@@ -2,8 +2,8 @@ package se.crafted.chrisb.ecoCreature.utils;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
-import com.nijiko.coelho.iConomy.iConomy;
-import com.nijiko.coelho.iConomy.system.Account;
+import com.iConomy.iConomy;
+import com.iConomy.util.Constants;
 import com.spikensbror.bukkit.mineconomy.MineConomy;
 import cosine.boseconomy.BOSEconomy;
 import java.text.DecimalFormat;
@@ -57,7 +57,7 @@ public class ecoEcon
   {
     if (iConomy != null)
     {
-      iConomy.getBank().getAccount(paramPlayer.getName()).add(paramDouble);
+      iConomy.getAccount(paramPlayer.getName()).getHoldings().add(paramDouble);
     }
     else if (BOSEconomy != null)
     {
@@ -77,7 +77,7 @@ public class ecoEcon
   public static double getBalance(Player paramPlayer)
   {
     if (iConomy != null)
-      return iConomy.getBank().getAccount(paramPlayer.getName()).getBalance();
+      return iConomy.getAccount(paramPlayer.getName()).getHoldings().balance();
     if (BOSEconomy != null)
       return BOSEconomy.getPlayerMoney(paramPlayer.getName());
     if (Essentials != null)
@@ -115,7 +115,7 @@ public class ecoEcon
     {
       localDecimalFormat = new DecimalFormat("0");
       if (iConomy != null)
-        return String.valueOf(localDecimalFormat.format(paramDouble)) + " " + iConomy.getBank().getCurrency();
+        return String.valueOf(localDecimalFormat.format(paramDouble)) + " " + Constants.Major.get(0);
       if (BOSEconomy != null)
       {
         paramDouble = Math.round(paramDouble);
@@ -130,7 +130,7 @@ public class ecoEcon
     {
       localDecimalFormat = new DecimalFormat("#0.00");
       if (iConomy != null)
-        return String.valueOf(localDecimalFormat.format(paramDouble)) + " " + iConomy.getBank().getCurrency();
+        return String.valueOf(localDecimalFormat.format(paramDouble)) + " " + Constants.Major.get(0);
       if (BOSEconomy != null)
       {
         paramDouble = Math.round(paramDouble);
