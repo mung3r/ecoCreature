@@ -135,7 +135,7 @@ public class ecoEntityListener extends EntityListener
             k = j;
           else
             k = localRandom.nextInt(j) + 1;
-          ItemStack localItemStack = new ItemStack((int)ecoConstants.CD[cIndex(localLivingEntity.getClass().getSimpleName())][i][0], k, 0);
+          ItemStack localItemStack = new ItemStack((int)ecoConstants.CD[cIndex(localLivingEntity.getClass().getSimpleName())][i][0], k, (short)0);
           if (localItemStack == null)
             continue;
           if (localItemStack.getAmount() == 0)
