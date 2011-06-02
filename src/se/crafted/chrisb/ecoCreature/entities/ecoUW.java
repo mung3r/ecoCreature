@@ -41,14 +41,14 @@ public class ecoUW
 
   public boolean isTame()
   {
-    return getHandle().m_();
+    return getHandle().A();
   }
 
   public void setTame(boolean paramBoolean)
   {
-    if ((paramBoolean) && (!this.wolf.getHandle().m_()))
+    if ((paramBoolean) && (!this.wolf.getHandle().A()))
       this.wolf.getHandle().health = (int)Math.round(20.0D * (this.wolf.getHandle().health / 8.0D));
-    else if ((!paramBoolean) && (this.wolf.getHandle().m_()))
+    else if ((!paramBoolean) && (this.wolf.getHandle().A()))
       this.wolf.getHandle().health = (int)Math.round(8.0D * (this.wolf.getHandle().health / 20.0D));
     this.wolf.getHandle().d(paramBoolean);
   }
@@ -63,7 +63,7 @@ public class ecoUW
     EntityWolf localEntityWolf = getHandle();
     if ((paramString != null) && (paramString.length() > 0))
     {
-      if (!localEntityWolf.m_())
+      if (!localEntityWolf.A())
         localEntityWolf.health = (int)Math.round(20.0D * (localEntityWolf.health / 8.0D));
       localEntityWolf.d(true);
       localEntityWolf.a((PathEntity)null);
@@ -71,7 +71,7 @@ public class ecoUW
     }
     else
     {
-      if (localEntityWolf.m_())
+      if (localEntityWolf.A())
         localEntityWolf.health = (int)Math.round(8.0D * (localEntityWolf.health / 20.0D));
       localEntityWolf.d(false);
       localEntityWolf.a("");
