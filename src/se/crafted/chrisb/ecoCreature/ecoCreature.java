@@ -10,8 +10,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Locale;
 import org.bukkit.Server;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
+import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -158,7 +157,7 @@ public class ecoCreature extends JavaPlugin
         }
         catch (Exception localException5)
         {
-          localException3.printStackTrace();
+          localException5.printStackTrace();
           try
           {
             if (localInputStream != null)
