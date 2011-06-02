@@ -65,7 +65,7 @@ public class ecoEcon
     }
     else if (Essentials != null)
     {
-      User localUser = User.get(paramPlayer);
+      User localUser = Essentials.getUser(paramPlayer);
       localUser.setMoney(localUser.getMoney() + paramDouble);
     }
     else if (MineConomy != null)
@@ -82,7 +82,7 @@ public class ecoEcon
       return BOSEconomy.getPlayerMoney(paramPlayer.getName());
     if (Essentials != null)
     {
-      User localUser = User.get(paramPlayer);
+      User localUser = Essentials.getUser(paramPlayer);
       return localUser.getMoney();
     }
     if (MineConomy != null)
