@@ -41,21 +41,21 @@ public class ecoUW
 
   public boolean isTame()
   {
-    return getHandle().A();
+    return getHandle().isTamed();
   }
 
   public void setTame(boolean paramBoolean)
   {
-    if ((paramBoolean) && (!this.wolf.getHandle().A()))
+    if ((paramBoolean) && (!this.wolf.getHandle().isTamed()))
       this.wolf.getHandle().health = (int)Math.round(20.0D * (this.wolf.getHandle().health / 8.0D));
-    else if ((!paramBoolean) && (this.wolf.getHandle().A()))
+    else if ((!paramBoolean) && (this.wolf.getHandle().isTamed()))
       this.wolf.getHandle().health = (int)Math.round(8.0D * (this.wolf.getHandle().health / 20.0D));
-    this.wolf.getHandle().d(paramBoolean);
+    this.wolf.getHandle().setTamed(paramBoolean);
   }
 
   public String getOwner()
   {
-    return getHandle().x();
+    return getHandle().getOwnerName();
   }
 
   public void setOwner(String paramString)
@@ -63,18 +63,18 @@ public class ecoUW
     EntityWolf localEntityWolf = getHandle();
     if ((paramString != null) && (paramString.length() > 0))
     {
-      if (!localEntityWolf.A())
+      if (!localEntityWolf.isTamed())
         localEntityWolf.health = (int)Math.round(20.0D * (localEntityWolf.health / 8.0D));
-      localEntityWolf.d(true);
-      localEntityWolf.a((PathEntity)null);
-      localEntityWolf.a(paramString);
+      localEntityWolf.setTamed(true);
+      localEntityWolf.setPathEntity((PathEntity)null);
+      localEntityWolf.setOwnerName(paramString);
     }
     else
     {
-      if (localEntityWolf.A())
+      if (localEntityWolf.isTamed())
         localEntityWolf.health = (int)Math.round(8.0D * (localEntityWolf.health / 20.0D));
-      localEntityWolf.d(false);
-      localEntityWolf.a("");
+      localEntityWolf.setTamed(false);
+      localEntityWolf.setOwnerName("");
     }
   }
 
