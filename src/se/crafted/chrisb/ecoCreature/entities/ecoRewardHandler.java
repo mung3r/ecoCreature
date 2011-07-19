@@ -24,6 +24,8 @@ public class ecoRewardHandler
 
   public void CashRegistry(Player paramPlayer, int paramInt, String paramString)
   {
+    //TODO: refactor creature string to index mappings
+    if (paramInt < 0) return;
     double d = ecoEcon.rawAmount(ecoConstants.CCMIN[paramInt], ecoConstants.CCMAX[paramInt], ecoConstants.CCP[paramInt]);
     if (ecoConstants.IC)
       d = Math.round(d);
