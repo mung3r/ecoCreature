@@ -9,6 +9,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.bukkit.Server;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
@@ -28,6 +31,7 @@ public class ecoCreature extends JavaPlugin
   public static boolean uQuestEnabled = false;
   public static QuestInteraction questInteraction = null;
   public static PermissionHandler Permissions = null;
+  public static final Logger logger = Logger.getLogger("Minecraft");
   private static ecoBlockListener blockListener;
   private static ecoEntityListener entityListener;
   private static ecoPlayerListener playerListener;
@@ -49,7 +53,7 @@ public class ecoCreature extends JavaPlugin
     getDataFolder().setWritable(true);
     getDataFolder().setExecutable(true);
     ecoConstants.Plugin_Directory = getDataFolder().getPath();
-    System.out.println("[ecoCreature] v0.0.5b (Spengebab) loaded.");
+    logger.log(Level.INFO, "[ecoCreature] v0.0.5b (Spengebab) loaded.");
     extractSettings("ecoCreature.yml");
     try
     {
@@ -57,8 +61,8 @@ public class ecoCreature extends JavaPlugin
     }
     catch (Exception localException)
     {
-      System.out.println("[ecoCreature] Failed to retrieve configuration from directory.");
-      System.out.println("[ecoCreature] Please back up your current settings and let ecoCreature recreate it.");
+      logger.log(Level.INFO, "[ecoCreature] Failed to retrieve configuration from directory.");
+      logger.log(Level.INFO, "[ecoCreature] Please back up your current settings and let ecoCreature recreate it.");
       Server.getPluginManager().disablePlugin(this);
       return;
     }
@@ -70,25 +74,25 @@ public class ecoCreature extends JavaPlugin
     Server = getServer();
     if (!ecoConstants.SSA)
     {
-      System.out.println("[ecoCreature] Please configure ecoCreature (plugins/ecoCreature.yml) before continuing. Plugin disabled.");
+      logger.log(Level.INFO, "[ecoCreature] Please configure ecoCreature (plugins/ecoCreature.yml) before continuing. Plugin disabled.");
       Server.getPluginManager().disablePlugin(this);
       return;
     }
     if (!setupPermissions(Server))
     {
-      System.out.println("[ecoCreature] Denied usage because Permissions can not be found.");
+      logger.log(Level.INFO, "[ecoCreature] Denied usage because Permissions can not be found.");
       Server.getPluginManager().disablePlugin(this);
       return;
     }
     if (!ecoEcon.initEcon(Server))
     {
-      System.out.println("[ecoCreature] Failed to find a supported economy plugin. ecoCreature disabled.");
+      logger.log(Level.INFO, "[ecoCreature] Failed to find a supported economy plugin. ecoCreature disabled.");
       Server.getPluginManager().disablePlugin(this);
       return;
     }
     if ((ecoConstants.uQuestHooking) && (!setupUQuest(Server)))
     {
-      System.out.println("[ecoCreature] uQuest system enabled but not found. ecoCreature disabled.");
+      logger.log(Level.INFO, "[ecoCreature] uQuest system enabled but not found. ecoCreature disabled.");
       getServer().getPluginManager().disablePlugin(this);
       return;
     }
@@ -153,7 +157,7 @@ public class ecoCreature extends JavaPlugin
           int i = 0;
           while ((i = localInputStream.read(arrayOfByte)) > 0)
             localFileOutputStream.write(arrayOfByte, 0, i);
-          System.out.println("[ecoCreature] Default settings file written: " + paramString);
+          logger.log(Level.INFO, "[ecoCreature] Default settings file written: " + paramString);
         }
         catch (Exception localException5)
         {
