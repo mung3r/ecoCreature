@@ -5,7 +5,11 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+
 import org.bukkit.util.config.Configuration;
+
+import se.crafted.chrisb.ecoCreature.ecoCreature;
 
 public class ecoConstants
 {
@@ -110,7 +114,7 @@ public class ecoConstants
     }
     catch (Exception localException)
     {
-      System.out.println("[ecoCreature] Failed to load drops for: " + Creatures[paramInt]);
+      ecoCreature.logger.log(Level.INFO, "[ecoCreature] Failed to load drops for: " + Creatures[paramInt]);
       CD[paramInt] = ((double[][])null);
     }
   }
