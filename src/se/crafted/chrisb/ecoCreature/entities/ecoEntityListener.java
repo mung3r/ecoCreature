@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Level;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -178,6 +180,8 @@ public class ecoEntityListener extends EntityListener
       return 12;
     if (paramString.equals("CraftWolf"))
       return 13;
+    
+    ecoCreature.logger.log(Level.INFO, "unknown cIndex" + paramString);
     return -1;
   }
 
