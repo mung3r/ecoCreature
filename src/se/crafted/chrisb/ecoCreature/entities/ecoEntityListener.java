@@ -180,8 +180,9 @@ public class ecoEntityListener extends EntityListener
       return 12;
     if (paramString.equals("CraftWolf"))
       return 13;
-    
-    ecoCreature.logger.log(Level.INFO, "unknown cIndex" + paramString);
+    if (paramString.equals("CraftMonster"))
+      return 14;
+    ecoCreature.logger.log(Level.INFO, "unknown cIndex " + paramString);
     return -1;
   }
 

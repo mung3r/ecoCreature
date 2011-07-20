@@ -38,7 +38,7 @@ public class ecoConstants
   public static boolean uQuestHooking;
   public static double uQuestRQP;
   public static HashMap<String, Double> Gain = new HashMap();
-  public static String[] Creatures = { "Creeper", "Skeleton", "Zombie", "Spider", "PigZombie", "Ghast", "Slime", "Giant", "Chicken", "Cow", "Pig", "Sheep", "Squid", "Wolf", "Spawner" };
+  public static String[] Creatures = { "Creeper", "Skeleton", "Zombie", "Spider", "PigZombie", "Ghast", "Slime", "Giant", "Chicken", "Cow", "Pig", "Sheep", "Squid", "Wolf", "Monster", "Spawner" };
   public static double[][][] CD = new double[Creatures.length][][];
   public static double[] CCMIN = new double[Creatures.length];
   public static double[] CCMAX = new double[Creatures.length];

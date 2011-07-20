@@ -264,6 +264,15 @@ RewardTable:
         Reward_Message: '[&2:)&f] You have been awarded &6<amt> &ffor slaying a &2<crt>'
         Penalty_Message: '[&4:(&f] You have been penalized with a deduction of &6<amt> &ffor slaying a &2<crt>'
 
+    Monster:
+        Drops: ''
+        Coin_Minimum: 0.01
+        Coin_Maximum: 20.00
+        Coin_Percent: 20
+        NoReward_Message: '[&9!&f] The &c<crt> &fdies from a blow with your &3<itm>'
+        Reward_Message: '[&2:)&f] You have been awarded &6<amt> &ffor slaying a &c<crt>'
+        Penalty_Message: '[&4:(&f] You have been penalized with a deduction of &6<amt> &ffor slaying a &2<crt>'
+
     Spawner:
         Drops: ''
         Coin_Minimum: 0.01
