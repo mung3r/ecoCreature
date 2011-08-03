@@ -1,7 +1,6 @@
 package se.crafted.chrisb.ecoCreature.entities;
 
 import com.nijiko.permissions.PermissionHandler;
-import hawox.uquest.QuestInteraction;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -118,12 +117,6 @@ public class ecoEntityListener extends EntityListener
         else if (ecoCreature.Permissions.has(localPlayer, "ecoCreature.Creature." + localLivingEntity.getClass().getSimpleName()))
         {
           ecoCreature.getRewardHandler().CashRegistry(localPlayer, cIndex(localLivingEntity.getClass().getSimpleName()), Material.getMaterial(localPlayer.getItemInHand().getTypeId()).name());
-        }
-        if (ecoConstants.uQuestHooking)
-        {
-          double d1 = Math.floor(Math.random() * 100.0D);
-          if (d1 < ecoConstants.uQuestRQP)
-            ecoCreature.questInteraction.giveQuestRandom(localPlayer, true);
         }
         for (int i = 0; i < ecoConstants.CD[cIndex(localLivingEntity.getClass().getSimpleName())].length; i++)
         {

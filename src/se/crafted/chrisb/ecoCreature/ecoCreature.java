@@ -2,8 +2,6 @@ package se.crafted.chrisb.ecoCreature;
 
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
-import hawox.uquest.QuestInteraction;
-import hawox.uquest.UQuest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -29,7 +27,6 @@ public class ecoCreature extends JavaPlugin
 {
   private static Server Server;
   public static boolean uQuestEnabled = false;
-  public static QuestInteraction questInteraction = null;
   public static PermissionHandler Permissions = null;
   public static final Logger logger = Logger.getLogger("Minecraft");
   private static ecoBlockListener blockListener;
@@ -90,12 +87,6 @@ public class ecoCreature extends JavaPlugin
       Server.getPluginManager().disablePlugin(this);
       return;
     }
-    if ((ecoConstants.uQuestHooking) && (!setupUQuest(Server)))
-    {
-      logger.log(Level.INFO, "[ecoCreature] uQuest system enabled but not found. ecoCreature disabled.");
-      getServer().getPluginManager().disablePlugin(this);
-      return;
-    }
     registerEvents();
   }
 
@@ -114,21 +105,6 @@ public class ecoCreature extends JavaPlugin
 
   public void onDisable()
   {
-  }
-
-  public static boolean setupUQuest(Server paramServer)
-  {
-    Plugin localPlugin = paramServer.getPluginManager().getPlugin("uQuest");
-    if (localPlugin != null)
-      questInteraction = new QuestInteraction((UQuest)localPlugin);
-    else
-      return false;
-    return true;
-  }
-
-  public QuestInteraction getQuestInteraction()
-  {
-    return questInteraction;
   }
 
   public static Server getBukkitServer()
