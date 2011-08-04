@@ -50,7 +50,7 @@ public class ecoCreature extends JavaPlugin
     getDataFolder().setWritable(true);
     getDataFolder().setExecutable(true);
     ecoConstants.Plugin_Directory = getDataFolder().getPath();
-    logger.log(Level.INFO, "[ecoCreature] v0.0.5b (Spengebab) loaded.");
+    logger.log(Level.INFO, "[ecoCreature] v0.0.5c (Spengebab) loaded.");
     extractSettings("ecoCreature.yml");
     try
     {
