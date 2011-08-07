@@ -60,11 +60,6 @@
 # Spawner :: When accidently killing around the spawn, a player can be notified of a nearby dungeon.
 # Having this option set to false will not send them the spawn/mobspawn camping message.
 #
-# Extra Hooks!
-# ------------
-# uQuest, true or false... should it be enabled or not
-# uQuestRQP, how big a chance does a player have to receive a random quest from killing a creature?
-#
 # Gains!
 # -----
 # These are per group on your server, if a player is in a group called Donors in your permissions
@@ -96,9 +91,6 @@ System:
         NoCampMessage: '[&4Warning&f] Camping around the Monster Spawn gives no rewards.'
         NoBowMessage: '[&9???&f] You can''t seem to find any currency on this creature.'
         DeathPenaltyMessage: 'You wake up to find that &6<amt> &fis missing from your pockets!'
-    ExtraHooks:
-        uQuest: false
-        uQuestRQP: 0.5
 Gain:
     Default:
         Amount: 1

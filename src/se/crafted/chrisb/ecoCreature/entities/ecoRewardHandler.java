@@ -1,70 +1,74 @@
 package se.crafted.chrisb.ecoCreature.entities;
 
-import com.nijiko.permissions.PermissionHandler;
-import java.util.HashMap;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
+
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.utils.ecoConstants;
 import se.crafted.chrisb.ecoCreature.utils.ecoEcon;
 
 public class ecoRewardHandler
 {
-  public void RegisterAccident(Player paramPlayer)
-  {
-    double d1 = ecoEcon.getBalance(paramPlayer);
-    double d2;
-    if (ecoConstants.PT)
-      d2 = d1 * ecoConstants.PA / 100.0D;
-    else
-      d2 = ecoConstants.PA;
-    ecoEcon.regMoney(paramPlayer, -d2);
-    paramPlayer.sendMessage(ecoConstants.MPD.replaceAll("<amt>", ecoEcon.format(d2).replaceAll("\\$", "\\\\\\$")));
-  }
+    private final ecoCreature plugin;
 
-  public void CashRegistry(Player paramPlayer, int paramInt, String paramString)
-  {
-    //TODO: refactor creature string to index mappings
-    if (paramInt < 0) return;
-    double d = ecoEcon.rawAmount(ecoConstants.CCMIN[paramInt], ecoConstants.CCMAX[paramInt], ecoConstants.CCP[paramInt]);
-    if (ecoConstants.IC)
-      d = Math.round(d);
-    if (ecoConstants.Gain.containsKey(ecoCreature.Permissions.getGroup(paramPlayer.getWorld().getName(), paramPlayer.getName())))
-      d *= ((Double)ecoConstants.Gain.get(ecoCreature.Permissions.getGroup(paramPlayer.getWorld().getName(), paramPlayer.getName()))).doubleValue();
-    if (d > 0.0D)
+    public ecoRewardHandler(ecoCreature plugin)
     {
-      ecoEcon.regMoney(paramPlayer, d);
-      if (ecoConstants.MO)
-        paramPlayer.sendMessage(ecoConstants.CRM[paramInt].replaceAll("<amt>", ecoEcon.format(d).replaceAll("\\$", "\\\\\\$")).replaceAll("<itm>", toCamelCase(paramString)).replaceAll("<crt>", ecoConstants.Creatures[paramInt]));
+        this.plugin = plugin;
     }
-    else if (d == 0.0D)
-    {
-      if ((ecoConstants.MO) && (ecoConstants.MNR))
-        paramPlayer.sendMessage(ecoConstants.CNR[paramInt].replaceAll("<crt>", ecoConstants.Creatures[paramInt]).replaceAll("<itm>", toCamelCase(paramString)));
-    }
-    else if (d < 0.0D)
-    {
-      ecoEcon.regMoney(paramPlayer, d);
-      if (ecoConstants.MO)
-        paramPlayer.sendMessage(ecoConstants.CPM[paramInt].replaceAll("<amt>", ecoEcon.format(d).replaceAll("\\$", "\\\\\\$")).replaceAll("<itm>", toCamelCase(paramString)).replaceAll("<crt>", ecoConstants.Creatures[paramInt]));
-    }
-  }
 
-  static String toCamelCase(String paramString)
-  {
-    String[] arrayOfString1 = paramString.split("_");
-    String str1 = "";
-    for (String str2 : arrayOfString1)
-      str1 = str1 + " " + toProperCase(str2);
-    if (str1.trim().equals("Air"))
-      return "Fists";
-    if (str1.trim().equals("Bow"))
-      return "Bow & Arrow";
-    return str1.trim();
-  }
+    public void registerAccident(Player player)
+    {
+        double playerBalance = ecoEcon.getBalance(player);
+        double penaltyAmount;
+        if (ecoConstants.hasPenaltyType)
+            penaltyAmount = playerBalance * ecoConstants.penaltyAmount / 100.0D;
+        else
+            penaltyAmount = ecoConstants.penaltyAmount;
+        ecoEcon.addMoney(player, -penaltyAmount);
+        player.sendMessage(ecoConstants.deathPenaltyMessage.replaceAll("<amt>", ecoEcon.format(penaltyAmount).replaceAll("\\$", "\\\\\\$")));
+    }
 
-  static String toProperCase(String paramString)
-  {
-    return paramString.substring(0, 1).toUpperCase() + paramString.substring(1).toLowerCase();
-  }
+    public void registerReward(Player player, int creatureIndex, String itemNameInHand)
+    {
+        if (creatureIndex < 0)
+            return;
+        double amount = ecoEcon.computeAmount(ecoConstants.CreatureCoinMin[creatureIndex], ecoConstants.CreatureCoinMax[creatureIndex], ecoConstants.CreatureCoinPercentage[creatureIndex]);
+        if (ecoConstants.isIntegerCurrency)
+            amount = Math.round(amount);
+        if (ecoConstants.Gain.containsKey(ecoCreature.permissionsHandler.getGroup(player.getWorld().getName(), player.getName())))
+            amount *= ((Double) ecoConstants.Gain.get(ecoCreature.permissionsHandler.getGroup(player.getWorld().getName(), player.getName()))).doubleValue();
+        if (amount > 0.0D) {
+            ecoEcon.addMoney(player, amount);
+            if (ecoConstants.shouldOutputMessages)
+                player.sendMessage(ecoConstants.CreatureRewardMessage[creatureIndex].replaceAll("<amt>", ecoEcon.format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll("<itm>", toCamelCase(itemNameInHand))
+                        .replaceAll("<crt>", ecoConstants.Creatures[creatureIndex]));
+        }
+        else if (amount == 0.0D) {
+            if ((ecoConstants.shouldOutputMessages) && (ecoConstants.shouldOutputNoRewardMessage))
+                player.sendMessage(ecoConstants.CreatureNoRewardMessage[creatureIndex].replaceAll("<crt>", ecoConstants.Creatures[creatureIndex]).replaceAll("<itm>", toCamelCase(itemNameInHand)));
+        }
+        else if (amount < 0.0D) {
+            ecoEcon.addMoney(player, amount);
+            if (ecoConstants.shouldOutputMessages)
+                player.sendMessage(ecoConstants.CreaturePenaltyMessage[creatureIndex].replaceAll("<amt>", ecoEcon.format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll("<itm>", toCamelCase(itemNameInHand))
+                        .replaceAll("<crt>", ecoConstants.Creatures[creatureIndex]));
+        }
+    }
+
+    private static String toCamelCase(String rawItemName)
+    {
+        String[] rawItemNameParts = rawItemName.split("_");
+        String itemName = "";
+        for (String itemNamePart : rawItemNameParts)
+            itemName = itemName + " " + toProperCase(itemNamePart);
+        if (itemName.trim().equals("Air"))
+            return "Fists";
+        if (itemName.trim().equals("Bow"))
+            return "Bow & Arrow";
+        return itemName.trim();
+    }
+
+    private static String toProperCase(String str)
+    {
+        return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+    }
 }

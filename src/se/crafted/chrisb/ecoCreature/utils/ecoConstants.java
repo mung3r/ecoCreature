@@ -1,7 +1,6 @@
 package se.crafted.chrisb.ecoCreature.utils;
 
 import java.io.File;
-import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -13,109 +12,103 @@ import se.crafted.chrisb.ecoCreature.ecoCreature;
 
 public class ecoConstants
 {
-  public static File Configuration;
-  public static String Plugin_Directory;
-  public static boolean SSA;
-  public static String WEP;
-  public static boolean IC;
-  public static boolean AC;
-  public static boolean OD;
-  public static boolean FD;
-  public static boolean CCD;
-  public static int CR;
-  public static boolean BR;
-  public static boolean PD;
-  public static boolean PT;
-  public static double PA;
-  public static boolean AUSL;
-  public static boolean MO;
-  public static boolean MNR;
-  public static boolean MS;
-  public static String MNB;
-  public static String MNC;
-  public static String MPD;
-  public static boolean WR;
-  public static boolean uQuestHooking;
-  public static double uQuestRQP;
-  public static HashMap<String, Double> Gain = new HashMap();
-  public static String[] Creatures = { "Creeper", "Skeleton", "Zombie", "Spider", "PigZombie", "Ghast", "Slime", "Giant", "Chicken", "Cow", "Pig", "Sheep", "Squid", "Wolf", "Monster", "Spawner" };
-  public static double[][][] CD = new double[Creatures.length][][];
-  public static double[] CCMIN = new double[Creatures.length];
-  public static double[] CCMAX = new double[Creatures.length];
-  public static double[] CCP = new double[Creatures.length];
-  public static String[] CNR = new String[Creatures.length];
-  public static String[] CRM = new String[Creatures.length];
-  public static String[] CPM = new String[Creatures.length];
+    public static File Configuration;
+    public static String pluginDirectory;
+    public static boolean isConfigurationEnabled;
+    public static String economyCore;
+    public static boolean isIntegerCurrency;
+    public static boolean shouldAllowCamping;
+    public static boolean shouldOverrideDrops;
+    public static boolean isFixedDrops;
+    public static boolean shouldClearCampDrops;
+    public static int campRadius;
+    public static boolean hasBowRewards;
+    public static boolean hasDeathPenalty;
+    public static boolean hasPenaltyType;
+    public static double penaltyAmount;
+    public static boolean shouldAllowUnderSeaLVL;
+    public static boolean shouldOutputMessages;
+    public static boolean shouldOutputNoRewardMessage;
+    public static boolean shouldOutputSpawnerMessage;
+    public static String shouldOuputNoBowMessage;
+    public static String noCampMessage;
+    public static String deathPenaltyMessage;
+    public static boolean isWolverineMode;
+    public static HashMap<String, Double> Gain = new HashMap<String, Double>();
+    public static String[] Creatures = { "Creeper", "Skeleton", "Zombie", "Spider", "PigZombie", "Ghast", "Slime", "Giant", "Chicken", "Cow", "Pig", "Sheep", "Squid", "Wolf", "Monster", "Spawner" };
+    public static double[][][] CreatureDrop = new double[Creatures.length][][];
+    public static double[] CreatureCoinMin = new double[Creatures.length];
+    public static double[] CreatureCoinMax = new double[Creatures.length];
+    public static double[] CreatureCoinPercentage = new double[Creatures.length];
+    public static String[] CreatureNoRewardMessage = new String[Creatures.length];
+    public static String[] CreatureRewardMessage = new String[Creatures.length];
+    public static String[] CreaturePenaltyMessage = new String[Creatures.length];
 
-  public static void load(Configuration paramConfiguration)
-  {
-    String str1 = "";
-    paramConfiguration.load();
-    SSA = paramConfiguration.getBoolean("DidYou.Read.Understand.Configure", false);
-    WEP = paramConfiguration.getString("System.Economy.Core");
-    IC = paramConfiguration.getBoolean("System.Economy.IntegerCurrency", false);
-    AC = paramConfiguration.getBoolean("System.Hunting.AllowCamping", false);
-    CCD = paramConfiguration.getBoolean("System.Hunting.ClearCampDrops", false);
-    OD = paramConfiguration.getBoolean("System.Hunting.OverrideDrops", false);
-    FD = paramConfiguration.getBoolean("System.Hunting.FixedDrops", false);
-    CR = paramConfiguration.getInt("System.Hunting.CampRadius", 0);
-    BR = paramConfiguration.getBoolean("System.Hunting.BowRewards", false);
-    PD = paramConfiguration.getBoolean("System.Hunting.PenalizeDeath", false);
-    PT = paramConfiguration.getBoolean("System.Hunting.PenalizeType", false);
-    PA = paramConfiguration.getDouble("System.Hunting.PenalizeAmount", 0.0D);
-    AUSL = paramConfiguration.getBoolean("System.Hunting.AllowUnderSeaLVL", false);
-    MO = paramConfiguration.getBoolean("System.Messages.Output", false);
-    MNR = paramConfiguration.getBoolean("System.Messages.NoReward", false);
-    MS = paramConfiguration.getBoolean("System.Messages.Spawner", false);
-    MNB = paramConfiguration.getString("System.Messages.NoBowMessage").replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
-    MNC = paramConfiguration.getString("System.Messages.NoCampMessage").replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
-    MPD = paramConfiguration.getString("System.Messages.DeathPenaltyMessage").replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
-    uQuestHooking = paramConfiguration.getBoolean("System.ExtraHooks.uQuest", false);
-    uQuestRQP = paramConfiguration.getDouble("System.ExtraHooks.uQuestRQP", 0.0D);
-    WR = paramConfiguration.getBoolean("System.Hunting.WolverineMode", false);
-    List localList = paramConfiguration.getKeys("Gain");
-    Iterator localIterator = localList.iterator();
-    while (localIterator.hasNext())
+    public static void load(Configuration configuration)
     {
-      String str2 = (String)localIterator.next();
-      Gain.put(str2, Double.valueOf(paramConfiguration.getDouble("Gain." + str2 + ".Amount", 0.0D)));
-    }
-    for (int i = 0; i < Creatures.length; i++)
-    {
-      loadCreatureDrops(paramConfiguration.getString("RewardTable." + Creatures[i] + ".Drops", str1), i);
-      CCMIN[i] = paramConfiguration.getDouble("RewardTable." + Creatures[i] + ".Coin_Minimum", CCMIN[i]);
-      CCMAX[i] = paramConfiguration.getDouble("RewardTable." + Creatures[i] + ".Coin_Maximum", CCMAX[i]);
-      CCP[i] = paramConfiguration.getDouble("RewardTable." + Creatures[i] + ".Coin_Percent", CCP[i]);
-      CNR[i] = paramConfiguration.getString("RewardTable." + Creatures[i] + ".NoReward_Message", CNR[i]).replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
-      CRM[i] = paramConfiguration.getString("RewardTable." + Creatures[i] + ".Reward_Message", CRM[i]).replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
-      CPM[i] = paramConfiguration.getString("RewardTable." + Creatures[i] + ".Penalty_Message", CPM[i]).replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
-    }
-  }
+        configuration.load();
+        isConfigurationEnabled = configuration.getBoolean("DidYou.Read.Understand.Configure", false);
 
-  private static void loadCreatureDrops(String paramString, int paramInt)
-  {
-    String[] arrayOfString1 = paramString.split(";");
-    try
-    {
-      if (arrayOfString1.length > 0)
-      {
-        CD[paramInt] = new double[arrayOfString1.length][3];
-        for (int i = 0; i < arrayOfString1.length; i++)
-        {
-          String[] arrayOfString2 = arrayOfString1[i].split(":");
-          if (arrayOfString2.length != 3)
-            continue;
-          CD[paramInt][i][0] = Integer.parseInt(arrayOfString2[0]);
-          CD[paramInt][i][1] = Integer.parseInt(arrayOfString2[1]);
-          CD[paramInt][i][2] = Double.parseDouble(arrayOfString2[2]);
+        economyCore = configuration.getString("System.Economy.Core");
+        isIntegerCurrency = configuration.getBoolean("System.Economy.IntegerCurrency", false);
+
+        shouldAllowCamping = configuration.getBoolean("System.Hunting.AllowCamping", false);
+        shouldClearCampDrops = configuration.getBoolean("System.Hunting.ClearCampDrops", false);
+        shouldOverrideDrops = configuration.getBoolean("System.Hunting.OverrideDrops", false);
+        isFixedDrops = configuration.getBoolean("System.Hunting.FixedDrops", false);
+        campRadius = configuration.getInt("System.Hunting.CampRadius", 0);
+        hasBowRewards = configuration.getBoolean("System.Hunting.BowRewards", false);
+        hasDeathPenalty = configuration.getBoolean("System.Hunting.PenalizeDeath", false);
+        hasPenaltyType = configuration.getBoolean("System.Hunting.PenalizeType", false);
+        penaltyAmount = configuration.getDouble("System.Hunting.PenalizeAmount", 0.0D);
+        shouldAllowUnderSeaLVL = configuration.getBoolean("System.Hunting.AllowUnderSeaLVL", false);
+        isWolverineMode = configuration.getBoolean("System.Hunting.WolverineMode", false);
+
+        shouldOutputMessages = configuration.getBoolean("System.Messages.Output", false);
+        shouldOutputNoRewardMessage = configuration.getBoolean("System.Messages.NoReward", false);
+        shouldOutputSpawnerMessage = configuration.getBoolean("System.Messages.Spawner", false);
+        shouldOuputNoBowMessage = configuration.getString("System.Messages.NoBowMessage").replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
+        noCampMessage = configuration.getString("System.Messages.NoCampMessage").replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
+        deathPenaltyMessage = configuration.getString("System.Messages.DeathPenaltyMessage").replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
+
+        List<String> gainList = configuration.getKeys("Gain");
+        Iterator<String> gainIterator = gainList.iterator();
+        while (gainIterator.hasNext()) {
+            String gainTypeName = (String) gainIterator.next();
+            Gain.put(gainTypeName, Double.valueOf(configuration.getDouble("Gain." + gainTypeName + ".Amount", 0.0D)));
         }
-        return;
-      }
+
+        for (int i = 0; i < Creatures.length; i++) {
+            loadCreatureDrops(configuration.getString("RewardTable." + Creatures[i] + ".Drops", ""), i);
+            CreatureCoinMin[i] = configuration.getDouble("RewardTable." + Creatures[i] + ".Coin_Minimum", CreatureCoinMin[i]);
+            CreatureCoinMax[i] = configuration.getDouble("RewardTable." + Creatures[i] + ".Coin_Maximum", CreatureCoinMax[i]);
+            CreatureCoinPercentage[i] = configuration.getDouble("RewardTable." + Creatures[i] + ".Coin_Percent", CreatureCoinPercentage[i]);
+            CreatureNoRewardMessage[i] = configuration.getString("RewardTable." + Creatures[i] + ".NoReward_Message", CreatureNoRewardMessage[i]).replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
+            CreatureRewardMessage[i] = configuration.getString("RewardTable." + Creatures[i] + ".Reward_Message", CreatureRewardMessage[i]).replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
+            CreaturePenaltyMessage[i] = configuration.getString("RewardTable." + Creatures[i] + ".Penalty_Message", CreaturePenaltyMessage[i]).replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
+        }
     }
-    catch (Exception localException)
+
+    private static void loadCreatureDrops(String pathString, int creatureIndex)
     {
-      ecoCreature.logger.log(Level.INFO, "[ecoCreature] Failed to load drops for: " + Creatures[paramInt]);
-      CD[paramInt] = ((double[][])null);
+        String[] dropList = pathString.split(";");
+        try {
+            if (dropList.length > 0) {
+                CreatureDrop[creatureIndex] = new double[dropList.length][3];
+                for (int i = 0; i < dropList.length; i++) {
+                    String[] dropItemData = dropList[i].split(":");
+                    if (dropItemData.length != 3)
+                        continue;
+                    CreatureDrop[creatureIndex][i][0] = Integer.parseInt(dropItemData[0]);
+                    CreatureDrop[creatureIndex][i][1] = Integer.parseInt(dropItemData[1]);
+                    CreatureDrop[creatureIndex][i][2] = Double.parseDouble(dropItemData[2]);
+                }
+                return;
+            }
+        }
+        catch (Exception exception) {
+            ecoCreature.logger.log(Level.WARNING, "[ecoCreature] Failed to load drops for: " + Creatures[creatureIndex]);
+            CreatureDrop[creatureIndex] = ((double[][]) null);
+        }
     }
-  }
 }
