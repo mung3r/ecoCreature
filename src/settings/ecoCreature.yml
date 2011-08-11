@@ -52,6 +52,8 @@
 # What does it do? If you are under the sea level when hunting, rewards are enabled. If this is set to false,
 # you will not get rewards for kills below sea level. This applies to everything under sea level.
 #
+# WolverineMode - When set to true, wolf owners are rewarded for kills by their wolves
+#
 # Message Options!
 # ----------------
 # Output :: Should you notify the player of rewards, penalties or no rewards? Defaults to true - to notify.
@@ -76,20 +78,18 @@ System:
         OverrideDrops: true
         FixedDrops: false
         BowRewards: true
-        PenalizeDeath: true
+        PenalizeDeath: false
         PenalizeType: true
         PenalizeAmount: 3
         AllowUnderSeaLVL: true
-        WolverineMode: false
-    Limits:
-        BowRange: 25
+        WolverineMode: true
         CampRadius: 15
     Messages:
         Output: true
         NoReward: true
         Spawner: false
-        NoCampMessage: '[&4Warning&f] Camping around the Monster Spawn gives no rewards.'
-        NoBowMessage: '[&9???&f] You can''t seem to find any currency on this creature.'
+        NoCampMessage: '[&4Warning&f] Camping Monster Spawners gives no rewards.'
+        NoBowMessage: '[&9???&f] You can''t seem to find any rewards on this creature.'
         DeathPenaltyMessage: 'You wake up to find that &6<amt> &fis missing from your pockets!'
 Gain:
     Default:
