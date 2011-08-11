@@ -1,38 +1,46 @@
 package se.crafted.chrisb.ecoCreature;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.event.Event;
+import org.bukkit.event.Event.Priority;
+import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.config.Configuration;
 
-import se.crafted.chrisb.ecoCreature.entities.ecoBlockListener;
-import se.crafted.chrisb.ecoCreature.entities.ecoEntityListener;
-import se.crafted.chrisb.ecoCreature.entities.ecoPlayerListener;
-import se.crafted.chrisb.ecoCreature.entities.ecoRewardHandler;
-import se.crafted.chrisb.ecoCreature.utils.ecoConstants;
-import se.crafted.chrisb.ecoCreature.utils.ecoEcon;
+import se.crafted.chrisb.ecoCreature.listeners.ecoBlockListener;
+import se.crafted.chrisb.ecoCreature.listeners.ecoEntityListener;
+import se.crafted.chrisb.ecoCreature.listeners.ecoPlayerListener;
+import se.crafted.chrisb.ecoCreature.listeners.ecoPluginListener;
+import se.crafted.chrisb.ecoCreature.managers.ecoConfigManager;
+import se.crafted.chrisb.ecoCreature.managers.ecoRewardManager;
 
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
+import com.nijikokun.register.payment.Method;
 
 public class ecoCreature extends JavaPlugin
 {
+
     private final ecoBlockListener blockListener = new ecoBlockListener(this);
     private final ecoEntityListener entityListener = new ecoEntityListener(this);
     private final ecoPlayerListener playerListener = new ecoPlayerListener(this);
-    private final ecoRewardHandler rewardHandler = new ecoRewardHandler(this);
+    private final ecoPluginListener pluginListener = new ecoPluginListener(this);
+    // private final ecoRewardHandler rewardHandler = new
+    // ecoRewardHandler(this);
 
-    public static PermissionHandler permissionsHandler = null;
     public static final File dataFolder = new File("plugins" + File.separator + "ecoCreature");
     public static final Logger logger = Logger.getLogger("Minecraft");
+    public static PermissionHandler permissionsHandler = null;
+
+    private ecoConfigManager configManager;
+    private ecoRewardManager rewardManager;
+
+    public Method method = null;
 
     private boolean setupPermissions()
     {
@@ -48,19 +56,41 @@ public class ecoCreature extends JavaPlugin
         return false;
     }
 
+    private void registerEvents()
+    {
+        PluginManager pluginManager = getServer().getPluginManager();
+
+        pluginManager.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Normal, this);
+        pluginManager.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
+        pluginManager.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.Normal, this);
+        pluginManager.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
+
+        pluginManager.registerEvent(Type.PLUGIN_ENABLE, pluginListener, Priority.Monitor, this);
+        pluginManager.registerEvent(Type.PLUGIN_DISABLE, pluginListener, Priority.Monitor, this);
+    }
+
+    public ecoConfigManager getConfigManager()
+    {
+        return configManager;
+    }
+
+    public ecoRewardManager getRewardManager()
+    {
+        return rewardManager;
+    }
+
     public void onLoad()
     {
         dataFolder.mkdirs();
-        ecoConstants.pluginDirectory = dataFolder.getPath();
     }
 
     public void onEnable()
     {
         Locale.setDefault(Locale.US);
-        extractSettings("ecoCreature.yml");
-        
+
         try {
-            ecoConstants.load(new Configuration(new File(dataFolder, "ecoCreature.yml")));
+            configManager = new ecoConfigManager(this);
+            configManager.load();
         }
         catch (Exception exception) {
             logger.log(Level.SEVERE, "[ecoCreature] Failed to retrieve configuration from directory.");
@@ -69,90 +99,29 @@ public class ecoCreature extends JavaPlugin
             return;
         }
 
-        if (!ecoConstants.isConfigurationEnabled) {
+        if (!configManager.isEnabled()) {
             logger.log(Level.SEVERE, "[ecoCreature] Please configure ecoCreature (plugins/ecoCreature.yml) before continuing. Plugin disabled.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
         if (!setupPermissions()) {
             logger.log(Level.SEVERE, "[ecoCreature] Denied usage because Permissions can not be found.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        if (!ecoEcon.initEcon(getServer())) {
-            logger.log(Level.SEVERE, "[ecoCreature] Failed to find a supported economy plugin. ecoCreature disabled.");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-        registerEvents();
-        logger.log(Level.INFO, "[ecoCreature] " + getDescription().getVersion() + " enabled.");
-    }
 
-    private void registerEvents()
-    {
-        PluginManager pluginManager = getServer().getPluginManager();
-        pluginManager.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Event.Priority.Normal, this);
-        pluginManager.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Event.Priority.Normal, this);
-        pluginManager.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this);
-        pluginManager.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Event.Priority.Normal, this);
+        rewardManager = new ecoRewardManager(this);
+        registerEvents();
+
+        logger.log(Level.INFO, "[ecoCreature] " + getDescription().getVersion() + " enabled.");
     }
 
     public void onDisable()
     {
         permissionsHandler = null;
+        method = null;
+        configManager = null;
         logger.log(Level.INFO, "[ecoCreature] " + getDescription().getVersion() + " is disabled.");
-    }
-
-    public ecoRewardHandler getRewardHandler()
-    {
-        return rewardHandler;
-    }
-
-    public void extractSettings(String filename)
-    {
-        File file = new File(dataFolder, filename);
-        if (!file.exists()) {
-            InputStream inputStream = getClass().getResourceAsStream("/settings/" + filename);
-            if (inputStream != null) {
-                FileOutputStream fileOutputStream = null;
-                try {
-                    fileOutputStream = new FileOutputStream(file);
-                    byte[] arrayOfByte = new byte[8192];
-                    int i = 0;
-                    while ((i = inputStream.read(arrayOfByte)) > 0)
-                        fileOutputStream.write(arrayOfByte, 0, i);
-                    logger.log(Level.INFO, "[ecoCreature] Default settings file written: " + filename);
-                }
-                catch (Exception localException5) {
-                    localException5.printStackTrace();
-                    try {
-                        if (inputStream != null)
-                            inputStream.close();
-                    }
-                    catch (Exception localException6) {
-                    }
-                    try {
-                        if (fileOutputStream != null)
-                            fileOutputStream.close();
-                    }
-                    catch (Exception localException7) {
-                    }
-                }
-                finally {
-                    try {
-                        if (inputStream != null)
-                            inputStream.close();
-                    }
-                    catch (Exception localException8) {
-                    }
-                    try {
-                        if (fileOutputStream != null)
-                            fileOutputStream.close();
-                    }
-                    catch (Exception localException9) {
-                    }
-                }
-            }
-        }
     }
 }
