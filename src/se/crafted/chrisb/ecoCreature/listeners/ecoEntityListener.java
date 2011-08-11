@@ -1,18 +1,11 @@
 package se.crafted.chrisb.ecoCreature.listeners;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.entity.CraftWolf;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Wolf;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Tameable;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageByProjectileEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityListener;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
@@ -22,30 +15,10 @@ import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 public class ecoEntityListener extends EntityListener
 {
     private final ecoCreature plugin;
-    private Map<Entity, Player> creatureTable = new HashMap<Entity, Player>();
 
     public ecoEntityListener(ecoCreature plugin)
     {
         this.plugin = plugin;
-    }
-
-    @Override
-    public void onEntityDamage(EntityDamageEvent event)
-    {
-        if (event.isCancelled()) {
-            return;
-        }
-
-        if (!(event.getEntity() instanceof LivingEntity)) {
-            return;
-        }
-
-        if (event instanceof EntityDamageByEntityEvent) {
-            onEntityDamageByEntityEvent((EntityDamageByEntityEvent) event);
-        }
-        else if (event instanceof EntityDamageByProjectileEvent) {
-            onEntityDamageByProjectileEvent((EntityDamageByProjectileEvent) event);
-        }
     }
 
     @Override
@@ -56,12 +29,21 @@ public class ecoEntityListener extends EntityListener
         }
 
         Player player = null;
-        if (creatureTable.containsKey(event.getEntity())) {
-            player = creatureTable.get(event.getEntity());
+        if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+        	EntityDamageByEntityEvent subEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
+        	if (subEvent.getDamager() instanceof Player) {
+        		player = (Player) subEvent.getDamager();
+        	} else if (subEvent.getDamager() instanceof Tameable) {
+        		if (((Tameable) subEvent.getDamager()).getOwner() instanceof Player ) {
+        			player = (Player) ((Tameable) subEvent.getDamager()).getOwner();
+        		}
+        	} else if (subEvent.getDamager() instanceof Projectile) {
+        		if (((Projectile) subEvent.getDamager()).getShooter() instanceof Player ) {
+        			player = (Player) ((Projectile) subEvent.getDamager()).getShooter();
+        		}
+        	}
         }
-        else {
-            return;
-        }
+        if (player == null) return;
 
         if (ecoRewardManager.shouldOverrideDrops) {
             event.getDrops().clear();
@@ -71,15 +53,11 @@ public class ecoEntityListener extends EntityListener
             if (ecoRewardManager.shouldOutputMessages) {
                 player.sendMessage(ecoRewardManager.noBowRewardMessage);
             }
-            creatureTable.remove(event.getEntity());
             return;
-        }
-
-        if (ecoEntityUtil.isUnderSeaLevel(player) && !ecoRewardManager.canHuntUnderSeaLevel) {
+        } else if (ecoEntityUtil.isUnderSeaLevel(player) && !ecoRewardManager.canHuntUnderSeaLevel) {
             if (ecoRewardManager.shouldOutputMessages) {
                 player.sendMessage(ecoRewardManager.noBowRewardMessage);
             }
-            creatureTable.remove(event.getEntity());
             return;
         }
 
@@ -98,42 +76,5 @@ public class ecoEntityListener extends EntityListener
         }
 
         event.getDrops().addAll(ecoRewardManager.rewards.get(ecoEntityUtil.getCreatureType(livingEntity)).computeDrops());
-        creatureTable.remove(event.getEntity());
-    }
-
-    private void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event)
-    {
-        if (event.isCancelled()) {
-            return;
-        }
-
-        if (ecoEntityUtil.isDeathBlow(event)) {
-            if (event.getDamager() instanceof Player) {
-                creatureTable.put(event.getEntity(), (Player) event.getDamager());
-            }
-            else if (event.getDamager() instanceof Wolf && ecoRewardManager.isWolverineMode) {
-                CraftWolf wolf = (CraftWolf) event.getDamager();
-                if (wolf.isTamed()) {
-                    creatureTable.put(event.getEntity(), plugin.getServer().getPlayer(wolf.getHandle().getOwnerName()));
-                }
-            }
-        }
-    }
-
-    private void onEntityDamageByProjectileEvent(EntityDamageByProjectileEvent event)
-    {
-        if (event.isCancelled()) {
-            return;
-        }
-
-        LivingEntity livingEntity = (LivingEntity) event.getEntity();
-
-        if (event.getDamager() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            // TODO: What's the purpose of this player message?
-            player.sendMessage(Double.toString(player.getLocation().toVector().distance(livingEntity.getLocation().toVector())));
-            if (ecoEntityUtil.isDeathBlow(event))
-                creatureTable.put(event.getEntity(), (Player) event.getDamager());
-        }
     }
 }
