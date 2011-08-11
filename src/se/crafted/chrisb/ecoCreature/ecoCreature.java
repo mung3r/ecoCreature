@@ -62,7 +62,6 @@ public class ecoCreature extends JavaPlugin
 
         pluginManager.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Normal, this);
         pluginManager.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
-        pluginManager.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.Normal, this);
         pluginManager.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
 
         pluginManager.registerEvent(Type.PLUGIN_ENABLE, pluginListener, Priority.Monitor, this);
