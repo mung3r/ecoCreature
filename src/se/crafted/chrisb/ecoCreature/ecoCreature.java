@@ -30,8 +30,6 @@ public class ecoCreature extends JavaPlugin
     private final ecoEntityListener entityListener = new ecoEntityListener(this);
     private final ecoPlayerListener playerListener = new ecoPlayerListener(this);
     private final ecoPluginListener pluginListener = new ecoPluginListener(this);
-    // private final ecoRewardHandler rewardHandler = new
-    // ecoRewardHandler(this);
 
     public static final File dataFolder = new File("plugins" + File.separator + "ecoCreature");
     public static final Logger logger = Logger.getLogger("Minecraft");
