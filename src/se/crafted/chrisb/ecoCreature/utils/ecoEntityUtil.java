@@ -48,22 +48,12 @@ public class ecoEntityUtil
             for (int j = 0 - r; j <= r; j++) {
                 for (int k = 0 - r; k <= r; k++) {
                     Block block = world.getBlockAt(x + i, y + j, z + k);
-                    if ((block.getTypeId() == Material.MOB_SPAWNER.getId()) && (block.getLocation().distance(location) < r))
+                    if (block.getType().equals(Material.MOB_SPAWNER) && (block.getLocation().distance(location) < r))
                         return true;
                 }
             }
         }
         return false;
-    }
-
-    public static boolean isDeathBlow(EntityDamageEvent event)
-    {
-        if (!(event.getEntity() instanceof LivingEntity))
-            return false;
-
-        LivingEntity livingEntity = (LivingEntity) event.getEntity();
-
-        return (livingEntity.getHealth() - event.getDamage() > 0) ? false : true;
     }
 
     public static CreatureType getCreatureType(Entity entity)
