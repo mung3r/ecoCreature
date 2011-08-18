@@ -1,6 +1,7 @@
 package se.crafted.chrisb.ecoCreature.listeners;
 
 import org.bukkit.Material;
+import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -29,21 +30,29 @@ public class ecoEntityListener extends EntityListener
         }
 
         Player player = null;
+        CreatureType tamedCreature = null;
+
         if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-        	EntityDamageByEntityEvent subEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
-        	if (subEvent.getDamager() instanceof Player) {
-        		player = (Player) subEvent.getDamager();
-        	} else if (subEvent.getDamager() instanceof Tameable) {
-        		if (((Tameable) subEvent.getDamager()).getOwner() instanceof Player ) {
-        			player = (Player) ((Tameable) subEvent.getDamager()).getOwner();
-        		}
-        	} else if (subEvent.getDamager() instanceof Projectile) {
-        		if (((Projectile) subEvent.getDamager()).getShooter() instanceof Player ) {
-        			player = (Player) ((Projectile) subEvent.getDamager()).getShooter();
-        		}
-        	}
+            EntityDamageByEntityEvent subEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
+            if (subEvent.getDamager() instanceof Player) {
+                player = (Player) subEvent.getDamager();
+            }
+            else if (subEvent.getDamager() instanceof Tameable) {
+                if (((Tameable) subEvent.getDamager()).isTamed() && ((Tameable) subEvent.getDamager()).getOwner() instanceof Player) {
+                    tamedCreature = ecoEntityUtil.getCreatureType((LivingEntity) subEvent.getDamager());
+                    player = (Player) ((Tameable) subEvent.getDamager()).getOwner();
+                }
+            }
+            else if (subEvent.getDamager() instanceof Projectile) {
+                if (((Projectile) subEvent.getDamager()).getShooter() instanceof Player) {
+                    player = (Player) ((Projectile) subEvent.getDamager()).getShooter();
+                }
+            }
         }
-        if (player == null) return;
+
+        if (player == null) {
+            return;
+        }
 
         if (ecoRewardManager.shouldOverrideDrops) {
             event.getDrops().clear();
@@ -54,7 +63,8 @@ public class ecoEntityListener extends EntityListener
                 player.sendMessage(ecoRewardManager.noBowRewardMessage);
             }
             return;
-        } else if (ecoEntityUtil.isUnderSeaLevel(player) && !ecoRewardManager.canHuntUnderSeaLevel) {
+        }
+        else if (ecoEntityUtil.isUnderSeaLevel(player) && !ecoRewardManager.canHuntUnderSeaLevel) {
             if (ecoRewardManager.shouldOutputMessages) {
                 player.sendMessage(ecoRewardManager.noBowRewardMessage);
             }
@@ -67,12 +77,12 @@ public class ecoEntityListener extends EntityListener
             if (ecoRewardManager.shouldClearCampDrops) {
                 event.getDrops().clear();
             }
-            if (ecoRewardManager.shouldOutputSpawnerMessage) {
+            if (ecoRewardManager.shouldOutputMessages && ecoRewardManager.shouldOutputSpawnerMessage) {
                 player.sendMessage(ecoRewardManager.noCampMessage);
             }
         }
-        else if (ecoCreature.permissionsHandler.has(player, "ecoCreature.Creature." + livingEntity.getClass().getSimpleName())) {
-            plugin.getRewardManager().registerCreatureReward(player, ecoEntityUtil.getCreatureType(livingEntity));
+        else if (ecoCreature.permissionsHandler.has(player, "ecoCreature.Creature." + ecoEntityUtil.getCreatureType(livingEntity).getName())) {
+            plugin.getRewardManager().registerCreatureReward(player, tamedCreature, ecoEntityUtil.getCreatureType(livingEntity));
         }
 
         event.getDrops().addAll(ecoRewardManager.rewards.get(ecoEntityUtil.getCreatureType(livingEntity)).computeDrops());

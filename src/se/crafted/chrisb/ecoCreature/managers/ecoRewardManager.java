@@ -63,18 +63,18 @@ public class ecoRewardManager
         }
     }
 
-    public void registerCreatureReward(Player player, CreatureType creatureType)
+    public void registerCreatureReward(Player player, CreatureType tamedCreature, CreatureType killedCreature)
     {
         if (player == null) {
             return;
         }
 
-        if (creatureType == null) {
+        if (killedCreature == null) {
             return;
         }
 
-        ecoReward reward = rewards.get(creatureType);
-        String itemNameInHand = Material.getMaterial(player.getItemInHand().getTypeId()).name();
+        ecoReward reward = rewards.get(killedCreature);
+        String weaponName = tamedCreature != null ? tamedCreature.getName() : Material.getMaterial(player.getItemInHand().getTypeId()).name();
 
         double amount = computeAmount(reward);
 
@@ -89,18 +89,18 @@ public class ecoRewardManager
         if (amount > 0.0D) {
             plugin.method.getAccount(player.getName()).add(amount);
             if (ecoRewardManager.shouldOutputMessages) {
-                player.sendMessage(reward.getRewardMessage().replaceAll("<amt>", plugin.method.format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll("<itm>", toCamelCase(itemNameInHand)).replaceAll("<crt>", reward.getRewardName()));
-            }
-        }
-        else if (amount == 0.0D) {
-            if ((ecoRewardManager.shouldOutputMessages) && (ecoRewardManager.shouldOutputNoRewardMessage)) {
-                player.sendMessage(reward.getNoRewardMessage().replaceAll("<crt>", reward.getRewardName()).replaceAll("<itm>", toCamelCase(itemNameInHand)));
+                player.sendMessage(reward.getRewardMessage().replaceAll("<amt>", plugin.method.format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll("<itm>", toCamelCase(weaponName)).replaceAll("<crt>", reward.getRewardName()));
             }
         }
         else if (amount < 0.0D) {
             plugin.method.getAccount(player.getName()).add(amount);
             if (ecoRewardManager.shouldOutputMessages) {
-                player.sendMessage(reward.getPenaltyMessage().replaceAll("<amt>", plugin.method.format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll("<itm>", toCamelCase(itemNameInHand)).replaceAll("<crt>", reward.getRewardName()));
+                player.sendMessage(reward.getPenaltyMessage().replaceAll("<amt>", plugin.method.format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll("<itm>", toCamelCase(weaponName)).replaceAll("<crt>", reward.getRewardName()));
+            }
+        }
+        else {
+            if ((ecoRewardManager.shouldOutputMessages) && (ecoRewardManager.shouldOutputNoRewardMessage)) {
+                player.sendMessage(reward.getNoRewardMessage().replaceAll("<crt>", reward.getRewardName()).replaceAll("<itm>", toCamelCase(weaponName)));
             }
         }
     }
