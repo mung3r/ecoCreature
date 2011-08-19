@@ -7,10 +7,8 @@
 #
 # Now then ...
 #
-# Which economy system are you running? ecoCreature supports the following four.
-# iConomy, BOSEconomy, Essentials, MineConomy
-#
-# As an example, you have BOSE, you should change the CORE setting to Core: BOSEconomy
+# Which economy plugin are you using? ecoCreature supports the following four.
+# iConomy, BOSEconomy, Essentials, MultiCurrency
 #
 # IntegerCurrency set to true will round the reward to a whole number, no decimals.
 # While if it is set to false, it will give rewards with a decimal value.
@@ -70,7 +68,6 @@
 # The group names must match those within your Permissions configuration, ecoCreature compares.
 System:
     Economy:
-        Core: 'iConomy'
         IntegerCurrency: false
     Hunting:
         AllowCamping: false
