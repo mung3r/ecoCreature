@@ -15,23 +15,27 @@ public class ecoRewardManager
 {
     private final ecoCreature plugin;
 
-    public static boolean isIntegerCurrency;
+    private final static String AMOUNT_TOKEN = "<amt>";
+    private final static String ITEM_TOKEN = "<itm>";
+    private final static String CREATURE_TOKEN = "<crt>";
 
-    public static boolean canCampSpawner;
-    public static boolean shouldOverrideDrops;
-    public static boolean isFixedDrops;
-    public static boolean shouldClearCampDrops;
+    public static Boolean isIntegerCurrency;
+
+    public static Boolean canCampSpawner;
+    public static Boolean shouldOverrideDrops;
+    public static Boolean isFixedDrops;
+    public static Boolean shouldClearCampDrops;
     public static int campRadius;
-    public static boolean hasBowRewards;
-    public static boolean hasDeathPenalty;
-    public static boolean isPercentPenalty;
-    public static double penaltyAmount;
-    public static boolean canHuntUnderSeaLevel;
-    public static boolean isWolverineMode;
+    public static Boolean hasBowRewards;
+    public static Boolean hasDeathPenalty;
+    public static Boolean isPercentPenalty;
+    public static Double penaltyAmount;
+    public static Boolean canHuntUnderSeaLevel;
+    public static Boolean isWolverineMode;
 
-    public static boolean shouldOutputMessages;
-    public static boolean shouldOutputNoRewardMessage;
-    public static boolean shouldOutputSpawnerMessage;
+    public static Boolean shouldOutputMessages;
+    public static Boolean shouldOutputNoRewardMessage;
+    public static Boolean shouldOutputSpawnerMessage;
     public static String noBowRewardMessage;
     public static String noCampMessage;
     public static String deathPenaltyMessage;
@@ -47,15 +51,11 @@ public class ecoRewardManager
 
     public void registerDeathPenalty(Player player)
     {
-        if (player == null) {
+        if (player == null || !hasDeathPenalty) {
             return;
         }
 
-        if (!hasDeathPenalty) {
-            return;
-        }
-
-        double amount = isPercentPenalty ? plugin.method.getAccount(player.getName()).balance() * (penaltyAmount / 100.0D) : penaltyAmount;
+        Double amount = isPercentPenalty ? plugin.method.getAccount(player.getName()).balance() * (penaltyAmount / 100.0D) : penaltyAmount;
         plugin.method.getAccount(player.getName()).subtract(amount);
 
         if (ecoRewardManager.shouldOutputMessages) {
@@ -65,79 +65,76 @@ public class ecoRewardManager
 
     public void registerCreatureReward(Player player, CreatureType tamedCreature, CreatureType killedCreature)
     {
-        if (player == null) {
+        if (player == null || killedCreature == null) {
             return;
         }
 
-        if (killedCreature == null) {
+        if (!ecoCreature.permissionsHandler.has(player, "ecoCreature.Creature." + killedCreature.getName())) {
             return;
         }
 
         ecoReward reward = rewards.get(killedCreature);
         String weaponName = tamedCreature != null ? tamedCreature.getName() : Material.getMaterial(player.getItemInHand().getTypeId()).name();
 
-        double amount = computeAmount(reward);
-
-        if (isIntegerCurrency) {
-            amount = Math.round(amount);
-        }
-
-        if (groupMultiplier.containsKey(ecoCreature.permissionsHandler.getGroup(player.getWorld().getName(), player.getName()))) {
-            amount *= ((Double) groupMultiplier.get(ecoCreature.permissionsHandler.getGroup(player.getWorld().getName(), player.getName()))).doubleValue();
-        }
-
-        if (amount > 0.0D) {
-            plugin.method.getAccount(player.getName()).add(amount);
-            if (ecoRewardManager.shouldOutputMessages) {
-                player.sendMessage(reward.getRewardMessage().replaceAll("<amt>", plugin.method.format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll("<itm>", toCamelCase(weaponName)).replaceAll("<crt>", reward.getRewardName()));
-            }
-        }
-        else if (amount < 0.0D) {
-            plugin.method.getAccount(player.getName()).add(amount);
-            if (ecoRewardManager.shouldOutputMessages) {
-                player.sendMessage(reward.getPenaltyMessage().replaceAll("<amt>", plugin.method.format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll("<itm>", toCamelCase(weaponName)).replaceAll("<crt>", reward.getRewardName()));
-            }
-        }
-        else {
-            if ((ecoRewardManager.shouldOutputMessages) && (ecoRewardManager.shouldOutputNoRewardMessage)) {
-                player.sendMessage(reward.getNoRewardMessage().replaceAll("<crt>", reward.getRewardName()).replaceAll("<itm>", toCamelCase(weaponName)));
-            }
-        }
+        registerReward(player, reward, weaponName);
     }
 
     public void registerSpawnerReward(Player player, Block block)
     {
-        if (player == null) {
+        if (player == null || block == null) {
             return;
         }
 
-        if (block == null || !block.getType().equals(Material.MOB_SPAWNER)) {
+        if (!block.getType().equals(Material.MOB_SPAWNER)) {
             return;
         }
 
         if (ecoCreature.permissionsHandler.has(player, "ecoCreature.Creature.Spawner")) {
+
+            registerReward(player, spawnerReward, Material.getMaterial(player.getItemInHand().getTypeId()).name());
+
             for (ItemStack itemStack : spawnerReward.computeDrops()) {
                 block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
             }
         }
     }
 
-    private static double computeAmount(ecoReward reward)
+    private void registerReward(Player player, ecoReward reward, String weaponName)
     {
-        double amount = 0.0D;
-        if ((reward.getCoinMin() == 0.0D) && (reward.getCoinMax() == 0.0D))
-            amount = 0.0D;
-        else if (reward.getCoinMax() == 0.0D)
-            amount = reward.getCoinMin();
-        else
-            amount = reward.getCoinMin() + Math.random() * (reward.getCoinMax() - reward.getCoinMin());
-        if (reward.getCoinPercentage() == 0.0D)
-            return 0.0D;
-        if (reward.getCoinPercentage() == 100.0D)
-            return amount;
-        if (Math.random() < reward.getCoinPercentage() / 100.0D)
-            return amount;
-        return 0.0D;
+        Double amount = computeReward(player, reward);
+
+        if (amount > 0.0D) {
+            plugin.method.getAccount(player.getName()).add(amount);
+            if (ecoRewardManager.shouldOutputMessages) {
+                player.sendMessage(reward.getRewardMessage().replaceAll(AMOUNT_TOKEN, plugin.method.format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll(ITEM_TOKEN, toCamelCase(weaponName)).replaceAll(CREATURE_TOKEN, reward.getRewardName()));
+            }
+        }
+        else if (amount < 0.0D) {
+            plugin.method.getAccount(player.getName()).subtract(amount);
+            if (ecoRewardManager.shouldOutputMessages) {
+                player.sendMessage(reward.getPenaltyMessage().replaceAll(AMOUNT_TOKEN, plugin.method.format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll(ITEM_TOKEN, toCamelCase(weaponName)).replaceAll(CREATURE_TOKEN, reward.getRewardName()));
+            }
+        }
+        else {
+            if ((ecoRewardManager.shouldOutputMessages) && (ecoRewardManager.shouldOutputNoRewardMessage)) {
+                player.sendMessage(reward.getNoRewardMessage().replaceAll(CREATURE_TOKEN, reward.getRewardName()).replaceAll(ITEM_TOKEN, toCamelCase(weaponName)));
+            }
+        }
+    }
+
+    private static Double computeReward(Player player, ecoReward reward)
+    {
+        Double amount = reward.getRewardAmount();
+
+        if (isIntegerCurrency) {
+            amount = (double) Math.round(amount);
+        }
+
+        if (groupMultiplier.containsKey(ecoCreature.permissionsHandler.getGroup(player.getWorld().getName(), player.getName()))) {
+            amount *= groupMultiplier.get(ecoCreature.permissionsHandler.getGroup(player.getWorld().getName(), player.getName()));
+        }
+
+        return amount;
     }
 
     private static String toCamelCase(String rawItemName)
@@ -150,11 +147,11 @@ public class ecoRewardManager
         }
 
         if (itemName.trim().equals("Air")) {
-            return "Fists";
+            itemName = "Fists";
         }
 
         if (itemName.trim().equals("Bow")) {
-            return "Bow & Arrow";
+            itemName = "Bow & Arrow";
         }
 
         return itemName.trim();
