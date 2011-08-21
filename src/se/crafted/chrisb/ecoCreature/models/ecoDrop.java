@@ -13,7 +13,7 @@ public class ecoDrop
 {
     private Material item;
     private int amount;
-    private double percentage;
+    private Double percentage;
 
     public Material getItem()
     {
@@ -35,12 +35,12 @@ public class ecoDrop
         this.amount = amount;
     }
 
-    public double getPercentage()
+    public Double getPercentage()
     {
         return percentage;
     }
 
-    public void setPercentage(double percentage)
+    public void setPercentage(Double percentage)
     {
         this.percentage = percentage;
     }
