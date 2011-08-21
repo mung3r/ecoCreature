@@ -81,7 +81,7 @@ public class ecoEntityListener extends EntityListener
                 player.sendMessage(ecoRewardManager.noCampMessage);
             }
         }
-        else if (ecoCreature.permissionsHandler.has(player, "ecoCreature.Creature." + ecoEntityUtil.getCreatureType(livingEntity).getName())) {
+        else {
             plugin.getRewardManager().registerCreatureReward(player, tamedCreature, ecoEntityUtil.getCreatureType(livingEntity));
         }
 
