@@ -30,12 +30,12 @@ public class ecoEntityUtil
 {
     private static final double SEA_LEVEL = 63;
 
-    public static boolean isUnderSeaLevel(Entity entity)
+    public static Boolean isUnderSeaLevel(Entity entity)
     {
         return entity.getLocation().getY() < SEA_LEVEL;
     }
 
-    public static boolean isNearSpawner(Entity entity)
+    public static Boolean isNearSpawner(Entity entity)
     {
         Location location = entity.getLocation();
         int x = (int) location.getX();
