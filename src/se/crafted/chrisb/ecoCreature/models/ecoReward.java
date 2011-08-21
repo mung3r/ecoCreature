@@ -11,9 +11,11 @@ public class ecoReward
     private String rewardName;
     private CreatureType creatureType;
     private List<ecoDrop> drops;
-    private double coinMin;
-    private double coinMax;
-    private double coinPercentage;
+    private Double coinMin;
+    private Double coinMax;
+    private Double coinPercentage;
+    private Double rewardAmount;
+
     private String noRewardMessage;
     private String rewardMessage;
     private String penaltyMessage;
@@ -48,32 +50,32 @@ public class ecoReward
         this.drops = drops;
     }
 
-    public double getCoinMin()
+    public Double getCoinMin()
     {
         return coinMin;
     }
 
-    public void setCoinMin(double coinMin)
+    public void setCoinMin(Double coinMin)
     {
         this.coinMin = coinMin;
     }
 
-    public double getCoinMax()
+    public Double getCoinMax()
     {
         return coinMax;
     }
 
-    public void setCoinMax(double coinMax)
+    public void setCoinMax(Double coinMax)
     {
         this.coinMax = coinMax;
     }
 
-    public double getCoinPercentage()
+    public Double getCoinPercentage()
     {
         return coinPercentage;
     }
 
-    public void setCoinPercentage(double coinPercentage)
+    public void setCoinPercentage(Double coinPercentage)
     {
         this.coinPercentage = coinPercentage;
     }
@@ -124,10 +126,29 @@ public class ecoReward
         return stack;
     }
 
+    public Double getRewardAmount()
+    {
+        if (coinMin == coinMax) {
+            rewardAmount = coinMax;
+        }
+        else if (coinMin > coinMax) {
+            rewardAmount = coinMin;
+        }
+        else {
+            rewardAmount = coinMin + Math.random() * (coinMax - coinMin);
+        }
+
+        if (Math.random() > coinPercentage / 100.0D) {
+            rewardAmount = 0.0D;
+        }
+
+        return rewardAmount;
+    }
+
     @Override
     public String toString()
     {
-        return "ecoReward [rewardName=" + rewardName + ", creatureType=" + creatureType + ", drops=" + drops + ", coinMin=" + coinMin + ", coinMax=" + coinMax + ", coinPercentage=" + coinPercentage + ", noRewardMessage=" + noRewardMessage
-                + ", rewardMessage=" + rewardMessage + ", penaltyMessage=" + penaltyMessage + "]";
+        return "ecoReward [rewardName=" + rewardName + ", creatureType=" + creatureType + ", drops=" + drops + ", coinMin=" + coinMin + ", coinMax=" + coinMax + ", coinPercentage=" + coinPercentage + ", rewardAmount=" + rewardAmount
+                + ", noRewardMessage=" + noRewardMessage + ", rewardMessage=" + rewardMessage + ", penaltyMessage=" + penaltyMessage + "]";
     }
 }
