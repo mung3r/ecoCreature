@@ -22,7 +22,7 @@ public class ecoConfigManager
 
     private ecoCreature plugin;
     private Configuration config;
-    private boolean isEnabled;
+    private Boolean isEnabled;
 
     public ecoConfigManager(ecoCreature plugin)
     {
@@ -30,7 +30,7 @@ public class ecoConfigManager
         config = null;
     }
 
-    public boolean isEnabled()
+    public Boolean isEnabled()
     {
         return isEnabled;
     }
@@ -50,7 +50,7 @@ public class ecoConfigManager
         ecoRewardManager.campRadius = config.getInt("System.Hunting.CampRadius", 15);
         ecoRewardManager.hasBowRewards = config.getBoolean("System.Hunting.BowRewards", true);
         ecoRewardManager.hasDeathPenalty = config.getBoolean("System.Hunting.PenalizeDeath", false);
-        ecoRewardManager.isPercentPenalty = !config.getBoolean("System.Hunting.PenalizeType", false);
+        ecoRewardManager.isPercentPenalty = config.getBoolean("System.Hunting.PenalizeType", false);
         ecoRewardManager.penaltyAmount = config.getDouble("System.Hunting.PenalizeAmount", 0.0D);
         ecoRewardManager.canHuntUnderSeaLevel = config.getBoolean("System.Hunting.AllowUnderSeaLVL", true);
         ecoRewardManager.isWolverineMode = config.getBoolean("System.Hunting.WolverineMode", true);
