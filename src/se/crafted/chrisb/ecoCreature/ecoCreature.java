@@ -40,7 +40,7 @@ public class ecoCreature extends JavaPlugin
 
     public Method method = null;
 
-    private boolean setupPermissions()
+    private Boolean setupPermissions()
     {
         Plugin testPlugin = getServer().getPluginManager().getPlugin("Permissions");
 
