@@ -69,7 +69,7 @@ public class ecoRewardManager
             return;
         }
 
-        if (!ecoCreature.permissionsHandler.has(player, "ecoCreature.Creature." + killedCreature.getName())) {
+        if (!ecoCreature.permissionsHandler.has(player, "ecoCreature.Creature.Craft" + killedCreature.getName())) {
             return;
         }
 
