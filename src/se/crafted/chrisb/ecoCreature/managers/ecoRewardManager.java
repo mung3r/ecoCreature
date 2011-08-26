@@ -59,7 +59,7 @@ public class ecoRewardManager
         plugin.method.getAccount(player.getName()).subtract(amount);
 
         if (ecoRewardManager.shouldOutputMessages) {
-            player.sendMessage(deathPenaltyMessage.replaceAll("<amt>", plugin.method.format(amount).replaceAll("\\$", "\\\\\\$")));
+            player.sendMessage(deathPenaltyMessage.replaceAll(AMOUNT_TOKEN, plugin.method.format(amount).replaceAll("\\$", "\\\\\\$")));
         }
     }
 
