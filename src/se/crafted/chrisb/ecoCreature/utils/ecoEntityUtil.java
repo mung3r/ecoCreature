@@ -2,8 +2,6 @@ package se.crafted.chrisb.ecoCreature.utils;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.CreatureType;
@@ -11,7 +9,6 @@ import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Ghast;
 import org.bukkit.entity.Giant;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.PigZombie;
@@ -22,7 +19,6 @@ import org.bukkit.entity.Spider;
 import org.bukkit.entity.Squid;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
-import org.bukkit.event.entity.EntityDamageEvent;
 
 import se.crafted.chrisb.ecoCreature.managers.ecoRewardManager;
 
@@ -35,20 +31,15 @@ public class ecoEntityUtil
         return entity.getLocation().getY() < SEA_LEVEL;
     }
 
-    public static Boolean isNearSpawner(Entity entity)
+    public static boolean isNearSpawner(Entity entity)
     {
         Location location = entity.getLocation();
-        int x = (int) location.getX();
-        int y = (int) location.getY();
-        int z = (int) location.getZ();
         int r = ecoRewardManager.campRadius;
-        World world = entity.getWorld();
 
         for (int i = 0 - r; i <= r; i++) {
             for (int j = 0 - r; j <= r; j++) {
                 for (int k = 0 - r; k <= r; k++) {
-                    Block block = world.getBlockAt(x + i, y + j, z + k);
-                    if (block.getType().equals(Material.MOB_SPAWNER) && (block.getLocation().distance(location) < r))
+                    if (location.getBlock().getRelative(i, j, k).getType().equals(Material.MOB_SPAWNER))
                         return true;
                 }
             }
