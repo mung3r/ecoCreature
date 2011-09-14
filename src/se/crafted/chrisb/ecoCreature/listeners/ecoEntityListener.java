@@ -1,7 +1,6 @@
 package se.crafted.chrisb.ecoCreature.listeners;
 
 import org.bukkit.Material;
-import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -30,7 +29,7 @@ public class ecoEntityListener extends EntityListener
         }
 
         Player player = null;
-        CreatureType tamedCreature = null;
+        LivingEntity tamedCreature = null;
 
         if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
             EntityDamageByEntityEvent subEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
@@ -39,7 +38,7 @@ public class ecoEntityListener extends EntityListener
             }
             else if (subEvent.getDamager() instanceof Tameable) {
                 if (((Tameable) subEvent.getDamager()).isTamed() && ((Tameable) subEvent.getDamager()).getOwner() instanceof Player) {
-                    tamedCreature = ecoEntityUtil.getCreatureType((LivingEntity) subEvent.getDamager());
+                    tamedCreature = (LivingEntity) subEvent.getDamager();
                     player = (Player) ((Tameable) subEvent.getDamager()).getOwner();
                 }
             }
@@ -82,7 +81,7 @@ public class ecoEntityListener extends EntityListener
             }
         }
         else {
-            plugin.getRewardManager().registerCreatureReward(player, tamedCreature, ecoEntityUtil.getCreatureType(livingEntity));
+            plugin.getRewardManager().registerCreatureReward(player, tamedCreature, livingEntity);
         }
 
         event.getDrops().addAll(ecoRewardManager.rewards.get(ecoEntityUtil.getCreatureType(livingEntity)).computeDrops());

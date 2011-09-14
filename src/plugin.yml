@@ -1,4 +1,5 @@
 name: ecoCreature
 main: se.crafted.chrisb.ecoCreature.ecoCreature
 version: 0.0.5f (Cheatin' Death & Cheap Spawners!)
+depend: [Vault]
 description: Coins and drops for PvM

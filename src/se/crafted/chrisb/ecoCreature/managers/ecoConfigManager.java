@@ -43,6 +43,7 @@ public class ecoConfigManager
         isEnabled = config.getBoolean("DidYou.Read.Understand.Configure", false);
 
         ecoRewardManager.isIntegerCurrency = config.getBoolean("System.Economy.IntegerCurrency", false);
+        
         ecoRewardManager.canCampSpawner = config.getBoolean("System.Hunting.AllowCamping", false);
         ecoRewardManager.shouldClearCampDrops = config.getBoolean("System.Hunting.ClearCampDrops", true);
         ecoRewardManager.shouldOverrideDrops = config.getBoolean("System.Hunting.OverrideDrops", true);
