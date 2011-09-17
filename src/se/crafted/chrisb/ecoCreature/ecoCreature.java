@@ -18,6 +18,7 @@ import se.crafted.chrisb.ecoCreature.listeners.ecoBlockListener;
 import se.crafted.chrisb.ecoCreature.listeners.ecoEntityListener;
 import se.crafted.chrisb.ecoCreature.listeners.ecoPlayerListener;
 import se.crafted.chrisb.ecoCreature.managers.ecoConfigManager;
+import se.crafted.chrisb.ecoCreature.managers.ecoMessageManager;
 import se.crafted.chrisb.ecoCreature.managers.ecoRewardManager;
 
 public class ecoCreature extends JavaPlugin
@@ -33,8 +34,9 @@ public class ecoCreature extends JavaPlugin
     public static Permission permission = null;
     public static Economy economy = null;
 
-    private ecoConfigManager configManager;
+    private ecoMessageManager messageManager;
     private ecoRewardManager rewardManager;
+    private ecoConfigManager configManager;
 
     private Boolean setupPermission()
     {
@@ -65,14 +67,19 @@ public class ecoCreature extends JavaPlugin
         pluginManager.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
     }
 
-    public ecoConfigManager getConfigManager()
+    public ecoMessageManager getMessageManager()
     {
-        return configManager;
+        return messageManager;
     }
 
     public ecoRewardManager getRewardManager()
     {
         return rewardManager;
+    }
+
+    public ecoConfigManager getConfigManager()
+    {
+        return configManager;
     }
 
     public void onLoad()
@@ -83,6 +90,9 @@ public class ecoCreature extends JavaPlugin
     public void onEnable()
     {
         Locale.setDefault(Locale.US);
+
+        messageManager = new ecoMessageManager(this);
+        rewardManager = new ecoRewardManager(this);
 
         try {
             configManager = new ecoConfigManager(this);
@@ -113,7 +123,6 @@ public class ecoCreature extends JavaPlugin
             return;
         }
 
-        rewardManager = new ecoRewardManager(this);
         registerEvents();
 
         logger.log(Level.INFO, "[ecoCreature] " + getDescription().getVersion() + " enabled.");

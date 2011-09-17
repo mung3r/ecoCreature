@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class ecoReward
 {
-    private String rewardName;
+    private String creatureName;
     private CreatureType creatureType;
     private List<ecoDrop> drops;
     private Double coinMin;
@@ -16,18 +16,18 @@ public class ecoReward
     private Double coinPercentage;
     private Double rewardAmount;
 
-    private String noRewardMessage;
-    private String rewardMessage;
-    private String penaltyMessage;
+    private ecoMessage noRewardMessage;
+    private ecoMessage rewardMessage;
+    private ecoMessage penaltyMessage;
 
-    public String getRewardName()
+    public String getCreatureName()
     {
-        return rewardName;
+        return creatureName;
     }
 
-    public void setRewardName(String rewardName)
+    public void setCreatureName(String creatureName)
     {
-        this.rewardName = rewardName;
+        this.creatureName = creatureName;
     }
 
     public void setCreatureType(CreatureType creatureType)
@@ -80,32 +80,32 @@ public class ecoReward
         this.coinPercentage = coinPercentage;
     }
 
-    public String getNoRewardMessage()
+    public ecoMessage getNoRewardMessage()
     {
         return noRewardMessage;
     }
 
-    public void setNoRewardMessage(String noRewardMessage)
+    public void setNoRewardMessage(ecoMessage noRewardMessage)
     {
         this.noRewardMessage = noRewardMessage;
     }
 
-    public String getRewardMessage()
+    public ecoMessage getRewardMessage()
     {
         return rewardMessage;
     }
 
-    public void setRewardMessage(String rewardMessage)
+    public void setRewardMessage(ecoMessage rewardMessage)
     {
         this.rewardMessage = rewardMessage;
     }
 
-    public String getPenaltyMessage()
+    public ecoMessage getPenaltyMessage()
     {
         return penaltyMessage;
     }
 
-    public void setPenaltyMessage(String penaltyMessage)
+    public void setPenaltyMessage(ecoMessage penaltyMessage)
     {
         this.penaltyMessage = penaltyMessage;
     }
@@ -148,7 +148,7 @@ public class ecoReward
     @Override
     public String toString()
     {
-        return "ecoReward [rewardName=" + rewardName + ", creatureType=" + creatureType + ", drops=" + drops + ", coinMin=" + coinMin + ", coinMax=" + coinMax + ", coinPercentage=" + coinPercentage + ", rewardAmount=" + rewardAmount
+        return "ecoReward [rewardName=" + creatureName + ", creatureType=" + creatureType + ", drops=" + drops + ", coinMin=" + coinMin + ", coinMax=" + coinMax + ", coinPercentage=" + coinPercentage + ", rewardAmount=" + rewardAmount
                 + ", noRewardMessage=" + noRewardMessage + ", rewardMessage=" + rewardMessage + ", penaltyMessage=" + penaltyMessage + "]";
     }
 }

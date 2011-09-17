@@ -1,6 +1,7 @@
 package se.crafted.chrisb.ecoCreature.managers;
 
 import java.util.HashMap;
+import java.util.logging.Level;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -18,10 +19,6 @@ public class ecoRewardManager
 {
     private final ecoCreature plugin;
 
-    private final static String AMOUNT_TOKEN = "<amt>";
-    private final static String ITEM_TOKEN = "<itm>";
-    private final static String CREATURE_TOKEN = "<crt>";
-
     public static Boolean isIntegerCurrency;
 
     public static Boolean canCampSpawner;
@@ -35,13 +32,6 @@ public class ecoRewardManager
     public static Double penaltyAmount;
     public static Boolean canHuntUnderSeaLevel;
     public static Boolean isWolverineMode;
-
-    public static Boolean shouldOutputMessages;
-    public static Boolean shouldOutputNoRewardMessage;
-    public static Boolean shouldOutputSpawnerMessage;
-    public static String noBowRewardMessage;
-    public static String noCampMessage;
-    public static String deathPenaltyMessage;
 
     public static HashMap<String, Double> groupMultiplier = new HashMap<String, Double>();
     public static HashMap<CreatureType, ecoReward> rewards;
@@ -65,9 +55,7 @@ public class ecoRewardManager
         Double amount = isPercentPenalty ? ecoCreature.economy.getBalance(player.getName()) * (penaltyAmount / 100.0D) : penaltyAmount;
         ecoCreature.economy.withdrawPlayer(player.getName(), amount);
 
-        if (ecoRewardManager.shouldOutputMessages) {
-            player.sendMessage(deathPenaltyMessage.replaceAll(AMOUNT_TOKEN, ecoCreature.economy.format(amount).replaceAll("\\$", "\\\\\\$")));
-        }
+        plugin.getMessageManager().sendMessage(ecoMessageManager.deathPenaltyMessage, player, amount);
     }
 
     public void registerCreatureReward(Player player, LivingEntity tamedCreature, LivingEntity killedCreature)
@@ -92,7 +80,12 @@ public class ecoRewardManager
         ecoReward reward = rewards.get(ecoEntityUtil.getCreatureType(killedCreature));
         String weaponName = tamedCreature != null ? ecoEntityUtil.getCreatureType(tamedCreature).getName() : Material.getMaterial(player.getItemInHand().getTypeId()).name();
 
-        registerReward(player, reward, weaponName);
+        if (reward == null) {
+            ecoCreature.logger.log(Level.INFO, "[ecoCreature] Unrecognized creature: " + killedCreature.getClass().getSimpleName());
+        }
+        else {
+            registerReward(player, reward, weaponName);
+        }
     }
 
     public void registerSpawnerReward(Player player, Block block)
@@ -121,20 +114,14 @@ public class ecoRewardManager
 
         if (amount > 0.0D) {
             ecoCreature.economy.depositPlayer(player.getName(), amount);
-            if (ecoRewardManager.shouldOutputMessages) {
-                player.sendMessage(reward.getRewardMessage().replaceAll(AMOUNT_TOKEN, ecoCreature.economy.format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll(ITEM_TOKEN, toCamelCase(weaponName)).replaceAll(CREATURE_TOKEN, reward.getRewardName()));
-            }
+            plugin.getMessageManager().sendMessage(reward.getRewardMessage(), player, amount, reward.getCreatureName(), weaponName);
         }
         else if (amount < 0.0D) {
             ecoCreature.economy.withdrawPlayer(player.getName(), amount);
-            if (ecoRewardManager.shouldOutputMessages) {
-                player.sendMessage(reward.getPenaltyMessage().replaceAll(AMOUNT_TOKEN, ecoCreature.economy.format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll(ITEM_TOKEN, toCamelCase(weaponName)).replaceAll(CREATURE_TOKEN, reward.getRewardName()));
-            }
+            plugin.getMessageManager().sendMessage(reward.getPenaltyMessage(), player, amount, reward.getCreatureName(), weaponName);
         }
         else {
-            if ((ecoRewardManager.shouldOutputMessages) && (ecoRewardManager.shouldOutputNoRewardMessage)) {
-                player.sendMessage(reward.getNoRewardMessage().replaceAll(CREATURE_TOKEN, reward.getRewardName()).replaceAll(ITEM_TOKEN, toCamelCase(weaponName)));
-            }
+            plugin.getMessageManager().sendMessage(reward.getNoRewardMessage(), player, reward.getCreatureName(), weaponName);
         }
     }
 
@@ -151,30 +138,5 @@ public class ecoRewardManager
         }
 
         return amount;
-    }
-
-    private static String toCamelCase(String rawItemName)
-    {
-        String[] rawItemNameParts = rawItemName.split("_");
-        String itemName = "";
-
-        for (String itemNamePart : rawItemNameParts) {
-            itemName = itemName + " " + toProperCase(itemNamePart);
-        }
-
-        if (itemName.trim().equals("Air")) {
-            itemName = "Fists";
-        }
-
-        if (itemName.trim().equals("Bow")) {
-            itemName = "Bow & Arrow";
-        }
-
-        return itemName.trim();
-    }
-
-    private static String toProperCase(String str)
-    {
-        return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 }

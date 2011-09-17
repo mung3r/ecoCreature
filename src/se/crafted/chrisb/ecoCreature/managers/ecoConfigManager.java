@@ -14,6 +14,7 @@ import org.bukkit.util.config.Configuration;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.models.ecoDrop;
+import se.crafted.chrisb.ecoCreature.models.ecoMessage;
 import se.crafted.chrisb.ecoCreature.models.ecoReward;
 
 public class ecoConfigManager
@@ -43,7 +44,7 @@ public class ecoConfigManager
         isEnabled = config.getBoolean("DidYou.Read.Understand.Configure", false);
 
         ecoRewardManager.isIntegerCurrency = config.getBoolean("System.Economy.IntegerCurrency", false);
-        
+
         ecoRewardManager.canCampSpawner = config.getBoolean("System.Hunting.AllowCamping", false);
         ecoRewardManager.shouldClearCampDrops = config.getBoolean("System.Hunting.ClearCampDrops", true);
         ecoRewardManager.shouldOverrideDrops = config.getBoolean("System.Hunting.OverrideDrops", true);
@@ -56,33 +57,32 @@ public class ecoConfigManager
         ecoRewardManager.canHuntUnderSeaLevel = config.getBoolean("System.Hunting.AllowUnderSeaLVL", true);
         ecoRewardManager.isWolverineMode = config.getBoolean("System.Hunting.WolverineMode", true);
 
-        ecoRewardManager.shouldOutputMessages = config.getBoolean("System.Messages.Output", true);
-        ecoRewardManager.shouldOutputNoRewardMessage = config.getBoolean("System.Messages.NoReward", false);
-        ecoRewardManager.shouldOutputSpawnerMessage = config.getBoolean("System.Messages.Spawner", false);
-        ecoRewardManager.noBowRewardMessage = convertMessage(config.getString("System.Messages.NoBowMessage"));
-        ecoRewardManager.noCampMessage = convertMessage(config.getString("System.Messages.NoCampMessage"));
-        ecoRewardManager.deathPenaltyMessage = convertMessage(config.getString("System.Messages.DeathPenaltyMessage"));
+        ecoMessageManager.shouldOutputMessages = config.getBoolean("System.Messages.Output", true);
+        ecoMessageManager.noBowRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoBowMessage")), true);
+        ecoMessageManager.noCampMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoCampMessage")), config.getBoolean("System.Messages.Spawner", false));
+        ecoMessageManager.deathPenaltyMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DeathPenaltyMessage")), true);
 
         for (String groupMultiplierName : config.getKeys("Gain")) {
             ecoRewardManager.groupMultiplier.put(groupMultiplierName, Double.valueOf(config.getDouble("Gain." + groupMultiplierName + ".Amount", 0.0D)));
         }
 
         ecoRewardManager.rewards = new HashMap<CreatureType, ecoReward>();
-        for (String rewardName : config.getKeys("RewardTable")) {
+        for (String creatureName : config.getKeys("RewardTable")) {
             ecoReward reward = new ecoReward();
-            reward.setRewardName(rewardName);
-            reward.setCreatureType(CreatureType.fromName(rewardName));
+            reward.setCreatureName(creatureName);
+            reward.setCreatureType(CreatureType.fromName(creatureName));
 
-            String root = "RewardTable." + rewardName;
+            String root = "RewardTable." + creatureName;
             reward.setDrops(parseDrops(config.getString(root + ".Drops")));
             reward.setCoinMax(config.getDouble(root + ".Coin_Maximum", 0));
             reward.setCoinMin(config.getDouble(root + ".Coin_Minimum", 5));
             reward.setCoinPercentage(config.getDouble(root + ".Coin_Percent", 50));
-            reward.setNoRewardMessage(convertMessage(config.getString(root + ".NoReward_Message")));
-            reward.setRewardMessage(convertMessage(config.getString(root + ".Reward_Message")));
-            reward.setPenaltyMessage(convertMessage(config.getString(root + ".Penalty_Message")));
 
-            if (rewardName.equals("Spawner")) {
+            reward.setNoRewardMessage(new ecoMessage(convertMessage(config.getString(root + ".NoReward_Message")), config.getBoolean("System.Messages.NoReward", false)));
+            reward.setRewardMessage(new ecoMessage(convertMessage(config.getString(root + ".Reward_Message")), true));
+            reward.setPenaltyMessage(new ecoMessage(convertMessage(config.getString(root + ".Penalty_Message")), true));
+
+            if (creatureName.equals("Spawner")) {
                 ecoRewardManager.spawnerReward = reward;
             }
             else {
@@ -133,6 +133,7 @@ public class ecoConfigManager
                     drop.setItem(Material.getMaterial(Integer.parseInt(dropParts[0])));
                     drop.setAmount(Integer.parseInt(dropParts[1]));
                     drop.setPercentage(Double.parseDouble(dropParts[2]));
+                    drop.setIsFixedDrops(ecoRewardManager.isFixedDrops);
                     drops.add(drop);
                 }
 

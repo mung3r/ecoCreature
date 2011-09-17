@@ -7,13 +7,13 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.managers.ecoRewardManager;
 
 public class ecoDrop
 {
     private Material item;
     private int amount;
     private Double percentage;
+    private Boolean isFixedDrops;
 
     public Material getItem()
     {
@@ -45,10 +45,20 @@ public class ecoDrop
         this.percentage = percentage;
     }
 
+    public Boolean getIsFixedDrops()
+    {
+        return isFixedDrops;
+    }
+
+    public void setIsFixedDrops(Boolean isFixedDrops)
+    {
+        this.isFixedDrops = isFixedDrops;
+    }
+
     public ItemStack computeItemStack()
     {
         if (Math.floor(Math.random() * 100.0D) < percentage) {
-            int dropAmount = ecoRewardManager.isFixedDrops ? amount : (new Random()).nextInt(amount) + 1;
+            int dropAmount = isFixedDrops ? amount : (new Random()).nextInt(amount) + 1;
             if (dropAmount > 0) {
                 ItemStack itemStack = new ItemStack(item, dropAmount);
                 if (itemStack.getAmount() > 0) {

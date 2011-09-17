@@ -85,9 +85,9 @@ System:
         Output: true
         NoReward: true
         Spawner: false
-        NoCampMessage: '[&4Warning&f] Camping Monster Spawners gives no rewards.'
-        NoBowMessage: '[&9???&f] You can''t seem to find any rewards on this creature.'
-        DeathPenaltyMessage: 'You wake up to find that &6<amt> &fis missing from your pockets!'
+        NoCampMessage: '[&4Warning&f] You find no rewards camping monster spawners.'
+        NoBowMessage: '[&9???&f] You find no rewards on this creature.'
+        DeathPenaltyMessage: 'You wake up to find &6<amt> &fmissing from your pockets!'
 Gain:
     Default:
         Amount: 1
@@ -132,72 +132,72 @@ RewardTable:
         Coin_Minimum: 0.01
         Coin_Maximum: 10.00
         Coin_Percent: 75
-        NoReward_Message: '[&9!&f] The &c<crt> &fdies from a blow with your &3<itm>'
-        Reward_Message: '[&2:)&f] You have been awarded &6<amt> &ffor slaying a &c<crt>'
-        Penalty_Message: '[&4:(&f] You have been penalized with a deduction of &6<amt> &ffor slaying a &c<crt>'
+        NoReward_Message: '[&9!&f] You killed a &c<crt> &fweilding a &3<itm>'
+        Reward_Message: '[&2:)&f] You are awarded &6<amt> &ffor killing a &c<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor killing a &c<crt>'
 
     Skeleton:
         Drops: '352:2:10;262:2:20'
         Coin_Minimum: 0.05
         Coin_Maximum: 10.00
         Coin_Percent: 35
-        NoReward_Message: '[&9!&f] The &c<crt> &fdies from a blow with your &3<itm>'
-        Reward_Message: '[&2:)&f] You have been awarded &6<amt> &ffor slaying a &c<crt>'
-        Penalty_Message: '[&4:(&f] You have been penalized with a deduction of &6<amt> &ffor slaying a &2<crt>'
+        NoReward_Message: '[&9!&f] You killed a &c<crt> &fweilding a &3<itm>'
+        Reward_Message: '[&2:)&f] You are awarded &6<amt> &ffor killing a &c<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor killing a &c<crt>'
 
     Zombie:
         Drops: '288:2:15'
         Coin_Minimum: 0.01
         Coin_Maximum: 6.00
         Coin_Percent: 65
-        NoReward_Message: '[&9!&f] The &c<crt> &fdies from a blow with your &3<itm>'
-        Reward_Message: '[&2:)&f] You have been awarded &6<amt> &ffor slaying a &c<crt>'
-        Penalty_Message: '[&4:(&f] You have been penalized with a deduction of &6<amt> &ffor slaying a &2<crt>'
+        NoReward_Message: '[&9!&f] You killed a &c<crt> &fweilding a &3<itm>'
+        Reward_Message: '[&2:)&f] You are awarded &6<amt> &ffor killing a &c<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor killing a &c<crt>'
 
     Spider:
         Drops: '287:1:8'
         Coin_Minimum: 0.01
         Coin_Maximum: 5.70
         Coin_Percent: 10
-        NoReward_Message: '[&9!&f] The &c<crt> &fdies from a blow with your &3<itm>'
-        Reward_Message: '[&2:)&f] You have been awarded &6<amt> &ffor slaying a &c<crt>'
-        Penalty_Message: '[&4:(&f] You have been penalized with a deduction of &6<amt> &ffor slaying a &2<crt>'
+        NoReward_Message: '[&9!&f] You killed a &c<crt> &fweilding a &3<itm>'
+        Reward_Message: '[&2:)&f] You are awarded &6<amt> &ffor killing a &c<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor killing a &c<crt>'
 
     PigZombie:
         Drops: '320:2:3;288:2:8'
         Coin_Minimum: 0.01
         Coin_Maximum: 20.00
         Coin_Percent: 20
-        NoReward_Message: '[&9!&f] The &c<crt> &fdies from a blow with your &3<itm>'
-        Reward_Message: '[&2:)&f] You have been awarded &6<amt> &ffor slaying a &c<crt>'
-        Penalty_Message: '[&4:(&f] You have been penalized with a deduction of &6<amt> &ffor slaying a &2<crt>'
+        NoReward_Message: '[&9!&f] You killed a &c<crt> &fweilding a &3<itm>'
+        Reward_Message: '[&2:)&f] You are awarded &6<amt> &ffor killing a &c<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor killing a &c<crt>'
 
     Ghast:
         Drops: '289:2:15'
         Coin_Minimum: 0.15
         Coin_Maximum: 25.00
         Coin_Percent: 15
-        NoReward_Message: '[&9!&f] The &c<crt> &fdies from a blow with your &3<itm>'
-        Reward_Message: '[&2:)&f] You have been awarded &6<amt> &ffor slaying a &c<crt>'
-        Penalty_Message: '[&4:(&f] You have been penalized with a deduction of &6<amt> &ffor slaying a &2<crt>'
+        NoReward_Message: '[&9!&f] You killed a &c<crt> &fweilding a &3<itm>'
+        Reward_Message: '[&2:)&f] You are awarded &6<amt> &ffor killing a &c<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor killing a &c<crt>'
 
     Slime:
         Drops: '341:2:5'
         Coin_Minimum: 0.08
         Coin_Maximum: 13.00
         Coin_Percent: 65
-        NoReward_Message: '[&9!&f] The &c<crt> &fdies from a blow with your &3<itm>'
-        Reward_Message: '[&2:)&f] You have been awarded &6<amt> &ffor slaying a &c<crt>'
-        Penalty_Message: '[&4:(&f] You have been penalized with a deduction of &6<amt> &ffor slaying a &2<crt>'
+        NoReward_Message: '[&9!&f] You killed a &c<crt> &fweilding a &3<itm>'
+        Reward_Message: '[&2:)&f] You are awarded &6<amt> &ffor killing a &c<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor killing a &c<crt>'
 
     Giant:
         Drops: ''
         Coin_Minimum: 0.30
         Coin_Maximum: 55.00
         Coin_Percent: 60
-        NoReward_Message: '[&9!&f] The &c<crt> &fdies from a blow with your &3<itm>'
-        Reward_Message: '[&2:)&f] You have been awarded &6<amt> &ffor slaying a &c<crt>'
-        Penalty_Message: '[&4:(&f] You have been penalized with a deduction of &6<amt> &ffor slaying a &2<crt>'
+        NoReward_Message: '[&9!&f] You killed a &c<crt> &fweilding a &3<itm>'
+        Reward_Message: '[&2:)&f] You are awarded &6<amt> &ffor killing a &c<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor killing a &c<crt>'
 
     Chicken:
         Drops: '288:2:30'
@@ -206,7 +206,7 @@ RewardTable:
         Coin_Percent: 10
         NoReward_Message: '[&9!&f] The &2<crt> &fdies from a blow with your &3<itm>'
         Reward_Message: '[&2:)&f] You have been awarded &6<amt> &ffor slaying a &2<crt>'
-        Penalty_Message: '[&4:(&f] You have been penalized with a deduction of &6<amt> &ffor slaying a &2<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor killing a &c<crt>'
 
     Cow:
         Drops: '334:2:25'
@@ -215,7 +215,7 @@ RewardTable:
         Coin_Percent: 40
         NoReward_Message: '[&9!&f] The &2<crt> &fdies from a blow with your &3<itm>'
         Reward_Message: '[&2:)&f] You have been awarded &6<amt> &ffor slaying a &2<crt>'
-        Penalty_Message: '[&4:(&f] You have been penalized with a deduction of &6<amt> &ffor slaying a &2<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor killing a &c<crt>'
 
     Pig:
         Drops: '319:2:25'
@@ -224,7 +224,7 @@ RewardTable:
         Coin_Percent: 43
         NoReward_Message: '[&9!&f] The &2<crt> &fdies from a blow with your &3<itm>'
         Reward_Message: '[&2:)&f] You have been awarded &6<amt> &ffor slaying a &2<crt>'
-        Penalty_Message: '[&4:(&f] You have been penalized with a deduction of &6<amt> &ffor slaying a &2<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor killing a &c<crt>'
 
     Sheep:
         Drops: ''
@@ -233,7 +233,7 @@ RewardTable:
         Coin_Percent: 15
         NoReward_Message: '[&9!&f] The &2<crt> &fdies from a blow with your &3<itm>'
         Reward_Message: '[&2:)&f] You have been awarded &6<amt> &ffor slaying a &2<crt>'
-        Penalty_Message: '[&4:(&f] You have been penalized with a deduction of &6<amt> &ffor slaying a &2<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor killing a &c<crt>'
 
     Squid:
         Drops: '351:2:25'
@@ -242,7 +242,7 @@ RewardTable:
         Coin_Percent: 5
         NoReward_Message: '[&9!&f] The &2<crt> &fdies from a blow with your &3<itm>'
         Reward_Message: '[&2:)&f] You have been awarded &6<amt> &ffor slaying a &2<crt>'
-        Penalty_Message: '[&4:(&f] You have been penalized with a deduction of &6<amt> &ffor slaying a &2<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor killing a &c<crt>'
 
     Wolf:
         Drops: ''
@@ -251,25 +251,52 @@ RewardTable:
         Coin_Percent: 3
         NoReward_Message: '[&9!&f] The &2<crt> &fdies from a blow with your &3<itm>'
         Reward_Message: '[&2:)&f] You have been awarded &6<amt> &ffor slaying a &2<crt>'
-        Penalty_Message: '[&4:(&f] You have been penalized with a deduction of &6<amt> &ffor slaying a &2<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor killing a &c<crt>'
 
     Monster:
         Drops: ''
         Coin_Minimum: 0.01
         Coin_Maximum: 20.00
         Coin_Percent: 20
-        NoReward_Message: '[&9!&f] The &c<crt> &fdies from a blow with your &3<itm>'
-        Reward_Message: '[&2:)&f] You have been awarded &6<amt> &ffor slaying a &c<crt>'
-        Penalty_Message: '[&4:(&f] You have been penalized with a deduction of &6<amt> &ffor slaying a &2<crt>'
+        NoReward_Message: '[&9!&f] You killed a &c<crt> &fweilding a &3<itm>'
+        Reward_Message: '[&2:)&f] You are awarded &6<amt> &ffor killing a &c<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor killing a &c<crt>'
+
+    CaveSpider:
+        Drops: ''
+        Coin_Minimum: 0.01
+        Coin_Maximum: 5.70
+        Coin_Percent: 10
+        NoReward_Message: '[&9!&f] You killed a &c<crt> &fweilding a &3<itm>'
+        Reward_Message: '[&2:)&f] You are awarded &6<amt> &ffor killing a &c<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor killing a &c<crt>'
+
+    Enderman:
+        Drops: ''
+        Coin_Minimum: 0.01
+        Coin_Maximum: 6.00
+        Coin_Percent: 65
+        NoReward_Message: '[&9!&f] You killed a &c<crt> &fweilding a &3<itm>'
+        Reward_Message: '[&2:)&f] You are awarded &6<amt> &ffor killing a &c<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor killing a &c<crt>'
+        
+    Silverfish:
+        Drops: ''
+        Coin_Minimum: 0.08
+        Coin_Maximum: 13.00
+        Coin_Percent: 65
+        NoReward_Message: '[&9!&f] You killed a &c<crt> &fweilding a &3<itm>'
+        Reward_Message: '[&2:)&f] You are awarded &6<amt> &ffor killing a &c<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor killing a &c<crt>'
 
     Spawner:
         Drops: ''
         Coin_Minimum: 0.01
         Coin_Maximum: 30.00
         Coin_Percent: 100
-        NoReward_Message: '[&9!&f] The &2<crt> &fexplodes from a blow with your &3<itm>'
-        Reward_Message: '[&2:)&f] You have been awarded &6<amt> &ffor slaying a &2<crt>'
-        Penalty_Message: '[&4:(&f] You have been penalized with a deduction of &6<amt> &ffor slaying a &2<crt>'
+        NoReward_Message: '[&9!&f] You destroyed a &2<crt> &fweilding a &3<itm>'
+        Reward_Message: '[&2:)&f] You are awarded &6<amt> &ffor destroying a &2<crt>'
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor destroying a &2<crt>''
 
 DidYou:
     Read:

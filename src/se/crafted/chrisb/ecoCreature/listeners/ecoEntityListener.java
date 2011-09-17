@@ -9,6 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityListener;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.managers.ecoMessageManager;
 import se.crafted.chrisb.ecoCreature.managers.ecoRewardManager;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 
@@ -58,15 +59,11 @@ public class ecoEntityListener extends EntityListener
         }
 
         if (player.getItemInHand().getType().equals(Material.BOW) && !ecoRewardManager.hasBowRewards) {
-            if (ecoRewardManager.shouldOutputMessages) {
-                player.sendMessage(ecoRewardManager.noBowRewardMessage);
-            }
+            plugin.getMessageManager().sendMessage(ecoMessageManager.noBowRewardMessage, player);
             return;
         }
         else if (ecoEntityUtil.isUnderSeaLevel(player) && !ecoRewardManager.canHuntUnderSeaLevel) {
-            if (ecoRewardManager.shouldOutputMessages) {
-                player.sendMessage(ecoRewardManager.noBowRewardMessage);
-            }
+            plugin.getMessageManager().sendMessage(ecoMessageManager.noBowRewardMessage, player);
             return;
         }
 
@@ -76,14 +73,14 @@ public class ecoEntityListener extends EntityListener
             if (ecoRewardManager.shouldClearCampDrops) {
                 event.getDrops().clear();
             }
-            if (ecoRewardManager.shouldOutputMessages && ecoRewardManager.shouldOutputSpawnerMessage) {
-                player.sendMessage(ecoRewardManager.noCampMessage);
-            }
+            plugin.getMessageManager().sendMessage(ecoMessageManager.noCampMessage, player);
         }
         else {
             plugin.getRewardManager().registerCreatureReward(player, tamedCreature, livingEntity);
         }
 
-        event.getDrops().addAll(ecoRewardManager.rewards.get(ecoEntityUtil.getCreatureType(livingEntity)).computeDrops());
+        if (ecoRewardManager.rewards.containsKey(livingEntity)) {
+            event.getDrops().addAll(ecoRewardManager.rewards.get(ecoEntityUtil.getCreatureType(livingEntity)).computeDrops());
+        }
     }
 }

@@ -2,10 +2,12 @@ package se.crafted.chrisb.ecoCreature.utils;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.CaveSpider;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Ghast;
 import org.bukkit.entity.Giant;
@@ -13,6 +15,7 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Sheep;
+import org.bukkit.entity.Silverfish;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Slime;
 import org.bukkit.entity.Spider;
@@ -49,12 +52,16 @@ public class ecoEntityUtil
 
     public static CreatureType getCreatureType(Entity entity)
     {
+        if (entity instanceof CaveSpider)
+            return CreatureType.CAVE_SPIDER;
         if (entity instanceof Chicken)
             return CreatureType.CHICKEN;
         if (entity instanceof Cow)
             return CreatureType.COW;
         if (entity instanceof Creeper)
             return CreatureType.CREEPER;
+        if (entity instanceof Enderman)
+            return CreatureType.ENDERMAN;
         if (entity instanceof Ghast)
             return CreatureType.GHAST;
         if (entity instanceof Giant)
@@ -69,6 +76,8 @@ public class ecoEntityUtil
             return CreatureType.SKELETON;
         if (entity instanceof Slime)
             return CreatureType.SLIME;
+        if (entity instanceof Silverfish)
+            return CreatureType.SILVERFISH;
         if (entity instanceof Spider)
             return CreatureType.SPIDER;
         if (entity instanceof Squid)
