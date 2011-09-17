@@ -296,7 +296,7 @@ RewardTable:
         Coin_Percent: 100
         NoReward_Message: '[&9!&f] You destroyed a &2<crt> &fweilding a &3<itm>'
         Reward_Message: '[&2:)&f] You are awarded &6<amt> &ffor destroying a &2<crt>'
-        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor destroying a &2<crt>''
+        Penalty_Message: '[&4:(&f] You are penalized &6<amt> &ffor destroying a &2<crt>'
 
 DidYou:
     Read:
