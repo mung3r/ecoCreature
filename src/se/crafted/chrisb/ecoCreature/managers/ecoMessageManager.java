@@ -7,6 +7,7 @@ import se.crafted.chrisb.ecoCreature.models.ecoMessage;
 
 public class ecoMessageManager
 {
+    private final static String PLAYER_TOKEN = "<plr>";
     private final static String AMOUNT_TOKEN = "<amt>";
     private final static String ITEM_TOKEN = "<itm>";
     private final static String CREATURE_TOKEN = "<crt>";
@@ -27,28 +28,28 @@ public class ecoMessageManager
     public void sendMessage(ecoMessage message, Player player)
     {
         if (shouldOutputMessages && message.isEnabled()) {
-            player.sendMessage(message.getMessage());
+            player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()));
         }
     }
 
     public void sendMessage(ecoMessage message, Player player, Double amount)
     {
         if (shouldOutputMessages && message.isEnabled()) {
-            player.sendMessage(message.getMessage().replaceAll(AMOUNT_TOKEN, ecoCreature.economy.format(amount).replaceAll("\\$", "\\\\\\$")));
+            player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()).replaceAll(AMOUNT_TOKEN, ecoCreature.economy.format(amount).replaceAll("\\$", "\\\\\\$")));
         }
     }
 
     public void sendMessage(ecoMessage message, Player player, Double amount, String creatureName, String weaponName)
     {
         if (shouldOutputMessages && message.isEnabled()) {
-            player.sendMessage(message.getMessage().replaceAll(AMOUNT_TOKEN, ecoCreature.economy.format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll(ITEM_TOKEN, toCamelCase(weaponName)).replaceAll(CREATURE_TOKEN, creatureName));
+            player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()).replaceAll(AMOUNT_TOKEN, ecoCreature.economy.format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll(ITEM_TOKEN, toCamelCase(weaponName)).replaceAll(CREATURE_TOKEN, creatureName));
         }
     }
 
     public void sendMessage(ecoMessage message, Player player, String creatureName, String weaponName)
     {
         if (shouldOutputMessages && message.isEnabled()) {
-            player.sendMessage(message.getMessage().replaceAll(CREATURE_TOKEN, creatureName).replaceAll(ITEM_TOKEN, toCamelCase(weaponName)));
+            player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()).replaceAll(CREATURE_TOKEN, creatureName).replaceAll(ITEM_TOKEN, toCamelCase(weaponName)));
         }
     }
 
