@@ -14,6 +14,7 @@ public class ecoDrop
     private int amount;
     private Double percentage;
     private Boolean isFixedDrops;
+    private Random random = new Random();
 
     public Material getItem()
     {
@@ -57,8 +58,8 @@ public class ecoDrop
 
     public ItemStack computeItemStack()
     {
-        if (Math.floor(Math.random() * 100.0D) < percentage) {
-            int dropAmount = isFixedDrops ? amount : (new Random()).nextInt(amount) + 1;
+        if (random.nextDouble() * 100.0D + 1 < percentage) {
+            int dropAmount = isFixedDrops ? amount : random.nextInt(amount) + 1;
             if (dropAmount > 0) {
                 ItemStack itemStack = new ItemStack(item, dropAmount);
                 if (itemStack.getAmount() > 0) {
