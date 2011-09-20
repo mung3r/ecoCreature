@@ -72,15 +72,15 @@ System:
     Hunting:
         AllowCamping: false
         ClearCampDrops: true
+        CampRadius: 7
         OverrideDrops: true
         FixedDrops: false
         BowRewards: true
-        PenalizeDeath: false
+        PenalizeDeath: true
         PenalizeType: true
-        PenalizeAmount: 3
+        PenalizeAmount: 0.5
         AllowUnderSeaLVL: true
         WolverineMode: true
-        CampRadius: 15
     Messages:
         Output: true
         NoReward: true
@@ -90,9 +90,9 @@ System:
         DeathPenaltyMessage: '&7You wake up to find &6<amt>&7 missing from your pockets!'
 Gain:
     Default:
-        Amount: 1
+        Amount: 1.0
     Donors:
-        Amount: 2.5
+        Amount: 2.0
 
 # HOW DO I DROPS!?
 #     - format: 'item:amount:percent'
@@ -102,8 +102,8 @@ Gain:
 # is the chanse it has to drop, in percent... 50 yields a fifty fifty, for instance.
 #
 # -+-+- Special note on the AMOUNT, if you set an item to drop with the value set to 10
-#       it selects a random amount, there's no guarantee that it will be fixed to 10.
-#       ---> This will later be optional.
+#       it selects a random amount, there's no guarantee that it will be fixed to 10 unless
+#       FixedDrops is set to true
 #
 # Coin_Minimum - Minium amount of coins to drop.
 # Coin_Maximum - The max amount of coins to drop.
@@ -129,172 +129,172 @@ Gain:
 # for when the player is penalized with a deduction.
 RewardTable:
     Creeper:
-        Drops: '289:3:10'
-        Coin_Minimum: 0.01
-        Coin_Maximum: 10.00
-        Coin_Percent: 75
+        Drops: '289:2:75'
+        Coin_Minimum: 5.50
+        Coin_Maximum: 10.50
+        Coin_Percent: 50.0
         NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
     Skeleton:
-        Drops: '352:2:10;262:2:20'
-        Coin_Minimum: 0.05
-        Coin_Maximum: 10.00
-        Coin_Percent: 35
+        Drops: '352:2:75;262:2:75'
+        Coin_Minimum: 1.00
+        Coin_Maximum: 3.00
+        Coin_Percent: 50.0
         NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
     Zombie:
-        Drops: '288:2:15'
-        Coin_Minimum: 0.01
-        Coin_Maximum: 6.00
-        Coin_Percent: 65
+        Drops: '367:2:75'
+        Coin_Minimum: 1.00
+        Coin_Maximum: 3.50
+        Coin_Percent: 50.0
         NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
     Spider:
-        Drops: '287:1:8'
-        Coin_Minimum: 0.01
-        Coin_Maximum: 5.70
-        Coin_Percent: 10
+        Drops: '287:2:75'
+        Coin_Minimum: 0.50
+        Coin_Maximum: 1.50
+        Coin_Percent: 50.0
         NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
     PigZombie:
-        Drops: '320:2:3;288:2:8'
-        Coin_Minimum: 0.01
-        Coin_Maximum: 20.00
-        Coin_Percent: 20
+        Drops: '320:2:75'
+        Coin_Minimum: 1.00
+        Coin_Maximum: 3.50
+        Coin_Percent: 50.0
         NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
     Ghast:
-        Drops: '289:2:15'
-        Coin_Minimum: 0.15
-        Coin_Maximum: 25.00
-        Coin_Percent: 15
+        Drops: '289:2:75'
+        Coin_Minimum: 3.50
+        Coin_Maximum: 3.50
+        Coin_Percent: 50.0
         NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
     Slime:
-        Drops: '341:2:5'
-        Coin_Minimum: 0.08
-        Coin_Maximum: 13.00
-        Coin_Percent: 65
+        Drops: '341:2:75'
+        Coin_Minimum: 0.00
+        Coin_Maximum: 2.00
+        Coin_Percent: 50.00
         NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
     Giant:
         Drops: ''
-        Coin_Minimum: 0.30
-        Coin_Maximum: 55.00
-        Coin_Percent: 60
+        Coin_Minimum: 8.50
+        Coin_Maximum: 8.50
+        Coin_Percent: 50.00
         NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
     Chicken:
-        Drops: '288:2:30'
-        Coin_Minimum: 0.01
+        Drops: '288:2:75;365:1:75'
+        Coin_Minimum: 0.10
         Coin_Maximum: 2.00
-        Coin_Percent: 10
+        Coin_Percent: 1.0
         NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
     Cow:
-        Drops: '334:2:25'
-        Coin_Minimum: 0.01
-        Coin_Maximum: 3.00
-        Coin_Percent: 40
+        Drops: '334:2:75;363:3:75'
+        Coin_Minimum: 0.10
+        Coin_Maximum: 2.50
+        Coin_Percent: 1.0
         NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
     Pig:
-        Drops: '319:2:25'
-        Coin_Minimum: 0.01
+        Drops: '319:2:75'
+        Coin_Minimum: 0.10
         Coin_Maximum: 2.50
-        Coin_Percent: 43
+        Coin_Percent: 1.0
         NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
     Sheep:
-        Drops: ''
-        Coin_Minimum: 0.01
-        Coin_Maximum: 1.50
-        Coin_Percent: 15
+        Drops: '35:1:75'
+        Coin_Minimum: 0.10
+        Coin_Maximum: 2.50
+        Coin_Percent: 1.0
         NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
     Squid:
-        Drops: '351:2:25'
-        Coin_Minimum: 0.04
-        Coin_Maximum: 4.75
-        Coin_Percent: 5
+        Drops: '351:3:75'
+        Coin_Minimum: 0.10
+        Coin_Maximum: 2.50
+        Coin_Percent: 1.0
         NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
     Wolf:
         Drops: ''
-        Coin_Minimum: 0.04
-        Coin_Maximum: 3.82
-        Coin_Percent: 3
+        Coin_Minimum: 1.00
+        Coin_Maximum: 2.00
+        Coin_Percent: 1.0
         NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
     Monster:
         Drops: ''
-        Coin_Minimum: 0.01
-        Coin_Maximum: 20.00
-        Coin_Percent: 20
+        Coin_Minimum: 0.50
+        Coin_Maximum: 1.50
+        Coin_Percent: 50.0
         NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
     CaveSpider:
-        Drops: ''
-        Coin_Minimum: 0.01
-        Coin_Maximum: 5.70
-        Coin_Percent: 10
+        Drops: '287:2:75'
+        Coin_Minimum: 0.50
+        Coin_Maximum: 1.50
+        Coin_Percent: 50.0
         NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
     Enderman:
-        Drops: ''
-        Coin_Minimum: 0.01
-        Coin_Maximum: 6.00
-        Coin_Percent: 65
+        Drops: '368:1:75'
+        Coin_Minimum: 1.00
+        Coin_Maximum: 3.50
+        Coin_Percent: 50.0
         NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
-        
+
     Silverfish:
         Drops: ''
-        Coin_Minimum: 0.08
-        Coin_Maximum: 13.00
-        Coin_Percent: 65
+        Coin_Minimum: 0.50
+        Coin_Maximum: 0.50
+        Coin_Percent: 50.0
         NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
     Spawner:
         Drops: ''
-        Coin_Minimum: 0.01
-        Coin_Maximum: 30.00
-        Coin_Percent: 100
+        Coin_Minimum: 0.10
+        Coin_Maximum: 15.00
+        Coin_Percent: 50.0
         NoReward_Message: '&7You destroyed a &5<crt>&7 weilding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for destroying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for destroying a &5<crt>.'
