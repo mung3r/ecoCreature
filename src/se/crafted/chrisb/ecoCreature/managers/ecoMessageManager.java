@@ -53,7 +53,7 @@ public class ecoMessageManager
         }
     }
 
-    private String toCamelCase(String rawItemName)
+    private static String toCamelCase(String rawItemName)
     {
         String[] rawItemNameParts = rawItemName.split("_");
         String itemName = "";
@@ -73,7 +73,7 @@ public class ecoMessageManager
         return itemName.trim();
     }
 
-    private String toProperCase(String str)
+    private static String toProperCase(String str)
     {
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
