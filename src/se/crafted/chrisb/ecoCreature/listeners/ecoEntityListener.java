@@ -54,10 +54,6 @@ public class ecoEntityListener extends EntityListener
             return;
         }
 
-        if (ecoRewardManager.shouldOverrideDrops) {
-            event.getDrops().clear();
-        }
-
         if (player.getItemInHand().getType().equals(Material.BOW) && !ecoRewardManager.hasBowRewards) {
             plugin.getMessageManager().sendMessage(ecoMessageManager.noBowRewardMessage, player);
             return;
@@ -80,6 +76,10 @@ public class ecoEntityListener extends EntityListener
         }
 
         if (ecoRewardManager.rewards.containsKey(livingEntity)) {
+            if (ecoRewardManager.shouldOverrideDrops) {
+                event.getDrops().clear();
+            }
+
             event.getDrops().addAll(ecoRewardManager.rewards.get(ecoEntityUtil.getCreatureType(livingEntity)).computeDrops());
         }
     }
