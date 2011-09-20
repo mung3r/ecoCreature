@@ -112,13 +112,13 @@ public class ecoCreature extends JavaPlugin
         }
 
         if (!setupPermission()) {
-            logger.log(Level.SEVERE, "[ecoCreature] Denied usage because Permissions can not be found.");
+            logger.log(Level.SEVERE, "[ecoCreature] Permission plugin not found. Plugin disabled.");
             getPluginLoader().disablePlugin(this);
             return;
         }
 
         if (!setupEconomy()) {
-            logger.log(Level.SEVERE, "[ecoCreature] Denied usage because Economy can not be found.");
+            logger.log(Level.SEVERE, "[ecoCreature] Economy plugin not found. Plugin disabled.");
             getPluginLoader().disablePlugin(this);
             return;
         }
@@ -133,6 +133,8 @@ public class ecoCreature extends JavaPlugin
         permission = null;
         economy = null;
         configManager = null;
+        rewardManager = null;
+        messageManager = null;
         logger.log(Level.INFO, "[ecoCreature] " + getDescription().getVersion() + " is disabled.");
     }
 }
