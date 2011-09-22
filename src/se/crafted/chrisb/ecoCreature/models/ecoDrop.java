@@ -1,12 +1,11 @@
 package se.crafted.chrisb.ecoCreature.models;
 
 import java.util.Random;
-import java.util.logging.Level;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
+//import se.crafted.chrisb.ecoCreature.ecoCreature;
 
 public class ecoDrop
 {
@@ -67,7 +66,7 @@ public class ecoDrop
                 }
 
                 // TODO: Why is this a concern?
-                ecoCreature.logger.log(Level.SEVERE, "[ecoCreature] Item stack for drop is zero.");
+                // ecoCreature.logger.severe("[ecoCreature] Item stack for drop is zero.");
             }
         }
         return null;

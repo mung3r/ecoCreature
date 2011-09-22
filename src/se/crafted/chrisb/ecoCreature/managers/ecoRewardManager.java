@@ -1,7 +1,6 @@
 package se.crafted.chrisb.ecoCreature.managers;
 
 import java.util.HashMap;
-import java.util.logging.Level;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -81,7 +80,7 @@ public class ecoRewardManager
         String weaponName = tamedCreature != null ? ecoEntityUtil.getCreatureType(tamedCreature).getName() : Material.getMaterial(player.getItemInHand().getTypeId()).name();
 
         if (reward == null) {
-            ecoCreature.logger.log(Level.INFO, "[ecoCreature] Unrecognized creature: " + killedCreature.getClass().getSimpleName());
+            plugin.getLogger().info("Unrecognized creature: " + killedCreature.getClass().getSimpleName());
         }
         else {
             registerReward(player, reward, weaponName);

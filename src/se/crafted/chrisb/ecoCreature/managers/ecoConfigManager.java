@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
 
 import org.bukkit.Material;
 import org.bukkit.entity.CreatureType;
@@ -106,7 +105,7 @@ public class ecoConfigManager
             inputStream.close();
             outputStream.close();
 
-            ecoCreature.logger.log(Level.INFO, "[ecoCreature] Default settings file written: " + filename);
+            plugin.getLogger().info("Default settings file written: " + filename);
         }
 
         return new Configuration(new File(ecoCreature.dataFolder, filename));
@@ -121,7 +120,7 @@ public class ecoConfigManager
         return null;
     }
 
-    private static List<ecoDrop> parseDrops(String dropsString)
+    private List<ecoDrop> parseDrops(String dropsString)
     {
         if (dropsString != null && !dropsString.isEmpty()) {
             List<ecoDrop> drops = new ArrayList<ecoDrop>();
@@ -140,7 +139,7 @@ public class ecoConfigManager
                 return drops;
             }
             catch (Exception exception) {
-                ecoCreature.logger.log(Level.WARNING, "[ecoCreature] Failed to parse drops: " + dropsString);
+                plugin.getLogger().warning("Failed to parse drops: " + dropsString);
             }
         }
 
