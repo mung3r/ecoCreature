@@ -124,7 +124,7 @@ public class ecoRewardManager
         }
     }
 
-    private static Double computeReward(Player player, ecoReward reward)
+    private Double computeReward(Player player, ecoReward reward)
     {
         Double amount = reward.getRewardAmount();
 
@@ -132,8 +132,13 @@ public class ecoRewardManager
             amount = (double) Math.round(amount);
         }
 
-        if (groupMultiplier.containsKey(ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()))) {
-            amount *= groupMultiplier.get(ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()));
+        try {
+            if (groupMultiplier.containsKey(ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()))) {
+                amount *= groupMultiplier.get(ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()));
+            }
+        }
+        catch (Exception exception) {
+            plugin.getLogger().warning("Permissions does not support group multiplier");
         }
 
         return amount;
