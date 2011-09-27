@@ -1,5 +1,5 @@
 name: ecoCreature
 main: se.crafted.chrisb.ecoCreature.ecoCreature
-version: 0.0.6 (Mo' Mobs!)
+version: 0.0.6a (Mo' Mobs!)
 depend: [Vault]
 description: Coins and drops for PvM
