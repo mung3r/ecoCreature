@@ -62,7 +62,7 @@ public class ecoConfigManager
         ecoMessageManager.deathPenaltyMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DeathPenaltyMessage")), true);
 
         for (String groupMultiplierName : config.getKeys("Gain")) {
-            ecoRewardManager.groupMultiplier.put(groupMultiplierName, Double.valueOf(config.getDouble("Gain." + groupMultiplierName + ".Amount", 0.0D)));
+            ecoRewardManager.groupMultiplier.put(groupMultiplierName.toLowerCase(), Double.valueOf(config.getDouble("Gain." + groupMultiplierName + ".Amount", 0.0D)));
         }
 
         ecoRewardManager.rewards = new HashMap<CreatureType, ecoReward>();

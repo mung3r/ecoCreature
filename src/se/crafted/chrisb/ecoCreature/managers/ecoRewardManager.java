@@ -47,7 +47,8 @@ public class ecoRewardManager
             return;
         }
 
-        if (!ecoCreature.permission.has(player, "ecoCreature.DeathPenalty")) {
+        String perm = "ecoCreature.DeathPenalty";
+        if (!ecoCreature.permission.has(player, perm) && !ecoCreature.permission.has(player, perm.toLowerCase())) {
             return;
         }
 
@@ -63,7 +64,8 @@ public class ecoRewardManager
             return;
         }
 
-        if (!ecoCreature.permission.has(player, "ecoCreature.Creature.Craft" + ecoEntityUtil.getCreatureType(killedCreature).getName())) {
+        String perm = "ecoCreature.Creature.Craft" + ecoEntityUtil.getCreatureType(killedCreature).getName();
+        if (!ecoCreature.permission.has(player, perm) && !ecoCreature.permission.has(player, perm.toLowerCase())) {
             return;
         }
 
@@ -97,7 +99,8 @@ public class ecoRewardManager
             return;
         }
 
-        if (ecoCreature.permission.has(player, "ecoCreature.Creature.Spawner")) {
+        String perm = "ecoCreature.Creature.Spawner";
+        if (ecoCreature.permission.has(player, perm) || ecoCreature.permission.has(player, perm.toLowerCase())) {
 
             registerReward(player, spawnerReward, Material.getMaterial(player.getItemInHand().getTypeId()).name());
 
@@ -133,8 +136,9 @@ public class ecoRewardManager
         }
 
         try {
-            if (groupMultiplier.containsKey(ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()))) {
-                amount *= groupMultiplier.get(ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()));
+            String group = ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()).toLowerCase();
+            if (groupMultiplier.containsKey(group)) {
+                amount *= groupMultiplier.get(group);
             }
         }
         catch (Exception exception) {
