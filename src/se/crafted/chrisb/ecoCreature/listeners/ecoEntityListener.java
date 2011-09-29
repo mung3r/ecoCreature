@@ -75,7 +75,7 @@ public class ecoEntityListener extends EntityListener
             plugin.getRewardManager().registerCreatureReward(player, tamedCreature, livingEntity);
         }
 
-        if (ecoRewardManager.rewards.containsKey(livingEntity)) {
+        if (ecoRewardManager.rewards.containsKey(ecoEntityUtil.getCreatureType(livingEntity))) {
             if (ecoRewardManager.shouldOverrideDrops) {
                 event.getDrops().clear();
             }
