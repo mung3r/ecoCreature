@@ -16,6 +16,7 @@ public class ecoPlayerListener extends PlayerListener
 
     public void onPlayerRespawn(PlayerRespawnEvent event)
     {
-        plugin.getRewardManager().registerDeathPenalty(event.getPlayer());
+        //TODO: fetching a player from the online players list returns null inside this event
+        //plugin.getRewardManager().registerDeathPenalty(event.getPlayer());
     }
 }
