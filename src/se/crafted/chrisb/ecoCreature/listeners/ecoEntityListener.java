@@ -26,7 +26,7 @@ public class ecoEntityListener extends EntityListener
     public void onEntityDeath(EntityDeathEvent event)
     {
         if (event.getEntity() instanceof Player) {
-            plugin.getRewardManager().registerDeathPenalty((Player)event.getEntity());
+            plugin.getRewardManager().registerDeathPenalty(event);
             return;
         }
 

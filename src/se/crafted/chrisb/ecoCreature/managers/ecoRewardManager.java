@@ -8,6 +8,8 @@ import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
@@ -27,6 +29,7 @@ public class ecoRewardManager
     public static int campRadius;
     public static Boolean hasBowRewards;
     public static Boolean hasDeathPenalty;
+    public static Boolean hasPVPReward;
     public static Boolean isPercentPenalty;
     public static Double penaltyAmount;
     public static Boolean canHuntUnderSeaLevel;
@@ -41,21 +44,44 @@ public class ecoRewardManager
         this.plugin = plugin;
     }
 
-    public void registerDeathPenalty(Player player)
+    public void registerDeathPenalty(EntityDeathEvent event)
     {
-        if (player == null || !hasDeathPenalty) {
-            return;
-        }
+        Player player = (Player) event.getEntity();
 
-        String perm = "ecoCreature.DeathPenalty";
-        if (!ecoCreature.permission.has(player, perm) && !ecoCreature.permission.has(player, perm.toLowerCase())) {
+        if (player == null) {
             return;
         }
 
         Double amount = isPercentPenalty ? ecoCreature.economy.getBalance(player.getName()) * (penaltyAmount / 100.0D) : penaltyAmount;
-        ecoCreature.economy.withdrawPlayer(player.getName(), amount);
+        if (amount <= 0.0D) {
+            return;
+        }
 
-        plugin.getMessageManager().sendMessage(ecoMessageManager.deathPenaltyMessage, player, amount);
+        if (hasDeathPenalty) {
+            String perm = "ecoCreature.DeathPenalty";
+            if (!ecoCreature.permission.has(player, perm) && !ecoCreature.permission.has(player, perm.toLowerCase())) {
+                return;
+            }
+
+            ecoCreature.economy.withdrawPlayer(player.getName(), amount);
+
+            plugin.getMessageManager().sendMessage(ecoMessageManager.deathPenaltyMessage, player, amount);
+        }
+
+        if (hasPVPReward) {
+            if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+                EntityDamageByEntityEvent subEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
+                if (subEvent.getDamager() instanceof Player) {
+                    Player killer = (Player) subEvent.getDamager();
+
+                    ecoCreature.economy.depositPlayer(killer.getName(), amount);
+
+                    plugin.getMessageManager().sendMessage(ecoMessageManager.pvpRewardMessage, killer, amount, player.getName(), "");
+                }
+            }
+        }
+
+        return;
     }
 
     public void registerCreatureReward(Player player, LivingEntity tamedCreature, LivingEntity killedCreature)

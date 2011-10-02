@@ -51,6 +51,7 @@ public class ecoConfigManager
         ecoRewardManager.campRadius = config.getInt("System.Hunting.CampRadius", 15);
         ecoRewardManager.hasBowRewards = config.getBoolean("System.Hunting.BowRewards", true);
         ecoRewardManager.hasDeathPenalty = config.getBoolean("System.Hunting.PenalizeDeath", false);
+        ecoRewardManager.hasPVPReward = config.getBoolean("System.Hunting.PVPReward", false);
         ecoRewardManager.isPercentPenalty = config.getBoolean("System.Hunting.PenalizeType", false);
         ecoRewardManager.penaltyAmount = config.getDouble("System.Hunting.PenalizeAmount", 0.0D);
         ecoRewardManager.canHuntUnderSeaLevel = config.getBoolean("System.Hunting.AllowUnderSeaLVL", true);
@@ -60,6 +61,7 @@ public class ecoConfigManager
         ecoMessageManager.noBowRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoBowMessage")), true);
         ecoMessageManager.noCampMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoCampMessage")), config.getBoolean("System.Messages.Spawner", false));
         ecoMessageManager.deathPenaltyMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DeathPenaltyMessage")), true);
+        ecoMessageManager.pvpRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.PVPRewardMessage")), true);
 
         for (String groupMultiplierName : config.getKeys("Gain")) {
             ecoRewardManager.groupMultiplier.put(groupMultiplierName.toLowerCase(), Double.valueOf(config.getDouble("Gain." + groupMultiplierName + ".Amount", 0.0D)));
