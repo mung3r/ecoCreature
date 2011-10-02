@@ -1,5 +1,87 @@
 name: ecoCreature
 main: se.crafted.chrisb.ecoCreature.ecoCreature
-version: 0.0.6c (Mo' Mobs!)
+version: 0.0.7 (People are creatures too!)
 depend: [Vault]
 description: Coins and drops for PvM
+permissions:
+    ecoCreature.Creature.*:
+        description: Allows rewards for all creature types
+        children:
+            ecoCreature.Creature.CraftCaveSpider: true
+            ecoCreature.Creature.CraftChicken: true
+            ecoCreature.Creature.CraftCow: true
+            ecoCreature.Creature.CraftCreeper: true
+            ecoCreature.Creature.CraftEnderman: true
+            ecoCreature.Creature.CraftGhast: true
+            ecoCreature.Creature.CraftMonster: true
+            ecoCreature.Creature.CraftPig: true
+            ecoCreature.Creature.CraftPigZombie: true
+            ecoCreature.Creature.CraftSheep: true
+            ecoCreature.Creature.CraftSilverfish: true
+            ecoCreature.Creature.CraftSkeleton: true
+            ecoCreature.Creature.CraftSlime: true
+            ecoCreature.Creature.CraftSpider: true
+            ecoCreature.Creature.CraftSquid: true
+            ecoCreature.Creature.CraftWolf: true
+            ecoCreature.Creature.CraftZombie: true
+            ecoCreature.Creature.Spawner: true
+    ecoCreature.Creature.CraftCaveSpider:
+        description: Enables rewards for cave spiders
+        default: true
+    ecoCreature.Creature.CraftChicken:
+        description: Enables rewards for chickens
+        default: true
+    ecoCreature.Creature.CraftCow:
+        description: Enables rewards for cows
+        default: true
+    ecoCreature.Creature.CraftCreeper:
+        description: Enables rewards for creepers
+        default: true
+    ecoCreature.Creature.CraftEnderman:
+        description: Enables rewards for endermen
+        default: true
+    ecoCreature.Creature.CraftGhast:
+        description: Enables rewards for ghasts
+        default: true
+    ecoCreature.Creature.CraftMonster:
+        description: Enables rewards for monsters
+        default: true
+    ecoCreature.Creature.CraftPig:
+        description: Enables rewards for pigs
+        default: true
+    ecoCreature.Creature.CraftPigZombie:
+        description: Enables rewards for zombies
+        default: true
+    ecoCreature.Creature.CraftSheep:
+        description: Enables rewards for sheep
+        default: true
+    ecoCreature.Creature.CraftSilverfish:
+        description: Enables rewards for silverfish
+        default: true
+    ecoCreature.Creature.CraftSkeleton:
+        description: Enables rewards for skeletons
+        default: true
+    ecoCreature.Creature.CraftSlime:
+        description: Enables rewards for slime
+        default: true
+    ecoCreature.Creature.CraftSpider:
+        description: Enables rewards for spiders
+        default: true
+    ecoCreature.Creature.CraftSquid:
+        description: Enables rewards for squid
+        default: true
+    ecoCreature.Creature.CraftWolf:
+        description: Enables rewards for wolves
+        default: true
+    ecoCreature.Creature.CraftZombie:
+        description: Enables rewards for zombies
+        default: true
+    ecoCreature.Creature.Spawner:
+        description: Enables rewards for spawners
+        default: true
+    ecoCreature.DeathPenalty:
+        description: Enables the death penalty
+        default: true
+    ecoCreature.PVPReward:
+        description: Enables rewards for PVP
+        default: true
