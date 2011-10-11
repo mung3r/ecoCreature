@@ -69,6 +69,11 @@ public class ecoRewardManager
         }
 
         if (hasPVPReward) {
+            String perm = "ecoCreature.PVPReward";
+            if (!ecoCreature.permission.has(player, perm) && !ecoCreature.permission.has(player, perm.toLowerCase())) {
+                return;
+            }
+            
             if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
                 EntityDamageByEntityEvent subEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
                 if (subEvent.getDamager() instanceof Player) {
