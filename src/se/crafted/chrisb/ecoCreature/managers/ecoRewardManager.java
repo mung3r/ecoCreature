@@ -150,8 +150,8 @@ public class ecoRewardManager
             plugin.getMessageManager().sendMessage(reward.getRewardMessage(), player, amount, reward.getCreatureName(), weaponName);
         }
         else if (amount < 0.0D) {
-            ecoCreature.economy.withdrawPlayer(player.getName(), amount);
-            plugin.getMessageManager().sendMessage(reward.getPenaltyMessage(), player, amount, reward.getCreatureName(), weaponName);
+            ecoCreature.economy.withdrawPlayer(player.getName(), Math.abs(amount));
+            plugin.getMessageManager().sendMessage(reward.getPenaltyMessage(), player, Math.abs(amount), reward.getCreatureName(), weaponName);
         }
         else {
             plugin.getMessageManager().sendMessage(reward.getNoRewardMessage(), player, reward.getCreatureName(), weaponName);
