@@ -17,7 +17,7 @@
     <dependency>
     	<groupId>net.milkbowl.vault</groupId>
     	<artifactId>Vault</artifactId>
-    	<version>1.0.0dev-b31</version>
+    	<version>1.0.0dev-b44</version>
     	<type>jar</type>
     	<scope>compile</scope>
     </dependency>
