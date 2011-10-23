@@ -12,21 +12,25 @@ import org.bukkit.entity.CreatureType;
 import org.bukkit.util.config.Configuration;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.managers.ecoRewardManager.TIME_PERIOD;
 import se.crafted.chrisb.ecoCreature.models.ecoDrop;
 import se.crafted.chrisb.ecoCreature.models.ecoMessage;
 import se.crafted.chrisb.ecoCreature.models.ecoReward;
+import se.crafted.chrisb.ecoCreature.utils.ecoLogger;
 
 public class ecoConfigManager
 {
     private static final String MAIN_CONFIG_FILE = "ecoCreature.yml";
 
     private ecoCreature plugin;
+    private ecoLogger log;
     private Configuration config;
     private Boolean isEnabled;
 
     public ecoConfigManager(ecoCreature plugin)
     {
         this.plugin = plugin;
+        log = plugin.getLogger();
         config = null;
     }
 
@@ -48,12 +52,14 @@ public class ecoConfigManager
         ecoRewardManager.shouldClearCampDrops = config.getBoolean("System.Hunting.ClearCampDrops", true);
         ecoRewardManager.shouldOverrideDrops = config.getBoolean("System.Hunting.OverrideDrops", true);
         ecoRewardManager.isFixedDrops = config.getBoolean("System.Hunting.FixedDrops", false);
-        ecoRewardManager.campRadius = config.getInt("System.Hunting.CampRadius", 15);
+        ecoRewardManager.campRadius = config.getInt("System.Hunting.CampRadius", 7);
         ecoRewardManager.hasBowRewards = config.getBoolean("System.Hunting.BowRewards", true);
         ecoRewardManager.hasDeathPenalty = config.getBoolean("System.Hunting.PenalizeDeath", false);
-        ecoRewardManager.hasPVPReward = config.getBoolean("System.Hunting.PVPReward", false);
-        ecoRewardManager.isPercentPenalty = config.getBoolean("System.Hunting.PenalizeType", false);
-        ecoRewardManager.penaltyAmount = config.getDouble("System.Hunting.PenalizeAmount", 0.0D);
+        ecoRewardManager.hasPVPReward = config.getBoolean("System.Hunting.PVPReward", true);
+        ecoRewardManager.isPercentPenalty = config.getBoolean("System.Hunting.PenalizeType", true);
+        ecoRewardManager.isPercentPvpReward = config.getBoolean("System.Hunting.PVPRewardType", true);
+        ecoRewardManager.penaltyAmount = config.getDouble("System.Hunting.PenalizeAmount", 0.05D);
+        ecoRewardManager.pvpRewardAmount = config.getDouble("System.Hunting.PenalizeAmount", 0.05D);
         ecoRewardManager.canHuntUnderSeaLevel = config.getBoolean("System.Hunting.AllowUnderSeaLVL", true);
         ecoRewardManager.isWolverineMode = config.getBoolean("System.Hunting.WolverineMode", true);
 
@@ -66,6 +72,14 @@ public class ecoConfigManager
         for (String groupMultiplierName : config.getKeys("Gain")) {
             ecoRewardManager.groupMultiplier.put(groupMultiplierName.toLowerCase(), Double.valueOf(config.getDouble("Gain." + groupMultiplierName + ".Amount", 0.0D)));
         }
+
+        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.SUNRISE, Double.valueOf(config.getDouble("Time.Sunrise.Amount", 1.0D)));
+        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.DAY, Double.valueOf(config.getDouble("Time.Day.Amount", 1.0D)));
+        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.SUNSET, Double.valueOf(config.getDouble("Time.Sunset.Amount", 1.0D)));
+        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.DUSK, Double.valueOf(config.getDouble("Time.Dusk.Amount", 1.125D)));
+        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.NIGHT, Double.valueOf(config.getDouble("Time.Night.Amount", 1.25D)));
+        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.DAWN, Double.valueOf(config.getDouble("Time.Dawn.Amount", 1.125D)));
+        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.IDENTITY, 1.0D);
 
         ecoRewardManager.rewards = new HashMap<CreatureType, ecoReward>();
         for (String creatureName : config.getKeys("RewardTable")) {
@@ -107,7 +121,7 @@ public class ecoConfigManager
             inputStream.close();
             outputStream.close();
 
-            plugin.getLogger().info("Default settings file written: " + filename);
+            log.info("Default settings file written: " + filename);
         }
 
         return new Configuration(new File(ecoCreature.dataFolder, filename));
@@ -141,7 +155,7 @@ public class ecoConfigManager
                 return drops;
             }
             catch (Exception exception) {
-                plugin.getLogger().warning("Failed to parse drops: " + dropsString);
+                log.warning("Failed to parse drops: " + dropsString);
             }
         }
 

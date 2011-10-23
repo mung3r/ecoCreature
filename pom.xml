@@ -15,13 +15,13 @@
   		<artifactId>craftbukkit</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
-  	<dependency>
-  		<groupId>net.milkbowl.vault</groupId>
-  		<artifactId>Vault</artifactId>
-  		<version>1.0.0dev-b44</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
+    <dependency>
+    	<groupId>net.milkbowl.vault</groupId>
+    	<artifactId>Vault</artifactId>
+    	<version>1.0.0dev-b44</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
   </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

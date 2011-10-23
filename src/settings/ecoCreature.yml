@@ -20,7 +20,7 @@
 # ClearCampDrops is available as an option, it will clear the creature / monster drops if set to
 # true, and if false, it will allow regular creature drops.
 #
-# OverrideDrops, if set to true... default drops will be overriden by the drops specified
+# OverrideDrops, if set to true... specified drops will overide default drops
 # for ecoCreature. This only applies to the player killed monsters.
 # If a monster dies by accident / fire / whatever it will default to the Minecraft default drops. Have
 # this in mind.
@@ -32,19 +32,23 @@
 # BowRewards
 # If this value is set to false, there will be no gains from killing with a bow.
 #
-# PenalizeDeath should only be set to true if you want to penalize your players for dieing while hunting.
+# PenalizeDeath should only be set to true if you want to penalize your players for dying while hunting.
 # as it will withdraw the money they hold in their hand, and not from their banks, if they have that.
 #
 # PenalizeType, this has two values: true or false.
 # If the type is set to false, the amount will be a flat amount, a constant value of the set amount upon death.
 # If the type is set to true, the amount will be used as a percentage value and drawn from the total held currency.
-# This is so that ecoCreature knows whether you want to punish via flatrate or percent.
+# This is so that ecoCreature knows whether you want to punish via fixed amount or percentage.
 #
 # PenalizeAmount - How much money should they drop, from the amount they already have?
 # This depends on what you set the type to, flat or percent (false or true).
 # An example;
 # PenalizeType: true <---- we want to punish with percentage of held money
 # PenalizeAmount: 5 <---- draw 5% of the players held money
+#
+# PVPReward - set to true if you want to reward players for killing other players
+# PVPRewardType - set to true to take a percentage, false for a fixed amount
+# PVPRewardAmount - percentage or fixed amount to reward (depends on the PVPRewardType setting - see above)
 #
 # AllowUnderSeaLVL - Really not that useful, should in most cases be set to true.
 # What does it do? If you are under the sea level when hunting, rewards are enabled. If this is set to false,
@@ -66,6 +70,11 @@
 # they will gain the base amount * value specified in the amount bit for the group.
 # You may freely add additional groupnames and specify your own amount here.
 # The group names must match those within your Permissions configuration, ecoCreature compares.
+#
+# Time of day bonuses
+# -------------------
+# You can also have a multiplier based on the time of day. This only applies to mobs and not PVP
+# 
 System:
     Economy:
         IntegerCurrency: false
@@ -76,10 +85,12 @@ System:
         OverrideDrops: true
         FixedDrops: false
         BowRewards: true
-        PenalizeDeath: true
+        PenalizeDeath: false
         PenalizeType: true
-        PenalizeAmount: 0.5
+        PenalizeAmount: 0.05
         PVPReward: true
+        PVPRewardType: true
+        PVPRewardAmount: 0.05
         AllowUnderSeaLVL: true
         WolverineMode: true
     Messages:
@@ -96,6 +107,19 @@ Gain:
     Donors:
         Amount: 2.0
 
+Time:
+    Sunrise:
+        Amount: 1.0
+    Day:
+        Amount: 1.0
+    Sunset:
+        Amount: 1.0
+    Dusk:
+        Amount: 1.125
+    Night:
+        Amount: 1.25
+    Dawn:
+        Amount: 1.125
 # HOW DO I DROPS!?
 #     - format: 'item:amount:percent'
 #     - more drops: Seperate the items with ; add next
