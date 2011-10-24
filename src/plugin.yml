@@ -1,6 +1,6 @@
 name: ecoCreature
 main: se.crafted.chrisb.ecoCreature.ecoCreature
-version: 0.0.7a (People are creatures too!)
+version: 0.0.7b (People are creatures too!)
 depend: [Vault]
 description: Coins and drops for PvM
 permissions:
