@@ -62,7 +62,7 @@ public class ecoRewardManager
         this.log = plugin.getLogger();
     }
 
-    public void registerDeathPenalty(EntityDeathEvent event)
+    public void registerPlayerDeath(EntityDeathEvent event)
     {
         Player player = (Player) event.getEntity();
 
@@ -113,7 +113,7 @@ public class ecoRewardManager
         return;
     }
 
-    public void registerCreatureReward(Player player, LivingEntity tamedCreature, LivingEntity killedCreature)
+    public void registerCreatureDeath(Player player, LivingEntity tamedCreature, LivingEntity killedCreature)
     {
         if (player == null || killedCreature == null) {
             return;
@@ -144,7 +144,7 @@ public class ecoRewardManager
         }
     }
 
-    public void registerSpawnerReward(Player player, Block block)
+    public void registerSpawnerBreak(Player player, Block block)
     {
         if (player == null || block == null) {
             return;

@@ -26,7 +26,7 @@ public class ecoEntityListener extends EntityListener
     public void onEntityDeath(EntityDeathEvent event)
     {
         if (event.getEntity() instanceof Player) {
-            plugin.getRewardManager().registerDeathPenalty(event);
+            plugin.getRewardManager().registerPlayerDeath(event);
             return;
         }
 
@@ -73,7 +73,7 @@ public class ecoEntityListener extends EntityListener
             plugin.getMessageManager().sendMessage(ecoMessageManager.noCampMessage, player);
         }
         else {
-            plugin.getRewardManager().registerCreatureReward(player, tamedCreature, livingEntity);
+            plugin.getRewardManager().registerCreatureDeath(player, tamedCreature, livingEntity);
         }
 
         if (ecoRewardManager.rewards.containsKey(ecoEntityUtil.getCreatureType(livingEntity))) {
