@@ -37,14 +37,6 @@
   	<url>https://github.com/mung3r/ecoCreature</url>
   </scm>
   <build>
-    <resources>
-      <resource>
-        <directory>${project.basedir}/src</directory>
-        <includes>
-          <include>plugin.yml</include>
-        </includes>
-      </resource>
-    </resources>
     <plugins>
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
