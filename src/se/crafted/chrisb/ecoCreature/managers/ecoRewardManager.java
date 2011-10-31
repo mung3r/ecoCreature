@@ -50,6 +50,7 @@ public class ecoRewardManager
     public static double pvpRewardAmount;
     public static Boolean canHuntUnderSeaLevel;
     public static Boolean isWolverineMode;
+    public static Boolean noFarm;
 
     public static HashMap<String, Double> groupMultiplier = new HashMap<String, Double>();
     public static HashMap<TIME_PERIOD, Double> timeMultiplier = new HashMap<TIME_PERIOD, Double>();
@@ -197,7 +198,7 @@ public class ecoRewardManager
             if (groupMultiplier.containsKey(group)) {
                 groupAmount = amount * groupMultiplier.get(group);
             }
-            
+
             timeAmount = amount * timeMultiplier.get(getTime(player));
         }
         catch (Exception exception) {

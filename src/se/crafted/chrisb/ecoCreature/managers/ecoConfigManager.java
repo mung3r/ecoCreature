@@ -62,6 +62,7 @@ public class ecoConfigManager
         ecoRewardManager.pvpRewardAmount = config.getDouble("System.Hunting.PenalizeAmount", 0.05D);
         ecoRewardManager.canHuntUnderSeaLevel = config.getBoolean("System.Hunting.AllowUnderSeaLVL", true);
         ecoRewardManager.isWolverineMode = config.getBoolean("System.Hunting.WolverineMode", true);
+        ecoRewardManager.noFarm = config.getBoolean("System.Hunting.NoFarm", false);
 
         ecoMessageManager.shouldOutputMessages = config.getBoolean("System.Messages.Output", true);
         ecoMessageManager.noBowRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoBowMessage")), true);

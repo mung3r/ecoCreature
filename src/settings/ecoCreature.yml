@@ -93,6 +93,7 @@ System:
         PVPRewardAmount: 0.05
         AllowUnderSeaLVL: true
         WolverineMode: true
+        NoFarm: false
     Messages:
         Output: true
         NoReward: true

@@ -5,7 +5,9 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Tameable;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityListener;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
@@ -52,6 +54,12 @@ public class ecoEntityListener extends EntityListener
         }
 
         if (player == null) {
+            if (event.getEntity().getLastDamageCause() instanceof EntityDamageByBlockEvent && ecoRewardManager.noFarm) {
+                DamageCause cause = ((EntityDamageByBlockEvent) event.getEntity().getLastDamageCause()).getCause();
+                if (cause.equals(DamageCause.CONTACT) || cause.equals(DamageCause.DROWNING) || cause.equals(DamageCause.SUFFOCATION)) {
+                    event.getDrops().clear();
+                }
+            }
             return;
         }
 
