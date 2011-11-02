@@ -196,10 +196,10 @@ public class ecoRewardManager
         try {
             String group = ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()).toLowerCase();
             if (groupMultiplier.containsKey(group)) {
-                groupAmount = amount * groupMultiplier.get(group);
+                groupAmount = amount * groupMultiplier.get(group) - amount;
             }
 
-            timeAmount = amount * timeMultiplier.get(getTime(player));
+            timeAmount = amount * timeMultiplier.get(getTime(player)) - amount;
         }
         catch (Exception exception) {
             log.warning("Permissions does not support group multiplier");
