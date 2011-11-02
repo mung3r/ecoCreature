@@ -62,7 +62,7 @@ public class ecoEntityListener extends EntityListener
                         event.getDrops().clear();
                     }
                 }
-                else if (damageEvent.getCause().equals(DamageCause.FALL)) {
+                else if (damageEvent.getCause() != null && damageEvent.getCause().equals(DamageCause.FALL)) {
                     event.getDrops().clear();
                 }
             }
