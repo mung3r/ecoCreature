@@ -54,9 +54,14 @@ public class ecoEntityListener extends EntityListener
         }
 
         if (player == null) {
-            if (event.getEntity().getLastDamageCause() instanceof EntityDamageByBlockEvent && ecoRewardManager.noFarm) {
-                DamageCause cause = ((EntityDamageByBlockEvent) event.getEntity().getLastDamageCause()).getCause();
-                if (cause.equals(DamageCause.CONTACT) || cause.equals(DamageCause.DROWNING) || cause.equals(DamageCause.SUFFOCATION)) {
+            if (ecoRewardManager.noFarm) {
+                if (event.getEntity().getLastDamageCause() instanceof EntityDamageByBlockEvent) {
+                    DamageCause cause = ((EntityDamageByBlockEvent) event.getEntity().getLastDamageCause()).getCause();
+                    if (cause.equals(DamageCause.CONTACT) || cause.equals(DamageCause.DROWNING) || cause.equals(DamageCause.SUFFOCATION)) {
+                        event.getDrops().clear();
+                    }
+                }
+                else if (event.getEntity().getLastDamageCause().getCause().equals(DamageCause.FALL)) {
                     event.getDrops().clear();
                 }
             }
