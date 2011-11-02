@@ -7,6 +7,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Tameable;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityListener;
@@ -54,14 +55,14 @@ public class ecoEntityListener extends EntityListener
         }
 
         if (player == null) {
-            if (ecoRewardManager.noFarm) {
-                if (event.getEntity().getLastDamageCause() instanceof EntityDamageByBlockEvent) {
-                    DamageCause cause = ((EntityDamageByBlockEvent) event.getEntity().getLastDamageCause()).getCause();
-                    if (cause.equals(DamageCause.CONTACT) || cause.equals(DamageCause.DROWNING) || cause.equals(DamageCause.SUFFOCATION)) {
+            EntityDamageEvent damageEvent = event.getEntity().getLastDamageCause();
+            if (ecoRewardManager.noFarm && damageEvent != null) {
+                if (damageEvent instanceof EntityDamageByBlockEvent) {
+                    if (damageEvent.getCause().equals(DamageCause.CONTACT) || damageEvent.getCause().equals(DamageCause.DROWNING) || damageEvent.getCause().equals(DamageCause.SUFFOCATION)) {
                         event.getDrops().clear();
                     }
                 }
-                else if (event.getEntity().getLastDamageCause().getCause().equals(DamageCause.FALL)) {
+                else if (damageEvent.getCause().equals(DamageCause.FALL)) {
                     event.getDrops().clear();
                 }
             }
