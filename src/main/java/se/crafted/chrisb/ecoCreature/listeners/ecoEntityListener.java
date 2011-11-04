@@ -57,12 +57,10 @@ public class ecoEntityListener extends EntityListener
         if (player == null) {
             EntityDamageEvent damageEvent = event.getEntity().getLastDamageCause();
             if (ecoRewardManager.noFarm && damageEvent != null) {
-                if (damageEvent instanceof EntityDamageByBlockEvent) {
-                    if (damageEvent.getCause().equals(DamageCause.CONTACT) || damageEvent.getCause().equals(DamageCause.DROWNING) || damageEvent.getCause().equals(DamageCause.SUFFOCATION)) {
-                        event.getDrops().clear();
-                    }
+                if (damageEvent instanceof EntityDamageByBlockEvent && damageEvent.getCause().equals(DamageCause.CONTACT)) {
+                    event.getDrops().clear();
                 }
-                else if (damageEvent.getCause() != null && damageEvent.getCause().equals(DamageCause.FALL)) {
+                else if (damageEvent.getCause() != null && (damageEvent.getCause().equals(DamageCause.FALL) || damageEvent.getCause().equals(DamageCause.DROWNING) || damageEvent.getCause().equals(DamageCause.SUFFOCATION))) {
                     event.getDrops().clear();
                 }
             }
