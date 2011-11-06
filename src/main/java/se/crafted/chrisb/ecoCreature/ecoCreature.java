@@ -14,7 +14,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import se.crafted.chrisb.ecoCreature.listeners.ecoBlockListener;
 import se.crafted.chrisb.ecoCreature.listeners.ecoEntityListener;
-import se.crafted.chrisb.ecoCreature.listeners.ecoPlayerListener;
 import se.crafted.chrisb.ecoCreature.managers.ecoConfigManager;
 import se.crafted.chrisb.ecoCreature.managers.ecoMessageManager;
 import se.crafted.chrisb.ecoCreature.managers.ecoRewardManager;
@@ -24,7 +23,6 @@ public class ecoCreature extends JavaPlugin
 {
     private final ecoBlockListener blockListener = new ecoBlockListener(this);
     private final ecoEntityListener entityListener = new ecoEntityListener(this);
-    private final ecoPlayerListener playerListener = new ecoPlayerListener(this);
 
     public static final File dataFolder = new File("plugins" + File.separator + "ecoCreature");
 
@@ -60,7 +58,6 @@ public class ecoCreature extends JavaPlugin
     {
         PluginManager pluginManager = getServer().getPluginManager();
 
-        pluginManager.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Normal, this);
         pluginManager.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
         pluginManager.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
     }

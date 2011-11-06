@@ -1,6 +1,7 @@
 package se.crafted.chrisb.ecoCreature.listeners;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -37,19 +38,19 @@ public class ecoEntityListener extends EntityListener
         LivingEntity tamedCreature = null;
 
         if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-            EntityDamageByEntityEvent subEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
-            if (subEvent.getDamager() instanceof Player) {
-                player = (Player) subEvent.getDamager();
+            Entity damager = ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
+            if (damager instanceof Player) {
+                player = (Player) damager;
             }
-            else if (subEvent.getDamager() instanceof Tameable) {
-                if (((Tameable) subEvent.getDamager()).isTamed() && ((Tameable) subEvent.getDamager()).getOwner() instanceof Player) {
-                    tamedCreature = (LivingEntity) subEvent.getDamager();
-                    player = (Player) ((Tameable) subEvent.getDamager()).getOwner();
+            else if (damager instanceof Tameable) {
+                if (((Tameable) damager).isTamed() && ((Tameable) damager).getOwner() instanceof Player) {
+                    tamedCreature = (LivingEntity) damager;
+                    player = (Player) ((Tameable) damager).getOwner();
                 }
             }
-            else if (subEvent.getDamager() instanceof Projectile) {
-                if (((Projectile) subEvent.getDamager()).getShooter() instanceof Player) {
-                    player = (Player) ((Projectile) subEvent.getDamager()).getShooter();
+            else if (damager instanceof Projectile) {
+                if (((Projectile) damager).getShooter() instanceof Player) {
+                    player = (Player) ((Projectile) damager).getShooter();
                 }
             }
         }

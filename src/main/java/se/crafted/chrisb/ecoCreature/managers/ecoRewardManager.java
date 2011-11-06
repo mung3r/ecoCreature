@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.CreatureType;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
@@ -15,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.models.ecoReward;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
+import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil.TIME_PERIOD;
 import se.crafted.chrisb.ecoCreature.utils.ecoLogger;
 
 public class ecoRewardManager
@@ -22,17 +24,6 @@ public class ecoRewardManager
     private final ecoCreature plugin;
 
     private ecoLogger log;
-
-    private static final long DAY_START = 0;
-    private static final long SUNSET_START = 13000;
-    private static final long DUSK_START = 13500;
-    private static final long NIGHT_START = 14000;
-    private static final long DAWN_START = 22000;
-    private static final long SUNRISE_START = 23000;
-
-    public static enum TIME_PERIOD {
-        DAY, SUNSET, DUSK, NIGHT, DAWN, SUNRISE, IDENTITY
-    };
 
     public static Boolean isIntegerCurrency;
 
@@ -90,13 +81,13 @@ public class ecoRewardManager
         Double amount = isPercentPvpReward ? ecoCreature.economy.getBalance(player.getName()) * (pvpRewardAmount / 100.0D) : pvpRewardAmount;
         if (amount > 0.0D) {
             if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-                EntityDamageByEntityEvent subEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
-                if (subEvent.getDamager() instanceof Player) {
+                Entity damager = ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
+                if (damager instanceof Player) {
 
                     ecoCreature.economy.withdrawPlayer(player.getName(), amount);
                     plugin.getMessageManager().sendMessage(ecoMessageManager.deathPenaltyMessage, player, amount);
 
-                    Player killer = (Player) subEvent.getDamager();
+                    Player killer = (Player) damager;
                     ecoCreature.economy.depositPlayer(killer.getName(), amount);
                     plugin.getMessageManager().sendMessage(ecoMessageManager.pvpRewardMessage, killer, amount, player.getName(), "");
                 }
@@ -200,7 +191,7 @@ public class ecoRewardManager
                 groupAmount = amount * groupMultiplier.get(group) - amount;
             }
 
-            timeAmount = amount * timeMultiplier.get(getTime(player)) - amount;
+            timeAmount = amount * timeMultiplier.get(ecoEntityUtil.getTimePeriod(player)) - amount;
         }
         catch (Exception exception) {
             log.warning("Permissions does not support group multiplier");
@@ -212,37 +203,15 @@ public class ecoRewardManager
     private Boolean isPVPDeath(EntityDeathEvent event)
     {
         if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-            EntityDamageByEntityEvent subEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
-            if (subEvent.getDamager() instanceof Player) {
-                return true;
-            }
+            Entity damager = ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
+            return damager instanceof Player;
         }
-
+        
         return false;
     }
 
     private Boolean hasIgnoreCase(Player player, String perm)
     {
         return ecoCreature.permission.has(player, perm) || ecoCreature.permission.has(player, perm.toLowerCase());
-    }
-
-    private TIME_PERIOD getTime(Player player)
-    {
-        long time = player.getWorld().getTime();
-
-        if (time >= DAY_START && time < SUNSET_START)
-            return TIME_PERIOD.DAY;
-        else if (time >= SUNSET_START && time < DUSK_START)
-            return TIME_PERIOD.SUNSET;
-        else if (time >= DUSK_START && time < NIGHT_START)
-            return TIME_PERIOD.DUSK;
-        else if (time >= NIGHT_START && time < DAWN_START)
-            return TIME_PERIOD.NIGHT;
-        else if (time >= DAWN_START && time < SUNRISE_START)
-            return TIME_PERIOD.DAWN;
-        else if (time >= SUNRISE_START && time < DAY_START)
-            return TIME_PERIOD.SUNRISE;
-
-        return TIME_PERIOD.IDENTITY;
     }
 }

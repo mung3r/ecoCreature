@@ -29,6 +29,17 @@ public class ecoEntityUtil
 {
     private static final double SEA_LEVEL = 63;
 
+    private static final long DAY_START = 0;
+    private static final long SUNSET_START = 13000;
+    private static final long DUSK_START = 13500;
+    private static final long NIGHT_START = 14000;
+    private static final long DAWN_START = 22000;
+    private static final long SUNRISE_START = 23000;
+
+    public static enum TIME_PERIOD {
+        DAY, SUNSET, DUSK, NIGHT, DAWN, SUNRISE, IDENTITY
+    };
+
     public static Boolean isUnderSeaLevel(Entity entity)
     {
         return entity.getLocation().getY() < SEA_LEVEL;
@@ -91,5 +102,25 @@ public class ecoEntityUtil
         if (entity instanceof Monster)
             return CreatureType.MONSTER;
         return null;
+    }
+
+    public static TIME_PERIOD getTimePeriod(Entity entity)
+    {
+        long time = entity.getWorld().getTime();
+
+        if (time >= DAY_START && time < SUNSET_START)
+            return TIME_PERIOD.DAY;
+        else if (time >= SUNSET_START && time < DUSK_START)
+            return TIME_PERIOD.SUNSET;
+        else if (time >= DUSK_START && time < NIGHT_START)
+            return TIME_PERIOD.DUSK;
+        else if (time >= NIGHT_START && time < DAWN_START)
+            return TIME_PERIOD.NIGHT;
+        else if (time >= DAWN_START && time < SUNRISE_START)
+            return TIME_PERIOD.DAWN;
+        else if (time >= SUNRISE_START && time < DAY_START)
+            return TIME_PERIOD.SUNRISE;
+
+        return TIME_PERIOD.IDENTITY;
     }
 }

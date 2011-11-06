@@ -12,10 +12,10 @@ import org.bukkit.entity.CreatureType;
 import org.bukkit.util.config.Configuration;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.managers.ecoRewardManager.TIME_PERIOD;
 import se.crafted.chrisb.ecoCreature.models.ecoDrop;
 import se.crafted.chrisb.ecoCreature.models.ecoMessage;
 import se.crafted.chrisb.ecoCreature.models.ecoReward;
+import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil.TIME_PERIOD;
 import se.crafted.chrisb.ecoCreature.utils.ecoLogger;
 
 public class ecoConfigManager
