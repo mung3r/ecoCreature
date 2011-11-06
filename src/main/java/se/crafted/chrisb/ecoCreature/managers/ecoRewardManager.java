@@ -71,47 +71,50 @@ public class ecoRewardManager
             return;
         }
 
-        if (hasPVPReward) {
-            String perm = "ecoCreature.PVPReward";
-            if (ecoCreature.permission.has(player, perm) || ecoCreature.permission.has(player, perm.toLowerCase())) {
-
-                Double amount = isPercentPvpReward ? ecoCreature.economy.getBalance(player.getName()) * (pvpRewardAmount / 100.0D) : pvpRewardAmount;
-                if (amount <= 0.0D) {
-                    return;
-                }
-
-                if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-                    EntityDamageByEntityEvent subEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
-                    if (subEvent.getDamager() instanceof Player) {
-
-                        ecoCreature.economy.withdrawPlayer(player.getName(), amount);
-                        plugin.getMessageManager().sendMessage(ecoMessageManager.deathPenaltyMessage, player, amount);
-
-                        Player killer = (Player) subEvent.getDamager();
-                        ecoCreature.economy.depositPlayer(killer.getName(), amount);
-                        plugin.getMessageManager().sendMessage(ecoMessageManager.pvpRewardMessage, killer, amount, player.getName(), "");
-
-                        return;
-                    }
-                }
-            }
+        if (hasPVPReward && isPVPDeath(event)) {
+            registerPVPReward(player, event);
         }
-
-        if (hasDeathPenalty) {
-            String perm = "ecoCreature.DeathPenalty";
-            if (ecoCreature.permission.has(player, perm) && ecoCreature.permission.has(player, perm.toLowerCase())) {
-
-                Double amount = isPercentPenalty ? ecoCreature.economy.getBalance(player.getName()) * (penaltyAmount / 100.0D) : penaltyAmount;
-                if (amount <= 0.0D) {
-                    return;
-                }
-
-                ecoCreature.economy.withdrawPlayer(player.getName(), amount);
-                plugin.getMessageManager().sendMessage(ecoMessageManager.deathPenaltyMessage, player, amount);
-            }
+        else if (hasDeathPenalty) {
+            registerDeathPenalty(player);
         }
 
         return;
+    }
+
+    public void registerPVPReward(Player player, EntityDeathEvent event)
+    {
+        if (!hasIgnoreCase(player, "ecoCreature.PVPReward")) {
+            return;
+        }
+
+        Double amount = isPercentPvpReward ? ecoCreature.economy.getBalance(player.getName()) * (pvpRewardAmount / 100.0D) : pvpRewardAmount;
+        if (amount > 0.0D) {
+            if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+                EntityDamageByEntityEvent subEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
+                if (subEvent.getDamager() instanceof Player) {
+
+                    ecoCreature.economy.withdrawPlayer(player.getName(), amount);
+                    plugin.getMessageManager().sendMessage(ecoMessageManager.deathPenaltyMessage, player, amount);
+
+                    Player killer = (Player) subEvent.getDamager();
+                    ecoCreature.economy.depositPlayer(killer.getName(), amount);
+                    plugin.getMessageManager().sendMessage(ecoMessageManager.pvpRewardMessage, killer, amount, player.getName(), "");
+                }
+            }
+        }
+    }
+
+    public void registerDeathPenalty(Player player)
+    {
+        if (!hasIgnoreCase(player, "ecoCreature.DeathPenalty")) {
+            return;
+        }
+
+        Double amount = isPercentPenalty ? ecoCreature.economy.getBalance(player.getName()) * (penaltyAmount / 100.0D) : penaltyAmount;
+        if (amount > 0.0D) {
+            ecoCreature.economy.withdrawPlayer(player.getName(), amount);
+            plugin.getMessageManager().sendMessage(ecoMessageManager.deathPenaltyMessage, player, amount);
+        }
     }
 
     public void registerCreatureDeath(Player player, LivingEntity tamedCreature, LivingEntity killedCreature)
@@ -120,8 +123,7 @@ public class ecoRewardManager
             return;
         }
 
-        String perm = "ecoCreature.Creature.Craft" + ecoEntityUtil.getCreatureType(killedCreature).getName();
-        if (!ecoCreature.permission.has(player, perm) && !ecoCreature.permission.has(player, perm.toLowerCase())) {
+        if (!hasIgnoreCase(player, "ecoCreature.Creature.Craft")) {
             return;
         }
 
@@ -139,10 +141,10 @@ public class ecoRewardManager
 
         if (reward == null) {
             log.info("Unrecognized creature: " + killedCreature.getClass().getSimpleName());
+            return;
         }
-        else {
-            registerReward(player, reward, weaponName);
-        }
+
+        registerReward(player, reward, weaponName);
     }
 
     public void registerSpawnerBreak(Player player, Block block)
@@ -155,8 +157,7 @@ public class ecoRewardManager
             return;
         }
 
-        String perm = "ecoCreature.Creature.Spawner";
-        if (ecoCreature.permission.has(player, perm) || ecoCreature.permission.has(player, perm.toLowerCase())) {
+        if (hasIgnoreCase(player, "ecoCreature.Creature.Spawner")) {
 
             registerReward(player, spawnerReward, Material.getMaterial(player.getItemInHand().getTypeId()).name());
 
@@ -206,6 +207,23 @@ public class ecoRewardManager
         }
 
         return amount + groupAmount + timeAmount;
+    }
+
+    private Boolean isPVPDeath(EntityDeathEvent event)
+    {
+        if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+            EntityDamageByEntityEvent subEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
+            if (subEvent.getDamager() instanceof Player) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private Boolean hasIgnoreCase(Player player, String perm)
+    {
+        return ecoCreature.permission.has(player, perm) || ecoCreature.permission.has(player, perm.toLowerCase());
     }
 
     private TIME_PERIOD getTime(Player player)
