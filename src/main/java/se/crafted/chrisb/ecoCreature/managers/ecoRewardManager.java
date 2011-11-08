@@ -9,8 +9,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
@@ -62,7 +65,7 @@ public class ecoRewardManager
             return;
         }
 
-        if (hasPVPReward && isPVPDeath(event)) {
+        if (hasPVPReward && ecoEntityUtil.isPVPDeath(event)) {
             registerPVPReward(player, event);
         }
         else if (hasDeathPenalty) {
@@ -114,7 +117,7 @@ public class ecoRewardManager
             return;
         }
 
-        if (!hasIgnoreCase(player, "ecoCreature.Creature.Craft"  + ecoEntityUtil.getCreatureType(killedCreature).getName())) {
+        if (!hasIgnoreCase(player, "ecoCreature.Creature.Craft" + ecoEntityUtil.getCreatureType(killedCreature).getName())) {
             return;
         }
 
@@ -154,6 +157,20 @@ public class ecoRewardManager
 
             for (ItemStack itemStack : spawnerReward.computeDrops()) {
                 block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
+            }
+        }
+    }
+
+    public void handleNoFarm(EntityDeathEvent event)
+    {
+        EntityDamageEvent damageEvent = event.getEntity().getLastDamageCause();
+
+        if (damageEvent != null) {
+            if (damageEvent instanceof EntityDamageByBlockEvent && damageEvent.getCause().equals(DamageCause.CONTACT)) {
+                event.getDrops().clear();
+            }
+            else if (damageEvent.getCause() != null && (damageEvent.getCause().equals(DamageCause.FALL) || damageEvent.getCause().equals(DamageCause.DROWNING) || damageEvent.getCause().equals(DamageCause.SUFFOCATION))) {
+                event.getDrops().clear();
             }
         }
     }
@@ -198,16 +215,6 @@ public class ecoRewardManager
         }
 
         return amount + groupAmount + timeAmount;
-    }
-
-    private Boolean isPVPDeath(EntityDeathEvent event)
-    {
-        if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-            Entity damager = ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
-            return damager instanceof Player;
-        }
-        
-        return false;
     }
 
     private Boolean hasIgnoreCase(Player player, String perm)

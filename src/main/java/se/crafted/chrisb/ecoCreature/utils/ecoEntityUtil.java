@@ -11,17 +11,23 @@ import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Ghast;
 import org.bukkit.entity.Giant;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.PigZombie;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Silverfish;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Slime;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.Squid;
+import org.bukkit.entity.Tameable;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 
 import se.crafted.chrisb.ecoCreature.managers.ecoRewardManager;
 
@@ -122,5 +128,67 @@ public class ecoEntityUtil
             return TIME_PERIOD.SUNRISE;
 
         return TIME_PERIOD.IDENTITY;
+    }
+
+    public static Player getKillerFromDeathEvent(EntityDeathEvent event)
+    {
+        if (event == null) {
+            return null;
+        }
+
+        if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+
+            Entity damager = ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
+
+            if (damager instanceof Player) {
+                return (Player) damager;
+            }
+            else if (damager instanceof Tameable) {
+                if (((Tameable) damager).isTamed() && ((Tameable) damager).getOwner() instanceof Player) {
+                    return (Player) ((Tameable) damager).getOwner();
+                }
+            }
+            else if (damager instanceof Projectile) {
+                if (((Projectile) damager).getShooter() instanceof Player) {
+                    return (Player) ((Projectile) damager).getShooter();
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static LivingEntity getTamedKillerFromDeathEvent(EntityDeathEvent event)
+    {
+        if (event == null) {
+            return null;
+        }
+
+        if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+
+            Entity damager = ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
+
+            if (damager instanceof Tameable) {
+                if (((Tameable) damager).isTamed() && ((Tameable) damager).getOwner() instanceof Player) {
+                    return (LivingEntity) damager;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static Boolean isPVPDeath(EntityDeathEvent event)
+    {
+        if (event == null) {
+            return false;
+        }
+
+        if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+            Entity damager = ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
+            return damager instanceof Player;
+        }
+
+        return false;
     }
 }
