@@ -114,7 +114,7 @@ public class ecoRewardManager
             return;
         }
 
-        if (!hasIgnoreCase(player, "ecoCreature.Creature.Craft")) {
+        if (!hasIgnoreCase(player, "ecoCreature.Creature.Craft"  + ecoEntityUtil.getCreatureType(killedCreature).getName())) {
             return;
         }
 
