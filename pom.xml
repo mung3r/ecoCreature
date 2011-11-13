@@ -17,6 +17,20 @@
     	<scope>system</scope>
     	<systemPath>${project.basedir}/lib/Vault-1.0.0dev-b45.jar</systemPath>
     </dependency>
+    <dependency>
+        <groupId>org.simiancage.deathtpplus</groupId>
+        <artifactId>DeathTpPlus</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <scope>system</scope>
+        <systemPath>${project.basedir}/lib/DeathTpPlus-0.0.1-SNAPSHOT.jar</systemPath>
+    </dependency>
+    <dependency>
+        <groupId>com.garbagemule.MobArena</groupId>
+        <artifactId>MobArena</artifactId>
+        <version>0.94.3.11</version>
+        <scope>system</scope>
+        <systemPath>${project.basedir}/lib/MobArena.jar</systemPath>
+    </dependency>
   </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

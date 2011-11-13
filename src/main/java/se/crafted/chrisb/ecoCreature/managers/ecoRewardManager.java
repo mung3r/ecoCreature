@@ -1,16 +1,14 @@
 package se.crafted.chrisb.ecoCreature.managers;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.CreatureType;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Tameable;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -57,50 +55,26 @@ public class ecoRewardManager
         this.log = plugin.getLogger();
     }
 
-    public void registerPlayerDeath(EntityDeathEvent event)
+    public void registerPVPReward(Player player, Player damager)
     {
-        Player player = (Player) event.getEntity();
-
-        if (player == null) {
-            return;
-        }
-
-        if (hasPVPReward && ecoEntityUtil.isPVPDeath(event)) {
-            registerPVPReward(player, event);
-        }
-        else if (hasDeathPenalty) {
-            registerDeathPenalty(player);
-        }
-
-        return;
-    }
-
-    public void registerPVPReward(Player player, EntityDeathEvent event)
-    {
-        if (!hasIgnoreCase(player, "ecoCreature.PVPReward")) {
+        if (!hasPVPReward || !hasIgnoreCase(player, "ecoCreature.PVPReward") || !plugin.hasEconomy()) {
             return;
         }
 
         Double amount = isPercentPvpReward ? ecoCreature.economy.getBalance(player.getName()) * (pvpRewardAmount / 100.0D) : pvpRewardAmount;
         if (amount > 0.0D) {
-            if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-                Entity damager = ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
-                if (damager instanceof Player) {
+            ecoCreature.economy.withdrawPlayer(player.getName(), amount);
+            plugin.getMessageManager().sendMessage(ecoMessageManager.deathPenaltyMessage, player, amount);
 
-                    ecoCreature.economy.withdrawPlayer(player.getName(), amount);
-                    plugin.getMessageManager().sendMessage(ecoMessageManager.deathPenaltyMessage, player, amount);
-
-                    Player killer = (Player) damager;
-                    ecoCreature.economy.depositPlayer(killer.getName(), amount);
-                    plugin.getMessageManager().sendMessage(ecoMessageManager.pvpRewardMessage, killer, amount, player.getName(), "");
-                }
-            }
+            Player killer = (Player) damager;
+            ecoCreature.economy.depositPlayer(killer.getName(), amount);
+            plugin.getMessageManager().sendMessage(ecoMessageManager.pvpRewardMessage, killer, amount, player.getName(), "");
         }
     }
 
     public void registerDeathPenalty(Player player)
     {
-        if (!hasIgnoreCase(player, "ecoCreature.DeathPenalty")) {
+        if (!hasDeathPenalty || !hasIgnoreCase(player, "ecoCreature.DeathPenalty") || !plugin.hasEconomy()) {
             return;
         }
 
@@ -111,34 +85,44 @@ public class ecoRewardManager
         }
     }
 
-    public void registerCreatureDeath(Player player, LivingEntity tamedCreature, LivingEntity killedCreature)
+    public void registerCreatureDeath(Player killer, LivingEntity tamedCreature, LivingEntity killedCreature, List<ItemStack> drops)
     {
-        if (player == null || killedCreature == null) {
+        if (killer.getItemInHand().getType().equals(Material.BOW) && !hasBowRewards) {
+            plugin.getMessageManager().sendMessage(ecoMessageManager.noBowRewardMessage, killer);
             return;
         }
-
-        if (!hasIgnoreCase(player, "ecoCreature.Creature.Craft" + ecoEntityUtil.getCreatureType(killedCreature).getName())) {
+        else if (ecoEntityUtil.isUnderSeaLevel(killer) && !canHuntUnderSeaLevel) {
+            plugin.getMessageManager().sendMessage(ecoMessageManager.noBowRewardMessage, killer);
             return;
         }
-
-        if (killedCreature instanceof Tameable) {
-            if (((Tameable) killedCreature).isTamed() && ((Tameable) killedCreature).getOwner() instanceof Player) {
-                Player owner = (Player) ((Tameable) killedCreature).getOwner();
-                if (owner.getName().equals(player.getName())) {
-                    return;
-                }
+        else if (ecoEntityUtil.isOwner(killer, killedCreature)) {
+            // TODO: message no killing your own pets?
+            return;
+        }
+        else if (ecoCreature.mobArenaHandler != null && ecoCreature.mobArenaHandler.isPlayerInArena(killer)) {
+            // TODO: message no arena awards?
+            return;
+        }
+        else if ((ecoEntityUtil.isNearSpawner(killer) || ecoEntityUtil.isNearSpawner(killedCreature)) && !canCampSpawner) {
+            if (shouldClearCampDrops) {
+                drops.clear();
             }
+            plugin.getMessageManager().sendMessage(ecoMessageManager.noCampMessage, killer);
+            return;
+        }
+        else if (!hasIgnoreCase(killer, "ecoCreature.Creature.Craft" + ecoEntityUtil.getCreatureType(killedCreature).getName())) {
+            return;
         }
 
         ecoReward reward = rewards.get(ecoEntityUtil.getCreatureType(killedCreature));
-        String weaponName = tamedCreature != null ? ecoEntityUtil.getCreatureType(tamedCreature).getName() : Material.getMaterial(player.getItemInHand().getTypeId()).name();
 
         if (reward == null) {
-            log.info("Unrecognized creature: " + killedCreature.getClass().getSimpleName());
-            return;
+            log.warning("Unrecognized creature");
         }
-
-        registerReward(player, reward, weaponName);
+        else {
+            String weaponName = tamedCreature != null ? ecoEntityUtil.getCreatureType(tamedCreature).getName() : Material.getMaterial(killer.getItemInHand().getTypeId()).name();
+            registerReward(killer, reward, weaponName);
+        }
     }
 
     public void registerSpawnerBreak(Player player, Block block)
@@ -179,11 +163,11 @@ public class ecoRewardManager
     {
         Double amount = computeReward(player, reward);
 
-        if (amount > 0.0D) {
+        if (amount > 0.0D && plugin.hasEconomy()) {
             ecoCreature.economy.depositPlayer(player.getName(), amount);
             plugin.getMessageManager().sendMessage(reward.getRewardMessage(), player, amount, reward.getCreatureName(), weaponName);
         }
-        else if (amount < 0.0D) {
+        else if (amount < 0.0D && plugin.hasEconomy()) {
             ecoCreature.economy.withdrawPlayer(player.getName(), Math.abs(amount));
             plugin.getMessageManager().sendMessage(reward.getPenaltyMessage(), player, Math.abs(amount), reward.getCreatureName(), weaponName);
         }
