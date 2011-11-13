@@ -2,6 +2,7 @@ package se.crafted.chrisb.ecoCreature.managers;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public class ecoConfigManager
         return isEnabled;
     }
 
-    public void load() throws Exception
+    public void load() throws IOException
     {
         config = getConfig(MAIN_CONFIG_FILE);
         config.load();
@@ -107,7 +108,7 @@ public class ecoConfigManager
         }
     }
 
-    private Configuration getConfig(String filename) throws Exception
+    private Configuration getConfig(String filename) throws IOException
     {
         File file = new File(ecoCreature.dataFolder, filename);
         if (!file.exists()) {
