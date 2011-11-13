@@ -132,11 +132,7 @@ public class ecoEntityUtil
 
     public static Player getKillerFromDeathEvent(EntityDeathEvent event)
     {
-        if (event == null) {
-            return null;
-        }
-
-        if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+        if (event != null && event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
 
             Entity damager = ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
 
@@ -160,11 +156,7 @@ public class ecoEntityUtil
 
     public static LivingEntity getTamedKillerFromDeathEvent(EntityDeathEvent event)
     {
-        if (event == null) {
-            return null;
-        }
-
-        if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+        if (event != null && event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
 
             Entity damager = ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
 
@@ -180,15 +172,24 @@ public class ecoEntityUtil
 
     public static Boolean isPVPDeath(EntityDeathEvent event)
     {
-        if (event == null) {
-            return false;
-        }
-
-        if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+        if (event != null && event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
             Entity damager = ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
             return damager instanceof Player;
         }
 
+        return false;
+    }
+
+    public static Boolean isOwner(Player player, Entity entity)
+    {
+        if (entity instanceof Tameable) {
+            if (((Tameable) entity).isTamed() && ((Tameable) entity).getOwner() instanceof Player) {
+                Player owner = (Player) ((Tameable) entity).getOwner();
+                if (owner.getName().equals(player.getName())) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 }
