@@ -160,7 +160,7 @@ RewardTable:
         Coin_Minimum: 5.50
         Coin_Maximum: 10.50
         Coin_Percent: 50.0
-        NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You slayed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
@@ -169,7 +169,7 @@ RewardTable:
         Coin_Minimum: 1.00
         Coin_Maximum: 3.00
         Coin_Percent: 50.0
-        NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You slayed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
@@ -178,7 +178,7 @@ RewardTable:
         Coin_Minimum: 1.00
         Coin_Maximum: 3.50
         Coin_Percent: 50.0
-        NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You slayed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
@@ -187,7 +187,7 @@ RewardTable:
         Coin_Minimum: 0.50
         Coin_Maximum: 1.50
         Coin_Percent: 50.0
-        NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You slayed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
@@ -196,7 +196,7 @@ RewardTable:
         Coin_Minimum: 1.00
         Coin_Maximum: 3.50
         Coin_Percent: 50.0
-        NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You slayed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
@@ -205,7 +205,7 @@ RewardTable:
         Coin_Minimum: 3.50
         Coin_Maximum: 3.50
         Coin_Percent: 50.0
-        NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You slayed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
@@ -214,7 +214,7 @@ RewardTable:
         Coin_Minimum: 0.00
         Coin_Maximum: 2.00
         Coin_Percent: 50.00
-        NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You slayed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
@@ -223,7 +223,7 @@ RewardTable:
         Coin_Minimum: 8.50
         Coin_Maximum: 8.50
         Coin_Percent: 50.00
-        NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You slayed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
@@ -232,7 +232,7 @@ RewardTable:
         Coin_Minimum: 0.10
         Coin_Maximum: 2.00
         Coin_Percent: 1.0
-        NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You slayed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
@@ -241,7 +241,7 @@ RewardTable:
         Coin_Minimum: 0.10
         Coin_Maximum: 2.50
         Coin_Percent: 1.0
-        NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You slayed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
@@ -250,7 +250,7 @@ RewardTable:
         Coin_Minimum: 0.10
         Coin_Maximum: 2.50
         Coin_Percent: 1.0
-        NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You slayed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
@@ -259,7 +259,7 @@ RewardTable:
         Coin_Minimum: 0.10
         Coin_Maximum: 2.50
         Coin_Percent: 1.0
-        NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You slayed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
@@ -268,7 +268,7 @@ RewardTable:
         Coin_Minimum: 0.10
         Coin_Maximum: 2.50
         Coin_Percent: 1.0
-        NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You slayed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
@@ -277,7 +277,7 @@ RewardTable:
         Coin_Minimum: 1.00
         Coin_Maximum: 2.00
         Coin_Percent: 1.0
-        NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You slayed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
@@ -286,7 +286,7 @@ RewardTable:
         Coin_Minimum: 0.50
         Coin_Maximum: 1.50
         Coin_Percent: 50.0
-        NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You slayed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
@@ -295,7 +295,7 @@ RewardTable:
         Coin_Minimum: 0.50
         Coin_Maximum: 1.50
         Coin_Percent: 50.0
-        NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You slayed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
@@ -304,7 +304,7 @@ RewardTable:
         Coin_Minimum: 1.00
         Coin_Maximum: 3.50
         Coin_Percent: 50.0
-        NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You slayed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
@@ -313,7 +313,7 @@ RewardTable:
         Coin_Minimum: 0.50
         Coin_Maximum: 0.50
         Coin_Percent: 50.0
-        NoReward_Message: '&7You slayed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You slayed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
 
@@ -322,7 +322,7 @@ RewardTable:
         Coin_Minimum: 0.10
         Coin_Maximum: 15.00
         Coin_Percent: 50.0
-        NoReward_Message: '&7You destroyed a &5<crt>&7 weilding a &3<itm>.'
+        NoReward_Message: '&7You destroyed a &5<crt>&7 wielding a &3<itm>.'
         Reward_Message: '&7You are awarded &6<amt>&7 for destroying a &5<crt>.'
         Penalty_Message: '&7You are penalized &6<amt>&7 for destroying a &5<crt>.'
 
