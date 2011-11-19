@@ -48,6 +48,7 @@ public class ecoRewardManager
     public static HashMap<TIME_PERIOD, Double> timeMultiplier = new HashMap<TIME_PERIOD, Double>();
     public static HashMap<CreatureType, ecoReward> rewards;
     public static ecoReward spawnerReward;
+    public static Boolean warnGroupMultiplierSupport = true;
 
     public ecoRewardManager(ecoCreature plugin)
     {
@@ -195,7 +196,10 @@ public class ecoRewardManager
             timeAmount = amount * timeMultiplier.get(ecoEntityUtil.getTimePeriod(player)) - amount;
         }
         catch (Exception exception) {
-            log.warning("Permissions does not support group multiplier");
+            if (warnGroupMultiplierSupport) {
+                log.warning("Permissions does not support group multiplier");
+                warnGroupMultiplierSupport = false;
+            }
         }
 
         return amount + groupAmount + timeAmount;
