@@ -13,16 +13,12 @@
     <dependency>
     	<groupId>net.milkbowl.vault</groupId>
     	<artifactId>Vault</artifactId>
-    	<version>1.0.0dev-b45</version>
-    	<scope>system</scope>
-    	<systemPath>${project.basedir}/lib/Vault-1.0.0dev-b45.jar</systemPath>
+    	<version>1.1.0dev</version>
     </dependency>
     <dependency>
         <groupId>org.simiancage.deathtpplus</groupId>
         <artifactId>DeathTpPlus</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <scope>system</scope>
-        <systemPath>${project.basedir}/lib/DeathTpPlus-0.0.1-SNAPSHOT.jar</systemPath>
     </dependency>
     <dependency>
         <groupId>com.garbagemule.MobArena</groupId>
