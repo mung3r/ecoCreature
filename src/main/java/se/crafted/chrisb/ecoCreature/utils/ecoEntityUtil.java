@@ -2,17 +2,20 @@ package se.crafted.chrisb.ecoCreature.utils;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Blaze;
 import org.bukkit.entity.CaveSpider;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Ghast;
 import org.bukkit.entity.Giant;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
+import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
@@ -24,6 +27,7 @@ import org.bukkit.entity.Slime;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.Squid;
 import org.bukkit.entity.Tameable;
+import org.bukkit.entity.Villager;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -69,6 +73,8 @@ public class ecoEntityUtil
 
     public static CreatureType getCreatureType(Entity entity)
     {
+        if (entity instanceof Blaze)
+            return CreatureType.BLAZE;
         if (entity instanceof CaveSpider)
             return CreatureType.CAVE_SPIDER;
         if (entity instanceof Chicken)
@@ -77,12 +83,16 @@ public class ecoEntityUtil
             return CreatureType.COW;
         if (entity instanceof Creeper)
             return CreatureType.CREEPER;
+        if (entity instanceof EnderDragon)
+            return CreatureType.ENDER_DRAGON;
         if (entity instanceof Enderman)
             return CreatureType.ENDERMAN;
         if (entity instanceof Ghast)
             return CreatureType.GHAST;
         if (entity instanceof Giant)
             return CreatureType.GIANT;
+        if (entity instanceof MushroomCow)
+            return CreatureType.MUSHROOM_COW;
         if (entity instanceof Pig)
             return CreatureType.PIG;
         if (entity instanceof PigZombie)
@@ -99,6 +109,8 @@ public class ecoEntityUtil
             return CreatureType.SPIDER;
         if (entity instanceof Squid)
             return CreatureType.SQUID;
+        if (entity instanceof Villager)
+            return CreatureType.VILLAGER;
         if (entity instanceof Zombie)
             return CreatureType.ZOMBIE;
         if (entity instanceof Wolf)
