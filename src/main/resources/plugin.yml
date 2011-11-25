@@ -1,6 +1,6 @@
 name: ecoCreature
 main: se.crafted.chrisb.ecoCreature.ecoCreature
-version: 0.0.7b (People are creatures too!)
+version: 0.0.8 (All your death are belong to us!)
 depend: [Vault]
 softdepend: [DeathTpPlus]
 description: Coins and drops for PvM
