@@ -76,7 +76,7 @@ public class ecoConfigManager
         messageManager.deathPenaltyMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DeathPenaltyMessage", ecoMessageManager.DEATH_PENALTY_MESSAGE)), true);
         messageManager.pvpRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.PVPRewardMessage", ecoMessageManager.PVP_REWARD_MESSAGE)), true);
 
-        for (String groupMultiplierName : config.getKeys("Gain")) {
+        for (String groupMultiplierName : config.getKeys("Gain.Groups")) {
             rewardManager.groupMultiplier.put(groupMultiplierName.toLowerCase(), Double.valueOf(config.getDouble("Gain.Groups." + groupMultiplierName + ".Amount", 0.0D)));
         }
 
