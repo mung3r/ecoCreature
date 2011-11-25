@@ -19,6 +19,15 @@ public class ecoMessageManager
     public static ecoMessage deathPenaltyMessage;
     public static ecoMessage pvpRewardMessage;
 
+    public final static String NO_CAMP_MESSAGE = "&7You find no rewards camping monster spawners.";
+    public final static String NO_BOW_REWARD_MESSAGE = "&7You find no rewards on this creature.";
+    public final static String DEATH_PENALTY_MESSAGE = "&7You wake up to find &6<amt>&7 missing from your pockets!";
+    public final static String PVP_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for murdering &5<crt>.";
+
+    public final static String NO_REWARD_MESSAGE = "'&7You slayed a &5<crt>&7 using a &3<itm>.";
+    public final static String REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>.";
+    public final static String PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>.";
+
     private ecoCreature plugin;
 
     public ecoMessageManager(ecoCreature plugin)

@@ -66,21 +66,21 @@ public class ecoConfigManager
         ecoRewardManager.noFarm = config.getBoolean("System.Hunting.NoFarm", false);
 
         ecoMessageManager.shouldOutputMessages = config.getBoolean("System.Messages.Output", true);
-        ecoMessageManager.noBowRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoBowMessage")), true);
-        ecoMessageManager.noCampMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoCampMessage")), config.getBoolean("System.Messages.Spawner", false));
-        ecoMessageManager.deathPenaltyMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DeathPenaltyMessage")), true);
-        ecoMessageManager.pvpRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.PVPRewardMessage")), true);
+        ecoMessageManager.noBowRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoBowMessage", ecoMessageManager.NO_BOW_REWARD_MESSAGE)), true);
+        ecoMessageManager.noCampMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoCampMessage", ecoMessageManager.NO_CAMP_MESSAGE)), config.getBoolean("System.Messages.Spawner", false));
+        ecoMessageManager.deathPenaltyMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DeathPenaltyMessage", ecoMessageManager.DEATH_PENALTY_MESSAGE)), true);
+        ecoMessageManager.pvpRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.PVPRewardMessage", ecoMessageManager.PVP_REWARD_MESSAGE)), true);
 
         for (String groupMultiplierName : config.getKeys("Gain")) {
-            ecoRewardManager.groupMultiplier.put(groupMultiplierName.toLowerCase(), Double.valueOf(config.getDouble("Gain." + groupMultiplierName + ".Amount", 0.0D)));
+            ecoRewardManager.groupMultiplier.put(groupMultiplierName.toLowerCase(), Double.valueOf(config.getDouble("Gain.Groups." + groupMultiplierName + ".Amount", 0.0D)));
         }
 
-        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.SUNRISE, Double.valueOf(config.getDouble("Time.Sunrise.Amount", 1.0D)));
-        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.DAY, Double.valueOf(config.getDouble("Time.Day.Amount", 1.0D)));
-        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.SUNSET, Double.valueOf(config.getDouble("Time.Sunset.Amount", 1.0D)));
-        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.DUSK, Double.valueOf(config.getDouble("Time.Dusk.Amount", 1.125D)));
-        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.NIGHT, Double.valueOf(config.getDouble("Time.Night.Amount", 1.25D)));
-        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.DAWN, Double.valueOf(config.getDouble("Time.Dawn.Amount", 1.125D)));
+        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.SUNRISE, Double.valueOf(config.getDouble("Gain.Time.Sunrise.Amount", 1.0D)));
+        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.DAY, Double.valueOf(config.getDouble("Gain.Time.Day.Amount", 1.0D)));
+        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.SUNSET, Double.valueOf(config.getDouble("Gain.Time.Sunset.Amount", 1.0D)));
+        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.DUSK, Double.valueOf(config.getDouble("Gain.Time.Dusk.Amount", 1.125D)));
+        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.NIGHT, Double.valueOf(config.getDouble("Gain.Time.Night.Amount", 1.25D)));
+        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.DAWN, Double.valueOf(config.getDouble("Gain.Time.Dawn.Amount", 1.125D)));
         ecoRewardManager.timeMultiplier.put(TIME_PERIOD.IDENTITY, 1.0D);
 
         ecoRewardManager.rewards = new HashMap<CreatureType, ecoReward>();
@@ -95,9 +95,9 @@ public class ecoConfigManager
             reward.setCoinMin(config.getDouble(root + ".Coin_Minimum", 5));
             reward.setCoinPercentage(config.getDouble(root + ".Coin_Percent", 50));
 
-            reward.setNoRewardMessage(new ecoMessage(convertMessage(config.getString(root + ".NoReward_Message")), config.getBoolean("System.Messages.NoReward", false)));
-            reward.setRewardMessage(new ecoMessage(convertMessage(config.getString(root + ".Reward_Message")), true));
-            reward.setPenaltyMessage(new ecoMessage(convertMessage(config.getString(root + ".Penalty_Message")), true));
+            reward.setNoRewardMessage(new ecoMessage(convertMessage(config.getString(root + ".NoReward_Message", ecoMessageManager.NO_REWARD_MESSAGE)), config.getBoolean("System.Messages.NoReward", false)));
+            reward.setRewardMessage(new ecoMessage(convertMessage(config.getString(root + ".Reward_Message", ecoMessageManager.REWARD_MESSAGE)), true));
+            reward.setPenaltyMessage(new ecoMessage(convertMessage(config.getString(root + ".Penalty_Message", ecoMessageManager.PENALTY_MESSAGE)), true));
 
             if (creatureName.equals("Spawner")) {
                 ecoRewardManager.spawnerReward = reward;
