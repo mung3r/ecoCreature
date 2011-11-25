@@ -148,12 +148,20 @@ public class ecoCreature extends JavaPlugin
 
     public static ecoMessageManager getMessageManager(Entity entity)
     {
-        return messageManagers.get(entity.getWorld().getName());
+        ecoMessageManager messageManager = messageManagers.get(entity.getWorld().getName());
+        if (messageManager == null) {
+            messageManager = messageManagers.get("default");
+        }
+        return messageManager;
     }
 
     public static ecoRewardManager getRewardManager(Entity entity)
     {
-        return rewardManagers.get(entity.getWorld().getName());
+        ecoRewardManager rewardManager = rewardManagers.get(entity.getWorld().getName());
+        if (rewardManager == null) {
+            rewardManager = rewardManagers.get("default");
+        }
+        return rewardManager;
     }
 
     public ecoConfigManager getConfigManager()
