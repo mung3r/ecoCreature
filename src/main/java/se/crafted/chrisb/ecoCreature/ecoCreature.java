@@ -105,6 +105,8 @@ public class ecoCreature extends JavaPlugin
         Locale.setDefault(Locale.US);
 
         logger = new ecoLogger(this);
+        messageManagers = new HashMap<String, ecoMessageManager>();
+        rewardManagers = new HashMap<String, ecoRewardManager>();
 
         try {
             configManager = new ecoConfigManager(this);
