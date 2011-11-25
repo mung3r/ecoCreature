@@ -7,7 +7,6 @@ import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.CreatureKilledByPlayerEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerDeathEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledByPlayerEvent;
-import se.crafted.chrisb.ecoCreature.managers.ecoRewardManager;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 
 public class ecoEntityListener extends EntityListener
@@ -35,8 +34,8 @@ public class ecoEntityListener extends EntityListener
         Player killer = ecoEntityUtil.getKillerFromDeathEvent(event);
 
         if (killer == null) {
-            if (ecoRewardManager.noFarm) {
-                plugin.getRewardManager().handleNoFarm(event);
+            if (ecoCreature.getRewardManager(event.getEntity()).noFarm) {
+                ecoCreature.getRewardManager(event.getEntity()).handleNoFarm(event);
             }
             return;
         }

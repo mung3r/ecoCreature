@@ -12,12 +12,12 @@ public class ecoMessageManager
     private final static String ITEM_TOKEN = "<itm>";
     private final static String CREATURE_TOKEN = "<crt>";
 
-    public static boolean shouldOutputMessages;
+    public boolean shouldOutputMessages;
 
-    public static ecoMessage noBowRewardMessage;
-    public static ecoMessage noCampMessage;
-    public static ecoMessage deathPenaltyMessage;
-    public static ecoMessage pvpRewardMessage;
+    public ecoMessage noBowRewardMessage;
+    public ecoMessage noCampMessage;
+    public ecoMessage deathPenaltyMessage;
+    public ecoMessage pvpRewardMessage;
 
     public final static String NO_CAMP_MESSAGE = "&7You find no rewards camping monster spawners.";
     public final static String NO_BOW_REWARD_MESSAGE = "&7You find no rewards on this creature.";

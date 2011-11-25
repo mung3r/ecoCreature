@@ -21,6 +21,6 @@ public class ecoBlockListener extends BlockListener
             return;
         }
 
-        plugin.getRewardManager().registerSpawnerBreak(event.getPlayer(), event.getBlock());
+        ecoCreature.getRewardManager(event.getPlayer()).registerSpawnerBreak(event.getPlayer(), event.getBlock());
     }
 }

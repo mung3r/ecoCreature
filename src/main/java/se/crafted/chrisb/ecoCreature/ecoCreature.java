@@ -2,11 +2,13 @@ package se.crafted.chrisb.ecoCreature;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Locale;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.Plugin;
@@ -41,8 +43,8 @@ public class ecoCreature extends JavaPlugin
     private final ecoDeathListener rewardListener = new ecoDeathListener(this);
 
     private ecoLogger logger;
-    private ecoMessageManager messageManager;
-    private ecoRewardManager rewardManager;
+    public static HashMap<String, ecoMessageManager> messageManagers;
+    public static HashMap<String, ecoRewardManager> rewardManagers;
     private ecoConfigManager configManager;
 
     private Boolean setupDependencies()
@@ -103,8 +105,6 @@ public class ecoCreature extends JavaPlugin
         Locale.setDefault(Locale.US);
 
         logger = new ecoLogger(this);
-        messageManager = new ecoMessageManager(this);
-        rewardManager = new ecoRewardManager(this);
 
         try {
             configManager = new ecoConfigManager(this);
@@ -131,11 +131,6 @@ public class ecoCreature extends JavaPlugin
 
     public void onDisable()
     {
-        permission = null;
-        economy = null;
-        configManager = null;
-        rewardManager = null;
-        messageManager = null;
         logger.info(getDescription().getVersion() + " is disabled.");
     }
 
@@ -149,14 +144,14 @@ public class ecoCreature extends JavaPlugin
         return logger;
     }
 
-    public ecoMessageManager getMessageManager()
+    public static ecoMessageManager getMessageManager(Entity entity)
     {
-        return messageManager;
+        return messageManagers.get(entity.getWorld().getName());
     }
 
-    public ecoRewardManager getRewardManager()
+    public static ecoRewardManager getRewardManager(Entity entity)
     {
-        return rewardManager;
+        return rewardManagers.get(entity.getWorld().getName());
     }
 
     public ecoConfigManager getConfigManager()

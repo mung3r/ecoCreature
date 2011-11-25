@@ -29,7 +29,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-import se.crafted.chrisb.ecoCreature.managers.ecoRewardManager;
+import se.crafted.chrisb.ecoCreature.ecoCreature;
 
 public class ecoEntityUtil
 {
@@ -54,7 +54,7 @@ public class ecoEntityUtil
     public static boolean isNearSpawner(Entity entity)
     {
         Location location = entity.getLocation();
-        int r = ecoRewardManager.campRadius;
+        int r = ecoCreature.getRewardManager(entity).campRadius;
 
         for (int i = 0 - r; i <= r; i++) {
             for (int j = 0 - r; j <= r; j++) {

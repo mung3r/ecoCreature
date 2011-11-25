@@ -26,28 +26,29 @@ public class ecoRewardManager
 
     private ecoLogger log;
 
-    public static Boolean isIntegerCurrency;
+    public Boolean isIntegerCurrency;
 
-    public static Boolean canCampSpawner;
-    public static Boolean shouldOverrideDrops;
-    public static Boolean isFixedDrops;
-    public static Boolean shouldClearCampDrops;
-    public static int campRadius;
-    public static Boolean hasBowRewards;
-    public static Boolean hasDeathPenalty;
-    public static Boolean hasPVPReward;
-    public static Boolean isPercentPenalty;
-    public static Boolean isPercentPvpReward;
-    public static Double penaltyAmount;
-    public static double pvpRewardAmount;
-    public static Boolean canHuntUnderSeaLevel;
-    public static Boolean isWolverineMode;
-    public static Boolean noFarm;
+    public Boolean canCampSpawner;
+    public Boolean shouldOverrideDrops;
+    public Boolean isFixedDrops;
+    public Boolean shouldClearCampDrops;
+    public int campRadius;
+    public Boolean hasBowRewards;
+    public Boolean hasDeathPenalty;
+    public Boolean hasPVPReward;
+    public Boolean isPercentPenalty;
+    public Boolean isPercentPvpReward;
+    public Double penaltyAmount;
+    public double pvpRewardAmount;
+    public Boolean canHuntUnderSeaLevel;
+    public Boolean isWolverineMode;
+    public Boolean noFarm;
 
-    public static HashMap<String, Double> groupMultiplier = new HashMap<String, Double>();
-    public static HashMap<TIME_PERIOD, Double> timeMultiplier = new HashMap<TIME_PERIOD, Double>();
-    public static HashMap<CreatureType, ecoReward> rewards;
-    public static ecoReward spawnerReward;
+    public HashMap<String, Double> groupMultiplier = new HashMap<String, Double>();
+    public HashMap<TIME_PERIOD, Double> timeMultiplier = new HashMap<TIME_PERIOD, Double>();
+    public HashMap<CreatureType, ecoReward> rewards;
+    public ecoReward spawnerReward;
+
     public static Boolean warnGroupMultiplierSupport = true;
 
     public ecoRewardManager(ecoCreature plugin)
@@ -65,11 +66,11 @@ public class ecoRewardManager
         Double amount = isPercentPvpReward ? ecoCreature.economy.getBalance(player.getName()) * (pvpRewardAmount / 100.0D) : pvpRewardAmount;
         if (amount > 0.0D) {
             ecoCreature.economy.withdrawPlayer(player.getName(), amount);
-            plugin.getMessageManager().sendMessage(ecoMessageManager.deathPenaltyMessage, player, amount);
+            ecoCreature.getMessageManager(player).sendMessage(ecoCreature.getMessageManager(player).deathPenaltyMessage, player, amount);
 
             Player killer = (Player) damager;
             ecoCreature.economy.depositPlayer(killer.getName(), amount);
-            plugin.getMessageManager().sendMessage(ecoMessageManager.pvpRewardMessage, killer, amount, player.getName(), "");
+            ecoCreature.getMessageManager(player).sendMessage(ecoCreature.getMessageManager(player).pvpRewardMessage, killer, amount, player.getName(), "");
         }
     }
 
@@ -82,18 +83,18 @@ public class ecoRewardManager
         Double amount = isPercentPenalty ? ecoCreature.economy.getBalance(player.getName()) * (penaltyAmount / 100.0D) : penaltyAmount;
         if (amount > 0.0D) {
             ecoCreature.economy.withdrawPlayer(player.getName(), amount);
-            plugin.getMessageManager().sendMessage(ecoMessageManager.deathPenaltyMessage, player, amount);
+            ecoCreature.getMessageManager(player).sendMessage(ecoCreature.getMessageManager(player).deathPenaltyMessage, player, amount);
         }
     }
 
     public void registerCreatureDeath(Player killer, LivingEntity tamedCreature, LivingEntity killedCreature, List<ItemStack> drops)
     {
         if (killer.getItemInHand().getType().equals(Material.BOW) && !hasBowRewards) {
-            plugin.getMessageManager().sendMessage(ecoMessageManager.noBowRewardMessage, killer);
+            ecoCreature.getMessageManager(killer).sendMessage(ecoCreature.getMessageManager(killer).noBowRewardMessage, killer);
             return;
         }
         else if (ecoEntityUtil.isUnderSeaLevel(killer) && !canHuntUnderSeaLevel) {
-            plugin.getMessageManager().sendMessage(ecoMessageManager.noBowRewardMessage, killer);
+            ecoCreature.getMessageManager(killer).sendMessage(ecoCreature.getMessageManager(killer).noBowRewardMessage, killer);
             return;
         }
         else if (ecoEntityUtil.isOwner(killer, killedCreature)) {
@@ -108,7 +109,7 @@ public class ecoRewardManager
             if (shouldClearCampDrops) {
                 drops.clear();
             }
-            plugin.getMessageManager().sendMessage(ecoMessageManager.noCampMessage, killer);
+            ecoCreature.getMessageManager(killer).sendMessage(ecoCreature.getMessageManager(killer).noCampMessage, killer);
             return;
         }
         else if (!hasIgnoreCase(killer, "ecoCreature.Creature.Craft" + ecoEntityUtil.getCreatureType(killedCreature).getName())) {
@@ -166,14 +167,14 @@ public class ecoRewardManager
 
         if (amount > 0.0D && plugin.hasEconomy()) {
             ecoCreature.economy.depositPlayer(player.getName(), amount);
-            plugin.getMessageManager().sendMessage(reward.getRewardMessage(), player, amount, reward.getCreatureName(), weaponName);
+            ecoCreature.getMessageManager(player).sendMessage(reward.getRewardMessage(), player, amount, reward.getCreatureName(), weaponName);
         }
         else if (amount < 0.0D && plugin.hasEconomy()) {
             ecoCreature.economy.withdrawPlayer(player.getName(), Math.abs(amount));
-            plugin.getMessageManager().sendMessage(reward.getPenaltyMessage(), player, Math.abs(amount), reward.getCreatureName(), weaponName);
+            ecoCreature.getMessageManager(player).sendMessage(reward.getPenaltyMessage(), player, Math.abs(amount), reward.getCreatureName(), weaponName);
         }
         else {
-            plugin.getMessageManager().sendMessage(reward.getNoRewardMessage(), player, reward.getCreatureName(), weaponName);
+            ecoCreature.getMessageManager(player).sendMessage(reward.getNoRewardMessage(), player, reward.getCreatureName(), weaponName);
         }
     }
 

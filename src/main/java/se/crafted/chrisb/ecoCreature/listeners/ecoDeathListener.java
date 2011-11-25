@@ -17,18 +17,18 @@ public class ecoDeathListener extends DeathEventsListener
     @Override
     public void onCreatureKilledByPlayer(CreatureKilledByPlayerEvent event)
     {
-        plugin.getRewardManager().registerCreatureDeath(event.getPlayer(), event.getTamedCreature(), event.getKilledCreature(), event.getDrops());
+        ecoCreature.getRewardManager(event.getPlayer()).registerCreatureDeath(event.getPlayer(), event.getTamedCreature(), event.getKilledCreature(), event.getDrops());
     }
 
     @Override
     public void onPlayerDeath(PlayerDeathEvent event)
     {
-        plugin.getRewardManager().registerDeathPenalty(event.getPlayer());
+        ecoCreature.getRewardManager(event.getPlayer()).registerDeathPenalty(event.getPlayer());
     }
 
     @Override
     public void onPlayerKilledByPlayer(PlayerKilledByPlayerEvent event)
     {
-        plugin.getRewardManager().registerPVPReward(event.getVictim(), event.getKiller());
+        ecoCreature.getRewardManager(event.getKiller()).registerPVPReward(event.getVictim(), event.getKiller());
     }
 }
