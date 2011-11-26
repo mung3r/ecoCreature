@@ -103,24 +103,24 @@ System:
         DeathPenaltyMessage: '&7You wake up to find &6<amt>&7 missing from your pockets!'
         PVPRewardMessage: '&7You are awarded &6<amt>&7 for murdering &5<crt>.'
 Gain:
-    Default:
-        Amount: 1.0
-    Donors:
-        Amount: 2.0
-
-Time:
-    Sunrise:
-        Amount: 1.0
-    Day:
-        Amount: 1.0
-    Sunset:
-        Amount: 1.0
-    Dusk:
-        Amount: 1.125
-    Night:
-        Amount: 1.25
-    Dawn:
-        Amount: 1.125
+    Group:
+        Default:
+            Amount: 1.0
+        Donors:
+            Amount: 2.0
+    Time:
+        Sunrise:
+            Amount: 1.0
+        Day:
+            Amount: 1.0
+        Sunset:
+            Amount: 1.0
+        Dusk:
+            Amount: 1.125
+        Night:
+            Amount: 1.25
+        Dawn:
+            Amount: 1.125
 # HOW DO I DROPS!?
 #     - format: 'item:amount:percent'
 #     - more drops: Seperate the items with ; add next
