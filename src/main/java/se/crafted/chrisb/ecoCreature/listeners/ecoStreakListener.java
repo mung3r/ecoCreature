@@ -21,14 +21,14 @@ public class ecoStreakListener extends StreakEventsListener
     @Override
     public void onDeathStreakEvent(DeathStreakEvent event)
     {
-        // TODO: register some kind of penalty
-        log.info("DEBUG: caught death streak event");
+        ecoCreature.getRewardManager(event.getPlayer()).registerDeathStreak(event.getPlayer());
+        log.debug("caught death streak event");
     }
 
     @Override
     public void onKillStreakEvent(KillStreakEvent event)
     {
-        // TODO: register some kind of reward
-        log.info("DEBUG: caught kill streak event");
+        ecoCreature.getRewardManager(event.getPlayer()).registerKillStreak(event.getPlayer());
+        log.debug("caught kill streak event");
     }
 }
