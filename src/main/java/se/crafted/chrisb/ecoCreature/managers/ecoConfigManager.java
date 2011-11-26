@@ -17,6 +17,7 @@ import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.models.ecoDrop;
 import se.crafted.chrisb.ecoCreature.models.ecoMessage;
 import se.crafted.chrisb.ecoCreature.models.ecoReward;
+import se.crafted.chrisb.ecoCreature.models.ecoReward.RewardType;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil.TimePeriod;
 import se.crafted.chrisb.ecoCreature.utils.ecoLogger;
 
@@ -151,12 +152,12 @@ public class ecoConfigManager
         }
 
         if (config.getKeys("RewardTable") != null) {
-            for (String creatureName : config.getKeys("RewardTable")) {
+            for (String rewardName : config.getKeys("RewardTable")) {
                 ecoReward reward = new ecoReward();
-                reward.setCreatureName(creatureName);
-                reward.setCreatureType(CreatureType.fromName(creatureName));
+                reward.setRewardName(rewardName);
+                reward.setRewardType(RewardType.fromName(rewardName));
 
-                String root = "RewardTable." + creatureName;
+                String root = "RewardTable." + rewardName;
                 reward.setDrops(parseDrops(config.getString(root + ".Drops"), rewardManager.isFixedDrops));
                 reward.setCoinMax(config.getDouble(root + ".Coin_Maximum", 0));
                 reward.setCoinMin(config.getDouble(root + ".Coin_Minimum", 5));
@@ -166,12 +167,7 @@ public class ecoConfigManager
                 reward.setRewardMessage(new ecoMessage(convertMessage(config.getString(root + ".Reward_Message", ecoMessageManager.REWARD_MESSAGE)), true));
                 reward.setPenaltyMessage(new ecoMessage(convertMessage(config.getString(root + ".Penalty_Message", ecoMessageManager.PENALTY_MESSAGE)), true));
 
-                if (creatureName.equals("Spawner")) {
-                    rewardManager.spawnerReward = reward;
-                }
-                else {
-                    rewardManager.rewards.put(reward.getCreatureType(), reward);
-                }
+                rewardManager.rewards.put(reward.getRewardType(), reward);
             }
         }
 

@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.models.ecoReward;
+import se.crafted.chrisb.ecoCreature.models.ecoReward.RewardType;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil.TimePeriod;
 import se.crafted.chrisb.ecoCreature.utils.ecoLogger;
@@ -49,8 +50,7 @@ public class ecoRewardManager implements Cloneable
     public HashMap<String, Double> groupMultiplier;
     public HashMap<TimePeriod, Double> timeMultiplier;
     public HashMap<Environment, Double> envMultiplier;
-    public HashMap<CreatureType, ecoReward> rewards;
-    public ecoReward spawnerReward;
+    public HashMap<RewardType, ecoReward> rewards;
 
     private final ecoCreature plugin;
     private final ecoLogger log;
@@ -63,7 +63,7 @@ public class ecoRewardManager implements Cloneable
         groupMultiplier = new HashMap<String, Double>();
         timeMultiplier = new HashMap<TimePeriod, Double>();
         envMultiplier = new HashMap<Environment, Double>();
-        rewards = new HashMap<CreatureType, ecoReward>();
+        rewards = new HashMap<RewardType, ecoReward>();
     }
 
     @Override
@@ -136,7 +136,7 @@ public class ecoRewardManager implements Cloneable
             return;
         }
 
-        ecoReward reward = rewards.get(ecoEntityUtil.getCreatureType(killedCreature));
+        ecoReward reward = rewards.get(RewardType.fromEntity(killedCreature));
 
         if (reward == null) {
             log.warning("Unrecognized creature");
@@ -159,9 +159,9 @@ public class ecoRewardManager implements Cloneable
 
         if (hasIgnoreCase(player, "ecoCreature.Creature.Spawner")) {
 
-            registerReward(player, spawnerReward, Material.getMaterial(player.getItemInHand().getTypeId()).name());
+            registerReward(player, rewards.get(RewardType.SPAWNER), Material.getMaterial(player.getItemInHand().getTypeId()).name());
 
-            for (ItemStack itemStack : spawnerReward.computeDrops()) {
+            for (ItemStack itemStack : rewards.get(RewardType.SPAWNER).computeDrops()) {
                 block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
             }
         }

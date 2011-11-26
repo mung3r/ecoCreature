@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.models.ecoReward;
+import se.crafted.chrisb.ecoCreature.models.ecoReward.RewardType;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 
 @SuppressWarnings("serial")
@@ -31,7 +32,7 @@ public class CreatureKilledByPlayerEvent extends Event
         killedCreature = (LivingEntity) event.getEntity();
         weapon = Material.getMaterial(player.getItemInHand().getTypeId());
         tamedCreature = ecoEntityUtil.getTamedKillerFromDeathEvent(event);
-        reward = ecoCreature.getRewardManager(event.getEntity()).rewards.get(killedCreature);
+        reward = ecoCreature.getRewardManager(event.getEntity()).rewards.get(RewardType.fromEntity(killedCreature));
         drops = event.getDrops();
     }
 
