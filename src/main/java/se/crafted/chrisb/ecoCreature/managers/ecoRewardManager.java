@@ -169,17 +169,17 @@ public class ecoRewardManager implements Cloneable
 
     public void registerDeathStreak(Player player)
     {
-        if (hasDTPRewards && plugin.hasEconomy()) {
+        if (hasDTPRewards && plugin.hasEconomy() && dtpPenaltyAmount > 0.0D) {
             ecoCreature.economy.withdrawPlayer(player.getName(), dtpPenaltyAmount);
-            ecoCreature.getMessageManager(player).sendMessage(ecoCreature.getMessageManager(player).dtpDeathStreakMessage, player);
+            ecoCreature.getMessageManager(player).sendMessage(ecoCreature.getMessageManager(player).dtpDeathStreakMessage, player, dtpPenaltyAmount);
         }
     }
 
     public void registerKillStreak(Player player)
     {
-        if (hasDTPRewards && plugin.hasEconomy()) {
+        if (hasDTPRewards && plugin.hasEconomy() && dtpRewardAmount > 0.0D) {
             ecoCreature.economy.depositPlayer(player.getName(), dtpRewardAmount);
-            ecoCreature.getMessageManager(player).sendMessage(ecoCreature.getMessageManager(player).dtpKillStreakMessage, player);
+            ecoCreature.getMessageManager(player).sendMessage(ecoCreature.getMessageManager(player).dtpKillStreakMessage, player, dtpRewardAmount);
         }
     }
 

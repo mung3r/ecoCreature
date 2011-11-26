@@ -129,7 +129,7 @@ public class ecoConfigManager
         rewardManager.isWolverineMode = config.getBoolean("System.Hunting.WolverineMode", true);
         rewardManager.hasDTPRewards = config.getBoolean("System.Hunting.DTPRewards", true);
         rewardManager.dtpPenaltyAmount = config.getDouble("System.Hunting.DTPDeathStreakPenalty", 5.0D);
-        rewardManager.dtpPenaltyAmount = config.getDouble("System.Hunting.DTPKillStreakPenalty", 10.0D);
+        rewardManager.dtpRewardAmount = config.getDouble("System.Hunting.DTPKillStreakPenalty", 10.0D);
         rewardManager.noFarm = config.getBoolean("System.Hunting.NoFarm", false);
 
         if (config.getKeys("Gain.Groups") != null) {
