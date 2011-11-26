@@ -6,7 +6,6 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
-import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
@@ -144,6 +143,10 @@ public class ecoRewardManager implements Cloneable
         else {
             String weaponName = tamedCreature != null ? ecoEntityUtil.getCreatureType(tamedCreature).getName() : Material.getMaterial(killer.getItemInHand().getTypeId()).name();
             registerReward(killer, reward, weaponName);
+            if (ecoCreature.getRewardManager(killer).shouldOverrideDrops) {
+                drops.clear();
+            }
+            drops.addAll(reward.computeDrops());
         }
     }
 
