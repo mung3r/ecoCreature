@@ -31,7 +31,7 @@ public class ecoConfigManager
     private final ecoLogger log;
     private Boolean isEnabled;
 
-    public static boolean debug;
+    public static boolean debug = false;
 
     public ecoConfigManager(ecoCreature plugin)
     {
@@ -62,39 +62,54 @@ public class ecoConfigManager
         }
 
         defaultConfig.load();
-        loadConfig(DEFAULT_WORLD, defaultConfig);
+        log.info("Loaded config defaults.");
+        ecoMessageManager defaultMessageManager = loadMessageConfig(defaultConfig);
+        ecoRewardManager defaultRewardManager = loadRewardConfig(defaultConfig);
+        ecoCreature.messageManagers.put(DEFAULT_WORLD, defaultMessageManager);
+        ecoCreature.rewardManagers.put(DEFAULT_WORLD, defaultRewardManager);
 
         for (World world : plugin.getServer().getWorlds()) {
-            ecoCreature.messageManagers.put(world.getName(), ecoCreature.messageManagers.get(DEFAULT_WORLD).clone());
-            ecoCreature.rewardManagers.put(world.getName(), ecoCreature.rewardManagers.get(DEFAULT_WORLD).clone());
+
             File worldConfigFile = new File(ecoCreature.dataWorldsFolder, world.getName() + ".yml");
-            Configuration worldConfig = getConfig(worldConfigFile);
-            worldConfig.load();
-            loadConfig(world.getName(), worldConfig);
+            Configuration worldConfig;
+
+            if (worldConfigFile.exists()) {
+                worldConfig = getConfig(worldConfigFile);
+                worldConfig.load();
+                log.info("Loaded config for " + world.getName() + " world.");
+                ecoCreature.messageManagers.put(world.getName(), loadMessageConfig(worldConfig));
+                ecoCreature.rewardManagers.put(world.getName(), loadRewardConfig(worldConfig));
+            }
+            else {
+                ecoCreature.messageManagers.put(world.getName(), defaultMessageManager);
+                ecoCreature.rewardManagers.put(world.getName(), defaultRewardManager);
+            }
+
         }
     }
 
-    public void loadConfig(String worldName, Configuration config)
+    public ecoMessageManager loadMessageConfig(Configuration config)
     {
-        ecoMessageManager messageManager;
-        ecoRewardManager rewardManager;
+        ecoMessageManager messageManager = new ecoMessageManager(plugin);
 
-        if (ecoCreature.messageManagers.containsKey(worldName)) {
-            messageManager = ecoCreature.messageManagers.get(worldName);
-        }
-        else {
-            messageManager = new ecoMessageManager(plugin);
-        }
+        messageManager.shouldOutputMessages = config.getBoolean("System.Messages.Output", true);
+        messageManager.noBowRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoBowMessage", ecoMessageManager.NO_BOW_REWARD_MESSAGE)), true);
+        messageManager.noCampMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoCampMessage", ecoMessageManager.NO_CAMP_MESSAGE)), config.getBoolean("System.Messages.Spawner", false));
+        messageManager.deathPenaltyMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DeathPenaltyMessage", ecoMessageManager.DEATH_PENALTY_MESSAGE)), true);
+        messageManager.pvpRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.PVPRewardMessage", ecoMessageManager.PVP_REWARD_MESSAGE)), true);
+        messageManager.dtpDeathStreakMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DTPDeathStreakMessage", ecoMessageManager.DTP_DEATHSTREAK_MESSAGE)), true);
+        messageManager.dtpKillStreakMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DTPKillStreakMessage", ecoMessageManager.DTP_KILLSTREAK_MESSAGE)), true);
 
-        if (ecoCreature.rewardManagers.containsKey(worldName)) {
-            rewardManager = ecoCreature.rewardManagers.get(worldName);
-        }
-        else {
-            rewardManager = new ecoRewardManager(plugin);
-        }
+        return messageManager;
+    }
+
+    public ecoRewardManager loadRewardConfig(Configuration config)
+    {
+        ecoRewardManager rewardManager = new ecoRewardManager(plugin);
+
         isEnabled = config.getBoolean("DidYou.Read.Understand.Configure", true);
 
-        debug = config.getBoolean("System.debug", false);
+        debug = config.getBoolean("System.debug", false) || debug;
 
         rewardManager.isIntegerCurrency = config.getBoolean("System.Economy.IntegerCurrency", false);
 
@@ -117,14 +132,6 @@ public class ecoConfigManager
         rewardManager.dtpPenaltyAmount = config.getDouble("System.Hunting.DTPKillStreakPenalty", 10.0D);
         rewardManager.noFarm = config.getBoolean("System.Hunting.NoFarm", false);
 
-        messageManager.shouldOutputMessages = config.getBoolean("System.Messages.Output", true);
-        messageManager.noBowRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoBowMessage", ecoMessageManager.NO_BOW_REWARD_MESSAGE)), true);
-        messageManager.noCampMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoCampMessage", ecoMessageManager.NO_CAMP_MESSAGE)), config.getBoolean("System.Messages.Spawner", false));
-        messageManager.deathPenaltyMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DeathPenaltyMessage", ecoMessageManager.DEATH_PENALTY_MESSAGE)), true);
-        messageManager.pvpRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.PVPRewardMessage", ecoMessageManager.PVP_REWARD_MESSAGE)), true);
-        messageManager.dtpDeathStreakMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DTPDeathStreakMessage", ecoMessageManager.DTP_DEATHSTREAK_MESSAGE)), true);
-        messageManager.dtpKillStreakMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DTPKillStreakMessage", ecoMessageManager.DTP_KILLSTREAK_MESSAGE)), true);
-
         if (config.getKeys("Gain.Groups") != null) {
             for (String group : config.getKeys("Gain.Groups")) {
                 rewardManager.groupMultiplier.put(group.toLowerCase(), Double.valueOf(config.getDouble("Gain.Groups." + group + ".Amount", 0.0D)));
@@ -139,7 +146,7 @@ public class ecoConfigManager
 
         if (config.getKeys("Gain.Environment") != null) {
             for (String environment : config.getKeys("Gain.Environment")) {
-                rewardManager.envMultiplier.put(Environment.valueOf(environment), Double.valueOf(config.getDouble("Gain.Environment." + environment + ".Amount", 1.0D)));
+                rewardManager.envMultiplier.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(config.getDouble("Gain.Environment." + environment + ".Amount", 1.0D)));
             }
         }
 
@@ -168,14 +175,13 @@ public class ecoConfigManager
             }
         }
 
-        ecoCreature.messageManagers.put(worldName, messageManager);
-        ecoCreature.rewardManagers.put(worldName, rewardManager);
+        return rewardManager;
     }
 
     private Configuration getConfig(File configFile) throws IOException
     {
         if (!configFile.exists()) {
-            InputStream inputStream = ecoCreature.class.getResourceAsStream(DEFAULT_CONFIG_FILE);
+            InputStream inputStream = ecoCreature.class.getResourceAsStream("/" + DEFAULT_CONFIG_FILE);
             FileOutputStream outputStream = new FileOutputStream(configFile);
 
             byte[] buffer = new byte[8192];

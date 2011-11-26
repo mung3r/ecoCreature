@@ -46,10 +46,10 @@ public class ecoRewardManager implements Cloneable
     public double dtpPenaltyAmount;
     public Boolean noFarm;
 
-    public HashMap<String, Double> groupMultiplier = new HashMap<String, Double>();
-    public HashMap<TimePeriod, Double> timeMultiplier = new HashMap<TimePeriod, Double>();
-    public HashMap<Environment, Double> envMultiplier = new HashMap<Environment, Double>();
-    public HashMap<CreatureType, ecoReward> rewards = new HashMap<CreatureType, ecoReward>();
+    public HashMap<String, Double> groupMultiplier;
+    public HashMap<TimePeriod, Double> timeMultiplier;
+    public HashMap<Environment, Double> envMultiplier;
+    public HashMap<CreatureType, ecoReward> rewards;
     public ecoReward spawnerReward;
 
     private final ecoCreature plugin;
@@ -59,6 +59,11 @@ public class ecoRewardManager implements Cloneable
     {
         this.plugin = plugin;
         log = this.plugin.getLogger();
+
+        groupMultiplier = new HashMap<String, Double>();
+        timeMultiplier = new HashMap<TimePeriod, Double>();
+        envMultiplier = new HashMap<Environment, Double>();
+        rewards = new HashMap<CreatureType, ecoReward>();
     }
 
     @Override
@@ -226,8 +231,13 @@ public class ecoRewardManager implements Cloneable
                 groupAmount = amount * groupMultiplier.get(group) - amount;
             }
 
-            timeAmount = amount * timeMultiplier.get(ecoEntityUtil.getTimePeriod(player)) - amount;
-            envAmount = amount * envMultiplier.get(player.getWorld().getEnvironment()) - amount;
+            if (timeMultiplier.containsKey(ecoEntityUtil.getTimePeriod(player))) {
+                timeAmount = amount * timeMultiplier.get(ecoEntityUtil.getTimePeriod(player)) - amount;
+            }
+
+            if (envMultiplier.containsKey(player.getWorld().getEnvironment())) {
+                envAmount = amount * envMultiplier.get(player.getWorld().getEnvironment()) - amount;
+            }
         }
         catch (Exception exception) {
             if (warnGroupMultiplierSupport) {
