@@ -22,7 +22,7 @@ import se.crafted.chrisb.ecoCreature.utils.ecoLogger;
 public class ecoConfigManager
 {
     private static final String OLD_CONFIG_FILE = "ecoCreature.yml";
-    private static final String CONFIG_FILE = "config.yml";
+    private static final String DEFAULT_CONFIG = "default.yml";
 
     private ecoCreature plugin;
     private ecoLogger log;
@@ -120,7 +120,7 @@ public class ecoConfigManager
     {
         Configuration config = null;
 
-        File configFile = new File(ecoCreature.dataFolder, CONFIG_FILE);
+        File configFile = new File(ecoCreature.dataFolder, DEFAULT_CONFIG);
         File oldConfigFile = new File(ecoCreature.dataFolder, OLD_CONFIG_FILE);
 
         if (configFile.exists()) {
@@ -132,7 +132,7 @@ public class ecoConfigManager
             isOldConfig = true;
         }
         else {
-            InputStream inputStream = ecoCreature.class.getResourceAsStream(CONFIG_FILE);
+            InputStream inputStream = ecoCreature.class.getResourceAsStream(DEFAULT_CONFIG);
             FileOutputStream outputStream = new FileOutputStream(configFile);
 
             byte[] buffer = new byte[8192];
@@ -143,9 +143,9 @@ public class ecoConfigManager
             inputStream.close();
             outputStream.close();
 
-            log.info("Default settings file written: " + CONFIG_FILE);
+            log.info("Default settings file written: " + DEFAULT_CONFIG);
 
-            config = new Configuration(new File(ecoCreature.dataFolder, CONFIG_FILE));
+            config = new Configuration(new File(ecoCreature.dataFolder, DEFAULT_CONFIG));
             isOldConfig = false;
         }
 
