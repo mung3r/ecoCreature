@@ -5,19 +5,12 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.models.ecoMessage;
 
-public class ecoMessageManager
+public class ecoMessageManager implements Cloneable
 {
     private final static String PLAYER_TOKEN = "<plr>";
     private final static String AMOUNT_TOKEN = "<amt>";
     private final static String ITEM_TOKEN = "<itm>";
     private final static String CREATURE_TOKEN = "<crt>";
-
-    public boolean shouldOutputMessages;
-
-    public ecoMessage noBowRewardMessage;
-    public ecoMessage noCampMessage;
-    public ecoMessage deathPenaltyMessage;
-    public ecoMessage pvpRewardMessage;
 
     public final static String NO_CAMP_MESSAGE = "&7You find no rewards camping monster spawners.";
     public final static String NO_BOW_REWARD_MESSAGE = "&7You find no rewards on this creature.";
@@ -28,11 +21,29 @@ public class ecoMessageManager
     public final static String REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>.";
     public final static String PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>.";
 
+    public boolean shouldOutputMessages;
+
+    public ecoMessage noBowRewardMessage;
+    public ecoMessage noCampMessage;
+    public ecoMessage deathPenaltyMessage;
+    public ecoMessage pvpRewardMessage;
+
     private ecoCreature plugin;
 
     public ecoMessageManager(ecoCreature plugin)
     {
         this.plugin = plugin;
+    }
+
+    @Override
+    public ecoMessageManager clone()
+    {
+        try {
+            return (ecoMessageManager) super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 
     public void sendMessage(ecoMessage message, Player player)
@@ -91,5 +102,4 @@ public class ecoMessageManager
         }
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
-
 }

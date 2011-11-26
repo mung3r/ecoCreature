@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.CreatureType;
 import org.bukkit.util.config.Configuration;
 
@@ -22,19 +23,18 @@ import se.crafted.chrisb.ecoCreature.utils.ecoLogger;
 public class ecoConfigManager
 {
     private static final String OLD_CONFIG_FILE = "ecoCreature.yml";
-    private static final String DEFAULT_CONFIG = "default.yml";
+    private static final String DEFAULT_CONFIG_FILE = "default.yml";
 
-    private ecoCreature plugin;
-    private ecoLogger log;
-    private Configuration config;
-    private Boolean isOldConfig;
+    private static final String DEFAULT_WORLD = "default";
+
+    private final ecoCreature plugin;
+    private final ecoLogger log;
     private Boolean isEnabled;
 
     public ecoConfigManager(ecoCreature plugin)
     {
         this.plugin = plugin;
-        log = plugin.getLogger();
-        config = null;
+        log = this.plugin.getLogger();
     }
 
     public Boolean isEnabled()
@@ -44,13 +44,53 @@ public class ecoConfigManager
 
     public void load() throws IOException
     {
-        config = getConfig();
-        config.load();
+        Configuration defaultConfig;
 
-        ecoMessageManager messageManager = new ecoMessageManager(plugin);
-        ecoRewardManager rewardManager = new ecoRewardManager(plugin);
+        File defaultConfigFile = new File(ecoCreature.dataFolder, DEFAULT_CONFIG_FILE);
+        File oldConfigFile = new File(ecoCreature.dataFolder, OLD_CONFIG_FILE);
 
-        isEnabled = config.getBoolean("DidYou.Read.Understand.Configure", false);
+        if (defaultConfigFile.exists()) {
+            defaultConfig = new Configuration(defaultConfigFile);
+        }
+        else if (oldConfigFile.exists()) {
+            defaultConfig = new Configuration(oldConfigFile);
+        }
+        else {
+            defaultConfig = getConfig(defaultConfigFile);
+        }
+
+        loadConfig(DEFAULT_WORLD, defaultConfig);
+
+        for (World world : plugin.getServer().getWorlds()) {
+            File worldConfigFile = new File(ecoCreature.dataWorldsFolder, world.getName() + ".yml");
+            if (!worldConfigFile.exists()) {
+                ecoCreature.messageManagers.put(world.getName(), ecoCreature.messageManagers.get(DEFAULT_WORLD).clone());
+                ecoCreature.rewardManagers.put(world.getName(), ecoCreature.rewardManagers.get(DEFAULT_WORLD).clone());
+            }
+            Configuration worldConfig = getConfig(worldConfigFile);
+            loadConfig(world.getName(), worldConfig);
+        }
+    }
+
+    public void loadConfig(String worldName, Configuration config)
+    {
+        ecoMessageManager messageManager;
+        ecoRewardManager rewardManager;
+
+        if (ecoCreature.messageManagers.containsKey(worldName)) {
+            messageManager = ecoCreature.messageManagers.get(worldName);
+        }
+        else {
+            messageManager = new ecoMessageManager(plugin);
+        }
+
+        if (ecoCreature.rewardManagers.containsKey(worldName)) {
+            rewardManager = ecoCreature.rewardManagers.get(worldName);
+        }
+        else {
+            rewardManager = new ecoRewardManager(plugin);
+        }
+        isEnabled = config.getBoolean("DidYou.Read.Understand.Configure", true);
 
         rewardManager.isIntegerCurrency = config.getBoolean("System.Economy.IntegerCurrency", false);
 
@@ -112,27 +152,14 @@ public class ecoConfigManager
             }
         }
 
-        ecoCreature.messageManagers.put("default", messageManager);
-        ecoCreature.rewardManagers.put("default", rewardManager);
+        ecoCreature.messageManagers.put(worldName, messageManager);
+        ecoCreature.rewardManagers.put(worldName, rewardManager);
     }
 
-    private Configuration getConfig() throws IOException
+    private Configuration getConfig(File configFile) throws IOException
     {
-        Configuration config = null;
-
-        File configFile = new File(ecoCreature.dataFolder, DEFAULT_CONFIG);
-        File oldConfigFile = new File(ecoCreature.dataFolder, OLD_CONFIG_FILE);
-
-        if (configFile.exists()) {
-            config = new Configuration(configFile);
-            isOldConfig = false;
-        }
-        else if (oldConfigFile.exists()) {
-            config = new Configuration(oldConfigFile);
-            isOldConfig = true;
-        }
-        else {
-            InputStream inputStream = ecoCreature.class.getResourceAsStream(DEFAULT_CONFIG);
+        if (!configFile.exists()) {
+            InputStream inputStream = ecoCreature.class.getResourceAsStream(DEFAULT_CONFIG_FILE);
             FileOutputStream outputStream = new FileOutputStream(configFile);
 
             byte[] buffer = new byte[8192];
@@ -143,11 +170,11 @@ public class ecoConfigManager
             inputStream.close();
             outputStream.close();
 
-            log.info("Default settings file written: " + DEFAULT_CONFIG);
-
-            config = new Configuration(new File(ecoCreature.dataFolder, DEFAULT_CONFIG));
-            isOldConfig = false;
+            log.info("Default settings file written: " + DEFAULT_CONFIG_FILE);
         }
+
+        Configuration config = new Configuration(new File(configFile.getPath()));
+        config.load();
 
         return config;
     }

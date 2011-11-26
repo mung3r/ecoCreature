@@ -32,6 +32,7 @@ import se.crafted.chrisb.ecoCreature.utils.ecoLogger;
 public class ecoCreature extends JavaPlugin
 {
     public static final File dataFolder = new File("plugins" + File.separator + "ecoCreature");
+    public static final File dataWorldsFolder = new File(dataFolder, "worlds");
 
     public static Permission permission = null;
     public static Economy economy = null;
@@ -138,7 +139,7 @@ public class ecoCreature extends JavaPlugin
 
     public void onLoad()
     {
-        dataFolder.mkdirs();
+        dataWorldsFolder.mkdirs();
     }
 
     public ecoLogger getLogger()

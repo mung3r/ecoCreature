@@ -20,11 +20,9 @@ import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil.TIME_PERIOD;
 import se.crafted.chrisb.ecoCreature.utils.ecoLogger;
 
-public class ecoRewardManager
+public class ecoRewardManager implements Cloneable
 {
-    private final ecoCreature plugin;
-
-    private ecoLogger log;
+    public static Boolean warnGroupMultiplierSupport = true;
 
     public Boolean isIntegerCurrency;
 
@@ -49,12 +47,24 @@ public class ecoRewardManager
     public HashMap<CreatureType, ecoReward> rewards;
     public ecoReward spawnerReward;
 
-    public static Boolean warnGroupMultiplierSupport = true;
+    private final ecoCreature plugin;
+    private final ecoLogger log;
 
     public ecoRewardManager(ecoCreature plugin)
     {
         this.plugin = plugin;
-        this.log = plugin.getLogger();
+        log = this.plugin.getLogger();
+    }
+
+    @Override
+    public ecoRewardManager clone()
+    {
+        try {
+            return (ecoRewardManager) super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 
     public void registerPVPReward(Player player, Player damager)
