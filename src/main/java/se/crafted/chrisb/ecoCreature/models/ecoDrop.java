@@ -4,13 +4,14 @@ import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-
-//import se.crafted.chrisb.ecoCreature.ecoCreature;
+import org.bukkit.material.MaterialData;
 
 public class ecoDrop
 {
     private Material item;
-    private int amount;
+    private byte data;
+    private int maxAmount;
+    private int minAmount;
     private Double percentage;
     private Boolean isFixedDrops;
     private Random random = new Random();
@@ -25,14 +26,34 @@ public class ecoDrop
         this.item = item;
     }
 
-    public int getAmount()
+    public int getData()
     {
-        return amount;
+        return data;
     }
 
-    public void setAmount(int amount)
+    public void setData(byte data)
     {
-        this.amount = amount;
+        this.data = data;
+    }
+
+    public int getMaxAmount()
+    {
+        return maxAmount;
+    }
+
+    public void setMaxAmount(int maxAmount)
+    {
+        this.maxAmount = maxAmount;
+    }
+
+    public int getMinAmount()
+    {
+        return minAmount;
+    }
+
+    public void setMinAmount(int minAmount)
+    {
+        this.minAmount = minAmount;
     }
 
     public Double getPercentage()
@@ -58,15 +79,20 @@ public class ecoDrop
     public ItemStack computeItemStack()
     {
         if (random.nextDouble() * 100.0D + 1 < percentage) {
-            int dropAmount = isFixedDrops ? amount : random.nextInt(amount) + 1;
+            int dropAmount = isFixedDrops ? maxAmount : minAmount + random.nextInt(Math.abs(maxAmount - minAmount + 1));
+
             if (dropAmount > 0) {
-                ItemStack itemStack = new ItemStack(item, dropAmount);
+                ItemStack itemStack;
+                if (data == 0) {
+                    itemStack = new ItemStack(item, dropAmount);
+                }
+                else {
+                    MaterialData materialData = new MaterialData(item, data);
+                    itemStack = materialData.toItemStack(dropAmount);
+                }
                 if (itemStack.getAmount() > 0) {
                     return itemStack;
                 }
-
-                // TODO: Why is this a concern?
-                // ecoCreature.logger.severe("[ecoCreature] Item stack for drop is zero.");
             }
         }
         return null;
@@ -75,6 +101,6 @@ public class ecoDrop
     @Override
     public String toString()
     {
-        return "ecoDrop [item=" + item + ", amount=" + amount + ", percentage=" + percentage + "]";
+        return "ecoDrop [item=" + item + ", amount=" + maxAmount + ", percentage=" + percentage + "]";
     }
 }
