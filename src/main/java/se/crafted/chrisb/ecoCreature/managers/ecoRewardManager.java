@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.LivingEntity;
@@ -17,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.models.ecoReward;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
-import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil.TIME_PERIOD;
+import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil.TimePeriod;
 import se.crafted.chrisb.ecoCreature.utils.ecoLogger;
 
 public class ecoRewardManager implements Cloneable
@@ -40,11 +41,15 @@ public class ecoRewardManager implements Cloneable
     public double pvpRewardAmount;
     public Boolean canHuntUnderSeaLevel;
     public Boolean isWolverineMode;
+    public Boolean hasDTPRewards;
+    public double dtpRewardAmount;
+    public double dtpPenaltyAmount;
     public Boolean noFarm;
 
     public HashMap<String, Double> groupMultiplier = new HashMap<String, Double>();
-    public HashMap<TIME_PERIOD, Double> timeMultiplier = new HashMap<TIME_PERIOD, Double>();
-    public HashMap<CreatureType, ecoReward> rewards;
+    public HashMap<TimePeriod, Double> timeMultiplier = new HashMap<TimePeriod, Double>();
+    public HashMap<Environment, Double> envMultiplier = new HashMap<Environment, Double>();
+    public HashMap<CreatureType, ecoReward> rewards = new HashMap<CreatureType, ecoReward>();
     public ecoReward spawnerReward;
 
     private final ecoCreature plugin;
@@ -157,6 +162,22 @@ public class ecoRewardManager implements Cloneable
         }
     }
 
+    public void registerDeathStreak(Player player)
+    {
+        if (hasDTPRewards && plugin.hasEconomy()) {
+            ecoCreature.economy.withdrawPlayer(player.getName(), dtpPenaltyAmount);
+            ecoCreature.getMessageManager(player).sendMessage(ecoCreature.getMessageManager(player).dtpDeathStreakMessage, player);
+        }
+    }
+
+    public void registerKillStreak(Player player)
+    {
+        if (hasDTPRewards && plugin.hasEconomy()) {
+            ecoCreature.economy.depositPlayer(player.getName(), dtpRewardAmount);
+            ecoCreature.getMessageManager(player).sendMessage(ecoCreature.getMessageManager(player).dtpKillStreakMessage, player);
+        }
+    }
+
     public void handleNoFarm(EntityDeathEvent event)
     {
         EntityDamageEvent damageEvent = event.getEntity().getLastDamageCause();
@@ -193,6 +214,7 @@ public class ecoRewardManager implements Cloneable
         Double amount = reward.getRewardAmount();
         Double groupAmount = 0D;
         Double timeAmount = 0D;
+        Double envAmount = 0D;
 
         if (isIntegerCurrency) {
             amount = (double) Math.round(amount);
@@ -205,6 +227,7 @@ public class ecoRewardManager implements Cloneable
             }
 
             timeAmount = amount * timeMultiplier.get(ecoEntityUtil.getTimePeriod(player)) - amount;
+            envAmount = amount * envMultiplier.get(player.getWorld().getEnvironment()) - amount;
         }
         catch (Exception exception) {
             if (warnGroupMultiplierSupport) {
@@ -213,7 +236,12 @@ public class ecoRewardManager implements Cloneable
             }
         }
 
-        return amount + groupAmount + timeAmount;
+        log.debug("base amount is " + amount);
+        log.debug("group amount is " + groupAmount);
+        log.debug("time amount is " + timeAmount);
+        log.debug("env amount is " + envAmount);
+
+        return amount + groupAmount + timeAmount + envAmount;
     }
 
     private Boolean hasIgnoreCase(Player player, String perm)
