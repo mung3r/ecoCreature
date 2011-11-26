@@ -63,8 +63,8 @@ System:
         # IMPORTANT NOTE: requires "classic" build of plugin here http://tiny.cc/dtpclassic
         # Default: true (false if DeathTpPlus plugin is not detected)
         DTPRewards: true
-        DTPDeathStreakPenalty: 10
-        DTPKillStreakReward: 10
+        DTPDeathStreakPenalty: 0.0
+        DTPKillStreakReward: 10.0
         #
         # Remove drops from mobs killed by farming contraptions (mob death by cacti, falling,
         # drowning or suffocation)
@@ -98,10 +98,10 @@ System:
         PVPRewardMessage: '&7You are awarded &6<amt>&7 for murdering &5<crt>.'
         #
         # Custom message for DTP penalty
-        DTPDeathStreakMessage: '&7To add insult to injury, &6<amt>&7 was taken for your death streak.'
+        DTPDeathStreakMessage: '&7That death streak cost you &6<amt>&7.'
         #
         # Custom message for DTP reward
-        DTPKillStreakMessage: '&7You are awarded &6<amt>&7 for your kill streak!'
+        DTPKillStreakMessage: '&7You are awarded &6<amt>&7 for that kill streak!'
 
 Gain:
     #
