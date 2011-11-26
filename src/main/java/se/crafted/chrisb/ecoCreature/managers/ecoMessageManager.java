@@ -21,8 +21,8 @@ public class ecoMessageManager implements Cloneable
     public final static String REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>.";
     public final static String PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>.";
 
-    public final static String DTP_DEATHSTREAK_MESSAGE = "&7To add insult to injury, &6<amt>&7 was taken for your death streak.";
-    public final static String DTP_KILLSTREAK_MESSAGE = "&7You are awarded &6<amt>&7 for your kill streak!";
+    public final static String DTP_DEATHSTREAK_MESSAGE = "&7That death streak cost you &6<amt>&7.";
+    public final static String DTP_KILLSTREAK_MESSAGE = "&7You are awarded &6<amt>&7 for that kill streak!";
 
     public boolean shouldOutputMessages;
 
