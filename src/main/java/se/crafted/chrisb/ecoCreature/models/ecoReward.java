@@ -9,6 +9,7 @@ import java.util.Map;
 import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
@@ -16,30 +17,33 @@ import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 public class ecoReward
 {
     public enum RewardType {
+        ANGRY_WOLF("AngryWolf"),
+        BLAZE("Blaze"),
+        CAVE_SPIDER("CaveSpider"),
         CHICKEN("Chicken"),
         COW("Cow"),
         CREEPER("Creeper"),
+        ENDER_DRAGON("EnderDragon"),
+        ENDERMAN("Enderman"),
         GHAST("Ghast"),
         GIANT("Giant"),
+        KILL_STREAK("KillStreak"),
         MONSTER("Monster"),
+        MUSHROOM_COW("MushroomCow"),
         PIG("Pig"),
         PIG_ZOMBIE("PigZombie"),
+        PLAYER("Player"),
+        POWERED_CREEPER("PoweredCreeper"),
         SHEEP("Sheep"),
+        SILVERFISH("Silverfish"),
         SKELETON("Skeleton"),
         SLIME("Slime"),
+        SPAWNER("Spawner"),
         SPIDER("Spider"),
         SQUID("Squid"),
-        ZOMBIE("Zombie"),
-        WOLF("Wolf"),
-        CAVE_SPIDER("CaveSpider"),
-        ENDERMAN("Enderman"),
-        SILVERFISH("Silverfish"),
-        ENDER_DRAGON("EnderDragon"),
         VILLAGER("Villager"),
-        BLAZE("Blaze"),
-        MUSHROOM_COW("MushroomCow"),
-        SPAWNER("Spawner"),
-        PLAYER("Player");
+        WOLF("Wolf"),
+        ZOMBIE("Zombie");
 
         private static final Map<String, RewardType> mapping = new HashMap<String, RewardType>();
 
@@ -63,16 +67,28 @@ public class ecoReward
 
         public static RewardType fromEntity(Entity entity)
         {
-            CreatureType creatureType = ecoEntityUtil.getCreatureType(entity);
+            RewardType rewardType = null;
 
-            if (creatureType != null) {
-                return RewardType.fromName(creatureType.getName());
+            if (entity instanceof Player) {
+                rewardType = RewardType.PLAYER;
             }
-            else if (entity instanceof Player) {
-                return RewardType.PLAYER;
+            else if (entity instanceof Wolf) {
+                Wolf wolf = (Wolf) entity;
+                if (wolf.isAngry()) {
+                    rewardType = ANGRY_WOLF;
+                }
+                else {
+                    rewardType = WOLF;
+                }
+            }
+            else {
+                CreatureType creatureType = ecoEntityUtil.getCreatureType(entity);
+                if (creatureType != null) {
+                    rewardType = RewardType.fromName(creatureType.getName());
+                }
             }
 
-            return null;
+            return rewardType;
         }
     }
 
