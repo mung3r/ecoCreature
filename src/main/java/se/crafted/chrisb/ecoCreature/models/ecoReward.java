@@ -101,6 +101,11 @@ public class ecoReward
 
             return rewardType;
         }
+
+        public String getName()
+        {
+            return name;
+        }
     }
 
     private String rewardName;
