@@ -9,6 +9,7 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.Plugin;
@@ -173,5 +174,10 @@ public class ecoCreature extends JavaPlugin
     public Boolean hasEconomy()
     {
         return economy != null;
+    }
+    
+    public Boolean has(Player player, String perm)
+    {
+        return permission.has(player, "ecoCreature." + perm) || permission.has(player, "ecocreature." + perm.toLowerCase());
     }
 }

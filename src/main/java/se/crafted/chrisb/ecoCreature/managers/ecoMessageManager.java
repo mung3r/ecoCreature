@@ -37,17 +37,6 @@ public class ecoMessageManager implements Cloneable
         this.plugin = plugin;
     }
 
-    @Override
-    public ecoMessageManager clone()
-    {
-        try {
-            return (ecoMessageManager) super.clone();
-        }
-        catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
-    }
-
     public void sendMessage(ecoMessage message, Player player)
     {
         if (shouldOutputMessages && message.isEnabled()) {
