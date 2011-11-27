@@ -22,13 +22,11 @@ public class ecoStreakListener extends StreakEventsListener
     public void onDeathStreakEvent(DeathStreakEvent event)
     {
         ecoCreature.getRewardManager(event.getPlayer()).registerDeathStreak(event.getPlayer());
-        log.debug("caught death streak event");
     }
 
     @Override
     public void onKillStreakEvent(KillStreakEvent event)
     {
         ecoCreature.getRewardManager(event.getPlayer()).registerKillStreak(event.getPlayer());
-        log.debug("caught kill streak event");
     }
 }
