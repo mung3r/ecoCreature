@@ -56,6 +56,8 @@ public class ecoConfigManager
         }
         else if (oldConfigFile.exists()) {
             defaultConfig = new Configuration(oldConfigFile);
+            log.warning("Using old config file format " + OLD_CONFIG_FILE + ".");
+            log.warning("Backup or delete the old config to generate the new " + DEFAULT_CONFIG_FILE+ ".");
         }
         else {
             defaultConfig = getConfig(defaultConfigFile);
