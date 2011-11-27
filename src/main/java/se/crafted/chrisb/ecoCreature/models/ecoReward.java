@@ -24,6 +24,7 @@ public class ecoReward
         CHICKEN("Chicken"),
         COW("Cow"),
         CREEPER("Creeper"),
+        DEATH_STREAK("DeathStreak"),
         ENDER_DRAGON("EnderDragon"),
         ENDERMAN("Enderman"),
         GHAST("Ghast"),

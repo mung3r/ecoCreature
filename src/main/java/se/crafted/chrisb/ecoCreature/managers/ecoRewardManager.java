@@ -78,7 +78,7 @@ public class ecoRewardManager implements Cloneable
 
     public void registerPVPReward(Player player, Player damager, List<ItemStack> drops)
     {
-        if (!hasPVPReward || !hasIgnoreCase(player, "ecoCreature.PVPReward") || !plugin.hasEconomy()) {
+        if (!hasPVPReward || !hasIgnoreCase(player, "ecoCreature.PVPReward")) {
             return;
         }
 
@@ -97,7 +97,7 @@ public class ecoRewardManager implements Cloneable
             amount = isPercentPvpReward ? ecoCreature.economy.getBalance(player.getName()) * (pvpRewardAmount / 100.0D) : pvpRewardAmount;
         }
 
-        if (amount > 0.0D) {
+        if (amount > 0.0D && plugin.hasEconomy()) {
             ecoCreature.economy.withdrawPlayer(player.getName(), amount);
             ecoCreature.getMessageManager(player).sendMessage(ecoCreature.getMessageManager(player).deathPenaltyMessage, player, amount);
 
@@ -174,7 +174,7 @@ public class ecoRewardManager implements Cloneable
             return;
         }
 
-        if (hasIgnoreCase(player, "ecoCreature.Creature.Spawner")) {
+        if (hasIgnoreCase(player, "ecoCreature.Creature.Spawner") && rewards.containsKey(RewardType.SPAWNER)) {
 
             registerReward(player, rewards.get(RewardType.SPAWNER), Material.getMaterial(player.getItemInHand().getTypeId()).name());
 
@@ -186,17 +186,25 @@ public class ecoRewardManager implements Cloneable
 
     public void registerDeathStreak(Player player)
     {
-        if (hasDTPRewards && plugin.hasEconomy() && dtpPenaltyAmount > 0.0D) {
-            ecoCreature.economy.withdrawPlayer(player.getName(), dtpPenaltyAmount);
-            ecoCreature.getMessageManager(player).sendMessage(ecoCreature.getMessageManager(player).dtpDeathStreakMessage, player, dtpPenaltyAmount);
+        if (hasIgnoreCase(player, "ecoCreature.Creature.DeathStreak") && rewards.containsKey(RewardType.DEATH_STREAK)) {
+
+            registerReward(player, rewards.get(RewardType.DEATH_STREAK), "");
+
+            for (ItemStack itemStack : rewards.get(RewardType.DEATH_STREAK).computeDrops()) {
+                player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+            }
         }
     }
 
     public void registerKillStreak(Player player)
     {
-        if (hasDTPRewards && plugin.hasEconomy() && dtpRewardAmount > 0.0D) {
-            ecoCreature.economy.depositPlayer(player.getName(), dtpRewardAmount);
-            ecoCreature.getMessageManager(player).sendMessage(ecoCreature.getMessageManager(player).dtpKillStreakMessage, player, dtpRewardAmount);
+        if (hasIgnoreCase(player, "ecoCreature.Creature.KillStreak") && rewards.containsKey(RewardType.KILL_STREAK)) {
+
+            registerReward(player, rewards.get(RewardType.KILL_STREAK), "");
+
+            for (ItemStack itemStack : rewards.get(RewardType.KILL_STREAK).computeDrops()) {
+                player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+            }
         }
     }
 

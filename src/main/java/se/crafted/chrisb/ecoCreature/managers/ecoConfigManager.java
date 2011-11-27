@@ -98,8 +98,6 @@ public class ecoConfigManager
         messageManager.noCampMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoCampMessage", ecoMessageManager.NO_CAMP_MESSAGE)), config.getBoolean("System.Messages.Spawner", false));
         messageManager.deathPenaltyMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DeathPenaltyMessage", ecoMessageManager.DEATH_PENALTY_MESSAGE)), true);
         messageManager.pvpRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.PVPRewardMessage", ecoMessageManager.PVP_REWARD_MESSAGE)), true);
-        messageManager.dtpDeathStreakMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DTPDeathStreakMessage", ecoMessageManager.DTP_DEATHSTREAK_MESSAGE)), true);
-        messageManager.dtpKillStreakMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DTPKillStreakMessage", ecoMessageManager.DTP_KILLSTREAK_MESSAGE)), true);
 
         return messageManager;
     }
