@@ -76,13 +76,27 @@ public class ecoRewardManager implements Cloneable
         }
     }
 
-    public void registerPVPReward(Player player, Player damager)
+    public void registerPVPReward(Player player, Player damager, List<ItemStack> drops)
     {
         if (!hasPVPReward || !hasIgnoreCase(player, "ecoCreature.PVPReward") || !plugin.hasEconomy()) {
             return;
         }
 
-        Double amount = isPercentPvpReward ? ecoCreature.economy.getBalance(player.getName()) * (pvpRewardAmount / 100.0D) : pvpRewardAmount;
+        Double amount = 0.0D;
+
+        if (rewards.containsKey(RewardType.PLAYER)) {
+            ecoReward reward = rewards.get(RewardType.PLAYER);
+
+            amount = computeReward(player, reward);
+            if (!drops.isEmpty() && shouldOverrideDrops) {
+                drops.clear();
+            }
+            drops.addAll(reward.computeDrops());
+        }
+        else {
+            amount = isPercentPvpReward ? ecoCreature.economy.getBalance(player.getName()) * (pvpRewardAmount / 100.0D) : pvpRewardAmount;
+        }
+
         if (amount > 0.0D) {
             ecoCreature.economy.withdrawPlayer(player.getName(), amount);
             ecoCreature.getMessageManager(player).sendMessage(ecoCreature.getMessageManager(player).deathPenaltyMessage, player, amount);
@@ -143,7 +157,7 @@ public class ecoRewardManager implements Cloneable
         else {
             String weaponName = tamedCreature != null ? ecoEntityUtil.getCreatureType(tamedCreature).getName() : Material.getMaterial(killer.getItemInHand().getTypeId()).name();
             registerReward(killer, reward, weaponName);
-            if (ecoCreature.getRewardManager(killer).shouldOverrideDrops) {
+            if (!drops.isEmpty() && shouldOverrideDrops) {
                 drops.clear();
             }
             drops.addAll(reward.computeDrops());

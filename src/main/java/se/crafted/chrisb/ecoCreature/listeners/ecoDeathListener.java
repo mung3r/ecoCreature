@@ -32,6 +32,6 @@ public class ecoDeathListener extends DeathEventsListener
     @Override
     public void onPlayerKilledByPlayer(PlayerKilledByPlayerEvent event)
     {
-        ecoCreature.getRewardManager(event.getKiller()).registerPVPReward(event.getVictim(), event.getKiller());
+        ecoCreature.getRewardManager(event.getKiller()).registerPVPReward(event.getVictim(), event.getKiller(), event.getDrops());
     }
 }
