@@ -5,10 +5,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.entity.CreatureType;
 import org.bukkit.util.config.Configuration;
 
@@ -16,23 +17,27 @@ import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.models.ecoDrop;
 import se.crafted.chrisb.ecoCreature.models.ecoMessage;
 import se.crafted.chrisb.ecoCreature.models.ecoReward;
-import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil.TIME_PERIOD;
+import se.crafted.chrisb.ecoCreature.models.ecoReward.RewardType;
+import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil.TimePeriod;
 import se.crafted.chrisb.ecoCreature.utils.ecoLogger;
 
 public class ecoConfigManager
 {
-    private static final String MAIN_CONFIG_FILE = "ecoCreature.yml";
+    private static final String OLD_CONFIG_FILE = "ecoCreature.yml";
+    private static final String DEFAULT_CONFIG_FILE = "default.yml";
 
-    private ecoCreature plugin;
-    private ecoLogger log;
-    private Configuration config;
+    private static final String DEFAULT_WORLD = "default";
+
+    private final ecoCreature plugin;
+    private final ecoLogger log;
     private Boolean isEnabled;
+
+    public static boolean debug = false;
 
     public ecoConfigManager(ecoCreature plugin)
     {
         this.plugin = plugin;
-        log = plugin.getLogger();
-        config = null;
+        log = this.plugin.getLogger();
     }
 
     public Boolean isEnabled()
@@ -42,78 +47,136 @@ public class ecoConfigManager
 
     public void load() throws IOException
     {
-        config = getConfig(MAIN_CONFIG_FILE);
-        config.load();
+        Configuration defaultConfig;
 
-        isEnabled = config.getBoolean("DidYou.Read.Understand.Configure", false);
+        File defaultConfigFile = new File(ecoCreature.dataFolder, DEFAULT_CONFIG_FILE);
+        File oldConfigFile = new File(ecoCreature.dataFolder, OLD_CONFIG_FILE);
 
-        ecoRewardManager.isIntegerCurrency = config.getBoolean("System.Economy.IntegerCurrency", false);
-
-        ecoRewardManager.canCampSpawner = config.getBoolean("System.Hunting.AllowCamping", false);
-        ecoRewardManager.shouldClearCampDrops = config.getBoolean("System.Hunting.ClearCampDrops", true);
-        ecoRewardManager.shouldOverrideDrops = config.getBoolean("System.Hunting.OverrideDrops", true);
-        ecoRewardManager.isFixedDrops = config.getBoolean("System.Hunting.FixedDrops", false);
-        ecoRewardManager.campRadius = config.getInt("System.Hunting.CampRadius", 7);
-        ecoRewardManager.hasBowRewards = config.getBoolean("System.Hunting.BowRewards", true);
-        ecoRewardManager.hasDeathPenalty = config.getBoolean("System.Hunting.PenalizeDeath", false);
-        ecoRewardManager.hasPVPReward = config.getBoolean("System.Hunting.PVPReward", true);
-        ecoRewardManager.isPercentPenalty = config.getBoolean("System.Hunting.PenalizeType", true);
-        ecoRewardManager.isPercentPvpReward = config.getBoolean("System.Hunting.PVPRewardType", true);
-        ecoRewardManager.penaltyAmount = config.getDouble("System.Hunting.PenalizeAmount", 0.05D);
-        ecoRewardManager.pvpRewardAmount = config.getDouble("System.Hunting.PenalizeAmount", 0.05D);
-        ecoRewardManager.canHuntUnderSeaLevel = config.getBoolean("System.Hunting.AllowUnderSeaLVL", true);
-        ecoRewardManager.isWolverineMode = config.getBoolean("System.Hunting.WolverineMode", true);
-        ecoRewardManager.noFarm = config.getBoolean("System.Hunting.NoFarm", false);
-
-        ecoMessageManager.shouldOutputMessages = config.getBoolean("System.Messages.Output", true);
-        ecoMessageManager.noBowRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoBowMessage")), true);
-        ecoMessageManager.noCampMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoCampMessage")), config.getBoolean("System.Messages.Spawner", false));
-        ecoMessageManager.deathPenaltyMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DeathPenaltyMessage")), true);
-        ecoMessageManager.pvpRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.PVPRewardMessage")), true);
-
-        for (String groupMultiplierName : config.getKeys("Gain")) {
-            ecoRewardManager.groupMultiplier.put(groupMultiplierName.toLowerCase(), Double.valueOf(config.getDouble("Gain." + groupMultiplierName + ".Amount", 0.0D)));
+        if (defaultConfigFile.exists()) {
+            defaultConfig = new Configuration(defaultConfigFile);
+        }
+        else if (oldConfigFile.exists()) {
+            defaultConfig = new Configuration(oldConfigFile);
+        }
+        else {
+            defaultConfig = getConfig(defaultConfigFile);
         }
 
-        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.SUNRISE, Double.valueOf(config.getDouble("Time.Sunrise.Amount", 1.0D)));
-        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.DAY, Double.valueOf(config.getDouble("Time.Day.Amount", 1.0D)));
-        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.SUNSET, Double.valueOf(config.getDouble("Time.Sunset.Amount", 1.0D)));
-        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.DUSK, Double.valueOf(config.getDouble("Time.Dusk.Amount", 1.125D)));
-        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.NIGHT, Double.valueOf(config.getDouble("Time.Night.Amount", 1.25D)));
-        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.DAWN, Double.valueOf(config.getDouble("Time.Dawn.Amount", 1.125D)));
-        ecoRewardManager.timeMultiplier.put(TIME_PERIOD.IDENTITY, 1.0D);
+        defaultConfig.load();
+        log.info("Loaded config defaults.");
+        ecoMessageManager defaultMessageManager = loadMessageConfig(defaultConfig);
+        ecoRewardManager defaultRewardManager = loadRewardConfig(defaultConfig);
+        ecoCreature.messageManagers.put(DEFAULT_WORLD, defaultMessageManager);
+        ecoCreature.rewardManagers.put(DEFAULT_WORLD, defaultRewardManager);
 
-        ecoRewardManager.rewards = new HashMap<CreatureType, ecoReward>();
-        for (String creatureName : config.getKeys("RewardTable")) {
-            ecoReward reward = new ecoReward();
-            reward.setCreatureName(creatureName);
-            reward.setCreatureType(CreatureType.fromName(creatureName));
+        for (World world : plugin.getServer().getWorlds()) {
 
-            String root = "RewardTable." + creatureName;
-            reward.setDrops(parseDrops(config.getString(root + ".Drops")));
-            reward.setCoinMax(config.getDouble(root + ".Coin_Maximum", 0));
-            reward.setCoinMin(config.getDouble(root + ".Coin_Minimum", 5));
-            reward.setCoinPercentage(config.getDouble(root + ".Coin_Percent", 50));
+            File worldConfigFile = new File(ecoCreature.dataWorldsFolder, world.getName() + ".yml");
+            Configuration worldConfig;
 
-            reward.setNoRewardMessage(new ecoMessage(convertMessage(config.getString(root + ".NoReward_Message")), config.getBoolean("System.Messages.NoReward", false)));
-            reward.setRewardMessage(new ecoMessage(convertMessage(config.getString(root + ".Reward_Message")), true));
-            reward.setPenaltyMessage(new ecoMessage(convertMessage(config.getString(root + ".Penalty_Message")), true));
-
-            if (creatureName.equals("Spawner")) {
-                ecoRewardManager.spawnerReward = reward;
+            if (worldConfigFile.exists()) {
+                worldConfig = getConfig(worldConfigFile);
+                worldConfig.load();
+                log.info("Loaded config for " + world.getName() + " world.");
+                ecoCreature.messageManagers.put(world.getName(), loadMessageConfig(worldConfig));
+                ecoCreature.rewardManagers.put(world.getName(), loadRewardConfig(worldConfig));
             }
             else {
-                ecoRewardManager.rewards.put(reward.getCreatureType(), reward);
+                ecoCreature.messageManagers.put(world.getName(), defaultMessageManager);
+                ecoCreature.rewardManagers.put(world.getName(), defaultRewardManager);
             }
+
         }
     }
 
-    private Configuration getConfig(String filename) throws IOException
+    public ecoMessageManager loadMessageConfig(Configuration config)
     {
-        File file = new File(ecoCreature.dataFolder, filename);
-        if (!file.exists()) {
-            InputStream inputStream = ecoCreature.class.getResourceAsStream("/settings/" + filename);
-            FileOutputStream outputStream = new FileOutputStream(file);
+        ecoMessageManager messageManager = new ecoMessageManager(plugin);
+
+        messageManager.shouldOutputMessages = config.getBoolean("System.Messages.Output", true);
+        messageManager.noBowRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoBowMessage", ecoMessageManager.NO_BOW_REWARD_MESSAGE)), true);
+        messageManager.noCampMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoCampMessage", ecoMessageManager.NO_CAMP_MESSAGE)), config.getBoolean("System.Messages.Spawner", false));
+        messageManager.deathPenaltyMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DeathPenaltyMessage", ecoMessageManager.DEATH_PENALTY_MESSAGE)), true);
+        messageManager.pvpRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.PVPRewardMessage", ecoMessageManager.PVP_REWARD_MESSAGE)), true);
+
+        return messageManager;
+    }
+
+    public ecoRewardManager loadRewardConfig(Configuration config)
+    {
+        ecoRewardManager rewardManager = new ecoRewardManager(plugin);
+
+        isEnabled = config.getBoolean("DidYou.Read.Understand.Configure", true);
+
+        debug = config.getBoolean("System.debug", false) || debug;
+
+        rewardManager.isIntegerCurrency = config.getBoolean("System.Economy.IntegerCurrency", false);
+
+        rewardManager.canCampSpawner = config.getBoolean("System.Hunting.AllowCamping", false);
+        rewardManager.shouldClearCampDrops = config.getBoolean("System.Hunting.ClearCampDrops", true);
+        rewardManager.shouldOverrideDrops = config.getBoolean("System.Hunting.OverrideDrops", true);
+        rewardManager.isFixedDrops = config.getBoolean("System.Hunting.FixedDrops", false);
+        rewardManager.campRadius = config.getInt("System.Hunting.CampRadius", 7);
+        rewardManager.hasBowRewards = config.getBoolean("System.Hunting.BowRewards", true);
+        rewardManager.hasDeathPenalty = config.getBoolean("System.Hunting.PenalizeDeath", false);
+        rewardManager.hasPVPReward = config.getBoolean("System.Hunting.PVPReward", true);
+        rewardManager.isPercentPenalty = config.getBoolean("System.Hunting.PenalizeType", true);
+        rewardManager.isPercentPvpReward = config.getBoolean("System.Hunting.PVPRewardType", true);
+        rewardManager.penaltyAmount = config.getDouble("System.Hunting.PenalizeAmount", 0.05D);
+        rewardManager.pvpRewardAmount = config.getDouble("System.Hunting.PenalizeAmount", 0.05D);
+        rewardManager.canHuntUnderSeaLevel = config.getBoolean("System.Hunting.AllowUnderSeaLVL", true);
+        rewardManager.isWolverineMode = config.getBoolean("System.Hunting.WolverineMode", true);
+        rewardManager.hasDTPRewards = config.getBoolean("System.Hunting.DTPRewards", true);
+        rewardManager.dtpPenaltyAmount = config.getDouble("System.Hunting.DTPDeathStreakPenalty", 5.0D);
+        rewardManager.dtpRewardAmount = config.getDouble("System.Hunting.DTPKillStreakPenalty", 10.0D);
+        rewardManager.noFarm = config.getBoolean("System.Hunting.NoFarm", false);
+
+        if (config.getKeys("Gain.Groups") != null) {
+            for (String group : config.getKeys("Gain.Groups")) {
+                rewardManager.groupMultiplier.put(group.toLowerCase(), Double.valueOf(config.getDouble("Gain.Groups." + group + ".Amount", 0.0D)));
+            }
+        }
+
+        if (config.getKeys("Gain.Time") != null) {
+            for (String period : config.getKeys("Gain.Time")) {
+                rewardManager.timeMultiplier.put(TimePeriod.fromName(period), Double.valueOf(config.getDouble("Gain.Time." + period + ".Amount", 1.0D)));
+            }
+        }
+
+        if (config.getKeys("Gain.Environment") != null) {
+            for (String environment : config.getKeys("Gain.Environment")) {
+                rewardManager.envMultiplier.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(config.getDouble("Gain.Environment." + environment + ".Amount", 1.0D)));
+            }
+        }
+
+        if (config.getKeys("RewardTable") != null) {
+            for (String rewardName : config.getKeys("RewardTable")) {
+                ecoReward reward = new ecoReward();
+                reward.setRewardName(rewardName);
+                reward.setRewardType(RewardType.fromName(rewardName));
+
+                String root = "RewardTable." + rewardName;
+                reward.setDrops(parseDrops(config.getString(root + ".Drops"), rewardManager.isFixedDrops));
+                reward.setCoinMax(config.getDouble(root + ".Coin_Maximum", 0));
+                reward.setCoinMin(config.getDouble(root + ".Coin_Minimum", 0));
+                reward.setCoinPercentage(config.getDouble(root + ".Coin_Percent", 0));
+
+                reward.setNoRewardMessage(new ecoMessage(convertMessage(config.getString(root + ".NoReward_Message", ecoMessageManager.NO_REWARD_MESSAGE)), config.getBoolean("System.Messages.NoReward", false)));
+                reward.setRewardMessage(new ecoMessage(convertMessage(config.getString(root + ".Reward_Message", ecoMessageManager.REWARD_MESSAGE)), true));
+                reward.setPenaltyMessage(new ecoMessage(convertMessage(config.getString(root + ".Penalty_Message", ecoMessageManager.PENALTY_MESSAGE)), true));
+
+                rewardManager.rewards.put(reward.getRewardType(), reward);
+            }
+        }
+
+        return rewardManager;
+    }
+
+    private Configuration getConfig(File configFile) throws IOException
+    {
+        if (!configFile.exists()) {
+            InputStream inputStream = ecoCreature.class.getResourceAsStream("/" + DEFAULT_CONFIG_FILE);
+            FileOutputStream outputStream = new FileOutputStream(configFile);
 
             byte[] buffer = new byte[8192];
             int length = 0;
@@ -123,10 +186,10 @@ public class ecoConfigManager
             inputStream.close();
             outputStream.close();
 
-            log.info("Default settings file written: " + filename);
+            log.info("Default settings file written: " + DEFAULT_CONFIG_FILE);
         }
 
-        return new Configuration(new File(ecoCreature.dataFolder, filename));
+        return new Configuration(new File(configFile.getPath()));
     }
 
     private static String convertMessage(String message)
@@ -138,7 +201,7 @@ public class ecoConfigManager
         return null;
     }
 
-    private List<ecoDrop> parseDrops(String dropsString)
+    private List<ecoDrop> parseDrops(String dropsString, Boolean isFixedDrops)
     {
         if (dropsString != null && !dropsString.isEmpty()) {
             List<ecoDrop> drops = new ArrayList<ecoDrop>();
@@ -147,10 +210,24 @@ public class ecoConfigManager
                 for (String dropString : dropsString.split(";")) {
                     String[] dropParts = dropString.split(":");
                     ecoDrop drop = new ecoDrop();
-                    drop.setItem(Material.getMaterial(Integer.parseInt(dropParts[0])));
-                    drop.setAmount(Integer.parseInt(dropParts[1]));
+                    String[] itemParts = dropParts[0].split("\\.");
+                    try {
+                        drop.setItem(Material.getMaterial(Integer.parseInt(itemParts.length > 0 ? itemParts[0] : dropParts[0])));
+                    }
+                    catch (NumberFormatException e) {
+                        drop.setItem(Material.matchMaterial(itemParts.length > 0 ? itemParts[0] : dropParts[0]));
+                    }
+                    drop.setData(itemParts.length > 1 ? Byte.parseByte(itemParts[1]) : 0);
+                    String[] amountRange = dropParts[1].split("-");
+                    if (amountRange.length == 2) {
+                        drop.setMinAmount(Integer.parseInt(amountRange[0]));
+                        drop.setMaxAmount(Integer.parseInt(amountRange[1]));
+                    }
+                    else {
+                        drop.setMaxAmount(Integer.parseInt(dropParts[1]));
+                    }
                     drop.setPercentage(Double.parseDouble(dropParts[2]));
-                    drop.setIsFixedDrops(ecoRewardManager.isFixedDrops);
+                    drop.setIsFixedDrops(isFixedDrops);
                     drops.add(drop);
                 }
 

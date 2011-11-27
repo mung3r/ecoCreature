@@ -1,15 +1,115 @@
 package se.crafted.chrisb.ecoCreature.models;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.entity.CreatureType;
+import org.bukkit.entity.Creeper;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.ItemStack;
+
+import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 
 public class ecoReward
 {
-    private String creatureName;
-    private CreatureType creatureType;
+    public enum RewardType {
+        ANGRY_WOLF("AngryWolf"),
+        BLAZE("Blaze"),
+        CAVE_SPIDER("CaveSpider"),
+        CHICKEN("Chicken"),
+        COW("Cow"),
+        CREEPER("Creeper"),
+        DEATH_STREAK("DeathStreak"),
+        ENDER_DRAGON("EnderDragon"),
+        ENDERMAN("Enderman"),
+        GHAST("Ghast"),
+        GIANT("Giant"),
+        KILL_STREAK("KillStreak"),
+        MONSTER("Monster"),
+        MUSHROOM_COW("MushroomCow"),
+        PIG("Pig"),
+        PIG_ZOMBIE("PigZombie"),
+        PLAYER("Player"),
+        POWERED_CREEPER("PoweredCreeper"),
+        SHEEP("Sheep"),
+        SILVERFISH("Silverfish"),
+        SKELETON("Skeleton"),
+        SLIME("Slime"),
+        SPAWNER("Spawner"),
+        SPIDER("Spider"),
+        SQUID("Squid"),
+        VILLAGER("Villager"),
+        WOLF("Wolf"),
+        ZOMBIE("Zombie");
+
+        private static final Map<String, RewardType> mapping = new HashMap<String, RewardType>();
+
+        static {
+            for (RewardType type : EnumSet.allOf(RewardType.class)) {
+                mapping.put(type.name, type);
+            }
+        }
+
+        private String name;
+
+        RewardType(String name)
+        {
+            this.name = name;
+        }
+
+        public static RewardType fromName(String name)
+        {
+            return mapping.get(name);
+        }
+
+        public static RewardType fromEntity(Entity entity)
+        {
+            RewardType rewardType = null;
+
+            if (entity instanceof Creeper) {
+                Creeper creeper = (Creeper) entity;
+                if (creeper.isPowered()) {
+                    rewardType = RewardType.POWERED_CREEPER;
+                }
+                else {
+                    rewardType = RewardType.CREEPER;
+                }
+            }
+            else if (entity instanceof Player) {
+                rewardType = RewardType.PLAYER;
+            }
+            else if (entity instanceof Wolf) {
+                Wolf wolf = (Wolf) entity;
+                if (wolf.isAngry()) {
+                    rewardType = ANGRY_WOLF;
+                }
+                else {
+                    rewardType = WOLF;
+                }
+            }
+            else {
+                CreatureType creatureType = ecoEntityUtil.getCreatureType(entity);
+                if (creatureType != null) {
+                    rewardType = RewardType.fromName(creatureType.getName());
+                }
+            }
+
+            return rewardType;
+        }
+
+        public String getName()
+        {
+            return name;
+        }
+    }
+
+    private String rewardName;
+    private RewardType rewardType;
     private List<ecoDrop> drops;
     private Double coinMin;
     private Double coinMax;
@@ -22,22 +122,22 @@ public class ecoReward
 
     public String getCreatureName()
     {
-        return creatureName;
+        return rewardName;
     }
 
-    public void setCreatureName(String creatureName)
+    public void setRewardName(String creatureName)
     {
-        this.creatureName = creatureName;
+        this.rewardName = creatureName;
     }
 
-    public void setCreatureType(CreatureType creatureType)
+    public void setRewardType(RewardType creatureType)
     {
-        this.creatureType = creatureType;
+        this.rewardType = creatureType;
     }
 
-    public CreatureType getCreatureType()
+    public RewardType getRewardType()
     {
-        return creatureType;
+        return rewardType;
     }
 
     public List<ecoDrop> getDrops()
@@ -148,7 +248,7 @@ public class ecoReward
     @Override
     public String toString()
     {
-        return "ecoReward [rewardName=" + creatureName + ", creatureType=" + creatureType + ", drops=" + drops + ", coinMin=" + coinMin + ", coinMax=" + coinMax + ", coinPercentage=" + coinPercentage + ", rewardAmount=" + rewardAmount
+        return "ecoReward [rewardName=" + rewardName + ", creatureType=" + rewardType + ", drops=" + drops + ", coinMin=" + coinMin + ", coinMax=" + coinMax + ", coinPercentage=" + coinPercentage + ", rewardAmount=" + rewardAmount
                 + ", noRewardMessage=" + noRewardMessage + ", rewardMessage=" + rewardMessage + ", penaltyMessage=" + penaltyMessage + "]";
     }
 }

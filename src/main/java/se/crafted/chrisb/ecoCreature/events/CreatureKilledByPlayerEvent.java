@@ -3,15 +3,15 @@ package se.crafted.chrisb.ecoCreature.events;
 import java.util.List;
 
 import org.bukkit.Material;
-import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-import se.crafted.chrisb.ecoCreature.managers.ecoRewardManager;
+import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.models.ecoReward;
+import se.crafted.chrisb.ecoCreature.models.ecoReward.RewardType;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 
 @SuppressWarnings("serial")
@@ -32,7 +32,7 @@ public class CreatureKilledByPlayerEvent extends Event
         killedCreature = (LivingEntity) event.getEntity();
         weapon = Material.getMaterial(player.getItemInHand().getTypeId());
         tamedCreature = ecoEntityUtil.getTamedKillerFromDeathEvent(event);
-        reward = ecoRewardManager.rewards.get(killedCreature);
+        reward = ecoCreature.getRewardManager(event.getEntity()).rewards.get(RewardType.fromEntity(killedCreature));
         drops = event.getDrops();
     }
 

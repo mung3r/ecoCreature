@@ -5,19 +5,30 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.models.ecoMessage;
 
-public class ecoMessageManager
+public class ecoMessageManager implements Cloneable
 {
     private final static String PLAYER_TOKEN = "<plr>";
     private final static String AMOUNT_TOKEN = "<amt>";
     private final static String ITEM_TOKEN = "<itm>";
     private final static String CREATURE_TOKEN = "<crt>";
 
-    public static boolean shouldOutputMessages;
+    public final static String NO_CAMP_MESSAGE = "&7You find no rewards camping monster spawners.";
+    public final static String NO_BOW_REWARD_MESSAGE = "&7You find no rewards on this creature.";
+    public final static String DEATH_PENALTY_MESSAGE = "&7You wake up to find &6<amt>&7 missing from your pockets!";
+    public final static String PVP_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for murdering &5<crt>&7.";
 
-    public static ecoMessage noBowRewardMessage;
-    public static ecoMessage noCampMessage;
-    public static ecoMessage deathPenaltyMessage;
-    public static ecoMessage pvpRewardMessage;
+    public final static String NO_REWARD_MESSAGE = "&7You slayed a &5<crt>&7 using a &3<itm>&7.";
+    public final static String REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.";
+    public final static String PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.";
+
+    public boolean shouldOutputMessages;
+
+    public ecoMessage noBowRewardMessage;
+    public ecoMessage noCampMessage;
+    public ecoMessage deathPenaltyMessage;
+    public ecoMessage pvpRewardMessage;
+    public ecoMessage dtpDeathStreakMessage;
+    public ecoMessage dtpKillStreakMessage;
 
     private ecoCreature plugin;
 
@@ -82,5 +93,4 @@ public class ecoMessageManager
         }
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
-
 }

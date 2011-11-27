@@ -1,5 +1,8 @@
 package se.crafted.chrisb.ecoCreature.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Blaze;
@@ -33,7 +36,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-import se.crafted.chrisb.ecoCreature.managers.ecoRewardManager;
+import se.crafted.chrisb.ecoCreature.ecoCreature;
 
 public class ecoEntityUtil
 {
@@ -46,8 +49,21 @@ public class ecoEntityUtil
     private static final long DAWN_START = 22000;
     private static final long SUNRISE_START = 23000;
 
-    public static enum TIME_PERIOD {
-        DAY, SUNSET, DUSK, NIGHT, DAWN, SUNRISE, IDENTITY
+    public static enum TimePeriod {
+        DAY, SUNSET, DUSK, NIGHT, DAWN, SUNRISE, IDENTITY;
+
+        private static final Map<String, TimePeriod> nameMap = new HashMap<String, TimePeriod>();
+
+        static {
+            for (TimePeriod type : TimePeriod.values()) {
+                nameMap.put(type.toString(), type);
+            }
+        }
+
+        public static TimePeriod fromName(String period)
+        {
+            return nameMap.get(period.toUpperCase());
+        }
     };
 
     public static Boolean isUnderSeaLevel(Entity entity)
@@ -58,7 +74,7 @@ public class ecoEntityUtil
     public static boolean isNearSpawner(Entity entity)
     {
         Location location = entity.getLocation();
-        int r = ecoRewardManager.campRadius;
+        int r = ecoCreature.getRewardManager(entity).campRadius;
 
         for (int i = 0 - r; i <= r; i++) {
             for (int j = 0 - r; j <= r; j++) {
@@ -122,24 +138,24 @@ public class ecoEntityUtil
         return null;
     }
 
-    public static TIME_PERIOD getTimePeriod(Entity entity)
+    public static TimePeriod getTimePeriod(Entity entity)
     {
         long time = entity.getWorld().getTime();
 
         if (time >= DAY_START && time < SUNSET_START)
-            return TIME_PERIOD.DAY;
+            return TimePeriod.DAY;
         else if (time >= SUNSET_START && time < DUSK_START)
-            return TIME_PERIOD.SUNSET;
+            return TimePeriod.SUNSET;
         else if (time >= DUSK_START && time < NIGHT_START)
-            return TIME_PERIOD.DUSK;
+            return TimePeriod.DUSK;
         else if (time >= NIGHT_START && time < DAWN_START)
-            return TIME_PERIOD.NIGHT;
+            return TimePeriod.NIGHT;
         else if (time >= DAWN_START && time < SUNRISE_START)
-            return TIME_PERIOD.DAWN;
+            return TimePeriod.DAWN;
         else if (time >= SUNRISE_START && time < DAY_START)
-            return TIME_PERIOD.SUNRISE;
+            return TimePeriod.SUNRISE;
 
-        return TIME_PERIOD.IDENTITY;
+        return TimePeriod.IDENTITY;
     }
 
     public static Player getKillerFromDeathEvent(EntityDeathEvent event)

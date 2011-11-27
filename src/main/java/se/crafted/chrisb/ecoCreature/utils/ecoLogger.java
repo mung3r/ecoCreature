@@ -3,6 +3,7 @@ package se.crafted.chrisb.ecoCreature.utils;
 import java.util.logging.Logger;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.managers.ecoConfigManager;
 
 public class ecoLogger
 {
@@ -28,6 +29,13 @@ public class ecoLogger
     public void severe(String msg)
     {
         logger.severe(format(msg));
+    }
+
+    public void debug(String msg)
+    {
+        if (ecoConfigManager.debug) {
+            logger.info(format("DEBUG: " + msg));
+        }
     }
 
     public String format(String msg)

@@ -1,0 +1,297 @@
+System:
+    Economy:
+        #
+        # Round reward amounts to the nearest integer
+        # Default : false
+        IntegerCurrency: false
+
+    Hunting:
+        #
+        # Give rewards for mob spawner camping
+        # Default: false
+        AllowCamping: false
+        #
+        # Clear drops from mobs killed near spawners
+        # Default: true
+        ClearCampDrops: true
+        #
+        # How many blocks away from a spawner you need to be to get a reward
+        # Default: 7            
+        CampRadius: 7
+        #
+        # Replace instead of stack rewards drops/items
+        # Default: true
+        OverrideDrops: true
+        #
+        # Do not randomize the amount of drop items - always drop a fixed amount
+        # Default: false
+        FixedDrops: false
+        #
+        # Enable rewards for mobs killed with bow & arrow
+        # Default: true
+        BowRewards: true
+        #
+        # Enable rewards for killing mobs under sea level
+        # Default: true
+        AllowUnderSeaLVL: true
+        #
+        # Enable rewards for kills with tamed creatures (wolves)
+        # Default: true
+        WolverineMode: true
+        #
+        # Penalize players when they die. Use PenalizeType to select whether PenalizeAmount
+        # is used as a percentage (PenalizeType: true) or a fixed amount (PenalizeType: false)
+        # taken from the player.
+        # Default: false
+        PenalizeDeath: false
+        PenalizeType: true
+        PenalizeAmount: 0.05
+        #
+        # Remove drops from mobs killed by farming contraptions (mob death by cacti, falling,
+        # drowning or suffocation)
+        # Default: false
+        NoFarm: false
+
+    Messages:
+        #
+        # Enable all reward messages
+        # Default: true
+        Output: true
+        #
+        # Message players when they get no reward for a kill
+        # Default: true
+        NoReward: true
+        #
+        # Message players for camping spawners
+        # Default: false
+        Spawner: false
+        #
+        # Custom message for no camping mob spawners
+        NoCampMessage: '&7You find no rewards camping monster spawners.'
+        #
+        # Custom message for no rewards killing with bow & arrow
+        NoBowMessage: '&7You find no rewards on this creature.'
+        #
+        # Custom message for death penalty
+        DeathPenaltyMessage: '&7You wake up to find &6<amt>&7 missing from your pockets!'
+
+Gain:
+    #
+    # Multiply reward amount based on group (NOTE: requires a permission plugin that
+    # supports groups)
+    Groups:
+        Default:
+            Amount: 1.0
+        Donors:
+            Amount: 2.0
+    #
+    # Multiply reward amount based on time period of day/night
+    Time:
+        Sunrise:
+            Amount: 1.0
+        Day:
+            Amount: 1.0
+        Sunset:
+            Amount: 1.0
+        Dusk:
+            Amount: 1.125
+        Night:
+            Amount: 1.25
+        Dawn:
+            Amount: 1.125
+    #
+    # Multiply reward amount based on environment type
+    Environment:
+        Normal:
+            Amount: 1.0
+        Nether:
+            Amount: 1.25
+        Skylands:
+            Amount: 1.0
+
+RewardTable:
+    #
+    # Format for Drops:
+    #
+    #   Drops: ITEM_ID.DATA_ID:[MIN-]MAX:CHANCE;ITEM_ID.DATA_ID:[MIN-]MAX:CHANCE;...
+    #
+    # Drop example 1: drop 0 to 5 diamonds 50% of the time
+    #   Drops: 'diamond:5:50'
+    #
+    # Drop example 2: drop 1 to 2 birch leaves 100% of the time
+    #   Drops: 'leaves.2:1-2:100'
+    #
+    # Drop example 3: drop 0 to 5 diamonds 50% of the time AND drop 1 to 2 birch leaves 100% of the time
+    #   Drops: 'diamond:5:50;leaves.2:1-2:100'
+    #
+    # Drop example 4: drop nothing
+    #   Drops: ''
+    #
+    # Coin reward examples:
+    #
+    # Coin example 1: award 0 to 10 coin 50% of the time
+    #   Coin_Minimum: 0.0 
+    #   Coin_Maximum: 10.0
+    #   Coin_percent: 50.0
+    #
+    # Coin example 2: award 10 coin 100% of the time
+    #   Coin_Minimum: 10.0 
+    #   Coin_Maximum: 10.0
+    #   Coin_percent: 50.0
+    #
+    # Coin example 3: award nothing
+    #   Coin_Minimum: 0.0 
+    #   Coin_Maximum: 0.0
+    #   Coin_percent: 0.0
+    #
+    # Coin example 4: penalize 0 to 10 coin 50% of the time
+    #   Coin_Minimum: -10
+    #   Coin_Maximum: 0
+    #   Coin_percent: 50.0
+    #
+    # Custom reward messages
+    #
+    #   &[0-9a-f] - color codes
+    #   <plr> - display player name in a message
+    #   <crt> - display creature name in a message
+    #   <amt> - display amount in a message
+    #   <itm> - display item used to kill in a message
+    #
+    # Message examples:
+    #   NoReward_Message: '&7You slayed a &5<crt>&7 using a &3<itm>.'
+    #   Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
+    #   Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
+    #
+    CaveSpider:
+        Drops: 'string:2:75'
+        Coin_Minimum: 0.50
+        Coin_Maximum: 1.50
+        Coin_Percent: 50.0
+    Chicken:
+        Drops: 'feather:2:75;365:1:75'
+        Coin_Minimum: 0.10
+        Coin_Maximum: 2.00
+        Coin_Percent: 1.0
+    Cow:
+        Drops: 'leather:2:75;rawbeef:3:75'
+        Coin_Minimum: 0.10
+        Coin_Maximum: 2.50
+        Coin_Percent: 1.0
+    Creeper:
+        Drops: 'sulphur:2:75'
+        Coin_Minimum: 5.50
+        Coin_Maximum: 10.50
+        Coin_Percent: 50.0
+    PoweredCreeper:
+        Drops: 'sulphur:2:75'
+        Coin_Minimum: 10.50
+        Coin_Maximum: 15.50
+        Coin_Percent: 50.0
+    #
+    # IMPORTANT NOTE:
+    # This reward requires "classic" build of DeathTpPlus here http://tiny.cc/dtpclassic
+    DeathStreak:
+        Coin_Minimum: -10.00
+        Coin_Maximum: -10.00
+        Coin_Percent: 100.00
+        NoReward_Message: ''
+        Reward_Message: '&7You earned &6<amt>&7 for that death streak!'
+        Penalty_Message: '&7That death streak cost you &6<amt>&7.'
+    Enderman:
+        Drops: 'enderpearl:1:75'
+        Coin_Minimum: 1.00
+        Coin_Maximum: 3.50
+        Coin_Percent: 50.0
+    Ghast:
+        Drops: 'sulphur:2:75'
+        Coin_Minimum: 3.50
+        Coin_Maximum: 3.50
+        Coin_Percent: 50.0
+    Giant:
+        Coin_Minimum: 8.50
+        Coin_Maximum: 8.50
+        Coin_Percent: 50.00
+    #
+    # IMPORTANT NOTE:
+    # This reward requires "classic" build of DeathTpPlus here http://tiny.cc/dtpclassic
+    KillStreak:
+        Drops: 'diamond:1:100'
+        Coin_Minimum: 20.00
+        Coin_Maximum: 20.00
+        Coin_Percent: 100.00
+        NoReward_Message: ''
+        Reward_Message: '&7You earned &6<amt>&7 for that kill streak!'
+        Penalty_Message: '&7That kill streak cost you &6<amt>&7.'
+    Monster:
+        Coin_Minimum: 0.50
+        Coin_Maximum: 1.50
+        Coin_Percent: 50.0
+    Pig:
+        Drops: 'pork:2:75'
+        Coin_Minimum: 0.10
+        Coin_Maximum: 2.50
+        Coin_Percent: 1.0
+    PigZombie:
+        Drops: 'grilledpork:2:75'
+        Coin_Minimum: 1.00
+        Coin_Maximum: 3.50
+        Coin_Percent: 50.0
+    #
+    # IMPORTANT NOTE: If you define Drops, and OverrideDrops is set to true, the victim's
+    # inventory will be replaced! Also note that the amount awarded is taken from the victim.
+    Player:
+        Coin_Minimum: 5.00
+        Coin_Maximum: 10.50
+        Coin_Percent: 50.0
+        NoReward_Message: ''
+        Reward_Message: '&7You are awarded &6<amt>&7 for murdering &5<crt>&7.'
+        Penalty_Message: '&7You are penalized &6<amt>&7 for murdering &5<crt>&7.'
+    Sheep:
+        Drops: 'wool:1:75'
+        Coin_Minimum: 0.10
+        Coin_Maximum: 2.50
+        Coin_Percent: 1.0
+    Silverfish:
+        Coin_Minimum: 0.50
+        Coin_Maximum: 0.50
+        Coin_Percent: 50.0
+    Skeleton:
+        Drops: 'bone:2:75;arrow:2:75'
+        Coin_Minimum: 1.00
+        Coin_Maximum: 3.00
+        Coin_Percent: 50.0
+    Slime:
+        Drops: 'slimeball:2:75'
+        Coin_Minimum: 0.00
+        Coin_Maximum: 2.00
+        Coin_Percent: 50.00
+    Spawner:
+        Coin_Minimum: 0.10
+        Coin_Maximum: 15.00
+        Coin_Percent: 50.0
+        NoReward_Message: '&7You destroyed a &5<crt>&7 using a &3<itm>&7.'
+        Reward_Message: '&7You are awarded &6<amt>&7 for destroying a &5<crt>&7.'
+        Penalty_Message: '&7You are penalized &6<amt>&7 for destroying a &5<crt>&7.'
+    Spider:
+        Drops: 'string:2:75'
+        Coin_Minimum: 0.50
+        Coin_Maximum: 1.50
+        Coin_Percent: 50.0
+    Squid:
+        Drops: 'inksack:3:75'
+        Coin_Minimum: 0.10
+        Coin_Maximum: 2.50
+        Coin_Percent: 1.0
+    Wolf:
+        Coin_Minimum: 1.00
+        Coin_Maximum: 2.00
+        Coin_Percent: 1.0
+    AngryWolf:
+        Coin_Minimum: 1.00
+        Coin_Maximum: 2.00
+        Coin_Percent: 50.0
+    Zombie:
+        Drops: 'rottenflesh:2:75'
+        Coin_Minimum: 1.00
+        Coin_Maximum: 3.50
+        Coin_Percent: 50.0

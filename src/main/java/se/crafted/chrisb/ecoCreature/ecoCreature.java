@@ -2,11 +2,14 @@ package se.crafted.chrisb.ecoCreature;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Locale;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.Plugin;
@@ -30,6 +33,7 @@ import se.crafted.chrisb.ecoCreature.utils.ecoLogger;
 public class ecoCreature extends JavaPlugin
 {
     public static final File dataFolder = new File("plugins" + File.separator + "ecoCreature");
+    public static final File dataWorldsFolder = new File(dataFolder, "worlds");
 
     public static Permission permission = null;
     public static Economy economy = null;
@@ -41,8 +45,8 @@ public class ecoCreature extends JavaPlugin
     private final ecoDeathListener rewardListener = new ecoDeathListener(this);
 
     private ecoLogger logger;
-    private ecoMessageManager messageManager;
-    private ecoRewardManager rewardManager;
+    public static HashMap<String, ecoMessageManager> messageManagers;
+    public static HashMap<String, ecoRewardManager> rewardManagers;
     private ecoConfigManager configManager;
 
     private Boolean setupDependencies()
@@ -103,8 +107,8 @@ public class ecoCreature extends JavaPlugin
         Locale.setDefault(Locale.US);
 
         logger = new ecoLogger(this);
-        messageManager = new ecoMessageManager(this);
-        rewardManager = new ecoRewardManager(this);
+        messageManagers = new HashMap<String, ecoMessageManager>();
+        rewardManagers = new HashMap<String, ecoRewardManager>();
 
         try {
             configManager = new ecoConfigManager(this);
@@ -131,17 +135,12 @@ public class ecoCreature extends JavaPlugin
 
     public void onDisable()
     {
-        permission = null;
-        economy = null;
-        configManager = null;
-        rewardManager = null;
-        messageManager = null;
         logger.info(getDescription().getVersion() + " is disabled.");
     }
 
     public void onLoad()
     {
-        dataFolder.mkdirs();
+        dataWorldsFolder.mkdirs();
     }
 
     public ecoLogger getLogger()
@@ -149,13 +148,21 @@ public class ecoCreature extends JavaPlugin
         return logger;
     }
 
-    public ecoMessageManager getMessageManager()
+    public static ecoMessageManager getMessageManager(Entity entity)
     {
+        ecoMessageManager messageManager = messageManagers.get(entity.getWorld().getName());
+        if (messageManager == null) {
+            messageManager = messageManagers.get("default");
+        }
         return messageManager;
     }
 
-    public ecoRewardManager getRewardManager()
+    public static ecoRewardManager getRewardManager(Entity entity)
     {
+        ecoRewardManager rewardManager = rewardManagers.get(entity.getWorld().getName());
+        if (rewardManager == null) {
+            rewardManager = rewardManagers.get("default");
+        }
         return rewardManager;
     }
 
@@ -167,5 +174,10 @@ public class ecoCreature extends JavaPlugin
     public Boolean hasEconomy()
     {
         return economy != null;
+    }
+    
+    public Boolean has(Player player, String perm)
+    {
+        return permission.has(player, "ecoCreature." + perm) || permission.has(player, "ecocreature." + perm.toLowerCase());
     }
 }
