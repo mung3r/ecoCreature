@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.entity.CreatureType;
+import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
@@ -69,7 +70,16 @@ public class ecoReward
         {
             RewardType rewardType = null;
 
-            if (entity instanceof Player) {
+            if (entity instanceof Creeper) {
+                Creeper creeper = (Creeper) entity;
+                if (creeper.isPowered()) {
+                    rewardType = RewardType.POWERED_CREEPER;
+                }
+                else {
+                    rewardType = RewardType.CREEPER;
+                }
+            }
+            else if (entity instanceof Player) {
                 rewardType = RewardType.PLAYER;
             }
             else if (entity instanceof Wolf) {
