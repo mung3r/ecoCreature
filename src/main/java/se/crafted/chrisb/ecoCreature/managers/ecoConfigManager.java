@@ -160,8 +160,8 @@ public class ecoConfigManager
                 String root = "RewardTable." + rewardName;
                 reward.setDrops(parseDrops(config.getString(root + ".Drops"), rewardManager.isFixedDrops));
                 reward.setCoinMax(config.getDouble(root + ".Coin_Maximum", 0));
-                reward.setCoinMin(config.getDouble(root + ".Coin_Minimum", 5));
-                reward.setCoinPercentage(config.getDouble(root + ".Coin_Percent", 50));
+                reward.setCoinMin(config.getDouble(root + ".Coin_Minimum", 0));
+                reward.setCoinPercentage(config.getDouble(root + ".Coin_Percent", 0));
 
                 reward.setNoRewardMessage(new ecoMessage(convertMessage(config.getString(root + ".NoReward_Message", ecoMessageManager.NO_REWARD_MESSAGE)), config.getBoolean("System.Messages.NoReward", false)));
                 reward.setRewardMessage(new ecoMessage(convertMessage(config.getString(root + ".Reward_Message", ecoMessageManager.REWARD_MESSAGE)), true));
