@@ -77,7 +77,7 @@ public class ecoRewardManager implements Cloneable
             ecoReward reward = rewards.get(RewardType.PLAYER);
 
             amount = computeReward(player, reward);
-            if (!drops.isEmpty() && shouldOverrideDrops) {
+            if (!reward.getDrops().isEmpty() && shouldOverrideDrops) {
                 drops.clear();
             }
             drops.addAll(reward.computeDrops());

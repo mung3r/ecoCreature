@@ -204,9 +204,9 @@ public class ecoConfigManager
 
     private List<ecoDrop> parseDrops(String dropsString, Boolean isFixedDrops)
     {
+        List<ecoDrop> drops = new ArrayList<ecoDrop>();
+        
         if (dropsString != null && !dropsString.isEmpty()) {
-            List<ecoDrop> drops = new ArrayList<ecoDrop>();
-
             try {
                 for (String dropString : dropsString.split(";")) {
                     String[] dropParts = dropString.split(":");
@@ -228,13 +228,12 @@ public class ecoConfigManager
                     drops.add(drop);
                 }
 
-                return drops;
             }
             catch (Exception exception) {
                 log.warning("Failed to parse drops: " + dropsString);
             }
         }
 
-        return null;
+        return drops;
     }
 }
