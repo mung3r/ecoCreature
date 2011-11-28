@@ -21,12 +21,12 @@ public class ecoStreakListener extends StreakEventsListener
     @Override
     public void onDeathStreakEvent(DeathStreakEvent event)
     {
-        ecoCreature.getRewardManager(event.getPlayer()).registerDeathStreak(event.getPlayer());
+        ecoCreature.getRewardManager(event.getPlayer()).registerDeathStreak(event.getPlayer(), event.getDeaths());
     }
 
     @Override
     public void onKillStreakEvent(KillStreakEvent event)
     {
-        ecoCreature.getRewardManager(event.getPlayer()).registerKillStreak(event.getPlayer());
+        ecoCreature.getRewardManager(event.getPlayer()).registerKillStreak(event.getPlayer(), event.getKills());
     }
 }

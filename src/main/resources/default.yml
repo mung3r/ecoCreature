@@ -189,10 +189,11 @@ RewardTable:
         Coin_Percent: 50.0
     #
     # IMPORTANT NOTE:
-    # This reward requires "classic" build of DeathTpPlus here http://tiny.cc/dtpclassic
+    # This reward requires "classic" build of DeathTpPlus here http://tiny.cc/dtpclassic.
+    # Also note that the penalty amount is multiplied by the number of deaths in the streak.
     DeathStreak:
-        Coin_Minimum: -10.00
-        Coin_Maximum: -10.00
+        Coin_Minimum: -1.00
+        Coin_Maximum: -1.00
         Coin_Percent: 100.00
         NoReward_Message: ''
         Reward_Message: '&7You earned &6<amt>&7 for that death streak!'
@@ -213,11 +214,12 @@ RewardTable:
         Coin_Percent: 50.00
     #
     # IMPORTANT NOTE:
-    # This reward requires "classic" build of DeathTpPlus here http://tiny.cc/dtpclassic
+    # This reward requires "classic" build of DeathTpPlus here http://tiny.cc/dtpclassic.
+    # Also note that the reward amount is multiplied by the number of kills in the streak.
     KillStreak:
         Drops: 'diamond:1:100'
-        Coin_Minimum: 20.00
-        Coin_Maximum: 20.00
+        Coin_Minimum: 2.00
+        Coin_Maximum: 2.00
         Coin_Percent: 100.00
         NoReward_Message: ''
         Reward_Message: '&7You earned &6<amt>&7 for that kill streak!'

@@ -174,25 +174,31 @@ public class ecoRewardManager implements Cloneable
         }
     }
 
-    public void registerDeathStreak(Player player)
+    public void registerDeathStreak(Player player, Integer deaths)
     {
         if (hasPermission(player, "reward.deathstreak") && rewards.containsKey(RewardType.DEATH_STREAK)) {
 
-            registerReward(player, rewards.get(RewardType.DEATH_STREAK), "");
+            ecoReward reward = rewards.get(RewardType.DEATH_STREAK);
+            reward.setCoinMin(reward.getCoinMin() * deaths);
+            reward.setCoinMax(reward.getCoinMax() * deaths);
+            registerReward(player, reward, "");
 
-            for (ItemStack itemStack : rewards.get(RewardType.DEATH_STREAK).computeDrops()) {
+            for (ItemStack itemStack : reward.computeDrops()) {
                 player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
             }
         }
     }
 
-    public void registerKillStreak(Player player)
+    public void registerKillStreak(Player player, Integer kills)
     {
         if (hasPermission(player, "reward.killstreak") && rewards.containsKey(RewardType.KILL_STREAK)) {
 
-            registerReward(player, rewards.get(RewardType.KILL_STREAK), "");
+            ecoReward reward = rewards.get(RewardType.KILL_STREAK);
+            reward.setCoinMin(reward.getCoinMin() * kills);
+            reward.setCoinMax(reward.getCoinMax() * kills);
+            registerReward(player, reward, "");
 
-            for (ItemStack itemStack : rewards.get(RewardType.KILL_STREAK).computeDrops()) {
+            for (ItemStack itemStack : reward.computeDrops()) {
                 player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
             }
         }
@@ -215,7 +221,7 @@ public class ecoRewardManager implements Cloneable
     private void registerReward(Player player, ecoReward reward, String weaponName)
     {
         Double amount = computeReward(player, reward);
-
+        
         if (amount > 0.0D && plugin.hasEconomy()) {
             ecoCreature.economy.depositPlayer(player.getName(), amount);
             ecoCreature.getMessageManager(player).sendMessage(reward.getRewardMessage(), player, amount, reward.getCreatureName(), weaponName);
