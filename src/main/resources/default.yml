@@ -173,7 +173,7 @@ RewardTable:
         Coin_Maximum: 2.00
         Coin_Percent: 1.0
     Cow:
-        Drops: 'leather:2:75;rawbeef:3:75'
+        Drops: 'leather:2:75;raw beef:3:75'
         Coin_Minimum: 0.10
         Coin_Maximum: 2.50
         Coin_Percent: 1.0
@@ -189,16 +189,17 @@ RewardTable:
         Coin_Percent: 50.0
     #
     # IMPORTANT NOTE:
-    # This reward requires "classic" build of DeathTpPlus here http://tiny.cc/dtpclassic
+    # This reward requires "classic" build of DeathTpPlus here http://tiny.cc/dtpclassic.
+    # Also note that the penalty amount is multiplied by the number of deaths in the streak.
     DeathStreak:
-        Coin_Minimum: -10.00
-        Coin_Maximum: -10.00
+        Coin_Minimum: -1.00
+        Coin_Maximum: -1.00
         Coin_Percent: 100.00
         NoReward_Message: ''
         Reward_Message: '&7You earned &6<amt>&7 for that death streak!'
         Penalty_Message: '&7That death streak cost you &6<amt>&7.'
     Enderman:
-        Drops: 'enderpearl:1:75'
+        Drops: 'ender pearl:1:75'
         Coin_Minimum: 1.00
         Coin_Maximum: 3.50
         Coin_Percent: 50.0
@@ -213,11 +214,12 @@ RewardTable:
         Coin_Percent: 50.00
     #
     # IMPORTANT NOTE:
-    # This reward requires "classic" build of DeathTpPlus here http://tiny.cc/dtpclassic
+    # This reward requires "classic" build of DeathTpPlus here http://tiny.cc/dtpclassic.
+    # Also note that the reward amount is multiplied by the number of kills in the streak.
     KillStreak:
         Drops: 'diamond:1:100'
-        Coin_Minimum: 20.00
-        Coin_Maximum: 20.00
+        Coin_Minimum: 2.00
+        Coin_Maximum: 2.00
         Coin_Percent: 100.00
         NoReward_Message: ''
         Reward_Message: '&7You earned &6<amt>&7 for that kill streak!'
@@ -232,7 +234,7 @@ RewardTable:
         Coin_Maximum: 2.50
         Coin_Percent: 1.0
     PigZombie:
-        Drops: 'grilledpork:2:75'
+        Drops: 'grilled pork:2:75'
         Coin_Minimum: 1.00
         Coin_Maximum: 3.50
         Coin_Percent: 50.0
@@ -261,7 +263,7 @@ RewardTable:
         Coin_Maximum: 3.00
         Coin_Percent: 50.0
     Slime:
-        Drops: 'slimeball:2:75'
+        Drops: 'slime ball:2:75'
         Coin_Minimum: 0.00
         Coin_Maximum: 2.00
         Coin_Percent: 50.00
@@ -278,7 +280,7 @@ RewardTable:
         Coin_Maximum: 1.50
         Coin_Percent: 50.0
     Squid:
-        Drops: 'inksack:3:75'
+        Drops: 'ink sack:3:75'
         Coin_Minimum: 0.10
         Coin_Maximum: 2.50
         Coin_Percent: 1.0
@@ -291,7 +293,7 @@ RewardTable:
         Coin_Maximum: 2.00
         Coin_Percent: 50.0
     Zombie:
-        Drops: 'rottenflesh:2:75'
+        Drops: 'rotten flesh:2:75'
         Coin_Minimum: 1.00
         Coin_Maximum: 3.50
         Coin_Percent: 50.0

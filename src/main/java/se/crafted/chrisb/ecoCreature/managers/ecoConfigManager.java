@@ -10,7 +10,6 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
-import org.bukkit.entity.CreatureType;
 import org.bukkit.util.config.Configuration;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
@@ -57,6 +56,8 @@ public class ecoConfigManager
         }
         else if (oldConfigFile.exists()) {
             defaultConfig = new Configuration(oldConfigFile);
+            log.warning("Using old config file format " + OLD_CONFIG_FILE + ".");
+            log.warning("Backup or delete the old config to generate the new " + DEFAULT_CONFIG_FILE+ ".");
         }
         else {
             defaultConfig = getConfig(defaultConfigFile);
@@ -203,20 +204,16 @@ public class ecoConfigManager
 
     private List<ecoDrop> parseDrops(String dropsString, Boolean isFixedDrops)
     {
+        List<ecoDrop> drops = new ArrayList<ecoDrop>();
+        
         if (dropsString != null && !dropsString.isEmpty()) {
-            List<ecoDrop> drops = new ArrayList<ecoDrop>();
-
             try {
                 for (String dropString : dropsString.split(";")) {
                     String[] dropParts = dropString.split(":");
                     ecoDrop drop = new ecoDrop();
                     String[] itemParts = dropParts[0].split("\\.");
-                    try {
-                        drop.setItem(Material.getMaterial(Integer.parseInt(itemParts.length > 0 ? itemParts[0] : dropParts[0])));
-                    }
-                    catch (NumberFormatException e) {
-                        drop.setItem(Material.matchMaterial(itemParts.length > 0 ? itemParts[0] : dropParts[0]));
-                    }
+                    drop.setItem(Material.matchMaterial(itemParts.length > 0 ? itemParts[0] : dropParts[0]));
+                    if (drop.getItem() == null) throw new Exception();
                     drop.setData(itemParts.length > 1 ? Byte.parseByte(itemParts[1]) : 0);
                     String[] amountRange = dropParts[1].split("-");
                     if (amountRange.length == 2) {
@@ -231,13 +228,12 @@ public class ecoConfigManager
                     drops.add(drop);
                 }
 
-                return drops;
             }
             catch (Exception exception) {
                 log.warning("Failed to parse drops: " + dropsString);
             }
         }
 
-        return null;
+        return drops;
     }
 }

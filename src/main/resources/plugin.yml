@@ -1,5 +1,5 @@
 name: ecoCreature
-main: se.ed.chrisb.ecoCreature.ecoCreature
+main: se.crafted.chrisb.ecoCreature.ecoCreature
 version: 0.0.8 (All your death are belong to us!)
 depend: [Vault]
 softdepend: [DeathTpPlus]
@@ -42,85 +42,85 @@ permissions:
             ecocreature.reward.zombie: true
     ecocreature.gain.group:
         description: Enables gain multiplier based on group
-        default: true
+        default: false
     ecocreature.gain.time:
         description: Enables gain multiplier based on time period
-        default: true
+        default: false
     ecocreature.gain.environment:
         description: Enables gain multiplier based on environment
-        default: true
+        default: false
     ecocreature.reward.angrywolf:
         description: Enables rewards for angry wolves
-        default: true
+        default: false
     ecocreature.reward.cavespider:
         description: Enables rewards for cave spiders
-        default: true
+        default: false
     ecocreature.reward.chicken:
         description: Enables rewards for chickens
-        default: true
+        default: false
     ecocreature.reward.cow:
         description: Enables rewards for cows
-        default: true
+        default: false
     ecocreature.reward.creeper:
         description: Enables rewards for creepers
-        default: true
+        default: false
     ecocreature.reward.deathpenalty:
         description: Enables penalty for playe death
-        default: true
+        default: false
     ecocreature.reward.deathstreak:
         description: Enables penalty for death streaks via DeathTpPlus
-        default: true
+        default: false
     ecocreature.reward.enderman:
         description: Enables rewards for endermen
-        default: true
+        default: false
     ecocreature.reward.ghast:
         description: Enables rewards for ghasts
-        default: true
+        default: false
     ecocreature.reward.giant:
         description: Enables rewards for giants
-        default: true
+        default: false
     ecocreature.reward.killstreak:
         description: Enables rewards for kill streaks via DeathTpPlus
-        default: true
+        default: false
     ecocreature.reward.monster:
         description: Enables rewards for monsters
-        default: true
+        default: false
     ecocreature.reward.pig:
         description: Enables rewards for pigs
-        default: true
+        default: false
     ecocreature.reward.pigzombie:
         description: Enables rewards for zombies
-        default: true
+        default: false
     ecocreature.reward.player:
         description: Enables rewards for players (a.k.a. PVP reward)
-        default: true
+        default: false
     ecocreature.reward.poweredcreeper:
         description: Enables rewards for powered creepers
-        default: true
+        default: false
     ecocreature.reward.sheep:
         description: Enables rewards for sheep
-        default: true
+        default: false
     ecocreature.reward.silverfish:
         description: Enables rewards for silverfish
-        default: true
+        default: false
     ecocreature.reward.skeleton:
         description: Enables rewards for skeletons
-        default: true
+        default: false
     ecocreature.reward.slime:
         description: Enables rewards for slime
-        default: true
+        default: false
     ecocreature.reward.spawner:
         description: Enables rewards for spawners
-        default: true
+        default: false
     ecocreature.reward.spider:
         description: Enables rewards for spiders
-        default: true
+        default: false
     ecocreature.reward.squid:
         description: Enables rewards for squid
-        default: true
+        default: false
     ecocreature.reward.wolf:
         description: Enables rewards for wolves
-        default: true
+        default: false
     ecocreature.reward.zombie:
         description: Enables rewards for zombies
-        default: true
+        default: false
