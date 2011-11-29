@@ -76,8 +76,11 @@ public class ecoCreature extends JavaPlugin
     {
         Plugin plugin = this.getServer().getPluginManager().getPlugin("DeathTpPlus");
         if (plugin != null && plugin instanceof DeathTpPlus) {
-            deathTpPlusPlugin = ((DeathTpPlus) plugin);
-            logger.info("Successfully hooked " + plugin.getDescription().getName());
+            DeathTpPlus testPlugin = (DeathTpPlus) plugin;
+            if (testPlugin.getDescription().getVersion().equals("1.95")) {
+                deathTpPlusPlugin = testPlugin;
+                logger.info("Successfully hooked " + plugin.getDescription().getName());
+            }
         }
     }
 
