@@ -146,7 +146,12 @@ public class ecoConfigManager
 
         if (config.getKeys("Gain.Environment") != null) {
             for (String environment : config.getKeys("Gain.Environment")) {
-                rewardManager.envMultiplier.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(config.getDouble("Gain.Environment." + environment + ".Amount", 1.0D)));
+                try {
+                    rewardManager.envMultiplier.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(config.getDouble("Gain.Environment." + environment + ".Amount", 1.0D)));
+                }
+                catch (Exception e) {
+                    log.warning("Skipping unknown environment name: " + environment);
+                }
             }
         }
 
