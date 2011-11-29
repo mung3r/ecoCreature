@@ -106,7 +106,7 @@ Gain:
             Amount: 1.0
         Nether:
             Amount: 1.25
-        Skylands:
+        The_End:
             Amount: 1.0
 
 RewardTable:
