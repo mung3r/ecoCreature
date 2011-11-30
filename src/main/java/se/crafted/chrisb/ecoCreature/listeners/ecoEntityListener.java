@@ -3,9 +3,10 @@ package se.crafted.chrisb.ecoCreature.listeners;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityListener;
+import org.bukkit.event.entity.PlayerDeathEvent;
+
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.CreatureKilledByPlayerEvent;
-import se.crafted.chrisb.ecoCreature.events.PlayerDeathEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledByPlayerEvent;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 
@@ -21,12 +22,9 @@ public class ecoEntityListener extends EntityListener
     @Override
     public void onEntityDeath(EntityDeathEvent event)
     {
-        if (event.getEntity() instanceof Player) {
+        if (event instanceof PlayerDeathEvent) {
             if (ecoEntityUtil.isPVPDeath(event)) {
                 plugin.getServer().getPluginManager().callEvent(new PlayerKilledByPlayerEvent(event));
-            }
-            else {
-                plugin.getServer().getPluginManager().callEvent(new PlayerDeathEvent(event));
             }
             return;
         }
