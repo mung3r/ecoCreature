@@ -17,6 +17,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Ghast;
 import org.bukkit.entity.Giant;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.MagmaCube;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Pig;
@@ -27,6 +28,7 @@ import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Silverfish;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Slime;
+import org.bukkit.entity.Snowman;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.Squid;
 import org.bukkit.entity.Tameable;
@@ -107,6 +109,8 @@ public class ecoEntityUtil
             return CreatureType.GHAST;
         if (entity instanceof Giant)
             return CreatureType.GIANT;
+        if (entity instanceof MagmaCube)
+            return CreatureType.MAGMA_CUBE;
         if (entity instanceof MushroomCow)
             return CreatureType.MUSHROOM_COW;
         if (entity instanceof Pig)
@@ -119,6 +123,8 @@ public class ecoEntityUtil
             return CreatureType.SKELETON;
         if (entity instanceof Slime)
             return CreatureType.SLIME;
+        if (entity instanceof Snowman)
+            return CreatureType.SNOWMAN;
         if (entity instanceof Silverfish)
             return CreatureType.SILVERFISH;
         if (entity instanceof Spider)

@@ -232,6 +232,10 @@ RewardTable:
         NoReward_Message: ''
         Reward_Message: '&7You earned &6<amt>&7 for that kill streak!'
         Penalty_Message: '&7That kill streak cost you &6<amt>&7.'
+    MagmaCube:
+        Coin_Minimum: 0.00
+        Coin_Maximum: 2.00
+        Coin_Percent: 50.00
     Monster:
         Coin_Minimum: 0.50
         Coin_Maximum: 1.50

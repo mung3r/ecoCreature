@@ -30,6 +30,7 @@ public class ecoReward
         GHAST("Ghast"),
         GIANT("Giant"),
         KILL_STREAK("KillStreak"),
+        MAGMA_CUBE("MagmaCube"),
         MONSTER("Monster"),
         MUSHROOM_COW("MushroomCow"),
         PIG("Pig"),
