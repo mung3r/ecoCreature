@@ -40,12 +40,14 @@ public class ecoReward
         SILVERFISH("Silverfish"),
         SKELETON("Skeleton"),
         SLIME("Slime"),
+        SNOWMAN("Snowman"),
         SPAWNER("Spawner"),
         SPIDER("Spider"),
         SQUID("Squid"),
         VILLAGER("Villager"),
         WOLF("Wolf"),
-        ZOMBIE("Zombie");
+        ZOMBIE("Zombie"),
+        UNKNOWN("Unknown");
 
         private static final Map<String, RewardType> mapping = new HashMap<String, RewardType>();
 
@@ -96,6 +98,9 @@ public class ecoReward
                 CreatureType creatureType = ecoEntityUtil.getCreatureType(entity);
                 if (creatureType != null) {
                     rewardType = RewardType.fromName(creatureType.getName());
+                }
+                else {
+                    rewardType = UNKNOWN;
                 }
             }
 
