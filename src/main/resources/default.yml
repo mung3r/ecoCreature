@@ -162,6 +162,10 @@ RewardTable:
     #   Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
     #   Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
     #
+    Blaze:
+        Coin_Minimum: 3.50
+        Coin_Maximum: 3.50
+        Coin_Percent: 50.0
     CaveSpider:
         Drops: 'string:2:75'
         Coin_Minimum: 0.50
@@ -198,6 +202,10 @@ RewardTable:
         NoReward_Message: ''
         Reward_Message: '&7You earned &6<amt>&7 for that death streak!'
         Penalty_Message: '&7That death streak cost you &6<amt>&7.'
+    EnderDragon:
+        Coin_Minimum: 5.00
+        Coin_Maximum: 10.50
+        Coin_Percent: 100.00
     Enderman:
         Drops: 'ender pearl:1:75'
         Coin_Minimum: 1.00
@@ -228,6 +236,11 @@ RewardTable:
         Coin_Minimum: 0.50
         Coin_Maximum: 1.50
         Coin_Percent: 50.0
+    MushroomCow:
+        Drops: 'leather:2:75;raw beef:3:75'
+        Coin_Minimum: 0.10
+        Coin_Maximum: 2.50
+        Coin_Percent: 1.0
     Pig:
         Drops: 'pork:2:75'
         Coin_Minimum: 0.10
@@ -267,6 +280,10 @@ RewardTable:
         Coin_Minimum: 0.00
         Coin_Maximum: 2.00
         Coin_Percent: 50.00
+    Snowman:
+        Coin_Minimum: 1.00
+        Coin_Maximum: 2.00
+        Coin_Percent: 100.0
     Spawner:
         Coin_Minimum: 0.10
         Coin_Maximum: 15.00
@@ -292,6 +309,10 @@ RewardTable:
         Coin_Minimum: 1.00
         Coin_Maximum: 2.00
         Coin_Percent: 50.0
+    Villager:
+        Coin_Minimum: 1.00
+        Coin_Maximum: 2.00
+        Coin_Percent: 1.0
     Zombie:
         Drops: 'rotten flesh:2:75'
         Coin_Minimum: 1.00
