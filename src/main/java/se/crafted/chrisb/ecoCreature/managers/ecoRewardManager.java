@@ -147,10 +147,13 @@ public class ecoRewardManager implements Cloneable
         else {
             String weaponName = tamedCreature != null ? RewardType.fromEntity(tamedCreature).getName() : Material.getMaterial(killer.getItemInHand().getTypeId()).name();
             registerReward(killer, reward, weaponName);
-            if (!drops.isEmpty() && shouldOverrideDrops) {
-                drops.clear();
+            List<ItemStack> rewardDrops = reward.computeDrops();
+            if (!rewardDrops.isEmpty()) {
+                if (!drops.isEmpty() && shouldOverrideDrops) {
+                    drops.clear();
+                }
+                drops.addAll(rewardDrops);
             }
-            drops.addAll(reward.computeDrops());
         }
     }
 
@@ -221,7 +224,7 @@ public class ecoRewardManager implements Cloneable
     private void registerReward(Player player, ecoReward reward, String weaponName)
     {
         Double amount = computeReward(player, reward);
-        
+
         if (amount > 0.0D && plugin.hasEconomy()) {
             ecoCreature.economy.depositPlayer(player.getName(), amount);
             ecoCreature.getMessageManager(player).sendMessage(reward.getRewardMessage(), player, amount, reward.getCreatureName(), weaponName);
