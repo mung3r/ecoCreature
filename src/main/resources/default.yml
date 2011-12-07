@@ -52,6 +52,11 @@ System:
         # Default: false
         NoFarm: false
 
+        #
+        # MobArena: allow rewards when players are in the arena
+        # Default: false
+        MobArenaRewards: false
+        
     Messages:
         #
         # Enable all reward messages

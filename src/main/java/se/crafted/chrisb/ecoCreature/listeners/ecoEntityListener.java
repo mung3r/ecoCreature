@@ -26,6 +26,9 @@ public class ecoEntityListener extends EntityListener
             if (ecoEntityUtil.isPVPDeath(event)) {
                 plugin.getServer().getPluginManager().callEvent(new PlayerKilledByPlayerEvent(event));
             }
+            else {
+                ecoCreature.getRewardManager(event.getEntity()).registerDeathPenalty((Player) event.getEntity());
+            }
             return;
         }
 
