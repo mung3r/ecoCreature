@@ -45,6 +45,7 @@ public class ecoRewardManager implements Cloneable
     public double dtpRewardAmount;
     public double dtpPenaltyAmount;
     public Boolean noFarm;
+    public boolean hasMobArenaAwards;
 
     public HashMap<String, Double> groupMultiplier;
     public HashMap<TimePeriod, Double> timeMultiplier;
@@ -124,7 +125,7 @@ public class ecoRewardManager implements Cloneable
             // TODO: message no killing your own pets?
             return;
         }
-        else if (ecoCreature.mobArenaHandler != null && ecoCreature.mobArenaHandler.isPlayerInArena(killer)) {
+        else if (ecoCreature.mobArenaHandler != null && ecoCreature.mobArenaHandler.isPlayerInArena(killer) && !hasMobArenaAwards) {
             // TODO: message no arena awards?
             return;
         }
