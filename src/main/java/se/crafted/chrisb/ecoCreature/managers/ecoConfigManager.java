@@ -115,6 +115,7 @@ public class ecoConfigManager
 
         rewardManager.canCampSpawner = config.getBoolean("System.Hunting.AllowCamping", false);
         rewardManager.shouldClearCampDrops = config.getBoolean("System.Hunting.ClearCampDrops", true);
+        rewardManager.shouldClearDefaultDrops = config.getBoolean("System.Hunting.ClearDefaultDrops", true);
         rewardManager.shouldOverrideDrops = config.getBoolean("System.Hunting.OverrideDrops", true);
         rewardManager.isFixedDrops = config.getBoolean("System.Hunting.FixedDrops", false);
         rewardManager.campRadius = config.getInt("System.Hunting.CampRadius", 7);
