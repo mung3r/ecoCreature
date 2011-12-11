@@ -19,6 +19,10 @@ System:
         # Default: 7            
         CampRadius: 7
         #
+        # Do not drop anything except for rewards defined in this file
+        # Default: false
+        ClearDefaultDrops: false
+        #
         # Replace instead of stack rewards drops/items
         # Default: true
         OverrideDrops: true

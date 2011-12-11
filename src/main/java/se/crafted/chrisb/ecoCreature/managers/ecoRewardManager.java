@@ -28,6 +28,7 @@ public class ecoRewardManager implements Cloneable
     public Boolean isIntegerCurrency;
 
     public Boolean canCampSpawner;
+    public boolean shouldClearDefaultDrops;
     public Boolean shouldOverrideDrops;
     public Boolean isFixedDrops;
     public Boolean shouldClearCampDrops;
@@ -113,6 +114,9 @@ public class ecoRewardManager implements Cloneable
 
     public void registerCreatureDeath(Player killer, LivingEntity tamedCreature, LivingEntity killedCreature, List<ItemStack> drops)
     {
+        if (shouldClearDefaultDrops)
+            drops.clear();
+        
         if (killer.getItemInHand().getType().equals(Material.BOW) && !hasBowRewards) {
             ecoCreature.getMessageManager(killer).sendMessage(ecoCreature.getMessageManager(killer).noBowRewardMessage, killer);
             return;
