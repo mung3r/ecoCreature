@@ -3,6 +3,7 @@ package se.crafted.chrisb.ecoCreature.models;
 import java.util.Random;
 
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
@@ -10,6 +11,8 @@ public class ecoDrop
 {
     private Material item;
     private byte data;
+    private Enchantment enchantment;
+    private int enchantmentLevel;
     private int maxAmount;
     private int minAmount;
     private Double percentage;
@@ -34,6 +37,26 @@ public class ecoDrop
     public void setData(byte data)
     {
         this.data = data;
+    }
+
+    public Enchantment getEnchantment()
+    {
+        return enchantment;
+    }
+
+    public void setEnchantment(Enchantment enchantment)
+    {
+        this.enchantment = enchantment;
+    }
+
+    public int getEnchantmentLevel()
+    {
+        return enchantmentLevel;
+    }
+
+    public void setEnchantmentLevel(int enchantmentLevel)
+    {
+        this.enchantmentLevel = enchantmentLevel;
     }
 
     public int getMaxAmount()
@@ -89,6 +112,9 @@ public class ecoDrop
                 else {
                     MaterialData materialData = new MaterialData(item, data);
                     itemStack = materialData.toItemStack(dropAmount);
+                }
+                if (enchantment != null) {
+                    itemStack.addEnchantment(enchantment, enchantmentLevel);
                 }
                 if (itemStack.getAmount() > 0) {
                     return itemStack;

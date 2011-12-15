@@ -152,12 +152,17 @@ public class ecoRewardManager implements Cloneable
         else {
             String weaponName = tamedCreature != null ? RewardType.fromEntity(tamedCreature).getName() : Material.getMaterial(killer.getItemInHand().getTypeId()).name();
             registerReward(killer, reward, weaponName);
-            List<ItemStack> rewardDrops = reward.computeDrops();
-            if (!rewardDrops.isEmpty()) {
-                if (!drops.isEmpty() && shouldOverrideDrops) {
-                    drops.clear();
+            try {
+                List<ItemStack> rewardDrops = reward.computeDrops();
+                if (!rewardDrops.isEmpty()) {
+                    if (!drops.isEmpty() && shouldOverrideDrops) {
+                        drops.clear();
+                    }
+                    drops.addAll(rewardDrops);
                 }
-                drops.addAll(rewardDrops);
+            }
+            catch (IllegalArgumentException e) {
+                log.warning(e.getMessage());
             }
         }
     }

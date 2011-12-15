@@ -122,7 +122,7 @@ RewardTable:
     #
     # Format for Drops:
     #
-    #   Drops: ITEM_ID.DATA_ID:[MIN-]MAX:CHANCE;ITEM_ID.DATA_ID:[MIN-]MAX:CHANCE;...
+    #   Drops: ITEM_ID.DATA_ID,ENCHANTMENT.LEVEL:[MIN-]MAX:CHANCE;ITEM_ID.DATA_ID:[MIN-]MAX:CHANCE;...
     #
     # Drop example 1: drop 0 to 5 diamonds 50% of the time
     #   Drops: 'diamond:5:50'
@@ -135,6 +135,9 @@ RewardTable:
     #
     # Drop example 4: drop nothing
     #   Drops: ''
+    #
+    # Drop example 5: drop 0 to 1 diamond swords with a damage_all level 4 enchantment (a.k.a. Sharpness IV) 25% of the time
+    #   Drops: 'diamond_sword,damage_all.4:1:25'
     #
     # Coin reward examples:
     #

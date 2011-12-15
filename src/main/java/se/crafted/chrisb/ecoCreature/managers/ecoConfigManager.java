@@ -10,6 +10,8 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.util.config.Configuration;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
@@ -216,12 +218,21 @@ public class ecoConfigManager
         if (dropsString != null && !dropsString.isEmpty()) {
             try {
                 for (String dropString : dropsString.split(";")) {
-                    String[] dropParts = dropString.split(":");
                     ecoDrop drop = new ecoDrop();
-                    String[] itemParts = dropParts[0].split("\\.");
-                    drop.setItem(Material.matchMaterial(itemParts.length > 0 ? itemParts[0] : dropParts[0]));
+                    String[] dropParts = dropString.split(":");
+                    String[] itemParts = dropParts[0].split(",");
+                    // check for enchantment
+                    if (itemParts.length > 1) {
+                        String[] enchantParts = itemParts[1].split("\\.");
+                        drop.setEnchantment(Enchantment.getByName(enchantParts[0].toUpperCase()));
+                        drop.setEnchantmentLevel(enchantParts.length > 1 ? Integer.parseInt(enchantParts[1]) : 1);
+                    }
+                    // check for data id
+                    String[] itemSubParts = itemParts[0].split("\\.");
+                    drop.setItem(Material.matchMaterial(itemSubParts[0]));
                     if (drop.getItem() == null) throw new Exception();
-                    drop.setData(itemParts.length > 1 ? Byte.parseByte(itemParts[1]) : 0);
+                    drop.setData(itemSubParts.length > 1 ? Byte.parseByte(itemSubParts[1]) : 0);
+                    // check for range on amount
                     String[] amountRange = dropParts[1].split("-");
                     if (amountRange.length == 2) {
                         drop.setMinAmount(Integer.parseInt(amountRange[0]));
