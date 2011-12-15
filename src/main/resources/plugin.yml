@@ -15,17 +15,21 @@ permissions:
         description: Allows rewards for all creature types
         children:
             ecocreature.reward.angrywolf: true
+            ecocreature.reward.blaze: true
             ecocreature.reward.cavespider: true
             ecocreature.reward.chicken: true
             ecocreature.reward.cow: true
             ecocreature.reward.creeper: true
             ecocreature.reward.deathpenalty: true
             ecocreature.reward.deathstreak: true
+            ecocreature.reward.enderdragon: true
             ecocreature.reward.enderman: true
             ecocreature.reward.ghast: true
             ecocreature.reward.giant: true
             ecocreature.reward.killstreak: true
+            ecocreature.reward.magmacube: true
             ecocreature.reward.monster: true
+            ecocreature.reward.mushroomcow: true
             ecocreature.reward.pig: true
             ecocreature.reward.pigzombie: true
             ecocreature.reward.player: true
@@ -34,9 +38,11 @@ permissions:
             ecocreature.reward.silverfish: true
             ecocreature.reward.skeleton: true
             ecocreature.reward.slime: true
+            ecocreature.reward.snowman: true
             ecocreature.reward.spawner: true
             ecocreature.reward.spider: true
             ecocreature.reward.squid: true
+            ecocreature.reward.villager: true
             ecocreature.reward.wolf: true
             ecocreature.reward.zombie: true
     ecocreature.gain.group:
@@ -50,6 +56,9 @@ permissions:
         default: false
     ecocreature.reward.angrywolf:
         description: Enables rewards for angry wolves
+        default: false
+    ecocreature.reward.blaze:
+        description: Enables rewards for blazes
         default: false
     ecocreature.reward.cavespider:
         description: Enables rewards for cave spiders
@@ -69,6 +78,9 @@ permissions:
     ecocreature.reward.deathstreak:
         description: Enables penalty for death streaks via DeathTpPlus
         default: false
+    ecocreature.reward.enderdragon:
+        description: Enables rewards for enderdragons
+        default: false
     ecocreature.reward.enderman:
         description: Enables rewards for endermen
         default: false
@@ -81,14 +93,20 @@ permissions:
     ecocreature.reward.killstreak:
         description: Enables rewards for kill streaks via DeathTpPlus
         default: false
+    ecocreature.reward.magmacube:
+        description: Enables rewards for magmacubes
+        default: false
     ecocreature.reward.monster:
         description: Enables rewards for monsters
+        default: false
+    ecocreature.reward.mushroomcow:
+        description: Enables rewards for mushroomcows
         default: false
     ecocreature.reward.pig:
         description: Enables rewards for pigs
         default: false
     ecocreature.reward.pigzombie:
-        description: Enables rewards for zombies
+        description: Enables rewards for pig zombies
         default: false
     ecocreature.reward.player:
         description: Enables rewards for players (a.k.a. PVP reward)
@@ -108,6 +126,9 @@ permissions:
     ecocreature.reward.slime:
         description: Enables rewards for slime
         default: false
+    ecocreature.reward.snowman:
+        description: Enables rewards for snowmen
+        default: false
     ecocreature.reward.spawner:
         description: Enables rewards for spawners
         default: false
@@ -116,6 +137,9 @@ permissions:
         default: false
     ecocreature.reward.squid:
         description: Enables rewards for squid
+        default: false
+    ecocreature.reward.villager:
+        description: Enables rewards for villagers
         default: false
     ecocreature.reward.wolf:
         description: Enables rewards for wolves
