@@ -1,6 +1,8 @@
 package se.crafted.chrisb.ecoCreature.models;
 
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -11,13 +13,43 @@ public class ecoDrop
 {
     private Material item;
     private byte data;
-    private Enchantment enchantment;
-    private int enchantmentLevel;
     private int maxAmount;
     private int minAmount;
     private Double percentage;
     private Boolean isFixedDrops;
+    private Set<ecoEnchantment> enchantments;
     private Random random = new Random();
+
+    public ecoDrop()
+    {
+        this.enchantments = new HashSet<ecoEnchantment>();
+    }
+
+    class ecoEnchantment
+    {
+        private Enchantment enchantment;
+        private int level;
+
+        public Enchantment getEnchantment()
+        {
+            return enchantment;
+        }
+
+        public void setEnchantment(Enchantment enchantment)
+        {
+            this.enchantment = enchantment;
+        }
+
+        public int getLevel()
+        {
+            return level;
+        }
+
+        public void setLevel(int level)
+        {
+            this.level = level;
+        }
+    }
 
     public Material getItem()
     {
@@ -37,26 +69,6 @@ public class ecoDrop
     public void setData(byte data)
     {
         this.data = data;
-    }
-
-    public Enchantment getEnchantment()
-    {
-        return enchantment;
-    }
-
-    public void setEnchantment(Enchantment enchantment)
-    {
-        this.enchantment = enchantment;
-    }
-
-    public int getEnchantmentLevel()
-    {
-        return enchantmentLevel;
-    }
-
-    public void setEnchantmentLevel(int enchantmentLevel)
-    {
-        this.enchantmentLevel = enchantmentLevel;
     }
 
     public int getMaxAmount()
@@ -99,6 +111,17 @@ public class ecoDrop
         this.isFixedDrops = isFixedDrops;
     }
 
+    public void addEnchantment(Enchantment enchantment, int level)
+    {
+        if (enchantment == null) {
+            throw new IllegalArgumentException();
+        }
+        ecoEnchantment e = new ecoEnchantment();
+        e.setEnchantment(enchantment);
+        e.setLevel(level);
+        enchantments.add(e);
+    }
+
     public ItemStack computeItemStack()
     {
         if (random.nextDouble() * 100.0D + 1 < percentage) {
@@ -113,8 +136,8 @@ public class ecoDrop
                     MaterialData materialData = new MaterialData(item, data);
                     itemStack = materialData.toItemStack(dropAmount);
                 }
-                if (enchantment != null) {
-                    itemStack.addEnchantment(enchantment, enchantmentLevel);
+                for (ecoEnchantment e : enchantments) {
+                    itemStack.addEnchantment(e.getEnchantment(), e.getLevel());
                 }
                 if (itemStack.getAmount() > 0) {
                     return itemStack;

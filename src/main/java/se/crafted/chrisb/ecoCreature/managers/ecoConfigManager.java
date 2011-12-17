@@ -223,15 +223,16 @@ public class ecoConfigManager
                     String[] itemParts = dropParts[0].split(",");
                     // check for enchantment
                     if (itemParts.length > 1) {
-                        String[] enchantParts = itemParts[1].split("\\.");
-                        drop.setEnchantment(Enchantment.getByName(enchantParts[0].toUpperCase()));
-                        drop.setEnchantmentLevel(enchantParts.length > 1 ? Integer.parseInt(enchantParts[1]) : 1);
+                        for (int i = 1; i < itemParts.length; i++) {
+                            String[] enchantParts = itemParts[i].split("\\.");
+                            drop.addEnchantment(Enchantment.getByName(enchantParts[0].toUpperCase()), enchantParts.length > 1 ? Integer.parseInt(enchantParts[1]) : 1);
+                        }
                     }
                     // check for data id
                     String[] itemSubParts = itemParts[0].split("\\.");
                     drop.setItem(Material.matchMaterial(itemSubParts[0]));
                     if (drop.getItem() == null) throw new Exception();
-                    drop.setData(itemSubParts.length > 1 ? Byte.parseByte(itemSubParts[1]) : 0);
+                    drop.setData(itemSubParts.length > 1 ? Byte.parseByte(itemSubParts[1]) : 1);
                     // check for range on amount
                     String[] amountRange = dropParts[1].split("-");
                     if (amountRange.length == 2) {
@@ -245,7 +246,6 @@ public class ecoConfigManager
                     drop.setIsFixedDrops(isFixedDrops);
                     drops.add(drop);
                 }
-
             }
             catch (Exception exception) {
                 log.warning("Failed to parse drops: " + dropsString);
