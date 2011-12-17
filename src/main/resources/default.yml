@@ -139,6 +139,12 @@ RewardTable:
     # Drop example 5: drop 0 to 1 diamond swords with a damage_all level 4 enchantment (a.k.a. Sharpness IV) 25% of the time
     #   Drops: 'diamond_sword,damage_all.4:1:25'
     #
+    # Drop example 6: drop 0 to 1 potion type 2 (a.k.a. Swiftness) 25% of the time
+    #   Drops: 'potion.2:1:25'
+    #
+    # Drop example 7: go crazy :P
+    #   Drops: 'diamond_pickaxe,durability.3:1:25;diamond_sword,damage_all.5:1:25;potion.2:1-1:25'
+    #
     # Coin reward examples:
     #
     # Coin example 1: award 0 to 10 coin 50% of the time
