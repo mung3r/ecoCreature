@@ -29,7 +29,7 @@
     <dependency>
         <groupId>com.garbagemule.MobArena</groupId>
         <artifactId>MobArena</artifactId>
-        <version>0.94.3.11</version>
+        <version>0.94.3.24</version>
         <scope>system</scope>
         <systemPath>${project.basedir}/lib/MobArena.jar</systemPath>
     </dependency>
