@@ -134,7 +134,7 @@ public class ecoConfigManager
         rewardManager.dtpPenaltyAmount = config.getDouble("System.Hunting.DTPDeathStreakPenalty", 5.0D);
         rewardManager.dtpRewardAmount = config.getDouble("System.Hunting.DTPKillStreakPenalty", 10.0D);
         rewardManager.noFarm = config.getBoolean("System.Hunting.NoFarm", false);
-        rewardManager.hasMobArenaAwards = config.getBoolean("System.Hunting.MobArenaRewards", false);
+        rewardManager.hasMobArenaRewards = config.getBoolean("System.Hunting.MobArenaRewards", false);
 
         if (config.getKeys("Gain.Groups") != null) {
             for (String group : config.getKeys("Gain.Groups")) {
