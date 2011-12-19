@@ -232,7 +232,7 @@ public class ecoConfigManager
                     String[] itemSubParts = itemParts[0].split("\\.");
                     drop.setItem(Material.matchMaterial(itemSubParts[0]));
                     if (drop.getItem() == null) throw new Exception();
-                    drop.setData(itemSubParts.length > 1 ? Byte.parseByte(itemSubParts[1]) : 1);
+                    drop.setData(itemSubParts.length > 1 ? Byte.parseByte(itemSubParts[1]) : 0);
                     // check for range on amount
                     String[] amountRange = dropParts[1].split("-");
                     if (amountRange.length == 2) {
