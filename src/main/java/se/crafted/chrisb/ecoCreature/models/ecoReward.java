@@ -100,9 +100,10 @@ public class ecoReward
                 if (creatureType != null) {
                     rewardType = RewardType.fromName(creatureType.getName());
                 }
-                else {
-                    rewardType = UNKNOWN;
-                }
+            }
+
+            if (rewardType == null) {
+                rewardType = UNKNOWN;
             }
 
             return rewardType;
