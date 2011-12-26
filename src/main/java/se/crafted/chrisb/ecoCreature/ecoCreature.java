@@ -57,7 +57,7 @@ public class ecoCreature extends JavaPlugin
             logger.info("Found permissions provider.");
         }
         else {
-            logger.severe("Failed load permission provider.");
+            logger.severe("Failed to load permission provider.");
         }
 
         RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
