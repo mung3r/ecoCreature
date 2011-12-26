@@ -124,7 +124,7 @@ public class ecoDrop
 
     public ItemStack computeItemStack()
     {
-        if (Math.round(Math.random() * 100.0D) < percentage) {
+        if (Math.random() * 100.0D < percentage) {
             int dropAmount = isFixedDrops ? maxAmount : minAmount + random.nextInt(Math.abs(maxAmount - minAmount + 1));
 
             if (dropAmount > 0) {
