@@ -3,17 +3,11 @@ package se.crafted.chrisb.ecoCreature.listeners;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.CreatureKilledByPlayerEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledByPlayerEvent;
-import se.crafted.chrisb.ecoCreature.utils.ecoLogger;
 
 public class ecoDeathListener extends DeathEventsListener
 {
-    private final ecoCreature plugin;
-    private final ecoLogger log;
-
-    public ecoDeathListener(ecoCreature plugin)
+    public ecoDeathListener()
     {
-        this.plugin = plugin;
-        log = this.plugin.getLogger();
     }
 
     @Override

@@ -40,11 +40,11 @@ public class ecoCreature extends JavaPlugin
     public static DeathTpPlus deathTpPlusPlugin = null;
     public static MobArenaHandler mobArenaHandler = null;
 
-    private final ecoBlockListener blockListener = new ecoBlockListener(this);
+    private final ecoBlockListener blockListener = new ecoBlockListener();
     private final ecoEntityListener entityListener = new ecoEntityListener(this);
-    private final ecoDeathListener rewardListener = new ecoDeathListener(this);
+    private final ecoDeathListener rewardListener = new ecoDeathListener();
 
-    private ecoLogger logger;
+    private static ecoLogger logger = new ecoLogger();
     public static HashMap<String, ecoMessageManager> messageManagers;
     public static HashMap<String, ecoRewardManager> rewardManagers;
     private ecoConfigManager configManager;
@@ -109,7 +109,7 @@ public class ecoCreature extends JavaPlugin
     {
         Locale.setDefault(Locale.US);
 
-        logger = new ecoLogger(this);
+        logger.setName(this.getDescription().getName());
         messageManagers = new HashMap<String, ecoMessageManager>();
         rewardManagers = new HashMap<String, ecoRewardManager>();
 
@@ -146,7 +146,7 @@ public class ecoCreature extends JavaPlugin
         dataWorldsFolder.mkdirs();
     }
 
-    public ecoLogger getLogger()
+    public static ecoLogger getLogger()
     {
         return logger;
     }

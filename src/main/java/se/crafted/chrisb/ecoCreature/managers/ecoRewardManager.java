@@ -19,7 +19,6 @@ import se.crafted.chrisb.ecoCreature.models.ecoReward;
 import se.crafted.chrisb.ecoCreature.models.ecoReward.RewardType;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil.TimePeriod;
-import se.crafted.chrisb.ecoCreature.utils.ecoLogger;
 
 public class ecoRewardManager implements Cloneable
 {
@@ -54,12 +53,10 @@ public class ecoRewardManager implements Cloneable
     public HashMap<RewardType, ecoReward> rewards;
 
     private final ecoCreature plugin;
-    private final ecoLogger log;
 
     public ecoRewardManager(ecoCreature plugin)
     {
         this.plugin = plugin;
-        log = this.plugin.getLogger();
 
         groupMultiplier = new HashMap<String, Double>();
         timeMultiplier = new HashMap<TimePeriod, Double>();
@@ -147,7 +144,9 @@ public class ecoRewardManager implements Cloneable
         ecoReward reward = rewards.get(RewardType.fromEntity(killedCreature));
 
         if (reward == null) {
-            log.warning("Unrecognized reward");
+            if (killedCreature != null) {
+                ecoCreature.getLogger().warning("No reward found for " + killedCreature.getClass());
+            }
         }
         else {
             String weaponName = tamedCreature != null ? RewardType.fromEntity(tamedCreature).getName() : Material.getMaterial(killer.getItemInHand().getTypeId()).name();
@@ -162,7 +161,7 @@ public class ecoRewardManager implements Cloneable
                 }
             }
             catch (IllegalArgumentException e) {
-                log.warning(e.getMessage());
+                ecoCreature.getLogger().warning(e.getMessage());
             }
         }
     }
@@ -275,21 +274,16 @@ public class ecoRewardManager implements Cloneable
         }
         catch (Exception exception) {
             if (warnGroupMultiplierSupport) {
-                log.warning("Permissions does not support group multiplier");
+                ecoCreature.getLogger().warning("Permissions does not support group multiplier");
                 warnGroupMultiplierSupport = false;
             }
         }
-
-        log.debug("base amount is " + amount);
-        log.debug("group amount is " + groupAmount);
-        log.debug("time amount is " + timeAmount);
-        log.debug("env amount is " + envAmount);
 
         return amount + groupAmount + timeAmount + envAmount;
     }
 
     private Boolean hasPermission(Player player, String perm)
     {
-        return ecoCreature.permission.has(player, "ecoCreature." + perm) || ecoCreature.permission.has(player, "ecocreature." + perm.toLowerCase());
+        return ecoCreature.permission.has(player.getWorld(), player.getName(), "ecoCreature." + perm) || ecoCreature.permission.has(player.getWorld(), player.getName(), "ecocreature." + perm.toLowerCase());
     }
 }

@@ -2,18 +2,26 @@ package se.crafted.chrisb.ecoCreature.utils;
 
 import java.util.logging.Logger;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.managers.ecoConfigManager;
 
 public class ecoLogger
 {
-    private ecoCreature plugin;
+    private String name = "ecoCreature";
     private Logger logger;
 
-    public ecoLogger(ecoCreature plugin)
+    public ecoLogger()
     {
-        this.plugin = plugin;
         logger = Logger.getLogger("Minecraft");
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
     }
 
     public void info(String msg)
@@ -40,6 +48,6 @@ public class ecoLogger
 
     public String format(String msg)
     {
-        return String.format("[%s] %s", plugin.getDescription().getName(), msg);
+        return String.format("[%s] %s", name, msg);
     }
 }

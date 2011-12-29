@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.ItemStack;
 
+import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 
 public class ecoReward
@@ -99,6 +100,9 @@ public class ecoReward
                 CreatureType creatureType = ecoEntityUtil.getCreatureType(entity);
                 if (creatureType != null) {
                     rewardType = RewardType.fromName(creatureType.getName());
+                    if (rewardType == null) {
+                        ecoCreature.getLogger().warning("Unknown creature type: " + creatureType.getName());
+                    }
                 }
             }
 
