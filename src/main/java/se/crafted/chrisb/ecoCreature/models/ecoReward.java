@@ -63,12 +63,16 @@ public class ecoReward
 
         RewardType(String name)
         {
-            this.name = name;
+            if (name != null)
+                this.name = name.toLowerCase();
         }
 
         public static RewardType fromName(String name)
         {
-            return mapping.get(name);
+            RewardType rewardType = null;
+            if (name != null)
+                rewardType = mapping.get(name.toLowerCase());
+            return rewardType;
         }
 
         public static RewardType fromEntity(Entity entity)
