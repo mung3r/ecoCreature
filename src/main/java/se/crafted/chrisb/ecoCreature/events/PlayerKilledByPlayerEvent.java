@@ -11,47 +11,37 @@ import org.bukkit.inventory.ItemStack;
 @SuppressWarnings("serial")
 public class PlayerKilledByPlayerEvent extends Event
 {
-    private Player victim;
-    private Player killer;
-    private List<ItemStack> drops;
+    private EntityDeathEvent event;
 
     public PlayerKilledByPlayerEvent(EntityDeathEvent event)
     {
         super("PlayerKilledByPlayerEvent");
 
-        this.victim = (Player) event.getEntity();
-        this.killer = (Player) ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
-        this.drops = event.getDrops();
+        this.event = event;
     }
 
     public Player getVictim()
     {
-        return victim;
-    }
-
-    public void setVictim(Player victim)
-    {
-        this.victim = victim;
+        return (Player) event.getEntity();
     }
 
     public Player getKiller()
     {
-        return killer;
-    }
-
-    public void setKiller(Player killer)
-    {
-        this.killer = killer;
+        return (Player) ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
     }
 
     public List<ItemStack> getDrops()
     {
-        return drops;
+        return event.getDrops();
     }
 
-    public void setDrops(List<ItemStack> drops)
+    public int getDroppedExp()
     {
-        this.drops = drops;
+        return event.getDroppedExp();
     }
 
+    public void setDroppedExp(int exp)
+    {
+        event.setDroppedExp(exp);
+    }
 }

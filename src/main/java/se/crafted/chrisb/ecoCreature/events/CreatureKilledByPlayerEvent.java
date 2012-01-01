@@ -17,82 +17,52 @@ import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 @SuppressWarnings("serial")
 public class CreatureKilledByPlayerEvent extends Event
 {
-    private Player player;
-    private LivingEntity killedCreature;
-    private Material weapon;
-    private LivingEntity tamedCreature;
-    private ecoReward reward;
-    private List<ItemStack> drops;
+    private EntityDeathEvent event;
 
     public CreatureKilledByPlayerEvent(EntityDeathEvent event)
     {
         super("CreatureKilledByPlayerEvent");
 
-        player = ecoEntityUtil.getKillerFromDeathEvent(event);
-        killedCreature = (LivingEntity) event.getEntity();
-        weapon = Material.getMaterial(player.getItemInHand().getTypeId());
-        tamedCreature = ecoEntityUtil.getTamedKillerFromDeathEvent(event);
-        reward = ecoCreature.getRewardManager(event.getEntity()).rewards.get(RewardType.fromEntity(killedCreature));
-        drops = event.getDrops();
+        this.event = event;
     }
 
     public Player getPlayer()
     {
-        return player;
-    }
-
-    public void setPlayer(Player player)
-    {
-        this.player = player;
+        return ecoEntityUtil.getKillerFromDeathEvent(event);
     }
 
     public LivingEntity getKilledCreature()
     {
-        return killedCreature;
-    }
-
-    public void setKilledCreature(LivingEntity killedCreature)
-    {
-        this.killedCreature = killedCreature;
+        return (LivingEntity) event.getEntity();
     }
 
     public Material getWeapon()
     {
-        return weapon;
-    }
-
-    public void setWeapon(Material weapon)
-    {
-        this.weapon = weapon;
+        return Material.getMaterial(getPlayer().getItemInHand().getTypeId());
     }
 
     public LivingEntity getTamedCreature()
     {
-        return tamedCreature;
-    }
-
-    public void setTamedCreature(LivingEntity tamedCreature)
-    {
-        this.tamedCreature = tamedCreature;
+        return ecoEntityUtil.getTamedKillerFromDeathEvent(event);
     }
 
     public ecoReward getReward()
     {
-        return reward;
-    }
-
-    public void setReward(ecoReward reward)
-    {
-        this.reward = reward;
+        return ecoCreature.getRewardManager(event.getEntity()).rewards.get(RewardType.fromEntity(getKilledCreature()));
     }
 
     public List<ItemStack> getDrops()
     {
-        return drops;
+        return event.getDrops();
     }
 
-    public void setDrops(List<ItemStack> drops)
+    public int getDroppedExp()
     {
-        this.drops = drops;
+        return event.getDroppedExp();
+    }
+
+    public void setDroppedExp(int exp)
+    {
+        event.setDroppedExp(exp);
     }
 }
