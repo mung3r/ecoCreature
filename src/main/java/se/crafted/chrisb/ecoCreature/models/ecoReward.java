@@ -31,7 +31,7 @@ public class ecoReward
         GHAST("Ghast"),
         GIANT("Giant"),
         KILL_STREAK("KillStreak"),
-        MAGMA_CUBE("MagmaCube"),
+        MAGMA_CUBE("LavaSlime"),
         MONSTER("Monster"),
         MUSHROOM_COW("MushroomCow"),
         PIG("Pig"),
@@ -57,6 +57,9 @@ public class ecoReward
             for (RewardType type : EnumSet.allOf(RewardType.class)) {
                 mapping.put(type.name, type);
             }
+            
+            // NOTE: backward compatibility
+            mapping.put("MagmaCube".toLowerCase(), MAGMA_CUBE);
         }
 
         private String name;
