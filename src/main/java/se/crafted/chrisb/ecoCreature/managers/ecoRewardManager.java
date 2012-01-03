@@ -6,7 +6,6 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -15,6 +14,8 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.events.CreatureKilledByPlayerEvent;
+import se.crafted.chrisb.ecoCreature.events.PlayerKilledByPlayerEvent;
 import se.crafted.chrisb.ecoCreature.models.ecoReward;
 import se.crafted.chrisb.ecoCreature.models.ecoReward.RewardType;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
@@ -64,9 +65,9 @@ public class ecoRewardManager implements Cloneable
         rewards = new HashMap<RewardType, ecoReward>();
     }
 
-    public void registerPVPReward(Player player, Player damager, List<ItemStack> drops)
+    public void registerPVPReward(PlayerKilledByPlayerEvent event)
     {
-        if (!hasPVPReward || !hasPermission(player, "reward.player")) {
+        if (!hasPVPReward || !hasPermission(event.getVictim(), "reward.player")) {
             return;
         }
 
@@ -75,24 +76,23 @@ public class ecoRewardManager implements Cloneable
         if (rewards.containsKey(RewardType.PLAYER)) {
             ecoReward reward = rewards.get(RewardType.PLAYER);
 
-            amount = computeReward(player, reward);
+            amount = computeReward(event.getVictim(), reward);
             if (!reward.getDrops().isEmpty() && shouldOverrideDrops) {
-                drops.clear();
+                event.getDrops().clear();
             }
-            drops.addAll(reward.computeDrops());
+            event.getDrops().addAll(reward.computeDrops());
         }
         else if (plugin.hasEconomy()) {
-            amount = isPercentPvpReward ? ecoCreature.economy.getBalance(player.getName()) * (pvpRewardAmount / 100.0D) : pvpRewardAmount;
+            amount = isPercentPvpReward ? ecoCreature.economy.getBalance(event.getVictim().getName()) * (pvpRewardAmount / 100.0D) : pvpRewardAmount;
         }
 
         if (amount > 0.0D && plugin.hasEconomy()) {
-            amount = Math.min(amount, ecoCreature.economy.getBalance(player.getName()));
-            ecoCreature.economy.withdrawPlayer(player.getName(), amount);
-            ecoCreature.getMessageManager(player).sendMessage(ecoCreature.getMessageManager(player).deathPenaltyMessage, player, amount);
+            amount = Math.min(amount, ecoCreature.economy.getBalance(event.getVictim().getName()));
+            ecoCreature.economy.withdrawPlayer(event.getVictim().getName(), amount);
+            ecoCreature.getMessageManager(event.getVictim()).sendMessage(ecoCreature.getMessageManager(event.getVictim()).deathPenaltyMessage, event.getVictim(), amount);
 
-            Player killer = (Player) damager;
-            ecoCreature.economy.depositPlayer(killer.getName(), amount);
-            ecoCreature.getMessageManager(player).sendMessage(ecoCreature.getMessageManager(player).pvpRewardMessage, killer, amount, player.getName(), "");
+            ecoCreature.economy.depositPlayer(event.getKiller().getName(), amount);
+            ecoCreature.getMessageManager(event.getVictim()).sendMessage(ecoCreature.getMessageManager(event.getVictim()).pvpRewardMessage, event.getKiller(), amount, event.getVictim().getName(), "");
         }
     }
 
@@ -109,55 +109,57 @@ public class ecoRewardManager implements Cloneable
         }
     }
 
-    public void registerCreatureDeath(Player killer, LivingEntity tamedCreature, LivingEntity killedCreature, List<ItemStack> drops)
+    public void registerCreatureDeath(CreatureKilledByPlayerEvent event)
     {
-        if (shouldClearDefaultDrops)
-            drops.clear();
-        
-        if (killer.getItemInHand().getType().equals(Material.BOW) && !hasBowRewards) {
-            ecoCreature.getMessageManager(killer).sendMessage(ecoCreature.getMessageManager(killer).noBowRewardMessage, killer);
+        if (shouldClearDefaultDrops) {
+            event.getDrops().clear();
+        }
+
+        if (event.getKiller().getItemInHand().getType().equals(Material.BOW) && !hasBowRewards) {
+            ecoCreature.getMessageManager(event.getKiller()).sendMessage(ecoCreature.getMessageManager(event.getKiller()).noBowRewardMessage, event.getKiller());
             return;
         }
-        else if (ecoEntityUtil.isUnderSeaLevel(killer) && !canHuntUnderSeaLevel) {
-            ecoCreature.getMessageManager(killer).sendMessage(ecoCreature.getMessageManager(killer).noBowRewardMessage, killer);
+        else if (ecoEntityUtil.isUnderSeaLevel(event.getKiller()) && !canHuntUnderSeaLevel) {
+            ecoCreature.getMessageManager(event.getKiller()).sendMessage(ecoCreature.getMessageManager(event.getKiller()).noBowRewardMessage, event.getKiller());
             return;
         }
-        else if (ecoEntityUtil.isOwner(killer, killedCreature)) {
+        else if (ecoEntityUtil.isOwner(event.getKiller(), event.getKilledCreature())) {
             // TODO: message no killing your own pets?
             return;
         }
-        else if (ecoCreature.mobArenaHandler != null && ecoCreature.mobArenaHandler.isPlayerInArena(killer) && !hasMobArenaRewards) {
+        else if (ecoCreature.mobArenaHandler != null && ecoCreature.mobArenaHandler.isPlayerInArena(event.getKiller()) && !hasMobArenaRewards) {
             // TODO: message no arena awards?
             return;
         }
-        else if ((ecoEntityUtil.isNearSpawner(killer) || ecoEntityUtil.isNearSpawner(killedCreature)) && !canCampSpawner) {
+        else if ((ecoEntityUtil.isNearSpawner(event.getKiller()) || ecoEntityUtil.isNearSpawner(event.getKilledCreature())) && !canCampSpawner) {
             if (shouldClearCampDrops) {
-                drops.clear();
+                event.getDrops().clear();
+                event.setDroppedExp(0);
             }
-            ecoCreature.getMessageManager(killer).sendMessage(ecoCreature.getMessageManager(killer).noCampMessage, killer);
+            ecoCreature.getMessageManager(event.getKiller()).sendMessage(ecoCreature.getMessageManager(event.getKiller()).noCampMessage, event.getKiller());
             return;
         }
-        else if (!hasPermission(killer, "reward." + RewardType.fromEntity(killedCreature).getName())) {
+        else if (!hasPermission(event.getKiller(), "reward." + RewardType.fromEntity(event.getKilledCreature()).getName())) {
             return;
         }
 
-        ecoReward reward = rewards.get(RewardType.fromEntity(killedCreature));
+        ecoReward reward = rewards.get(RewardType.fromEntity(event.getKilledCreature()));
 
         if (reward == null) {
-            if (killedCreature != null) {
-                ecoCreature.getLogger().warning("No reward found for " + killedCreature.getClass());
+            if (event.getKilledCreature() != null) {
+                ecoCreature.getLogger().warning("No reward found for " + event.getKilledCreature().getClass());
             }
         }
         else {
-            String weaponName = tamedCreature != null ? RewardType.fromEntity(tamedCreature).getName() : Material.getMaterial(killer.getItemInHand().getTypeId()).name();
-            registerReward(killer, reward, weaponName);
+            String weaponName = event.getTamedCreature() != null ? RewardType.fromEntity(event.getTamedCreature()).getName() : Material.getMaterial(event.getKiller().getItemInHand().getTypeId()).name();
+            registerReward(event.getKiller(), reward, weaponName);
             try {
                 List<ItemStack> rewardDrops = reward.computeDrops();
                 if (!rewardDrops.isEmpty()) {
-                    if (!drops.isEmpty() && shouldOverrideDrops) {
-                        drops.clear();
+                    if (!event.getDrops().isEmpty() && shouldOverrideDrops) {
+                        event.getDrops().clear();
                     }
-                    drops.addAll(rewardDrops);
+                    event.getDrops().addAll(rewardDrops);
                 }
             }
             catch (IllegalArgumentException e) {

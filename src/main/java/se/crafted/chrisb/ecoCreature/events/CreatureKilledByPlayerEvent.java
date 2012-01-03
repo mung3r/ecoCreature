@@ -31,6 +31,11 @@ public class CreatureKilledByPlayerEvent extends Event
         return ecoEntityUtil.getKillerFromDeathEvent(event);
     }
 
+    public Player getKiller()
+    {
+        return getPlayer();
+    }
+
     public LivingEntity getKilledCreature()
     {
         return (LivingEntity) event.getEntity();
