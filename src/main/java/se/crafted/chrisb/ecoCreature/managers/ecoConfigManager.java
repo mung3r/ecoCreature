@@ -11,7 +11,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.util.config.Configuration;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
