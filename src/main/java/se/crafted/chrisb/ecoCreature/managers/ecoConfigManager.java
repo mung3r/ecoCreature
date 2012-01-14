@@ -166,6 +166,19 @@ public class ecoConfigManager
                 reward.setCoinMax(config.getDouble(root + ".Coin_Maximum", 0));
                 reward.setCoinMin(config.getDouble(root + ".Coin_Minimum", 0));
                 reward.setCoinPercentage(config.getDouble(root + ".Coin_Percent", 0));
+                String expMin = config.getString(root + ".ExpMin");
+                String expMax = config.getString(root + ".ExpMax");
+                String expPercentage = config.getString(root + ".ExpPercent");
+                if (expMin != null && expMax != null && expPercentage != null) {
+                    try {
+                        reward.setExpMin(Integer.parseInt(expMin));
+                        reward.setExpMax(Integer.parseInt(expMax));
+                        reward.setExpPercentage(Double.parseDouble(expPercentage));
+                    }
+                    catch(NumberFormatException e) {
+                        ecoCreature.getLogger().warning("Could not parse exp for " + rewardName);
+                    }
+                }
 
                 reward.setNoRewardMessage(new ecoMessage(convertMessage(config.getString(root + ".NoReward_Message", ecoMessageManager.NO_REWARD_MESSAGE)), config.getBoolean("System.Messages.NoReward", false)));
                 reward.setRewardMessage(new ecoMessage(convertMessage(config.getString(root + ".Reward_Message", ecoMessageManager.REWARD_MESSAGE)), true));
@@ -228,7 +241,8 @@ public class ecoConfigManager
                     String[] itemSubParts = itemParts[0].split("\\.");
                     drop.setItem(Material.matchMaterial(itemSubParts[0]));
                     if (drop.getItem() == null) throw new Exception();
-                    drop.setData(itemSubParts.length > 1 ? Byte.parseByte(itemSubParts[1]) : 0);
+                    drop.setData(itemSubParts.length > 1 ? Byte.parseByte(itemSubParts[1]) : null);
+                    drop.setDurability(itemSubParts.length > 2 ? Short.parseShort(itemSubParts[2]) : null);
                     // check for range on amount
                     String[] amountRange = dropParts[1].split("-");
                     if (amountRange.length == 2) {

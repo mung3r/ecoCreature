@@ -12,7 +12,8 @@ import org.bukkit.material.MaterialData;
 public class ecoDrop
 {
     private Material item;
-    private byte data;
+    private Byte data;
+    private Short durability;
     private int maxAmount;
     private int minAmount;
     private Double percentage;
@@ -61,14 +62,24 @@ public class ecoDrop
         this.item = item;
     }
 
-    public int getData()
+    public Byte getData()
     {
         return data;
     }
 
-    public void setData(byte data)
+    public void setData(Byte data)
     {
         this.data = data;
+    }
+
+    public Short getDurability()
+    {
+        return durability;
+    }
+
+    public void setDurability(Short durability)
+    {
+        this.durability = durability;
     }
 
     public int getMaxAmount()
@@ -129,12 +140,15 @@ public class ecoDrop
 
             if (dropAmount > 0) {
                 ItemStack itemStack;
-                if (data == 0) {
+                if (data == null) {
                     itemStack = new ItemStack(item, dropAmount);
                 }
                 else {
                     MaterialData materialData = new MaterialData(item, data);
                     itemStack = materialData.toItemStack(dropAmount);
+                    if (durability != null) {
+                        itemStack.setDurability(durability);
+                    }
                 }
                 for (ecoEnchantment e : enchantments) {
                     itemStack.addEnchantment(e.getEnchantment(), e.getLevel());
@@ -150,6 +164,7 @@ public class ecoDrop
     @Override
     public String toString()
     {
-        return "ecoDrop [item=" + item + ", amount=" + maxAmount + ", percentage=" + percentage + "]";
+        return String.format("ecoDrop [item=%s, data=%s, durabilit=%s, maxAmount=%s, minAmount=%s, percentage=%s, isFixedDrops=%s, enchantments=%s, random=%s]",
+                item, data, durability, maxAmount, minAmount, percentage, isFixedDrops, enchantments, random);
     }
 }

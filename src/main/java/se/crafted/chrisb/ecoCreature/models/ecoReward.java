@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Creeper;
@@ -126,13 +127,17 @@ public class ecoReward
         }
     }
 
+    private static Random random = new Random();
+
     private String rewardName;
     private RewardType rewardType;
     private List<ecoDrop> drops;
     private Double coinMin;
     private Double coinMax;
     private Double coinPercentage;
-    private Double rewardAmount;
+    private Integer expMin;
+    private Integer expMax;
+    private Double expPercentage;
 
     private ecoMessage noRewardMessage;
     private ecoMessage rewardMessage;
@@ -198,6 +203,36 @@ public class ecoReward
         this.coinPercentage = coinPercentage;
     }
 
+    public Integer getExpMin()
+    {
+        return expMin;
+    }
+
+    public void setExpMin(Integer expMin)
+    {
+        this.expMin = expMin;
+    }
+
+    public Integer getExpMax()
+    {
+        return expMax;
+    }
+
+    public void setExpMax(Integer expMax)
+    {
+        this.expMax = expMax;
+    }
+
+    public Double getExpPercentage()
+    {
+        return expPercentage;
+    }
+
+    public void setExpPercentage(Double expPercentage)
+    {
+        this.expPercentage = expPercentage;
+    }
+
     public ecoMessage getNoRewardMessage()
     {
         return noRewardMessage;
@@ -246,27 +281,56 @@ public class ecoReward
 
     public Double getRewardAmount()
     {
-        if (coinMin == coinMax) {
-            rewardAmount = coinMax;
-        }
-        else if (coinMin > coinMax) {
-            rewardAmount = coinMin;
-        }
-        else {
-            rewardAmount = coinMin + Math.random() * (coinMax - coinMin);
-        }
+        Double rewardAmount;
 
         if (Math.random() > coinPercentage / 100.0D) {
             rewardAmount = 0.0D;
+        }
+        else {
+            if (coinMin == coinMax) {
+                rewardAmount = coinMax;
+            }
+            else if (coinMin > coinMax) {
+                rewardAmount = coinMin;
+            }
+            else {
+                rewardAmount = coinMin + Math.random() * (coinMax - coinMin);
+            }
         }
 
         return rewardAmount;
     }
 
+    public Integer getExpAmount()
+    {
+        Integer xpAmount;
+        if (expMin == null || expMax == null || expPercentage == null) {
+            xpAmount = null;
+        }
+        else {
+            if (Math.random() > expPercentage / 100.0D) {
+                xpAmount = 0;
+            }
+            else {
+                if (expMin == expMax) {
+                    xpAmount = expMin;
+                }
+                else if (expMin > expMax) {
+                    xpAmount = expMin;
+                }
+                else {
+                    xpAmount = expMin + random.nextInt(expMax - expMin + 1);
+                }
+            }
+        }
+
+        return xpAmount;
+    }
+
     @Override
     public String toString()
     {
-        return "ecoReward [rewardName=" + rewardName + ", creatureType=" + rewardType + ", drops=" + drops + ", coinMin=" + coinMin + ", coinMax=" + coinMax + ", coinPercentage=" + coinPercentage + ", rewardAmount=" + rewardAmount
-                + ", noRewardMessage=" + noRewardMessage + ", rewardMessage=" + rewardMessage + ", penaltyMessage=" + penaltyMessage + "]";
+        return String.format("ecoReward [rewardName=%s, rewardType=%s, drops=%s, coinMin=%s, coinMax=%s, coinPercentage=%s, expMin=%s, expMax=%s, expPercentage=%s, noRewardMessage=%s, rewardMessage=%s, penaltyMessage=%s]", rewardName,
+                rewardType, drops, coinMin, coinMax, coinPercentage, expMin, expMax, expPercentage, noRewardMessage, rewardMessage, penaltyMessage);
     }
 }

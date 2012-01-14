@@ -75,12 +75,16 @@ public class ecoRewardManager implements Cloneable
 
         if (rewards.containsKey(RewardType.PLAYER)) {
             ecoReward reward = rewards.get(RewardType.PLAYER);
+            Integer exp = reward.getExpAmount();
 
             amount = computeReward(event.getVictim(), reward);
             if (!reward.getDrops().isEmpty() && shouldOverrideDrops) {
                 event.getDrops().clear();
             }
             event.getDrops().addAll(reward.computeDrops());
+            if (exp != null) {
+                event.setDroppedExp(exp);
+            }
         }
         else if (plugin.hasEconomy()) {
             amount = isPercentPvpReward ? ecoCreature.economy.getBalance(event.getVictim().getName()) * (pvpRewardAmount / 100.0D) : pvpRewardAmount;
@@ -151,6 +155,7 @@ public class ecoRewardManager implements Cloneable
             }
         }
         else {
+            Integer exp = reward.getExpAmount();
             String weaponName = event.getTamedCreature() != null ? RewardType.fromEntity(event.getTamedCreature()).getName() : Material.getMaterial(event.getKiller().getItemInHand().getTypeId()).name();
             registerReward(event.getKiller(), reward, weaponName);
             try {
@@ -160,6 +165,9 @@ public class ecoRewardManager implements Cloneable
                         event.getDrops().clear();
                     }
                     event.getDrops().addAll(rewardDrops);
+                    if (exp != null) {
+                        event.setDroppedExp(exp);
+                    }
                 }
             }
             catch (IllegalArgumentException e) {
@@ -274,7 +282,7 @@ public class ecoRewardManager implements Cloneable
                 envAmount = amount * envMultiplier.get(player.getWorld().getEnvironment()) - amount;
             }
         }
-        catch (Exception exception) {
+        catch (UnsupportedOperationException exception) {
             if (warnGroupMultiplierSupport) {
                 ecoCreature.getLogger().warning("Permissions does not support group multiplier");
                 warnGroupMultiplierSupport = false;
