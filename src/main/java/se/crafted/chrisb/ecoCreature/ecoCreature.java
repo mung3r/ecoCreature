@@ -98,10 +98,10 @@ public class ecoCreature extends JavaPlugin
         PluginManager pluginManager = getServer().getPluginManager();
 
         pluginManager.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
-        pluginManager.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
+        pluginManager.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Monitor, this);
         pluginManager.registerEvent(Event.Type.CUSTOM_EVENT, rewardListener, Priority.Normal, this);
         if (deathTpPlusPlugin != null) {
-            pluginManager.registerEvent(Event.Type.CUSTOM_EVENT, new ecoStreakListener(this), Priority.Normal, this);
+            pluginManager.registerEvent(Event.Type.CUSTOM_EVENT, new ecoStreakListener(this), Priority.Monitor, this);
         }
     }
 
