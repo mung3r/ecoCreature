@@ -46,6 +46,7 @@ public class ecoRewardManager implements Cloneable
     public double dtpRewardAmount;
     public double dtpPenaltyAmount;
     public Boolean noFarm;
+    public Boolean noFarmFire;
     public boolean hasMobArenaRewards;
 
     public HashMap<String, Double> groupMultiplier;
@@ -234,8 +235,13 @@ public class ecoRewardManager implements Cloneable
             if (damageEvent instanceof EntityDamageByBlockEvent && damageEvent.getCause().equals(DamageCause.CONTACT)) {
                 event.getDrops().clear();
             }
-            else if (damageEvent.getCause() != null && (damageEvent.getCause().equals(DamageCause.FALL) || damageEvent.getCause().equals(DamageCause.DROWNING) || damageEvent.getCause().equals(DamageCause.SUFFOCATION))) {
-                event.getDrops().clear();
+            else if (damageEvent.getCause() != null) {
+                if (damageEvent.getCause().equals(DamageCause.FALL) || damageEvent.getCause().equals(DamageCause.DROWNING) || damageEvent.getCause().equals(DamageCause.SUFFOCATION)) {
+                    event.getDrops().clear();
+                }
+                else if (noFarmFire && (damageEvent.getCause().equals(DamageCause.FIRE) || damageEvent.getCause().equals(DamageCause.FIRE_TICK))) {
+                    event.getDrops().clear();
+                }
             }
         }
     }

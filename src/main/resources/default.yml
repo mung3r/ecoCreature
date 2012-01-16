@@ -55,7 +55,8 @@ System:
         # drowning or suffocation)
         # Default: false
         NoFarm: false
-
+        # Set this to true to include fire and fire_tick.
+        NoFarmFire: false
         #
         # MobArena: allow rewards when players are in the arena
         # Default: false
