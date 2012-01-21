@@ -152,7 +152,7 @@ public class ecoRewardManager implements Cloneable
 
         if (reward == null) {
             if (event.getKilledCreature() != null) {
-                ecoCreature.getLogger().warning("No reward found for " + event.getKilledCreature().getClass());
+                ecoCreature.getEcoLogger().warning("No reward found for " + event.getKilledCreature().getClass());
             }
         }
         else {
@@ -172,7 +172,7 @@ public class ecoRewardManager implements Cloneable
                 }
             }
             catch (IllegalArgumentException e) {
-                ecoCreature.getLogger().warning(e.getMessage());
+                ecoCreature.getEcoLogger().warning(e.getMessage());
             }
         }
     }
@@ -290,7 +290,7 @@ public class ecoRewardManager implements Cloneable
         }
         catch (UnsupportedOperationException exception) {
             if (warnGroupMultiplierSupport) {
-                ecoCreature.getLogger().warning("Permissions does not support group multiplier");
+                ecoCreature.getEcoLogger().warning("Permissions does not support group multiplier");
                 warnGroupMultiplierSupport = false;
             }
         }

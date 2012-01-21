@@ -54,15 +54,15 @@ public class ecoConfigManager
         }
         else if (oldConfigFile.exists()) {
             defaultConfig = new Configuration(oldConfigFile);
-            ecoCreature.getLogger().warning("Using old config file format " + OLD_CONFIG_FILE + ".");
-            ecoCreature.getLogger().warning("Backup or delete the old config to generate the new " + DEFAULT_CONFIG_FILE+ ".");
+            ecoCreature.getEcoLogger().warning("Using old config file format " + OLD_CONFIG_FILE + ".");
+            ecoCreature.getEcoLogger().warning("Backup or delete the old config to generate the new " + DEFAULT_CONFIG_FILE+ ".");
         }
         else {
             defaultConfig = getConfig(defaultConfigFile);
         }
 
         defaultConfig.load();
-        ecoCreature.getLogger().info("Loaded config defaults.");
+        ecoCreature.getEcoLogger().info("Loaded config defaults.");
         ecoMessageManager defaultMessageManager = loadMessageConfig(defaultConfig);
         ecoRewardManager defaultRewardManager = loadRewardConfig(defaultConfig);
         ecoCreature.messageManagers.put(DEFAULT_WORLD, defaultMessageManager);
@@ -76,7 +76,7 @@ public class ecoConfigManager
             if (worldConfigFile.exists()) {
                 worldConfig = getConfig(worldConfigFile);
                 worldConfig.load();
-                ecoCreature.getLogger().info("Loaded config for " + world.getName() + " world.");
+                ecoCreature.getEcoLogger().info("Loaded config for " + world.getName() + " world.");
                 ecoCreature.messageManagers.put(world.getName(), loadMessageConfig(worldConfig));
                 ecoCreature.rewardManagers.put(world.getName(), loadRewardConfig(worldConfig));
             }
@@ -151,7 +151,7 @@ public class ecoConfigManager
                     rewardManager.envMultiplier.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(config.getDouble("Gain.Environment." + environment + ".Amount", 1.0D)));
                 }
                 catch (Exception e) {
-                    ecoCreature.getLogger().warning("Skipping unknown environment name: " + environment);
+                    ecoCreature.getEcoLogger().warning("Skipping unknown environment name: " + environment);
                 }
             }
         }
@@ -177,7 +177,7 @@ public class ecoConfigManager
                         reward.setExpPercentage(Double.parseDouble(expPercentage));
                     }
                     catch(NumberFormatException e) {
-                        ecoCreature.getLogger().warning("Could not parse exp for " + rewardName);
+                        ecoCreature.getEcoLogger().warning("Could not parse exp for " + rewardName);
                     }
                 }
 
@@ -206,7 +206,7 @@ public class ecoConfigManager
             inputStream.close();
             outputStream.close();
 
-            ecoCreature.getLogger().info("Default settings file written: " + DEFAULT_CONFIG_FILE);
+            ecoCreature.getEcoLogger().info("Default settings file written: " + DEFAULT_CONFIG_FILE);
         }
 
         return new Configuration(new File(configFile.getPath()));
@@ -259,7 +259,7 @@ public class ecoConfigManager
                 }
             }
             catch (Exception exception) {
-                ecoCreature.getLogger().warning("Failed to parse drops: " + dropsString);
+                ecoCreature.getEcoLogger().warning("Failed to parse drops: " + dropsString);
             }
         }
 

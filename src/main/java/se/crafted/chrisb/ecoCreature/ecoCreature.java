@@ -146,7 +146,7 @@ public class ecoCreature extends JavaPlugin
         dataWorldsFolder.mkdirs();
     }
 
-    public static ecoLogger getLogger()
+    public static ecoLogger getEcoLogger()
     {
         return logger;
     }

@@ -109,7 +109,7 @@ public class ecoReward
                 if (creatureType != null) {
                     rewardType = RewardType.fromName(creatureType.getName());
                     if (rewardType == null) {
-                        ecoCreature.getLogger().warning("Unknown creature type: " + creatureType.getName());
+                        ecoCreature.getEcoLogger().warning("Unknown creature type: " + creatureType.getName());
                     }
                 }
             }
