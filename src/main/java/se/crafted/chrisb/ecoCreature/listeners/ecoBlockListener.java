@@ -13,7 +13,7 @@ public class ecoBlockListener implements Listener
     {
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(event = BlockBreakEvent.class, priority = EventPriority.MONITOR)
     public void onBlockBreak(BlockBreakEvent event)
     {
         if (event.isCancelled()) {
