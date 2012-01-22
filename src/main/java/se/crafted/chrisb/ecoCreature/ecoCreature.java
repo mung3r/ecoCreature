@@ -8,12 +8,10 @@ import java.util.Locale;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.simiancage.DeathTpPlus.DeathTpPlus;
@@ -39,10 +37,6 @@ public class ecoCreature extends JavaPlugin
     public static Economy economy = null;
     public static DeathTpPlus deathTpPlusPlugin = null;
     public static MobArenaHandler mobArenaHandler = null;
-
-    private final ecoBlockListener blockListener = new ecoBlockListener();
-    private final ecoEntityListener entityListener = new ecoEntityListener(this);
-    private final ecoDeathListener rewardListener = new ecoDeathListener();
 
     private static ecoLogger logger = new ecoLogger();
     public static HashMap<String, ecoMessageManager> messageManagers;
@@ -95,13 +89,11 @@ public class ecoCreature extends JavaPlugin
 
     private void registerEvents()
     {
-        PluginManager pluginManager = getServer().getPluginManager();
-
-        pluginManager.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
-        pluginManager.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Monitor, this);
-        pluginManager.registerEvent(Event.Type.CUSTOM_EVENT, rewardListener, Priority.Normal, this);
+        Bukkit.getPluginManager().registerEvents(new ecoBlockListener(), this);
+        Bukkit.getPluginManager().registerEvents(new ecoEntityListener(), this);
+        Bukkit.getPluginManager().registerEvents(new ecoDeathListener(), this);
         if (deathTpPlusPlugin != null) {
-            pluginManager.registerEvent(Event.Type.CUSTOM_EVENT, new ecoStreakListener(this), Priority.Monitor, this);
+            Bukkit.getPluginManager().registerEvents(new ecoStreakListener(), this);
         }
     }
 

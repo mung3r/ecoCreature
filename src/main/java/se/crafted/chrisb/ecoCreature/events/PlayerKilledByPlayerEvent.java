@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 @SuppressWarnings("serial")
 public class PlayerKilledByPlayerEvent extends Event
 {
+    private static final HandlerList handlers = new HandlerList();
     private EntityDeathEvent event;
 
     public PlayerKilledByPlayerEvent(EntityDeathEvent event)
@@ -43,5 +45,15 @@ public class PlayerKilledByPlayerEvent extends Event
     public void setDroppedExp(int exp)
     {
         event.setDroppedExp(exp);
+    }
+
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }

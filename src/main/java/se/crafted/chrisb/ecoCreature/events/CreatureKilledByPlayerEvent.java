@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -17,6 +18,7 @@ import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 @SuppressWarnings("serial")
 public class CreatureKilledByPlayerEvent extends Event
 {
+    private static final HandlerList handlers = new HandlerList();
     private EntityDeathEvent event;
 
     public CreatureKilledByPlayerEvent(EntityDeathEvent event)
@@ -69,5 +71,15 @@ public class CreatureKilledByPlayerEvent extends Event
     public void setDroppedExp(int exp)
     {
         event.setDroppedExp(exp);
+    }
+
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }
