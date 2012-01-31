@@ -19,7 +19,7 @@ public class ecoEntityListener implements Listener
     {
     }
 
-    @EventHandler(event = EntityDeathEvent.class, priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onEntityDeath(EntityDeathEvent event)
     {
         if (event instanceof PlayerDeathEvent) {

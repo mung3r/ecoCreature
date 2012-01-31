@@ -14,13 +14,13 @@ public class ecoStreakListener implements Listener
     {
     }
 
-    @EventHandler(event = DeathStreakEvent.class, priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onDeathStreakEvent(DeathStreakEvent event)
     {
         ecoCreature.getRewardManager(event.getPlayer()).registerDeathStreak(event.getPlayer(), event.getDeaths());
     }
 
-    @EventHandler(event = KillStreakEvent.class, priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onKillStreakEvent(KillStreakEvent event)
     {
         ecoCreature.getRewardManager(event.getPlayer()).registerKillStreak(event.getPlayer(), event.getKills());

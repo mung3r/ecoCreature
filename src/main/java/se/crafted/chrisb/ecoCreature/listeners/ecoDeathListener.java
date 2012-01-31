@@ -14,13 +14,13 @@ public class ecoDeathListener implements Listener
     {
     }
 
-    @EventHandler(event = CreatureKilledByPlayerEvent.class, priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onCreatureKilledByPlayer(CreatureKilledByPlayerEvent event)
     {
         ecoCreature.getRewardManager(event.getPlayer()).registerCreatureDeath(event);
     }
 
-    @EventHandler(event = PlayerKilledByPlayerEvent.class, priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerKilledByPlayer(PlayerKilledByPlayerEvent event)
     {
         ecoCreature.getRewardManager(event.getKiller()).registerPVPReward(event);
