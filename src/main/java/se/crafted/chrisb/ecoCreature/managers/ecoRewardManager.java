@@ -274,25 +274,23 @@ public class ecoRewardManager implements Cloneable
             amount = (double) Math.round(amount);
         }
 
-        try {
+        if (ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()) != null) {
             String group = ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()).toLowerCase();
             if (hasPermission(player, "gain.group") && groupMultiplier.containsKey(group)) {
                 groupAmount = amount * groupMultiplier.get(group) - amount;
             }
-
-            if (hasPermission(player, "gain.time") && timeMultiplier.containsKey(ecoEntityUtil.getTimePeriod(player))) {
-                timeAmount = amount * timeMultiplier.get(ecoEntityUtil.getTimePeriod(player)) - amount;
-            }
-
-            if (hasPermission(player, "gain.environment") && envMultiplier.containsKey(player.getWorld().getEnvironment())) {
-                envAmount = amount * envMultiplier.get(player.getWorld().getEnvironment()) - amount;
-            }
         }
-        catch (UnsupportedOperationException exception) {
-            if (warnGroupMultiplierSupport) {
-                ecoCreature.getEcoLogger().warning("Permissions does not support group multiplier");
-                warnGroupMultiplierSupport = false;
-            }
+        else if (warnGroupMultiplierSupport) {
+            ecoCreature.getEcoLogger().warning("Permissions does not support group multiplier");
+            warnGroupMultiplierSupport = false;
+        }
+
+        if (hasPermission(player, "gain.time") && timeMultiplier.containsKey(ecoEntityUtil.getTimePeriod(player))) {
+            timeAmount = amount * timeMultiplier.get(ecoEntityUtil.getTimePeriod(player)) - amount;
+        }
+
+        if (hasPermission(player, "gain.environment") && envMultiplier.containsKey(player.getWorld().getEnvironment())) {
+            envAmount = amount * envMultiplier.get(player.getWorld().getEnvironment()) - amount;
         }
 
         return amount + groupAmount + timeAmount + envAmount;
