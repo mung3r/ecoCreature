@@ -1,7 +1,6 @@
 package se.crafted.chrisb.ecoCreature;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -114,7 +113,7 @@ public class ecoCreature extends JavaPlugin
                 return;
             }
         }
-        catch (IOException e) {
+        catch (Exception e) {
             logger.severe("Failed to load config: " + e.toString());
             getPluginLoader().disablePlugin(this);
             return;

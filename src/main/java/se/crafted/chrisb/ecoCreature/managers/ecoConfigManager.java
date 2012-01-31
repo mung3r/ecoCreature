@@ -2,7 +2,6 @@ package se.crafted.chrisb.ecoCreature.managers;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +9,10 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.util.config.Configuration;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.models.ecoDrop;
@@ -42,18 +43,18 @@ public class ecoConfigManager
         return isEnabled;
     }
 
-    public void load() throws IOException
+    public void load() throws Exception
     {
-        Configuration defaultConfig;
+        FileConfiguration defaultConfig = new YamlConfiguration();
 
         File defaultConfigFile = new File(ecoCreature.dataFolder, DEFAULT_CONFIG_FILE);
         File oldConfigFile = new File(ecoCreature.dataFolder, OLD_CONFIG_FILE);
 
         if (defaultConfigFile.exists()) {
-            defaultConfig = new Configuration(defaultConfigFile);
+            defaultConfig.load(defaultConfigFile);
         }
         else if (oldConfigFile.exists()) {
-            defaultConfig = new Configuration(oldConfigFile);
+            defaultConfig.load(oldConfigFile);
             ecoCreature.getEcoLogger().warning("Using old config file format " + OLD_CONFIG_FILE + ".");
             ecoCreature.getEcoLogger().warning("Backup or delete the old config to generate the new " + DEFAULT_CONFIG_FILE+ ".");
         }
@@ -61,7 +62,6 @@ public class ecoConfigManager
             defaultConfig = getConfig(defaultConfigFile);
         }
 
-        defaultConfig.load();
         ecoCreature.getEcoLogger().info("Loaded config defaults.");
         ecoMessageManager defaultMessageManager = loadMessageConfig(defaultConfig);
         ecoRewardManager defaultRewardManager = loadRewardConfig(defaultConfig);
@@ -71,11 +71,10 @@ public class ecoConfigManager
         for (World world : plugin.getServer().getWorlds()) {
 
             File worldConfigFile = new File(ecoCreature.dataWorldsFolder, world.getName() + ".yml");
-            Configuration worldConfig;
+            FileConfiguration worldConfig = new YamlConfiguration();
 
             if (worldConfigFile.exists()) {
                 worldConfig = getConfig(worldConfigFile);
-                worldConfig.load();
                 ecoCreature.getEcoLogger().info("Loaded config for " + world.getName() + " world.");
                 ecoCreature.messageManagers.put(world.getName(), loadMessageConfig(worldConfig));
                 ecoCreature.rewardManagers.put(world.getName(), loadRewardConfig(worldConfig));
@@ -88,7 +87,7 @@ public class ecoConfigManager
         }
     }
 
-    public ecoMessageManager loadMessageConfig(Configuration config)
+    public ecoMessageManager loadMessageConfig(FileConfiguration config)
     {
         ecoMessageManager messageManager = new ecoMessageManager(plugin);
 
@@ -101,7 +100,7 @@ public class ecoConfigManager
         return messageManager;
     }
 
-    public ecoRewardManager loadRewardConfig(Configuration config)
+    public ecoRewardManager loadRewardConfig(FileConfiguration config)
     {
         ecoRewardManager rewardManager = new ecoRewardManager(plugin);
 
@@ -133,22 +132,25 @@ public class ecoConfigManager
         rewardManager.noFarmFire = config.getBoolean("System.Hunting.NoFarmFire", false);
         rewardManager.hasMobArenaRewards = config.getBoolean("System.Hunting.MobArenaRewards", false);
 
-        if (config.getKeys("Gain.Groups") != null) {
-            for (String group : config.getKeys("Gain.Groups")) {
-                rewardManager.groupMultiplier.put(group.toLowerCase(), Double.valueOf(config.getDouble("Gain.Groups." + group + ".Amount", 0.0D)));
+        ConfigurationSection groupGainConfig = config.getConfigurationSection("Gain.Groups");
+        if (groupGainConfig != null) {
+            for (String group : groupGainConfig.getKeys(false)) {
+                rewardManager.groupMultiplier.put(group.toLowerCase(), Double.valueOf(groupGainConfig.getConfigurationSection(group).getDouble("Amount", 0.0D)));
             }
         }
 
-        if (config.getKeys("Gain.Time") != null) {
-            for (String period : config.getKeys("Gain.Time")) {
-                rewardManager.timeMultiplier.put(TimePeriod.fromName(period), Double.valueOf(config.getDouble("Gain.Time." + period + ".Amount", 1.0D)));
+        ConfigurationSection timeGainConfig = config.getConfigurationSection("Gain.Time");
+        if (timeGainConfig != null) {
+            for (String period : timeGainConfig.getKeys(false)) {
+                rewardManager.timeMultiplier.put(TimePeriod.fromName(period), Double.valueOf(timeGainConfig.getConfigurationSection(period).getDouble("Amount", 1.0D)));
             }
         }
 
-        if (config.getKeys("Gain.Environment") != null) {
-            for (String environment : config.getKeys("Gain.Environment")) {
+        ConfigurationSection envGainConfig = config.getConfigurationSection("Gain.Environment");
+        if (envGainConfig != null) {
+            for (String environment : envGainConfig.getKeys(false)) {
                 try {
-                    rewardManager.envMultiplier.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(config.getDouble("Gain.Environment." + environment + ".Amount", 1.0D)));
+                    rewardManager.envMultiplier.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(envGainConfig.getConfigurationSection(environment).getDouble("Amount", 1.0D)));
                 }
                 catch (Exception e) {
                     ecoCreature.getEcoLogger().warning("Skipping unknown environment name: " + environment);
@@ -156,20 +158,21 @@ public class ecoConfigManager
             }
         }
 
-        if (config.getKeys("RewardTable") != null) {
-            for (String rewardName : config.getKeys("RewardTable")) {
+        ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
+        if (rewardTable != null) {
+            for (String rewardName : rewardTable.getKeys(false)) {
                 ecoReward reward = new ecoReward();
                 reward.setRewardName(rewardName);
                 reward.setRewardType(RewardType.fromName(rewardName));
 
-                String root = "RewardTable." + rewardName;
-                reward.setDrops(parseDrops(config.getString(root + ".Drops"), rewardManager.isFixedDrops));
-                reward.setCoinMax(config.getDouble(root + ".Coin_Maximum", 0));
-                reward.setCoinMin(config.getDouble(root + ".Coin_Minimum", 0));
-                reward.setCoinPercentage(config.getDouble(root + ".Coin_Percent", 0));
-                String expMin = config.getString(root + ".ExpMin");
-                String expMax = config.getString(root + ".ExpMax");
-                String expPercentage = config.getString(root + ".ExpPercent");
+                ConfigurationSection rewardConfig = rewardTable.getConfigurationSection(rewardName);
+                reward.setDrops(parseDrops(rewardConfig.getString("Drops"), rewardManager.isFixedDrops));
+                reward.setCoinMax(rewardConfig.getDouble("Coin_Maximum", 0));
+                reward.setCoinMin(rewardConfig.getDouble("Coin_Minimum", 0));
+                reward.setCoinPercentage(rewardConfig.getDouble("Coin_Percent", 0));
+                String expMin = rewardConfig.getString("ExpMin");
+                String expMax = rewardConfig.getString("ExpMax");
+                String expPercentage = rewardConfig.getString("ExpPercent");
                 if (expMin != null && expMax != null && expPercentage != null) {
                     try {
                         reward.setExpMin(Integer.parseInt(expMin));
@@ -181,9 +184,9 @@ public class ecoConfigManager
                     }
                 }
 
-                reward.setNoRewardMessage(new ecoMessage(convertMessage(config.getString(root + ".NoReward_Message", ecoMessageManager.NO_REWARD_MESSAGE)), config.getBoolean("System.Messages.NoReward", false)));
-                reward.setRewardMessage(new ecoMessage(convertMessage(config.getString(root + ".Reward_Message", ecoMessageManager.REWARD_MESSAGE)), true));
-                reward.setPenaltyMessage(new ecoMessage(convertMessage(config.getString(root + ".Penalty_Message", ecoMessageManager.PENALTY_MESSAGE)), true));
+                reward.setNoRewardMessage(new ecoMessage(convertMessage(rewardConfig.getString("NoReward_Message", ecoMessageManager.NO_REWARD_MESSAGE)), config.getBoolean("System.Messages.NoReward", false)));
+                reward.setRewardMessage(new ecoMessage(convertMessage(rewardConfig.getString("Reward_Message", ecoMessageManager.REWARD_MESSAGE)), true));
+                reward.setPenaltyMessage(new ecoMessage(convertMessage(rewardConfig.getString("Penalty_Message", ecoMessageManager.PENALTY_MESSAGE)), true));
 
                 rewardManager.rewards.put(reward.getRewardType(), reward);
             }
@@ -192,11 +195,15 @@ public class ecoConfigManager
         return rewardManager;
     }
 
-    private Configuration getConfig(File configFile) throws IOException
+    private FileConfiguration getConfig(File file) throws Exception
     {
-        if (!configFile.exists()) {
-            InputStream inputStream = ecoCreature.class.getResourceAsStream("/" + DEFAULT_CONFIG_FILE);
-            FileOutputStream outputStream = new FileOutputStream(configFile);
+        FileConfiguration config = new YamlConfiguration();
+
+        if (!file.exists()) {
+            file.getParentFile().mkdir();
+            file.createNewFile();
+            InputStream inputStream = ecoCreature.class.getResourceAsStream(File.separator + DEFAULT_CONFIG_FILE);
+            FileOutputStream outputStream = new FileOutputStream(file);
 
             byte[] buffer = new byte[8192];
             int length = 0;
@@ -209,7 +216,8 @@ public class ecoConfigManager
             ecoCreature.getEcoLogger().info("Default settings file written: " + DEFAULT_CONFIG_FILE);
         }
 
-        return new Configuration(new File(configFile.getPath()));
+        config.load(file);
+        return config;
     }
 
     private static String convertMessage(String message)
