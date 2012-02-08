@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.Blaze;
 import org.bukkit.entity.CaveSpider;
 import org.bukkit.entity.Chicken;
@@ -75,15 +77,13 @@ public class ecoEntityUtil
 
     public static boolean isNearSpawner(Entity entity)
     {
-        Location location = entity.getLocation();
+        Location loc = entity.getLocation();
+        BlockState[] tileEntities = entity.getLocation().getChunk().getTileEntities();
         int r = ecoCreature.getRewardManager(entity).campRadius;
-
-        for (int i = 0 - r; i <= r; i++) {
-            for (int j = 0 - r; j <= r; j++) {
-                for (int k = 0 - r; k <= r; k++) {
-                    if (location.getBlock().getRelative(i, j, k).getType().equals(Material.MOB_SPAWNER))
-                        return true;
-                }
+        r *= r;
+        for (BlockState state : tileEntities) {
+            if (state instanceof CreatureSpawner && state.getBlock().getLocation().distanceSquared(loc) <= r) {
+                return true;
             }
         }
         return false;
