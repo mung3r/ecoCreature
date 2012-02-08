@@ -157,6 +157,9 @@ public class ecoRewardManager implements Cloneable
         }
         else {
             Integer exp = reward.getExpAmount();
+            if (exp != null) {
+                event.setDroppedExp(exp);
+            }
             String weaponName = event.getTamedCreature() != null ? RewardType.fromEntity(event.getTamedCreature()).getName() : Material.getMaterial(event.getKiller().getItemInHand().getTypeId()).name();
             registerReward(event.getKiller(), reward, weaponName);
             try {
@@ -166,9 +169,6 @@ public class ecoRewardManager implements Cloneable
                         event.getDrops().clear();
                     }
                     event.getDrops().addAll(rewardDrops);
-                    if (exp != null) {
-                        event.setDroppedExp(exp);
-                    }
                 }
             }
             catch (IllegalArgumentException e) {
