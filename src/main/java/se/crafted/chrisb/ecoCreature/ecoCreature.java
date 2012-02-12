@@ -169,7 +169,7 @@ public class ecoCreature extends JavaPlugin
     {
         return economy != null;
     }
-    
+
     public Boolean has(Player player, String perm)
     {
         return permission.has(player, "ecoCreature." + perm) || permission.has(player, "ecocreature." + perm.toLowerCase());

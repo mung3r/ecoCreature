@@ -58,7 +58,7 @@ public class ecoReward
             for (RewardType type : EnumSet.allOf(RewardType.class)) {
                 mapping.put(type.name, type);
             }
-            
+
             // NOTE: backward compatibility
             mapping.put("MagmaCube".toLowerCase(), MAGMA_CUBE);
         }

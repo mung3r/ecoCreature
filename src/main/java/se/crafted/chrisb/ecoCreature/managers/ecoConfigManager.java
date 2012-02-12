@@ -56,7 +56,7 @@ public class ecoConfigManager
         else if (oldConfigFile.exists()) {
             defaultConfig.load(oldConfigFile);
             ecoCreature.getEcoLogger().warning("Using old config file format " + OLD_CONFIG_FILE + ".");
-            ecoCreature.getEcoLogger().warning("Backup or delete the old config to generate the new " + DEFAULT_CONFIG_FILE+ ".");
+            ecoCreature.getEcoLogger().warning("Backup or delete the old config to generate the new " + DEFAULT_CONFIG_FILE + ".");
         }
         else {
             defaultConfig = getConfig(defaultConfigFile);
@@ -181,7 +181,7 @@ public class ecoConfigManager
                         reward.setExpMax(Integer.parseInt(expMax));
                         reward.setExpPercentage(Double.parseDouble(expPercentage));
                     }
-                    catch(NumberFormatException e) {
+                    catch (NumberFormatException e) {
                         ecoCreature.getEcoLogger().warning("Could not parse exp for " + rewardName);
                     }
                 }
@@ -234,7 +234,7 @@ public class ecoConfigManager
     private List<ecoDrop> parseDrops(String dropsString, Boolean isFixedDrops)
     {
         List<ecoDrop> drops = new ArrayList<ecoDrop>();
-        
+
         if (dropsString != null && !dropsString.isEmpty()) {
             try {
                 for (String dropString : dropsString.split(";")) {
