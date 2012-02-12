@@ -28,6 +28,8 @@ public class ecoRewardManager implements Cloneable
     public Boolean isIntegerCurrency;
 
     public Boolean canCampSpawner;
+    public boolean campByDistance;
+    public boolean campByEntity;
     public boolean shouldClearDefaultDrops;
     public Boolean shouldOverrideDrops;
     public Boolean isFixedDrops;
@@ -136,13 +138,18 @@ public class ecoRewardManager implements Cloneable
             // TODO: message no arena awards?
             return;
         }
-        else if ((ecoEntityUtil.isNearSpawner(event.getKiller()) || ecoEntityUtil.isNearSpawner(event.getKilledCreature())) && !canCampSpawner) {
-            if (shouldClearCampDrops) {
-                event.getDrops().clear();
-                event.setDroppedExp(0);
+        else if (!canCampSpawner && (campByDistance || campByEntity)) {
+            //Reordered the conditional slightly, to make it more efficient, since 
+            //java will stop evaluating when it knows the outcome.
+            if( (campByEntity &&  ecoEntityUtil.isSpawnerMob(event.getKilledCreature())) ||
+                (campByDistance && (ecoEntityUtil.isNearSpawner(event.getKiller()) || ecoEntityUtil.isNearSpawner(event.getKilledCreature()))) ) {
+                    if (shouldClearCampDrops) {
+                        event.getDrops().clear();
+                        event.setDroppedExp(0);
+                    }
+                    ecoCreature.getMessageManager(event.getKiller()).sendMessage(ecoCreature.getMessageManager(event.getKiller()).noCampMessage, event.getKiller());
+                    return;
             }
-            ecoCreature.getMessageManager(event.getKiller()).sendMessage(ecoCreature.getMessageManager(event.getKiller()).noCampMessage, event.getKiller());
-            return;
         }
         else if (!hasPermission(event.getKiller(), "reward." + RewardType.fromEntity(event.getKilledCreature()).getName())) {
             return;

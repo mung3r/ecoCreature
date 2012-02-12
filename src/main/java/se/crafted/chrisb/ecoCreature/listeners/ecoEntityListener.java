@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
@@ -42,5 +43,14 @@ public class ecoEntityListener implements Listener
         }
 
         Bukkit.getPluginManager().callEvent(new CreatureKilledByPlayerEvent(event));
+    }
+    
+    @EventHandler(priority= EventPriority.MONITOR)
+    public void onCreatureSpawn(CreatureSpawnEvent event)
+    {
+        if (event.isCancelled())
+            return;
+        if(event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPAWNER))
+            ecoEntityUtil.setSpawnerMob(event.getEntity());
     }
 }
