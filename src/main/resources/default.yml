@@ -15,8 +15,17 @@ System:
         # Default: true
         ClearCampDrops: true
         #
-        # How many blocks away from a spawner you need to be to get a reward
-        # Default: 7            
+        # Determine camping by closeness to spawner
+        # Default: true
+        CampingByDistance: true
+        #
+        # Determine camping by remembering entities spawned by mobspawners.
+        # Default: false
+        CampingByEntity: false
+        #
+        # If CampingByDistance is true, then this is how many blocks
+        # away from a spawner you need to be to get a reward
+        # Default: 7             
         CampRadius: 7
         #
         # Do not drop anything except for rewards defined in this file

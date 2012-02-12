@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,6 +54,8 @@ public class ecoEntityUtil
     private static final long DAWN_START = 22000;
     private static final long SUNRISE_START = 23000;
 
+    private static ArrayList spawnerMobs = new ArrayList();
+    
     public static enum TimePeriod {
         DAY, SUNSET, DUSK, NIGHT, DAWN, SUNRISE, IDENTITY;
 
@@ -87,6 +90,21 @@ public class ecoEntityUtil
             }
         }
         return false;
+    }
+    
+    public static boolean isSpawnerMob(Entity entity)
+    {
+        return spawnerMobs.remove((Integer)entity.getEntityId());
+    }
+    
+    public static void setSpawnerMob(Entity entity)
+    {
+        //Only add to the array if we're tracking by entity. Avoids a memory leak.
+        if(!ecoCreature.getRewardManager(entity).canCampSpawner 
+                && ecoCreature.getRewardManager(entity).campByEntity) {
+            if(!spawnerMobs.contains(entity.getEntityId()))
+                spawnerMobs.add(entity.getEntityId());
+        }
     }
 
     public static CreatureType getCreatureType(Entity entity)
