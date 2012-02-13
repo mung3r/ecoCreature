@@ -130,8 +130,8 @@ Gain:
 
 RewardTable:
     #
-    # Format for Drops:
-    #
+    # Drop format and Examples:
+    ###########################
     #   Drops: ITEM_ID.DATA_ID,ENCHANTMENT.LEVEL:[MIN-]MAX:CHANCE;ITEM_ID.DATA_ID:[MIN-]MAX:CHANCE;...
     #
     # Drop example 1: drop 0 to 5 diamonds 50% of the time
@@ -156,7 +156,7 @@ RewardTable:
     #   Drops: 'diamond_pickaxe,durability.3:1:25;diamond_sword,damage_all.5:1:25;potion.2:1-1:25'
     #
     # Coin reward examples:
-    #
+    #######################
     # Coin example 1: award 0 to 10 coin 50% of the time
     #   Coin_Minimum: 0.0 
     #   Coin_Maximum: 10.0
@@ -177,8 +177,25 @@ RewardTable:
     #   Coin_Maximum: 0
     #   Coin_percent: 50.0
     #
-    # Custom reward messages
+    # Experience orb examples:
+    ##########################
+    # Exp orb example 1: award 0 to 10 exp 50% of the time
+    #   ExpMin: 0.0 
+    #   ExpMax: 10.0
+    #   ExpPercent: 50.0
     #
+    # Exp orb example 2: award 10 exp 100% of the time
+    #   ExpMin: 10.0 
+    #   ExpMax: 10.0
+    #   ExpPercent: 50.0
+    #
+    # Exp orb example 3: award nothing
+    #   ExpMin: 0.0 
+    #   ExpMax: 0.0
+    #   ExpPercent: 0.0
+    #
+    # Custom reward messages:
+    #########################
     #   &[0-9a-f] - color codes
     #   <plr> - display player name in a message
     #   <crt> - display creature name in a message
@@ -186,6 +203,7 @@ RewardTable:
     #   <itm> - display item used to kill in a message
     #
     # Message examples:
+    ###################
     #   NoReward_Message: '&7You slayed a &5<crt>&7 using a &3<itm>.'
     #   Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
     #   Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
@@ -221,7 +239,7 @@ RewardTable:
         Coin_Percent: 50.0
     #
     # IMPORTANT NOTE:
-    # This reward requires "classic" build of DeathTpPlus here http://tiny.cc/dtpclassic.
+    # This reward requires "classic" build of DeathTpPlus here http://tiny.cc/heroicdeath2.
     # Also note that the penalty amount is multiplied by the number of deaths in the streak.
     DeathStreak:
         Coin_Minimum: -1.00
@@ -250,7 +268,7 @@ RewardTable:
         Coin_Percent: 50.00
     #
     # IMPORTANT NOTE:
-    # This reward requires "classic" build of DeathTpPlus here http://tiny.cc/dtpclassic.
+    # This reward requires "classic" build of DeathTpPlus here http://tiny.cc/heroicdeath2.
     # Also note that the reward amount is multiplied by the number of kills in the streak.
     KillStreak:
         Drops: 'diamond:1:100'
