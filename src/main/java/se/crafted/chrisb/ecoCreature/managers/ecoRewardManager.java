@@ -276,15 +276,19 @@ public class ecoRewardManager implements Cloneable
         Double timeAmount = 0D;
         Double envAmount = 0D;
 
-        if (ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()) != null) {
-            String group = ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()).toLowerCase();
-            if (hasPermission(player, "gain.group") && groupMultiplier.containsKey(group)) {
-                groupAmount = amount * groupMultiplier.get(group) - amount;
+        try {
+            if (ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()) != null) {
+                String group = ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()).toLowerCase();
+                if (hasPermission(player, "gain.group") && groupMultiplier.containsKey(group)) {
+                    groupAmount = amount * groupMultiplier.get(group) - amount;
+                }
             }
         }
-        else if (warnGroupMultiplierSupport) {
-            ecoCreature.getEcoLogger().warning("Permissions does not support group multiplier");
-            warnGroupMultiplierSupport = false;
+        catch (UnsupportedOperationException e) {
+            if (warnGroupMultiplierSupport) {
+                ecoCreature.getEcoLogger().warning(e.getMessage());
+                warnGroupMultiplierSupport = false;
+            }
         }
 
         if (hasPermission(player, "gain.time") && timeMultiplier.containsKey(ecoEntityUtil.getTimePeriod(player))) {
