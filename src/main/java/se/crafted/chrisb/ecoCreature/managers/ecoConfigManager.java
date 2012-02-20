@@ -204,7 +204,7 @@ public class ecoConfigManager
         if (!file.exists()) {
             file.getParentFile().mkdir();
             file.createNewFile();
-            InputStream inputStream = ecoCreature.class.getResourceAsStream(File.separator + DEFAULT_CONFIG_FILE);
+            InputStream inputStream = ecoCreature.class.getResourceAsStream("/" + DEFAULT_CONFIG_FILE);
             FileOutputStream outputStream = new FileOutputStream(file);
 
             byte[] buffer = new byte[8192];
