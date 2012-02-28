@@ -9,7 +9,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-@SuppressWarnings("serial")
 public class PlayerKilledByPlayerEvent extends Event
 {
     private static final HandlerList handlers = new HandlerList();
@@ -17,8 +16,6 @@ public class PlayerKilledByPlayerEvent extends Event
 
     public PlayerKilledByPlayerEvent(EntityDeathEvent event)
     {
-        super("PlayerKilledByPlayerEvent");
-
         this.event = event;
     }
 

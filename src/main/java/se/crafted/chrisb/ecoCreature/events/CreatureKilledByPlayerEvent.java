@@ -23,8 +23,6 @@ public class CreatureKilledByPlayerEvent extends Event
 
     public CreatureKilledByPlayerEvent(EntityDeathEvent event)
     {
-        super("CreatureKilledByPlayerEvent");
-
         this.event = event;
     }
 
