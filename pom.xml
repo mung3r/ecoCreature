@@ -16,7 +16,7 @@
     </repository>
     <repository>
       <id>deathtpplus-repo</id>
-      <url>http://ci.bighatchet.com/plugin/repository/project/DeathTpPlus/LastSuccessful/repository/</url>
+      <url>http://ci.herocraftonline.com/plugin/repository/project/HeroicDeath2/LastSuccessful/repository/</url>
     </repository>
     <repository>
       <id>sk89q-mvn2</id>
@@ -46,7 +46,7 @@
     </dependency>
     <dependency>
       <groupId>org.simiancage.deathtpplus</groupId>
-      <artifactId>DeathTpPlus</artifactId>
+      <artifactId>HeroicDeath2</artifactId>
       <version>1.95-SNAPSHOT</version>
     </dependency>
     <dependency>
@@ -115,7 +115,7 @@
   </issueManagement>
   <ciManagement>
     <system>jenkins</system>
-    <url>http://ci.bighatchet.com/job/ecoCreature/</url>
+    <url>http://ci.herocraftonline.com/job/ecoCreature/</url>
   </ciManagement>
   <scm>
     <connection>scm:git:git://github.com:mung3r/ecoCreature.git</connection>
