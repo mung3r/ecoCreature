@@ -15,7 +15,7 @@
     </repository>
     <repository>
       <id>deathtpplus-repo</id>
-      <url>http://ci.milkbowl.net/plugin/repository/project/DeathTpPlus/LastSuccessful/repository/</url>
+      <url>http://ci.milkbowl.net/plugin/repository/project/HeroicDeath2/LastSuccessful/repository/</url>
     </repository>
   </repositories>
   <dependencies>
@@ -27,22 +27,22 @@
   	<dependency>
   		<groupId>org.bukkit</groupId>
   		<artifactId>bukkit</artifactId>
-  		<version>1.1-R3</version>
+  		<version>1.1-R6</version>
   	</dependency>
     <dependency>
     	<groupId>net.milkbowl.vault</groupId>
     	<artifactId>Vault</artifactId>
-    	<version>0.0.1-SNAPSHOT</version>
+    	<version>1.2.12-SNAPSHOT</version>
     </dependency>
     <dependency>
         <groupId>org.simiancage.deathtpplus</groupId>
-        <artifactId>DeathTpPlus</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <artifactId>HeroicDeath2</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
         <groupId>com.garbagemule.MobArena</groupId>
         <artifactId>MobArena</artifactId>
-        <version>0.94.3.24</version>
+        <version>0.94.4.49</version>
         <scope>system</scope>
         <systemPath>${project.basedir}/lib/MobArena.jar</systemPath>
     </dependency>
