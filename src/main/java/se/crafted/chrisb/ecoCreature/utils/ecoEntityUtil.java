@@ -154,10 +154,6 @@ public class ecoEntityUtil
             return CreatureType.ZOMBIE;
         if (entity instanceof Wolf)
             return CreatureType.WOLF;
-
-        // Monster is a parent class and needs to be last
-        if (entity instanceof Monster)
-            return CreatureType.MONSTER;
         return null;
     }
 
