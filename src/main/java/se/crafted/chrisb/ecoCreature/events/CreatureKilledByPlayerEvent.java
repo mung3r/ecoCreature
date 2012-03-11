@@ -15,7 +15,6 @@ import se.crafted.chrisb.ecoCreature.models.ecoReward;
 import se.crafted.chrisb.ecoCreature.models.ecoReward.RewardType;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 
-@SuppressWarnings("serial")
 public class CreatureKilledByPlayerEvent extends Event
 {
     private static final HandlerList handlers = new HandlerList();

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.bukkit.entity.CreatureType;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -15,7 +15,6 @@ import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 
 public class ecoReward
 {
@@ -105,7 +104,7 @@ public class ecoReward
                 }
             }
             else {
-                CreatureType creatureType = ecoEntityUtil.getCreatureType(entity);
+                EntityType creatureType = entity.getType();
                 if (creatureType != null) {
                     rewardType = RewardType.fromName(creatureType.getName());
                     if (rewardType == null) {

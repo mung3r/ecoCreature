@@ -3,7 +3,7 @@
   <groupId>se.crafted.chrisb</groupId>
   <artifactId>ecoCreature</artifactId>
   <name>ecoCreature</name>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.9e-SNAPSHOT</version>
   <repositories>
     <repository>
       <id>bukkit-repo</id>
@@ -27,7 +27,7 @@
   	<dependency>
   		<groupId>org.bukkit</groupId>
   		<artifactId>bukkit</artifactId>
-  		<version>1.1-R3</version>
+  		<version>1.1-R6</version>
   	</dependency>
     <dependency>
     	<groupId>net.milkbowl.vault</groupId>
