@@ -291,6 +291,10 @@ RewardTable:
         Coin_Minimum: 0.10
         Coin_Maximum: 2.50
         Coin_Percent: 1.0
+    Ozelot:
+        Coin_Minimum: 1.00
+        Coin_Maximum: 2.00
+        Coin_Percent: 1.0
     Pig:
         Drops: 'pork:2:75'
         Coin_Minimum: 0.10
@@ -362,6 +366,10 @@ RewardTable:
     Villager:
         Coin_Minimum: 1.00
         Coin_Maximum: 2.00
+        Coin_Percent: 1.0
+    VillagerGolem:
+        Coin_Minimum: 1.00
+        Coin_Maximum: 3.50
         Coin_Percent: 1.0
     Zombie:
         Drops: 'rotten flesh:2:75'
