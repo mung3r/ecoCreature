@@ -10,12 +10,8 @@
       <url>http://repo.bukkit.org/content/groups/public/</url>
     </repository>
     <repository>
-      <id>vault-repo</id>
-      <url>http://ci.milkbowl.net/plugin/repository/project/Vault/LastSuccessful/repository/</url>
-    </repository>
-    <repository>
-      <id>deathtpplus-repo</id>
-      <url>http://ci.milkbowl.net/plugin/repository/project/DeathTpPlus/LastSuccessful/repository/</url>
+      <id>milkbowl-repo</id>
+      <url>http://ci.milkbowl.net/plugin/repository/everything/</url>
     </repository>
   </repositories>
   <dependencies>
@@ -27,17 +23,17 @@
   	<dependency>
   		<groupId>org.bukkit</groupId>
   		<artifactId>bukkit</artifactId>
-  		<version>1.2.3-R0.2</version>
+  		<version>1.2.4-R0.1-SNAPSHOT</version>
   	</dependency>
     <dependency>
     	<groupId>net.milkbowl.vault</groupId>
     	<artifactId>Vault</artifactId>
-    	<version>0.0.1-SNAPSHOT</version>
+    	<version>1.2.13-SNAPSHOT</version>
     </dependency>
     <dependency>
         <groupId>org.simiancage.deathtpplus</groupId>
-        <artifactId>DeathTpPlus</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <artifactId>HeroicDeath2</artifactId>
+        <version>1.95-SNAPSHOT</version>
     </dependency>
     <dependency>
         <groupId>com.garbagemule.MobArena</groupId>
