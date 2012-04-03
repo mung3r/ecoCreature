@@ -44,7 +44,7 @@ public class ecoReward
         SILVERFISH("Silverfish"),
         SKELETON("Skeleton"),
         SLIME("Slime"),
-        SNOWMAN("Snowman"),
+        SNOWMAN("SnowMan"),
         SPAWNER("Spawner"),
         SPIDER("Spider"),
         SQUID("Squid"),
