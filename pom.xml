@@ -10,7 +10,11 @@
       <url>http://repo.bukkit.org/content/groups/public/</url>
     </repository>
     <repository>
-      <id>milkbowl-repo</id>
+      <id>vault-repo</id>
+      <url>http://ci.milkbowl.net/plugin/repository/project/Vault/LastSuccessful/repository/</url>
+    </repository>
+    <repository>
+      <id>deathtpplus-repo</id>
       <url>http://ci.milkbowl.net/plugin/repository/project/HeroicDeath2/LastSuccessful/repository/</url>
     </repository>
   </repositories>
