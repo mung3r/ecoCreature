@@ -15,7 +15,7 @@
     </repository>
     <repository>
       <id>deathtpplus-repo</id>
-      <url>http://ci.milkbowl.net/plugin/repository/project/HeroicDeath2/LastSuccessful/repository/</url>
+      <url>http://ci.bighatchet.com/plugin/repository/project/DeathTpPlus/LastSuccessful/repository/</url>
     </repository>
   </repositories>
   <dependencies>
@@ -36,7 +36,7 @@
     </dependency>
     <dependency>
         <groupId>org.simiancage.deathtpplus</groupId>
-        <artifactId>HeroicDeath2</artifactId>
+        <artifactId>DeathTpPlus</artifactId>
         <version>1.95-SNAPSHOT</version>
     </dependency>
     <dependency>
