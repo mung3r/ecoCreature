@@ -278,7 +278,7 @@ RewardTable:
         NoReward_Message: ''
         Reward_Message: '&7You earned &6<amt>&7 for that kill streak!'
         Penalty_Message: '&7That kill streak cost you &6<amt>&7.'
-    MagmaCube:
+    LavaSlime:
         Coin_Minimum: 0.00
         Coin_Maximum: 2.00
         Coin_Percent: 50.00
@@ -334,7 +334,7 @@ RewardTable:
         Coin_Minimum: 0.00
         Coin_Maximum: 2.00
         Coin_Percent: 50.00
-    Snowman:
+    SnowMan:
         Coin_Minimum: 1.00
         Coin_Maximum: 2.00
         Coin_Percent: 100.0
