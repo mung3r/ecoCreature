@@ -272,15 +272,17 @@ public class ecoRewardManager implements Cloneable
     private Double computeReward(Player player, ecoReward reward)
     {
         Double amount = reward.getRewardAmount();
-        Double groupAmount = 0D;
-        Double timeAmount = 0D;
-        Double envAmount = 0D;
+        //Double groupAmount = 0D;
+        //Double timeAmount = 0D;
+        //Double envAmount = 0D;
+        Double TotalAmount = 0D;
 
         try {
             if (ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()) != null) {
                 String group = ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()).toLowerCase();
                 if (hasPermission(player, "gain.group") && groupMultiplier.containsKey(group)) {
-                    groupAmount = amount * groupMultiplier.get(group) - amount;
+                    //groupAmount = amount * groupMultiplier.get(group) - amount;
+                    TotalAmount = amount * groupMultiplier,get(group);
                 }
             }
         }
@@ -292,15 +294,17 @@ public class ecoRewardManager implements Cloneable
         }
 
         if (hasPermission(player, "gain.time") && timeMultiplier.containsKey(ecoEntityUtil.getTimePeriod(player))) {
-            timeAmount = amount * timeMultiplier.get(ecoEntityUtil.getTimePeriod(player)) - amount;
+            //timeAmount = amount * timeMultiplier.get(ecoEntityUtil.getTimePeriod(player)) - amount;
+            TotalAmount = TotalAmount * timeMultiplier.get(ecoEntityUtil.getTimePeriod(player)) 
         }
 
         if (hasPermission(player, "gain.environment") && envMultiplier.containsKey(player.getWorld().getEnvironment())) {
-            envAmount = amount * envMultiplier.get(player.getWorld().getEnvironment()) - amount;
+            //envAmount = amount * envMultiplier.get(player.getWorld().getEnvironment()) - amount;
+            TotalAmount = TotalAmount * envMultiplier.get(player.getWorld().getEnvironment())
         }
 
-        Double total = amount + groupAmount + timeAmount + envAmount;
-        return isIntegerCurrency ? (double) Math.round(total) : total;
+        //Double total = amount + groupAmount + timeAmount + envAmount;
+        return isIntegerCurrency ? (double) Math.round(TotalAmount) : TotalAmount;
     }
 
     private Boolean hasPermission(Player player, String perm)
