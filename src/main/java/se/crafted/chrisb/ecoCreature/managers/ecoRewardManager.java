@@ -275,14 +275,14 @@ public class ecoRewardManager implements Cloneable
         //Double groupAmount = 0D;
         //Double timeAmount = 0D;
         //Double envAmount = 0D;
-        Double TotalAmount = 0D;
+        Double TotalAmount = amount;
 
         try {
             if (ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()) != null) {
                 String group = ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()).toLowerCase();
                 if (hasPermission(player, "gain.group") && groupMultiplier.containsKey(group)) {
                     //groupAmount = amount * groupMultiplier.get(group) - amount;
-                    TotalAmount = amount * groupMultiplier,get(group);
+                    TotalAmount = TotalAmount * groupMultiplier.get(group);
                 }
             }
         }
