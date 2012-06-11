@@ -11,7 +11,7 @@
     </repository>
     <repository>
       <id>vault-repo</id>
-      <url>http://ci.milkbowl.net/plugin/repository/project/Vault/LastSuccessful/repository/</url>
+      <url>http://ci.herocraftonline.com/plugin/repository/everything/</url>
     </repository>
     <repository>
       <id>deathtpplus-repo</id>
@@ -58,7 +58,7 @@
   </issueManagement>
   <ciManagement>
   	<system>jenkins</system>
-  	<url>http://ci.milkbowl.net/job/ecoCreature/</url>
+  	<url>http://ci.bighatchet.com/job/ecoCreature/</url>
   </ciManagement>
   <scm>
   	<connection>scm:git:git://github.com:mung3r/ecoCreature.git</connection>
