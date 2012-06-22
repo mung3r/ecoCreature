@@ -3,16 +3,13 @@ package se.crafted.chrisb.ecoCreature.managers;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.models.ecoDrop;
@@ -71,10 +68,9 @@ public class ecoConfigManager
         for (World world : plugin.getServer().getWorlds()) {
 
             File worldConfigFile = new File(ecoCreature.dataWorldsFolder, world.getName() + ".yml");
-            FileConfiguration worldConfig = new YamlConfiguration();
 
             if (worldConfigFile.exists()) {
-                worldConfig = getConfig(worldConfigFile);
+                FileConfiguration worldConfig = getConfig(worldConfigFile);
                 ecoCreature.getEcoLogger().info("Loaded config for " + world.getName() + " world.");
                 ecoCreature.messageManagers.put(world.getName(), loadMessageConfig(worldConfig));
                 ecoCreature.rewardManagers.put(world.getName(), loadRewardConfig(worldConfig));
@@ -168,7 +164,13 @@ public class ecoConfigManager
                 reward.setRewardType(RewardType.fromName(rewardName));
 
                 ConfigurationSection rewardConfig = rewardTable.getConfigurationSection(rewardName);
-                reward.setDrops(parseDrops(rewardConfig.getString("Drops"), rewardManager.isFixedDrops));
+                if (rewardConfig.getList("Drops") != null) {
+                    List<String> dropsList = (List<String>) rewardConfig.getList("Drops");
+                    reward.setDrops(ecoDrop.parseDrops(dropsList, rewardManager.isFixedDrops));
+                }
+                else {
+                    reward.setDrops(ecoDrop.parseDrops(rewardConfig.getString("Drops"), rewardManager.isFixedDrops));
+                }
                 reward.setCoinMax(rewardConfig.getDouble("Coin_Maximum", 0));
                 reward.setCoinMin(rewardConfig.getDouble("Coin_Minimum", 0));
                 reward.setCoinPercentage(rewardConfig.getDouble("Coin_Percent", 0));
@@ -231,48 +233,4 @@ public class ecoConfigManager
         return null;
     }
 
-    private List<ecoDrop> parseDrops(String dropsString, Boolean isFixedDrops)
-    {
-        List<ecoDrop> drops = new ArrayList<ecoDrop>();
-
-        if (dropsString != null && !dropsString.isEmpty()) {
-            try {
-                for (String dropString : dropsString.split(";")) {
-                    ecoDrop drop = new ecoDrop();
-                    String[] dropParts = dropString.split(":");
-                    String[] itemParts = dropParts[0].split(",");
-                    // check for enchantment
-                    if (itemParts.length > 1) {
-                        for (int i = 1; i < itemParts.length; i++) {
-                            String[] enchantParts = itemParts[i].split("\\.");
-                            drop.addEnchantment(Enchantment.getByName(enchantParts[0].toUpperCase()), enchantParts.length > 1 ? Integer.parseInt(enchantParts[1]) : 1);
-                        }
-                    }
-                    // check for data id
-                    String[] itemSubParts = itemParts[0].split("\\.");
-                    drop.setItem(Material.matchMaterial(itemSubParts[0]));
-                    if (drop.getItem() == null) throw new Exception();
-                    drop.setData(itemSubParts.length > 1 ? Byte.parseByte(itemSubParts[1]) : null);
-                    drop.setDurability(itemSubParts.length > 2 ? Short.parseShort(itemSubParts[2]) : null);
-                    // check for range on amount
-                    String[] amountRange = dropParts[1].split("-");
-                    if (amountRange.length == 2) {
-                        drop.setMinAmount(Integer.parseInt(amountRange[0]));
-                        drop.setMaxAmount(Integer.parseInt(amountRange[1]));
-                    }
-                    else {
-                        drop.setMaxAmount(Integer.parseInt(dropParts[1]));
-                    }
-                    drop.setPercentage(Double.parseDouble(dropParts[2]));
-                    drop.setIsFixedDrops(isFixedDrops);
-                    drops.add(drop);
-                }
-            }
-            catch (Exception exception) {
-                ecoCreature.getEcoLogger().warning("Failed to parse drops: " + dropsString);
-            }
-        }
-
-        return drops;
-    }
 }

@@ -21,7 +21,7 @@ import se.crafted.chrisb.ecoCreature.models.ecoReward.RewardType;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil.TimePeriod;
 
-public class ecoRewardManager implements Cloneable
+public class ecoRewardManager
 {
     public static Boolean warnGroupMultiplierSupport = true;
 

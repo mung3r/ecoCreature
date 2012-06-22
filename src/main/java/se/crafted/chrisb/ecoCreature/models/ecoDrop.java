@@ -1,6 +1,9 @@
 package se.crafted.chrisb.ecoCreature.models;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -8,6 +11,8 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
+
+import se.crafted.chrisb.ecoCreature.ecoCreature;
 
 public class ecoDrop
 {
@@ -17,7 +22,7 @@ public class ecoDrop
     private int maxAmount;
     private int minAmount;
     private Double percentage;
-    private Boolean isFixedDrops;
+    private boolean isFixedDrops;
     private Set<ecoEnchantment> enchantments;
     private Random random = new Random();
 
@@ -26,7 +31,7 @@ public class ecoDrop
         this.enchantments = new HashSet<ecoEnchantment>();
     }
 
-    class ecoEnchantment
+    private static class ecoEnchantment
     {
         private Enchantment enchantment;
         private int level;
@@ -112,12 +117,12 @@ public class ecoDrop
         this.percentage = percentage;
     }
 
-    public Boolean getIsFixedDrops()
+    public boolean getIsFixedDrops()
     {
         return isFixedDrops;
     }
 
-    public void setIsFixedDrops(Boolean isFixedDrops)
+    public void setIsFixedDrops(boolean isFixedDrops)
     {
         this.isFixedDrops = isFixedDrops;
     }
@@ -166,5 +171,63 @@ public class ecoDrop
     {
         return String.format("ecoDrop [item=%s, data=%s, durabilit=%s, maxAmount=%s, minAmount=%s, percentage=%s, isFixedDrops=%s, enchantments=%s, random=%s]",
                 item, data, durability, maxAmount, minAmount, percentage, isFixedDrops, enchantments, random);
+    }
+
+    public static List<ecoDrop> parseDrops(String dropsConfig, boolean isFixedDrops)
+    {
+        List<String> drops = new ArrayList<String>();
+
+        if (dropsConfig != null && !dropsConfig.isEmpty()) {
+            drops.addAll(Arrays.asList(dropsConfig.split(";")));
+        }
+
+        return parseDrops(drops, isFixedDrops);
+    }
+
+    public static List<ecoDrop> parseDrops(List<String> dropsConfig, boolean isFixedDrops)
+    {
+        List<ecoDrop> drops = new ArrayList<ecoDrop>();
+
+        if (dropsConfig != null && !dropsConfig.isEmpty()) {
+            try {
+                for (String dropString : dropsConfig) {
+                    ecoDrop drop = new ecoDrop();
+                    String[] dropParts = dropString.split(":");
+                    String[] itemParts = dropParts[0].split(",");
+                    // check for enchantment
+                    if (itemParts.length > 1) {
+                        for (int i = 1; i < itemParts.length; i++) {
+                            String[] enchantParts = itemParts[i].split("\\.");
+                            drop.addEnchantment(Enchantment.getByName(enchantParts[0].toUpperCase()), enchantParts.length > 1 ? Integer.parseInt(enchantParts[1]) : 1);
+                        }
+                    }
+                    // check for data id
+                    String[] itemSubParts = itemParts[0].split("\\.");
+                    drop.setItem(Material.matchMaterial(itemSubParts[0]));
+                    if (drop.getItem() == null)
+                        throw new Exception();
+                    drop.setData(itemSubParts.length > 1 ? Byte.parseByte(itemSubParts[1]) : null);
+                    drop.setDurability(itemSubParts.length > 2 ? Short.parseShort(itemSubParts[2]) : null);
+                    // check for range on amount
+                    String[] amountRange = dropParts[1].split("-");
+                    if (amountRange.length == 2) {
+                        drop.setMinAmount(Integer.parseInt(amountRange[0]));
+                        drop.setMaxAmount(Integer.parseInt(amountRange[1]));
+                    }
+                    else {
+                        drop.setMaxAmount(Integer.parseInt(dropParts[1]));
+                    }
+                    drop.setPercentage(Double.parseDouble(dropParts[2]));
+                    drop.setIsFixedDrops(isFixedDrops);
+                    System.out.println("DEBUG: added " + drop);
+                    drops.add(drop);
+                }
+            }
+            catch (Exception exception) {
+                ecoCreature.getEcoLogger().warning("Failed to parse drops: " + dropsConfig);
+            }
+        }
+
+        return drops;
     }
 }
