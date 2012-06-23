@@ -288,7 +288,7 @@ public class ecoReward
             rewardAmount = 0.0D;
         }
         else {
-            if (coinMin == coinMax) {
+            if (coinMin.equals(coinMax)) {
                 rewardAmount = coinMax;
             }
             else if (coinMin > coinMax) {
@@ -313,7 +313,7 @@ public class ecoReward
                 xpAmount = 0;
             }
             else {
-                if (expMin == expMax) {
+                if (expMin.equals(expMax)) {
                     xpAmount = expMin;
                 }
                 else if (expMin > expMax) {

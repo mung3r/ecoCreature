@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.models.ecoMessage;
 
-public class ecoMessageManager implements Cloneable
+public class ecoMessageManager
 {
     private final static String PLAYER_TOKEN = "<plr>";
     private final static String AMOUNT_TOKEN = "<amt>";
@@ -69,12 +69,13 @@ public class ecoMessageManager implements Cloneable
     private static String toCamelCase(String rawItemName)
     {
         String[] rawItemNameParts = rawItemName.split("_");
-        String itemName = "";
+        StringBuilder itemNameBuilder = new StringBuilder("");
 
         for (String itemNamePart : rawItemNameParts) {
-            itemName = itemName + " " + toProperCase(itemNamePart);
+        	itemNameBuilder.append(" ").append(toProperCase(itemNamePart));
         }
-
+        
+        String itemName = itemNameBuilder.toString();
         if (itemName.trim().equals("Air")) {
             itemName = "Fists";
         }

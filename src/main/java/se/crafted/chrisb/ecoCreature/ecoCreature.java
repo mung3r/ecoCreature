@@ -1,6 +1,7 @@
 package se.crafted.chrisb.ecoCreature;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -41,6 +42,7 @@ public class ecoCreature extends JavaPlugin
     public static HashMap<String, ecoMessageManager> messageManagers;
     public static HashMap<String, ecoRewardManager> rewardManagers;
     private ecoConfigManager configManager;
+    private Metrics metrics;
 
     private Boolean setupDependencies()
     {
@@ -123,6 +125,14 @@ public class ecoCreature extends JavaPlugin
         setupDeathTpPlus();
         setupMobArenaHandler();
         registerEvents();
+
+        try {
+            metrics = new Metrics(this);
+            metrics.start();
+        }
+        catch (IOException e) {
+            logger.warning("Metrics failed to load.");
+        }
 
         logger.info(getDescription().getVersion() + " enabled.");
     }

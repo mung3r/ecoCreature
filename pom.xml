@@ -11,11 +11,11 @@
     </repository>
     <repository>
       <id>vault-repo</id>
-      <url>http://ci.milkbowl.net/plugin/repository/project/Vault/LastSuccessful/repository/</url>
+      <url>http://ci.herocraftonline.com/plugin/repository/project/Vault/LastSuccessful/repository/</url>
     </repository>
     <repository>
       <id>deathtpplus-repo</id>
-      <url>http://ci.milkbowl.net/plugin/repository/project/HeroicDeath2/LastSuccessful/repository/</url>
+      <url>http://ci.herocraftonline.com/plugin/repository/project/HeroicDeath2/LastSuccessful/repository/</url>
     </repository>
   </repositories>
   <dependencies>
@@ -54,11 +54,11 @@
   <url>http://dev.bukkit.org/server-mods/ecocreature/</url>
   <issueManagement>
   	<system>Bukkit Dev</system>
-  	<url>http://dev.bukkit.org/server-mods/ecocreature/tickets/</url>
+  	<url>https://github.com/mung3r/ecoCreature/issues</url>
   </issueManagement>
   <ciManagement>
   	<system>jenkins</system>
-  	<url>http://ci.milkbowl.net/job/ecoCreature/</url>
+  	<url>http://ci.herocraftonline.com/job/ecoCreature/</url>
   </ciManagement>
   <scm>
   	<connection>scm:git:git://github.com:mung3r/ecoCreature.git</connection>
