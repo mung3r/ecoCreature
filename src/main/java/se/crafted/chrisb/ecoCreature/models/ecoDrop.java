@@ -219,7 +219,6 @@ public class ecoDrop
                     }
                     drop.setPercentage(Double.parseDouble(dropParts[2]));
                     drop.setIsFixedDrops(isFixedDrops);
-                    System.out.println("DEBUG: added " + drop);
                     drops.add(drop);
                 }
             }
