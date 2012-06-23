@@ -1,6 +1,8 @@
 name: ecoCreature
 main: se.crafted.chrisb.ecoCreature.ecoCreature
 version: 0.0.9f-b${BUILD_NUMBER} (All your death are belong to us!)
+authors: [chrisb, mung3r]
+website: http://dev.bukkit.org/server-mods/ecocreature
 depend: [Vault]
 softdepend: [DeathTpPlus,MobArena]
 description: Coins and drops for PvM
