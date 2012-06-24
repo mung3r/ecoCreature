@@ -36,7 +36,7 @@ System:
         # Default: true
         OverrideDrops: true
         #
-        # Do not randomize the amount of drop items - always drop a fixed amount
+        # Do not randomize amount of drop items. Always drop a fixed amount.
         # Default: false
         FixedDrops: false
         #
@@ -52,16 +52,16 @@ System:
         # Default: true
         WolverineMode: true
         #
-        # Penalize players when they die. Use PenalizeType to select whether PenalizeAmount
-        # is used as a percentage (PenalizeType: true) or a fixed amount (PenalizeType: false)
-        # taken from the player.
+        # Penalize players when they die. Use PenalizeType to select whether
+        # PenalizeAmount is used as a percentage (PenalizeType: true) or a
+        # fixed amount (PenalizeType: false) taken from the player.
         # Default: false
         PenalizeDeath: false
         PenalizeType: true
         PenalizeAmount: 0.05
         #
-        # Remove drops from mobs killed by farming contraptions (mob death by cacti, falling,
-        # drowning or suffocation)
+        # Remove drops from mobs killed by farming contraptions (mob death by
+        # cacti, falling, drowning or suffocation)
         # Default: false
         NoFarm: false
         # Set this to true to include fire and fire_tick.
@@ -95,17 +95,17 @@ System:
         DeathPenaltyMessage: '&7You wake up to find &6<amt>&7 missing from your pockets!'
 
 Gain:
-    #
-    # Multiply reward amount based on group (NOTE: requires a permission plugin that
-    # supports groups)
     Groups:
+    #
+    # Multiply reward amount based on group (NOTE: requires a permission plugin
+    # that supports groups)
         Default:
             Amount: 1.0
         Donors:
             Amount: 2.0
+    Time:
     #
     # Multiply reward amount based on time period of day/night
-    Time:
         Sunrise:
             Amount: 1.0
         Day:
@@ -118,9 +118,9 @@ Gain:
             Amount: 1.25
         Dawn:
             Amount: 1.125
+    Environment:
     #
     # Multiply reward amount based on environment type
-    Environment:
         Normal:
             Amount: 1.0
         Nether:
@@ -129,97 +129,114 @@ Gain:
             Amount: 1.0
 
 RewardTable:
-    #
+    ############################################################################
     # Drop format and Examples:
-    ###########################
+    ############################################################################
+    # Drop format:
     #   Drops:
-    #   - ITEM_ID.DATA_ID,ENCHANTMENT.LEVEL:[MIN-]MAX:CHANCE
+    #   - ITEM_ID.DATA_ID,ENCHANTMENT.[MIN_LEVEL]-MAX_LEVEL:[MIN-]MAX:CHANCE
     #   - ITEM_ID.DATA_ID:[MIN-]MAX:CHANCE
     #   - ...
     #
-    # Drop example 1: drop 0 to 5 diamonds 50% of the time
+    # Example 1: drop 0 to 5 diamonds 50% of the time
     #   Drops:
     #   - 'diamond:5:50'
     #
-    # Drop example 2: drop 1 to 2 birch leaves 100% of the time
+    # Example 2: drop 1 to 2 birch leaves 100% of the time
     #   Drops:
     #   - 'leaves.2:1-2:100'
     #
-    # Drop example 3: drop 0 to 5 diamonds 50% of the time AND drop 1 to 2 birch leaves 100% of the time
+    # Example 3: drop 0 to 5 diamonds 50% of the time AND drop 1 to 2 birch
+    # leaves 100% of the time
     #   Drops:
     #   - 'diamond:5:50'
     #   - 'leaves.2:1-2:100'
     #
-    # Drop example 4: drop nothing
+    # Example 4: drop nothing
     #   Drops: ''
     #
-    # Drop example 5: drop 0 to 1 diamond swords with a damage_all level 4 enchantment (a.k.a. Sharpness IV) 25% of the time
+    # Example 5: drop 0 to 1 diamond swords with a damage_all level 4
+    # enchantment (a.k.a. Sharpness IV) 25% of the time
     #   Drops:
     #   - 'diamond_sword,damage_all.4:1:25'
     #
-    # Drop example 6: drop 0 to 1 potion type 2 (a.k.a. Swiftness) 25% of the time
+    # Example 6: drop 0 to 1 diamond swords with random damage_all level 1 to 4
+    # enchantment (a.k.a. Sharpness IV) 25% of the time
+    #   Drops:
+    #   - 'diamond_sword,damage_all.1-4:1:25'
+    #
+    # Example 7: drop 0 to 1 diamond swords with up to 5 enchantments ranging
+    # from 0 to 2,3 or 5 (depending on enchantment type) 25% of the time
+    #   Drops:
+    #   - 'diamond_sword,damage_all.0-5,damage_undead.0-5,damage_arthropods.0-5,knockback.0-2,fire_aspect.0-2,loot_bonus_mobs.0-3:1-1:100'
+    #
+    # Example 8: drop 0 to 1 potion type 2 (a.k.a. Swiftness) 25% of the time
     #   Drops:
     #   - 'potion.2:1:25'
     #
-    # Drop example 7: go crazy :P
+    # Example 9: go crazy :P
     #   Drops:
     #   - 'diamond_pickaxe,durability.3:1:25'
     #   - 'diamond_sword,damage_all.5:1:25'
     #   - 'potion.2:1-1:25'
     #
+    ############################################################################
     # Coin reward examples:
-    #######################
-    # Coin example 1: award 0 to 10 coin 50% of the time
+    ############################################################################
+    # Example 1: award 0 to 10 coin 50% of the time
     #   Coin_Minimum: 0.0 
     #   Coin_Maximum: 10.0
     #   Coin_percent: 50.0
     #
-    # Coin example 2: award 10 coin 100% of the time
+    # Example 2: award 10 coin 100% of the time
     #   Coin_Minimum: 10.0 
     #   Coin_Maximum: 10.0
     #   Coin_percent: 50.0
     #
-    # Coin example 3: award nothing
+    # Example 3: award nothing
     #   Coin_Minimum: 0.0 
     #   Coin_Maximum: 0.0
     #   Coin_percent: 0.0
     #
-    # Coin example 4: penalize 0 to 10 coin 50% of the time
+    # Example 4: penalize 0 to 10 coin 50% of the time
     #   Coin_Minimum: -10
     #   Coin_Maximum: 0
     #   Coin_percent: 50.0
     #
+    ############################################################################
     # Experience orb examples:
-    ##########################
-    # Exp orb example 1: award 0 to 10 exp 50% of the time
+    ############################################################################
+    # Example 1: award 0 to 10 exp 50% of the time
     #   ExpMin: 0.0 
     #   ExpMax: 10.0
     #   ExpPercent: 50.0
     #
-    # Exp orb example 2: award 10 exp 100% of the time
+    # Example 2: award 10 exp 100% of the time
     #   ExpMin: 10.0 
     #   ExpMax: 10.0
     #   ExpPercent: 50.0
     #
-    # Exp orb example 3: award nothing
+    # Example 3: award nothing
     #   ExpMin: 0.0 
     #   ExpMax: 0.0
     #   ExpPercent: 0.0
     #
-    # Custom reward messages:
-    #########################
-    #   &[0-9a-f] - color codes
+    ############################################################################
+    # Custom reward message example:
+    ############################################################################
+    # Example:
+    #   NoReward_Message: '&7You slayed a &5<crt>&7 using a &3<itm>.'
+    #   Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
+    #   Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
+    #
+    # Color codes & replacement tokens:
+    #   &[0-9,a-f,k,l,m,n,o,r] - color codes
     #   <plr> - display player name in a message
     #   <crt> - display creature name in a message
     #   <amt> - display amount in a message
     #   <itm> - display item used to kill in a message
     #
-    # Message examples:
-    ###################
-    #   NoReward_Message: '&7You slayed a &5<crt>&7 using a &3<itm>.'
-    #   Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
-    #   Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
-    #
+    ############################################################################
     Blaze:
         Coin_Minimum: 3.50
         Coin_Maximum: 3.50
@@ -256,11 +273,10 @@ RewardTable:
         Coin_Minimum: 10.50
         Coin_Maximum: 15.50
         Coin_Percent: 50.0
-    #
-    # IMPORTANT NOTE:
-    # This reward requires "classic" build of DeathTpPlus here http://tiny.cc/heroicdeath2.
-    # Also note that the penalty amount is multiplied by the number of deaths in the streak.
     DeathStreak:
+    #
+    # This reward requires DeathTpPlus "classic": http://tiny.cc/heroicdeath2.
+    # The penalty amount is multiplied by the number of deaths in the streak.
         Coin_Minimum: -1.00
         Coin_Maximum: -1.00
         Coin_Percent: 100.00
@@ -287,11 +303,10 @@ RewardTable:
         Coin_Minimum: 8.50
         Coin_Maximum: 8.50
         Coin_Percent: 50.00
-    #
-    # IMPORTANT NOTE:
-    # This reward requires "classic" build of DeathTpPlus here http://tiny.cc/heroicdeath2.
-    # Also note that the reward amount is multiplied by the number of kills in the streak.
     KillStreak:
+    #
+    # This reward requires DeathTpPlus "classic": http://tiny.cc/heroicdeath2.
+    # The reward amount is multiplied by the number of kills in the streak.
         Drops:
         - 'diamond:1:100'
         Coin_Minimum: 2.00
@@ -331,10 +346,11 @@ RewardTable:
         Coin_Minimum: 1.00
         Coin_Maximum: 3.50
         Coin_Percent: 50.0
-    #
-    # IMPORTANT NOTE: If you define Drops, and OverrideDrops is set to true, the victim's
-    # inventory will be replaced! Also note that the amount awarded is taken from the victim.
     Player:
+    #
+    # IMPORTANT NOTE: If you define Drops, and OverrideDrops is set to true,
+    # the victim's inventory will be replaced! Also note that the amount
+    # awarded is taken from the victim.
         Coin_Minimum: 5.00
         Coin_Maximum: 10.50
         Coin_Percent: 50.0
