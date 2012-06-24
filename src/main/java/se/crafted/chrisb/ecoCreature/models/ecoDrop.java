@@ -24,7 +24,7 @@ public class ecoDrop
     private Double percentage;
     private boolean isFixedDrops;
     private Set<ecoEnchantment> enchantments;
-    private Random random = new Random();
+    private final Random random = new Random();
 
     public ecoDrop()
     {
@@ -34,7 +34,9 @@ public class ecoDrop
     private static class ecoEnchantment
     {
         private Enchantment enchantment;
-        private int level;
+        private int minLevel;
+        private int maxLevel;
+        private final Random random = new Random();
 
         public Enchantment getEnchantment()
         {
@@ -48,12 +50,17 @@ public class ecoDrop
 
         public int getLevel()
         {
-            return level;
+            return minLevel + random.nextInt(Math.abs(maxLevel - minLevel + 1));
         }
 
-        public void setLevel(int level)
+        public void setMinLevel(int minLevel)
         {
-            this.level = level;
+            this.minLevel = minLevel;
+        }
+
+        public void setMaxLevel(int maxLevel)
+        {
+            this.maxLevel = maxLevel;
         }
     }
 
@@ -127,14 +134,15 @@ public class ecoDrop
         this.isFixedDrops = isFixedDrops;
     }
 
-    public void addEnchantment(Enchantment enchantment, int level)
+    public void addEnchantment(Enchantment enchantment, int minLevel, int maxLevel)
     {
         if (enchantment == null) {
             throw new IllegalArgumentException();
         }
         ecoEnchantment e = new ecoEnchantment();
         e.setEnchantment(enchantment);
-        e.setLevel(level);
+        e.setMinLevel(minLevel);
+        e.setMaxLevel(maxLevel);
         enchantments.add(e);
     }
 
@@ -156,7 +164,10 @@ public class ecoDrop
                     }
                 }
                 for (ecoEnchantment e : enchantments) {
-                    itemStack.addEnchantment(e.getEnchantment(), e.getLevel());
+                    int level = e.getLevel();
+                    if (level > 0) {
+                        itemStack.addEnchantment(e.getEnchantment(), level);
+                    }
                 }
                 if (itemStack.getAmount() > 0) {
                     return itemStack;
@@ -198,7 +209,16 @@ public class ecoDrop
                     if (itemParts.length > 1) {
                         for (int i = 1; i < itemParts.length; i++) {
                             String[] enchantParts = itemParts[i].split("\\.");
-                            drop.addEnchantment(Enchantment.getByName(enchantParts[0].toUpperCase()), enchantParts.length > 1 ? Integer.parseInt(enchantParts[1]) : 1);
+                            //check enchantment level and range
+                            if (enchantParts.length > 1) {
+                                String[] levelRange = enchantParts[1].split("-");
+                                int minLevel = Integer.parseInt(levelRange[0]);
+                                int maxLevel = levelRange.length > 1 ? Integer.parseInt(levelRange[1]) : minLevel;
+                                drop.addEnchantment(Enchantment.getByName(enchantParts[0].toUpperCase()), minLevel, maxLevel);
+                            }
+                            else {
+                                drop.addEnchantment(Enchantment.getByName(enchantParts[0].toUpperCase()), 1, 1);
+                            }
                         }
                     }
                     // check for data id
