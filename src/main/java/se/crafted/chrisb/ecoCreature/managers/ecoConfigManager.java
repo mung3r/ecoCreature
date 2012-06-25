@@ -3,6 +3,7 @@ package se.crafted.chrisb.ecoCreature.managers;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.World;
@@ -156,6 +157,46 @@ public class ecoConfigManager
             }
         }
 
+        ConfigurationSection rewardSets = config.getConfigurationSection("RewardSets");
+        if (rewardSets != null) {
+            for (String setName : rewardSets.getKeys(false)) {
+                ecoReward reward = new ecoReward();
+                reward.setRewardName(setName);
+                reward.setRewardType(RewardType.CUSTOM);
+
+                ConfigurationSection rewardConfig = rewardSets.getConfigurationSection(setName);
+                if (rewardConfig.getList("Drops") != null) {
+                    List<String> dropsList = (List<String>) rewardConfig.getList("Drops");
+                    reward.setDrops(ecoDrop.parseDrops(dropsList, rewardManager.isFixedDrops));
+                }
+                else {
+                    reward.setDrops(ecoDrop.parseDrops(rewardConfig.getString("Drops"), rewardManager.isFixedDrops));
+                }
+                reward.setCoinMax(rewardConfig.getDouble("Coin_Maximum", 0));
+                reward.setCoinMin(rewardConfig.getDouble("Coin_Minimum", 0));
+                reward.setCoinPercentage(rewardConfig.getDouble("Coin_Percent", 0));
+                String expMin = rewardConfig.getString("ExpMin");
+                String expMax = rewardConfig.getString("ExpMax");
+                String expPercentage = rewardConfig.getString("ExpPercent");
+                if (expMin != null && expMax != null && expPercentage != null) {
+                    try {
+                        reward.setExpMin(Integer.parseInt(expMin));
+                        reward.setExpMax(Integer.parseInt(expMax));
+                        reward.setExpPercentage(Double.parseDouble(expPercentage));
+                    }
+                    catch (NumberFormatException e) {
+                        ecoCreature.getEcoLogger().warning("Could not parse exp for " + setName);
+                    }
+                }
+
+                reward.setNoRewardMessage(new ecoMessage(convertMessage(rewardConfig.getString("NoReward_Message", ecoMessageManager.NO_REWARD_MESSAGE)), config.getBoolean("System.Messages.NoReward", false)));
+                reward.setRewardMessage(new ecoMessage(convertMessage(rewardConfig.getString("Reward_Message", ecoMessageManager.REWARD_MESSAGE)), true));
+                reward.setPenaltyMessage(new ecoMessage(convertMessage(rewardConfig.getString("Penalty_Message", ecoMessageManager.PENALTY_MESSAGE)), true));
+
+                rewardManager.rewardSet.put(setName, reward);
+            }
+        }
+
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
         if (rewardTable != null) {
             for (String rewardName : rewardTable.getKeys(false)) {
@@ -192,7 +233,20 @@ public class ecoConfigManager
                 reward.setRewardMessage(new ecoMessage(convertMessage(rewardConfig.getString("Reward_Message", ecoMessageManager.REWARD_MESSAGE)), true));
                 reward.setPenaltyMessage(new ecoMessage(convertMessage(rewardConfig.getString("Penalty_Message", ecoMessageManager.PENALTY_MESSAGE)), true));
 
-                rewardManager.rewards.put(reward.getRewardType(), reward);
+                if (!rewardManager.rewards.containsKey(reward.getRewardType())) {
+                    rewardManager.rewards.put(reward.getRewardType(), new ArrayList<ecoReward>());
+                }
+                rewardManager.rewards.get(reward.getRewardType()).add(reward);
+
+                if (rewardConfig.getList("Sets") != null) {
+                    List<String> setList = (List<String>) rewardConfig.getList("Sets");
+                    for (String setName : setList) {
+                        if (rewardManager.rewardSet.containsKey(setName)) {
+                            rewardSets.get(setName);
+                            rewardManager.rewards.get(reward.getRewardType()).add(rewardManager.rewardSet.get(setName));
+                        }
+                    }
+                }
             }
         }
 
