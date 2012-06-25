@@ -2,6 +2,8 @@ package se.crafted.chrisb.ecoCreature.managers;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
@@ -51,10 +53,11 @@ public class ecoRewardManager
     public Boolean noFarmFire;
     public boolean hasMobArenaRewards;
 
-    public HashMap<String, Double> groupMultiplier;
-    public HashMap<TimePeriod, Double> timeMultiplier;
-    public HashMap<Environment, Double> envMultiplier;
-    public HashMap<RewardType, ecoReward> rewards;
+    public Map<String, Double> groupMultiplier;
+    public Map<TimePeriod, Double> timeMultiplier;
+    public Map<Environment, Double> envMultiplier;
+    public Map<RewardType, List<ecoReward>> rewards;
+    public Map<String, ecoReward> rewardSet;
 
     private final ecoCreature plugin;
 
@@ -65,7 +68,15 @@ public class ecoRewardManager
         groupMultiplier = new HashMap<String, Double>();
         timeMultiplier = new HashMap<TimePeriod, Double>();
         envMultiplier = new HashMap<Environment, Double>();
-        rewards = new HashMap<RewardType, ecoReward>();
+        rewards = new HashMap<RewardType, List<ecoReward>>();
+        rewardSet = new HashMap<String, ecoReward>();
+    }
+
+    public ecoReward getRewardFromType(RewardType rewardType)
+    {
+        Random random = new Random();
+        List<ecoReward> rewardList = rewards.get(rewardType);
+        return rewardList.get(random.nextInt(rewardList.size()));
     }
 
     public void registerPVPReward(PlayerKilledByPlayerEvent event)
@@ -77,7 +88,7 @@ public class ecoRewardManager
         Double amount = 0.0D;
 
         if (rewards.containsKey(RewardType.PLAYER)) {
-            ecoReward reward = rewards.get(RewardType.PLAYER);
+            ecoReward reward = getRewardFromType(RewardType.PLAYER);
             Integer exp = reward.getExpAmount();
 
             amount = computeReward(event.getVictim(), reward);
@@ -154,7 +165,7 @@ public class ecoRewardManager
             return;
         }
 
-        ecoReward reward = rewards.get(RewardType.fromEntity(event.getKilledCreature()));
+        ecoReward reward = getRewardFromType(RewardType.fromEntity(event.getKilledCreature()));
 
         if (reward == null) {
             if (event.getKilledCreature() != null) {
@@ -195,9 +206,9 @@ public class ecoRewardManager
 
         if (hasPermission(player, "reward.spawner") && rewards.containsKey(RewardType.SPAWNER)) {
 
-            registerReward(player, rewards.get(RewardType.SPAWNER), Material.getMaterial(player.getItemInHand().getTypeId()).name());
+            registerReward(player, getRewardFromType(RewardType.SPAWNER), Material.getMaterial(player.getItemInHand().getTypeId()).name());
 
-            for (ItemStack itemStack : rewards.get(RewardType.SPAWNER).computeDrops()) {
+            for (ItemStack itemStack : getRewardFromType(RewardType.SPAWNER).computeDrops()) {
                 block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
             }
         }
@@ -207,7 +218,7 @@ public class ecoRewardManager
     {
         if (hasPermission(player, "reward.deathstreak") && rewards.containsKey(RewardType.DEATH_STREAK)) {
 
-            ecoReward reward = rewards.get(RewardType.DEATH_STREAK);
+            ecoReward reward = getRewardFromType(RewardType.DEATH_STREAK);
             reward.setCoinMin(reward.getCoinMin() * deaths);
             reward.setCoinMax(reward.getCoinMax() * deaths);
             registerReward(player, reward, "");
@@ -222,7 +233,7 @@ public class ecoRewardManager
     {
         if (hasPermission(player, "reward.killstreak") && rewards.containsKey(RewardType.KILL_STREAK)) {
 
-            ecoReward reward = rewards.get(RewardType.KILL_STREAK);
+            ecoReward reward = getRewardFromType(RewardType.KILL_STREAK);
             reward.setCoinMin(reward.getCoinMin() * kills);
             reward.setCoinMax(reward.getCoinMax() * kills);
             registerReward(player, reward, "");
@@ -258,14 +269,14 @@ public class ecoRewardManager
 
         if (amount > 0.0D && plugin.hasEconomy()) {
             ecoCreature.economy.depositPlayer(player.getName(), amount);
-            ecoCreature.getMessageManager(player).sendMessage(reward.getRewardMessage(), player, amount, reward.getCreatureName(), weaponName);
+            ecoCreature.getMessageManager(player).sendMessage(reward.getRewardMessage(), player, amount, reward.getRewardName(), weaponName);
         }
         else if (amount < 0.0D && plugin.hasEconomy()) {
             ecoCreature.economy.withdrawPlayer(player.getName(), Math.abs(amount));
-            ecoCreature.getMessageManager(player).sendMessage(reward.getPenaltyMessage(), player, Math.abs(amount), reward.getCreatureName(), weaponName);
+            ecoCreature.getMessageManager(player).sendMessage(reward.getPenaltyMessage(), player, Math.abs(amount), reward.getRewardName(), weaponName);
         }
         else {
-            ecoCreature.getMessageManager(player).sendMessage(reward.getNoRewardMessage(), player, reward.getCreatureName(), weaponName);
+            ecoCreature.getMessageManager(player).sendMessage(reward.getNoRewardMessage(), player, reward.getRewardName(), weaponName);
         }
     }
 

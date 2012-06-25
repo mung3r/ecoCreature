@@ -127,6 +127,50 @@ Gain:
             Amount: 1.25
         The_End:
             Amount: 1.0
+RewardSets:
+    ############################################################################
+    # Drop set examples
+    ############################################################################
+    # Drop sets allow you to define groups or sets of drops for use in the
+    # RewardTable. The most obvious benefit is that you no longer have to copy
+    # and paste a list of common drops. You can also get really creative with
+    # different combinations of sets.
+    #
+    # Example:
+    #   MySetName:
+    #       Drops:
+    #       - 'diamond:5:50'
+    #       - 'leaves.2:1-2:100'
+    #       Coin_Minimum: 0.0 
+    #       Coin_Maximum: 10.0
+    #       Coin_percent: 50.0
+    #       ExpMin: 0
+    #       ExpMax: 10
+    #       ExpPercent: 50.0
+    #
+    # See how the these sets that follow are applied to Zombies in the
+    # RewardTable
+    ############################################################################
+    NormalZombie:
+        Drops:
+        - 'rotten flesh:2:75'
+    FarmerZombie:
+        Drops:
+        - 'rotten flesh:2:75'
+        - 'diamond_pickaxe,durability.0-3:1:25'
+        Coin_Minimum: 1.00
+        Coin_Maximum: 3.50
+        Coin_Percent: 50.0
+    WarriorZombie:
+        Drops:
+        - 'rotten flesh:2:75'
+        - 'diamond_sword,damage_all.0-4:1:25'
+        Coin_Minimum: 1.00
+        Coin_Maximum: 3.50
+        Coin_Percent: 50.0
+        ExpMin: 0
+        ExpMax: 10
+        ExpPercent: 50.0
 
 RewardTable:
     ############################################################################
@@ -207,18 +251,18 @@ RewardTable:
     # Experience orb examples:
     ############################################################################
     # Example 1: award 0 to 10 exp 50% of the time
-    #   ExpMin: 0.0 
-    #   ExpMax: 10.0
+    #   ExpMin: 0
+    #   ExpMax: 10
     #   ExpPercent: 50.0
     #
     # Example 2: award 10 exp 100% of the time
-    #   ExpMin: 10.0 
-    #   ExpMax: 10.0
+    #   ExpMin: 10
+    #   ExpMax: 10
     #   ExpPercent: 50.0
     #
     # Example 3: award nothing
-    #   ExpMin: 0.0 
-    #   ExpMax: 0.0
+    #   ExpMin: 0
+    #   ExpMax: 0
     #   ExpPercent: 0.0
     #
     ############################################################################
@@ -423,8 +467,7 @@ RewardTable:
         Coin_Maximum: 3.50
         Coin_Percent: 1.0
     Zombie:
-        Drops:
-        - 'rotten flesh:2:75'
-        Coin_Minimum: 1.00
-        Coin_Maximum: 3.50
-        Coin_Percent: 50.0
+        Sets:
+        - NormalZombie
+        - FarmerZombie
+        - WarriorZombie

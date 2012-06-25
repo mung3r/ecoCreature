@@ -52,7 +52,7 @@ public class CreatureKilledByPlayerEvent extends Event
 
     public ecoReward getReward()
     {
-        return ecoCreature.getRewardManager(event.getEntity()).rewards.get(RewardType.fromEntity(getKilledCreature()));
+        return ecoCreature.getRewardManager(event.getEntity()).getRewardFromType(RewardType.fromEntity(getKilledCreature()));
     }
 
     public List<ItemStack> getDrops()

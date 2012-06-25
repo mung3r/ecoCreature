@@ -25,6 +25,7 @@ public class ecoReward
         CHICKEN("Chicken"),
         COW("Cow"),
         CREEPER("Creeper"),
+        CUSTOM("Custom"),
         DEATH_STREAK("DeathStreak"),
         ENDER_DRAGON("EnderDragon"),
         ENDERMAN("Enderman"),
@@ -144,14 +145,14 @@ public class ecoReward
     private ecoMessage rewardMessage;
     private ecoMessage penaltyMessage;
 
-    public String getCreatureName()
+    public String getRewardName()
     {
         return rewardName;
     }
 
-    public void setRewardName(String creatureName)
+    public void setRewardName(String rewardName)
     {
-        this.rewardName = creatureName;
+        this.rewardName = rewardName;
     }
 
     public void setRewardType(RewardType creatureType)
