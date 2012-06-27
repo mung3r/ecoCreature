@@ -77,7 +77,7 @@ permissions:
     ecocreature.reward.creeper:
         description: Enables rewards for creepers
         default: false
-    ecocreature.reward.custom: true
+    ecocreature.reward.custom:
         description: Enables rewards for custom sets
         default: false
     ecocreature.reward.deathpenalty:
