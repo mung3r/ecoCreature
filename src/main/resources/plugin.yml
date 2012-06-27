@@ -22,6 +22,7 @@ permissions:
             ecocreature.reward.chicken: true
             ecocreature.reward.cow: true
             ecocreature.reward.creeper: true
+            ecocreature.reward.custom: true
             ecocreature.reward.deathpenalty: true
             ecocreature.reward.deathstreak: true
             ecocreature.reward.enderdragon: true
@@ -32,6 +33,7 @@ permissions:
             ecocreature.reward.magmacube: true
             ecocreature.reward.monster: true
             ecocreature.reward.mushroomcow: true
+            ecocreature.reward.ozelot: true
             ecocreature.reward.pig: true
             ecocreature.reward.pigzombie: true
             ecocreature.reward.player: true
@@ -45,6 +47,7 @@ permissions:
             ecocreature.reward.spider: true
             ecocreature.reward.squid: true
             ecocreature.reward.villager: true
+            ecocreature.reward.villagergolem: true
             ecocreature.reward.wolf: true
             ecocreature.reward.zombie: true
     ecocreature.gain.group:
@@ -73,6 +76,9 @@ permissions:
         default: false
     ecocreature.reward.creeper:
         description: Enables rewards for creepers
+        default: false
+    ecocreature.reward.custom:
+        description: Enables rewards for custom sets
         default: false
     ecocreature.reward.deathpenalty:
         description: Enables penalty for playe death
@@ -103,6 +109,9 @@ permissions:
         default: false
     ecocreature.reward.mushroomcow:
         description: Enables rewards for mushroomcows
+        default: false
+    ecocreature.reward.ozelot:
+        description: Enables rewards for ozelot
         default: false
     ecocreature.reward.pig:
         description: Enables rewards for pigs
@@ -142,6 +151,9 @@ permissions:
         default: false
     ecocreature.reward.villager:
         description: Enables rewards for villagers
+        default: false
+    ecocreature.reward.villagergolem:
+        description: Enables rewards for villagergolems
         default: false
     ecocreature.reward.wolf:
         description: Enables rewards for wolves

@@ -8,6 +8,7 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -72,11 +73,35 @@ public class ecoRewardManager
         rewardSet = new HashMap<String, ecoReward>();
     }
 
+    public ecoReward getRewardFromEntity(Entity entity)
+    {
+        RewardType rewardType = RewardType.fromEntity(entity);
+        ecoReward reward = null;
+
+        if (rewardType != null) {
+            reward = getRewardFromType(rewardType);
+        }
+        else {
+            ecoCreature.getEcoLogger().warning("No reward found for entity " + entity.getClass());
+        }
+
+        return reward;
+    }
+
     public ecoReward getRewardFromType(RewardType rewardType)
     {
         Random random = new Random();
-        List<ecoReward> rewardList = rewards.get(rewardType);
-        return rewardList.get(random.nextInt(rewardList.size()));
+        ecoReward reward = null;
+
+        if (rewards.containsKey(rewardType)) {
+            List<ecoReward> rewardList = rewards.get(rewardType);
+            reward = rewardList.get(random.nextInt(rewardList.size()));
+        }
+        else {
+            ecoCreature.getEcoLogger().warning("No reward configured for " + rewardType);
+        }
+
+        return reward;
     }
 
     public void registerPVPReward(PlayerKilledByPlayerEvent event)
@@ -89,15 +114,18 @@ public class ecoRewardManager
 
         if (rewards.containsKey(RewardType.PLAYER)) {
             ecoReward reward = getRewardFromType(RewardType.PLAYER);
-            Integer exp = reward.getExpAmount();
 
-            amount = computeReward(event.getVictim(), reward);
-            if (!reward.getDrops().isEmpty() && shouldOverrideDrops) {
-                event.getDrops().clear();
-            }
-            event.getDrops().addAll(reward.computeDrops());
-            if (exp != null) {
-                event.setDroppedExp(exp);
+            if (reward != null) {
+                Integer exp = reward.getExpAmount();
+
+                amount = computeReward(event.getVictim(), reward);
+                if (!reward.getDrops().isEmpty() && shouldOverrideDrops) {
+                    event.getDrops().clear();
+                }
+                event.getDrops().addAll(reward.computeDrops());
+                if (exp != null) {
+                    event.setDroppedExp(exp);
+                }
             }
         }
         else if (plugin.hasEconomy()) {
@@ -165,14 +193,9 @@ public class ecoRewardManager
             return;
         }
 
-        ecoReward reward = getRewardFromType(RewardType.fromEntity(event.getKilledCreature()));
+        ecoReward reward = getRewardFromEntity(event.getKilledCreature());
 
-        if (reward == null) {
-            if (event.getKilledCreature() != null) {
-                ecoCreature.getEcoLogger().warning("No reward found for " + event.getKilledCreature().getClass());
-            }
-        }
-        else {
+        if (reward != null) {
             Integer exp = reward.getExpAmount();
             if (exp != null) {
                 event.setDroppedExp(exp);
@@ -206,10 +229,14 @@ public class ecoRewardManager
 
         if (hasPermission(player, "reward.spawner") && rewards.containsKey(RewardType.SPAWNER)) {
 
-            registerReward(player, getRewardFromType(RewardType.SPAWNER), Material.getMaterial(player.getItemInHand().getTypeId()).name());
-
-            for (ItemStack itemStack : getRewardFromType(RewardType.SPAWNER).computeDrops()) {
-                block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
+            ecoReward reward = getRewardFromType(RewardType.SPAWNER);
+            
+            if (reward != null) {
+                registerReward(player, reward, Material.getMaterial(player.getItemInHand().getTypeId()).name());
+            
+                for (ItemStack itemStack : reward.computeDrops()) {
+                    block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
+                }
             }
         }
     }
@@ -219,12 +246,15 @@ public class ecoRewardManager
         if (hasPermission(player, "reward.deathstreak") && rewards.containsKey(RewardType.DEATH_STREAK)) {
 
             ecoReward reward = getRewardFromType(RewardType.DEATH_STREAK);
-            reward.setCoinMin(reward.getCoinMin() * deaths);
-            reward.setCoinMax(reward.getCoinMax() * deaths);
-            registerReward(player, reward, "");
 
-            for (ItemStack itemStack : reward.computeDrops()) {
-                player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+            if (reward != null) {
+                reward.setCoinMin(reward.getCoinMin() * deaths);
+                reward.setCoinMax(reward.getCoinMax() * deaths);
+                registerReward(player, reward, "");
+
+                for (ItemStack itemStack : reward.computeDrops()) {
+                    player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+                }
             }
         }
     }
@@ -234,12 +264,15 @@ public class ecoRewardManager
         if (hasPermission(player, "reward.killstreak") && rewards.containsKey(RewardType.KILL_STREAK)) {
 
             ecoReward reward = getRewardFromType(RewardType.KILL_STREAK);
-            reward.setCoinMin(reward.getCoinMin() * kills);
-            reward.setCoinMax(reward.getCoinMax() * kills);
-            registerReward(player, reward, "");
 
-            for (ItemStack itemStack : reward.computeDrops()) {
-                player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+            if (reward != null) {
+                reward.setCoinMin(reward.getCoinMin() * kills);
+                reward.setCoinMax(reward.getCoinMax() * kills);
+                registerReward(player, reward, "");
+
+                for (ItemStack itemStack : reward.computeDrops()) {
+                    player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+                }
             }
         }
     }
