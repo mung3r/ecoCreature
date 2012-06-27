@@ -110,7 +110,7 @@ permissions:
     ecocreature.reward.mushroomcow:
         description: Enables rewards for mushroomcows
         default: false
-    ecocreature.reward.ozelot: true
+    ecocreature.reward.ozelot:
         description: Enables rewards for ozelot
         default: false
     ecocreature.reward.pig:
