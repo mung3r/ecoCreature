@@ -191,7 +191,7 @@ RewardTable:
     # Example 2: award 10 coin 100% of the time
     #   Coin_Minimum: 10.0 
     #   Coin_Maximum: 10.0
-    #   Coin_percent: 50.0
+    #   Coin_percent: 100.0
     #
     # Example 3: award nothing
     #   Coin_Minimum: 0.0 
@@ -214,7 +214,7 @@ RewardTable:
     # Example 2: award 10 exp 100% of the time
     #   ExpMin: 10
     #   ExpMax: 10
-    #   ExpPercent: 50.0
+    #   ExpPercent: 100.0
     #
     # Example 3: award nothing
     #   ExpMin: 0
