@@ -27,6 +27,7 @@ import se.crafted.chrisb.ecoCreature.managers.ecoConfigManager;
 import se.crafted.chrisb.ecoCreature.managers.ecoMessageManager;
 import se.crafted.chrisb.ecoCreature.managers.ecoRewardManager;
 import se.crafted.chrisb.ecoCreature.utils.ecoLogger;
+import se.crafted.chrisb.ecoCreature.utils.ecoMetrics;
 
 public class ecoCreature extends JavaPlugin
 {
@@ -42,7 +43,7 @@ public class ecoCreature extends JavaPlugin
     public static HashMap<String, ecoMessageManager> messageManagers;
     public static HashMap<String, ecoRewardManager> rewardManagers;
     private ecoConfigManager configManager;
-    private Metrics metrics;
+    private ecoMetrics metrics;
 
     private Boolean setupDependencies()
     {
@@ -127,7 +128,8 @@ public class ecoCreature extends JavaPlugin
         registerEvents();
 
         try {
-            metrics = new Metrics(this);
+            metrics = new ecoMetrics(this);
+            metrics.setupGraphs();
             metrics.start();
         }
         catch (IOException e) {
@@ -173,6 +175,11 @@ public class ecoCreature extends JavaPlugin
     public ecoConfigManager getConfigManager()
     {
         return configManager;
+    }
+
+    public ecoMetrics getMetrics()
+    {
+        return metrics;
     }
 
     public Boolean hasEconomy()
