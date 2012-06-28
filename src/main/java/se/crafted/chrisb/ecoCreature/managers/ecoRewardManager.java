@@ -311,6 +311,8 @@ public class ecoRewardManager
         else {
             ecoCreature.getMessageManager(player).sendMessage(reward.getNoRewardMessage(), player, reward.getRewardName(), weaponName);
         }
+
+        plugin.getMetrics().addCount(reward.getRewardType());
     }
 
     private Double computeReward(Player player, ecoReward reward)
