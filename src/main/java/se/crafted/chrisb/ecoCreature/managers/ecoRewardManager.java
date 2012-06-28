@@ -98,7 +98,7 @@ public class ecoRewardManager
             reward = rewardList.get(random.nextInt(rewardList.size()));
         }
         else {
-            ecoCreature.getEcoLogger().warning("No reward configured for " + rewardType);
+            ecoCreature.getEcoLogger().warning("No reward defined for " + rewardType);
         }
 
         return reward;
