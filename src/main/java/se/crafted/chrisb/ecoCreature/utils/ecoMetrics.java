@@ -37,7 +37,6 @@ public class ecoMetrics extends Metrics
                 @Override
                 public int getValue()
                 {
-                    System.out.println("DEBUG: " + getColumnName() + ": " + rewardTypeCount.get(RewardType.fromName(getColumnName())));
                     return rewardTypeCount.get(RewardType.fromName(getColumnName()));
                 }
             });
