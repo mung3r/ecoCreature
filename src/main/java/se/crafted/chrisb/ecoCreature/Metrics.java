@@ -47,7 +47,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -161,15 +160,6 @@ public class Metrics {
 
         // Load the guid then
         guid = configuration.getString("guid");
-    }
-
-    private String getAuthorString(List<String> authorList)
-    {
-        if (!authorList.isEmpty()) {
-            String authors = authorList.toString();
-            return authors.toString().substring(1, authors.length() - 1);
-        }
-        return null;
     }
 
     /**
@@ -359,7 +349,6 @@ public class Metrics {
         encodeDataPair(data, "server", Bukkit.getVersion());
         encodeDataPair(data, "players", Integer.toString(Bukkit.getServer().getOnlinePlayers().length));
         encodeDataPair(data, "revision", String.valueOf(REVISION));
-        encodeDataPair(data, "authors", getAuthorString(description.getAuthors()));
 
         // If we're pinging, append it
         if (isPing) {
