@@ -16,6 +16,8 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.CreatureKilledByPlayerEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledByPlayerEvent;
@@ -53,10 +55,13 @@ public class ecoRewardManager
     public Boolean noFarm;
     public Boolean noFarmFire;
     public boolean hasMobArenaRewards;
+    public double mobArenaMultiplier;
+    public double heroesPartyMultiplier;
 
     public Map<String, Double> groupMultiplier;
     public Map<TimePeriod, Double> timeMultiplier;
     public Map<Environment, Double> envMultiplier;
+    public Map<String, Double> worldGuardRegionMultiplier;
     public Map<RewardType, List<ecoReward>> rewards;
     public Map<String, ecoReward> rewardSet;
 
@@ -69,6 +74,7 @@ public class ecoRewardManager
         groupMultiplier = new HashMap<String, Double>();
         timeMultiplier = new HashMap<TimePeriod, Double>();
         envMultiplier = new HashMap<Environment, Double>();
+        worldGuardRegionMultiplier = new HashMap<String, Double>();
         rewards = new HashMap<RewardType, List<ecoReward>>();
         rewardSet = new HashMap<String, ecoReward>();
     }
@@ -340,6 +346,21 @@ public class ecoRewardManager
 
         if (hasPermission(player, "gain.environment") && envMultiplier.containsKey(player.getWorld().getEnvironment())) {
             amount *= envMultiplier.get(player.getWorld().getEnvironment());
+        }
+
+        Map<String, ProtectedRegion> regions = ecoCreature.worldGuardPlugin.getRegionManager(player.getWorld()).getRegions();
+        for (String regionName : regions.keySet()) {
+            if (hasPermission(player, "gain.worldguard") && worldGuardRegionMultiplier.containsKey(regionName)) {
+                amount *= worldGuardRegionMultiplier.get(regionName);
+            }
+        }
+
+        if (hasPermission(player, "gain.heroes") && ecoCreature.heroesPlugin.getCharacterManager().getHero(player).hasParty()) {
+            amount *= heroesPartyMultiplier;
+        }
+
+        if (hasMobArenaRewards && hasPermission(player, "gain.mobarena") && ecoCreature.mobArenaHandler.isPlayerInArena(player)) {
+            amount *= mobArenaMultiplier;
         }
 
         return isIntegerCurrency ? (double) Math.round(amount) : amount;

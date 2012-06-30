@@ -18,6 +18,8 @@ import org.simiancage.DeathTpPlus.DeathTpPlus;
 
 import com.garbagemule.MobArena.MobArena;
 import com.garbagemule.MobArena.MobArenaHandler;
+import com.herocraftonline.heroes.Heroes;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import se.crafted.chrisb.ecoCreature.listeners.ecoBlockListener;
 import se.crafted.chrisb.ecoCreature.listeners.ecoEntityListener;
@@ -38,6 +40,8 @@ public class ecoCreature extends JavaPlugin
     public static Economy economy = null;
     public static DeathTpPlus deathTpPlusPlugin = null;
     public static MobArenaHandler mobArenaHandler = null;
+    public static Heroes heroesPlugin = null;
+    public static WorldGuardPlugin worldGuardPlugin = null;
 
     private static ecoLogger logger = new ecoLogger();
     public static HashMap<String, ecoMessageManager> messageManagers;
@@ -89,6 +93,24 @@ public class ecoCreature extends JavaPlugin
         }
     }
 
+    private void setupHeroes()
+    {
+        Plugin plugin = this.getServer().getPluginManager().getPlugin("Heroes");
+        if (plugin != null && plugin instanceof Heroes) {
+            heroesPlugin = (Heroes) plugin;
+            logger.info("Successfully hooked " + plugin.getDescription().getName());
+        }
+    }
+
+    private void setupWorldGuard()
+    {
+        Plugin plugin = this.getServer().getPluginManager().getPlugin("WorldGuard");
+        if (plugin != null && plugin instanceof WorldGuardPlugin) {
+            worldGuardPlugin = (WorldGuardPlugin) plugin;
+            logger.info("Successfully hooked " + plugin.getDescription().getName());
+        }
+    }
+
     private void registerEvents()
     {
         Bukkit.getPluginManager().registerEvents(new ecoBlockListener(), this);
@@ -125,6 +147,8 @@ public class ecoCreature extends JavaPlugin
         setupDependencies();
         setupDeathTpPlus();
         setupMobArenaHandler();
+        setupHeroes();
+        setupWorldGuard();
         registerEvents();
 
         try {
