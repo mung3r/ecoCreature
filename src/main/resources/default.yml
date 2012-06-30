@@ -127,7 +127,23 @@ Gain:
             Amount: 1.25
         The_End:
             Amount: 1.0
-
+    MobArena:
+    #
+    # Multiply reward amount based on player arena status
+        InArena:
+            Amount: 1.0
+    WorldGuard:
+    #
+    # Multiply reward amount based on WorldGuard region
+        MyRegionName1:
+            Amount: 0.125
+        MyRegionName2:
+            Amount: 0.5
+    Heroes:
+    #
+    # Multiply reward based on Heroes party status
+        InParty:
+            Amount: 1.125
 RewardTable:
     ############################################################################
     # Drop format and Examples:

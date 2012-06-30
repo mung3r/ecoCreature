@@ -157,6 +157,29 @@ public class ecoConfigManager
             }
         }
 
+        ConfigurationSection worldGuardGainConfig = config.getConfigurationSection("Gain.WorldGuard");
+        if (worldGuardGainConfig != null) {
+            for (String regionName : worldGuardGainConfig.getKeys(false)) {
+                rewardManager.worldGuardRegionMultiplier.put(regionName, Double.valueOf(worldGuardGainConfig.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
+            }
+        }
+
+        ConfigurationSection mobArenaGainConfig = config.getConfigurationSection("Gain.MobArena.InArena");
+        if (mobArenaGainConfig != null) {
+            rewardManager.mobArenaMultiplier = Double.valueOf(mobArenaGainConfig.getDouble("Amount", 1.0D));
+        }
+        else {
+            rewardManager.mobArenaMultiplier = 1.0D;
+        }
+
+        ConfigurationSection heroesGainConfig = config.getConfigurationSection("Gain.Heroes.InParty");
+        if (heroesGainConfig != null) {
+            rewardManager.heroesPartyMultiplier = Double.valueOf(heroesGainConfig.getDouble("Amount", 1.0D));
+        }
+        else {
+            rewardManager.heroesPartyMultiplier = 1.0D;
+        }
+
         ConfigurationSection rewardSets = config.getConfigurationSection("RewardSets");
         if (rewardSets != null) {
             for (String setName : rewardSets.getKeys(false)) {

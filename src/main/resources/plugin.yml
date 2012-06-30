@@ -1,6 +1,6 @@
 name: ecoCreature
 main: se.crafted.chrisb.ecoCreature.ecoCreature
-version: 0.1.0-b${BUILD_NUMBER}
+version: 0.1.1-b${BUILD_NUMBER}
 authors: [chrisb, mung3r]
 website: http://dev.bukkit.org/server-mods/ecocreature
 depend: [Vault]
@@ -13,6 +13,9 @@ permissions:
             ecocreature.gain.group: true
             ecocreature.gain.time: true
             ecocreature.gain.environment: true
+            ecocreature.gain.heroes: true
+            ecocreature.gain.mobarena: true
+            ecocreature.gain.worldguard: true
     ecocreature.reward.*:
         description: Allows rewards for all creature types
         children:
@@ -59,6 +62,15 @@ permissions:
     ecocreature.gain.environment:
         description: Enables gain multiplier based on environment
         default: false
+    ecocreature.gain.heroes:
+        description: Enables gain multiplier based on Heroes party status
+        default: false
+    ecocreature.gain.mobarena:
+        description: Enables gain multiplier based on player arena status
+        default: false
+    ecocreature.gain.worldguard:
+        description: Enables gain multiplier based on WorldGurad region
+        default: false 
     ecocreature.reward.angrywolf:
         description: Enables rewards for angry wolves
         default: false

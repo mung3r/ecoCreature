@@ -17,6 +17,10 @@
       <id>deathtpplus-repo</id>
       <url>http://ci.herocraftonline.com/plugin/repository/project/HeroicDeath2/LastSuccessful/repository/</url>
     </repository>
+    <repository>
+      <id>sk89q-mvn2</id>
+      <url>http://maven.sk89q.com/repo/</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -40,11 +44,23 @@
         <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
+      <groupId>com.sk89q</groupId>
+      <artifactId>worldguard</artifactId>
+      <version>5.4</version>
+    </dependency>
+    <dependency>
         <groupId>com.garbagemule.MobArena</groupId>
         <artifactId>MobArena</artifactId>
         <version>0.94.4.49</version>
         <scope>system</scope>
         <systemPath>${project.basedir}/lib/MobArena.jar</systemPath>
+    </dependency>
+    <dependency>
+        <groupId>com.herocraftonline.heroes</groupId>
+        <artifactId>Heroes</artifactId>
+        <version>1.4.7-b1383</version>
+        <scope>system</scope>
+        <systemPath>${project.basedir}/lib/Heroes.jar</systemPath>
     </dependency>
   </dependencies>
   <properties>
