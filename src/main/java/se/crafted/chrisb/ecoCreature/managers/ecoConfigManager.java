@@ -124,12 +124,10 @@ public class ecoConfigManager
         rewardManager.pvpRewardAmount = config.getDouble("System.Hunting.PenalizeAmount", 0.05D);
         rewardManager.canHuntUnderSeaLevel = config.getBoolean("System.Hunting.AllowUnderSeaLVL", true);
         rewardManager.isWolverineMode = config.getBoolean("System.Hunting.WolverineMode", true);
-        rewardManager.hasDTPRewards = config.getBoolean("System.Hunting.DTPRewards", true);
-        rewardManager.dtpPenaltyAmount = config.getDouble("System.Hunting.DTPDeathStreakPenalty", 5.0D);
-        rewardManager.dtpRewardAmount = config.getDouble("System.Hunting.DTPKillStreakPenalty", 10.0D);
         rewardManager.noFarm = config.getBoolean("System.Hunting.NoFarm", false);
         rewardManager.noFarmFire = config.getBoolean("System.Hunting.NoFarmFire", false);
         rewardManager.hasMobArenaRewards = config.getBoolean("System.Hunting.MobArenaRewards", false);
+        rewardManager.hasCreativeModeRewards = config.getBoolean("System.Hunting.CreativeModeRewards", false);
 
         ConfigurationSection groupGainConfig = config.getConfigurationSection("Gain.Groups");
         if (groupGainConfig != null) {

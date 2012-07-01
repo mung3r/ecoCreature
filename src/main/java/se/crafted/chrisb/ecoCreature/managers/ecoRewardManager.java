@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
@@ -30,7 +31,7 @@ public class ecoRewardManager
 {
     public static Boolean warnGroupMultiplierSupport = true;
 
-    public Boolean isIntegerCurrency;
+    public boolean isIntegerCurrency;
 
     public Boolean canCampSpawner;
     public boolean campByDistance;
@@ -49,12 +50,10 @@ public class ecoRewardManager
     public double pvpRewardAmount;
     public Boolean canHuntUnderSeaLevel;
     public Boolean isWolverineMode;
-    public Boolean hasDTPRewards;
-    public double dtpRewardAmount;
-    public double dtpPenaltyAmount;
     public Boolean noFarm;
     public Boolean noFarmFire;
     public boolean hasMobArenaRewards;
+    public boolean hasCreativeModeRewards;
     public double mobArenaMultiplier;
     public double heroesPartyMultiplier;
 
@@ -176,11 +175,15 @@ public class ecoRewardManager
             return;
         }
         else if (ecoEntityUtil.isOwner(event.getKiller(), event.getKilledCreature())) {
-            // TODO: message no killing your own pets?
+            ecoCreature.getEcoLogger().debug("No reward for " + event.getKiller().getName() + " killing pets.");
             return;
         }
         else if (ecoCreature.mobArenaHandler != null && ecoCreature.mobArenaHandler.isPlayerInArena(event.getKiller()) && !hasMobArenaRewards) {
-            // TODO: message no arena awards?
+            ecoCreature.getEcoLogger().debug("No reward for " + event.getKiller().getName() + " in Mob Arena.");
+            return;
+        }
+        else if (!hasCreativeModeRewards && event.getKiller().getGameMode() == GameMode.CREATIVE) {
+            ecoCreature.getEcoLogger().debug("No reward for " + event.getKiller().getName() + " in creative mode.");
             return;
         }
         else if (!canCampSpawner && (campByDistance || campByEntity)) {
@@ -192,10 +195,12 @@ public class ecoRewardManager
                     event.setDroppedExp(0);
                 }
                 ecoCreature.getMessageManager(event.getKiller()).sendMessage(ecoCreature.getMessageManager(event.getKiller()).noCampMessage, event.getKiller());
+                ecoCreature.getEcoLogger().debug("No reward for " + event.getKiller().getName() + " spawn camping.");
                 return;
             }
         }
         else if (!hasPermission(event.getKiller(), "reward." + RewardType.fromEntity(event.getKilledCreature()).getName())) {
+            ecoCreature.getEcoLogger().debug("No reward for " + event.getKiller().getName() + " due to lack of permission for " + RewardType.fromEntity(event.getKilledCreature()).getName());
             return;
         }
 
