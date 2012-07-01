@@ -49,7 +49,7 @@ public class ecoCreature extends JavaPlugin
     private ecoConfigManager configManager;
     private ecoMetrics metrics;
 
-    private Boolean setupDependencies()
+    private boolean setupDependencies()
     {
         RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
         if (permissionProvider != null) {
@@ -206,12 +206,12 @@ public class ecoCreature extends JavaPlugin
         return metrics;
     }
 
-    public Boolean hasEconomy()
+    public boolean hasEconomy()
     {
         return economy != null;
     }
 
-    public Boolean has(Player player, String perm)
+    public boolean has(Player player, String perm)
     {
         return permission.has(player, "ecoCreature." + perm) || permission.has(player, "ecocreature." + perm.toLowerCase());
     }

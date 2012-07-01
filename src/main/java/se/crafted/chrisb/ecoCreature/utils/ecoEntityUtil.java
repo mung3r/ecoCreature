@@ -48,7 +48,7 @@ public class ecoEntityUtil
         }
     };
 
-    public static Boolean isUnderSeaLevel(Entity entity)
+    public static boolean isUnderSeaLevel(Entity entity)
     {
         return entity.getLocation().getY() < SEA_LEVEL;
     }
@@ -140,7 +140,7 @@ public class ecoEntityUtil
         return null;
     }
 
-    public static Boolean isPVPDeath(EntityDeathEvent event)
+    public static boolean isPVPDeath(EntityDeathEvent event)
     {
         if (event != null && event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
             Entity damager = ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
@@ -150,7 +150,7 @@ public class ecoEntityUtil
         return false;
     }
 
-    public static Boolean isOwner(Player player, Entity entity)
+    public static boolean isOwner(Player player, Entity entity)
     {
         if (entity instanceof Tameable) {
             if (((Tameable) entity).isTamed() && ((Tameable) entity).getOwner() instanceof Player) {

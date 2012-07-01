@@ -281,9 +281,9 @@ public class ecoReward
         return stack;
     }
 
-    public Double getRewardAmount()
+    public double getRewardAmount()
     {
-        Double rewardAmount;
+        double rewardAmount;
 
         if (Math.random() > coinPercentage / 100.0D) {
             rewardAmount = 0.0D;

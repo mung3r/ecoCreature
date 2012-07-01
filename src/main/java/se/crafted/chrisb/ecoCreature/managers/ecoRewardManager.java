@@ -29,29 +29,29 @@ import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil.TimePeriod;
 
 public class ecoRewardManager
 {
-    public static Boolean warnGroupMultiplierSupport = true;
+    public static boolean warnGroupMultiplierSupport = true;
 
     public boolean isIntegerCurrency;
 
-    public Boolean canCampSpawner;
+    public boolean canCampSpawner;
     public boolean campByDistance;
     public boolean campByEntity;
     public boolean shouldClearDefaultDrops;
-    public Boolean shouldOverrideDrops;
-    public Boolean isFixedDrops;
-    public Boolean shouldClearCampDrops;
+    public boolean shouldOverrideDrops;
+    public boolean isFixedDrops;
+    public boolean shouldClearCampDrops;
     public int campRadius;
-    public Boolean hasBowRewards;
-    public Boolean hasDeathPenalty;
-    public Boolean hasPVPReward;
-    public Boolean isPercentPenalty;
-    public Boolean isPercentPvpReward;
-    public Double penaltyAmount;
+    public boolean hasBowRewards;
+    public boolean hasDeathPenalty;
+    public boolean hasPVPReward;
+    public boolean isPercentPenalty;
+    public boolean isPercentPvpReward;
+    public double penaltyAmount;
     public double pvpRewardAmount;
-    public Boolean canHuntUnderSeaLevel;
-    public Boolean isWolverineMode;
-    public Boolean noFarm;
-    public Boolean noFarmFire;
+    public boolean canHuntUnderSeaLevel;
+    public boolean isWolverineMode;
+    public boolean noFarm;
+    public boolean noFarmFire;
     public boolean hasMobArenaRewards;
     public boolean hasCreativeModeRewards;
     public double mobArenaMultiplier;
@@ -115,7 +115,7 @@ public class ecoRewardManager
             return;
         }
 
-        Double amount = 0.0D;
+        double amount = 0.0D;
 
         if (rewards.containsKey(RewardType.PLAYER)) {
             ecoReward reward = getRewardFromType(RewardType.PLAYER);
@@ -153,7 +153,7 @@ public class ecoRewardManager
             return;
         }
 
-        Double amount = isPercentPenalty ? ecoCreature.economy.getBalance(player.getName()) * (penaltyAmount / 100.0D) : penaltyAmount;
+        double amount = isPercentPenalty ? ecoCreature.economy.getBalance(player.getName()) * (penaltyAmount / 100.0D) : penaltyAmount;
         if (amount > 0.0D) {
             ecoCreature.economy.withdrawPlayer(player.getName(), amount);
             ecoCreature.getMessageManager(player).sendMessage(ecoCreature.getMessageManager(player).deathPenaltyMessage, player, amount);
@@ -252,7 +252,7 @@ public class ecoRewardManager
         }
     }
 
-    public void registerDeathStreak(Player player, Integer deaths)
+    public void registerDeathStreak(Player player, int deaths)
     {
         if (hasPermission(player, "reward.deathstreak") && rewards.containsKey(RewardType.DEATH_STREAK)) {
 
@@ -270,7 +270,7 @@ public class ecoRewardManager
         }
     }
 
-    public void registerKillStreak(Player player, Integer kills)
+    public void registerKillStreak(Player player, int kills)
     {
         if (hasPermission(player, "reward.killstreak") && rewards.containsKey(RewardType.KILL_STREAK)) {
 
@@ -309,7 +309,7 @@ public class ecoRewardManager
 
     private void registerReward(Player player, ecoReward reward, String weaponName)
     {
-        Double amount = computeReward(player, reward);
+        double amount = computeReward(player, reward);
 
         if (amount > 0.0D && plugin.hasEconomy()) {
             ecoCreature.economy.depositPlayer(player.getName(), amount);
@@ -326,9 +326,9 @@ public class ecoRewardManager
         plugin.getMetrics().addCount(reward.getRewardType());
     }
 
-    private Double computeReward(Player player, ecoReward reward)
+    private double computeReward(Player player, ecoReward reward)
     {
-        Double amount = reward.getRewardAmount();
+        double amount = reward.getRewardAmount();
 
         try {
             if (ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()) != null) {
@@ -371,7 +371,7 @@ public class ecoRewardManager
         return isIntegerCurrency ? (double) Math.round(amount) : amount;
     }
 
-    private Boolean hasPermission(Player player, String perm)
+    private boolean hasPermission(Player player, String perm)
     {
         return ecoCreature.permission.has(player.getWorld(), player.getName(), "ecoCreature." + perm) || ecoCreature.permission.has(player.getWorld(), player.getName(), "ecocreature." + perm.toLowerCase());
     }

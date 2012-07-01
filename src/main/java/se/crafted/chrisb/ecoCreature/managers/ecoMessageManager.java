@@ -44,14 +44,14 @@ public class ecoMessageManager
         }
     }
 
-    public void sendMessage(ecoMessage message, Player player, Double amount)
+    public void sendMessage(ecoMessage message, Player player, double amount)
     {
         if (shouldOutputMessages && message.isEnabled() && plugin.hasEconomy()) {
             player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()).replaceAll(AMOUNT_TOKEN, ecoCreature.economy.format(amount).replaceAll("\\$", "\\\\\\$")));
         }
     }
 
-    public void sendMessage(ecoMessage message, Player player, Double amount, String creatureName, String weaponName)
+    public void sendMessage(ecoMessage message, Player player, double amount, String creatureName, String weaponName)
     {
         if (shouldOutputMessages && message.isEnabled() && plugin.hasEconomy()) {
             player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()).replaceAll(AMOUNT_TOKEN, ecoCreature.economy.format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll(ITEM_TOKEN, toCamelCase(weaponName))

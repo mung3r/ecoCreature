@@ -27,7 +27,7 @@ public class ecoConfigManager
     private static final String DEFAULT_WORLD = "default";
 
     private final ecoCreature plugin;
-    private Boolean isEnabled;
+    private boolean isEnabled = false;
 
     public static boolean debug = false;
 
@@ -36,7 +36,7 @@ public class ecoConfigManager
         this.plugin = plugin;
     }
 
-    public Boolean isEnabled()
+    public boolean isEnabled()
     {
         return isEnabled;
     }
