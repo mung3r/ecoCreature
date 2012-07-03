@@ -45,8 +45,8 @@ public class ecoConfigManager
     {
         FileConfiguration defaultConfig = new YamlConfiguration();
 
-        File defaultConfigFile = new File(ecoCreature.dataFolder, DEFAULT_CONFIG_FILE);
-        File oldConfigFile = new File(ecoCreature.dataFolder, OLD_CONFIG_FILE);
+        File defaultConfigFile = new File(ecoCreature.DATA_FOLDER, DEFAULT_CONFIG_FILE);
+        File oldConfigFile = new File(ecoCreature.DATA_FOLDER, OLD_CONFIG_FILE);
 
         if (defaultConfigFile.exists()) {
             defaultConfig.load(defaultConfigFile);
@@ -68,7 +68,7 @@ public class ecoConfigManager
 
         for (World world : plugin.getServer().getWorlds()) {
 
-            File worldConfigFile = new File(ecoCreature.dataWorldsFolder, world.getName() + ".yml");
+            File worldConfigFile = new File(ecoCreature.DATA_WORLDS_FOLDER, world.getName() + ".yml");
 
             if (worldConfigFile.exists()) {
                 FileConfiguration worldConfig = getConfig(worldConfigFile);

@@ -7,19 +7,19 @@ import se.crafted.chrisb.ecoCreature.models.ecoMessage;
 
 public class ecoMessageManager
 {
-    private final static String PLAYER_TOKEN = "<plr>";
-    private final static String AMOUNT_TOKEN = "<amt>";
-    private final static String ITEM_TOKEN = "<itm>";
-    private final static String CREATURE_TOKEN = "<crt>";
+    private static final String PLAYER_TOKEN = "<plr>";
+    private static final String AMOUNT_TOKEN = "<amt>";
+    private static final String ITEM_TOKEN = "<itm>";
+    private static final String CREATURE_TOKEN = "<crt>";
 
-    public final static String NO_CAMP_MESSAGE = "&7You find no rewards camping monster spawners.";
-    public final static String NO_BOW_REWARD_MESSAGE = "&7You find no rewards on this creature.";
-    public final static String DEATH_PENALTY_MESSAGE = "&7You wake up to find &6<amt>&7 missing from your pockets!";
-    public final static String PVP_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for murdering &5<crt>&7.";
+    public static final String NO_CAMP_MESSAGE = "&7You find no rewards camping monster spawners.";
+    public static final String NO_BOW_REWARD_MESSAGE = "&7You find no rewards on this creature.";
+    public static final String DEATH_PENALTY_MESSAGE = "&7You wake up to find &6<amt>&7 missing from your pockets!";
+    public static final String PVP_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for murdering &5<crt>&7.";
 
-    public final static String NO_REWARD_MESSAGE = "&7You slayed a &5<crt>&7 using a &3<itm>&7.";
-    public final static String REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.";
-    public final static String PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.";
+    public static final String NO_REWARD_MESSAGE = "&7You slayed a &5<crt>&7 using a &3<itm>&7.";
+    public static final String REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.";
+    public static final String PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.";
 
     public boolean shouldOutputMessages;
 

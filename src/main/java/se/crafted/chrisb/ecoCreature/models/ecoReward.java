@@ -54,15 +54,15 @@ public class ecoReward
         ZOMBIE("Zombie"),
         UNKNOWN("Unknown");
 
-        private static final Map<String, RewardType> mapping = new HashMap<String, RewardType>();
+        private static final Map<String, RewardType> NAME_MAP = new HashMap<String, RewardType>();
 
         static {
             for (RewardType type : EnumSet.allOf(RewardType.class)) {
-                mapping.put(type.name, type);
+                NAME_MAP.put(type.name, type);
             }
 
             // NOTE: backward compatibility
-            mapping.put("MagmaCube".toLowerCase(), MAGMA_CUBE);
+            NAME_MAP.put("MagmaCube".toLowerCase(), MAGMA_CUBE);
         }
 
         private String name;
@@ -77,7 +77,7 @@ public class ecoReward
         {
             RewardType rewardType = null;
             if (name != null)
-                rewardType = mapping.get(name.toLowerCase());
+                rewardType = NAME_MAP.get(name.toLowerCase());
             return rewardType;
         }
 
