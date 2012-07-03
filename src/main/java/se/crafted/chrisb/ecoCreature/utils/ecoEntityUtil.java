@@ -20,8 +20,6 @@ import se.crafted.chrisb.ecoCreature.ecoCreature;
 
 public class ecoEntityUtil
 {
-    private static final double SEA_LEVEL = 63;
-
     private static final long DAY_START = 0;
     private static final long SUNSET_START = 13000;
     private static final long DUSK_START = 13500;
@@ -50,7 +48,7 @@ public class ecoEntityUtil
 
     public static boolean isUnderSeaLevel(Entity entity)
     {
-        return entity.getLocation().getY() < SEA_LEVEL;
+        return entity.getLocation().getBlockY() < entity.getWorld().getSeaLevel();
     }
 
     public static boolean isNearSpawner(Entity entity)
