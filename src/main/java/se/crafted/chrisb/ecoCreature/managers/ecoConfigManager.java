@@ -193,20 +193,46 @@ public class ecoConfigManager
                 if (!rewardManager.rewards.containsKey(reward.getRewardType())) {
                     rewardManager.rewards.put(reward.getRewardType(), new ArrayList<ecoReward>());
                 }
-                rewardManager.rewards.get(reward.getRewardType()).add(reward);
 
                 if (rewardTable.getConfigurationSection(rewardName).getList("Sets") != null) {
                     List<String> setList = (List<String>) rewardTable.getConfigurationSection(rewardName).getList("Sets");
                     for (String setName : setList) {
                         if (rewardManager.rewardSet.containsKey(setName)) {
-                            rewardManager.rewards.get(reward.getRewardType()).add(rewardManager.rewardSet.get(setName));
+                            rewardManager.rewards.get(reward.getRewardType()).add(mergeReward(reward, rewardManager.rewardSet.get(setName)));
                         }
                     }
+                }
+                else {
+                    rewardManager.rewards.get(reward.getRewardType()).add(reward);
                 }
             }
         }
 
         return rewardManager;
+    }
+
+    private ecoReward mergeReward(ecoReward from, ecoReward to)
+    {
+        ecoReward reward = new ecoReward();
+
+        reward.setRewardName(to.getRewardName());
+        reward.setRewardType(to.getRewardType());
+
+        reward.setDrops(!from.getDrops().isEmpty() ? from.getDrops() : to.getDrops());
+
+        reward.setCoinMin(from.getCoinMin() != null ? from.getCoinMin() : to.getCoinMin());
+        reward.setCoinMax(from.getCoinMax() != null ? from.getCoinMax() : to.getCoinMax());
+        reward.setCoinPercentage(from.getCoinPercentage() != null ? from.getCoinPercentage() : to.getCoinPercentage());
+
+        reward.setExpMin(from.getExpMin() != null ? from.getExpMin() : to.getExpMin());
+        reward.setExpMax(from.getExpMax() != null ? from.getExpMax() : to.getExpMax());
+        reward.setExpPercentage(from.getExpPercentage() != null ? from.getExpPercentage() : to.getExpPercentage());
+
+        reward.setNoRewardMessage(!from.getNoRewardMessage().equals(to.getNoRewardMessage()) ? from.getNoRewardMessage() : to.getNoRewardMessage());
+        reward.setRewardMessage(!from.getRewardMessage().equals(to.getRewardMessage()) ? from.getRewardMessage() : to.getRewardMessage());
+        reward.setPenaltyMessage(!from.getPenaltyMessage().equals(to.getPenaltyMessage()) ? from.getPenaltyMessage() : to.getPenaltyMessage());
+
+        return reward;
     }
 
     private FileConfiguration getConfig(File file) throws Exception
