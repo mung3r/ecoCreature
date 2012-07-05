@@ -353,18 +353,20 @@ public class ecoRewardManager
             amount *= envMultiplier.get(player.getWorld().getEnvironment());
         }
 
-        Map<String, ProtectedRegion> regions = ecoCreature.worldGuardPlugin.getRegionManager(player.getWorld()).getRegions();
-        for (String regionName : regions.keySet()) {
-            if (hasPermission(player, "gain.worldguard") && worldGuardRegionMultiplier.containsKey(regionName)) {
-                amount *= worldGuardRegionMultiplier.get(regionName);
+        if (ecoCreature.worldGuardPlugin != null) {
+            Map<String, ProtectedRegion> regions = ecoCreature.worldGuardPlugin.getRegionManager(player.getWorld()).getRegions();
+            for (String regionName : regions.keySet()) {
+                if (hasPermission(player, "gain.worldguard") && worldGuardRegionMultiplier.containsKey(regionName)) {
+                    amount *= worldGuardRegionMultiplier.get(regionName);
+                }
             }
         }
 
-        if (hasPermission(player, "gain.heroes") && ecoCreature.heroesPlugin.getCharacterManager().getHero(player).hasParty()) {
+        if (hasPermission(player, "gain.heroes") && ecoCreature.heroesPlugin != null && ecoCreature.heroesPlugin.getCharacterManager().getHero(player).hasParty()) {
             amount *= heroesPartyMultiplier;
         }
 
-        if (hasMobArenaRewards && hasPermission(player, "gain.mobarena") && ecoCreature.mobArenaHandler.isPlayerInArena(player)) {
+        if (hasMobArenaRewards && hasPermission(player, "gain.mobarena") && ecoCreature.mobArenaHandler != null && ecoCreature.mobArenaHandler.isPlayerInArena(player)) {
             amount *= mobArenaMultiplier;
         }
 
