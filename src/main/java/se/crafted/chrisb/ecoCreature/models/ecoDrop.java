@@ -21,7 +21,7 @@ public class ecoDrop
     private Short durability;
     private int maxAmount;
     private int minAmount;
-    private Double percentage;
+    private double percentage;
     private boolean isFixedDrops;
     private Set<ecoEnchantment> enchantments;
     private final Random random = new Random();
@@ -114,12 +114,12 @@ public class ecoDrop
         this.minAmount = minAmount;
     }
 
-    public Double getPercentage()
+    public double getPercentage()
     {
         return percentage;
     }
 
-    public void setPercentage(Double percentage)
+    public void setPercentage(double percentage)
     {
         this.percentage = percentage;
     }

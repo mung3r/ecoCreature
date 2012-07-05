@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -33,8 +34,8 @@ import se.crafted.chrisb.ecoCreature.utils.ecoMetrics;
 
 public class ecoCreature extends JavaPlugin
 {
-    public static final File dataFolder = new File("plugins" + File.separator + "ecoCreature");
-    public static final File dataWorldsFolder = new File(dataFolder, "worlds");
+    public static final File DATA_FOLDER = new File("plugins" + File.separator + "ecoCreature");
+    public static final File DATA_WORLDS_FOLDER = new File(DATA_FOLDER, "worlds");
 
     public static Permission permission = null;
     public static Economy economy = null;
@@ -44,12 +45,12 @@ public class ecoCreature extends JavaPlugin
     public static WorldGuardPlugin worldGuardPlugin = null;
 
     private static ecoLogger logger = new ecoLogger();
-    public static HashMap<String, ecoMessageManager> messageManagers;
-    public static HashMap<String, ecoRewardManager> rewardManagers;
+    public static Map<String, ecoMessageManager> messageManagers;
+    public static Map<String, ecoRewardManager> rewardManagers;
     private ecoConfigManager configManager;
     private ecoMetrics metrics;
 
-    private Boolean setupDependencies()
+    private boolean setupDependencies()
     {
         RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
         if (permissionProvider != null) {
@@ -75,7 +76,7 @@ public class ecoCreature extends JavaPlugin
     private void setupDeathTpPlus()
     {
         Plugin plugin = this.getServer().getPluginManager().getPlugin("DeathTpPlus");
-        if (plugin != null && plugin instanceof DeathTpPlus) {
+        if (plugin instanceof DeathTpPlus) {
             DeathTpPlus testPlugin = (DeathTpPlus) plugin;
             if (testPlugin.getDescription().getVersion().startsWith("1.95")) {
                 deathTpPlusPlugin = testPlugin;
@@ -87,7 +88,7 @@ public class ecoCreature extends JavaPlugin
     private void setupMobArenaHandler()
     {
         Plugin plugin = this.getServer().getPluginManager().getPlugin("MobArena");
-        if (plugin != null && plugin instanceof MobArena) {
+        if (plugin instanceof MobArena) {
             mobArenaHandler = new MobArenaHandler();
             logger.info("Successfully hooked " + plugin.getDescription().getName());
         }
@@ -96,7 +97,7 @@ public class ecoCreature extends JavaPlugin
     private void setupHeroes()
     {
         Plugin plugin = this.getServer().getPluginManager().getPlugin("Heroes");
-        if (plugin != null && plugin instanceof Heroes) {
+        if (plugin instanceof Heroes) {
             heroesPlugin = (Heroes) plugin;
             logger.info("Successfully hooked " + plugin.getDescription().getName());
         }
@@ -105,7 +106,7 @@ public class ecoCreature extends JavaPlugin
     private void setupWorldGuard()
     {
         Plugin plugin = this.getServer().getPluginManager().getPlugin("WorldGuard");
-        if (plugin != null && plugin instanceof WorldGuardPlugin) {
+        if (plugin instanceof WorldGuardPlugin) {
             worldGuardPlugin = (WorldGuardPlugin) plugin;
             logger.info("Successfully hooked " + plugin.getDescription().getName());
         }
@@ -170,7 +171,7 @@ public class ecoCreature extends JavaPlugin
 
     public void onLoad()
     {
-        dataWorldsFolder.mkdirs();
+        DATA_WORLDS_FOLDER.mkdirs();
     }
 
     public static ecoLogger getEcoLogger()
@@ -206,12 +207,12 @@ public class ecoCreature extends JavaPlugin
         return metrics;
     }
 
-    public Boolean hasEconomy()
+    public boolean hasEconomy()
     {
         return economy != null;
     }
 
-    public Boolean has(Player player, String perm)
+    public boolean has(Player player, String perm)
     {
         return permission.has(player, "ecoCreature." + perm) || permission.has(player, "ecocreature." + perm.toLowerCase());
     }

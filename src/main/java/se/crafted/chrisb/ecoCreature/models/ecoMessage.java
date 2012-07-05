@@ -2,7 +2,7 @@ package se.crafted.chrisb.ecoCreature.models;
 
 public class ecoMessage
 {
-    private Boolean isEnabled = true;
+    private boolean isEnabled = true;
     private String message;
 
     public ecoMessage(String message)
@@ -10,18 +10,18 @@ public class ecoMessage
         this.message = message;
     }
 
-    public ecoMessage(String message, Boolean isEnabled)
+    public ecoMessage(String message, boolean isEnabled)
     {
         this.message = message;
         this.isEnabled = isEnabled;
     }
 
-    public Boolean isEnabled()
+    public boolean isEnabled()
     {
         return isEnabled;
     }
 
-    public void isEnabled(Boolean isEnabled)
+    public void isEnabled(boolean isEnabled)
     {
         this.isEnabled = isEnabled;
     }

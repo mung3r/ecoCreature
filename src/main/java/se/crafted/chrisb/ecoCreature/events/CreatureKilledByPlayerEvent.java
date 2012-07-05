@@ -17,7 +17,7 @@ import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 
 public class CreatureKilledByPlayerEvent extends Event
 {
-    private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList HANDLERS = new HandlerList();
     private EntityDeathEvent event;
 
     public CreatureKilledByPlayerEvent(EntityDeathEvent event)
@@ -72,11 +72,11 @@ public class CreatureKilledByPlayerEvent extends Event
 
     public HandlerList getHandlers()
     {
-        return handlers;
+        return HANDLERS;
     }
 
     public static HandlerList getHandlerList()
     {
-        return handlers;
+        return HANDLERS;
     }
 }

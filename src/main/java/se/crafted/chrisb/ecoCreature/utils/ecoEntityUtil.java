@@ -34,21 +34,21 @@ public class ecoEntityUtil
     public static enum TimePeriod {
         DAY, SUNSET, DUSK, NIGHT, DAWN, SUNRISE, IDENTITY;
 
-        private static final Map<String, TimePeriod> nameMap = new HashMap<String, TimePeriod>();
+        private static final Map<String, TimePeriod> NAME_MAP = new HashMap<String, TimePeriod>();
 
         static {
             for (TimePeriod type : TimePeriod.values()) {
-                nameMap.put(type.toString(), type);
+                NAME_MAP.put(type.toString(), type);
             }
         }
 
         public static TimePeriod fromName(String period)
         {
-            return nameMap.get(period.toUpperCase());
+            return NAME_MAP.get(period.toUpperCase());
         }
     };
 
-    public static Boolean isUnderSeaLevel(Entity entity)
+    public static boolean isUnderSeaLevel(Entity entity)
     {
         return entity.getLocation().getY() < SEA_LEVEL;
     }
@@ -140,17 +140,16 @@ public class ecoEntityUtil
         return null;
     }
 
-    public static Boolean isPVPDeath(EntityDeathEvent event)
+    public static boolean isPVPDeath(EntityDeathEvent event)
     {
         if (event != null && event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-            Entity damager = ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
-            return damager instanceof Player;
+            return ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager() instanceof Player;
         }
 
         return false;
     }
 
-    public static Boolean isOwner(Player player, Entity entity)
+    public static boolean isOwner(Player player, Entity entity)
     {
         if (entity instanceof Tameable) {
             if (((Tameable) entity).isTamed() && ((Tameable) entity).getOwner() instanceof Player) {
