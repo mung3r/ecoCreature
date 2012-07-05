@@ -241,10 +241,10 @@ public class ecoRewardManager
         if (hasPermission(player, "reward.spawner") && rewards.containsKey(RewardType.SPAWNER)) {
 
             ecoReward reward = getRewardFromType(RewardType.SPAWNER);
-            
+
             if (reward != null) {
                 registerReward(player, reward, Material.getMaterial(player.getItemInHand().getTypeId()).name());
-            
+
                 for (ItemStack itemStack : reward.computeDrops()) {
                     block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
                 }
@@ -360,8 +360,12 @@ public class ecoRewardManager
             }
         }
 
-        if (hasPermission(player, "gain.heroes") && ecoCreature.heroesPlugin.getCharacterManager().getHero(player).hasParty()) {
-            amount *= heroesPartyMultiplier;
+        try {
+            if (hasPermission(player, "gain.heroes") && ecoCreature.heroesPlugin.getCharacterManager().getHero(player).hasParty()) {
+                amount *= heroesPartyMultiplier;
+            }
+        } catch (Exception e) {
+            //ignore exceptions caused by no class found.
         }
 
         if (hasMobArenaRewards && hasPermission(player, "gain.mobarena") && ecoCreature.mobArenaHandler.isPlayerInArena(player)) {
