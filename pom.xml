@@ -3,7 +3,7 @@
   <groupId>se.crafted.chrisb</groupId>
   <artifactId>ecoCreature</artifactId>
   <name>ecoCreature</name>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.1-SNAPSHOT</version>
   <repositories>
     <repository>
       <id>bukkit-repo</id>
@@ -82,6 +82,7 @@
   	<url>https://github.com/mung3r/ecoCreature</url>
   </scm>
   <build>
+    <defaultGoal>clean install</defaultGoal>
 	<resources>
 		<resource>
 			<directory>src/main/resources</directory>

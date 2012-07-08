@@ -17,6 +17,8 @@ public class ecoMetrics extends Metrics
     {
         super(plugin);
         rewardTypeCount = new Hashtable<RewardType, Integer>() {
+            private static final long serialVersionUID = 1L;
+
             @Override
             public synchronized Integer get(Object key)
             {

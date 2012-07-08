@@ -89,6 +89,7 @@ public class ecoConfigManager
         ecoMessageManager messageManager = new ecoMessageManager(plugin);
 
         messageManager.shouldOutputMessages = config.getBoolean("System.Messages.Output", true);
+        messageManager.shouldLogCoinRewards = config.getBoolean("System.Messages.LogCoinRewards", true);
         messageManager.noBowRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoBowMessage", ecoMessageManager.NO_BOW_REWARD_MESSAGE)), true);
         messageManager.noCampMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoCampMessage", ecoMessageManager.NO_CAMP_MESSAGE)), config.getBoolean("System.Messages.Spawner", false));
         messageManager.deathPenaltyMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DeathPenaltyMessage", ecoMessageManager.DEATH_PENALTY_MESSAGE)), true);
