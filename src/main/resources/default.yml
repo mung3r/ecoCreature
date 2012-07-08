@@ -81,6 +81,10 @@ System:
         # Default: true
         Output: true
         #
+        # Enable logging of coin rewards in server.log
+        # Default: false
+        LogCoinRewards: false
+        #
         # Message players when they get no reward for a kill
         # Default: true
         NoReward: true

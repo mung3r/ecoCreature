@@ -241,10 +241,10 @@ public class ecoRewardManager
         if (hasPermission(player, "reward.spawner") && rewards.containsKey(RewardType.SPAWNER)) {
 
             ecoReward reward = getRewardFromType(RewardType.SPAWNER);
-            
+
             if (reward != null) {
                 registerReward(player, reward, Material.getMaterial(player.getItemInHand().getTypeId()).name());
-            
+
                 for (ItemStack itemStack : reward.computeDrops()) {
                     block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
                 }

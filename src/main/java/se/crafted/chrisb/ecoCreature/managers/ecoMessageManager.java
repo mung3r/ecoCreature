@@ -22,6 +22,7 @@ public class ecoMessageManager
     public static final String PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.";
 
     public boolean shouldOutputMessages;
+    public boolean shouldLogCoinRewards;
 
     public ecoMessage noBowRewardMessage;
     public ecoMessage noCampMessage;
@@ -49,13 +50,20 @@ public class ecoMessageManager
         if (shouldOutputMessages && message.isEnabled() && plugin.hasEconomy()) {
             player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()).replaceAll(AMOUNT_TOKEN, ecoCreature.economy.format(amount).replaceAll("\\$", "\\\\\\$")));
         }
+
+        if (shouldLogCoinRewards) {
+            ecoCreature.getEcoLogger().info(player.getName() + " received " + ecoCreature.economy.format(amount));
+        }
     }
 
     public void sendMessage(ecoMessage message, Player player, double amount, String creatureName, String weaponName)
     {
         if (shouldOutputMessages && message.isEnabled() && plugin.hasEconomy()) {
-            player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()).replaceAll(AMOUNT_TOKEN, ecoCreature.economy.format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll(ITEM_TOKEN, toCamelCase(weaponName))
-                    .replaceAll(CREATURE_TOKEN, creatureName));
+            player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()).replaceAll(AMOUNT_TOKEN, ecoCreature.economy.format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll(ITEM_TOKEN, toCamelCase(weaponName)).replaceAll(CREATURE_TOKEN, creatureName));
+        }
+
+        if (shouldLogCoinRewards) {
+            ecoCreature.getEcoLogger().info(player.getName() + " received " + ecoCreature.economy.format(amount));
         }
     }
 
@@ -72,9 +80,9 @@ public class ecoMessageManager
         StringBuilder itemNameBuilder = new StringBuilder("");
 
         for (String itemNamePart : rawItemNameParts) {
-        	itemNameBuilder.append(" ").append(toProperCase(itemNamePart));
+            itemNameBuilder.append(" ").append(toProperCase(itemNamePart));
         }
-        
+
         String itemName = itemNameBuilder.toString();
         if (itemName.trim().equals("Air")) {
             itemName = "Fists";
