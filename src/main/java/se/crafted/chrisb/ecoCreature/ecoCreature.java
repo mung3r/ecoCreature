@@ -31,12 +31,16 @@ import se.crafted.chrisb.ecoCreature.managers.ecoMessageManager;
 import se.crafted.chrisb.ecoCreature.managers.ecoRewardManager;
 import se.crafted.chrisb.ecoCreature.utils.ecoLogger;
 import se.crafted.chrisb.ecoCreature.utils.ecoMetrics;
+import se.crafted.chrisb.ecoCreature.utils.ecoUpdate;
 
 public class ecoCreature extends JavaPlugin
 {
     public static final File DATA_FOLDER = new File("plugins" + File.separator + "ecoCreature");
     public static final File DATA_WORLDS_FOLDER = new File(DATA_FOLDER, "worlds");
-
+    private static final String DEV_BUKKIT_URL = "http://dev.bukkit.org/server-mods/ecocreature";
+    private static final long CHECK_DELAY = 0;
+    private static final long CHECK_PERIOD = 432000;
+    
     public static Permission permission = null;
     public static Economy economy = null;
     public static DeathTpPlus deathTpPlusPlugin = null;
@@ -151,6 +155,8 @@ public class ecoCreature extends JavaPlugin
         setupHeroes();
         setupWorldGuard();
         registerEvents();
+
+        Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, new ecoUpdate(this, DEV_BUKKIT_URL), CHECK_DELAY, CHECK_PERIOD);
 
         try {
             metrics = new ecoMetrics(this);
