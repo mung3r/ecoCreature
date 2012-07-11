@@ -140,6 +140,7 @@ Gain:
     # Multiply reward amount based on player arena status
         InArena:
             Amount: 1.0
+            Share: 'true'
     WorldGuard:
     #
     # Multiply reward amount based on WorldGuard region
@@ -152,6 +153,8 @@ Gain:
     # Multiply reward based on Heroes party status
         InParty:
             Amount: 1.125
+            Share: 'true'
+
 RewardTable:
     ############################################################################
     # Drop format and Examples:
@@ -448,9 +451,8 @@ RewardTable:
         Coin_Percent: 1.0
     Zombie:
         Sets:
-        - NormalZombie
-        - FarmerZombie
-        - WarriorZombie
+        - Zombie
+        - CashZombie
 
 RewardSets:
     ############################################################################
@@ -476,23 +478,12 @@ RewardSets:
     # See how the these example sets below are used for Zombies in the
     # RewardTable
     ############################################################################
-    NormalZombie:
+    Zombie:
         Drops:
         - 'rotten flesh:2:75'
-    FarmerZombie:
+    CashZombie:
         Drops:
         - 'rotten flesh:2:75'
-        - 'diamond_pickaxe,durability.0-3:1:25'
         Coin_Minimum: 1.00
         Coin_Maximum: 3.50
-        Coin_Percent: 50.0
-    WarriorZombie:
-        Drops:
-        - 'rotten flesh:2:75'
-        - 'diamond_sword,damage_all.0-4:1:25'
-        Coin_Minimum: 1.00
-        Coin_Maximum: 3.50
-        Coin_Percent: 50.0
-        ExpMin: 0
-        ExpMax: 10
-        ExpPercent: 50.0
+        Coin_Percent: 100.0

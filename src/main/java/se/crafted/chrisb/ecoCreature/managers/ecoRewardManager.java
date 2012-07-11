@@ -1,9 +1,11 @@
 package se.crafted.chrisb.ecoCreature.managers;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -17,6 +19,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 
+import com.herocraftonline.heroes.characters.Hero;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
@@ -55,7 +58,9 @@ public class ecoRewardManager
     public boolean hasMobArenaRewards;
     public boolean hasCreativeModeRewards;
     public double mobArenaMultiplier;
+    public boolean isMobArenaShare;
     public double heroesPartyMultiplier;
+    public boolean isHeroesPartyShare;
 
     public Map<String, Double> groupMultiplier;
     public Map<TimePeriod, Double> timeMultiplier;
@@ -310,17 +315,36 @@ public class ecoRewardManager
     private void registerReward(Player player, ecoReward reward, String weaponName)
     {
         double amount = computeReward(player, reward);
+        Set<Player> party = new HashSet<Player>();
 
-        if (amount > 0.0D && plugin.hasEconomy()) {
-            ecoCreature.economy.depositPlayer(player.getName(), amount);
-            ecoCreature.getMessageManager(player).sendMessage(reward.getRewardMessage(), player, amount, reward.getRewardName(), weaponName);
+        if (isHeroesPartyShare && ecoCreature.heroesPlugin != null && ecoCreature.heroesPlugin.getCharacterManager().getHero(player).hasParty()) {
+            for (Hero hero : ecoCreature.heroesPlugin.getCharacterManager().getHero(player).getParty().getMembers()) {
+                party.add(hero.getPlayer());
+            }
+            amount /= (double) party.size();
         }
-        else if (amount < 0.0D && plugin.hasEconomy()) {
-            ecoCreature.economy.withdrawPlayer(player.getName(), Math.abs(amount));
-            ecoCreature.getMessageManager(player).sendMessage(reward.getPenaltyMessage(), player, Math.abs(amount), reward.getRewardName(), weaponName);
+        else if (isMobArenaShare && ecoCreature.mobArenaHandler != null && ecoCreature.mobArenaHandler.isPlayerInArena(player)) {
+            for (Player member : ecoCreature.mobArenaHandler.getArenaWithPlayer(player).getAllPlayers()) {
+                party.add(member);
+            }
+            amount /= (double) party.size();
         }
         else {
-            ecoCreature.getMessageManager(player).sendMessage(reward.getNoRewardMessage(), player, reward.getRewardName(), weaponName);
+            party.add(player);
+        }
+
+        for (Player member : party) {
+            if (amount > 0.0D && plugin.hasEconomy()) {
+                ecoCreature.economy.depositPlayer(member.getName(), amount);
+                ecoCreature.getMessageManager(member).sendMessage(reward.getRewardMessage(), member, amount, reward.getRewardName(), weaponName);
+            }
+            else if (amount < 0.0D && plugin.hasEconomy()) {
+                ecoCreature.economy.withdrawPlayer(member.getName(), Math.abs(amount));
+                ecoCreature.getMessageManager(member).sendMessage(reward.getPenaltyMessage(), member, Math.abs(amount), reward.getRewardName(), weaponName);
+            }
+            else {
+                ecoCreature.getMessageManager(member).sendMessage(reward.getNoRewardMessage(), member, reward.getRewardName(), weaponName);
+            }
         }
 
         plugin.getMetrics().addCount(reward.getRewardType());
