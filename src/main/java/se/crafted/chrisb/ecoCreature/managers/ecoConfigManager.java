@@ -165,7 +165,8 @@ public class ecoConfigManager
 
         ConfigurationSection mobArenaGainConfig = config.getConfigurationSection("Gain.MobArena.InArena");
         if (mobArenaGainConfig != null) {
-            rewardManager.mobArenaMultiplier = Double.valueOf(mobArenaGainConfig.getDouble("Amount", 1.0D));
+            rewardManager.mobArenaMultiplier = mobArenaGainConfig.getDouble("Amount", 1.0D);
+            rewardManager.isMobArenaShare = mobArenaGainConfig.getBoolean("Share", true);
         }
         else {
             rewardManager.mobArenaMultiplier = 1.0D;
@@ -173,7 +174,8 @@ public class ecoConfigManager
 
         ConfigurationSection heroesGainConfig = config.getConfigurationSection("Gain.Heroes.InParty");
         if (heroesGainConfig != null) {
-            rewardManager.heroesPartyMultiplier = Double.valueOf(heroesGainConfig.getDouble("Amount", 1.0D));
+            rewardManager.heroesPartyMultiplier = heroesGainConfig.getDouble("Amount", 1.0D);
+            rewardManager.isHeroesPartyShare = heroesGainConfig.getBoolean("Share", true);
         }
         else {
             rewardManager.heroesPartyMultiplier = 1.0D;
