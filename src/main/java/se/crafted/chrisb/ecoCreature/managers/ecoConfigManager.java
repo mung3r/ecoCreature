@@ -198,7 +198,7 @@ public class ecoConfigManager
                 }
 
                 if (rewardTable.getConfigurationSection(rewardName).getList("Sets") != null) {
-                    List<String> setList = (List<String>) rewardTable.getConfigurationSection(rewardName).getList("Sets");
+                    List<String> setList = rewardTable.getConfigurationSection(rewardName).getStringList("Sets");
                     for (String setName : setList) {
                         if (rewardManager.rewardSet.containsKey(setName)) {
                             rewardManager.rewards.get(reward.getRewardType()).add(mergeReward(reward, rewardManager.rewardSet.get(setName)));
@@ -270,7 +270,7 @@ public class ecoConfigManager
         reward.setRewardType(rewardType);
 
         if (rewardConfig.getList("Drops") != null) {
-            List<String> dropsList = (List<String>) rewardConfig.getList("Drops");
+            List<String> dropsList = rewardConfig.getStringList("Drops");
             reward.setDrops(ecoDrop.parseDrops(dropsList, rewardManager.isFixedDrops));
         }
         else {
