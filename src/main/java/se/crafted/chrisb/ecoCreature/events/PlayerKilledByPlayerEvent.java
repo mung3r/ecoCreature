@@ -2,55 +2,26 @@ package se.crafted.chrisb.ecoCreature.events;
 
 import java.util.List;
 
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerKilledByPlayerEvent extends Event
+public class PlayerKilledByPlayerEvent extends EntityDeathEvent
 {
-    private static final HandlerList HANDLERS = new HandlerList();
-    private EntityDeathEvent event;
-
-    public PlayerKilledByPlayerEvent(EntityDeathEvent event)
+    public PlayerKilledByPlayerEvent(LivingEntity what, List<ItemStack> drops, int droppedExp)
     {
-        this.event = event;
+        super(what, drops, droppedExp);
     }
 
     public Player getVictim()
     {
-        return (Player) event.getEntity();
+        return (Player) getEntity();
     }
 
     public Player getKiller()
     {
-        return (Player) ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
-    }
-
-    public List<ItemStack> getDrops()
-    {
-        return event.getDrops();
-    }
-
-    public int getDroppedExp()
-    {
-        return event.getDroppedExp();
-    }
-
-    public void setDroppedExp(int exp)
-    {
-        event.setDroppedExp(exp);
-    }
-
-    public HandlerList getHandlers()
-    {
-        return HANDLERS;
-    }
-
-    public static HandlerList getHandlerList()
-    {
-        return HANDLERS;
+        return (Player) ((EntityDamageByEntityEvent) getEntity().getLastDamageCause()).getDamager();
     }
 }
