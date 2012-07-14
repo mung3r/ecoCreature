@@ -2,6 +2,7 @@ package se.crafted.chrisb.ecoCreature.managers;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -378,8 +379,9 @@ public class ecoRewardManager
         }
 
         if (ecoCreature.worldGuardPlugin != null) {
-            Map<String, ProtectedRegion> regions = ecoCreature.worldGuardPlugin.getRegionManager(player.getWorld()).getRegions();
-            for (String regionName : regions.keySet()) {
+            Iterator<ProtectedRegion> regionSet = ecoCreature.worldGuardPlugin.getRegionManager(player.getWorld()).getApplicableRegions(player.getLocation()).iterator();
+            while (regionSet.hasNext()) {
+            	String regionName = regionSet.next().getId();
                 if (hasPermission(player, "gain.worldguard") && worldGuardRegionMultiplier.containsKey(regionName)) {
                     amount *= worldGuardRegionMultiplier.get(regionName);
                 }
