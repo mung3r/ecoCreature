@@ -26,7 +26,7 @@ public class ecoEntityListener implements Listener
     {
         if (event instanceof PlayerDeathEvent) {
             if (ecoEntityUtil.isPVPDeath(event)) {
-                Bukkit.getPluginManager().callEvent(new PlayerKilledByPlayerEvent(event));
+                Bukkit.getPluginManager().callEvent(new PlayerKilledByPlayerEvent(event.getEntity(), event.getDrops(), event.getDroppedExp()));
             }
             else {
                 ecoCreature.getRewardManager(event.getEntity()).registerDeathPenalty((Player) event.getEntity());
@@ -43,7 +43,7 @@ public class ecoEntityListener implements Listener
             return;
         }
 
-        Bukkit.getPluginManager().callEvent(new CreatureKilledByPlayerEvent(event));
+        Bukkit.getPluginManager().callEvent(new CreatureKilledByPlayerEvent(event.getEntity(), event.getDrops(), event.getDroppedExp()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
