@@ -1,6 +1,5 @@
 package se.crafted.chrisb.ecoCreature;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
@@ -10,6 +9,8 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -19,9 +20,13 @@ import org.simiancage.DeathTpPlus.DeathTpPlus;
 
 import com.garbagemule.MobArena.MobArena;
 import com.garbagemule.MobArena.MobArenaHandler;
+import com.gmail.nossr50.mcMMO;
 import com.herocraftonline.heroes.Heroes;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
+import se.crafted.chrisb.ecoCreature.commands.CommandHandler;
+import se.crafted.chrisb.ecoCreature.commands.HelpCommand;
+import se.crafted.chrisb.ecoCreature.commands.ReloadCommand;
 import se.crafted.chrisb.ecoCreature.listeners.ecoBlockListener;
 import se.crafted.chrisb.ecoCreature.listeners.ecoEntityListener;
 import se.crafted.chrisb.ecoCreature.listeners.ecoDeathListener;
@@ -35,26 +40,118 @@ import se.crafted.chrisb.ecoCreature.utils.ecoUpdate;
 
 public class ecoCreature extends JavaPlugin
 {
-    public static final File DATA_FOLDER = new File("plugins" + File.separator + "ecoCreature");
-    public static final File DATA_WORLDS_FOLDER = new File(DATA_FOLDER, "worlds");
     private static final String DEV_BUKKIT_URL = "http://dev.bukkit.org/server-mods/ecocreature";
     private static final long CHECK_DELAY = 0;
     private static final long CHECK_PERIOD = 432000;
-    
+
     public static Permission permission = null;
     public static Economy economy = null;
     public static DeathTpPlus deathTpPlusPlugin = null;
     public static MobArenaHandler mobArenaHandler = null;
     public static Heroes heroesPlugin = null;
+    public static mcMMO mcMMOPlugin = null;
     public static WorldGuardPlugin worldGuardPlugin = null;
 
     private static ecoLogger logger = new ecoLogger();
+    private ecoMetrics metrics;
     public static Map<String, ecoMessageManager> messageManagers;
     public static Map<String, ecoRewardManager> rewardManagers;
     private ecoConfigManager configManager;
-    private ecoMetrics metrics;
+    private CommandHandler commandHandler;
 
-    private boolean setupDependencies()
+    public void onEnable()
+    {
+        Locale.setDefault(Locale.US);
+        logger.setName(this.getDescription().getName());
+
+        setupVault();
+        setupMetrics();
+        setupDeathTpPlus();
+        setupMobArenaHandler();
+        setupHeroes();
+        setupMcMMO();
+        setupWorldGuard();
+
+        messageManagers = new HashMap<String, ecoMessageManager>();
+        rewardManagers = new HashMap<String, ecoRewardManager>();
+        configManager = new ecoConfigManager(this);
+
+        registerCommands();
+        registerEvents();
+
+        Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, new ecoUpdate(this, DEV_BUKKIT_URL), CHECK_DELAY, CHECK_PERIOD);
+
+        logger.info(getDescription().getVersion() + " enabled.");
+    }
+
+    public void onDisable()
+    {
+        configManager.save();
+        logger.info(getDescription().getVersion() + " is disabled.");
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
+    {
+        return commandHandler.dispatch(sender, cmd, commandLabel, args);
+    }
+
+    @Override
+    public void reloadConfig()
+    {
+        super.reloadConfig();
+        configManager = new ecoConfigManager(this);
+    };
+
+    public ecoMetrics getMetrics()
+    {
+        return metrics;
+    }
+
+    public ecoConfigManager getConfigManager()
+    {
+        return configManager;
+    }
+
+    public static ecoMessageManager getMessageManager(Entity entity)
+    {
+        ecoMessageManager messageManager = messageManagers.get(entity.getWorld().getName());
+        if (messageManager == null) {
+            messageManager = messageManagers.get(ecoConfigManager.DEFAULT_WORLD);
+        }
+        return messageManager;
+    }
+
+    public static ecoRewardManager getRewardManager(Entity entity)
+    {
+        ecoRewardManager rewardManager = rewardManagers.get(entity.getWorld().getName());
+        if (rewardManager == null) {
+            rewardManager = rewardManagers.get(ecoConfigManager.DEFAULT_WORLD);
+        }
+        return rewardManager;
+    }
+
+    public CommandHandler getCommandHandler()
+    {
+        return commandHandler;
+    }
+
+    public static ecoLogger getEcoLogger()
+    {
+        return logger;
+    }
+
+    public boolean hasEconomy()
+    {
+        return economy != null;
+    }
+
+    public boolean has(Player player, String perm)
+    {
+        return permission.has(player, "ecoCreature." + perm) || permission.has(player, "ecocreature." + perm.toLowerCase());
+    }
+
+    private void setupVault()
     {
         RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
         if (permissionProvider != null) {
@@ -63,6 +160,7 @@ public class ecoCreature extends JavaPlugin
         }
         else {
             logger.severe("Failed to load permission provider.");
+            Bukkit.getPluginManager().disablePlugin(this);
         }
 
         RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
@@ -73,8 +171,18 @@ public class ecoCreature extends JavaPlugin
         else {
             logger.warning("Economy disabled.");
         }
+    }
 
-        return (permission != null);
+    private void setupMetrics()
+    {
+        try {
+            metrics = new ecoMetrics(this);
+            metrics.setupGraphs();
+            metrics.start();
+        }
+        catch (IOException e) {
+            logger.warning("Metrics failed to load.");
+        }
     }
 
     private void setupDeathTpPlus()
@@ -107,6 +215,15 @@ public class ecoCreature extends JavaPlugin
         }
     }
 
+    private void setupMcMMO()
+    {
+        Plugin plugin = this.getServer().getPluginManager().getPlugin("mcMMO");
+        if (plugin instanceof mcMMO) {
+            mcMMOPlugin = (mcMMO) plugin;
+            logger.info("Successfully hooked " + plugin.getDescription().getName());
+        }
+    }
+
     private void setupWorldGuard()
     {
         Plugin plugin = this.getServer().getPluginManager().getPlugin("WorldGuard");
@@ -114,6 +231,13 @@ public class ecoCreature extends JavaPlugin
             worldGuardPlugin = (WorldGuardPlugin) plugin;
             logger.info("Successfully hooked " + plugin.getDescription().getName());
         }
+    }
+
+    private void registerCommands()
+    {
+        commandHandler = new CommandHandler(this);
+        commandHandler.addCommand(new HelpCommand(this));
+        commandHandler.addCommand(new ReloadCommand(this));
     }
 
     private void registerEvents()
@@ -124,102 +248,5 @@ public class ecoCreature extends JavaPlugin
         if (deathTpPlusPlugin != null) {
             Bukkit.getPluginManager().registerEvents(new ecoStreakListener(), this);
         }
-    }
-
-    public void onEnable()
-    {
-        Locale.setDefault(Locale.US);
-
-        logger.setName(this.getDescription().getName());
-        messageManagers = new HashMap<String, ecoMessageManager>();
-        rewardManagers = new HashMap<String, ecoRewardManager>();
-
-        try {
-            configManager = new ecoConfigManager(this);
-            configManager.load();
-            if (!configManager.isEnabled()) {
-                logger.severe("Edit ecoCreature config to enable the plugin.");
-                getPluginLoader().disablePlugin(this);
-                return;
-            }
-        }
-        catch (Exception e) {
-            logger.severe("Failed to load config: " + e.toString());
-            getPluginLoader().disablePlugin(this);
-            return;
-        }
-
-        setupDependencies();
-        setupDeathTpPlus();
-        setupMobArenaHandler();
-        setupHeroes();
-        setupWorldGuard();
-        registerEvents();
-
-        Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, new ecoUpdate(this, DEV_BUKKIT_URL), CHECK_DELAY, CHECK_PERIOD);
-
-        try {
-            metrics = new ecoMetrics(this);
-            metrics.setupGraphs();
-            metrics.start();
-        }
-        catch (IOException e) {
-            logger.warning("Metrics failed to load.");
-        }
-
-        logger.info(getDescription().getVersion() + " enabled.");
-    }
-
-    public void onDisable()
-    {
-        logger.info(getDescription().getVersion() + " is disabled.");
-    }
-
-    public void onLoad()
-    {
-        DATA_WORLDS_FOLDER.mkdirs();
-    }
-
-    public static ecoLogger getEcoLogger()
-    {
-        return logger;
-    }
-
-    public static ecoMessageManager getMessageManager(Entity entity)
-    {
-        ecoMessageManager messageManager = messageManagers.get(entity.getWorld().getName());
-        if (messageManager == null) {
-            messageManager = messageManagers.get("default");
-        }
-        return messageManager;
-    }
-
-    public static ecoRewardManager getRewardManager(Entity entity)
-    {
-        ecoRewardManager rewardManager = rewardManagers.get(entity.getWorld().getName());
-        if (rewardManager == null) {
-            rewardManager = rewardManagers.get("default");
-        }
-        return rewardManager;
-    }
-
-    public ecoConfigManager getConfigManager()
-    {
-        return configManager;
-    }
-
-    public ecoMetrics getMetrics()
-    {
-        return metrics;
-    }
-
-    public boolean hasEconomy()
-    {
-        return economy != null;
-    }
-
-    public boolean has(Player player, String perm)
-    {
-        return permission.has(player, "ecoCreature." + perm) || permission.has(player, "ecocreature." + perm.toLowerCase());
     }
 }
