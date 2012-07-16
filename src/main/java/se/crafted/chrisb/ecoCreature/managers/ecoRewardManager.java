@@ -131,11 +131,11 @@ public class ecoRewardManager
 
                 amount = computeReward(event.getVictim(), reward);
                 if (!reward.getDrops().isEmpty() && shouldOverrideDrops) {
-                    event.getDrops().clear();
+                    event.getEvent().getDrops().clear();
                 }
-                event.getDrops().addAll(reward.computeDrops());
+                event.getEvent().getDrops().addAll(reward.computeDrops());
                 if (exp != null) {
-                    event.setDroppedExp(exp);
+                    event.getEvent().setDroppedExp(exp);
                 }
             }
         }
@@ -169,7 +169,7 @@ public class ecoRewardManager
     public void registerCreatureDeath(CreatureKilledByPlayerEvent event)
     {
         if (shouldClearDefaultDrops) {
-            event.getDrops().clear();
+            event.getEvent().getDrops().clear();
         }
 
         if (event.getKiller().getItemInHand().getType().equals(Material.BOW) && !hasBowRewards) {
@@ -197,8 +197,8 @@ public class ecoRewardManager
             // java will stop evaluating when it knows the outcome.
             if ((campByEntity && ecoEntityUtil.isSpawnerMob(event.getKilledCreature())) || (campByDistance && (ecoEntityUtil.isNearSpawner(event.getKiller()) || ecoEntityUtil.isNearSpawner(event.getKilledCreature())))) {
                 if (shouldClearCampDrops) {
-                    event.getDrops().clear();
-                    event.setDroppedExp(0);
+                    event.getEvent().getDrops().clear();
+                    event.getEvent().setDroppedExp(0);
                 }
                 ecoCreature.getMessageManager(event.getKiller()).sendMessage(ecoCreature.getMessageManager(event.getKiller()).noCampMessage, event.getKiller());
                 ecoCreature.getEcoLogger().debug("No reward for " + event.getKiller().getName() + " spawn camping.");
@@ -215,17 +215,17 @@ public class ecoRewardManager
         if (reward != null) {
             Integer exp = reward.getExpAmount();
             if (exp != null) {
-                event.setDroppedExp(exp);
+                event.getEvent().setDroppedExp(exp);
             }
             String weaponName = event.getTamedCreature() != null ? RewardType.fromEntity(event.getTamedCreature()).getName() : Material.getMaterial(event.getKiller().getItemInHand().getTypeId()).name();
             registerReward(event.getKiller(), reward, weaponName);
             try {
                 List<ItemStack> rewardDrops = reward.computeDrops();
                 if (!rewardDrops.isEmpty()) {
-                    if (!event.getDrops().isEmpty() && shouldOverrideDrops) {
-                        event.getDrops().clear();
+                    if (!event.getEvent().getDrops().isEmpty() && shouldOverrideDrops) {
+                        event.getEvent().getDrops().clear();
                     }
-                    event.getDrops().addAll(rewardDrops);
+                    event.getEvent().getDrops().addAll(rewardDrops);
                 }
             }
             catch (IllegalArgumentException e) {
@@ -381,7 +381,7 @@ public class ecoRewardManager
         if (ecoCreature.worldGuardPlugin != null) {
             Iterator<ProtectedRegion> regionSet = ecoCreature.worldGuardPlugin.getRegionManager(player.getWorld()).getApplicableRegions(player.getLocation()).iterator();
             while (regionSet.hasNext()) {
-            	String regionName = regionSet.next().getId();
+                String regionName = regionSet.next().getId();
                 if (hasPermission(player, "gain.worldguard") && worldGuardRegionMultiplier.containsKey(regionName)) {
                     amount *= worldGuardRegionMultiplier.get(regionName);
                 }

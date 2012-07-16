@@ -22,18 +22,19 @@ public class ecoEntityListener implements Listener
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerDeath(PlayerDeathEvent event)
+    {
+        if (ecoEntityUtil.isPVPDeath(event)) {
+            Bukkit.getPluginManager().callEvent(new PlayerKilledByPlayerEvent(event));
+        }
+        else {
+            ecoCreature.getRewardManager(event.getEntity()).registerDeathPenalty((Player) event.getEntity());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onEntityDeath(EntityDeathEvent event)
     {
-        if (event instanceof PlayerDeathEvent) {
-            if (ecoEntityUtil.isPVPDeath(event) && !(event instanceof PlayerKilledByPlayerEvent)) {
-                Bukkit.getPluginManager().callEvent(new PlayerKilledByPlayerEvent(event.getEntity(), event.getDrops(), event.getDroppedExp()));
-            }
-            else {
-                ecoCreature.getRewardManager(event.getEntity()).registerDeathPenalty((Player) event.getEntity());
-            }
-            return;
-        }
-
         Player killer = ecoEntityUtil.getKillerFromDeathEvent(event);
 
         if (killer == null) {
@@ -43,9 +44,7 @@ public class ecoEntityListener implements Listener
             return;
         }
 
-        if (!(event instanceof CreatureKilledByPlayerEvent)) {
-            Bukkit.getPluginManager().callEvent(new CreatureKilledByPlayerEvent(event.getEntity(), event.getDrops(), event.getDroppedExp()));
-        }
+        Bukkit.getPluginManager().callEvent(new CreatureKilledByPlayerEvent(event));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

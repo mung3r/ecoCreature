@@ -1,28 +1,41 @@
 package se.crafted.chrisb.ecoCreature.events;
 
-import java.util.List;
-
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.models.ecoReward;
 import se.crafted.chrisb.ecoCreature.models.ecoReward.RewardType;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 
-public class CreatureKilledByPlayerEvent extends EntityDeathEvent
+public class CreatureKilledByPlayerEvent extends Event
 {
-    public CreatureKilledByPlayerEvent(LivingEntity what, List<ItemStack> drops, int droppedExp)
+    private static final HandlerList handlers = new HandlerList();
+
+    private EntityDeathEvent event;
+
+    public CreatureKilledByPlayerEvent(EntityDeathEvent event)
     {
-        super(what, drops, droppedExp);
+        this.event = event;
+    }
+
+    public EntityDeathEvent getEvent()
+    {
+        return event;
+    }
+
+    public void setEvent(EntityDeathEvent event)
+    {
+        this.event = event;
     }
 
     public Player getPlayer()
     {
-        return ecoEntityUtil.getKillerFromDeathEvent(this);
+        return ecoEntityUtil.getKillerFromDeathEvent(event);
     }
 
     public Player getKiller()
@@ -32,7 +45,7 @@ public class CreatureKilledByPlayerEvent extends EntityDeathEvent
 
     public LivingEntity getKilledCreature()
     {
-        return (LivingEntity) getEntity();
+        return (LivingEntity) event.getEntity();
     }
 
     public Material getWeapon()
@@ -42,11 +55,22 @@ public class CreatureKilledByPlayerEvent extends EntityDeathEvent
 
     public LivingEntity getTamedCreature()
     {
-        return ecoEntityUtil.getTamedKillerFromDeathEvent(this);
+        return ecoEntityUtil.getTamedKillerFromDeathEvent(event);
     }
 
     public ecoReward getReward()
     {
-        return ecoCreature.getRewardManager(getEntity()).getRewardFromType(RewardType.fromEntity(getKilledCreature()));
+        return ecoCreature.getRewardManager(event.getEntity()).getRewardFromType(RewardType.fromEntity(getKilledCreature()));
+    }
+
+    @Override
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }
