@@ -159,7 +159,7 @@ public class ecoCreature extends JavaPlugin
     public boolean hasPermission(Player player, String perm)
     {
         return permission.has(player.getWorld(), player.getName(), "ecoCreature." + perm) || permission.has(player.getWorld(), player.getName(), "ecocreature." + perm.toLowerCase());
-    
+
     }
 
     public Economy getEconomy()
@@ -227,7 +227,7 @@ public class ecoCreature extends JavaPlugin
     private void setupDeathTpPlus()
     {
         Plugin plugin = this.getServer().getPluginManager().getPlugin("DeathTpPlus");
-        if (plugin instanceof DeathTpPlus) {
+        if (plugin != null && plugin instanceof DeathTpPlus) {
             DeathTpPlus testPlugin = (DeathTpPlus) plugin;
             if (testPlugin.getDescription().getVersion().startsWith("1.95")) {
                 deathTpPlusPlugin = testPlugin;
@@ -239,7 +239,7 @@ public class ecoCreature extends JavaPlugin
     private void setupMobArenaHandler()
     {
         Plugin plugin = this.getServer().getPluginManager().getPlugin("MobArena");
-        if (plugin instanceof MobArena) {
+        if (plugin != null && plugin instanceof MobArena) {
             mobArenaHandler = new MobArenaHandler();
             logger.info("Successfully hooked " + plugin.getDescription().getName());
         }
@@ -248,7 +248,7 @@ public class ecoCreature extends JavaPlugin
     private void setupHeroes()
     {
         Plugin plugin = this.getServer().getPluginManager().getPlugin("Heroes");
-        if (plugin instanceof Heroes) {
+        if (plugin != null && plugin instanceof Heroes) {
             heroesPlugin = (Heroes) plugin;
             logger.info("Successfully hooked " + plugin.getDescription().getName());
         }
@@ -257,7 +257,7 @@ public class ecoCreature extends JavaPlugin
     private void setupMcMMO()
     {
         Plugin plugin = this.getServer().getPluginManager().getPlugin("mcMMO");
-        if (plugin instanceof mcMMO) {
+        if (plugin != null && plugin instanceof mcMMO) {
             mcMMOPlugin = (mcMMO) plugin;
             logger.info("Successfully hooked " + plugin.getDescription().getName());
         }
@@ -266,7 +266,7 @@ public class ecoCreature extends JavaPlugin
     private void setupWorldGuard()
     {
         Plugin plugin = this.getServer().getPluginManager().getPlugin("WorldGuard");
-        if (plugin instanceof WorldGuardPlugin) {
+        if (plugin != null && plugin instanceof WorldGuardPlugin) {
             worldGuardPlugin = (WorldGuardPlugin) plugin;
             logger.info("Successfully hooked " + plugin.getDescription().getName());
         }
