@@ -9,7 +9,7 @@ import se.crafted.chrisb.ecoCreature.ecoCreature;
 
 public class ecoBlockListener implements Listener
 {
-    private ecoCreature plugin;
+    private final ecoCreature plugin;
 
     public ecoBlockListener(ecoCreature plugin)
     {

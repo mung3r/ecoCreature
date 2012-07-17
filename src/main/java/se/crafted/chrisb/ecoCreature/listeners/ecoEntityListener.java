@@ -17,7 +17,7 @@ import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 
 public class ecoEntityListener implements Listener
 {
-    private ecoCreature plugin;
+    private final ecoCreature plugin;
 
     public ecoEntityListener(ecoCreature plugin)
     {
@@ -40,7 +40,7 @@ public class ecoEntityListener implements Listener
     {
         if (!(event instanceof PlayerDeathEvent)) {
             Player killer = ecoEntityUtil.getKillerFromDeathEvent(event);
-    
+
             if (killer != null) {
                 Bukkit.getPluginManager().callEvent(new CreatureKilledByPlayerEvent(event));
             }

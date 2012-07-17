@@ -211,27 +211,28 @@ public class ecoConfigManager
             rewardManager.heroesPartyMultiplier = 1.0D;
         }
 
-        ConfigurationSection rewardSets = config.getConfigurationSection("RewardSets");
-        if (rewardSets != null) {
-            for (String setName : rewardSets.getKeys(false)) {
-                rewardManager.rewardSet.put(setName, createReward(RewardType.CUSTOM, rewardSets.getConfigurationSection(setName), rewardManager, config.getBoolean("System.Messages.NoReward", false)));
+        Map<String, ecoReward> rewardSet = new HashMap<String, ecoReward>();
+        ConfigurationSection rewardSetsConfig = config.getConfigurationSection("RewardSets");
+        if (rewardSetsConfig != null) {
+            for (String setName : rewardSetsConfig.getKeys(false)) {
+                rewardSet.put(setName, createReward(RewardType.CUSTOM, rewardSetsConfig.getConfigurationSection(setName), rewardManager, config.getBoolean("System.Messages.NoReward", false)));
             }
         }
 
-        ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
-        if (rewardTable != null) {
-            for (String rewardName : rewardTable.getKeys(false)) {
-                ecoReward reward = createReward(RewardType.fromName(rewardName), rewardTable.getConfigurationSection(rewardName), rewardManager, config.getBoolean("System.Messages.NoReward", false));
+        ConfigurationSection rewardTableConfig = config.getConfigurationSection("RewardTable");
+        if (rewardTableConfig != null) {
+            for (String rewardName : rewardTableConfig.getKeys(false)) {
+                ecoReward reward = createReward(RewardType.fromName(rewardName), rewardTableConfig.getConfigurationSection(rewardName), rewardManager, config.getBoolean("System.Messages.NoReward", false));
 
                 if (!rewardManager.rewards.containsKey(reward.getRewardType())) {
                     rewardManager.rewards.put(reward.getRewardType(), new ArrayList<ecoReward>());
                 }
 
-                if (rewardTable.getConfigurationSection(rewardName).getList("Sets") != null) {
-                    List<String> setList = rewardTable.getConfigurationSection(rewardName).getStringList("Sets");
+                if (rewardTableConfig.getConfigurationSection(rewardName).getList("Sets") != null) {
+                    List<String> setList = rewardTableConfig.getConfigurationSection(rewardName).getStringList("Sets");
                     for (String setName : setList) {
-                        if (rewardManager.rewardSet.containsKey(setName)) {
-                            rewardManager.rewards.get(reward.getRewardType()).add(mergeReward(reward, rewardManager.rewardSet.get(setName)));
+                        if (rewardSet.containsKey(setName)) {
+                            rewardManager.rewards.get(reward.getRewardType()).add(mergeReward(reward, rewardSet.get(setName)));
                         }
                     }
                 }
@@ -244,7 +245,7 @@ public class ecoConfigManager
         return rewardManager;
     }
 
-    private ecoReward mergeReward(ecoReward from, ecoReward to)
+    private static ecoReward mergeReward(ecoReward from, ecoReward to)
     {
         ecoReward reward = new ecoReward();
 
@@ -302,7 +303,7 @@ public class ecoConfigManager
         return config;
     }
 
-    private ecoReward createReward(RewardType rewardType, ConfigurationSection rewardConfig, ecoRewardManager rewardManager, boolean isNoRewardMessage)
+    private static ecoReward createReward(RewardType rewardType, ConfigurationSection rewardConfig, ecoRewardManager rewardManager, boolean isNoRewardMessage)
     {
         ecoReward reward = new ecoReward();
         reward.setRewardName(rewardConfig.getName());

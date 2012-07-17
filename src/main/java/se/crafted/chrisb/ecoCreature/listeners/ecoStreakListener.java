@@ -10,7 +10,7 @@ import se.crafted.chrisb.ecoCreature.ecoCreature;
 
 public class ecoStreakListener implements Listener
 {
-    private ecoCreature plugin;
+    private final ecoCreature plugin;
 
     public ecoStreakListener(ecoCreature plugin)
     {

@@ -6,7 +6,7 @@ import se.crafted.chrisb.ecoCreature.ecoCreature;
 
 public class ReloadCommand extends BasicCommand
 {
-    private ecoCreature plugin;
+    private final ecoCreature plugin;
 
     public ReloadCommand(ecoCreature plugin)
     {

@@ -47,8 +47,8 @@ public class ecoCreature extends JavaPlugin
     private static final long CHECK_DELAY = 0;
     private static final long CHECK_PERIOD = 432000;
 
-    public static Permission permission = null;
-    public static Economy economy = null;
+    public Permission permission = null;
+    public Economy economy = null;
     public static DeathTpPlus deathTpPlusPlugin = null;
     public static MobArenaHandler mobArenaHandler = null;
     public static Heroes heroesPlugin = null;
@@ -151,14 +151,25 @@ public class ecoCreature extends JavaPlugin
         return commandHandler;
     }
 
+    public Permission getPermission()
+    {
+        return permission;
+    }
+
+    public boolean hasPermission(Player player, String perm)
+    {
+        return permission.has(player.getWorld(), player.getName(), "ecoCreature." + perm) || permission.has(player.getWorld(), player.getName(), "ecocreature." + perm.toLowerCase());
+    
+    }
+
+    public Economy getEconomy()
+    {
+        return economy;
+    }
+
     public boolean hasEconomy()
     {
         return economy != null;
-    }
-
-    public boolean has(Player player, String perm)
-    {
-        return permission.has(player, "ecoCreature." + perm) || permission.has(player, "ecocreature." + perm.toLowerCase());
     }
 
     public boolean isSpawnerMob(Entity entity)

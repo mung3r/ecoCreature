@@ -24,12 +24,12 @@ import se.crafted.chrisb.ecoCreature.ecoCreature;
 public class CommandHandler
 {
 
-    private Permission permission;
+    private final Permission permission;
     protected Map<String, Command> commands;
 
     public CommandHandler(ecoCreature plugin)
     {
-        permission = ecoCreature.permission;
+        permission = plugin.getPermission();
         commands = new LinkedHashMap<String, Command>();
     }
 

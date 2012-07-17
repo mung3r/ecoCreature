@@ -31,7 +31,7 @@ public class ecoMessageManager
     public ecoMessage dtpDeathStreakMessage;
     public ecoMessage dtpKillStreakMessage;
 
-    private ecoCreature plugin;
+    private final ecoCreature plugin;
 
     public ecoMessageManager(ecoCreature plugin)
     {
@@ -48,22 +48,22 @@ public class ecoMessageManager
     public void sendMessage(ecoMessage message, Player player, double amount)
     {
         if (shouldOutputMessages && message.isEnabled() && plugin.hasEconomy()) {
-            player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()).replaceAll(AMOUNT_TOKEN, ecoCreature.economy.format(amount).replaceAll("\\$", "\\\\\\$")));
+            player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()).replaceAll(AMOUNT_TOKEN, plugin.getEconomy().format(amount).replaceAll("\\$", "\\\\\\$")));
         }
 
         if (shouldLogCoinRewards) {
-            ecoCreature.getEcoLogger().info(player.getName() + " received " + ecoCreature.economy.format(amount));
+            ecoCreature.getEcoLogger().info(player.getName() + " received " + plugin.getEconomy().format(amount));
         }
     }
 
     public void sendMessage(ecoMessage message, Player player, double amount, String creatureName, String weaponName)
     {
         if (shouldOutputMessages && message.isEnabled() && plugin.hasEconomy()) {
-            player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()).replaceAll(AMOUNT_TOKEN, ecoCreature.economy.format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll(ITEM_TOKEN, toCamelCase(weaponName)).replaceAll(CREATURE_TOKEN, creatureName));
+            player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()).replaceAll(AMOUNT_TOKEN, plugin.getEconomy().format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll(ITEM_TOKEN, toCamelCase(weaponName)).replaceAll(CREATURE_TOKEN, creatureName));
         }
 
         if (shouldLogCoinRewards) {
-            ecoCreature.getEcoLogger().info(player.getName() + " received " + ecoCreature.economy.format(amount));
+            ecoCreature.getEcoLogger().info(player.getName() + " received " + plugin.getEconomy().format(amount));
         }
     }
 

@@ -209,7 +209,7 @@ public class ecoDrop
                     if (itemParts.length > 1) {
                         for (int i = 1; i < itemParts.length; i++) {
                             String[] enchantParts = itemParts[i].split("\\.");
-                            //check enchantment level and range
+                            // check enchantment level and range
                             if (enchantParts.length > 1) {
                                 String[] levelRange = enchantParts[1].split("-");
                                 int minLevel = Integer.parseInt(levelRange[0]);
