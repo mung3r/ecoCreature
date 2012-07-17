@@ -2,8 +2,6 @@ package se.crafted.chrisb.ecoCreature.utils;
 
 import java.util.logging.Logger;
 
-import se.crafted.chrisb.ecoCreature.managers.ecoConfigManager;
-
 public class ecoLogger
 {
     private String name = "ecoCreature";
@@ -41,9 +39,7 @@ public class ecoLogger
 
     public void debug(String msg)
     {
-        if (ecoConfigManager.debug) {
-            logger.info(format("DEBUG: " + msg));
-        }
+        logger.info(format("DEBUG: " + msg));
     }
 
     public String format(String msg)

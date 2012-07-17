@@ -9,9 +9,12 @@ import java.util.Random;
 import java.util.Set;
 
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
@@ -68,7 +71,6 @@ public class ecoRewardManager
     public Map<Environment, Double> envMultiplier;
     public Map<String, Double> worldGuardRegionMultiplier;
     public Map<RewardType, List<ecoReward>> rewards;
-    public Map<String, ecoReward> rewardSet;
 
     private final ecoCreature plugin;
 
@@ -81,43 +83,11 @@ public class ecoRewardManager
         envMultiplier = new HashMap<Environment, Double>();
         worldGuardRegionMultiplier = new HashMap<String, Double>();
         rewards = new HashMap<RewardType, List<ecoReward>>();
-        rewardSet = new HashMap<String, ecoReward>();
-    }
-
-    public ecoReward getRewardFromEntity(Entity entity)
-    {
-        RewardType rewardType = RewardType.fromEntity(entity);
-        ecoReward reward = null;
-
-        if (rewardType != null) {
-            reward = getRewardFromType(rewardType);
-        }
-        else {
-            ecoCreature.getEcoLogger().warning("No reward found for entity " + entity.getClass());
-        }
-
-        return reward;
-    }
-
-    public ecoReward getRewardFromType(RewardType rewardType)
-    {
-        Random random = new Random();
-        ecoReward reward = null;
-
-        if (rewards.containsKey(rewardType)) {
-            List<ecoReward> rewardList = rewards.get(rewardType);
-            reward = rewardList.get(random.nextInt(rewardList.size()));
-        }
-        else {
-            ecoCreature.getEcoLogger().warning("No reward defined for " + rewardType);
-        }
-
-        return reward;
     }
 
     public void registerPVPReward(PlayerKilledByPlayerEvent event)
     {
-        if (!hasPVPReward || !hasPermission(event.getVictim(), "reward.player")) {
+        if (!hasPVPReward || !plugin.hasPermission(event.getVictim(), "reward.player")) {
             return;
         }
 
@@ -140,29 +110,29 @@ public class ecoRewardManager
             }
         }
         else if (plugin.hasEconomy()) {
-            amount = isPercentPvpReward ? ecoCreature.economy.getBalance(event.getVictim().getName()) * (pvpRewardAmount / 100.0D) : pvpRewardAmount;
+            amount = isPercentPvpReward ? plugin.getEconomy().getBalance(event.getVictim().getName()) * (pvpRewardAmount / 100.0D) : pvpRewardAmount;
         }
 
         if (amount > 0.0D && plugin.hasEconomy()) {
-            amount = Math.min(amount, ecoCreature.economy.getBalance(event.getVictim().getName()));
-            ecoCreature.economy.withdrawPlayer(event.getVictim().getName(), amount);
-            ecoCreature.getMessageManager(event.getVictim()).sendMessage(ecoCreature.getMessageManager(event.getVictim()).deathPenaltyMessage, event.getVictim(), amount);
+            amount = Math.min(amount, plugin.getEconomy().getBalance(event.getVictim().getName()));
+            plugin.getEconomy().withdrawPlayer(event.getVictim().getName(), amount);
+            plugin.getMessageManager(event.getVictim().getWorld()).sendMessage(plugin.getMessageManager(event.getVictim().getWorld()).deathPenaltyMessage, event.getVictim(), amount);
 
-            ecoCreature.economy.depositPlayer(event.getKiller().getName(), amount);
-            ecoCreature.getMessageManager(event.getVictim()).sendMessage(ecoCreature.getMessageManager(event.getVictim()).pvpRewardMessage, event.getKiller(), amount, event.getVictim().getName(), "");
+            plugin.getEconomy().depositPlayer(event.getKiller().getName(), amount);
+            plugin.getMessageManager(event.getVictim().getWorld()).sendMessage(plugin.getMessageManager(event.getVictim().getWorld()).pvpRewardMessage, event.getKiller(), amount, event.getVictim().getName(), "");
         }
     }
 
     public void registerDeathPenalty(Player player)
     {
-        if (!hasDeathPenalty || !hasPermission(player, "reward.deathpenalty") || !plugin.hasEconomy()) {
+        if (!hasDeathPenalty || !plugin.hasPermission(player, "reward.deathpenalty") || !plugin.hasEconomy()) {
             return;
         }
 
-        double amount = isPercentPenalty ? ecoCreature.economy.getBalance(player.getName()) * (penaltyAmount / 100.0D) : penaltyAmount;
+        double amount = isPercentPenalty ? plugin.getEconomy().getBalance(player.getName()) * (penaltyAmount / 100.0D) : penaltyAmount;
         if (amount > 0.0D) {
-            ecoCreature.economy.withdrawPlayer(player.getName(), amount);
-            ecoCreature.getMessageManager(player).sendMessage(ecoCreature.getMessageManager(player).deathPenaltyMessage, player, amount);
+            plugin.getEconomy().withdrawPlayer(player.getName(), amount);
+            plugin.getMessageManager(player.getWorld()).sendMessage(plugin.getMessageManager(player.getWorld()).deathPenaltyMessage, player, amount);
         }
     }
 
@@ -170,14 +140,15 @@ public class ecoRewardManager
     {
         if (shouldClearDefaultDrops) {
             event.getDrops().clear();
+            event.setDroppedExp(0);
         }
 
         if (event.getKiller().getItemInHand().getType().equals(Material.BOW) && !hasBowRewards) {
-            ecoCreature.getMessageManager(event.getKiller()).sendMessage(ecoCreature.getMessageManager(event.getKiller()).noBowRewardMessage, event.getKiller());
+            plugin.getMessageManager(event.getKiller().getWorld()).sendMessage(plugin.getMessageManager(event.getKiller().getWorld()).noBowRewardMessage, event.getKiller());
             return;
         }
         else if (ecoEntityUtil.isUnderSeaLevel(event.getKiller()) && !canHuntUnderSeaLevel) {
-            ecoCreature.getMessageManager(event.getKiller()).sendMessage(ecoCreature.getMessageManager(event.getKiller()).noBowRewardMessage, event.getKiller());
+            plugin.getMessageManager(event.getKiller().getWorld()).sendMessage(plugin.getMessageManager(event.getKiller().getWorld()).noBowRewardMessage, event.getKiller());
             return;
         }
         else if (ecoEntityUtil.isOwner(event.getKiller(), event.getKilledCreature())) {
@@ -195,17 +166,17 @@ public class ecoRewardManager
         else if (!canCampSpawner && (campByDistance || campByEntity)) {
             // Reordered the conditional slightly, to make it more efficient, since
             // java will stop evaluating when it knows the outcome.
-            if ((campByEntity && ecoEntityUtil.isSpawnerMob(event.getKilledCreature())) || (campByDistance && (ecoEntityUtil.isNearSpawner(event.getKiller()) || ecoEntityUtil.isNearSpawner(event.getKilledCreature())))) {
+            if ((campByEntity && plugin.isSpawnerMob(event.getKilledCreature())) || (campByDistance && (isNearSpawner(event.getKiller()) || isNearSpawner(event.getKilledCreature())))) {
                 if (shouldClearCampDrops) {
                     event.getDrops().clear();
                     event.setDroppedExp(0);
                 }
-                ecoCreature.getMessageManager(event.getKiller()).sendMessage(ecoCreature.getMessageManager(event.getKiller()).noCampMessage, event.getKiller());
+                plugin.getMessageManager(event.getKiller().getWorld()).sendMessage(plugin.getMessageManager(event.getKiller().getWorld()).noCampMessage, event.getKiller());
                 ecoCreature.getEcoLogger().debug("No reward for " + event.getKiller().getName() + " spawn camping.");
                 return;
             }
         }
-        else if (!hasPermission(event.getKiller(), "reward." + RewardType.fromEntity(event.getKilledCreature()).getName())) {
+        else if (!plugin.hasPermission(event.getKiller(), "reward." + RewardType.fromEntity(event.getKilledCreature()).getName())) {
             ecoCreature.getEcoLogger().debug("No reward for " + event.getKiller().getName() + " due to lack of permission for " + RewardType.fromEntity(event.getKilledCreature()).getName());
             return;
         }
@@ -244,7 +215,7 @@ public class ecoRewardManager
             return;
         }
 
-        if (hasPermission(player, "reward.spawner") && rewards.containsKey(RewardType.SPAWNER)) {
+        if (plugin.hasPermission(player, "reward.spawner") && rewards.containsKey(RewardType.SPAWNER)) {
 
             ecoReward reward = getRewardFromType(RewardType.SPAWNER);
 
@@ -260,7 +231,7 @@ public class ecoRewardManager
 
     public void registerDeathStreak(Player player, int deaths)
     {
-        if (hasPermission(player, "reward.deathstreak") && rewards.containsKey(RewardType.DEATH_STREAK)) {
+        if (plugin.hasPermission(player, "reward.deathstreak") && rewards.containsKey(RewardType.DEATH_STREAK)) {
 
             ecoReward reward = getRewardFromType(RewardType.DEATH_STREAK);
 
@@ -278,7 +249,7 @@ public class ecoRewardManager
 
     public void registerKillStreak(Player player, int kills)
     {
-        if (hasPermission(player, "reward.killstreak") && rewards.containsKey(RewardType.KILL_STREAK)) {
+        if (plugin.hasPermission(player, "reward.killstreak") && rewards.containsKey(RewardType.KILL_STREAK)) {
 
             ecoReward reward = getRewardFromType(RewardType.KILL_STREAK);
 
@@ -296,21 +267,53 @@ public class ecoRewardManager
 
     public void handleNoFarm(EntityDeathEvent event)
     {
-        EntityDamageEvent damageEvent = event.getEntity().getLastDamageCause();
+        if (noFarm) {
+            EntityDamageEvent damageEvent = event.getEntity().getLastDamageCause();
 
-        if (damageEvent != null) {
-            if (damageEvent instanceof EntityDamageByBlockEvent && damageEvent.getCause().equals(DamageCause.CONTACT)) {
-                event.getDrops().clear();
-            }
-            else if (damageEvent.getCause() != null) {
-                if (damageEvent.getCause().equals(DamageCause.FALL) || damageEvent.getCause().equals(DamageCause.DROWNING) || damageEvent.getCause().equals(DamageCause.SUFFOCATION)) {
+            if (damageEvent != null) {
+                if (damageEvent instanceof EntityDamageByBlockEvent && damageEvent.getCause().equals(DamageCause.CONTACT)) {
                     event.getDrops().clear();
                 }
-                else if (noFarmFire && (damageEvent.getCause().equals(DamageCause.FIRE) || damageEvent.getCause().equals(DamageCause.FIRE_TICK))) {
-                    event.getDrops().clear();
+                else if (damageEvent.getCause() != null) {
+                    if (damageEvent.getCause().equals(DamageCause.FALL) || damageEvent.getCause().equals(DamageCause.DROWNING) || damageEvent.getCause().equals(DamageCause.SUFFOCATION)) {
+                        event.getDrops().clear();
+                    }
+                    else if (noFarmFire && (damageEvent.getCause().equals(DamageCause.FIRE) || damageEvent.getCause().equals(DamageCause.FIRE_TICK))) {
+                        event.getDrops().clear();
+                    }
                 }
             }
         }
+    }
+
+    private ecoReward getRewardFromEntity(Entity entity)
+    {
+        RewardType rewardType = RewardType.fromEntity(entity);
+        ecoReward reward = null;
+
+        if (rewardType != null) {
+            reward = getRewardFromType(rewardType);
+        }
+        else {
+            ecoCreature.getEcoLogger().warning("No reward found for entity " + entity.getClass());
+        }
+
+        return reward;
+    }
+
+    private ecoReward getRewardFromType(RewardType rewardType)
+    {
+        Random random = new Random();
+        ecoReward reward = null;
+
+        if (rewards.containsKey(rewardType)) {
+            List<ecoReward> rewardList = rewards.get(rewardType);
+            reward = rewardList.get(random.nextInt(rewardList.size()));
+        }
+        else {
+            ecoCreature.getEcoLogger().warning("No reward defined for " + rewardType);
+        }
+        return reward;
     }
 
     private void registerReward(Player player, ecoReward reward, String weaponName)
@@ -336,15 +339,15 @@ public class ecoRewardManager
 
         for (Player member : party) {
             if (amount > 0.0D && plugin.hasEconomy()) {
-                ecoCreature.economy.depositPlayer(member.getName(), amount);
-                ecoCreature.getMessageManager(member).sendMessage(reward.getRewardMessage(), member, amount, reward.getRewardName(), weaponName);
+                plugin.getEconomy().depositPlayer(member.getName(), amount);
+                plugin.getMessageManager(member.getWorld()).sendMessage(reward.getRewardMessage(), member, amount, reward.getRewardName(), weaponName);
             }
             else if (amount < 0.0D && plugin.hasEconomy()) {
-                ecoCreature.economy.withdrawPlayer(member.getName(), Math.abs(amount));
-                ecoCreature.getMessageManager(member).sendMessage(reward.getPenaltyMessage(), member, Math.abs(amount), reward.getRewardName(), weaponName);
+                plugin.getEconomy().withdrawPlayer(member.getName(), Math.abs(amount));
+                plugin.getMessageManager(member.getWorld()).sendMessage(reward.getPenaltyMessage(), member, Math.abs(amount), reward.getRewardName(), weaponName);
             }
             else {
-                ecoCreature.getMessageManager(member).sendMessage(reward.getNoRewardMessage(), member, reward.getRewardName(), weaponName);
+                plugin.getMessageManager(member.getWorld()).sendMessage(reward.getNoRewardMessage(), member, reward.getRewardName(), weaponName);
             }
         }
 
@@ -356,9 +359,9 @@ public class ecoRewardManager
         double amount = reward.getRewardAmount();
 
         try {
-            if (ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()) != null) {
-                String group = ecoCreature.permission.getPrimaryGroup(player.getWorld().getName(), player.getName()).toLowerCase();
-                if (hasPermission(player, "gain.group") && groupMultiplier.containsKey(group)) {
+            if (plugin.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName()) != null) {
+                String group = plugin.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName()).toLowerCase();
+                if (plugin.hasPermission(player, "gain.group") && groupMultiplier.containsKey(group)) {
                     amount *= groupMultiplier.get(group);
                 }
             }
@@ -370,37 +373,46 @@ public class ecoRewardManager
             }
         }
 
-        if (hasPermission(player, "gain.time") && timeMultiplier.containsKey(ecoEntityUtil.getTimePeriod(player))) {
+        if (plugin.hasPermission(player, "gain.time") && timeMultiplier.containsKey(ecoEntityUtil.getTimePeriod(player))) {
             amount *= timeMultiplier.get(ecoEntityUtil.getTimePeriod(player));
         }
 
-        if (hasPermission(player, "gain.environment") && envMultiplier.containsKey(player.getWorld().getEnvironment())) {
+        if (plugin.hasPermission(player, "gain.environment") && envMultiplier.containsKey(player.getWorld().getEnvironment())) {
             amount *= envMultiplier.get(player.getWorld().getEnvironment());
         }
 
         if (ecoCreature.worldGuardPlugin != null) {
             Iterator<ProtectedRegion> regionSet = ecoCreature.worldGuardPlugin.getRegionManager(player.getWorld()).getApplicableRegions(player.getLocation()).iterator();
             while (regionSet.hasNext()) {
-            	String regionName = regionSet.next().getId();
-                if (hasPermission(player, "gain.worldguard") && worldGuardRegionMultiplier.containsKey(regionName)) {
+                String regionName = regionSet.next().getId();
+                if (plugin.hasPermission(player, "gain.worldguard") && worldGuardRegionMultiplier.containsKey(regionName)) {
                     amount *= worldGuardRegionMultiplier.get(regionName);
                 }
             }
         }
 
-        if (hasPermission(player, "gain.heroes") && ecoCreature.heroesPlugin != null && ecoCreature.heroesPlugin.getCharacterManager().getHero(player).hasParty()) {
+        if (plugin.hasPermission(player, "gain.heroes") && ecoCreature.heroesPlugin != null && ecoCreature.heroesPlugin.getCharacterManager().getHero(player).hasParty()) {
             amount *= heroesPartyMultiplier;
         }
 
-        if (hasMobArenaRewards && hasPermission(player, "gain.mobarena") && ecoCreature.mobArenaHandler != null && ecoCreature.mobArenaHandler.isPlayerInArena(player)) {
+        if (hasMobArenaRewards && plugin.hasPermission(player, "gain.mobarena") && ecoCreature.mobArenaHandler != null && ecoCreature.mobArenaHandler.isPlayerInArena(player)) {
             amount *= mobArenaMultiplier;
         }
 
         return isIntegerCurrency ? (double) Math.round(amount) : amount;
     }
 
-    private boolean hasPermission(Player player, String perm)
+    private boolean isNearSpawner(Entity entity)
     {
-        return ecoCreature.permission.has(player.getWorld(), player.getName(), "ecoCreature." + perm) || ecoCreature.permission.has(player.getWorld(), player.getName(), "ecocreature." + perm.toLowerCase());
+        Location loc = entity.getLocation();
+        BlockState[] tileEntities = entity.getLocation().getChunk().getTileEntities();
+        int r = plugin.getRewardManager(entity.getWorld()).campRadius;
+        r *= r;
+        for (BlockState state : tileEntities) {
+            if (state instanceof CreatureSpawner && state.getBlock().getLocation().distanceSquared(loc) <= r) {
+                return true;
+            }
+        }
+        return false;
     }
 }

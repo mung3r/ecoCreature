@@ -6,7 +6,18 @@ website: http://dev.bukkit.org/server-mods/ecocreature
 depend: [Vault]
 softdepend: [DeathTpPlus,MobArena]
 description: Coins and drops for PvM
+
+commands:
+    ecoc:
+        description: ecoCreature commands
+        usage: |
+               Usage:
+               /<command> reload - Reload config
 permissions:
+    ecocreature.command.*:
+        description: Allows all commands
+        children:
+            ecocreature.command.reload: true
     ecocreature.gain.*:
         description: Allows all gain multipliers
         children:
@@ -53,6 +64,9 @@ permissions:
             ecocreature.reward.villagergolem: true
             ecocreature.reward.wolf: true
             ecocreature.reward.zombie: true
+    ecocreature.command.reload:
+        description: Enables use of reload command
+        default: op
     ecocreature.gain.group:
         description: Enables gain multiplier based on group
         default: false

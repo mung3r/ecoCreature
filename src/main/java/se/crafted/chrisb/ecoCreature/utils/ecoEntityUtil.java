@@ -1,13 +1,8 @@
 package se.crafted.chrisb.ecoCreature.utils;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
-import org.bukkit.Location;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -15,8 +10,6 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Tameable;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-
-import se.crafted.chrisb.ecoCreature.ecoCreature;
 
 public class ecoEntityUtil
 {
@@ -26,8 +19,6 @@ public class ecoEntityUtil
     private static final long NIGHT_START = 14000;
     private static final long DAWN_START = 22000;
     private static final long SUNRISE_START = 23000;
-
-    private static Set<Integer> spawnerMobs = new HashSet<Integer>();
 
     public static enum TimePeriod {
         DAY, SUNSET, DUSK, NIGHT, DAWN, SUNRISE, IDENTITY;
@@ -49,33 +40,6 @@ public class ecoEntityUtil
     public static boolean isUnderSeaLevel(Entity entity)
     {
         return entity.getLocation().getBlockY() < entity.getWorld().getSeaLevel();
-    }
-
-    public static boolean isNearSpawner(Entity entity)
-    {
-        Location loc = entity.getLocation();
-        BlockState[] tileEntities = entity.getLocation().getChunk().getTileEntities();
-        int r = ecoCreature.getRewardManager(entity).campRadius;
-        r *= r;
-        for (BlockState state : tileEntities) {
-            if (state instanceof CreatureSpawner && state.getBlock().getLocation().distanceSquared(loc) <= r) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean isSpawnerMob(Entity entity)
-    {
-        return spawnerMobs.remove(Integer.valueOf(entity.getEntityId()));
-    }
-
-    public static void setSpawnerMob(Entity entity)
-    {
-        // Only add to the array if we're tracking by entity. Avoids a memory leak.
-        if (!ecoCreature.getRewardManager(entity).canCampSpawner && ecoCreature.getRewardManager(entity).campByEntity) {
-            spawnerMobs.add(Integer.valueOf(entity.getEntityId()));
-        }
     }
 
     public static TimePeriod getTimePeriod(Entity entity)

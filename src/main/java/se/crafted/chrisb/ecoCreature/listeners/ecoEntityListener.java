@@ -17,42 +17,48 @@ import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 
 public class ecoEntityListener implements Listener
 {
-    public ecoEntityListener()
+    private final ecoCreature plugin;
+
+    public ecoEntityListener(ecoCreature plugin)
     {
+        this.plugin = plugin;
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerDeath(PlayerDeathEvent event)
+    {
+        if (ecoEntityUtil.isPVPDeath(event)) {
+            Bukkit.getPluginManager().callEvent(new PlayerKilledByPlayerEvent(event));
+        }
+        else {
+            plugin.getRewardManager(event.getEntity().getWorld()).registerDeathPenalty(event.getEntity());
+        }
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onEntityDeath(EntityDeathEvent event)
     {
-        if (event instanceof PlayerDeathEvent) {
-            if (ecoEntityUtil.isPVPDeath(event)) {
-                Bukkit.getPluginManager().callEvent(new PlayerKilledByPlayerEvent(event.getEntity(), event.getDrops(), event.getDroppedExp()));
+        if (!(event instanceof PlayerDeathEvent)) {
+            Player killer = ecoEntityUtil.getKillerFromDeathEvent(event);
+
+            if (killer != null) {
+                Bukkit.getPluginManager().callEvent(new CreatureKilledByPlayerEvent(event));
             }
             else {
-                ecoCreature.getRewardManager(event.getEntity()).registerDeathPenalty((Player) event.getEntity());
+                plugin.getRewardManager(event.getEntity().getWorld()).handleNoFarm(event);
             }
-            return;
         }
-
-        Player killer = ecoEntityUtil.getKillerFromDeathEvent(event);
-
-        if (killer == null) {
-            if (ecoCreature.getRewardManager(event.getEntity()).noFarm) {
-                ecoCreature.getRewardManager(event.getEntity()).handleNoFarm(event);
-            }
-            return;
-        }
-
-        Bukkit.getPluginManager().callEvent(new CreatureKilledByPlayerEvent(event.getEntity(), event.getDrops(), event.getDroppedExp()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onCreatureSpawn(CreatureSpawnEvent event)
     {
-        if (event.isCancelled())
+        if (event.isCancelled()) {
             return;
+        }
 
-        if (event.getSpawnReason() == SpawnReason.SPAWNER)
-            ecoEntityUtil.setSpawnerMob(event.getEntity());
+        if (event.getSpawnReason() == SpawnReason.SPAWNER) {
+            plugin.setSpawnerMob(event.getEntity());
+        }
     }
 }
