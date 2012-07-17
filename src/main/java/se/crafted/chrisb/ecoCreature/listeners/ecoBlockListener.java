@@ -9,8 +9,11 @@ import se.crafted.chrisb.ecoCreature.ecoCreature;
 
 public class ecoBlockListener implements Listener
 {
-    public ecoBlockListener()
+    private ecoCreature plugin;
+
+    public ecoBlockListener(ecoCreature plugin)
     {
+        this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -20,6 +23,6 @@ public class ecoBlockListener implements Listener
             return;
         }
 
-        ecoCreature.getRewardManager(event.getPlayer()).registerSpawnerBreak(event.getPlayer(), event.getBlock());
+        plugin.getRewardManager(event.getPlayer().getWorld()).registerSpawnerBreak(event.getPlayer(), event.getBlock());
     }
 }

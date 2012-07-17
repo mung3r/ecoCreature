@@ -6,7 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,10 +78,10 @@ public class ecoConfigManager
         ecoCreature.getEcoLogger().info("Loaded config defaults.");
         ecoMessageManager defaultMessageManager = loadMessageConfig(defaultConfig);
         ecoRewardManager defaultRewardManager = loadRewardConfig(defaultConfig);
-        ecoCreature.messageManagers.put(DEFAULT_WORLD, defaultMessageManager);
-        ecoCreature.rewardManagers.put(DEFAULT_WORLD, defaultRewardManager);
+        plugin.getGlobalMessageManager().put(DEFAULT_WORLD, defaultMessageManager);
+        plugin.getGlobalRewardManager().put(DEFAULT_WORLD, defaultRewardManager);
 
-        worldConfigs = new Hashtable<String, FileConfiguration>();
+        worldConfigs = new HashMap<String, FileConfiguration>();
 
         for (World world : plugin.getServer().getWorlds()) {
 
@@ -90,13 +90,13 @@ public class ecoConfigManager
             if (worldConfigFile.exists()) {
                 FileConfiguration worldConfig = getConfig(worldConfigFile);
                 ecoCreature.getEcoLogger().info("Loaded config for " + world.getName() + " world.");
-                ecoCreature.messageManagers.put(world.getName(), loadMessageConfig(worldConfig));
-                ecoCreature.rewardManagers.put(world.getName(), loadRewardConfig(worldConfig));
+                plugin.getGlobalMessageManager().put(world.getName(), loadMessageConfig(worldConfig));
+                plugin.getGlobalRewardManager().put(world.getName(), loadRewardConfig(worldConfig));
                 worldConfigs.put(world.getName(), worldConfig);
             }
             else {
-                ecoCreature.messageManagers.put(world.getName(), defaultMessageManager);
-                ecoCreature.rewardManagers.put(world.getName(), defaultRewardManager);
+                plugin.getGlobalMessageManager().put(world.getName(), defaultMessageManager);
+                plugin.getGlobalRewardManager().put(world.getName(), defaultRewardManager);
             }
 
         }

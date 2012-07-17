@@ -1,9 +1,12 @@
 package se.crafted.chrisb.ecoCreature.events;
 
+import java.util.List;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class PlayerKilledByPlayerEvent extends Event
 {
@@ -16,14 +19,14 @@ public class PlayerKilledByPlayerEvent extends Event
         this.event = event;
     }
 
-    public PlayerDeathEvent getEvent()
+    public List<ItemStack> getDrops()
     {
-        return event;
+        return event.getDrops();
     }
 
-    public void setEvent(PlayerDeathEvent event)
+    public void setDroppedExp(int exp)
     {
-        this.event = event;
+        event.setDroppedExp(exp);
     }
 
     public Player getVictim()

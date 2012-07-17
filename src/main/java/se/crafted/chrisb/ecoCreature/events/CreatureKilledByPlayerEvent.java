@@ -1,15 +1,15 @@
 package se.crafted.chrisb.ecoCreature.events;
 
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.ItemStack;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.models.ecoReward;
-import se.crafted.chrisb.ecoCreature.models.ecoReward.RewardType;
 import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 
 public class CreatureKilledByPlayerEvent extends Event
@@ -23,14 +23,14 @@ public class CreatureKilledByPlayerEvent extends Event
         this.event = event;
     }
 
-    public EntityDeathEvent getEvent()
+    public List<ItemStack> getDrops()
     {
-        return event;
+        return event.getDrops();
     }
 
-    public void setEvent(EntityDeathEvent event)
+    public void setDroppedExp(int exp)
     {
-        this.event = event;
+        event.setDroppedExp(exp);
     }
 
     public Player getPlayer()
@@ -56,11 +56,6 @@ public class CreatureKilledByPlayerEvent extends Event
     public LivingEntity getTamedCreature()
     {
         return ecoEntityUtil.getTamedKillerFromDeathEvent(event);
-    }
-
-    public ecoReward getReward()
-    {
-        return ecoCreature.getRewardManager(event.getEntity()).getRewardFromType(RewardType.fromEntity(getKilledCreature()));
     }
 
     @Override

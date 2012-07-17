@@ -2,13 +2,16 @@ package se.crafted.chrisb.ecoCreature;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -54,10 +57,11 @@ public class ecoCreature extends JavaPlugin
 
     private static ecoLogger logger = new ecoLogger();
     private ecoMetrics metrics;
-    public static Map<String, ecoMessageManager> messageManagers;
-    public static Map<String, ecoRewardManager> rewardManagers;
+    private Map<String, ecoMessageManager> globalMessageManager;
+    private Map<String, ecoRewardManager> globalRewardManager;
     private ecoConfigManager configManager;
     private CommandHandler commandHandler;
+    private Set<Integer> spawnerMobs;
 
     public void onEnable()
     {
@@ -72,9 +76,10 @@ public class ecoCreature extends JavaPlugin
         setupMcMMO();
         setupWorldGuard();
 
-        messageManagers = new HashMap<String, ecoMessageManager>();
-        rewardManagers = new HashMap<String, ecoRewardManager>();
+        globalMessageManager = new HashMap<String, ecoMessageManager>();
+        globalRewardManager = new HashMap<String, ecoRewardManager>();
         configManager = new ecoConfigManager(this);
+        spawnerMobs = new HashSet<Integer>();
 
         registerCommands();
         registerEvents();
@@ -113,20 +118,30 @@ public class ecoCreature extends JavaPlugin
         return configManager;
     }
 
-    public static ecoMessageManager getMessageManager(Entity entity)
+    public Map<String, ecoMessageManager> getGlobalMessageManager()
     {
-        ecoMessageManager messageManager = messageManagers.get(entity.getWorld().getName());
+        return globalMessageManager;
+    }
+
+    public ecoMessageManager getMessageManager(World world)
+    {
+        ecoMessageManager messageManager = globalMessageManager.get(world.getName());
         if (messageManager == null) {
-            messageManager = messageManagers.get(ecoConfigManager.DEFAULT_WORLD);
+            messageManager = globalMessageManager.get(ecoConfigManager.DEFAULT_WORLD);
         }
         return messageManager;
     }
 
-    public static ecoRewardManager getRewardManager(Entity entity)
+    public Map<String, ecoRewardManager> getGlobalRewardManager()
     {
-        ecoRewardManager rewardManager = rewardManagers.get(entity.getWorld().getName());
+        return globalRewardManager;
+    }
+
+    public ecoRewardManager getRewardManager(World world)
+    {
+        ecoRewardManager rewardManager = globalRewardManager.get(world.getName());
         if (rewardManager == null) {
-            rewardManager = rewardManagers.get(ecoConfigManager.DEFAULT_WORLD);
+            rewardManager = globalRewardManager.get(ecoConfigManager.DEFAULT_WORLD);
         }
         return rewardManager;
     }
@@ -134,11 +149,6 @@ public class ecoCreature extends JavaPlugin
     public CommandHandler getCommandHandler()
     {
         return commandHandler;
-    }
-
-    public static ecoLogger getEcoLogger()
-    {
-        return logger;
     }
 
     public boolean hasEconomy()
@@ -149,6 +159,24 @@ public class ecoCreature extends JavaPlugin
     public boolean has(Player player, String perm)
     {
         return permission.has(player, "ecoCreature." + perm) || permission.has(player, "ecocreature." + perm.toLowerCase());
+    }
+
+    public boolean isSpawnerMob(Entity entity)
+    {
+        return spawnerMobs.remove(Integer.valueOf(entity.getEntityId()));
+    }
+
+    public void setSpawnerMob(Entity entity)
+    {
+        // Only add to the array if we're tracking by entity. Avoids a memory leak.
+        if (!getRewardManager(entity.getWorld()).canCampSpawner && getRewardManager(entity.getWorld()).campByEntity) {
+            spawnerMobs.add(Integer.valueOf(entity.getEntityId()));
+        }
+    }
+
+    public static ecoLogger getEcoLogger()
+    {
+        return logger;
     }
 
     private void setupVault()
@@ -242,11 +270,11 @@ public class ecoCreature extends JavaPlugin
 
     private void registerEvents()
     {
-        Bukkit.getPluginManager().registerEvents(new ecoBlockListener(), this);
-        Bukkit.getPluginManager().registerEvents(new ecoEntityListener(), this);
-        Bukkit.getPluginManager().registerEvents(new ecoDeathListener(), this);
+        Bukkit.getPluginManager().registerEvents(new ecoBlockListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new ecoEntityListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new ecoDeathListener(this), this);
         if (deathTpPlusPlugin != null) {
-            Bukkit.getPluginManager().registerEvents(new ecoStreakListener(), this);
+            Bukkit.getPluginManager().registerEvents(new ecoStreakListener(this), this);
         }
     }
 }

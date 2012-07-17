@@ -10,19 +10,22 @@ import se.crafted.chrisb.ecoCreature.events.PlayerKilledByPlayerEvent;
 
 public class ecoDeathListener implements Listener
 {
-    public ecoDeathListener()
+    private ecoCreature plugin;
+
+    public ecoDeathListener(ecoCreature plugin)
     {
+        this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onCreatureKilledByPlayer(CreatureKilledByPlayerEvent event)
     {
-        ecoCreature.getRewardManager(event.getPlayer()).registerCreatureDeath(event);
+        plugin.getRewardManager(event.getPlayer().getWorld()).registerCreatureDeath(event);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerKilledByPlayer(PlayerKilledByPlayerEvent event)
     {
-        ecoCreature.getRewardManager(event.getKiller()).registerPVPReward(event);
+        plugin.getRewardManager(event.getKiller().getWorld()).registerPVPReward(event);
     }
 }
