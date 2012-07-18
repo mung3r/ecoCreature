@@ -4,6 +4,7 @@ import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.bukkit.Bukkit;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -13,17 +14,23 @@ import se.crafted.chrisb.ecoCreature.ecoCreature;
 
 public class ecoUpdate implements Runnable
 {
-    private String devBukkitUrl;
+    private static final String DEV_BUKKIT_URL = "http://dev.bukkit.org/server-mods/ecocreature";
+    private static final long CHECK_DELAY = 0;
+    private static final long CHECK_PERIOD = 432000;
+
     private String pluginName;
     private String pluginVersion;
     private String latestVersion;
 
-    public ecoUpdate(ecoCreature plugin, String devBukkitUrl)
+    public ecoUpdate(ecoCreature plugin)
     {
-        this.devBukkitUrl = devBukkitUrl;
         pluginName = plugin.getName();
         pluginVersion = plugin.getDescription().getVersion().split("-")[0];
         latestVersion = pluginVersion;
+
+        if (Bukkit.getScheduler().scheduleAsyncRepeatingTask(plugin, this, CHECK_DELAY, CHECK_PERIOD) < 0) {
+            ecoCreature.getEcoLogger().warning("Failed to schedule ecoUpdate task.");
+        }
     }
 
     public void setPluginName(String pluginName)
@@ -39,7 +46,7 @@ public class ecoUpdate implements Runnable
     private void getLatestVersion()
     {
         try {
-            URL url = new URL(devBukkitUrl + "/files.rss");
+            URL url = new URL(DEV_BUKKIT_URL + "/files.rss");
             Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(url.openConnection().getInputStream());
             doc.getDocumentElement().normalize();
             NodeList nodes = doc.getElementsByTagName("item");
@@ -77,7 +84,7 @@ public class ecoUpdate implements Runnable
     {
         if (isOutOfDate()) {
             ecoCreature.getEcoLogger().warning(pluginName + " " + latestVersion + " is out! You are running: " + pluginName + " " + pluginVersion);
-            ecoCreature.getEcoLogger().warning("Update ecoCreature at: " + devBukkitUrl);
+            ecoCreature.getEcoLogger().warning("Update ecoCreature at: " + DEV_BUKKIT_URL);
         }
     }
 }
