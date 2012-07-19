@@ -39,7 +39,8 @@ public class ecoLogger
 
     public void debug(String msg)
     {
-        logger.info(format("DEBUG: " + msg));
+        // TODO: enable debug via command
+        //logger.info(format("DEBUG: " + msg));
     }
 
     public String format(String msg)

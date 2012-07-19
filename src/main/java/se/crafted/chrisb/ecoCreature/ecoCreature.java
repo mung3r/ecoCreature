@@ -43,10 +43,6 @@ import se.crafted.chrisb.ecoCreature.utils.ecoUpdate;
 
 public class ecoCreature extends JavaPlugin
 {
-    private static final String DEV_BUKKIT_URL = "http://dev.bukkit.org/server-mods/ecocreature";
-    private static final long CHECK_DELAY = 0;
-    private static final long CHECK_PERIOD = 432000;
-
     public Permission permission = null;
     public Economy economy = null;
     public static DeathTpPlus deathTpPlusPlugin = null;
@@ -84,7 +80,7 @@ public class ecoCreature extends JavaPlugin
         registerCommands();
         registerEvents();
 
-        Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, new ecoUpdate(this, DEV_BUKKIT_URL), CHECK_DELAY, CHECK_PERIOD);
+        new ecoUpdate(this);
 
         logger.info(getDescription().getVersion() + " enabled.");
     }
@@ -159,7 +155,7 @@ public class ecoCreature extends JavaPlugin
     public boolean hasPermission(Player player, String perm)
     {
         return permission.has(player.getWorld(), player.getName(), "ecoCreature." + perm) || permission.has(player.getWorld(), player.getName(), "ecocreature." + perm.toLowerCase());
-    
+
     }
 
     public Economy getEconomy()
