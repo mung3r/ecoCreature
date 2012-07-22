@@ -4,7 +4,7 @@ version: 0.1.1-b${BUILD_NUMBER}
 authors: [chrisb, mung3r]
 website: http://dev.bukkit.org/server-mods/ecocreature
 depend: [Vault]
-softdepend: [DeathTpPlus,MobArena]
+softdepend: [Heroes,mcMMO,WorldGuard,DeathTpPlus,MobArena]
 description: Coins and drops for PvM
 
 commands:

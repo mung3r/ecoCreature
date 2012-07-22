@@ -254,9 +254,9 @@ public class ecoConfigManager
 
         reward.setDrops(!from.getDrops().isEmpty() ? from.getDrops() : to.getDrops());
 
-        reward.setCoinMin(from.getCoinMin() != null ? from.getCoinMin() : to.getCoinMin());
-        reward.setCoinMax(from.getCoinMax() != null ? from.getCoinMax() : to.getCoinMax());
-        reward.setCoinPercentage(from.getCoinPercentage() != null ? from.getCoinPercentage() : to.getCoinPercentage());
+        reward.setCoinMin(from.getCoinMin() > 0.0 ? from.getCoinMin() : to.getCoinMin());
+        reward.setCoinMax(from.getCoinMax() > 0.0 ? from.getCoinMax() : to.getCoinMax());
+        reward.setCoinPercentage(from.getCoinPercentage() > 0.0 ? from.getCoinPercentage() : to.getCoinPercentage());
 
         reward.setExpMin(from.getExpMin() != null ? from.getExpMin() : to.getExpMin());
         reward.setExpMax(from.getExpMax() != null ? from.getExpMax() : to.getExpMax());
