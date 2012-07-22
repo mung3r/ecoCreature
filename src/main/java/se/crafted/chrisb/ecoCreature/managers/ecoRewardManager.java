@@ -147,23 +147,28 @@ public class ecoRewardManager
             plugin.getMessageManager(event.getKiller().getWorld()).sendMessage(plugin.getMessageManager(event.getKiller().getWorld()).noBowRewardMessage, event.getKiller());
             return;
         }
-        else if (ecoEntityUtil.isUnderSeaLevel(event.getKiller()) && !canHuntUnderSeaLevel) {
+
+        if (ecoEntityUtil.isUnderSeaLevel(event.getKiller()) && !canHuntUnderSeaLevel) {
             plugin.getMessageManager(event.getKiller().getWorld()).sendMessage(plugin.getMessageManager(event.getKiller().getWorld()).noBowRewardMessage, event.getKiller());
             return;
         }
-        else if (ecoEntityUtil.isOwner(event.getKiller(), event.getKilledCreature())) {
+
+        if (ecoEntityUtil.isOwner(event.getKiller(), event.getKilledCreature())) {
             ecoCreature.getEcoLogger().debug("No reward for " + event.getKiller().getName() + " killing pets.");
             return;
         }
-        else if (ecoCreature.mobArenaHandler != null && ecoCreature.mobArenaHandler.isPlayerInArena(event.getKiller()) && !hasMobArenaRewards) {
+
+        if (ecoCreature.mobArenaHandler != null && ecoCreature.mobArenaHandler.isPlayerInArena(event.getKiller()) && !hasMobArenaRewards) {
             ecoCreature.getEcoLogger().debug("No reward for " + event.getKiller().getName() + " in Mob Arena.");
             return;
         }
-        else if (!hasCreativeModeRewards && event.getKiller().getGameMode() == GameMode.CREATIVE) {
+
+        if (!hasCreativeModeRewards && event.getKiller().getGameMode() == GameMode.CREATIVE) {
             ecoCreature.getEcoLogger().debug("No reward for " + event.getKiller().getName() + " in creative mode.");
             return;
         }
-        else if (!canCampSpawner && (campByDistance || campByEntity)) {
+
+        if (!canCampSpawner && (campByDistance || campByEntity)) {
             // Reordered the conditional slightly, to make it more efficient, since
             // java will stop evaluating when it knows the outcome.
             if ((campByEntity && plugin.isSpawnerMob(event.getKilledCreature())) || (campByDistance && (isNearSpawner(event.getKiller()) || isNearSpawner(event.getKilledCreature())))) {
@@ -176,7 +181,8 @@ public class ecoRewardManager
                 return;
             }
         }
-        else if (!plugin.hasPermission(event.getKiller(), "reward." + RewardType.fromEntity(event.getKilledCreature()).getName())) {
+
+        if (!plugin.hasPermission(event.getKiller(), "reward." + RewardType.fromEntity(event.getKilledCreature()).getName())) {
             ecoCreature.getEcoLogger().debug("No reward for " + event.getKiller().getName() + " due to lack of permission for " + RewardType.fromEntity(event.getKilledCreature()).getName());
             return;
         }
