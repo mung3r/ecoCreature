@@ -21,7 +21,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.simiancage.DeathTpPlus.DeathTpPlus;
 
-import com.garbagemule.MobArena.MobArena;
 import com.garbagemule.MobArena.MobArenaHandler;
 import com.gmail.nossr50.mcMMO;
 import com.herocraftonline.heroes.Heroes;
@@ -64,20 +63,16 @@ public class ecoCreature extends JavaPlugin
         Locale.setDefault(Locale.US);
         logger.setName(this.getDescription().getName());
 
-        setupVault();
-        setupMetrics();
-        setupDeathTpPlus();
-        setupMobArenaHandler();
-        setupHeroes();
-        setupMcMMO();
-        setupWorldGuard();
+        initVault();
+        initMetrics();
+        initPlugins();
 
         globalMessageManager = new HashMap<String, ecoMessageManager>();
         globalRewardManager = new HashMap<String, ecoRewardManager>();
         configManager = new ecoConfigManager(this);
         spawnerMobs = new HashSet<Integer>();
 
-        registerCommands();
+        addCommands();
         registerEvents();
 
         new ecoUpdate(this);
@@ -85,6 +80,7 @@ public class ecoCreature extends JavaPlugin
         logger.info(getDescription().getVersion() + " enabled.");
     }
 
+    @Override
     public void onDisable()
     {
         configManager.save();
@@ -186,29 +182,35 @@ public class ecoCreature extends JavaPlugin
         return logger;
     }
 
-    private void setupVault()
+    private void initVault()
     {
-        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
-        if (permissionProvider != null) {
-            permission = permissionProvider.getProvider();
-            logger.info("Found permissions provider.");
+        Plugin vaultPlugin = getPlugin("Vault", "net.milkbowl.vault.Vault");
+        
+        if (vaultPlugin != null) {
+            RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+            if (permissionProvider != null) {
+                permission = permissionProvider.getProvider();
+                logger.info("Found permissions provider.");
+            }
+    
+            RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+            if (economyProvider != null) {
+                economy = economyProvider.getProvider();
+                logger.info("Economy enabled.");
+            }
         }
-        else {
+
+        if (permission == null) {
             logger.severe("Failed to load permission provider.");
             Bukkit.getPluginManager().disablePlugin(this);
         }
 
-        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-        if (economyProvider != null) {
-            economy = economyProvider.getProvider();
-            logger.info("Economy enabled.");
-        }
-        else {
+        if (economy == null) {
             logger.warning("Economy disabled.");
         }
     }
 
-    private void setupMetrics()
+    private void initMetrics()
     {
         try {
             metrics = new ecoMetrics(this);
@@ -220,55 +222,36 @@ public class ecoCreature extends JavaPlugin
         }
     }
 
-    private void setupDeathTpPlus()
+    private void initPlugins()
     {
-        Plugin plugin = this.getServer().getPluginManager().getPlugin("DeathTpPlus");
-        if (plugin instanceof DeathTpPlus) {
-            DeathTpPlus testPlugin = (DeathTpPlus) plugin;
-            if (testPlugin.getDescription().getVersion().startsWith("1.95")) {
-                deathTpPlusPlugin = testPlugin;
-                logger.info("Successfully hooked " + plugin.getDescription().getName());
+        deathTpPlusPlugin = (DeathTpPlus) getPlugin("DeathTpPlus", "org.simiancage.DeathTpPlus.DeathTpPlus");
+        heroesPlugin = (Heroes) getPlugin("Heroes", "com.herocraftonline.heroes.Heroes");
+        mcMMOPlugin = (mcMMO) getPlugin("mcMMO", "com.gmail.nossr50.mcMMO");
+        worldGuardPlugin = (WorldGuardPlugin) getPlugin("WorldGuard", "com.sk89q.worldguard.bukkit.WorldGuardPlugin");
+
+        Plugin mobArenaPlugin = getPlugin("MobArena", "com.garbagemule.MobArena.MobArena");
+        if (mobArenaPlugin != null) {
+            mobArenaHandler = new MobArenaHandler();
+        }
+    }
+
+    private Plugin getPlugin(String pluginName, String className)
+    {
+        Plugin plugin = this.getServer().getPluginManager().getPlugin(pluginName);
+        try {
+            Class<?> testClass = Class.forName(className);
+            if (testClass.isInstance(plugin)) {
+                logger.info("Found plugin " + plugin.getDescription().getName());
+                return plugin;
             }
         }
-    }
-
-    private void setupMobArenaHandler()
-    {
-        Plugin plugin = this.getServer().getPluginManager().getPlugin("MobArena");
-        if (plugin instanceof MobArena) {
-            mobArenaHandler = new MobArenaHandler();
-            logger.info("Successfully hooked " + plugin.getDescription().getName());
+        catch (ClassNotFoundException e) {
+            logger.warning("Did not find plugin " + pluginName);
         }
+        return null;
     }
 
-    private void setupHeroes()
-    {
-        Plugin plugin = this.getServer().getPluginManager().getPlugin("Heroes");
-        if (plugin instanceof Heroes) {
-            heroesPlugin = (Heroes) plugin;
-            logger.info("Successfully hooked " + plugin.getDescription().getName());
-        }
-    }
-
-    private void setupMcMMO()
-    {
-        Plugin plugin = this.getServer().getPluginManager().getPlugin("mcMMO");
-        if (plugin instanceof mcMMO) {
-            mcMMOPlugin = (mcMMO) plugin;
-            logger.info("Successfully hooked " + plugin.getDescription().getName());
-        }
-    }
-
-    private void setupWorldGuard()
-    {
-        Plugin plugin = this.getServer().getPluginManager().getPlugin("WorldGuard");
-        if (plugin instanceof WorldGuardPlugin) {
-            worldGuardPlugin = (WorldGuardPlugin) plugin;
-            logger.info("Successfully hooked " + plugin.getDescription().getName());
-        }
-    }
-
-    private void registerCommands()
+    private void addCommands()
     {
         commandHandler = new CommandHandler(this);
         commandHandler.addCommand(new HelpCommand(this));
