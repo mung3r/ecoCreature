@@ -184,22 +184,28 @@ public class ecoCreature extends JavaPlugin
 
     private void initVault()
     {
-        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
-        if (permissionProvider != null) {
-            permission = permissionProvider.getProvider();
-            logger.info("Found permissions provider.");
+        Plugin vaultPlugin = getPlugin("Vault", "net.milkbowl.vault.Vault");
+        
+        if (vaultPlugin != null) {
+            RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+            if (permissionProvider != null) {
+                permission = permissionProvider.getProvider();
+                logger.info("Found permissions provider.");
+            }
+    
+            RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+            if (economyProvider != null) {
+                economy = economyProvider.getProvider();
+                logger.info("Economy enabled.");
+            }
         }
-        else {
+
+        if (permission == null) {
             logger.severe("Failed to load permission provider.");
             Bukkit.getPluginManager().disablePlugin(this);
         }
 
-        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-        if (economyProvider != null) {
-            economy = economyProvider.getProvider();
-            logger.info("Economy enabled.");
-        }
-        else {
+        if (economy == null) {
             logger.warning("Economy disabled.");
         }
     }
@@ -235,12 +241,12 @@ public class ecoCreature extends JavaPlugin
         try {
             Class<?> testClass = Class.forName(className);
             if (testClass.isInstance(plugin)) {
-                logger.info("Successfully hooked " + plugin.getDescription().getName());
+                logger.info("Found plugin " + plugin.getDescription().getName());
                 return plugin;
             }
         }
         catch (ClassNotFoundException e) {
-            logger.info("Did not hook " + pluginName);
+            logger.warning("Did not find plugin " + pluginName);
         }
         return null;
     }
