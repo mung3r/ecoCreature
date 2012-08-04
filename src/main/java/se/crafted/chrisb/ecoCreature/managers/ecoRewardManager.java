@@ -314,7 +314,9 @@ public class ecoRewardManager
 
         if (rewards.containsKey(rewardType)) {
             List<ecoReward> rewardList = rewards.get(rewardType);
-            reward = rewardList.get(random.nextInt(rewardList.size()));
+            if (rewardList.size() > 0) {
+                reward = rewardList.get(random.nextInt(rewardList.size()));
+            }
         }
         else {
             ecoCreature.getEcoLogger().warning("No reward defined for " + rewardType);
