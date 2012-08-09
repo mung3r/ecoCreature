@@ -36,8 +36,6 @@ import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil.TimePeriod;
 
 public class ecoRewardManager
 {
-    public static boolean warnGroupMultiplierSupport = true;
-
     public boolean isIntegerCurrency;
 
     public boolean canCampSpawner;
@@ -73,10 +71,12 @@ public class ecoRewardManager
     public Map<RewardType, List<ecoReward>> rewards;
 
     private final ecoCreature plugin;
+    private boolean warnGroupMultiplierSupport;
 
     public ecoRewardManager(ecoCreature plugin)
     {
         this.plugin = plugin;
+        warnGroupMultiplierSupport = true;
 
         groupMultiplier = new HashMap<String, Double>();
         timeMultiplier = new HashMap<TimePeriod, Double>();
