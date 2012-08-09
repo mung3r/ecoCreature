@@ -54,7 +54,7 @@ public class ecoConfigManager
         }
     }
 
-    private void load() throws FileNotFoundException, IOException, InvalidConfigurationException
+    private void load() throws IOException, InvalidConfigurationException
     {
         defaultConfig = new YamlConfiguration();
         defaultConfigFile = new File(plugin.getDataFolder(), DEFAULT_CONFIG_FILE);
@@ -269,36 +269,32 @@ public class ecoConfigManager
         return reward;
     }
 
-    private FileConfiguration getConfig(File file) throws FileNotFoundException, IOException, InvalidConfigurationException
+    private FileConfiguration getConfig(File file) throws IOException, InvalidConfigurationException
     {
         FileConfiguration config = new YamlConfiguration();
 
-        try {
-            if (!file.exists()) {
-                file.getParentFile().mkdir();
-                file.createNewFile();
-                InputStream inputStream = plugin.getResource(file.getName());
-                FileOutputStream outputStream = new FileOutputStream(file);
+        if (!file.exists() && file.getParentFile().mkdir() && file.createNewFile()) {
+            InputStream inputStream = plugin.getResource(file.getName());
+            FileOutputStream outputStream = new FileOutputStream(file);
 
-                byte[] buffer = new byte[8192];
-                int length = 0;
-                while ((length = inputStream.read(buffer)) > 0) {
-                    outputStream.write(buffer, 0, length);
-                }
-
-                inputStream.close();
-                outputStream.close();
-
-                ecoCreature.getEcoLogger().info("Default config written to " + file.getName());
+            byte[] buffer = new byte[8192];
+            int length = 0;
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
             }
 
-            config.load(file);
-            config.setDefaults(YamlConfiguration.loadConfiguration(plugin.getResource(file.getName())));
-            config.options().copyDefaults(true);
+            inputStream.close();
+            outputStream.close();
+
+            ecoCreature.getEcoLogger().info("Default config written to " + file.getName());
         }
-        catch (Exception e) {
-            ecoCreature.getEcoLogger().warning("Default config could not be created!");
+        else {
+            ecoCreature.getEcoLogger().severe("Default config could not be created!");
         }
+
+        config.load(file);
+        config.setDefaults(YamlConfiguration.loadConfiguration(plugin.getResource(file.getName())));
+        config.options().copyDefaults(true);
 
         return config;
     }

@@ -4,12 +4,27 @@ import java.util.logging.Logger;
 
 public class ecoLogger
 {
-    private String name = "ecoCreature";
+    private static final String LOG_NAME = "ecoCreature";
+
     private Logger logger;
+    private String name;
+    private boolean isDebug;
 
     public ecoLogger()
     {
         logger = Logger.getLogger("Minecraft");
+        isDebug = false;
+        name = LOG_NAME;
+    }
+
+    public boolean isDebug()
+    {
+        return isDebug;
+    }
+
+    public void setDebug(boolean isDebug)
+    {
+        this.isDebug = isDebug;
     }
 
     public String getName()
@@ -39,8 +54,9 @@ public class ecoLogger
 
     public void debug(String msg)
     {
-        // TODO: enable debug via command
-        //logger.info(format("DEBUG: " + msg));
+        if (isDebug) {
+            logger.info(format("DEBUG: " + msg));
+        }
     }
 
     public String format(String msg)

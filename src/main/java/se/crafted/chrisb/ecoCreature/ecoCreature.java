@@ -25,6 +25,7 @@ import com.garbagemule.MobArena.MobArenaHandler;
 import com.gmail.nossr50.mcMMO;
 import com.herocraftonline.heroes.Heroes;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.managers.RegionManager;
 
 import se.crafted.chrisb.ecoCreature.commands.CommandHandler;
 import se.crafted.chrisb.ecoCreature.commands.HelpCommand;
@@ -42,16 +43,17 @@ import se.crafted.chrisb.ecoCreature.utils.ecoUpdate;
 
 public class ecoCreature extends JavaPlugin
 {
-    public Permission permission = null;
-    public Economy economy = null;
-    public static DeathTpPlus deathTpPlusPlugin = null;
-    public static MobArenaHandler mobArenaHandler = null;
-    public static Heroes heroesPlugin = null;
-    public static mcMMO mcMMOPlugin = null;
-    public static WorldGuardPlugin worldGuardPlugin = null;
-
     private static ecoLogger logger = new ecoLogger();
+
+    private Permission permission;
+    private Economy economy;
     private ecoMetrics metrics;
+    private DeathTpPlus deathTpPlusPlugin;
+    private MobArenaHandler mobArenaHandler;
+    private Heroes heroesPlugin;
+    private WorldGuardPlugin worldGuardPlugin;
+    private mcMMO mcMMOPlugin;
+
     private Map<String, ecoMessageManager> globalMessageManager;
     private Map<String, ecoRewardManager> globalRewardManager;
     private ecoConfigManager configManager;
@@ -143,15 +145,19 @@ public class ecoCreature extends JavaPlugin
         return commandHandler;
     }
 
+    public boolean hasPermission(Player player, String perm)
+    {
+        return permission.has(player.getWorld(), player.getName(), "ecoCreature." + perm) || permission.has(player.getWorld(), player.getName(), "ecocreature." + perm.toLowerCase());
+    }
+
     public Permission getPermission()
     {
         return permission;
     }
 
-    public boolean hasPermission(Player player, String perm)
+    public boolean hasEconomy()
     {
-        return permission.has(player.getWorld(), player.getName(), "ecoCreature." + perm) || permission.has(player.getWorld(), player.getName(), "ecocreature." + perm.toLowerCase());
-
+        return economy != null;
     }
 
     public Economy getEconomy()
@@ -159,9 +165,44 @@ public class ecoCreature extends JavaPlugin
         return economy;
     }
 
-    public boolean hasEconomy()
+    public boolean hasMobArena()
     {
-        return economy != null;
+        return mobArenaHandler != null;
+    }
+
+    public MobArenaHandler getMobArenaHandler()
+    {
+        return mobArenaHandler;
+    }
+
+    public boolean hasHeroes()
+    {
+        return heroesPlugin != null;
+    }
+
+    public Heroes getHeroes()
+    {
+        return heroesPlugin;
+    }
+
+    public boolean hasWorldGuard()
+    {
+        return worldGuardPlugin != null;
+    }
+
+    public RegionManager getRegionManager(World world)
+    {
+        return worldGuardPlugin.getRegionManager(world);
+    }
+
+    public boolean hasMcMMO()
+    {
+        return mcMMOPlugin != null;
+    }
+
+    public mcMMO getMcMMO()
+    {
+        return mcMMOPlugin;
     }
 
     public boolean isSpawnerMob(Entity entity)
@@ -185,14 +226,14 @@ public class ecoCreature extends JavaPlugin
     private void initVault()
     {
         Plugin vaultPlugin = getPlugin("Vault", "net.milkbowl.vault.Vault");
-        
+
         if (vaultPlugin != null) {
             RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
             if (permissionProvider != null) {
                 permission = permissionProvider.getProvider();
                 logger.info("Found permissions provider.");
             }
-    
+
             RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
             if (economyProvider != null) {
                 economy = economyProvider.getProvider();
