@@ -28,8 +28,6 @@ public class ecoMessageManager
     public ecoMessage noCampMessage;
     public ecoMessage deathPenaltyMessage;
     public ecoMessage pvpRewardMessage;
-    public ecoMessage dtpDeathStreakMessage;
-    public ecoMessage dtpKillStreakMessage;
 
     private final ecoCreature plugin;
 
