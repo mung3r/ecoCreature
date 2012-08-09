@@ -153,6 +153,11 @@ public class ecoRewardManager
             return;
         }
 
+        if (event.getTamedCreature() != null && !isWolverineMode) {
+            ecoCreature.getEcoLogger().debug("No reward for " + event.getKiller().getName() + " killing with their pet.");
+            return;
+        }
+
         if (ecoEntityUtil.isOwner(event.getKiller(), event.getKilledCreature())) {
             ecoCreature.getEcoLogger().debug("No reward for " + event.getKiller().getName() + " killing pets.");
             return;
