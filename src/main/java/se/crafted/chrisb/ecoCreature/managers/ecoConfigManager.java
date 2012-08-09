@@ -54,7 +54,7 @@ public class ecoConfigManager
         }
     }
 
-    private void load() throws FileNotFoundException, IOException, InvalidConfigurationException
+    private void load() throws IOException, InvalidConfigurationException
     {
         defaultConfig = new YamlConfiguration();
         defaultConfigFile = new File(plugin.getDataFolder(), DEFAULT_CONFIG_FILE);
@@ -269,7 +269,7 @@ public class ecoConfigManager
         return reward;
     }
 
-    private FileConfiguration getConfig(File file) throws FileNotFoundException, IOException, InvalidConfigurationException
+    private FileConfiguration getConfig(File file) throws IOException, InvalidConfigurationException
     {
         FileConfiguration config = new YamlConfiguration();
 
