@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>se.crafted.chrisb</groupId>
   <artifactId>ecoCreature</artifactId>
@@ -76,7 +77,7 @@
   <description>Player vs. Monster/Enemy Rewards</description>
   <url>http://dev.bukkit.org/server-mods/ecocreature/</url>
   <issueManagement>
-    <system>Bukkit Dev</system>
+    <system>GitHub</system>
     <url>https://github.com/mung3r/ecoCreature/issues</url>
   </issueManagement>
   <ciManagement>
