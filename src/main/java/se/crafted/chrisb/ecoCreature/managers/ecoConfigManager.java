@@ -188,7 +188,35 @@ public class ecoConfigManager
         ConfigurationSection worldGuardGainConfig = config.getConfigurationSection("Gain.WorldGuard");
         if (worldGuardGainConfig != null) {
             for (String regionName : worldGuardGainConfig.getKeys(false)) {
-                rewardManager.worldGuardRegionMultiplier.put(regionName, Double.valueOf(worldGuardGainConfig.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
+                rewardManager.worldGuardMultiplier.put(regionName, Double.valueOf(worldGuardGainConfig.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
+            }
+        }
+
+        ConfigurationSection regiosGainConfig = config.getConfigurationSection("Gain.Regios");
+        if (regiosGainConfig != null) {
+            for (String regionName: regiosGainConfig.getKeys(false)) {
+                rewardManager.regiosMultiplier.put(regionName, Double.valueOf(regiosGainConfig.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
+            }
+        }
+
+        ConfigurationSection residenceGainConfig = config.getConfigurationSection("Gain.Residence");
+        if (residenceGainConfig != null) {
+            for (String regionName: residenceGainConfig.getKeys(false)) {
+                rewardManager.regiosMultiplier.put(regionName, Double.valueOf(residenceGainConfig.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
+            }
+        }
+
+        ConfigurationSection factionsGainConfig = config.getConfigurationSection("Gain.Factions");
+        if (factionsGainConfig != null) {
+            for (String regionName: factionsGainConfig.getKeys(false)) {
+                rewardManager.regiosMultiplier.put(regionName, Double.valueOf(factionsGainConfig.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
+            }
+        }
+
+        ConfigurationSection townyGainConfig = config.getConfigurationSection("Gain.Towny");
+        if (townyGainConfig != null) {
+            for (String regionName: townyGainConfig.getKeys(false)) {
+                rewardManager.regiosMultiplier.put(regionName, Double.valueOf(townyGainConfig.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
             }
         }
 
@@ -208,6 +236,12 @@ public class ecoConfigManager
         }
         else {
             rewardManager.heroesPartyMultiplier = 1.0D;
+        }
+
+        ConfigurationSection mcMMOGainConfig = config.getConfigurationSection("Gain.mcMMO.InParty");
+        if (mcMMOGainConfig != null) {
+            rewardManager.mcMMOPartyMultiplier = mcMMOGainConfig.getDouble("Amount", 1.0D);
+            rewardManager.isMcMMOPartyShare = mcMMOGainConfig.getBoolean("Share", true);
         }
 
         Map<String, ecoReward> rewardSet = new HashMap<String, ecoReward>();

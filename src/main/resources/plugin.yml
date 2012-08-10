@@ -4,7 +4,7 @@ version: 0.1.1-b${BUILD_NUMBER}
 authors: [chrisb, mung3r]
 website: http://dev.bukkit.org/server-mods/ecocreature
 depend: [Vault]
-softdepend: [Heroes,mcMMO,WorldGuard,DeathTpPlus,MobArena]
+softdepend: [Heroes,mcMMO,WorldGuard,Residence,Regios,DeathTpPlus,MobArena,Factions,Towny]
 description: Coins and drops for PvM
 
 commands:
@@ -25,8 +25,13 @@ permissions:
             ecocreature.gain.time: true
             ecocreature.gain.environment: true
             ecocreature.gain.heroes: true
+            ecocreature.gain.mcmmo: true
             ecocreature.gain.mobarena: true
             ecocreature.gain.worldguard: true
+            ecocreature.gain.residence: true
+            ecocreature.gain.regios: true
+            ecocreature.gain.factions: true
+            ecocreature.gain.towny: true
     ecocreature.reward.*:
         description: Allows rewards for all creature types
         children:
@@ -79,11 +84,26 @@ permissions:
     ecocreature.gain.heroes:
         description: Enables gain multiplier based on Heroes party status
         default: op
+    ecocreature.gain.mcmmo:
+        description: Enables gain multiplier based on mcMMO party status
+        default: op
     ecocreature.gain.mobarena:
         description: Enables gain multiplier based on player arena status
         default: op
     ecocreature.gain.worldguard:
         description: Enables gain multiplier based on WorldGurad region
+        default: op 
+    ecocreature.gain.regios:
+        description: Enables gain multiplier based on Regios region
+        default: op 
+    ecocreature.gain.residence:
+        description: Enables gain multiplier based on Residence region
+        default: op 
+    ecocreature.gain.towny:
+        description: Enables gain multiplier based on Towny region
+        default: op 
+    ecocreature.gain.factions:
+        description: Enables gain multiplier based on Factions region
         default: op 
     ecocreature.reward.angrywolf:
         description: Enables rewards for angry wolves

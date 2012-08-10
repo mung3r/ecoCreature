@@ -21,11 +21,14 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.simiancage.DeathTpPlus.DeathTpPlus;
 
+import com.bekvon.bukkit.residence.Residence;
 import com.garbagemule.MobArena.MobArenaHandler;
-import com.gmail.nossr50.mcMMO;
 import com.herocraftonline.heroes.Heroes;
+import com.palmergames.bukkit.towny.Towny;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
+
+import couk.Adamki11s.Regios.API.RegiosAPI;
 
 import se.crafted.chrisb.ecoCreature.commands.CommandHandler;
 import se.crafted.chrisb.ecoCreature.commands.HelpCommand;
@@ -52,7 +55,11 @@ public class ecoCreature extends JavaPlugin
     private MobArenaHandler mobArenaHandler;
     private Heroes heroesPlugin;
     private WorldGuardPlugin worldGuardPlugin;
-    private mcMMO mcMMOPlugin;
+    private Plugin mcMMOPlugin;
+    private Residence residencePlugin;
+    private RegiosAPI regiosAPI;
+    private Towny townyPlugin;
+    private Plugin factionsPlugin;
 
     private Map<String, ecoMessageManager> globalMessageManager;
     private Map<String, ecoRewardManager> globalRewardManager;
@@ -185,6 +192,21 @@ public class ecoCreature extends JavaPlugin
         return heroesPlugin;
     }
 
+    public boolean hasResidence()
+    {
+        return residencePlugin != null;
+    }
+
+    public boolean hasRegios()
+    {
+        return regiosAPI != null;
+    }
+
+    public RegiosAPI getRegiosAPI()
+    {
+        return regiosAPI;
+    }
+
     public boolean hasWorldGuard()
     {
         return worldGuardPlugin != null;
@@ -200,9 +222,14 @@ public class ecoCreature extends JavaPlugin
         return mcMMOPlugin != null;
     }
 
-    public mcMMO getMcMMO()
+    public boolean hasTowny()
     {
-        return mcMMOPlugin;
+        return townyPlugin != null;
+    }
+
+    public boolean hasFactions()
+    {
+        return factionsPlugin != null;
     }
 
     public boolean isSpawnerMob(Entity entity)
@@ -267,8 +294,16 @@ public class ecoCreature extends JavaPlugin
     {
         deathTpPlusPlugin = (DeathTpPlus) getPlugin("DeathTpPlus", "org.simiancage.DeathTpPlus.DeathTpPlus");
         heroesPlugin = (Heroes) getPlugin("Heroes", "com.herocraftonline.heroes.Heroes");
-        mcMMOPlugin = (mcMMO) getPlugin("mcMMO", "com.gmail.nossr50.mcMMO");
         worldGuardPlugin = (WorldGuardPlugin) getPlugin("WorldGuard", "com.sk89q.worldguard.bukkit.WorldGuardPlugin");
+        residencePlugin = (Residence) getPlugin("Residence", "com.bekvon.bukkit.residence.Residence");
+        townyPlugin = (Towny) getPlugin("Towny", "com.palmergames.bukkit.towny.Towny");
+        factionsPlugin = getPlugin("Factions", "com.massivecraft.factions.P");
+        mcMMOPlugin = getPlugin("mcMMO", "com.gmail.nossr50.mcMMO");
+
+        Plugin regiosPlugin = getPlugin("Regios", "couk.Adamki11s.Regios.Main.Regios");
+        if (regiosPlugin != null) {
+            regiosAPI = new RegiosAPI();
+        }
 
         Plugin mobArenaPlugin = getPlugin("MobArena", "com.garbagemule.MobArena.MobArena");
         if (mobArenaPlugin != null) {

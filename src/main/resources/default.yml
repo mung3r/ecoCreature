@@ -148,12 +148,46 @@ Gain:
             Amount: 0.125
         MyRegionName2:
             Amount: 0.5
+    Regios:
+    #
+    # Multiply reward amount based on Regios region
+        MyRegiosName1:
+            Amount: 0.125
+        MyRegiosName1:
+            Amount: 0.5
+    Residence:
+    #
+    # Multiply reward amount based on Residence region
+        MyResidenceName1:
+            Amount: 0.125
+        MyResidenceName1:
+            Amount: 0.5
+    Factions:
+    #
+    # Multiply reward amount based on Faction region
+        MyFactionName1:
+            Amount: 0.125
+        MyFactionName2:
+            Amount: 0.5
+    Towny:
+    #
+    # Multiply reward amount based on Towny region
+        MyTownName1:
+            Amount: 0.125
+        MyTownName2:
+            Amount: 0.5
     Heroes:
     #
     # Multiply reward based on Heroes party status
         InParty:
             Amount: 1.125
             Share: 'true'
+    mcMMO:
+    #
+    # Multiply reward based on mcMMO party status
+        InParty:
+            Amount: 1.125
+            Share: 'true' 
 
 RewardTable:
     ############################################################################

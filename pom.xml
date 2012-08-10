@@ -70,6 +70,34 @@
       <scope>system</scope>
       <systemPath>${project.basedir}/lib/mcMMO.jar</systemPath>
     </dependency>
+    <dependency>
+      <groupId>com.bekvon.bukkit.residence</groupId>
+      <artifactId>Residence</artifactId>
+      <version>2.6.4</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/Residence.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>couk.Adamki11s.Regios</groupId>
+      <artifactId>Regios</artifactId>
+      <version>5.0.54</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/Regios.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.palmergames.bukkit.towny</groupId>
+      <artifactId>Towny</artifactId>
+      <version>0.81.0.0</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/Towny.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.massivecraft.factions</groupId>
+      <artifactId>Factions</artifactId>
+      <version>1.6.8</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/Factions.jar</systemPath>
+    </dependency>
   </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
