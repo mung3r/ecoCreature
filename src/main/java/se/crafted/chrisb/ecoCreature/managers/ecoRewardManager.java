@@ -426,11 +426,10 @@ public class ecoRewardManager
         }
 
         if (plugin.hasPermission(player, "gain.regios") && plugin.hasRegios()) {
-            for (Region region : plugin.getRegiosAPI().getRegions(player.getLocation())) {
-                if (regiosMultiplier.containsKey(region.getName())) {
-                    amount *= regiosMultiplier.get(region.getName());
-                    ecoCreature.getEcoLogger().debug("Regios multiplier applied");
-                }
+            Region region = plugin.getRegiosAPI().getRegion(player.getLocation());
+            if (region != null && regiosMultiplier.containsKey(region.getName())) {
+                amount *= regiosMultiplier.get(region.getName());
+                ecoCreature.getEcoLogger().debug("Regios multiplier applied");
             }
         }
 

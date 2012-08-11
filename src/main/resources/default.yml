@@ -140,7 +140,7 @@ Gain:
     # Multiply reward amount based on player arena status
         InArena:
             Amount: 1.0
-            Share: 'true'
+            Share: true
     WorldGuard:
     #
     # Multiply reward amount based on WorldGuard region
@@ -181,13 +181,13 @@ Gain:
     # Multiply reward based on Heroes party status
         InParty:
             Amount: 1.125
-            Share: 'true'
+            Share: true
     mcMMO:
     #
     # Multiply reward based on mcMMO party status
         InParty:
             Amount: 1.125
-            Share: 'true' 
+            Share: true 
 
 RewardTable:
     ############################################################################

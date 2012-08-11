@@ -4,7 +4,7 @@
   <groupId>se.crafted.chrisb</groupId>
   <artifactId>ecoCreature</artifactId>
   <name>ecoCreature</name>
-  <version>0.1.1-SNAPSHOT</version>
+  <version>0.1.2-SNAPSHOT</version>
   <repositories>
     <repository>
       <id>bukkit-repo</id>

@@ -201,22 +201,22 @@ public class ecoConfigManager
 
         ConfigurationSection residenceGainConfig = config.getConfigurationSection("Gain.Residence");
         if (residenceGainConfig != null) {
-            for (String regionName: residenceGainConfig.getKeys(false)) {
-                rewardManager.regiosMultiplier.put(regionName, Double.valueOf(residenceGainConfig.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
+            for (String residenceName: residenceGainConfig.getKeys(false)) {
+                rewardManager.residenceMultiplier.put(residenceName, Double.valueOf(residenceGainConfig.getConfigurationSection(residenceName).getDouble("Amount", 1.0D)));
             }
         }
 
         ConfigurationSection factionsGainConfig = config.getConfigurationSection("Gain.Factions");
         if (factionsGainConfig != null) {
-            for (String regionName: factionsGainConfig.getKeys(false)) {
-                rewardManager.regiosMultiplier.put(regionName, Double.valueOf(factionsGainConfig.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
+            for (String factionsTag: factionsGainConfig.getKeys(false)) {
+                rewardManager.factionsMultiplier.put(factionsTag, Double.valueOf(factionsGainConfig.getConfigurationSection(factionsTag).getDouble("Amount", 1.0D)));
             }
         }
 
         ConfigurationSection townyGainConfig = config.getConfigurationSection("Gain.Towny");
         if (townyGainConfig != null) {
-            for (String regionName: townyGainConfig.getKeys(false)) {
-                rewardManager.regiosMultiplier.put(regionName, Double.valueOf(townyGainConfig.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
+            for (String townName: townyGainConfig.getKeys(false)) {
+                rewardManager.townyMultiplier.put(townName, Double.valueOf(townyGainConfig.getConfigurationSection(townName).getDouble("Amount", 1.0D)));
             }
         }
 
@@ -306,7 +306,9 @@ public class ecoConfigManager
     {
         FileConfiguration config = new YamlConfiguration();
 
-        if (!file.exists() && file.getParentFile().mkdir() && file.createNewFile()) {
+        if (!file.exists()) {
+            file.getParentFile().mkdir();
+            file.createNewFile();
             InputStream inputStream = plugin.getResource(file.getName());
             FileOutputStream outputStream = new FileOutputStream(file);
 
