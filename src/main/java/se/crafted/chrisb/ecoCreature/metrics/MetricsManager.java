@@ -1,4 +1,4 @@
-package se.crafted.chrisb.ecoCreature.utils;
+package se.crafted.chrisb.ecoCreature.metrics;
 
 import java.io.IOException;
 import java.util.Hashtable;
@@ -6,14 +6,13 @@ import java.util.Map;
 
 import org.bukkit.plugin.Plugin;
 
-import se.crafted.chrisb.ecoCreature.Metrics;
-import se.crafted.chrisb.ecoCreature.models.ecoReward.RewardType;
+import se.crafted.chrisb.ecoCreature.rewards.RewardType;
 
-public class ecoMetrics extends Metrics
+public class MetricsManager extends Metrics
 {
     private Map<RewardType, Integer> rewardTypeCount;
 
-    public ecoMetrics(Plugin plugin) throws IOException
+    public MetricsManager(Plugin plugin) throws IOException
     {
         super(plugin);
         rewardTypeCount = new Hashtable<RewardType, Integer>() {

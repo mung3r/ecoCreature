@@ -8,11 +8,11 @@ import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 
-public class ecoStreakListener implements Listener
+public class StreakEventListener implements Listener
 {
     private final ecoCreature plugin;
 
-    public ecoStreakListener(ecoCreature plugin)
+    public StreakEventListener(ecoCreature plugin)
     {
         this.plugin = plugin;
     }

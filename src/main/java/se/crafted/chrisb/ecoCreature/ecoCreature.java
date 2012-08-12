@@ -19,44 +19,52 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.simiancage.DeathTpPlus.DeathTpPlus;
 
+import com.bekvon.bukkit.residence.Residence;
 import com.garbagemule.MobArena.MobArenaHandler;
-import com.gmail.nossr50.mcMMO;
 import com.herocraftonline.heroes.Heroes;
+import com.palmergames.bukkit.towny.Towny;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
+
+import couk.Adamki11s.Regios.API.RegiosAPI;
 
 import se.crafted.chrisb.ecoCreature.commands.CommandHandler;
 import se.crafted.chrisb.ecoCreature.commands.HelpCommand;
 import se.crafted.chrisb.ecoCreature.commands.ReloadCommand;
-import se.crafted.chrisb.ecoCreature.listeners.ecoBlockListener;
-import se.crafted.chrisb.ecoCreature.listeners.ecoEntityListener;
-import se.crafted.chrisb.ecoCreature.listeners.ecoDeathListener;
-import se.crafted.chrisb.ecoCreature.listeners.ecoStreakListener;
-import se.crafted.chrisb.ecoCreature.managers.ecoConfigManager;
-import se.crafted.chrisb.ecoCreature.managers.ecoMessageManager;
-import se.crafted.chrisb.ecoCreature.managers.ecoRewardManager;
-import se.crafted.chrisb.ecoCreature.utils.ecoLogger;
-import se.crafted.chrisb.ecoCreature.utils.ecoMetrics;
-import se.crafted.chrisb.ecoCreature.utils.ecoUpdate;
+import se.crafted.chrisb.ecoCreature.commons.UpdateTask;
+import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.config.ConfigManager;
+import se.crafted.chrisb.ecoCreature.listeners.BlockEventListener;
+import se.crafted.chrisb.ecoCreature.listeners.DeathEventListener;
+import se.crafted.chrisb.ecoCreature.listeners.HeroMasteredListener;
+import se.crafted.chrisb.ecoCreature.listeners.KillEventListener;
+import se.crafted.chrisb.ecoCreature.listeners.SpawnEventListener;
+import se.crafted.chrisb.ecoCreature.listeners.StreakEventListener;
+import se.crafted.chrisb.ecoCreature.messages.MessageManager;
+import se.crafted.chrisb.ecoCreature.metrics.MetricsManager;
+import se.crafted.chrisb.ecoCreature.rewards.RewardManager;
 
 public class ecoCreature extends JavaPlugin
 {
-    private static ecoLogger logger = new ecoLogger();
+    private static ECLogger logger = new ECLogger();
 
     private Permission permission;
     private Economy economy;
-    private ecoMetrics metrics;
-    private DeathTpPlus deathTpPlusPlugin;
+    private MetricsManager metrics;
+    private Plugin deathTpPlusPlugin;
     private MobArenaHandler mobArenaHandler;
     private Heroes heroesPlugin;
     private WorldGuardPlugin worldGuardPlugin;
-    private mcMMO mcMMOPlugin;
+    private Plugin mcMMOPlugin;
+    private Residence residencePlugin;
+    private RegiosAPI regiosAPI;
+    private Towny townyPlugin;
+    private Plugin factionsPlugin;
 
-    private Map<String, ecoMessageManager> globalMessageManager;
-    private Map<String, ecoRewardManager> globalRewardManager;
-    private ecoConfigManager configManager;
+    private Map<String, MessageManager> globalMessageManager;
+    private Map<String, RewardManager> globalRewardManager;
+    private ConfigManager configManager;
     private CommandHandler commandHandler;
     private Set<Integer> spawnerMobs;
 
@@ -69,15 +77,15 @@ public class ecoCreature extends JavaPlugin
         initMetrics();
         initPlugins();
 
-        globalMessageManager = new HashMap<String, ecoMessageManager>();
-        globalRewardManager = new HashMap<String, ecoRewardManager>();
-        configManager = new ecoConfigManager(this);
+        globalMessageManager = new HashMap<String, MessageManager>();
+        globalRewardManager = new HashMap<String, RewardManager>();
+        configManager = new ConfigManager(this);
         spawnerMobs = new HashSet<Integer>();
 
         addCommands();
         registerEvents();
 
-        new ecoUpdate(this);
+        new UpdateTask(this);
 
         logger.info(getDescription().getVersion() + " enabled.");
     }
@@ -99,43 +107,43 @@ public class ecoCreature extends JavaPlugin
     public void reloadConfig()
     {
         super.reloadConfig();
-        configManager = new ecoConfigManager(this);
+        configManager = new ConfigManager(this);
     };
 
-    public ecoMetrics getMetrics()
+    public MetricsManager getMetrics()
     {
         return metrics;
     }
 
-    public ecoConfigManager getConfigManager()
+    public ConfigManager getConfigManager()
     {
         return configManager;
     }
 
-    public Map<String, ecoMessageManager> getGlobalMessageManager()
+    public Map<String, MessageManager> getGlobalMessageManager()
     {
         return globalMessageManager;
     }
 
-    public ecoMessageManager getMessageManager(World world)
+    public MessageManager getMessageManager(World world)
     {
-        ecoMessageManager messageManager = globalMessageManager.get(world.getName());
+        MessageManager messageManager = globalMessageManager.get(world.getName());
         if (messageManager == null) {
-            messageManager = globalMessageManager.get(ecoConfigManager.DEFAULT_WORLD);
+            messageManager = globalMessageManager.get(ConfigManager.DEFAULT_WORLD);
         }
         return messageManager;
     }
 
-    public Map<String, ecoRewardManager> getGlobalRewardManager()
+    public Map<String, RewardManager> getGlobalRewardManager()
     {
         return globalRewardManager;
     }
 
-    public ecoRewardManager getRewardManager(World world)
+    public RewardManager getRewardManager(World world)
     {
-        ecoRewardManager rewardManager = globalRewardManager.get(world.getName());
+        RewardManager rewardManager = globalRewardManager.get(world.getName());
         if (rewardManager == null) {
-            rewardManager = globalRewardManager.get(ecoConfigManager.DEFAULT_WORLD);
+            rewardManager = globalRewardManager.get(ConfigManager.DEFAULT_WORLD);
         }
         return rewardManager;
     }
@@ -185,6 +193,21 @@ public class ecoCreature extends JavaPlugin
         return heroesPlugin;
     }
 
+    public boolean hasResidence()
+    {
+        return residencePlugin != null;
+    }
+
+    public boolean hasRegios()
+    {
+        return regiosAPI != null;
+    }
+
+    public RegiosAPI getRegiosAPI()
+    {
+        return regiosAPI;
+    }
+
     public boolean hasWorldGuard()
     {
         return worldGuardPlugin != null;
@@ -200,9 +223,19 @@ public class ecoCreature extends JavaPlugin
         return mcMMOPlugin != null;
     }
 
-    public mcMMO getMcMMO()
+    public boolean hasTowny()
     {
-        return mcMMOPlugin;
+        return townyPlugin != null;
+    }
+
+    public boolean hasFactions()
+    {
+        return factionsPlugin != null;
+    }
+
+    public boolean hasDeathTpPlus()
+    {
+        return deathTpPlusPlugin != null;
     }
 
     public boolean isSpawnerMob(Entity entity)
@@ -212,13 +245,14 @@ public class ecoCreature extends JavaPlugin
 
     public void setSpawnerMob(Entity entity)
     {
-        // Only add to the array if we're tracking by entity. Avoids a memory leak.
+        // Only add to the array if we're tracking by entity. Avoids a memory
+        // leak.
         if (!getRewardManager(entity.getWorld()).canCampSpawner && getRewardManager(entity.getWorld()).campByEntity) {
             spawnerMobs.add(Integer.valueOf(entity.getEntityId()));
         }
     }
 
-    public static ecoLogger getEcoLogger()
+    public static ECLogger getECLogger()
     {
         return logger;
     }
@@ -254,7 +288,7 @@ public class ecoCreature extends JavaPlugin
     private void initMetrics()
     {
         try {
-            metrics = new ecoMetrics(this);
+            metrics = new MetricsManager(this);
             metrics.setupGraphs();
             metrics.start();
         }
@@ -265,10 +299,18 @@ public class ecoCreature extends JavaPlugin
 
     private void initPlugins()
     {
-        deathTpPlusPlugin = (DeathTpPlus) getPlugin("DeathTpPlus", "org.simiancage.DeathTpPlus.DeathTpPlus");
+        deathTpPlusPlugin = getPlugin("DeathTpPlus", "org.simiancage.DeathTpPlus.DeathTpPlus");
         heroesPlugin = (Heroes) getPlugin("Heroes", "com.herocraftonline.heroes.Heroes");
-        mcMMOPlugin = (mcMMO) getPlugin("mcMMO", "com.gmail.nossr50.mcMMO");
         worldGuardPlugin = (WorldGuardPlugin) getPlugin("WorldGuard", "com.sk89q.worldguard.bukkit.WorldGuardPlugin");
+        residencePlugin = (Residence) getPlugin("Residence", "com.bekvon.bukkit.residence.Residence");
+        townyPlugin = (Towny) getPlugin("Towny", "com.palmergames.bukkit.towny.Towny");
+        factionsPlugin = getPlugin("Factions", "com.massivecraft.factions.P");
+        mcMMOPlugin = getPlugin("mcMMO", "com.gmail.nossr50.mcMMO");
+
+        Plugin regiosPlugin = getPlugin("Regios", "couk.Adamki11s.Regios.Main.Regios");
+        if (regiosPlugin != null) {
+            regiosAPI = new RegiosAPI();
+        }
 
         Plugin mobArenaPlugin = getPlugin("MobArena", "com.garbagemule.MobArena.MobArena");
         if (mobArenaPlugin != null) {
@@ -301,11 +343,15 @@ public class ecoCreature extends JavaPlugin
 
     private void registerEvents()
     {
-        Bukkit.getPluginManager().registerEvents(new ecoBlockListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new ecoEntityListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new ecoDeathListener(this), this);
-        if (deathTpPlusPlugin != null) {
-            Bukkit.getPluginManager().registerEvents(new ecoStreakListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new BlockEventListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new DeathEventListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new KillEventListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new SpawnEventListener(this), this);
+        if (hasDeathTpPlus()) {
+            Bukkit.getPluginManager().registerEvents(new StreakEventListener(this), this);
+        }
+        if (hasHeroes()) {
+            Bukkit.getPluginManager().registerEvents(new HeroMasteredListener(this), this);
         }
     }
 }

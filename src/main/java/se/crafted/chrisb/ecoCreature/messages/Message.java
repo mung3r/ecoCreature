@@ -1,16 +1,16 @@
-package se.crafted.chrisb.ecoCreature.models;
+package se.crafted.chrisb.ecoCreature.messages;
 
-public class ecoMessage
+public class Message
 {
     private boolean isEnabled = true;
     private String message;
 
-    public ecoMessage(String message)
+    public Message(String message)
     {
         this.message = message;
     }
 
-    public ecoMessage(String message, boolean isEnabled)
+    public Message(String message, boolean isEnabled)
     {
         this.message = message;
         this.isEnabled = isEnabled;
@@ -39,6 +39,6 @@ public class ecoMessage
     @Override
     public String toString()
     {
-        return String.format("ecoMessage [isEnabled=%s, message=%s]", isEnabled, message);
+        return String.format("Message [isEnabled=%s, message=%s]", isEnabled, message);
     }
 }

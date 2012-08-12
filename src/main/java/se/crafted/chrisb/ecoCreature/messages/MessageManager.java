@@ -1,11 +1,10 @@
-package se.crafted.chrisb.ecoCreature.managers;
+package se.crafted.chrisb.ecoCreature.messages;
 
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.models.ecoMessage;
 
-public class ecoMessageManager
+public class MessageManager
 {
     private static final String PLAYER_TOKEN = "<plr>";
     private static final String AMOUNT_TOKEN = "<amt>";
@@ -24,48 +23,48 @@ public class ecoMessageManager
     public boolean shouldOutputMessages;
     public boolean shouldLogCoinRewards;
 
-    public ecoMessage noBowRewardMessage;
-    public ecoMessage noCampMessage;
-    public ecoMessage deathPenaltyMessage;
-    public ecoMessage pvpRewardMessage;
+    public Message noBowRewardMessage;
+    public Message noCampMessage;
+    public Message deathPenaltyMessage;
+    public Message pvpRewardMessage;
 
     private final ecoCreature plugin;
 
-    public ecoMessageManager(ecoCreature plugin)
+    public MessageManager(ecoCreature plugin)
     {
         this.plugin = plugin;
     }
 
-    public void sendMessage(ecoMessage message, Player player)
+    public void sendMessage(Message message, Player player)
     {
         if (shouldOutputMessages && message.isEnabled()) {
             player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()));
         }
     }
 
-    public void sendMessage(ecoMessage message, Player player, double amount)
+    public void sendMessage(Message message, Player player, double amount)
     {
         if (shouldOutputMessages && message.isEnabled() && plugin.hasEconomy()) {
             player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()).replaceAll(AMOUNT_TOKEN, plugin.getEconomy().format(amount).replaceAll("\\$", "\\\\\\$")));
         }
 
         if (shouldLogCoinRewards) {
-            ecoCreature.getEcoLogger().info(player.getName() + " received " + plugin.getEconomy().format(amount));
+            ecoCreature.getECLogger().info(player.getName() + " received " + plugin.getEconomy().format(amount));
         }
     }
 
-    public void sendMessage(ecoMessage message, Player player, double amount, String creatureName, String weaponName)
+    public void sendMessage(Message message, Player player, double amount, String creatureName, String weaponName)
     {
         if (shouldOutputMessages && message.isEnabled() && plugin.hasEconomy()) {
             player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()).replaceAll(AMOUNT_TOKEN, plugin.getEconomy().format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll(ITEM_TOKEN, toCamelCase(weaponName)).replaceAll(CREATURE_TOKEN, creatureName));
         }
 
         if (shouldLogCoinRewards) {
-            ecoCreature.getEcoLogger().info(player.getName() + " received " + plugin.getEconomy().format(amount));
+            ecoCreature.getECLogger().info(player.getName() + " received " + plugin.getEconomy().format(amount));
         }
     }
 
-    public void sendMessage(ecoMessage message, Player player, String creatureName, String weaponName)
+    public void sendMessage(Message message, Player player, String creatureName, String weaponName)
     {
         if (shouldOutputMessages && message.isEnabled()) {
             player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()).replaceAll(CREATURE_TOKEN, creatureName).replaceAll(ITEM_TOKEN, toCamelCase(weaponName)));
