@@ -1,8 +1,8 @@
-package se.crafted.chrisb.ecoCreature.utils;
+package se.crafted.chrisb.ecoCreature.commons;
 
 import java.util.logging.Logger;
 
-public class ecoLogger
+public class ECLogger
 {
     private static final String LOG_NAME = "ecoCreature";
 
@@ -10,7 +10,7 @@ public class ecoLogger
     private String name;
     private boolean isDebug;
 
-    public ecoLogger()
+    public ECLogger()
     {
         logger = Logger.getLogger("Minecraft");
         isDebug = false;

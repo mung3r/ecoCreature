@@ -7,11 +7,11 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 
-public class ecoBlockListener implements Listener
+public class BlockEventListener implements Listener
 {
     private final ecoCreature plugin;
 
-    public ecoBlockListener(ecoCreature plugin)
+    public BlockEventListener(ecoCreature plugin)
     {
         this.plugin = plugin;
     }

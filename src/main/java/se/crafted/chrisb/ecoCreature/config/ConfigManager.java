@@ -1,4 +1,4 @@
-package se.crafted.chrisb.ecoCreature.managers;
+package se.crafted.chrisb.ecoCreature.config;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,13 +18,15 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.models.ecoDrop;
-import se.crafted.chrisb.ecoCreature.models.ecoMessage;
-import se.crafted.chrisb.ecoCreature.models.ecoReward;
-import se.crafted.chrisb.ecoCreature.models.ecoReward.RewardType;
-import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil.TimePeriod;
+import se.crafted.chrisb.ecoCreature.commons.TimePeriod;
+import se.crafted.chrisb.ecoCreature.messages.Message;
+import se.crafted.chrisb.ecoCreature.messages.MessageManager;
+import se.crafted.chrisb.ecoCreature.rewards.Drop;
+import se.crafted.chrisb.ecoCreature.rewards.Reward;
+import se.crafted.chrisb.ecoCreature.rewards.RewardManager;
+import se.crafted.chrisb.ecoCreature.rewards.RewardType;
 
-public class ecoConfigManager
+public class ConfigManager
 {
     public static final String DEFAULT_WORLD = "__DEFAULT_WORLD__";
 
@@ -38,7 +40,7 @@ public class ecoConfigManager
     private FileConfiguration defaultConfig;
     private Map<String, FileConfiguration> worldConfigs;
 
-    public ecoConfigManager(ecoCreature plugin)
+    public ConfigManager(ecoCreature plugin)
     {
         this.plugin = plugin;
         dataWorldsFolder = new File(plugin.getDataFolder(), "worlds");
@@ -48,7 +50,7 @@ public class ecoConfigManager
             load();
         }
         catch (Exception e) {
-            ecoCreature.getEcoLogger().severe("Failed to load config: " + e.toString());
+            ecoCreature.getECLogger().severe("Failed to load config: " + e.toString());
             Bukkit.getPluginManager().disablePlugin(plugin);
         }
     }
@@ -64,19 +66,19 @@ public class ecoConfigManager
             defaultConfig.load(defaultConfigFile);
         }
         else if (oldConfigFile.exists()) {
-            ecoCreature.getEcoLogger().info("Converting old config file.");
+            ecoCreature.getECLogger().info("Converting old config file.");
             defaultConfig = getConfig(oldConfigFile);
             if (oldConfigFile.delete()) {
-                ecoCreature.getEcoLogger().info("Old config file converted.");
+                ecoCreature.getECLogger().info("Old config file converted.");
             }
         }
         else {
             defaultConfig = getConfig(defaultConfigFile);
         }
 
-        ecoCreature.getEcoLogger().info("Loaded config defaults.");
-        ecoMessageManager defaultMessageManager = loadMessageConfig(defaultConfig);
-        ecoRewardManager defaultRewardManager = loadRewardConfig(defaultConfig);
+        ecoCreature.getECLogger().info("Loaded config defaults.");
+        MessageManager defaultMessageManager = loadMessageConfig(defaultConfig);
+        RewardManager defaultRewardManager = loadRewardConfig(defaultConfig);
         plugin.getGlobalMessageManager().put(DEFAULT_WORLD, defaultMessageManager);
         plugin.getGlobalRewardManager().put(DEFAULT_WORLD, defaultRewardManager);
 
@@ -88,7 +90,7 @@ public class ecoConfigManager
 
             if (worldConfigFile.exists()) {
                 FileConfiguration worldConfig = getConfig(worldConfigFile);
-                ecoCreature.getEcoLogger().info("Loaded config for " + world.getName() + " world.");
+                ecoCreature.getECLogger().info("Loaded config for " + world.getName() + " world.");
                 plugin.getGlobalMessageManager().put(world.getName(), loadMessageConfig(worldConfig));
                 plugin.getGlobalRewardManager().put(world.getName(), loadRewardConfig(worldConfig));
                 worldConfigs.put(world.getName(), worldConfig);
@@ -113,27 +115,27 @@ public class ecoConfigManager
             }
         }
         catch (Exception e) {
-            ecoCreature.getEcoLogger().severe(e.getMessage());
+            ecoCreature.getECLogger().severe(e.getMessage());
         }
     }
 
-    private ecoMessageManager loadMessageConfig(FileConfiguration config)
+    private MessageManager loadMessageConfig(FileConfiguration config)
     {
-        ecoMessageManager messageManager = new ecoMessageManager(plugin);
+        MessageManager messageManager = new MessageManager(plugin);
 
         messageManager.shouldOutputMessages = config.getBoolean("System.Messages.Output", true);
         messageManager.shouldLogCoinRewards = config.getBoolean("System.Messages.LogCoinRewards", true);
-        messageManager.noBowRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoBowMessage", ecoMessageManager.NO_BOW_REWARD_MESSAGE)), true);
-        messageManager.noCampMessage = new ecoMessage(convertMessage(config.getString("System.Messages.NoCampMessage", ecoMessageManager.NO_CAMP_MESSAGE)), config.getBoolean("System.Messages.Spawner", false));
-        messageManager.deathPenaltyMessage = new ecoMessage(convertMessage(config.getString("System.Messages.DeathPenaltyMessage", ecoMessageManager.DEATH_PENALTY_MESSAGE)), true);
-        messageManager.pvpRewardMessage = new ecoMessage(convertMessage(config.getString("System.Messages.PVPRewardMessage", ecoMessageManager.PVP_REWARD_MESSAGE)), true);
+        messageManager.noBowRewardMessage = new Message(convertMessage(config.getString("System.Messages.NoBowMessage", MessageManager.NO_BOW_REWARD_MESSAGE)), true);
+        messageManager.noCampMessage = new Message(convertMessage(config.getString("System.Messages.NoCampMessage", MessageManager.NO_CAMP_MESSAGE)), config.getBoolean("System.Messages.Spawner", false));
+        messageManager.deathPenaltyMessage = new Message(convertMessage(config.getString("System.Messages.DeathPenaltyMessage", MessageManager.DEATH_PENALTY_MESSAGE)), true);
+        messageManager.pvpRewardMessage = new Message(convertMessage(config.getString("System.Messages.PVPRewardMessage", MessageManager.PVP_REWARD_MESSAGE)), true);
 
         return messageManager;
     }
 
-    private ecoRewardManager loadRewardConfig(FileConfiguration config)
+    private RewardManager loadRewardConfig(FileConfiguration config)
     {
-        ecoRewardManager rewardManager = new ecoRewardManager(plugin);
+        RewardManager rewardManager = new RewardManager(plugin);
 
         rewardManager.isIntegerCurrency = config.getBoolean("System.Economy.IntegerCurrency", false);
 
@@ -180,7 +182,7 @@ public class ecoConfigManager
                     rewardManager.envMultiplier.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(envGainConfig.getConfigurationSection(environment).getDouble("Amount", 1.0D)));
                 }
                 catch (Exception e) {
-                    ecoCreature.getEcoLogger().warning("Skipping unknown environment name: " + environment);
+                    ecoCreature.getECLogger().warning("Skipping unknown environment name: " + environment);
                 }
             }
         }
@@ -244,7 +246,7 @@ public class ecoConfigManager
             rewardManager.isMcMMOPartyShare = mcMMOGainConfig.getBoolean("Share", true);
         }
 
-        Map<String, ecoReward> rewardSet = new HashMap<String, ecoReward>();
+        Map<String, Reward> rewardSet = new HashMap<String, Reward>();
         ConfigurationSection rewardSetsConfig = config.getConfigurationSection("RewardSets");
         if (rewardSetsConfig != null) {
             for (String setName : rewardSetsConfig.getKeys(false)) {
@@ -255,10 +257,10 @@ public class ecoConfigManager
         ConfigurationSection rewardTableConfig = config.getConfigurationSection("RewardTable");
         if (rewardTableConfig != null) {
             for (String rewardName : rewardTableConfig.getKeys(false)) {
-                ecoReward reward = createReward(RewardType.fromName(rewardName), rewardTableConfig.getConfigurationSection(rewardName), rewardManager, config.getBoolean("System.Messages.NoReward", false));
+                Reward reward = createReward(RewardType.fromName(rewardName), rewardTableConfig.getConfigurationSection(rewardName), rewardManager, config.getBoolean("System.Messages.NoReward", false));
 
                 if (!rewardManager.rewards.containsKey(reward.getRewardType())) {
-                    rewardManager.rewards.put(reward.getRewardType(), new ArrayList<ecoReward>());
+                    rewardManager.rewards.put(reward.getRewardType(), new ArrayList<Reward>());
                 }
 
                 if (rewardTableConfig.getConfigurationSection(rewardName).getList("Sets") != null) {
@@ -278,9 +280,9 @@ public class ecoConfigManager
         return rewardManager;
     }
 
-    private static ecoReward mergeReward(ecoReward from, ecoReward to)
+    private static Reward mergeReward(Reward from, Reward to)
     {
-        ecoReward reward = new ecoReward();
+        Reward reward = new Reward();
 
         reward.setRewardName(to.getRewardName());
         reward.setRewardType(to.getRewardType());
@@ -321,10 +323,10 @@ public class ecoConfigManager
             inputStream.close();
             outputStream.close();
 
-            ecoCreature.getEcoLogger().info("Default config written to " + file.getName());
+            ecoCreature.getECLogger().info("Default config written to " + file.getName());
         }
         else {
-            ecoCreature.getEcoLogger().severe("Default config could not be created!");
+            ecoCreature.getECLogger().severe("Default config could not be created!");
         }
 
         config.load(file);
@@ -334,18 +336,18 @@ public class ecoConfigManager
         return config;
     }
 
-    private static ecoReward createReward(RewardType rewardType, ConfigurationSection rewardConfig, ecoRewardManager rewardManager, boolean isNoRewardMessage)
+    private static Reward createReward(RewardType rewardType, ConfigurationSection rewardConfig, RewardManager rewardManager, boolean isNoRewardMessage)
     {
-        ecoReward reward = new ecoReward();
+        Reward reward = new Reward();
         reward.setRewardName(rewardConfig.getName());
         reward.setRewardType(rewardType);
 
         if (rewardConfig.getList("Drops") != null) {
             List<String> dropsList = rewardConfig.getStringList("Drops");
-            reward.setDrops(ecoDrop.parseDrops(dropsList, rewardManager.isFixedDrops));
+            reward.setDrops(Drop.parseDrops(dropsList, rewardManager.isFixedDrops));
         }
         else {
-            reward.setDrops(ecoDrop.parseDrops(rewardConfig.getString("Drops"), rewardManager.isFixedDrops));
+            reward.setDrops(Drop.parseDrops(rewardConfig.getString("Drops"), rewardManager.isFixedDrops));
         }
         reward.setCoinMax(rewardConfig.getDouble("Coin_Maximum", 0));
         reward.setCoinMin(rewardConfig.getDouble("Coin_Minimum", 0));
@@ -360,13 +362,13 @@ public class ecoConfigManager
                 reward.setExpPercentage(Double.parseDouble(expPercentage));
             }
             catch (NumberFormatException e) {
-                ecoCreature.getEcoLogger().warning("Could not parse exp for " + rewardConfig.getName());
+                ecoCreature.getECLogger().warning("Could not parse exp for " + rewardConfig.getName());
             }
         }
 
-        reward.setNoRewardMessage(new ecoMessage(convertMessage(rewardConfig.getString("NoReward_Message", ecoMessageManager.NO_REWARD_MESSAGE)), isNoRewardMessage));
-        reward.setRewardMessage(new ecoMessage(convertMessage(rewardConfig.getString("Reward_Message", ecoMessageManager.REWARD_MESSAGE)), true));
-        reward.setPenaltyMessage(new ecoMessage(convertMessage(rewardConfig.getString("Penalty_Message", ecoMessageManager.PENALTY_MESSAGE)), true));
+        reward.setNoRewardMessage(new Message(convertMessage(rewardConfig.getString("NoReward_Message", MessageManager.NO_REWARD_MESSAGE)), isNoRewardMessage));
+        reward.setRewardMessage(new Message(convertMessage(rewardConfig.getString("Reward_Message", MessageManager.REWARD_MESSAGE)), true));
+        reward.setPenaltyMessage(new Message(convertMessage(rewardConfig.getString("Penalty_Message", MessageManager.PENALTY_MESSAGE)), true));
 
         return reward;
     }

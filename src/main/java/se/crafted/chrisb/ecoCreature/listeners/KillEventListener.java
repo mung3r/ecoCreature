@@ -8,11 +8,11 @@ import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.CreatureKilledByPlayerEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledByPlayerEvent;
 
-public class ecoDeathListener implements Listener
+public class KillEventListener implements Listener
 {
     private final ecoCreature plugin;
 
-    public ecoDeathListener(ecoCreature plugin)
+    public KillEventListener(ecoCreature plugin)
     {
         this.plugin = plugin;
     }

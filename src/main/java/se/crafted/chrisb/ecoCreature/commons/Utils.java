@@ -1,7 +1,5 @@
-package se.crafted.chrisb.ecoCreature.utils;
+package se.crafted.chrisb.ecoCreature.commons;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -10,56 +8,13 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Tameable;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
-public class ecoEntityUtil
+public class Utils
 {
-    private static final long DAY_START = 0;
-    private static final long SUNSET_START = 13000;
-    private static final long DUSK_START = 13500;
-    private static final long NIGHT_START = 14000;
-    private static final long DAWN_START = 22000;
-    private static final long SUNRISE_START = 23000;
-
-    public static enum TimePeriod {
-        DAY, SUNSET, DUSK, NIGHT, DAWN, SUNRISE, IDENTITY;
-
-        private static final Map<String, TimePeriod> NAME_MAP = new HashMap<String, TimePeriod>();
-
-        static {
-            for (TimePeriod type : TimePeriod.values()) {
-                NAME_MAP.put(type.toString(), type);
-            }
-        }
-
-        public static TimePeriod fromName(String period)
-        {
-            return NAME_MAP.get(period.toUpperCase());
-        }
-    };
-
     public static boolean isUnderSeaLevel(Entity entity)
     {
-        return entity.getLocation().getBlockY() < entity.getWorld().getSeaLevel();
-    }
-
-    public static TimePeriod getTimePeriod(Entity entity)
-    {
-        long time = entity.getWorld().getTime();
-
-        if (time >= DAY_START && time < SUNSET_START)
-            return TimePeriod.DAY;
-        else if (time >= SUNSET_START && time < DUSK_START)
-            return TimePeriod.SUNSET;
-        else if (time >= DUSK_START && time < NIGHT_START)
-            return TimePeriod.DUSK;
-        else if (time >= NIGHT_START && time < DAWN_START)
-            return TimePeriod.NIGHT;
-        else if (time >= DAWN_START && time < SUNRISE_START)
-            return TimePeriod.DAWN;
-        else if (time >= SUNRISE_START && time < DAY_START)
-            return TimePeriod.SUNRISE;
-
-        return TimePeriod.IDENTITY;
+        return entity != null && (entity.getLocation().getBlockY() < entity.getWorld().getSeaLevel());
     }
 
     public static Player getKillerFromDeathEvent(EntityDeathEvent event)
@@ -102,13 +57,9 @@ public class ecoEntityUtil
         return null;
     }
 
-    public static boolean isPVPDeath(EntityDeathEvent event)
+    public static boolean isPVPDeath(PlayerDeathEvent event)
     {
-        if (event != null && event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-            return ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager() instanceof Player;
-        }
-
-        return false;
+        return event != null && event.getEntity().getKiller() != null;
     }
 
     public static boolean isOwner(Player player, Entity entity)
