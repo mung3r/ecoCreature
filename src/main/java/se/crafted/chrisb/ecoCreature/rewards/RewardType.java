@@ -26,6 +26,7 @@ public enum RewardType
     ENDERMAN("Enderman"),
     GHAST("Ghast"),
     GIANT("Giant"),
+    HERO_MASTERED("HeroMastered"),
     IRON_GOLEM("VillagerGolem"),
     KILL_STREAK("KillStreak"),
     MAGMA_CUBE("LavaSlime"),

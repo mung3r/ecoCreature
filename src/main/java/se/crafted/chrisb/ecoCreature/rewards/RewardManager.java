@@ -292,6 +292,18 @@ public class RewardManager
         }
     }
 
+    public void registerHeroMasteredReward(Hero hero)
+    {
+        if (plugin.hasPermission(hero.getPlayer(), "reward.hero_mastered") && rewards.containsKey(RewardType.HERO_MASTERED)) {
+
+            Reward reward = getRewardFromType(RewardType.HERO_MASTERED);
+
+            if (reward != null) {
+                registerReward(hero.getPlayer(), reward, "");
+            }
+        }
+    }
+
     public void handleNoFarm(EntityDeathEvent event)
     {
         if (noFarm) {

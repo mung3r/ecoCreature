@@ -25,7 +25,7 @@ System:
         #
         # If CampingByDistance is true, then this is how many blocks
         # away from a spawner you need to be to get a reward
-        # Default: 7             
+        # Default: 7
         CampRadius: 7
         #
         # Do not drop anything except for rewards defined in this file
@@ -153,14 +153,14 @@ Gain:
     # Multiply reward amount based on Regios region
         MyRegiosName1:
             Amount: 0.125
-        MyRegiosName1:
+        MyRegiosName2:
             Amount: 0.5
     Residence:
     #
     # Multiply reward amount based on Residence region
         MyResidenceName1:
             Amount: 0.125
-        MyResidenceName1:
+        MyResidenceName2:
             Amount: 0.5
     Factions:
     #
@@ -336,7 +336,7 @@ RewardTable:
         Coin_Percent: 50.0
     DeathStreak:
     #
-    # This reward requires DeathTpPlus "classic": http://tiny.cc/heroicdeath2.
+    # DeathTpPlus plugin is required to use this reward.
     # The penalty amount is multiplied by the number of deaths in the streak.
         Coin_Minimum: -1.00
         Coin_Maximum: -1.00
@@ -364,9 +364,16 @@ RewardTable:
         Coin_Minimum: 8.50
         Coin_Maximum: 8.50
         Coin_Percent: 50.00
+    #
+    # Heroes plugin is required to use this reward.
+    HeroMaster:
+        Coin_Minimum: 50.0
+        Coin_Maximum: 50.0
+        Coin_Percent: 100.00
+        Reward_Message: '&7You earned &6<amt>&7 mastering that class!'
     KillStreak:
     #
-    # This reward requires DeathTpPlus "classic": http://tiny.cc/heroicdeath2.
+    # DeathTpPlus plugin is required to use this reward.
     # The reward amount is multiplied by the number of kills in the streak.
         Drops:
         - 'diamond:1:100'
