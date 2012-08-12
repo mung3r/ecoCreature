@@ -19,7 +19,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.simiancage.DeathTpPlus.DeathTpPlus;
 
 import com.bekvon.bukkit.residence.Residence;
 import com.garbagemule.MobArena.MobArenaHandler;
