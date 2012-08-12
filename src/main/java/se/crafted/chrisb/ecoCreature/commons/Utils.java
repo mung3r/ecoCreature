@@ -1,6 +1,5 @@
 package se.crafted.chrisb.ecoCreature.commons;
 
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -27,13 +26,15 @@ public class Utils
                 return (Player) damager;
             }
             else if (damager instanceof Tameable) {
-                if (((Tameable) damager).isTamed() && ((Tameable) damager).getOwner() instanceof Player) {
-                    return (Player) ((Tameable) damager).getOwner();
+                Tameable tameable = (Tameable) damager;
+                if (tameable.isTamed() && tameable.getOwner() instanceof Player) {
+                    return (Player) tameable.getOwner();
                 }
             }
             else if (damager instanceof Projectile) {
-                if (((Projectile) damager).getShooter() instanceof Player) {
-                    return (Player) ((Projectile) damager).getShooter();
+                Projectile projectile = (Projectile) damager;
+                if (projectile.getShooter() instanceof Player) {
+                    return (Player) projectile.getShooter();
                 }
             }
         }
@@ -48,7 +49,8 @@ public class Utils
             Entity damager = ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
 
             if (damager instanceof Tameable) {
-                if (((Tameable) damager).isTamed() && ((Tameable) damager).getOwner() instanceof Player) {
+                Tameable tameable = (Tameable) damager;
+                if (tameable.isTamed() && tameable.getOwner() instanceof Player) {
                     return (LivingEntity) damager;
                 }
             }
@@ -65,8 +67,9 @@ public class Utils
     public static boolean isOwner(Player player, Entity entity)
     {
         if (entity instanceof Tameable) {
-            if (((Tameable) entity).isTamed() && ((Tameable) entity).getOwner() instanceof Player) {
-                Player owner = (Player) ((Tameable) entity).getOwner();
+            Tameable tameable = (Tameable) entity;
+            if (tameable.isTamed() && tameable.getOwner() instanceof Player) {
+                Player owner = (Player) tameable.getOwner();
                 if (owner.getName().equals(player.getName())) {
                     return true;
                 }
