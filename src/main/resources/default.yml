@@ -366,7 +366,7 @@ RewardTable:
         Coin_Percent: 50.00
     #
     # Heroes plugin is required to use this reward.
-    HeroMaster:
+    HeroMastered:
         Coin_Minimum: 50.0
         Coin_Maximum: 50.0
         Coin_Percent: 100.00

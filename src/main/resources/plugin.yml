@@ -48,6 +48,7 @@ permissions:
             ecocreature.reward.enderman: true
             ecocreature.reward.ghast: true
             ecocreature.reward.giant: true
+            ecocreature.reward.hero_mastered: true
             ecocreature.reward.killstreak: true
             ecocreature.reward.magmacube: true
             ecocreature.reward.monster: true
@@ -143,6 +144,9 @@ permissions:
         default: op
     ecocreature.reward.giant:
         description: Enables rewards for giants
+        default: op
+    ecocreature.reward.hero_mastered:
+        description: Enables rewards for mastering a class in Heroes
         default: op
     ecocreature.reward.killstreak:
         description: Enables rewards for kill streaks via DeathTpPlus

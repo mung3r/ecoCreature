@@ -38,6 +38,7 @@ import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.config.ConfigManager;
 import se.crafted.chrisb.ecoCreature.listeners.BlockEventListener;
 import se.crafted.chrisb.ecoCreature.listeners.DeathEventListener;
+import se.crafted.chrisb.ecoCreature.listeners.HeroMasteredListener;
 import se.crafted.chrisb.ecoCreature.listeners.KillEventListener;
 import se.crafted.chrisb.ecoCreature.listeners.SpawnEventListener;
 import se.crafted.chrisb.ecoCreature.listeners.StreakEventListener;
@@ -52,7 +53,7 @@ public class ecoCreature extends JavaPlugin
     private Permission permission;
     private Economy economy;
     private MetricsManager metrics;
-    private DeathTpPlus deathTpPlusPlugin;
+    private Plugin deathTpPlusPlugin;
     private MobArenaHandler mobArenaHandler;
     private Heroes heroesPlugin;
     private WorldGuardPlugin worldGuardPlugin;
@@ -233,6 +234,11 @@ public class ecoCreature extends JavaPlugin
         return factionsPlugin != null;
     }
 
+    public boolean hasDeathTpPlus()
+    {
+        return deathTpPlusPlugin != null;
+    }
+
     public boolean isSpawnerMob(Entity entity)
     {
         return spawnerMobs.remove(Integer.valueOf(entity.getEntityId()));
@@ -240,7 +246,8 @@ public class ecoCreature extends JavaPlugin
 
     public void setSpawnerMob(Entity entity)
     {
-        // Only add to the array if we're tracking by entity. Avoids a memory leak.
+        // Only add to the array if we're tracking by entity. Avoids a memory
+        // leak.
         if (!getRewardManager(entity.getWorld()).canCampSpawner && getRewardManager(entity.getWorld()).campByEntity) {
             spawnerMobs.add(Integer.valueOf(entity.getEntityId()));
         }
@@ -293,7 +300,7 @@ public class ecoCreature extends JavaPlugin
 
     private void initPlugins()
     {
-        deathTpPlusPlugin = (DeathTpPlus) getPlugin("DeathTpPlus", "org.simiancage.DeathTpPlus.DeathTpPlus");
+        deathTpPlusPlugin = getPlugin("DeathTpPlus", "org.simiancage.DeathTpPlus.DeathTpPlus");
         heroesPlugin = (Heroes) getPlugin("Heroes", "com.herocraftonline.heroes.Heroes");
         worldGuardPlugin = (WorldGuardPlugin) getPlugin("WorldGuard", "com.sk89q.worldguard.bukkit.WorldGuardPlugin");
         residencePlugin = (Residence) getPlugin("Residence", "com.bekvon.bukkit.residence.Residence");
@@ -341,8 +348,11 @@ public class ecoCreature extends JavaPlugin
         Bukkit.getPluginManager().registerEvents(new DeathEventListener(this), this);
         Bukkit.getPluginManager().registerEvents(new KillEventListener(this), this);
         Bukkit.getPluginManager().registerEvents(new SpawnEventListener(this), this);
-        if (deathTpPlusPlugin != null) {
+        if (hasDeathTpPlus()) {
             Bukkit.getPluginManager().registerEvents(new StreakEventListener(this), this);
+        }
+        if (hasHeroes()) {
+            Bukkit.getPluginManager().registerEvents(new HeroMasteredListener(this), this);
         }
     }
 }
