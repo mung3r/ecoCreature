@@ -5,21 +5,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.commons.Utils;
 import se.crafted.chrisb.ecoCreature.events.CreatureKilledByPlayerEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledByPlayerEvent;
-import se.crafted.chrisb.ecoCreature.utils.ecoEntityUtil;
 
-public class ecoEntityListener implements Listener
+public class DeathEventListener implements Listener
 {
     private final ecoCreature plugin;
 
-    public ecoEntityListener(ecoCreature plugin)
+    public DeathEventListener(ecoCreature plugin)
     {
         this.plugin = plugin;
     }
@@ -27,7 +25,7 @@ public class ecoEntityListener implements Listener
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerDeath(PlayerDeathEvent event)
     {
-        if (ecoEntityUtil.isPVPDeath(event)) {
+        if (Utils.isPVPDeath(event)) {
             Bukkit.getPluginManager().callEvent(new PlayerKilledByPlayerEvent(event));
         }
         else {
@@ -39,7 +37,7 @@ public class ecoEntityListener implements Listener
     public void onEntityDeath(EntityDeathEvent event)
     {
         if (!(event instanceof PlayerDeathEvent)) {
-            Player killer = ecoEntityUtil.getKillerFromDeathEvent(event);
+            Player killer = Utils.getKillerFromDeathEvent(event);
 
             if (killer != null) {
                 Bukkit.getPluginManager().callEvent(new CreatureKilledByPlayerEvent(event));
@@ -47,18 +45,6 @@ public class ecoEntityListener implements Listener
             else {
                 plugin.getRewardManager(event.getEntity().getWorld()).handleNoFarm(event);
             }
-        }
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onCreatureSpawn(CreatureSpawnEvent event)
-    {
-        if (event.isCancelled()) {
-            return;
-        }
-
-        if (event.getSpawnReason() == SpawnReason.SPAWNER) {
-            plugin.setSpawnerMob(event.getEntity());
         }
     }
 }

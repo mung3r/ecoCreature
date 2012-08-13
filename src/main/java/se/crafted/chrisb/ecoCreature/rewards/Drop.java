@@ -1,4 +1,4 @@
-package se.crafted.chrisb.ecoCreature.models;
+package se.crafted.chrisb.ecoCreature.rewards;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ import org.bukkit.material.MaterialData;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 
-public class ecoDrop
+public class Drop
 {
     private Material item;
     private Byte data;
@@ -26,7 +26,7 @@ public class ecoDrop
     private Set<ecoEnchantment> enchantments;
     private final Random random = new Random();
 
-    public ecoDrop()
+    public Drop()
     {
         this.enchantments = new HashSet<ecoEnchantment>();
     }
@@ -180,11 +180,11 @@ public class ecoDrop
     @Override
     public String toString()
     {
-        return String.format("ecoDrop [item=%s, data=%s, durabilit=%s, maxAmount=%s, minAmount=%s, percentage=%s, isFixedDrops=%s, enchantments=%s, random=%s]",
+        return String.format("Drop [item=%s, data=%s, durabilit=%s, maxAmount=%s, minAmount=%s, percentage=%s, isFixedDrops=%s, enchantments=%s, random=%s]",
                 item, data, durability, maxAmount, minAmount, percentage, isFixedDrops, enchantments, random);
     }
 
-    public static List<ecoDrop> parseDrops(String dropsConfig, boolean isFixedDrops)
+    public static List<Drop> parseDrops(String dropsConfig, boolean isFixedDrops)
     {
         List<String> drops = new ArrayList<String>();
 
@@ -195,14 +195,14 @@ public class ecoDrop
         return parseDrops(drops, isFixedDrops);
     }
 
-    public static List<ecoDrop> parseDrops(List<String> dropsConfig, boolean isFixedDrops)
+    public static List<Drop> parseDrops(List<String> dropsConfig, boolean isFixedDrops)
     {
-        List<ecoDrop> drops = new ArrayList<ecoDrop>();
+        List<Drop> drops = new ArrayList<Drop>();
 
         if (dropsConfig != null && !dropsConfig.isEmpty()) {
             try {
                 for (String dropString : dropsConfig) {
-                    ecoDrop drop = new ecoDrop();
+                    Drop drop = new Drop();
                     String[] dropParts = dropString.split(":");
                     String[] itemParts = dropParts[0].split(",");
                     // check for enchantment
@@ -243,7 +243,7 @@ public class ecoDrop
                 }
             }
             catch (Exception exception) {
-                ecoCreature.getEcoLogger().warning("Failed to parse drops: " + dropsConfig);
+                ecoCreature.getECLogger().warning("Failed to parse drops: " + dropsConfig);
             }
         }
 

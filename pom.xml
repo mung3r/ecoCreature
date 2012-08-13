@@ -1,9 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>se.crafted.chrisb</groupId>
   <artifactId>ecoCreature</artifactId>
   <name>ecoCreature</name>
-  <version>0.1.1-SNAPSHOT</version>
+  <version>0.1.2-SNAPSHOT</version>
   <repositories>
     <repository>
       <id>bukkit-repo</id>
@@ -69,6 +70,34 @@
       <scope>system</scope>
       <systemPath>${project.basedir}/lib/mcMMO.jar</systemPath>
     </dependency>
+    <dependency>
+      <groupId>com.bekvon.bukkit.residence</groupId>
+      <artifactId>Residence</artifactId>
+      <version>2.6.4</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/Residence.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>couk.Adamki11s.Regios</groupId>
+      <artifactId>Regios</artifactId>
+      <version>5.0.54</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/Regios.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.palmergames.bukkit.towny</groupId>
+      <artifactId>Towny</artifactId>
+      <version>0.81.0.0</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/Towny.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.massivecraft.factions</groupId>
+      <artifactId>Factions</artifactId>
+      <version>1.6.8</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/Factions.jar</systemPath>
+    </dependency>
   </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -76,7 +105,7 @@
   <description>Player vs. Monster/Enemy Rewards</description>
   <url>http://dev.bukkit.org/server-mods/ecocreature/</url>
   <issueManagement>
-    <system>Bukkit Dev</system>
+    <system>GitHub</system>
     <url>https://github.com/mung3r/ecoCreature/issues</url>
   </issueManagement>
   <ciManagement>

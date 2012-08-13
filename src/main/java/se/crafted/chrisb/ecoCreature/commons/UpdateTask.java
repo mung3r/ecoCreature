@@ -1,4 +1,4 @@
-package se.crafted.chrisb.ecoCreature.utils;
+package se.crafted.chrisb.ecoCreature.commons;
 
 import java.net.URL;
 
@@ -12,7 +12,7 @@ import org.w3c.dom.NodeList;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 
-public class ecoUpdate implements Runnable
+public class UpdateTask implements Runnable
 {
     private static final String DEV_BUKKIT_URL = "http://dev.bukkit.org/server-mods/ecocreature";
     private static final long CHECK_DELAY = 0;
@@ -22,14 +22,14 @@ public class ecoUpdate implements Runnable
     private String pluginVersion;
     private String latestVersion;
 
-    public ecoUpdate(ecoCreature plugin)
+    public UpdateTask(ecoCreature plugin)
     {
         pluginName = plugin.getName();
         pluginVersion = plugin.getDescription().getVersion().split("-")[0];
         latestVersion = pluginVersion;
 
         if (Bukkit.getScheduler().scheduleAsyncRepeatingTask(plugin, this, CHECK_DELAY, CHECK_PERIOD) < 0) {
-            ecoCreature.getEcoLogger().warning("Failed to schedule ecoUpdate task.");
+            ecoCreature.getECLogger().warning("Failed to schedule UpdateTask task.");
         }
     }
 
@@ -60,7 +60,7 @@ public class ecoUpdate implements Runnable
             }
         }
         catch (Exception e) {
-            ecoCreature.getEcoLogger().warning(e.getMessage());
+            ecoCreature.getECLogger().warning(e.getMessage());
         }
     }
 
@@ -73,7 +73,7 @@ public class ecoUpdate implements Runnable
             isOutOfDate = Double.parseDouble(pluginVersion.replaceFirst("\\.", "")) < Double.parseDouble(latestVersion.replaceFirst("\\.", ""));
         }
         catch (NumberFormatException e) {
-            ecoCreature.getEcoLogger().warning(e.getMessage());
+            ecoCreature.getECLogger().warning(e.getMessage());
         }
 
         return isOutOfDate;
@@ -83,8 +83,8 @@ public class ecoUpdate implements Runnable
     public void run()
     {
         if (isOutOfDate()) {
-            ecoCreature.getEcoLogger().warning(pluginName + " " + latestVersion + " is out! You are running: " + pluginName + " " + pluginVersion);
-            ecoCreature.getEcoLogger().warning("Update ecoCreature at: " + DEV_BUKKIT_URL);
+            ecoCreature.getECLogger().warning(pluginName + " " + latestVersion + " is out! You are running: " + pluginName + " " + pluginVersion);
+            ecoCreature.getECLogger().warning("Update ecoCreature at: " + DEV_BUKKIT_URL);
         }
     }
 }
