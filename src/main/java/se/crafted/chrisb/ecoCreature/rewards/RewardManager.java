@@ -2,10 +2,12 @@ package se.crafted.chrisb.ecoCreature.rewards;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -30,6 +32,8 @@ import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.Faction;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import couk.Adamki11s.Regios.Regions.Region;
@@ -84,11 +88,13 @@ public class RewardManager
 
     private final ecoCreature plugin;
     private boolean warnGroupMultiplierSupport;
+    private Set<Integer> spawnerMobs;
 
     public RewardManager(ecoCreature plugin)
     {
         this.plugin = plugin;
         warnGroupMultiplierSupport = true;
+        spawnerMobs = new HashSet<Integer>();
 
         groupMultiplier = new HashMap<String, Double>();
         timeMultiplier = new HashMap<TimePeriod, Double>();
@@ -99,6 +105,19 @@ public class RewardManager
         factionsMultiplier = new HashMap<String, Double>();
         townyMultiplier = new HashMap<String, Double>();
         rewards = new HashMap<RewardType, List<Reward>>();
+    }
+
+    public boolean isSpawnerMob(Entity entity)
+    {
+        return spawnerMobs.remove(Integer.valueOf(entity.getEntityId()));
+    }
+
+    public void setSpawnerMob(Entity entity)
+    {
+        // Only add to the array if we're tracking by entity. Avoids a memory leak.
+        if (!canCampSpawner && campByEntity) {
+            spawnerMobs.add(Integer.valueOf(entity.getEntityId()));
+        }
     }
 
     public void registerPVPReward(PlayerKilledByPlayerEvent event)
@@ -192,7 +211,7 @@ public class RewardManager
         if (!canCampSpawner && (campByDistance || campByEntity)) {
             // Reordered the conditional slightly, to make it more efficient, since
             // java will stop evaluating when it knows the outcome.
-            if ((campByEntity && plugin.isSpawnerMob(event.getKilledCreature())) || (campByDistance && (isNearSpawner(event.getKiller()) || isNearSpawner(event.getKilledCreature())))) {
+            if ((campByEntity && isSpawnerMob(event.getKilledCreature())) || (campByDistance && (isNearSpawner(event.getKiller()) || isNearSpawner(event.getKilledCreature())))) {
                 if (shouldClearCampDrops) {
                     event.getDrops().clear();
                     event.setDroppedExp(0);
@@ -425,9 +444,11 @@ public class RewardManager
         }
 
         if (plugin.hasPermission(player, "gain.worldguard") && plugin.hasWorldGuard()) {
-            Iterator<ProtectedRegion> regionSet = plugin.getRegionManager(player.getWorld()).getApplicableRegions(player.getLocation()).iterator();
-            while (regionSet.hasNext()) {
-                String regionName = regionSet.next().getId();
+            RegionManager regionManager = plugin.getRegionManager(player.getWorld());
+            ApplicableRegionSet regionSet = regionManager.getApplicableRegions(player.getLocation());
+            Iterator<ProtectedRegion> regions = regionSet.iterator();
+            while (regions.hasNext()) {
+                String regionName = regions.next().getId();
                 if (worldGuardMultiplier.containsKey(regionName)) {
                     amount *= worldGuardMultiplier.get(regionName);
                     ecoCreature.getECLogger().debug("WorldGuard multiplier applied");

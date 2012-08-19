@@ -25,7 +25,7 @@ public class SpawnEventListener implements Listener
         }
 
         if (event.getSpawnReason() == SpawnReason.SPAWNER) {
-            plugin.setSpawnerMob(event.getEntity());
+            plugin.getRewardManager(event.getEntity().getWorld()).setSpawnerMob(event.getEntity());
         }
     }
 }
