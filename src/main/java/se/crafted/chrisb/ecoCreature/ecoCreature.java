@@ -2,10 +2,8 @@ package se.crafted.chrisb.ecoCreature;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -14,7 +12,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -66,7 +63,6 @@ public class ecoCreature extends JavaPlugin
     private Map<String, RewardManager> globalRewardManager;
     private ConfigManager configManager;
     private CommandHandler commandHandler;
-    private Set<Integer> spawnerMobs;
 
     public void onEnable()
     {
@@ -80,7 +76,6 @@ public class ecoCreature extends JavaPlugin
         globalMessageManager = new HashMap<String, MessageManager>();
         globalRewardManager = new HashMap<String, RewardManager>();
         configManager = new ConfigManager(this);
-        spawnerMobs = new HashSet<Integer>();
 
         addCommands();
         registerEvents();
@@ -238,20 +233,6 @@ public class ecoCreature extends JavaPlugin
         return deathTpPlusPlugin != null;
     }
 
-    public boolean isSpawnerMob(Entity entity)
-    {
-        return spawnerMobs.remove(Integer.valueOf(entity.getEntityId()));
-    }
-
-    public void setSpawnerMob(Entity entity)
-    {
-        // Only add to the array if we're tracking by entity. Avoids a memory
-        // leak.
-        if (!getRewardManager(entity.getWorld()).canCampSpawner && getRewardManager(entity.getWorld()).campByEntity) {
-            spawnerMobs.add(Integer.valueOf(entity.getEntityId()));
-        }
-    }
-
     public static ECLogger getECLogger()
     {
         return logger;
@@ -323,7 +304,7 @@ public class ecoCreature extends JavaPlugin
         Plugin plugin = this.getServer().getPluginManager().getPlugin(pluginName);
         try {
             Class<?> testClass = Class.forName(className);
-            if (testClass.isInstance(plugin)) {
+            if (testClass.isInstance(plugin) && plugin.isEnabled()) {
                 logger.info("Found plugin " + plugin.getDescription().getName());
                 return plugin;
             }
