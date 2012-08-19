@@ -32,6 +32,8 @@ import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.Faction;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import couk.Adamki11s.Regios.Regions.Region;
@@ -442,9 +444,11 @@ public class RewardManager
         }
 
         if (plugin.hasPermission(player, "gain.worldguard") && plugin.hasWorldGuard()) {
-            Iterator<ProtectedRegion> regionSet = plugin.getRegionManager(player.getWorld()).getApplicableRegions(player.getLocation()).iterator();
-            while (regionSet.hasNext()) {
-                String regionName = regionSet.next().getId();
+            RegionManager regionManager = plugin.getRegionManager(player.getWorld());
+            ApplicableRegionSet regionSet = regionManager.getApplicableRegions(player.getLocation());
+            Iterator<ProtectedRegion> regions = regionSet.iterator();
+            while (regions.hasNext()) {
+                String regionName = regions.next().getId();
                 if (worldGuardMultiplier.containsKey(regionName)) {
                     amount *= worldGuardMultiplier.get(regionName);
                     ecoCreature.getECLogger().debug("WorldGuard multiplier applied");
