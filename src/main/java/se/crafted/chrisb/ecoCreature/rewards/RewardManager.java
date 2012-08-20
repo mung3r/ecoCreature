@@ -445,13 +445,15 @@ public class RewardManager
 
         if (plugin.hasPermission(player, "gain.worldguard") && plugin.hasWorldGuard()) {
             RegionManager regionManager = plugin.getRegionManager(player.getWorld());
-            ApplicableRegionSet regionSet = regionManager.getApplicableRegions(player.getLocation());
-            Iterator<ProtectedRegion> regions = regionSet.iterator();
-            while (regions.hasNext()) {
-                String regionName = regions.next().getId();
-                if (worldGuardMultiplier.containsKey(regionName)) {
-                    amount *= worldGuardMultiplier.get(regionName);
-                    ecoCreature.getECLogger().debug("WorldGuard multiplier applied");
+            if (regionManager != null) {
+                ApplicableRegionSet regionSet = regionManager.getApplicableRegions(player.getLocation());
+                Iterator<ProtectedRegion> regions = regionSet.iterator();
+                while (regions.hasNext()) {
+                    String regionName = regions.next().getId();
+                    if (worldGuardMultiplier.containsKey(regionName)) {
+                        amount *= worldGuardMultiplier.get(regionName);
+                        ecoCreature.getECLogger().debug("WorldGuard multiplier applied");
+                    }
                 }
             }
         }
