@@ -32,7 +32,6 @@ import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.Faction;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
@@ -446,8 +445,7 @@ public class RewardManager
         if (plugin.hasPermission(player, "gain.worldguard") && plugin.hasWorldGuard()) {
             RegionManager regionManager = plugin.getRegionManager(player.getWorld());
             if (regionManager != null) {
-                ApplicableRegionSet regionSet = regionManager.getApplicableRegions(player.getLocation());
-                Iterator<ProtectedRegion> regions = regionSet.iterator();
+                Iterator<ProtectedRegion> regions = regionManager.getApplicableRegions(player.getLocation()).iterator();
                 while (regions.hasNext()) {
                     String regionName = regions.next().getId();
                     if (worldGuardMultiplier.containsKey(regionName)) {
