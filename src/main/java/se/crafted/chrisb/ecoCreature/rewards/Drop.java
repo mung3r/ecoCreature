@@ -12,7 +12,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
 public class Drop
 {
@@ -243,7 +243,7 @@ public class Drop
                 }
             }
             catch (Exception exception) {
-                ecoCreature.getECLogger().warning("Failed to parse drops: " + dropsConfig);
+                ECLogger.getInstance().warning("Failed to parse drops: " + dropsConfig);
             }
         }
 

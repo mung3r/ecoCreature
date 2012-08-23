@@ -10,7 +10,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
 public enum RewardType
 {
@@ -107,7 +107,7 @@ public enum RewardType
             if (creatureType != null) {
                 rewardType = RewardType.fromName(creatureType.getName());
                 if (rewardType == null) {
-                    ecoCreature.getECLogger().warning("Unknown creature type: " + creatureType.getName());
+                    ECLogger.getInstance().warning("Unknown creature type: " + creatureType.getName());
                 }
             }
         }

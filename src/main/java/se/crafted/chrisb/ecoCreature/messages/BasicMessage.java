@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
 public class BasicMessage implements Message
 {
@@ -51,7 +51,7 @@ public class BasicMessage implements Message
         }
 
         if (messageManager.shouldLogCoinRewards && parameters.containsKey(MessageToken.AMOUNT_TOKEN)) {
-            ecoCreature.getECLogger().info(removeColorCodes(String.format("%s: %s", parameters.get(MessageToken.PLAYER_TOKEN), template)));
+            ECLogger.getInstance().info(removeColorCodes(String.format("%s: %s", parameters.get(MessageToken.PLAYER_TOKEN), template)));
         }
     }
 

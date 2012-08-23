@@ -43,9 +43,7 @@ import se.crafted.chrisb.ecoCreature.rewards.RewardManager;
 
 public class ecoCreature extends JavaPlugin
 {
-    private static ECLogger logger;
-
-    private static Plugin vaultPlugin;
+    private static volatile Plugin vaultPlugin;
     private static Permission permission;
     private static Economy economy;
 
@@ -67,7 +65,7 @@ public class ecoCreature extends JavaPlugin
     public void onEnable()
     {
         Locale.setDefault(Locale.US);
-        getECLogger().setName(this.getDescription().getName());
+        ECLogger.getInstance().setName(this.getDescription().getName());
 
         initVault();
         initMetrics();
@@ -81,14 +79,14 @@ public class ecoCreature extends JavaPlugin
 
         new UpdateTask(this);
 
-        getECLogger().info(getDescription().getVersion() + " enabled.");
+        ECLogger.getInstance().info(getDescription().getVersion() + " enabled.");
     }
 
     @Override
     public void onDisable()
     {
         configManager.save();
-        getECLogger().info(getDescription().getVersion() + " is disabled.");
+        ECLogger.getInstance().info(getDescription().getVersion() + " is disabled.");
     }
 
     @Override
@@ -248,29 +246,21 @@ public class ecoCreature extends JavaPlugin
         return deathTpPlusPlugin != null;
     }
 
-    public static ECLogger getECLogger()
-    {
-        if (logger == null) {
-            logger = new ECLogger();
-        }
-        return logger;
-    }
-
     private void initVault()
     {
         if (hasPermission()) {
-            getECLogger().info("Found permissions provider.");
+            ECLogger.getInstance().info("Found permissions provider.");
         }
         else {
-            getECLogger().severe("Failed to load permission provider.");
+            ECLogger.getInstance().severe("Failed to load permission provider.");
             Bukkit.getPluginManager().disablePlugin(this);
         }
 
         if (hasEconomy()) {
-            getECLogger().info("Economy enabled.");
+            ECLogger.getInstance().info("Economy enabled.");
         }
         else {
-            getECLogger().warning("Economy disabled.");
+            ECLogger.getInstance().warning("Economy disabled.");
         }
     }
 
@@ -282,7 +272,7 @@ public class ecoCreature extends JavaPlugin
             metrics.start();
         }
         catch (IOException e) {
-            getECLogger().warning("Metrics failed to load.");
+            ECLogger.getInstance().warning("Metrics failed to load.");
         }
     }
 
@@ -313,12 +303,12 @@ public class ecoCreature extends JavaPlugin
         try {
             Class<?> testClass = Class.forName(className);
             if (testClass.isInstance(plugin) && plugin.isEnabled()) {
-                getECLogger().info("Found plugin " + plugin.getDescription().getName());
+                ECLogger.getInstance().info("Found plugin " + plugin.getDescription().getName());
                 return plugin;
             }
         }
         catch (ClassNotFoundException e) {
-            getECLogger().warning("Did not find plugin " + pluginName);
+            ECLogger.getInstance().warning("Did not find plugin " + pluginName);
         }
         return null;
     }

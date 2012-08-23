@@ -38,6 +38,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import couk.Adamki11s.Regios.Regions.Region;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.commons.Utils;
 import se.crafted.chrisb.ecoCreature.commons.TimePeriod;
 import se.crafted.chrisb.ecoCreature.events.CreatureKilledByPlayerEvent;
@@ -191,22 +192,22 @@ public class RewardManager
         }
 
         if (event.getTamedCreature() != null && !isWolverineMode) {
-            ecoCreature.getECLogger().debug("No reward for " + event.getKiller().getName() + " killing with their pet.");
+            ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " killing with their pet.");
             return;
         }
 
         if (Utils.isOwner(event.getKiller(), event.getKilledCreature())) {
-            ecoCreature.getECLogger().debug("No reward for " + event.getKiller().getName() + " killing pets.");
+            ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " killing pets.");
             return;
         }
 
         if (plugin.hasMobArena() && plugin.getMobArenaHandler().isPlayerInArena(event.getKiller()) && !hasMobArenaRewards) {
-            ecoCreature.getECLogger().debug("No reward for " + event.getKiller().getName() + " in Mob Arena.");
+            ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " in Mob Arena.");
             return;
         }
 
         if (!hasCreativeModeRewards && event.getKiller().getGameMode() == GameMode.CREATIVE) {
-            ecoCreature.getECLogger().debug("No reward for " + event.getKiller().getName() + " in creative mode.");
+            ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " in creative mode.");
             return;
         }
 
@@ -219,13 +220,13 @@ public class RewardManager
                     event.setDroppedExp(0);
                 }
                 messageManager.spawnerMessage(messageManager.noCampMessage, event.getKiller());
-                ecoCreature.getECLogger().debug("No reward for " + event.getKiller().getName() + " spawn camping.");
+                ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " spawn camping.");
                 return;
             }
         }
 
         if (!ecoCreature.hasPermission(event.getKiller(), "reward." + RewardType.fromEntity(event.getKilledCreature()).getName())) {
-            ecoCreature.getECLogger().debug("No reward for " + event.getKiller().getName() + " due to lack of permission for " + RewardType.fromEntity(event.getKilledCreature()).getName());
+            ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " due to lack of permission for " + RewardType.fromEntity(event.getKilledCreature()).getName());
             return;
         }
 
@@ -248,7 +249,7 @@ public class RewardManager
                 }
             }
             catch (IllegalArgumentException e) {
-                ecoCreature.getECLogger().warning(e.getMessage());
+                ECLogger.getInstance().warning(e.getMessage());
             }
         }
     }
@@ -355,7 +356,7 @@ public class RewardManager
             reward = getRewardFromType(rewardType);
         }
         else {
-            ecoCreature.getECLogger().warning("No reward found for entity " + entity.getClass());
+            ECLogger.getInstance().warning("No reward found for entity " + entity.getClass());
         }
 
         return reward;
@@ -373,7 +374,7 @@ public class RewardManager
             }
         }
         else {
-            ecoCreature.getECLogger().warning("No reward defined for " + rewardType);
+            ECLogger.getInstance().warning("No reward defined for " + rewardType);
         }
         return reward;
     }
@@ -432,7 +433,7 @@ public class RewardManager
         }
         catch (UnsupportedOperationException e) {
             if (warnGroupMultiplierSupport) {
-                ecoCreature.getECLogger().warning(e.getMessage());
+                ECLogger.getInstance().warning(e.getMessage());
                 warnGroupMultiplierSupport = false;
             }
         }
@@ -453,7 +454,7 @@ public class RewardManager
                     String regionName = regions.next().getId();
                     if (worldGuardMultiplier.containsKey(regionName)) {
                         amount *= worldGuardMultiplier.get(regionName);
-                        ecoCreature.getECLogger().debug("WorldGuard multiplier applied");
+                        ECLogger.getInstance().debug("WorldGuard multiplier applied");
                     }
                 }
             }
@@ -463,7 +464,7 @@ public class RewardManager
             Region region = plugin.getRegiosAPI().getRegion(player.getLocation());
             if (region != null && regiosMultiplier.containsKey(region.getName())) {
                 amount *= regiosMultiplier.get(region.getName());
-                ecoCreature.getECLogger().debug("Regios multiplier applied");
+                ECLogger.getInstance().debug("Regios multiplier applied");
             }
         }
 
@@ -471,30 +472,30 @@ public class RewardManager
             ClaimedResidence residence = Residence.getResidenceManager().getByLoc(player.getLocation());
             if (residence != null && residenceMultiplier.containsKey(residence.getName())) {
                 amount *= residenceMultiplier.get(residence.getName());
-                ecoCreature.getECLogger().debug("Residence multiplier applied");
+                ECLogger.getInstance().debug("Residence multiplier applied");
             }
         }
 
         if (ecoCreature.hasPermission(player, "gain.heroes") && plugin.hasHeroes() && plugin.getHeroes().getCharacterManager().getHero(player).hasParty()) {
             amount *= heroesPartyMultiplier;
-            ecoCreature.getECLogger().debug("Heroes multiplier applied");
+            ECLogger.getInstance().debug("Heroes multiplier applied");
         }
 
         if (ecoCreature.hasPermission(player, "gain.mcmmo") && plugin.hasMcMMO()) {
             amount *= mcMMOPartyMultiplier;
-            ecoCreature.getECLogger().debug("mcMMO multiplier applied");
+            ECLogger.getInstance().debug("mcMMO multiplier applied");
         }
 
         if (hasMobArenaRewards && ecoCreature.hasPermission(player, "gain.mobarena") && plugin.hasMobArena() && plugin.getMobArenaHandler().isPlayerInArena(player)) {
             amount *= mobArenaMultiplier;
-            ecoCreature.getECLogger().debug("MobArena multiplier applied");
+            ECLogger.getInstance().debug("MobArena multiplier applied");
         }
 
         if (ecoCreature.hasPermission(player, "gain.factions") && plugin.hasFactions()) {
             Faction faction = Board.getFactionAt(new FLocation(player.getLocation()));
             if (faction != null && factionsMultiplier.containsKey(faction.getTag())) {
                 amount *= factionsMultiplier.get(faction.getTag());
-                ecoCreature.getECLogger().debug("Factions multiplier applied");
+                ECLogger.getInstance().debug("Factions multiplier applied");
             }
         }
 
@@ -502,7 +503,7 @@ public class RewardManager
             String townName = TownyUniverse.getTownName(player.getLocation());
             if (townName != null && townyMultiplier.containsKey(townName)) {
                 amount *= townyMultiplier.get(townName);
-                ecoCreature.getECLogger().debug("Towny multiplier applied");
+                ECLogger.getInstance().debug("Towny multiplier applied");
             }
         }
 

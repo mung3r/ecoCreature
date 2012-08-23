@@ -18,6 +18,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.commons.TimePeriod;
 import se.crafted.chrisb.ecoCreature.messages.MessageManager;
 import se.crafted.chrisb.ecoCreature.rewards.Drop;
@@ -49,7 +50,7 @@ public class ConfigManager
             load();
         }
         catch (Exception e) {
-            ecoCreature.getECLogger().severe("Failed to load config: " + e.toString());
+            ECLogger.getInstance().severe("Failed to load config: " + e.toString());
             Bukkit.getPluginManager().disablePlugin(plugin);
         }
     }
@@ -65,17 +66,17 @@ public class ConfigManager
             defaultConfig.load(defaultConfigFile);
         }
         else if (oldConfigFile.exists()) {
-            ecoCreature.getECLogger().info("Converting old config file.");
+            ECLogger.getInstance().info("Converting old config file.");
             defaultConfig = getConfig(oldConfigFile);
             if (oldConfigFile.delete()) {
-                ecoCreature.getECLogger().info("Old config file converted.");
+                ECLogger.getInstance().info("Old config file converted.");
             }
         }
         else {
             defaultConfig = getConfig(defaultConfigFile);
         }
 
-        ecoCreature.getECLogger().info("Loaded config defaults.");
+        ECLogger.getInstance().info("Loaded config defaults.");
         RewardManager defaultRewardManager = loadRewardConfig(defaultConfig);
         plugin.getGlobalRewardManager().put(DEFAULT_WORLD, defaultRewardManager);
 
@@ -87,7 +88,7 @@ public class ConfigManager
 
             if (worldConfigFile.exists()) {
                 FileConfiguration worldConfig = getConfig(worldConfigFile);
-                ecoCreature.getECLogger().info("Loaded config for " + world.getName() + " world.");
+                ECLogger.getInstance().info("Loaded config for " + world.getName() + " world.");
                 plugin.getGlobalRewardManager().put(world.getName(), loadRewardConfig(worldConfig));
                 worldConfigs.put(world.getName(), worldConfig);
             }
@@ -110,7 +111,7 @@ public class ConfigManager
             }
         }
         catch (Exception e) {
-            ecoCreature.getECLogger().severe(e.getMessage());
+            ECLogger.getInstance().severe(e.getMessage());
         }
     }
 
@@ -179,7 +180,7 @@ public class ConfigManager
                     rewardManager.envMultiplier.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(envGainConfig.getConfigurationSection(environment).getDouble("Amount", 1.0D)));
                 }
                 catch (Exception e) {
-                    ecoCreature.getECLogger().warning("Skipping unknown environment name: " + environment);
+                    ECLogger.getInstance().warning("Skipping unknown environment name: " + environment);
                 }
             }
         }
@@ -320,10 +321,10 @@ public class ConfigManager
             inputStream.close();
             outputStream.close();
 
-            ecoCreature.getECLogger().info("Default config written to " + file.getName());
+            ECLogger.getInstance().info("Default config written to " + file.getName());
         }
         else {
-            ecoCreature.getECLogger().severe("Default config could not be created!");
+            ECLogger.getInstance().severe("Default config could not be created!");
         }
 
         config.load(file);
@@ -359,7 +360,7 @@ public class ConfigManager
                 reward.setExpPercentage(Double.parseDouble(expPercentage));
             }
             catch (NumberFormatException e) {
-                ecoCreature.getECLogger().warning("Could not parse exp for " + rewardConfig.getName());
+                ECLogger.getInstance().warning("Could not parse exp for " + rewardConfig.getName());
             }
         }
 
