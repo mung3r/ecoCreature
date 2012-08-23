@@ -136,9 +136,9 @@ public class ecoCreature extends JavaPlugin
         return permission.has(player.getWorld(), player.getName(), "ecoCreature." + perm) || permission.has(player.getWorld(), player.getName(), "ecocreature." + perm.toLowerCase());
     }
 
-    public static boolean hasPermission()
+    private static boolean hasPermission()
     {
-        return getPermission() != null;
+        return permission != null;
     }
 
     public static Permission getPermission()
@@ -148,7 +148,7 @@ public class ecoCreature extends JavaPlugin
 
     public static boolean hasEconomy()
     {
-        return getEconomy() != null;
+        return economy != null;
     }
 
     public static Economy getEconomy()
@@ -156,17 +156,9 @@ public class ecoCreature extends JavaPlugin
         return economy;
     }
 
-    public static boolean hasVault()
+    private static boolean hasVault()
     {
-        return getVault() != null;
-    }
-
-    public static Plugin getVault()
-    {
-        if (vaultPlugin == null) {
-            vaultPlugin = getPlugin("Vault", "net.milkbowl.vault.Vault");
-        }
-        return vaultPlugin;
+        return vaultPlugin != null;
     }
 
     public static boolean hasMobArena()
