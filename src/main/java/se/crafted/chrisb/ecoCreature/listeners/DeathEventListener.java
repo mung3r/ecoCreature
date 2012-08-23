@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.commons.Utils;
+import se.crafted.chrisb.ecoCreature.commons.EventUtils;
 import se.crafted.chrisb.ecoCreature.events.CreatureKilledByPlayerEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledByPlayerEvent;
 
@@ -25,7 +25,7 @@ public class DeathEventListener implements Listener
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerDeath(PlayerDeathEvent event)
     {
-        if (Utils.isPVPDeath(event)) {
+        if (EventUtils.isPVPDeath(event)) {
             Bukkit.getPluginManager().callEvent(new PlayerKilledByPlayerEvent(event));
         }
         else {
@@ -37,7 +37,7 @@ public class DeathEventListener implements Listener
     public void onEntityDeath(EntityDeathEvent event)
     {
         if (!(event instanceof PlayerDeathEvent)) {
-            Player killer = Utils.getKillerFromDeathEvent(event);
+            Player killer = EventUtils.getKillerFromDeathEvent(event);
 
             if (killer != null) {
                 Bukkit.getPluginManager().callEvent(new CreatureKilledByPlayerEvent(event));

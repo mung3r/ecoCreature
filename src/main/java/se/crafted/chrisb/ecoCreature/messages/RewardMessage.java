@@ -1,6 +1,6 @@
 package se.crafted.chrisb.ecoCreature.messages;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 
 public class RewardMessage extends BasicMessage implements Message
 {
@@ -12,7 +12,7 @@ public class RewardMessage extends BasicMessage implements Message
     @Override
     public void send()
     {
-        if (ecoCreature.hasEconomy()) {
+        if (DependencyUtils.hasEconomy()) {
             super.send();
         }
     }

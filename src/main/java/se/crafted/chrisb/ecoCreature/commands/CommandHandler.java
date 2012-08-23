@@ -20,6 +20,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 
 public class CommandHandler
 {
@@ -29,7 +30,7 @@ public class CommandHandler
 
     public CommandHandler(ecoCreature plugin)
     {
-        permission = ecoCreature.getPermission();
+        permission = DependencyUtils.getPermission();
         commands = new LinkedHashMap<String, Command>();
     }
 

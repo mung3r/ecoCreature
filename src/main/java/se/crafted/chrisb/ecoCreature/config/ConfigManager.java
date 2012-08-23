@@ -39,6 +39,7 @@ public class ConfigManager
     private File defaultConfigFile;
     private FileConfiguration defaultConfig;
     private Map<String, FileConfiguration> worldConfigs;
+    private Map<String, RewardManager> globalRewardManager;
 
     public ConfigManager(ecoCreature plugin)
     {
@@ -53,6 +54,11 @@ public class ConfigManager
             ECLogger.getInstance().severe("Failed to load config: " + e.toString());
             Bukkit.getPluginManager().disablePlugin(plugin);
         }
+    }
+
+    public Map<String, RewardManager> getGlobalRewardManager()
+    {
+        return globalRewardManager;
     }
 
     private void load() throws IOException, InvalidConfigurationException
@@ -78,7 +84,8 @@ public class ConfigManager
 
         ECLogger.getInstance().info("Loaded config defaults.");
         RewardManager defaultRewardManager = loadRewardConfig(defaultConfig);
-        plugin.getGlobalRewardManager().put(DEFAULT_WORLD, defaultRewardManager);
+        globalRewardManager = new HashMap<String, RewardManager>();
+        globalRewardManager.put(DEFAULT_WORLD, defaultRewardManager);
 
         worldConfigs = new HashMap<String, FileConfiguration>();
 
@@ -89,11 +96,11 @@ public class ConfigManager
             if (worldConfigFile.exists()) {
                 FileConfiguration worldConfig = getConfig(worldConfigFile);
                 ECLogger.getInstance().info("Loaded config for " + world.getName() + " world.");
-                plugin.getGlobalRewardManager().put(world.getName(), loadRewardConfig(worldConfig));
+                globalRewardManager.put(world.getName(), loadRewardConfig(worldConfig));
                 worldConfigs.put(world.getName(), worldConfig);
             }
             else {
-                plugin.getGlobalRewardManager().put(world.getName(), defaultRewardManager);
+                globalRewardManager.put(world.getName(), defaultRewardManager);
             }
 
         }

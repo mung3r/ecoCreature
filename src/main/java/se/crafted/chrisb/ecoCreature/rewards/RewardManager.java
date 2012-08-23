@@ -10,12 +10,9 @@ import java.util.Random;
 import java.util.Set;
 
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
@@ -37,9 +34,9 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import couk.Adamki11s.Regios.Regions.Region;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
+import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
-import se.crafted.chrisb.ecoCreature.commons.Utils;
 import se.crafted.chrisb.ecoCreature.commons.TimePeriod;
 import se.crafted.chrisb.ecoCreature.events.CreatureKilledByPlayerEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledByPlayerEvent;
@@ -126,7 +123,7 @@ public class RewardManager
 
     public void registerPVPReward(PlayerKilledByPlayerEvent event)
     {
-        if (!hasPVPReward || !ecoCreature.hasPermission(event.getKiller(), "reward.player")) {
+        if (!hasPVPReward || !DependencyUtils.hasPermission(event.getKiller(), "reward.player")) {
             return;
         }
 
@@ -148,29 +145,29 @@ public class RewardManager
                 }
             }
         }
-        else if (ecoCreature.hasEconomy()) {
-            amount = isPercentPvpReward ? ecoCreature.getEconomy().getBalance(event.getVictim().getName()) * (pvpRewardAmount / 100.0D) : pvpRewardAmount;
+        else if (DependencyUtils.hasEconomy()) {
+            amount = isPercentPvpReward ? DependencyUtils.getEconomy().getBalance(event.getVictim().getName()) * (pvpRewardAmount / 100.0D) : pvpRewardAmount;
         }
 
-        if (amount > 0.0D && ecoCreature.hasEconomy()) {
-            amount = Math.min(amount, ecoCreature.getEconomy().getBalance(event.getVictim().getName()));
-            ecoCreature.getEconomy().withdrawPlayer(event.getVictim().getName(), amount);
+        if (amount > 0.0D && DependencyUtils.hasEconomy()) {
+            amount = Math.min(amount, DependencyUtils.getEconomy().getBalance(event.getVictim().getName()));
+            DependencyUtils.getEconomy().withdrawPlayer(event.getVictim().getName(), amount);
             messageManager.penaltyMessage(messageManager.deathPenaltyMessage, event.getVictim(), amount);
 
-            ecoCreature.getEconomy().depositPlayer(event.getKiller().getName(), amount);
+            DependencyUtils.getEconomy().depositPlayer(event.getKiller().getName(), amount);
             messageManager.rewardMessage(messageManager.pvpRewardMessage, event.getKiller(), amount, event.getVictim().getName(), "");
         }
     }
 
     public void registerDeathPenalty(Player player)
     {
-        if (!hasDeathPenalty || !ecoCreature.hasPermission(player, "reward.deathpenalty") || !ecoCreature.hasEconomy()) {
+        if (!hasDeathPenalty || !DependencyUtils.hasPermission(player, "reward.deathpenalty") || !DependencyUtils.hasEconomy()) {
             return;
         }
 
-        double amount = isPercentPenalty ? ecoCreature.getEconomy().getBalance(player.getName()) * (penaltyAmount / 100.0D) : penaltyAmount;
+        double amount = isPercentPenalty ? DependencyUtils.getEconomy().getBalance(player.getName()) * (penaltyAmount / 100.0D) : penaltyAmount;
         if (amount > 0.0D) {
-            ecoCreature.getEconomy().withdrawPlayer(player.getName(), amount);
+            DependencyUtils.getEconomy().withdrawPlayer(player.getName(), amount);
             messageManager.penaltyMessage(messageManager.deathPenaltyMessage, player, amount);
         }
     }
@@ -187,7 +184,7 @@ public class RewardManager
             return;
         }
 
-        if (Utils.isUnderSeaLevel(event.getKiller()) && !canHuntUnderSeaLevel) {
+        if (EntityUtils.isUnderSeaLevel(event.getKiller()) && !canHuntUnderSeaLevel) {
             messageManager.basicMessage(messageManager.noBowRewardMessage, event.getKiller());
             return;
         }
@@ -197,12 +194,12 @@ public class RewardManager
             return;
         }
 
-        if (Utils.isOwner(event.getKiller(), event.getKilledCreature())) {
+        if (EntityUtils.isOwner(event.getKiller(), event.getKilledCreature())) {
             ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " killing pets.");
             return;
         }
 
-        if (ecoCreature.hasMobArena() && ecoCreature.getMobArenaHandler().isPlayerInArena(event.getKiller()) && !hasMobArenaRewards) {
+        if (DependencyUtils.hasMobArena() && DependencyUtils.getMobArenaHandler().isPlayerInArena(event.getKiller()) && !hasMobArenaRewards) {
             ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " in Mob Arena.");
             return;
         }
@@ -215,7 +212,7 @@ public class RewardManager
         if (!canCampSpawner && (campByDistance || campByEntity)) {
             // Reordered the conditional slightly, to make it more efficient, since
             // java will stop evaluating when it knows the outcome.
-            if ((campByEntity && isSpawnerMob(event.getKilledCreature())) || (campByDistance && (isNearSpawner(event.getKiller()) || isNearSpawner(event.getKilledCreature())))) {
+            if ((campByEntity && isSpawnerMob(event.getKilledCreature())) || (campByDistance && (EntityUtils.isNearSpawner(event.getKiller(), campRadius) || EntityUtils.isNearSpawner(event.getKilledCreature(), campRadius)))) {
                 if (shouldClearCampDrops) {
                     event.getDrops().clear();
                     event.setDroppedExp(0);
@@ -226,7 +223,7 @@ public class RewardManager
             }
         }
 
-        if (!ecoCreature.hasPermission(event.getKiller(), "reward." + RewardType.fromEntity(event.getKilledCreature()).getName())) {
+        if (!DependencyUtils.hasPermission(event.getKiller(), "reward." + RewardType.fromEntity(event.getKilledCreature()).getName())) {
             ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " due to lack of permission for " + RewardType.fromEntity(event.getKilledCreature()).getName());
             return;
         }
@@ -265,7 +262,7 @@ public class RewardManager
             return;
         }
 
-        if (ecoCreature.hasPermission(player, "reward.spawner") && rewards.containsKey(RewardType.SPAWNER)) {
+        if (DependencyUtils.hasPermission(player, "reward.spawner") && rewards.containsKey(RewardType.SPAWNER)) {
 
             Reward reward = getRewardFromType(RewardType.SPAWNER);
 
@@ -281,7 +278,7 @@ public class RewardManager
 
     public void registerDeathStreak(Player player, int deaths)
     {
-        if (ecoCreature.hasPermission(player, "reward.deathstreak") && rewards.containsKey(RewardType.DEATH_STREAK)) {
+        if (DependencyUtils.hasPermission(player, "reward.deathstreak") && rewards.containsKey(RewardType.DEATH_STREAK)) {
 
             Reward reward = getRewardFromType(RewardType.DEATH_STREAK);
 
@@ -299,7 +296,7 @@ public class RewardManager
 
     public void registerKillStreak(Player player, int kills)
     {
-        if (ecoCreature.hasPermission(player, "reward.killstreak") && rewards.containsKey(RewardType.KILL_STREAK)) {
+        if (DependencyUtils.hasPermission(player, "reward.killstreak") && rewards.containsKey(RewardType.KILL_STREAK)) {
 
             Reward reward = getRewardFromType(RewardType.KILL_STREAK);
 
@@ -317,7 +314,7 @@ public class RewardManager
 
     public void registerHeroMasteredReward(Hero hero)
     {
-        if (ecoCreature.hasPermission(hero.getPlayer(), "reward.hero_mastered") && rewards.containsKey(RewardType.HERO_MASTERED)) {
+        if (DependencyUtils.hasPermission(hero.getPlayer(), "reward.hero_mastered") && rewards.containsKey(RewardType.HERO_MASTERED)) {
 
             Reward reward = getRewardFromType(RewardType.HERO_MASTERED);
 
@@ -385,18 +382,18 @@ public class RewardManager
         double amount = computeReward(player, reward);
         List<Player> party = new ArrayList<Player>();
 
-        if (isHeroesPartyShare && ecoCreature.hasHeroes() && ecoCreature.getHeroes().getCharacterManager().getHero(player).hasParty()) {
-            for (Hero hero : ecoCreature.getHeroes().getCharacterManager().getHero(player).getParty().getMembers()) {
+        if (isHeroesPartyShare && DependencyUtils.hasHeroes() && DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {
+            for (Hero hero : DependencyUtils.getHeroes().getCharacterManager().getHero(player).getParty().getMembers()) {
                 party.add(hero.getPlayer());
             }
             amount /= (double) party.size();
         }
-        else if (isMcMMOPartyShare && ecoCreature.hasMcMMO() && PartyAPI.inParty(player)) {
+        else if (isMcMMOPartyShare && DependencyUtils.hasMcMMO() && PartyAPI.inParty(player)) {
             party.addAll(PartyAPI.getOnlineMembers(player));
             amount /= (double) party.size();
         }
-        else if (isMobArenaShare && ecoCreature.hasMobArena() && ecoCreature.getMobArenaHandler().isPlayerInArena(player)) {
-            party.addAll(ecoCreature.getMobArenaHandler().getArenaWithPlayer(player).getAllPlayers());
+        else if (isMobArenaShare && DependencyUtils.hasMobArena() && DependencyUtils.getMobArenaHandler().isPlayerInArena(player)) {
+            party.addAll(DependencyUtils.getMobArenaHandler().getArenaWithPlayer(player).getAllPlayers());
             amount /= (double) party.size();
         }
         else {
@@ -404,12 +401,12 @@ public class RewardManager
         }
 
         for (Player member : party) {
-            if (amount > 0.0D && ecoCreature.hasEconomy()) {
-                ecoCreature.getEconomy().depositPlayer(member.getName(), amount);
+            if (amount > 0.0D && DependencyUtils.hasEconomy()) {
+                DependencyUtils.getEconomy().depositPlayer(member.getName(), amount);
                 messageManager.rewardMessage(reward.getRewardMessage(), member, amount, reward.getRewardName(), weaponName);
             }
-            else if (amount < 0.0D && ecoCreature.hasEconomy()) {
-                ecoCreature.getEconomy().withdrawPlayer(member.getName(), Math.abs(amount));
+            else if (amount < 0.0D && DependencyUtils.hasEconomy()) {
+                DependencyUtils.getEconomy().withdrawPlayer(member.getName(), Math.abs(amount));
                 messageManager.rewardMessage(reward.getPenaltyMessage(), member, Math.abs(amount), reward.getRewardName(), weaponName);
             }
             else {
@@ -425,9 +422,9 @@ public class RewardManager
         double amount = reward.getRewardAmount();
 
         try {
-            if (ecoCreature.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName()) != null) {
-                String group = ecoCreature.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName()).toLowerCase();
-                if (ecoCreature.hasPermission(player, "gain.group") && groupMultiplier.containsKey(group)) {
+            if (DependencyUtils.hasPermission() && DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName()) != null) {
+                String group = DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName()).toLowerCase();
+                if (DependencyUtils.hasPermission(player, "gain.group") && groupMultiplier.containsKey(group)) {
                     amount *= groupMultiplier.get(group);
                 }
             }
@@ -439,16 +436,16 @@ public class RewardManager
             }
         }
 
-        if (ecoCreature.hasPermission(player, "gain.time") && timeMultiplier.containsKey(TimePeriod.fromEntity(player))) {
+        if (DependencyUtils.hasPermission(player, "gain.time") && timeMultiplier.containsKey(TimePeriod.fromEntity(player))) {
             amount *= timeMultiplier.get(TimePeriod.fromEntity(player));
         }
 
-        if (ecoCreature.hasPermission(player, "gain.environment") && envMultiplier.containsKey(player.getWorld().getEnvironment())) {
+        if (DependencyUtils.hasPermission(player, "gain.environment") && envMultiplier.containsKey(player.getWorld().getEnvironment())) {
             amount *= envMultiplier.get(player.getWorld().getEnvironment());
         }
 
-        if (ecoCreature.hasPermission(player, "gain.worldguard") && ecoCreature.hasWorldGuard()) {
-            RegionManager regionManager = ecoCreature.getRegionManager(player.getWorld());
+        if (DependencyUtils.hasPermission(player, "gain.worldguard") && DependencyUtils.hasWorldGuard()) {
+            RegionManager regionManager = DependencyUtils.getRegionManager(player.getWorld());
             if (regionManager != null) {
                 Iterator<ProtectedRegion> regions = regionManager.getApplicableRegions(player.getLocation()).iterator();
                 while (regions.hasNext()) {
@@ -461,15 +458,15 @@ public class RewardManager
             }
         }
 
-        if (ecoCreature.hasPermission(player, "gain.regios") && ecoCreature.hasRegios()) {
-            Region region = ecoCreature.getRegiosAPI().getRegion(player.getLocation());
+        if (DependencyUtils.hasPermission(player, "gain.regios") && DependencyUtils.hasRegios()) {
+            Region region = DependencyUtils.getRegiosAPI().getRegion(player.getLocation());
             if (region != null && regiosMultiplier.containsKey(region.getName())) {
                 amount *= regiosMultiplier.get(region.getName());
                 ECLogger.getInstance().debug("Regios multiplier applied");
             }
         }
 
-        if (ecoCreature.hasPermission(player, "gain.residence") && ecoCreature.hasResidence()) {
+        if (DependencyUtils.hasPermission(player, "gain.residence") && DependencyUtils.hasResidence()) {
             ClaimedResidence residence = Residence.getResidenceManager().getByLoc(player.getLocation());
             if (residence != null && residenceMultiplier.containsKey(residence.getName())) {
                 amount *= residenceMultiplier.get(residence.getName());
@@ -477,22 +474,22 @@ public class RewardManager
             }
         }
 
-        if (ecoCreature.hasPermission(player, "gain.heroes") && ecoCreature.hasHeroes() && ecoCreature.getHeroes().getCharacterManager().getHero(player).hasParty()) {
+        if (DependencyUtils.hasPermission(player, "gain.heroes") && DependencyUtils.hasHeroes() && DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {
             amount *= heroesPartyMultiplier;
             ECLogger.getInstance().debug("Heroes multiplier applied");
         }
 
-        if (ecoCreature.hasPermission(player, "gain.mcmmo") && ecoCreature.hasMcMMO()) {
+        if (DependencyUtils.hasPermission(player, "gain.mcmmo") && DependencyUtils.hasMcMMO()) {
             amount *= mcMMOPartyMultiplier;
             ECLogger.getInstance().debug("mcMMO multiplier applied");
         }
 
-        if (hasMobArenaRewards && ecoCreature.hasPermission(player, "gain.mobarena") && ecoCreature.hasMobArena() && ecoCreature.getMobArenaHandler().isPlayerInArena(player)) {
+        if (hasMobArenaRewards && DependencyUtils.hasPermission(player, "gain.mobarena") && DependencyUtils.hasMobArena() && DependencyUtils.getMobArenaHandler().isPlayerInArena(player)) {
             amount *= mobArenaMultiplier;
             ECLogger.getInstance().debug("MobArena multiplier applied");
         }
 
-        if (ecoCreature.hasPermission(player, "gain.factions") && ecoCreature.hasFactions()) {
+        if (DependencyUtils.hasPermission(player, "gain.factions") && DependencyUtils.hasFactions()) {
             Faction faction = Board.getFactionAt(new FLocation(player.getLocation()));
             if (faction != null && factionsMultiplier.containsKey(faction.getTag())) {
                 amount *= factionsMultiplier.get(faction.getTag());
@@ -500,7 +497,7 @@ public class RewardManager
             }
         }
 
-        if (ecoCreature.hasPermission(player, "gain.towny") && ecoCreature.hasTowny()) {
+        if (DependencyUtils.hasPermission(player, "gain.towny") && DependencyUtils.hasTowny()) {
             String townName = TownyUniverse.getTownName(player.getLocation());
             if (townName != null && townyMultiplier.containsKey(townName)) {
                 amount *= townyMultiplier.get(townName);
@@ -509,19 +506,5 @@ public class RewardManager
         }
 
         return isIntegerCurrency ? (double) Math.round(amount) : amount;
-    }
-
-    private boolean isNearSpawner(Entity entity)
-    {
-        Location loc = entity.getLocation();
-        BlockState[] tileEntities = entity.getLocation().getChunk().getTileEntities();
-        int r = campRadius;
-        r *= r;
-        for (BlockState state : tileEntities) {
-            if (state instanceof CreatureSpawner && state.getBlock().getLocation().distanceSquared(loc) <= r) {
-                return true;
-            }
-        }
-        return false;
     }
 }

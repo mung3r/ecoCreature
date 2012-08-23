@@ -2,7 +2,7 @@ package se.crafted.chrisb.ecoCreature.messages;
 
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 
 public class MessageManager
 {
@@ -46,7 +46,7 @@ public class MessageManager
         Message message = new RewardMessage(this);
         message.setTemplate(template);
         message.addParameter(MessageToken.PLAYER_TOKEN, player.getName());
-        message.addParameter(MessageToken.AMOUNT_TOKEN, ecoCreature.getEconomy().format(amount));
+        message.addParameter(MessageToken.AMOUNT_TOKEN, DependencyUtils.getEconomy().format(amount));
         message.send();
     }
 
@@ -55,7 +55,7 @@ public class MessageManager
         Message message = new RewardMessage(this);
         message.setTemplate(template);
         message.addParameter(MessageToken.PLAYER_TOKEN, player.getName());
-        message.addParameter(MessageToken.AMOUNT_TOKEN, ecoCreature.getEconomy().format(amount));
+        message.addParameter(MessageToken.AMOUNT_TOKEN, DependencyUtils.getEconomy().format(amount));
         message.addParameter(MessageToken.CREATURE_TOKEN, creatureName);
         message.addParameter(MessageToken.ITEM_TOKEN, weaponName);
         message.send();
