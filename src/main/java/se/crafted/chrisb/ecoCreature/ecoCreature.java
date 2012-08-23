@@ -67,7 +67,7 @@ public class ecoCreature extends JavaPlugin
     public void onEnable()
     {
         Locale.setDefault(Locale.US);
-        logger.setName(this.getDescription().getName());
+        getECLogger().setName(this.getDescription().getName());
 
         initVault();
         initMetrics();
@@ -81,14 +81,14 @@ public class ecoCreature extends JavaPlugin
 
         new UpdateTask(this);
 
-        logger.info(getDescription().getVersion() + " enabled.");
+        getECLogger().info(getDescription().getVersion() + " enabled.");
     }
 
     @Override
     public void onDisable()
     {
         configManager.save();
-        logger.info(getDescription().getVersion() + " is disabled.");
+        getECLogger().info(getDescription().getVersion() + " is disabled.");
     }
 
     @Override
@@ -259,18 +259,18 @@ public class ecoCreature extends JavaPlugin
     private void initVault()
     {
         if (hasPermission()) {
-            logger.info("Found permissions provider.");
+            getECLogger().info("Found permissions provider.");
         }
         else {
-            logger.severe("Failed to load permission provider.");
+            getECLogger().severe("Failed to load permission provider.");
             Bukkit.getPluginManager().disablePlugin(this);
         }
 
         if (hasEconomy()) {
-            logger.info("Economy enabled.");
+            getECLogger().info("Economy enabled.");
         }
         else {
-            logger.warning("Economy disabled.");
+            getECLogger().warning("Economy disabled.");
         }
     }
 
@@ -282,7 +282,7 @@ public class ecoCreature extends JavaPlugin
             metrics.start();
         }
         catch (IOException e) {
-            logger.warning("Metrics failed to load.");
+            getECLogger().warning("Metrics failed to load.");
         }
     }
 
@@ -313,12 +313,12 @@ public class ecoCreature extends JavaPlugin
         try {
             Class<?> testClass = Class.forName(className);
             if (testClass.isInstance(plugin) && plugin.isEnabled()) {
-                logger.info("Found plugin " + plugin.getDescription().getName());
+                getECLogger().info("Found plugin " + plugin.getDescription().getName());
                 return plugin;
             }
         }
         catch (ClassNotFoundException e) {
-            logger.warning("Did not find plugin " + pluginName);
+            getECLogger().warning("Did not find plugin " + pluginName);
         }
         return null;
     }
