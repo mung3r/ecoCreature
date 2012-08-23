@@ -19,7 +19,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.commons.TimePeriod;
-import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.MessageManager;
 import se.crafted.chrisb.ecoCreature.rewards.Drop;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
@@ -77,9 +76,7 @@ public class ConfigManager
         }
 
         ecoCreature.getECLogger().info("Loaded config defaults.");
-        MessageManager defaultMessageManager = loadMessageConfig(defaultConfig);
         RewardManager defaultRewardManager = loadRewardConfig(defaultConfig);
-        plugin.getGlobalMessageManager().put(DEFAULT_WORLD, defaultMessageManager);
         plugin.getGlobalRewardManager().put(DEFAULT_WORLD, defaultRewardManager);
 
         worldConfigs = new HashMap<String, FileConfiguration>();
@@ -91,12 +88,10 @@ public class ConfigManager
             if (worldConfigFile.exists()) {
                 FileConfiguration worldConfig = getConfig(worldConfigFile);
                 ecoCreature.getECLogger().info("Loaded config for " + world.getName() + " world.");
-                plugin.getGlobalMessageManager().put(world.getName(), loadMessageConfig(worldConfig));
                 plugin.getGlobalRewardManager().put(world.getName(), loadRewardConfig(worldConfig));
                 worldConfigs.put(world.getName(), worldConfig);
             }
             else {
-                plugin.getGlobalMessageManager().put(world.getName(), defaultMessageManager);
                 plugin.getGlobalRewardManager().put(world.getName(), defaultRewardManager);
             }
 
@@ -121,21 +116,23 @@ public class ConfigManager
 
     private MessageManager loadMessageConfig(FileConfiguration config)
     {
-        MessageManager messageManager = new MessageManager(plugin);
+        MessageManager messageManager = new MessageManager();
 
         messageManager.shouldOutputMessages = config.getBoolean("System.Messages.Output", true);
+        messageManager.shouldOutputNoReward = config.getBoolean("System.Messages.NoReward", false);
+        messageManager.shouldOutputSpawnerCamp = config.getBoolean("System.Messages.Spawner", false);
         messageManager.shouldLogCoinRewards = config.getBoolean("System.Messages.LogCoinRewards", true);
-        messageManager.noBowRewardMessage = new Message(convertMessage(config.getString("System.Messages.NoBowMessage", MessageManager.NO_BOW_REWARD_MESSAGE)), true);
-        messageManager.noCampMessage = new Message(convertMessage(config.getString("System.Messages.NoCampMessage", MessageManager.NO_CAMP_MESSAGE)), config.getBoolean("System.Messages.Spawner", false));
-        messageManager.deathPenaltyMessage = new Message(convertMessage(config.getString("System.Messages.DeathPenaltyMessage", MessageManager.DEATH_PENALTY_MESSAGE)), true);
-        messageManager.pvpRewardMessage = new Message(convertMessage(config.getString("System.Messages.PVPRewardMessage", MessageManager.PVP_REWARD_MESSAGE)), true);
+        messageManager.noBowRewardMessage = convertMessage(config.getString("System.Messages.NoBowMessage", MessageManager.NO_BOW_REWARD_MESSAGE));
+        messageManager.noCampMessage = convertMessage(config.getString("System.Messages.NoCampMessage", MessageManager.NO_CAMP_MESSAGE));
+        messageManager.deathPenaltyMessage = convertMessage(config.getString("System.Messages.DeathPenaltyMessage", MessageManager.DEATH_PENALTY_MESSAGE));
+        messageManager.pvpRewardMessage = convertMessage(config.getString("System.Messages.PVPRewardMessage", MessageManager.PVP_REWARD_MESSAGE));
 
         return messageManager;
     }
 
     private RewardManager loadRewardConfig(FileConfiguration config)
     {
-        RewardManager rewardManager = new RewardManager(plugin);
+        RewardManager rewardManager = new RewardManager(plugin, loadMessageConfig(config));
 
         rewardManager.isIntegerCurrency = config.getBoolean("System.Economy.IntegerCurrency", false);
 
@@ -366,9 +363,9 @@ public class ConfigManager
             }
         }
 
-        reward.setNoRewardMessage(new Message(convertMessage(rewardConfig.getString("NoReward_Message", MessageManager.NO_REWARD_MESSAGE)), isNoRewardMessage));
-        reward.setRewardMessage(new Message(convertMessage(rewardConfig.getString("Reward_Message", MessageManager.REWARD_MESSAGE)), true));
-        reward.setPenaltyMessage(new Message(convertMessage(rewardConfig.getString("Penalty_Message", MessageManager.PENALTY_MESSAGE)), true));
+        reward.setNoRewardMessage(convertMessage(rewardConfig.getString("NoReward_Message", MessageManager.NO_REWARD_MESSAGE)));
+        reward.setRewardMessage(convertMessage(rewardConfig.getString("Reward_Message", MessageManager.REWARD_MESSAGE)));
+        reward.setPenaltyMessage(convertMessage(rewardConfig.getString("Penalty_Message", MessageManager.PENALTY_MESSAGE)));
 
         return reward;
     }

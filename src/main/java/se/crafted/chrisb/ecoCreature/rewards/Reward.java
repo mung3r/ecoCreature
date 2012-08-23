@@ -6,9 +6,6 @@ import java.util.Random;
 
 import org.bukkit.inventory.ItemStack;
 
-import se.crafted.chrisb.ecoCreature.messages.Message;
-
-
 public class Reward
 {
     private static Random random = new Random();
@@ -23,9 +20,9 @@ public class Reward
     private Integer expMax;
     private Double expPercentage;
 
-    private Message noRewardMessage;
-    private Message rewardMessage;
-    private Message penaltyMessage;
+    private String noRewardMessage;
+    private String rewardMessage;
+    private String penaltyMessage;
 
     public String getRewardName()
     {
@@ -117,32 +114,32 @@ public class Reward
         this.expPercentage = expPercentage;
     }
 
-    public Message getNoRewardMessage()
+    public String getNoRewardMessage()
     {
         return noRewardMessage;
     }
 
-    public void setNoRewardMessage(Message noRewardMessage)
+    public void setNoRewardMessage(String noRewardMessage)
     {
         this.noRewardMessage = noRewardMessage;
     }
 
-    public Message getRewardMessage()
+    public String getRewardMessage()
     {
         return rewardMessage;
     }
 
-    public void setRewardMessage(Message rewardMessage)
+    public void setRewardMessage(String rewardMessage)
     {
         this.rewardMessage = rewardMessage;
     }
 
-    public Message getPenaltyMessage()
+    public String getPenaltyMessage()
     {
         return penaltyMessage;
     }
 
-    public void setPenaltyMessage(Message penaltyMessage)
+    public void setPenaltyMessage(String penaltyMessage)
     {
         this.penaltyMessage = penaltyMessage;
     }

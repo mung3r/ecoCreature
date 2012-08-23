@@ -29,7 +29,7 @@ public class CommandHandler
 
     public CommandHandler(ecoCreature plugin)
     {
-        permission = plugin.getPermission();
+        permission = ecoCreature.getPermission();
         commands = new LinkedHashMap<String, Command>();
     }
 
