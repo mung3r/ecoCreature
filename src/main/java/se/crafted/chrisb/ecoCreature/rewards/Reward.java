@@ -184,28 +184,28 @@ public class Reward
 
     public Integer getExpAmount()
     {
-        Integer xpAmount;
+        Integer expAmount;
         if (expMin == null || expMax == null || expPercentage == null) {
-            xpAmount = null;
+            expAmount = null;
         }
         else {
             if (Math.random() > expPercentage / 100.0D) {
-                xpAmount = 0;
+                expAmount = 0;
             }
             else {
                 if (expMin.equals(expMax)) {
-                    xpAmount = expMin;
+                    expAmount = expMin;
                 }
                 else if (expMin > expMax) {
-                    xpAmount = expMin;
+                    expAmount = expMin;
                 }
                 else {
-                    xpAmount = expMin + random.nextInt(expMax - expMin + 1);
+                    expAmount = expMin + random.nextInt(expMax - expMin + 1);
                 }
             }
         }
 
-        return xpAmount;
+        return expAmount;
     }
 
     @Override
