@@ -51,7 +51,7 @@ public class BasicMessage implements Message
         }
 
         if (messageManager.shouldLogCoinRewards && parameters.containsKey(MessageToken.AMOUNT_TOKEN)) {
-            ecoCreature.getECLogger().info(removeColorCodes(template));
+            ecoCreature.getECLogger().info(removeColorCodes(String.format("%s: %s", parameters.get(MessageToken.PLAYER_TOKEN), template)));
         }
     }
 
