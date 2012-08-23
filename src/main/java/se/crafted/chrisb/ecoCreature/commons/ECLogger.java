@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 public class ECLogger
 {
     private static final String LOG_NAME = "ecoCreature";
-    private static ECLogger ecLogger;
+    private static ECLogger instance = new ECLogger();
 
     private Logger logger;
     private String name;
@@ -13,10 +13,7 @@ public class ECLogger
 
     public static ECLogger getInstance()
     {
-        if (ecLogger == null) {
-            ecLogger = new ECLogger();
-        }
-        return ecLogger;
+        return instance;
     }
 
     private ECLogger()
