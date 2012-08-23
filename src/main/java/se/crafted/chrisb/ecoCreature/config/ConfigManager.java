@@ -133,7 +133,7 @@ public class ConfigManager
 
     private RewardManager loadRewardConfig(FileConfiguration config)
     {
-        RewardManager rewardManager = new RewardManager(plugin, loadMessageConfig(config));
+        RewardManager rewardManager = new RewardManager(loadMessageConfig(config), plugin.getMetrics());
 
         rewardManager.isIntegerCurrency = config.getBoolean("System.Economy.IntegerCurrency", false);
 

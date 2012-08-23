@@ -44,6 +44,7 @@ import se.crafted.chrisb.ecoCreature.commons.TimePeriod;
 import se.crafted.chrisb.ecoCreature.events.CreatureKilledByPlayerEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledByPlayerEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageManager;
+import se.crafted.chrisb.ecoCreature.metrics.MetricsManager;
 
 public class RewardManager
 {
@@ -87,15 +88,15 @@ public class RewardManager
     public Map<String, Double> townyMultiplier;
     public Map<RewardType, List<Reward>> rewards;
 
-    private final ecoCreature plugin;
     private MessageManager messageManager;
+    private MetricsManager metricsManager;
     private boolean warnGroupMultiplierSupport;
     private Set<Integer> spawnerMobs;
 
-    public RewardManager(ecoCreature plugin, MessageManager messageManager)
+    public RewardManager(MessageManager messageManager, MetricsManager metricsManager)
     {
-        this.plugin = plugin;
         this.messageManager = messageManager;
+        this.metricsManager = metricsManager;
         warnGroupMultiplierSupport = true;
         spawnerMobs = new HashSet<Integer>();
 
@@ -201,7 +202,7 @@ public class RewardManager
             return;
         }
 
-        if (plugin.hasMobArena() && plugin.getMobArenaHandler().isPlayerInArena(event.getKiller()) && !hasMobArenaRewards) {
+        if (ecoCreature.hasMobArena() && ecoCreature.getMobArenaHandler().isPlayerInArena(event.getKiller()) && !hasMobArenaRewards) {
             ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " in Mob Arena.");
             return;
         }
@@ -384,18 +385,18 @@ public class RewardManager
         double amount = computeReward(player, reward);
         List<Player> party = new ArrayList<Player>();
 
-        if (isHeroesPartyShare && plugin.hasHeroes() && plugin.getHeroes().getCharacterManager().getHero(player).hasParty()) {
-            for (Hero hero : plugin.getHeroes().getCharacterManager().getHero(player).getParty().getMembers()) {
+        if (isHeroesPartyShare && ecoCreature.hasHeroes() && ecoCreature.getHeroes().getCharacterManager().getHero(player).hasParty()) {
+            for (Hero hero : ecoCreature.getHeroes().getCharacterManager().getHero(player).getParty().getMembers()) {
                 party.add(hero.getPlayer());
             }
             amount /= (double) party.size();
         }
-        else if (isMcMMOPartyShare && plugin.hasMcMMO() && PartyAPI.inParty(player)) {
+        else if (isMcMMOPartyShare && ecoCreature.hasMcMMO() && PartyAPI.inParty(player)) {
             party.addAll(PartyAPI.getOnlineMembers(player));
             amount /= (double) party.size();
         }
-        else if (isMobArenaShare && plugin.hasMobArena() && plugin.getMobArenaHandler().isPlayerInArena(player)) {
-            party.addAll(plugin.getMobArenaHandler().getArenaWithPlayer(player).getAllPlayers());
+        else if (isMobArenaShare && ecoCreature.hasMobArena() && ecoCreature.getMobArenaHandler().isPlayerInArena(player)) {
+            party.addAll(ecoCreature.getMobArenaHandler().getArenaWithPlayer(player).getAllPlayers());
             amount /= (double) party.size();
         }
         else {
@@ -416,7 +417,7 @@ public class RewardManager
             }
         }
 
-        plugin.getMetrics().addCount(reward.getRewardType());
+        metricsManager.addCount(reward.getRewardType());
     }
 
     private double computeReward(Player player, Reward reward)
@@ -446,8 +447,8 @@ public class RewardManager
             amount *= envMultiplier.get(player.getWorld().getEnvironment());
         }
 
-        if (ecoCreature.hasPermission(player, "gain.worldguard") && plugin.hasWorldGuard()) {
-            RegionManager regionManager = plugin.getRegionManager(player.getWorld());
+        if (ecoCreature.hasPermission(player, "gain.worldguard") && ecoCreature.hasWorldGuard()) {
+            RegionManager regionManager = ecoCreature.getRegionManager(player.getWorld());
             if (regionManager != null) {
                 Iterator<ProtectedRegion> regions = regionManager.getApplicableRegions(player.getLocation()).iterator();
                 while (regions.hasNext()) {
@@ -460,15 +461,15 @@ public class RewardManager
             }
         }
 
-        if (ecoCreature.hasPermission(player, "gain.regios") && plugin.hasRegios()) {
-            Region region = plugin.getRegiosAPI().getRegion(player.getLocation());
+        if (ecoCreature.hasPermission(player, "gain.regios") && ecoCreature.hasRegios()) {
+            Region region = ecoCreature.getRegiosAPI().getRegion(player.getLocation());
             if (region != null && regiosMultiplier.containsKey(region.getName())) {
                 amount *= regiosMultiplier.get(region.getName());
                 ECLogger.getInstance().debug("Regios multiplier applied");
             }
         }
 
-        if (ecoCreature.hasPermission(player, "gain.residence") && plugin.hasResidence()) {
+        if (ecoCreature.hasPermission(player, "gain.residence") && ecoCreature.hasResidence()) {
             ClaimedResidence residence = Residence.getResidenceManager().getByLoc(player.getLocation());
             if (residence != null && residenceMultiplier.containsKey(residence.getName())) {
                 amount *= residenceMultiplier.get(residence.getName());
@@ -476,22 +477,22 @@ public class RewardManager
             }
         }
 
-        if (ecoCreature.hasPermission(player, "gain.heroes") && plugin.hasHeroes() && plugin.getHeroes().getCharacterManager().getHero(player).hasParty()) {
+        if (ecoCreature.hasPermission(player, "gain.heroes") && ecoCreature.hasHeroes() && ecoCreature.getHeroes().getCharacterManager().getHero(player).hasParty()) {
             amount *= heroesPartyMultiplier;
             ECLogger.getInstance().debug("Heroes multiplier applied");
         }
 
-        if (ecoCreature.hasPermission(player, "gain.mcmmo") && plugin.hasMcMMO()) {
+        if (ecoCreature.hasPermission(player, "gain.mcmmo") && ecoCreature.hasMcMMO()) {
             amount *= mcMMOPartyMultiplier;
             ECLogger.getInstance().debug("mcMMO multiplier applied");
         }
 
-        if (hasMobArenaRewards && ecoCreature.hasPermission(player, "gain.mobarena") && plugin.hasMobArena() && plugin.getMobArenaHandler().isPlayerInArena(player)) {
+        if (hasMobArenaRewards && ecoCreature.hasPermission(player, "gain.mobarena") && ecoCreature.hasMobArena() && ecoCreature.getMobArenaHandler().isPlayerInArena(player)) {
             amount *= mobArenaMultiplier;
             ECLogger.getInstance().debug("MobArena multiplier applied");
         }
 
-        if (ecoCreature.hasPermission(player, "gain.factions") && plugin.hasFactions()) {
+        if (ecoCreature.hasPermission(player, "gain.factions") && ecoCreature.hasFactions()) {
             Faction faction = Board.getFactionAt(new FLocation(player.getLocation()));
             if (faction != null && factionsMultiplier.containsKey(faction.getTag())) {
                 amount *= factionsMultiplier.get(faction.getTag());
@@ -499,7 +500,7 @@ public class RewardManager
             }
         }
 
-        if (ecoCreature.hasPermission(player, "gain.towny") && plugin.hasTowny()) {
+        if (ecoCreature.hasPermission(player, "gain.towny") && ecoCreature.hasTowny()) {
             String townName = TownyUniverse.getTownName(player.getLocation());
             if (townName != null && townyMultiplier.containsKey(townName)) {
                 amount *= townyMultiplier.get(townName);
@@ -514,7 +515,7 @@ public class RewardManager
     {
         Location loc = entity.getLocation();
         BlockState[] tileEntities = entity.getLocation().getChunk().getTileEntities();
-        int r = plugin.getRewardManager(entity.getWorld()).campRadius;
+        int r = campRadius;
         r *= r;
         for (BlockState state : tileEntities) {
             if (state instanceof CreatureSpawner && state.getBlock().getLocation().distanceSquared(loc) <= r) {

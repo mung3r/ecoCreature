@@ -43,21 +43,21 @@ import se.crafted.chrisb.ecoCreature.rewards.RewardManager;
 
 public class ecoCreature extends JavaPlugin
 {
-    private static volatile Plugin vaultPlugin;
+    private static Plugin vaultPlugin;
+    private static Plugin deathTpPlusPlugin;
+    private static MobArenaHandler mobArenaHandler;
+    private static Heroes heroesPlugin;
+    private static WorldGuardPlugin worldGuardPlugin;
+    private static Plugin mcMMOPlugin;
+    private static Residence residencePlugin;
+    private static RegiosAPI regiosAPI;
+    private static Towny townyPlugin;
+    private static Plugin factionsPlugin;
+
     private static Permission permission;
     private static Economy economy;
 
     private MetricsManager metrics;
-    private Plugin deathTpPlusPlugin;
-    private MobArenaHandler mobArenaHandler;
-    private Heroes heroesPlugin;
-    private WorldGuardPlugin worldGuardPlugin;
-    private Plugin mcMMOPlugin;
-    private Residence residencePlugin;
-    private RegiosAPI regiosAPI;
-    private Towny townyPlugin;
-    private Plugin factionsPlugin;
-
     private Map<String, RewardManager> globalRewardManager;
     private ConfigManager configManager;
     private CommandHandler commandHandler;
@@ -67,9 +67,9 @@ public class ecoCreature extends JavaPlugin
         Locale.setDefault(Locale.US);
         ECLogger.getInstance().setName(this.getDescription().getName());
 
+        initPlugins();
         initVault();
         initMetrics();
-        initPlugins();
 
         globalRewardManager = new HashMap<String, RewardManager>();
         configManager = new ConfigManager(this);
@@ -143,12 +143,6 @@ public class ecoCreature extends JavaPlugin
 
     public static Permission getPermission()
     {
-        if (permission == null && hasVault()) {
-            RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
-            if (permissionProvider != null) {
-                permission = permissionProvider.getProvider();
-            }
-        }
         return permission;
     }
 
@@ -159,12 +153,6 @@ public class ecoCreature extends JavaPlugin
 
     public static Economy getEconomy()
     {
-        if (economy == null && hasVault()) {
-            RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-            if (economyProvider != null) {
-                economy = economyProvider.getProvider();
-            }
-        }
         return economy;
     }
 
@@ -181,73 +169,85 @@ public class ecoCreature extends JavaPlugin
         return vaultPlugin;
     }
 
-    public boolean hasMobArena()
+    public static boolean hasMobArena()
     {
         return mobArenaHandler != null;
     }
 
-    public MobArenaHandler getMobArenaHandler()
+    public static MobArenaHandler getMobArenaHandler()
     {
         return mobArenaHandler;
     }
 
-    public boolean hasHeroes()
+    public static boolean hasHeroes()
     {
         return heroesPlugin != null;
     }
 
-    public Heroes getHeroes()
+    public static Heroes getHeroes()
     {
         return heroesPlugin;
     }
 
-    public boolean hasResidence()
+    public static boolean hasResidence()
     {
         return residencePlugin != null;
     }
 
-    public boolean hasRegios()
+    public static boolean hasRegios()
     {
         return regiosAPI != null;
     }
 
-    public RegiosAPI getRegiosAPI()
+    public static RegiosAPI getRegiosAPI()
     {
         return regiosAPI;
     }
 
-    public boolean hasWorldGuard()
+    public static boolean hasWorldGuard()
     {
         return worldGuardPlugin != null;
     }
 
-    public RegionManager getRegionManager(World world)
+    public static RegionManager getRegionManager(World world)
     {
         return worldGuardPlugin.getRegionManager(world);
     }
 
-    public boolean hasMcMMO()
+    public static boolean hasMcMMO()
     {
         return mcMMOPlugin != null;
     }
 
-    public boolean hasTowny()
+    public static boolean hasTowny()
     {
         return townyPlugin != null;
     }
 
-    public boolean hasFactions()
+    public static boolean hasFactions()
     {
         return factionsPlugin != null;
     }
 
-    public boolean hasDeathTpPlus()
+    public static boolean hasDeathTpPlus()
     {
         return deathTpPlusPlugin != null;
     }
 
     private void initVault()
     {
+        if (hasVault()) {
+            RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+            if (permissionProvider != null) {
+                permission = permissionProvider.getProvider();
+            }
+
+            RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+            if (economyProvider != null) {
+                economy = economyProvider.getProvider();
+            }
+        }
+
         if (hasPermission()) {
             ECLogger.getInstance().info("Found permissions provider.");
         }
@@ -276,8 +276,9 @@ public class ecoCreature extends JavaPlugin
         }
     }
 
-    private void initPlugins()
+    private static void initPlugins()
     {
+        vaultPlugin = getPlugin("Vault", "net.milkbowl.vault.Vault");
         deathTpPlusPlugin = getPlugin("DeathTpPlus", "org.simiancage.DeathTpPlus.DeathTpPlus");
         heroesPlugin = (Heroes) getPlugin("Heroes", "com.herocraftonline.heroes.Heroes");
         worldGuardPlugin = (WorldGuardPlugin) getPlugin("WorldGuard", "com.sk89q.worldguard.bukkit.WorldGuardPlugin");
