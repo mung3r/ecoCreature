@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.messages;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
@@ -15,6 +16,7 @@ public class BasicMessage implements Message
     public BasicMessage(MessageManager messageManager)
     {
         this.messageManager = messageManager;
+        parameters = new HashMap<MessageToken, String>();
     }
 
     @Override
@@ -34,13 +36,13 @@ public class BasicMessage implements Message
     {
         for (MessageToken token : parameters.keySet()) {
             if (token == MessageToken.AMOUNT_TOKEN) {
-                template.replaceAll(token.toString(), parameters.get(token).replaceAll("\\$", "\\\\\\$"));
+                template = template.replaceAll(token.toString(), parameters.get(token).replaceAll("\\$", "\\\\\\$"));
             }
             else if (token == MessageToken.ITEM_TOKEN) {
-                template.replaceAll(token.toString(), toCamelCase(parameters.get(token)));
+                template = template.replaceAll(token.toString(), toCamelCase(parameters.get(token)));
             }
             else {
-                template.replaceAll(token.toString(), parameters.get(token));
+                template = template.replaceAll(token.toString(), parameters.get(token));
             }
         }
 
