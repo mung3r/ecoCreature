@@ -14,8 +14,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.milkbowl.vault.permission.Permission;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -25,12 +23,10 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 public class CommandHandler
 {
 
-    private final Permission permission;
     protected Map<String, Command> commands;
 
     public CommandHandler(ecoCreature plugin)
     {
-        permission = DependencyUtils.getPermission();
         commands = new LinkedHashMap<String, Command>();
     }
 
@@ -120,8 +116,8 @@ public class CommandHandler
         }
 
         Player player = (Player) sender;
-        if (permission != null) {
-            return permission.has(player, permString);
+        if (DependencyUtils.hasPermission()) {
+            return DependencyUtils.getPermission().has(player, permString);
         }
         return player.hasPermission(permString);
     }
