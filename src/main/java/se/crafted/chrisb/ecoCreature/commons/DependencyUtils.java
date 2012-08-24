@@ -69,26 +69,22 @@ public class DependencyUtils
             RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
             if (permissionProvider != null) {
                 permission = permissionProvider.getProvider();
+                ECLogger.getInstance().info("Found permission provider " + permission.getName());
             }
 
             RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
             if (economyProvider != null) {
                 economy = economyProvider.getProvider();
+                ECLogger.getInstance().info("Found economy provider " + economy.getName());
             }
         }
 
-        if (hasPermission()) {
-            ECLogger.getInstance().info("Found permissions provider.");
-        }
-        else {
-            ECLogger.getInstance().severe("Failed to load permission provider.");
+        if (!hasPermission()) {
+            ECLogger.getInstance().warning("Did not find permission provider");
         }
 
-        if (hasEconomy()) {
-            ECLogger.getInstance().info("Economy enabled.");
-        }
-        else {
-            ECLogger.getInstance().warning("Economy disabled.");
+        if (!hasEconomy()) {
+            ECLogger.getInstance().warning("Did not find economy provider");
         }
     }
 
