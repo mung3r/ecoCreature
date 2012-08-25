@@ -48,6 +48,7 @@ public class ecoCreature extends JavaPlugin
     @Override
     public void onDisable()
     {
+        getServer().getScheduler().cancelTasks(this);
         configManager.save();
         ECLogger.getInstance().info(getDescription().getVersion() + " is disabled.");
     }
