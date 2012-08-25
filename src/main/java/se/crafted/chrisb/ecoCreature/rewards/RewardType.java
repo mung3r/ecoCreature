@@ -65,15 +65,17 @@ public enum RewardType
 
     RewardType(String name)
     {
-        if (name != null)
+        if (name != null) {
             this.name = name.toLowerCase();
+        }
     }
 
     public static RewardType fromName(String name)
     {
         RewardType rewardType = null;
-        if (name != null)
+        if (name != null) {
             rewardType = NAME_MAP.get(name.toLowerCase());
+        }
         return rewardType;
     }
 

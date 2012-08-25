@@ -35,6 +35,10 @@ public class DependencyUtils
     private static Permission permission;
     private static Economy economy;
 
+    private DependencyUtils()
+    {
+    }
+
     public static void init()
     {
         initPlugins();

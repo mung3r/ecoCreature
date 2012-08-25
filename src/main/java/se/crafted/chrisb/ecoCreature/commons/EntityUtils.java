@@ -9,6 +9,10 @@ import org.bukkit.entity.Tameable;
 
 public class EntityUtils
 {
+    private EntityUtils()
+    {
+    }
+
     public static boolean isNearSpawner(Entity entity, int radius)
     {
         Location loc = entity.getLocation();

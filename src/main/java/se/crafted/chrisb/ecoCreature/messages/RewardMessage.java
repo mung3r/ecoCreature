@@ -2,7 +2,7 @@ package se.crafted.chrisb.ecoCreature.messages;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 
-public class RewardMessage extends BasicMessage implements Message
+public class RewardMessage extends BasicMessage
 {
     public RewardMessage(MessageManager messageManager)
     {

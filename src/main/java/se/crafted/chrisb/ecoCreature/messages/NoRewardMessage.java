@@ -1,6 +1,6 @@
 package se.crafted.chrisb.ecoCreature.messages;
 
-public class NoRewardMessage extends BasicMessage implements Message
+public class NoRewardMessage extends BasicMessage
 {
     public NoRewardMessage(MessageManager messageManager)
     {

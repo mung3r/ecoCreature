@@ -224,8 +224,9 @@ public class Drop
                     // check for data id
                     String[] itemSubParts = itemParts[0].split("\\.");
                     drop.setItem(Material.matchMaterial(itemSubParts[0]));
-                    if (drop.getItem() == null)
+                    if (drop.getItem() == null) {
                         throw new Exception();
+                    }
                     drop.setData(itemSubParts.length > 1 ? Byte.parseByte(itemSubParts[1]) : null);
                     drop.setDurability(itemSubParts.length > 2 ? Short.parseShort(itemSubParts[2]) : null);
                     // check for range on amount

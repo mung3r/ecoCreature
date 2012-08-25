@@ -104,7 +104,7 @@ public class ecoCreature extends JavaPlugin
 
     private void addCommands()
     {
-        commandHandler = new CommandHandler(this);
+        commandHandler = new CommandHandler();
         commandHandler.addCommand(new HelpCommand(this));
         commandHandler.addCommand(new ReloadCommand(this));
     }

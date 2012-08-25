@@ -17,7 +17,6 @@ import java.util.Map;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 
 public class CommandHandler
@@ -25,7 +24,7 @@ public class CommandHandler
 
     protected Map<String, Command> commands;
 
-    public CommandHandler(ecoCreature plugin)
+    public CommandHandler()
     {
         commands = new LinkedHashMap<String, Command>();
     }

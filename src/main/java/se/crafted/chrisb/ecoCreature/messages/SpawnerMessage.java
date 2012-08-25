@@ -1,6 +1,6 @@
 package se.crafted.chrisb.ecoCreature.messages;
 
-public class SpawnerMessage extends BasicMessage implements Message
+public class SpawnerMessage extends BasicMessage
 {
     public SpawnerMessage(MessageManager messageManager)
     {

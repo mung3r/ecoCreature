@@ -255,14 +255,14 @@ public class ConfigManager
         ConfigurationSection rewardSetsConfig = config.getConfigurationSection("RewardSets");
         if (rewardSetsConfig != null) {
             for (String setName : rewardSetsConfig.getKeys(false)) {
-                rewardSet.put(setName, createReward(RewardType.CUSTOM, rewardSetsConfig.getConfigurationSection(setName), rewardManager, config.getBoolean("System.Messages.NoReward", false)));
+                rewardSet.put(setName, createReward(RewardType.CUSTOM, rewardSetsConfig.getConfigurationSection(setName), rewardManager));
             }
         }
 
         ConfigurationSection rewardTableConfig = config.getConfigurationSection("RewardTable");
         if (rewardTableConfig != null) {
             for (String rewardName : rewardTableConfig.getKeys(false)) {
-                Reward reward = createReward(RewardType.fromName(rewardName), rewardTableConfig.getConfigurationSection(rewardName), rewardManager, config.getBoolean("System.Messages.NoReward", false));
+                Reward reward = createReward(RewardType.fromName(rewardName), rewardTableConfig.getConfigurationSection(rewardName), rewardManager);
 
                 if (!rewardManager.rewards.containsKey(reward.getRewardType())) {
                     rewardManager.rewards.put(reward.getRewardType(), new ArrayList<Reward>());
@@ -341,7 +341,7 @@ public class ConfigManager
         return config;
     }
 
-    private static Reward createReward(RewardType rewardType, ConfigurationSection rewardConfig, RewardManager rewardManager, boolean isNoRewardMessage)
+    private static Reward createReward(RewardType rewardType, ConfigurationSection rewardConfig, RewardManager rewardManager)
     {
         Reward reward = new Reward();
         reward.setRewardName(rewardConfig.getName());

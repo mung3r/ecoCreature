@@ -11,6 +11,10 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class EventUtils
 {
+    private EventUtils()
+    {
+    }
+
     public static Player getKillerFromDeathEvent(EntityDeathEvent event)
     {
         if (event != null && event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
