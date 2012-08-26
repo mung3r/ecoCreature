@@ -4,66 +4,60 @@ import java.util.Random;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
-
 public class Exp
 {
     private static Random random = new Random();
 
-    private Integer min;
-    private Integer max;
-    private Double percentage;
+    private int min;
+    private int max;
+    private double percentage;
 
-    public Integer getMin()
+    public int getMin()
     {
         return min;
     }
 
-    public void setMin(Integer min)
+    public void setMin(int min)
     {
         this.min = min;
     }
 
-    public Integer getMax()
+    public int getMax()
     {
         return max;
     }
 
-    public void setMax(Integer exp)
+    public void setMax(int max)
     {
-        this.max = exp;
+        this.max = max;
     }
 
-    public Double getPercentage()
+    public double getPercentage()
     {
         return percentage;
     }
 
-    public void setPercentage(Double percentage)
+    public void setPercentage(double percentage)
     {
         this.percentage = percentage;
     }
 
-    public Integer getAmount()
+    public int getAmount()
     {
-        Integer amount;
-        if (min == null || max == null || percentage == null) {
-            amount = null;
+        int amount;
+
+        if (Math.random() > percentage / 100.0D) {
+            amount = 0;
         }
         else {
-            if (Math.random() > percentage / 100.0D) {
-                amount = 0;
+            if (min == max) {
+                amount = min;
+            }
+            else if (min > max) {
+                amount = min;
             }
             else {
-                if (min.equals(max)) {
-                    amount = min;
-                }
-                else if (min > max) {
-                    amount = min;
-                }
-                else {
-                    amount = min + random.nextInt(max - min + 1);
-                }
+                amount = min + random.nextInt(max - min + 1);
             }
         }
 
@@ -75,15 +69,10 @@ public class Exp
         Exp exp = null;
 
         if (config.contains("ExpMin") && config.contains("ExpMax") && config.contains("ExpPercent")) {
-            try {
-                exp = new Exp();
-                exp.setMin(Integer.parseInt(config.getString("ExpMin")));
-                exp.setMax(Integer.parseInt(config.getString("ExpMax")));
-                exp.setPercentage(Double.parseDouble(config.getString("ExpPercent")));
-            }
-            catch (NumberFormatException e) {
-                ECLogger.getInstance().warning("Could not parse exp for " + config.getName());
-            }
+            exp = new Exp();
+            exp.setMin(config.getInt("ExpMin", 0));
+            exp.setMax(config.getInt("ExpMax", 0));
+            exp.setPercentage(config.getDouble("ExpPercent", 0.0D));
         }
 
         return exp;
