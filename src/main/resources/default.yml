@@ -134,7 +134,7 @@ Gain:
         Nether:
             Amount: 1.25
         The_End:
-            Amount: 1.0
+            Amount: 1.50
     MobArena:
     #
     # Multiply reward amount based on player arena status

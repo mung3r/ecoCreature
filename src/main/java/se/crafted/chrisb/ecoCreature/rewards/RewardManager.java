@@ -1,9 +1,7 @@
 package se.crafted.chrisb.ecoCreature.rewards;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -11,7 +9,6 @@ import java.util.Set;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -21,27 +18,17 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 
-import com.bekvon.bukkit.residence.Residence;
-import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 import com.gmail.nossr50.api.PartyAPI;
 import com.herocraftonline.heroes.characters.Hero;
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.Faction;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.sk89q.worldguard.protection.managers.RegionManager;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-
-import couk.Adamki11s.Regios.Regions.Region;
 
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
-import se.crafted.chrisb.ecoCreature.commons.TimePeriod;
 import se.crafted.chrisb.ecoCreature.events.CreatureKilledByPlayerEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledByPlayerEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageManager;
 import se.crafted.chrisb.ecoCreature.metrics.MetricsManager;
+import se.crafted.chrisb.ecoCreature.rewards.gain.Gain;
 
 public class RewardManager
 {
@@ -75,37 +62,56 @@ public class RewardManager
     public double mcMMOPartyMultiplier;
     public boolean isMcMMOPartyShare;
 
-    public Map<String, Double> groupMultiplier;
-    public Map<TimePeriod, Double> timeMultiplier;
-    public Map<Environment, Double> envMultiplier;
-    public Map<String, Double> worldGuardMultiplier;
-    public Map<String, Double> regiosMultiplier;
-    public Map<String, Double> residenceMultiplier;
-    public Map<String, Double> factionsMultiplier;
-    public Map<String, Double> townyMultiplier;
-    public Map<RewardType, List<Reward>> rewards;
-
-    private MessageManager messageManager;
     private MetricsManager metricsManager;
-    private boolean warnGroupMultiplierSupport;
+    private MessageManager messageManager;
+    private Map<RewardType, List<Reward>> rewards;
+    private Set<Gain> gainMultipliers;
+
     private Set<Integer> spawnerMobs;
 
-    public RewardManager(MessageManager messageManager, MetricsManager metricsManager)
+    public RewardManager()
+    {
+        spawnerMobs = new HashSet<Integer>();
+    }
+
+    public MetricsManager getMetricsManager()
+    {
+        return metricsManager;
+    }
+
+    public void setMetricsManager(MetricsManager metricsManager)
+    {
+        this.metricsManager = metricsManager;
+    }
+
+    public MessageManager getMessageManager()
+    {
+        return messageManager;
+    }
+
+    public void setMessageManager(MessageManager messageManager)
     {
         this.messageManager = messageManager;
-        this.metricsManager = metricsManager;
-        warnGroupMultiplierSupport = true;
-        spawnerMobs = new HashSet<Integer>();
+    }
 
-        groupMultiplier = new HashMap<String, Double>();
-        timeMultiplier = new HashMap<TimePeriod, Double>();
-        envMultiplier = new HashMap<Environment, Double>();
-        worldGuardMultiplier = new HashMap<String, Double>();
-        regiosMultiplier = new HashMap<String, Double>();
-        residenceMultiplier = new HashMap<String, Double>();
-        factionsMultiplier = new HashMap<String, Double>();
-        townyMultiplier = new HashMap<String, Double>();
-        rewards = new HashMap<RewardType, List<Reward>>();
+    public Map<RewardType, List<Reward>> getRewards()
+    {
+        return rewards;
+    }
+
+    public void setRewards(Map<RewardType, List<Reward>> rewards)
+    {
+        this.rewards = rewards;
+    }
+
+    public Set<Gain> getGainMultipliers()
+    {
+        return gainMultipliers;
+    }
+
+    public void setGainMultipliers(Set<Gain> gainMultipliers)
+    {
+        this.gainMultipliers = gainMultipliers;
     }
 
     public boolean isSpawnerMob(Entity entity)
@@ -115,7 +121,8 @@ public class RewardManager
 
     public void setSpawnerMob(Entity entity)
     {
-        // Only add to the array if we're tracking by entity. Avoids a memory leak.
+        // Only add to the array if we're tracking by entity. Avoids a memory
+        // leak.
         if (!canCampSpawner && campByEntity) {
             spawnerMobs.add(Integer.valueOf(entity.getEntityId()));
         }
@@ -133,7 +140,7 @@ public class RewardManager
             Reward reward = getRewardFromType(RewardType.PLAYER);
 
             if (reward != null) {
-                amount = computeCoinAmount(event.getVictim(), reward.getCoin());
+                amount = computeGain(event.getVictim(), reward.getCoin());
                 if (reward.hasDrops() && shouldOverrideDrops) {
                     event.getDrops().clear();
                 }
@@ -208,8 +215,8 @@ public class RewardManager
         }
 
         if (!canCampSpawner && (campByDistance || campByEntity)) {
-            // Reordered the conditional slightly, to make it more efficient, since
-            // java will stop evaluating when it knows the outcome.
+            // Reordered the conditional slightly, to make it more efficient,
+            // since java will stop evaluating when it knows the outcome.
             if ((campByEntity && isSpawnerMob(event.getKilledCreature())) || (campByDistance && (EntityUtils.isNearSpawner(event.getKiller(), campRadius) || EntityUtils.isNearSpawner(event.getKilledCreature(), campRadius)))) {
                 if (shouldClearCampDrops) {
                     event.getDrops().clear();
@@ -378,7 +385,7 @@ public class RewardManager
 
     private void registerReward(Player player, Reward reward, String weaponName)
     {
-        double amount = reward.hasCoin() ? computeCoinAmount(player, reward.getCoin()) : 0.0;
+        double amount = reward.hasCoin() ? computeGain(player, reward.getCoin()) : 0.0;
         List<Player> party = new ArrayList<Player>();
 
         if (isHeroesPartyShare && DependencyUtils.hasHeroes() && DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {
@@ -416,91 +423,13 @@ public class RewardManager
         metricsManager.addCount(reward.getType());
     }
 
-    private double computeCoinAmount(Player player, Coin coin)
+    private double computeGain(Player player, Coin coin)
     {
         double amount = coin.getAmount();
 
-        try {
-            if (DependencyUtils.hasPermission() && DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName()) != null) {
-                String group = DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName()).toLowerCase();
-                if (DependencyUtils.hasPermission(player, "gain.group") && groupMultiplier.containsKey(group)) {
-                    amount *= groupMultiplier.get(group);
-                }
-            }
-        }
-        catch (UnsupportedOperationException e) {
-            if (warnGroupMultiplierSupport) {
-                ECLogger.getInstance().warning(e.getMessage());
-                warnGroupMultiplierSupport = false;
-            }
-        }
-
-        if (DependencyUtils.hasPermission(player, "gain.time") && timeMultiplier.containsKey(TimePeriod.fromEntity(player))) {
-            amount *= timeMultiplier.get(TimePeriod.fromEntity(player));
-        }
-
-        if (DependencyUtils.hasPermission(player, "gain.environment") && envMultiplier.containsKey(player.getWorld().getEnvironment())) {
-            amount *= envMultiplier.get(player.getWorld().getEnvironment());
-        }
-
-        if (DependencyUtils.hasPermission(player, "gain.worldguard") && DependencyUtils.hasWorldGuard()) {
-            RegionManager regionManager = DependencyUtils.getRegionManager(player.getWorld());
-            if (regionManager != null) {
-                Iterator<ProtectedRegion> regions = regionManager.getApplicableRegions(player.getLocation()).iterator();
-                while (regions.hasNext()) {
-                    String regionName = regions.next().getId();
-                    if (worldGuardMultiplier.containsKey(regionName)) {
-                        amount *= worldGuardMultiplier.get(regionName);
-                        ECLogger.getInstance().debug("WorldGuard multiplier applied");
-                    }
-                }
-            }
-        }
-
-        if (DependencyUtils.hasPermission(player, "gain.regios") && DependencyUtils.hasRegios()) {
-            Region region = DependencyUtils.getRegiosAPI().getRegion(player.getLocation());
-            if (region != null && regiosMultiplier.containsKey(region.getName())) {
-                amount *= regiosMultiplier.get(region.getName());
-                ECLogger.getInstance().debug("Regios multiplier applied");
-            }
-        }
-
-        if (DependencyUtils.hasPermission(player, "gain.residence") && DependencyUtils.hasResidence()) {
-            ClaimedResidence residence = Residence.getResidenceManager().getByLoc(player.getLocation());
-            if (residence != null && residenceMultiplier.containsKey(residence.getName())) {
-                amount *= residenceMultiplier.get(residence.getName());
-                ECLogger.getInstance().debug("Residence multiplier applied");
-            }
-        }
-
-        if (DependencyUtils.hasPermission(player, "gain.heroes") && DependencyUtils.hasHeroes() && DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {
-            amount *= heroesPartyMultiplier;
-            ECLogger.getInstance().debug("Heroes multiplier applied");
-        }
-
-        if (DependencyUtils.hasPermission(player, "gain.mcmmo") && DependencyUtils.hasMcMMO()) {
-            amount *= mcMMOPartyMultiplier;
-            ECLogger.getInstance().debug("mcMMO multiplier applied");
-        }
-
-        if (hasMobArenaRewards && DependencyUtils.hasPermission(player, "gain.mobarena") && DependencyUtils.hasMobArena() && DependencyUtils.getMobArenaHandler().isPlayerInArena(player)) {
-            amount *= mobArenaMultiplier;
-            ECLogger.getInstance().debug("MobArena multiplier applied");
-        }
-
-        if (DependencyUtils.hasPermission(player, "gain.factions") && DependencyUtils.hasFactions()) {
-            Faction faction = Board.getFactionAt(new FLocation(player.getLocation()));
-            if (faction != null && factionsMultiplier.containsKey(faction.getTag())) {
-                amount *= factionsMultiplier.get(faction.getTag());
-                ECLogger.getInstance().debug("Factions multiplier applied");
-            }
-        }
-
-        if (DependencyUtils.hasPermission(player, "gain.towny") && DependencyUtils.hasTowny()) {
-            String townName = TownyUniverse.getTownName(player.getLocation());
-            if (townName != null && townyMultiplier.containsKey(townName)) {
-                amount *= townyMultiplier.get(townName);
-                ECLogger.getInstance().debug("Towny multiplier applied");
+        for (Gain gain : gainMultipliers) {
+            if (gain != null) {
+                amount *= gain.getMultiplier(player);
             }
         }
 
