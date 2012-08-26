@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.messages;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
@@ -69,5 +70,30 @@ public class MessageManager
         message.addParameter(MessageToken.CREATURE_TOKEN, creatureName);
         message.addParameter(MessageToken.ITEM_TOKEN, weaponName);
         message.send();
+    }
+
+    public static MessageManager parseConfig(ConfigurationSection config)
+    {
+        MessageManager messageManager = new MessageManager();
+
+        messageManager.shouldOutputMessages = config.getBoolean("System.Messages.Output", true);
+        messageManager.shouldOutputNoReward = config.getBoolean("System.Messages.NoReward", false);
+        messageManager.shouldOutputSpawnerCamp = config.getBoolean("System.Messages.Spawner", false);
+        messageManager.shouldLogCoinRewards = config.getBoolean("System.Messages.LogCoinRewards", true);
+        messageManager.noBowRewardMessage = convertMessage(config.getString("System.Messages.NoBowMessage", MessageManager.NO_BOW_REWARD_MESSAGE));
+        messageManager.noCampMessage = convertMessage(config.getString("System.Messages.NoCampMessage", MessageManager.NO_CAMP_MESSAGE));
+        messageManager.deathPenaltyMessage = convertMessage(config.getString("System.Messages.DeathPenaltyMessage", MessageManager.DEATH_PENALTY_MESSAGE));
+        messageManager.pvpRewardMessage = convertMessage(config.getString("System.Messages.PVPRewardMessage", MessageManager.PVP_REWARD_MESSAGE));
+
+        return messageManager;
+    }
+
+    public static String convertMessage(String message)
+    {
+        if (message != null) {
+            return message.replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
+        }
+
+        return null;
     }
 }

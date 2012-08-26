@@ -133,15 +133,13 @@ public class RewardManager
             Reward reward = getRewardFromType(RewardType.PLAYER);
 
             if (reward != null) {
-                Integer exp = reward.getExpAmount();
-
-                amount = computeReward(event.getVictim(), reward);
-                if (!reward.getDrops().isEmpty() && shouldOverrideDrops) {
+                amount = computeCoinAmount(event.getVictim(), reward.getCoin());
+                if (reward.hasDrops() && shouldOverrideDrops) {
                     event.getDrops().clear();
                 }
-                event.getDrops().addAll(reward.computeDrops());
-                if (exp != null) {
-                    event.setDroppedExp(exp);
+                event.getDrops().addAll(reward.computeDrops(isFixedDrops));
+                if (reward.hasExp()) {
+                    event.setDroppedExp(reward.getExp().getAmount());
                 }
             }
         }
@@ -231,14 +229,13 @@ public class RewardManager
         Reward reward = getRewardFromEntity(event.getKilledCreature());
 
         if (reward != null) {
-            Integer exp = reward.getExpAmount();
-            if (exp != null) {
-                event.setDroppedExp(exp);
+            if (reward.hasExp()) {
+                event.setDroppedExp(reward.getExp().getAmount());
             }
             String weaponName = event.getTamedCreature() != null ? RewardType.fromEntity(event.getTamedCreature()).getName() : Material.getMaterial(event.getKiller().getItemInHand().getTypeId()).name();
             registerReward(event.getKiller(), reward, weaponName);
             try {
-                List<ItemStack> rewardDrops = reward.computeDrops();
+                List<ItemStack> rewardDrops = reward.computeDrops(isFixedDrops);
                 if (!rewardDrops.isEmpty()) {
                     if (!event.getDrops().isEmpty() && shouldOverrideDrops) {
                         event.getDrops().clear();
@@ -269,7 +266,7 @@ public class RewardManager
             if (reward != null) {
                 registerReward(player, reward, Material.getMaterial(player.getItemInHand().getTypeId()).name());
 
-                for (ItemStack itemStack : reward.computeDrops()) {
+                for (ItemStack itemStack : reward.computeDrops(isFixedDrops)) {
                     block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
                 }
             }
@@ -283,11 +280,12 @@ public class RewardManager
             Reward reward = getRewardFromType(RewardType.DEATH_STREAK);
 
             if (reward != null) {
-                reward.setCoinMin(reward.getCoinMin() * deaths);
-                reward.setCoinMax(reward.getCoinMax() * deaths);
+                // TODO: incorrectly modifies the reward for subsequent calls
+                reward.getCoin().setMin(reward.getCoin().getMin() * deaths);
+                reward.getCoin().setMax(reward.getCoin().getMax() * deaths);
                 registerReward(player, reward, "");
 
-                for (ItemStack itemStack : reward.computeDrops()) {
+                for (ItemStack itemStack : reward.computeDrops(isFixedDrops)) {
                     player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
                 }
             }
@@ -301,11 +299,12 @@ public class RewardManager
             Reward reward = getRewardFromType(RewardType.KILL_STREAK);
 
             if (reward != null) {
-                reward.setCoinMin(reward.getCoinMin() * kills);
-                reward.setCoinMax(reward.getCoinMax() * kills);
+                // TODO: incorrectly modifies the reward for subsequent calls
+                reward.getCoin().setMin(reward.getCoin().getMin() * kills);
+                reward.getCoin().setMax(reward.getCoin().getMax() * kills);
                 registerReward(player, reward, "");
 
-                for (ItemStack itemStack : reward.computeDrops()) {
+                for (ItemStack itemStack : reward.computeDrops(isFixedDrops)) {
                     player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
                 }
             }
@@ -379,7 +378,7 @@ public class RewardManager
 
     private void registerReward(Player player, Reward reward, String weaponName)
     {
-        double amount = computeReward(player, reward);
+        double amount = reward.hasCoin() ? computeCoinAmount(player, reward.getCoin()) : 0.0;
         List<Player> party = new ArrayList<Player>();
 
         if (isHeroesPartyShare && DependencyUtils.hasHeroes() && DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {
@@ -403,23 +402,23 @@ public class RewardManager
         for (Player member : party) {
             if (amount > 0.0D && DependencyUtils.hasEconomy()) {
                 DependencyUtils.getEconomy().depositPlayer(member.getName(), amount);
-                messageManager.rewardMessage(reward.getRewardMessage(), member, amount, reward.getRewardName(), weaponName);
+                messageManager.rewardMessage(reward.getRewardMessage(), member, amount, reward.getName(), weaponName);
             }
             else if (amount < 0.0D && DependencyUtils.hasEconomy()) {
                 DependencyUtils.getEconomy().withdrawPlayer(member.getName(), Math.abs(amount));
-                messageManager.rewardMessage(reward.getPenaltyMessage(), member, Math.abs(amount), reward.getRewardName(), weaponName);
+                messageManager.rewardMessage(reward.getPenaltyMessage(), member, Math.abs(amount), reward.getName(), weaponName);
             }
             else {
-                messageManager.noRewardMessage(reward.getNoRewardMessage(), member, reward.getRewardName(), weaponName);
+                messageManager.noRewardMessage(reward.getNoRewardMessage(), member, reward.getName(), weaponName);
             }
         }
 
-        metricsManager.addCount(reward.getRewardType());
+        metricsManager.addCount(reward.getType());
     }
 
-    private double computeReward(Player player, Reward reward)
+    private double computeCoinAmount(Player player, Coin coin)
     {
-        double amount = reward.getRewardAmount();
+        double amount = coin.getAmount();
 
         try {
             if (DependencyUtils.hasPermission() && DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName()) != null) {

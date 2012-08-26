@@ -21,7 +21,9 @@ import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.commons.TimePeriod;
 import se.crafted.chrisb.ecoCreature.messages.MessageManager;
+import se.crafted.chrisb.ecoCreature.rewards.Coin;
 import se.crafted.chrisb.ecoCreature.rewards.Drop;
+import se.crafted.chrisb.ecoCreature.rewards.Exp;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.RewardManager;
 import se.crafted.chrisb.ecoCreature.rewards.RewardType;
@@ -122,25 +124,9 @@ public class ConfigManager
         }
     }
 
-    private MessageManager loadMessageConfig(FileConfiguration config)
-    {
-        MessageManager messageManager = new MessageManager();
-
-        messageManager.shouldOutputMessages = config.getBoolean("System.Messages.Output", true);
-        messageManager.shouldOutputNoReward = config.getBoolean("System.Messages.NoReward", false);
-        messageManager.shouldOutputSpawnerCamp = config.getBoolean("System.Messages.Spawner", false);
-        messageManager.shouldLogCoinRewards = config.getBoolean("System.Messages.LogCoinRewards", true);
-        messageManager.noBowRewardMessage = convertMessage(config.getString("System.Messages.NoBowMessage", MessageManager.NO_BOW_REWARD_MESSAGE));
-        messageManager.noCampMessage = convertMessage(config.getString("System.Messages.NoCampMessage", MessageManager.NO_CAMP_MESSAGE));
-        messageManager.deathPenaltyMessage = convertMessage(config.getString("System.Messages.DeathPenaltyMessage", MessageManager.DEATH_PENALTY_MESSAGE));
-        messageManager.pvpRewardMessage = convertMessage(config.getString("System.Messages.PVPRewardMessage", MessageManager.PVP_REWARD_MESSAGE));
-
-        return messageManager;
-    }
-
     private RewardManager loadRewardConfig(FileConfiguration config)
     {
-        RewardManager rewardManager = new RewardManager(loadMessageConfig(config), plugin.getMetrics());
+        RewardManager rewardManager = new RewardManager(MessageManager.parseConfig(config), plugin.getMetrics());
 
         rewardManager.isIntegerCurrency = config.getBoolean("System.Economy.IntegerCurrency", false);
 
@@ -255,29 +241,29 @@ public class ConfigManager
         ConfigurationSection rewardSetsConfig = config.getConfigurationSection("RewardSets");
         if (rewardSetsConfig != null) {
             for (String setName : rewardSetsConfig.getKeys(false)) {
-                rewardSet.put(setName, createReward(RewardType.CUSTOM, rewardSetsConfig.getConfigurationSection(setName), rewardManager));
+                rewardSet.put(setName, createReward(RewardType.CUSTOM, rewardSetsConfig.getConfigurationSection(setName)));
             }
         }
 
         ConfigurationSection rewardTableConfig = config.getConfigurationSection("RewardTable");
         if (rewardTableConfig != null) {
             for (String rewardName : rewardTableConfig.getKeys(false)) {
-                Reward reward = createReward(RewardType.fromName(rewardName), rewardTableConfig.getConfigurationSection(rewardName), rewardManager);
+                Reward reward = createReward(RewardType.fromName(rewardName), rewardTableConfig.getConfigurationSection(rewardName));
 
-                if (!rewardManager.rewards.containsKey(reward.getRewardType())) {
-                    rewardManager.rewards.put(reward.getRewardType(), new ArrayList<Reward>());
+                if (!rewardManager.rewards.containsKey(reward.getType())) {
+                    rewardManager.rewards.put(reward.getType(), new ArrayList<Reward>());
                 }
 
                 if (rewardTableConfig.getConfigurationSection(rewardName).getList("Sets") != null) {
                     List<String> setList = rewardTableConfig.getConfigurationSection(rewardName).getStringList("Sets");
                     for (String setName : setList) {
                         if (rewardSet.containsKey(setName)) {
-                            rewardManager.rewards.get(reward.getRewardType()).add(mergeReward(reward, rewardSet.get(setName)));
+                            rewardManager.rewards.get(reward.getType()).add(mergeReward(reward, rewardSet.get(setName)));
                         }
                     }
                 }
                 else {
-                    rewardManager.rewards.get(reward.getRewardType()).add(reward);
+                    rewardManager.rewards.get(reward.getType()).add(reward);
                 }
             }
         }
@@ -289,18 +275,20 @@ public class ConfigManager
     {
         Reward reward = new Reward();
 
-        reward.setRewardName(to.getRewardName());
-        reward.setRewardType(to.getRewardType());
+        reward.setName(to.getName());
+        reward.setType(to.getType());
 
-        reward.setDrops(!from.getDrops().isEmpty() ? from.getDrops() : to.getDrops());
+        if (from.hasDrops()) {
+            reward.setDrops(from.getDrops());
+        }
 
-        reward.setCoinMin(from.getCoinMin() > 0.0 ? from.getCoinMin() : to.getCoinMin());
-        reward.setCoinMax(from.getCoinMax() > 0.0 ? from.getCoinMax() : to.getCoinMax());
-        reward.setCoinPercentage(from.getCoinPercentage() > 0.0 ? from.getCoinPercentage() : to.getCoinPercentage());
+        if (from.hasCoin()) {
+            reward.setCoin(from.getCoin());
+        }
 
-        reward.setExpMin(from.getExpMin() != null ? from.getExpMin() : to.getExpMin());
-        reward.setExpMax(from.getExpMax() != null ? from.getExpMax() : to.getExpMax());
-        reward.setExpPercentage(from.getExpPercentage() != null ? from.getExpPercentage() : to.getExpPercentage());
+        if (from.hasExp()) {
+            reward.setExp(from.getExp());
+        }
 
         reward.setNoRewardMessage(!from.getNoRewardMessage().equals(to.getNoRewardMessage()) ? from.getNoRewardMessage() : to.getNoRewardMessage());
         reward.setRewardMessage(!from.getRewardMessage().equals(to.getRewardMessage()) ? from.getRewardMessage() : to.getRewardMessage());
@@ -341,50 +329,20 @@ public class ConfigManager
         return config;
     }
 
-    private static Reward createReward(RewardType rewardType, ConfigurationSection rewardConfig, RewardManager rewardManager)
+    private static Reward createReward(RewardType type, ConfigurationSection config)
     {
         Reward reward = new Reward();
-        reward.setRewardName(rewardConfig.getName());
-        reward.setRewardType(rewardType);
-
-        if (rewardConfig.getList("Drops") != null) {
-            List<String> dropsList = rewardConfig.getStringList("Drops");
-            reward.setDrops(Drop.parseDrops(dropsList, rewardManager.isFixedDrops));
-        }
-        else {
-            reward.setDrops(Drop.parseDrops(rewardConfig.getString("Drops"), rewardManager.isFixedDrops));
-        }
-        reward.setCoinMax(rewardConfig.getDouble("Coin_Maximum", 0));
-        reward.setCoinMin(rewardConfig.getDouble("Coin_Minimum", 0));
-        reward.setCoinPercentage(rewardConfig.getDouble("Coin_Percent", 0));
-        String expMin = rewardConfig.getString("ExpMin");
-        String expMax = rewardConfig.getString("ExpMax");
-        String expPercentage = rewardConfig.getString("ExpPercent");
-        if (expMin != null && expMax != null && expPercentage != null) {
-            try {
-                reward.setExpMin(Integer.parseInt(expMin));
-                reward.setExpMax(Integer.parseInt(expMax));
-                reward.setExpPercentage(Double.parseDouble(expPercentage));
-            }
-            catch (NumberFormatException e) {
-                ECLogger.getInstance().warning("Could not parse exp for " + rewardConfig.getName());
-            }
-        }
-
-        reward.setNoRewardMessage(convertMessage(rewardConfig.getString("NoReward_Message", MessageManager.NO_REWARD_MESSAGE)));
-        reward.setRewardMessage(convertMessage(rewardConfig.getString("Reward_Message", MessageManager.REWARD_MESSAGE)));
-        reward.setPenaltyMessage(convertMessage(rewardConfig.getString("Penalty_Message", MessageManager.PENALTY_MESSAGE)));
-
+        reward.setName(config.getName());
+        reward.setType(type);
+    
+        reward.setDrops(Drop.parseConfig(config));
+        reward.setCoin(Coin.parseConfig(config));
+        reward.setExp(Exp.parseConfig(config));
+    
+        reward.setNoRewardMessage(MessageManager.convertMessage(config.getString("NoReward_Message", MessageManager.NO_REWARD_MESSAGE)));
+        reward.setRewardMessage(MessageManager.convertMessage(config.getString("Reward_Message", MessageManager.REWARD_MESSAGE)));
+        reward.setPenaltyMessage(MessageManager.convertMessage(config.getString("Penalty_Message", MessageManager.PENALTY_MESSAGE)));
+    
         return reward;
     }
-
-    private static String convertMessage(String message)
-    {
-        if (message != null) {
-            return message.replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
-        }
-
-        return null;
-    }
-
 }
