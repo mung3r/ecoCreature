@@ -10,7 +10,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-import se.crafted.chrisb.ecoCreature.commons.Utils;
+import se.crafted.chrisb.ecoCreature.commons.EventUtils;
 
 public class CreatureKilledByPlayerEvent extends Event
 {
@@ -35,7 +35,7 @@ public class CreatureKilledByPlayerEvent extends Event
 
     public Player getPlayer()
     {
-        return Utils.getKillerFromDeathEvent(event);
+        return EventUtils.getKillerFromDeathEvent(event);
     }
 
     public Player getKiller()
@@ -55,7 +55,7 @@ public class CreatureKilledByPlayerEvent extends Event
 
     public LivingEntity getTamedCreature()
     {
-        return Utils.getTamedKillerFromDeathEvent(event);
+        return EventUtils.getTamedKillerFromDeathEvent(event);
     }
 
     @Override

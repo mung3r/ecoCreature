@@ -9,11 +9,10 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-public class Utils
+public class EventUtils
 {
-    public static boolean isUnderSeaLevel(Entity entity)
+    private EventUtils()
     {
-        return entity != null && (entity.getLocation().getBlockY() < entity.getWorld().getSeaLevel());
     }
 
     public static Player getKillerFromDeathEvent(EntityDeathEvent event)
@@ -62,19 +61,5 @@ public class Utils
     public static boolean isPVPDeath(PlayerDeathEvent event)
     {
         return event != null && event.getEntity().getKiller() != null;
-    }
-
-    public static boolean isOwner(Player player, Entity entity)
-    {
-        if (entity instanceof Tameable) {
-            Tameable tameable = (Tameable) entity;
-            if (tameable.isTamed() && tameable.getOwner() instanceof Player) {
-                Player owner = (Player) tameable.getOwner();
-                if (owner.getName().equals(player.getName())) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }

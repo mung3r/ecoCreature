@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.rewards;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -8,11 +9,12 @@ import java.util.Random;
 import java.util.Set;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
 public class Drop
 {
@@ -22,7 +24,6 @@ public class Drop
     private int maxAmount;
     private int minAmount;
     private double percentage;
-    private boolean isFixedDrops;
     private Set<ecoEnchantment> enchantments;
     private final Random random = new Random();
 
@@ -124,16 +125,6 @@ public class Drop
         this.percentage = percentage;
     }
 
-    public boolean getIsFixedDrops()
-    {
-        return isFixedDrops;
-    }
-
-    public void setIsFixedDrops(boolean isFixedDrops)
-    {
-        this.isFixedDrops = isFixedDrops;
-    }
-
     public void addEnchantment(Enchantment enchantment, int minLevel, int maxLevel)
     {
         if (enchantment == null) {
@@ -146,7 +137,7 @@ public class Drop
         enchantments.add(e);
     }
 
-    public ItemStack computeItemStack()
+    public ItemStack computeItemStack(boolean isFixedDrops)
     {
         if (Math.random() * 100.0D < percentage) {
             int dropAmount = isFixedDrops ? maxAmount : minAmount + random.nextInt(Math.abs(maxAmount - minAmount + 1));
@@ -177,29 +168,38 @@ public class Drop
         return null;
     }
 
-    @Override
-    public String toString()
+    public static List<Drop> parseConfig(ConfigurationSection config)
     {
-        return String.format("Drop [item=%s, data=%s, durabilit=%s, maxAmount=%s, minAmount=%s, percentage=%s, isFixedDrops=%s, enchantments=%s, random=%s]",
-                item, data, durability, maxAmount, minAmount, percentage, isFixedDrops, enchantments, random);
-    }
+        List<Drop> drops = null;
 
-    public static List<Drop> parseDrops(String dropsConfig, boolean isFixedDrops)
-    {
-        List<String> drops = new ArrayList<String>();
-
-        if (dropsConfig != null && !dropsConfig.isEmpty()) {
-            drops.addAll(Arrays.asList(dropsConfig.split(";")));
+        if (config.getList("Drops") != null) {
+            List<String> dropsList = config.getStringList("Drops");
+            drops = Drop.parseDrops(dropsList);
+        }
+        else {
+            drops = Drop.parseDrops(config.getString("Drops"));
         }
 
-        return parseDrops(drops, isFixedDrops);
+        return drops;
     }
 
-    public static List<Drop> parseDrops(List<String> dropsConfig, boolean isFixedDrops)
+    public static List<Drop> parseDrops(String dropsConfig)
     {
-        List<Drop> drops = new ArrayList<Drop>();
+        List<Drop> drops = null;
 
         if (dropsConfig != null && !dropsConfig.isEmpty()) {
+            drops = parseDrops(Arrays.asList(dropsConfig.split(";")));
+        }
+
+        return drops;
+    }
+
+    public static List<Drop> parseDrops(List<String> dropsConfig)
+    {
+        List<Drop> drops = null;
+
+        if (dropsConfig != null && !dropsConfig.isEmpty()) {
+            drops = new ArrayList<Drop>();
             try {
                 for (String dropString : dropsConfig) {
                     Drop drop = new Drop();
@@ -224,8 +224,9 @@ public class Drop
                     // check for data id
                     String[] itemSubParts = itemParts[0].split("\\.");
                     drop.setItem(Material.matchMaterial(itemSubParts[0]));
-                    if (drop.getItem() == null)
-                        throw new Exception();
+                    if (drop.getItem() == null) {
+                        throw new ParseException(itemParts[0], 0);
+                    }
                     drop.setData(itemSubParts.length > 1 ? Byte.parseByte(itemSubParts[1]) : null);
                     drop.setDurability(itemSubParts.length > 2 ? Short.parseShort(itemSubParts[2]) : null);
                     // check for range on amount
@@ -238,12 +239,11 @@ public class Drop
                         drop.setMaxAmount(Integer.parseInt(dropParts[1]));
                     }
                     drop.setPercentage(Double.parseDouble(dropParts[2]));
-                    drop.setIsFixedDrops(isFixedDrops);
                     drops.add(drop);
                 }
             }
             catch (Exception exception) {
-                ecoCreature.getECLogger().warning("Failed to parse drops: " + dropsConfig);
+                ECLogger.getInstance().warning("Failed to parse drops: " + dropsConfig);
             }
         }
 

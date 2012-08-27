@@ -6,25 +6,39 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.commons.TimePeriod;
-import se.crafted.chrisb.ecoCreature.messages.Message;
+import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.messages.MessageManager;
+import se.crafted.chrisb.ecoCreature.rewards.Coin;
 import se.crafted.chrisb.ecoCreature.rewards.Drop;
+import se.crafted.chrisb.ecoCreature.rewards.Exp;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.RewardManager;
 import se.crafted.chrisb.ecoCreature.rewards.RewardType;
+import se.crafted.chrisb.ecoCreature.rewards.gain.EnvironmentGain;
+import se.crafted.chrisb.ecoCreature.rewards.gain.FactionsGain;
+import se.crafted.chrisb.ecoCreature.rewards.gain.Gain;
+import se.crafted.chrisb.ecoCreature.rewards.gain.GroupGain;
+import se.crafted.chrisb.ecoCreature.rewards.gain.HeroesGain;
+import se.crafted.chrisb.ecoCreature.rewards.gain.McMMOGain;
+import se.crafted.chrisb.ecoCreature.rewards.gain.MobArenaGain;
+import se.crafted.chrisb.ecoCreature.rewards.gain.RegionGain;
+import se.crafted.chrisb.ecoCreature.rewards.gain.RegiosGain;
+import se.crafted.chrisb.ecoCreature.rewards.gain.ResidenceGain;
+import se.crafted.chrisb.ecoCreature.rewards.gain.TimeGain;
+import se.crafted.chrisb.ecoCreature.rewards.gain.TownyGain;
 
 public class ConfigManager
 {
@@ -39,6 +53,7 @@ public class ConfigManager
     private File defaultConfigFile;
     private FileConfiguration defaultConfig;
     private Map<String, FileConfiguration> worldConfigs;
+    private Map<String, RewardManager> globalRewardManager;
 
     public ConfigManager(ecoCreature plugin)
     {
@@ -50,9 +65,14 @@ public class ConfigManager
             load();
         }
         catch (Exception e) {
-            ecoCreature.getECLogger().severe("Failed to load config: " + e.toString());
+            ECLogger.getInstance().severe("Failed to load config: " + e.toString());
             Bukkit.getPluginManager().disablePlugin(plugin);
         }
+    }
+
+    public Map<String, RewardManager> getGlobalRewardManager()
+    {
+        return globalRewardManager;
     }
 
     private void load() throws IOException, InvalidConfigurationException
@@ -66,21 +86,20 @@ public class ConfigManager
             defaultConfig.load(defaultConfigFile);
         }
         else if (oldConfigFile.exists()) {
-            ecoCreature.getECLogger().info("Converting old config file.");
+            ECLogger.getInstance().info("Converting old config file.");
             defaultConfig = getConfig(oldConfigFile);
             if (oldConfigFile.delete()) {
-                ecoCreature.getECLogger().info("Old config file converted.");
+                ECLogger.getInstance().info("Old config file converted.");
             }
         }
         else {
             defaultConfig = getConfig(defaultConfigFile);
         }
 
-        ecoCreature.getECLogger().info("Loaded config defaults.");
-        MessageManager defaultMessageManager = loadMessageConfig(defaultConfig);
+        ECLogger.getInstance().info("Loaded config defaults.");
         RewardManager defaultRewardManager = loadRewardConfig(defaultConfig);
-        plugin.getGlobalMessageManager().put(DEFAULT_WORLD, defaultMessageManager);
-        plugin.getGlobalRewardManager().put(DEFAULT_WORLD, defaultRewardManager);
+        globalRewardManager = new HashMap<String, RewardManager>();
+        globalRewardManager.put(DEFAULT_WORLD, defaultRewardManager);
 
         worldConfigs = new HashMap<String, FileConfiguration>();
 
@@ -90,14 +109,12 @@ public class ConfigManager
 
             if (worldConfigFile.exists()) {
                 FileConfiguration worldConfig = getConfig(worldConfigFile);
-                ecoCreature.getECLogger().info("Loaded config for " + world.getName() + " world.");
-                plugin.getGlobalMessageManager().put(world.getName(), loadMessageConfig(worldConfig));
-                plugin.getGlobalRewardManager().put(world.getName(), loadRewardConfig(worldConfig));
+                ECLogger.getInstance().info("Loaded config for " + world.getName() + " world.");
+                globalRewardManager.put(world.getName(), loadRewardConfig(worldConfig));
                 worldConfigs.put(world.getName(), worldConfig);
             }
             else {
-                plugin.getGlobalMessageManager().put(world.getName(), defaultMessageManager);
-                plugin.getGlobalRewardManager().put(world.getName(), defaultRewardManager);
+                globalRewardManager.put(world.getName(), defaultRewardManager);
             }
 
         }
@@ -115,27 +132,17 @@ public class ConfigManager
             }
         }
         catch (Exception e) {
-            ecoCreature.getECLogger().severe(e.getMessage());
+            ECLogger.getInstance().severe(e.getMessage());
         }
-    }
-
-    private MessageManager loadMessageConfig(FileConfiguration config)
-    {
-        MessageManager messageManager = new MessageManager(plugin);
-
-        messageManager.shouldOutputMessages = config.getBoolean("System.Messages.Output", true);
-        messageManager.shouldLogCoinRewards = config.getBoolean("System.Messages.LogCoinRewards", true);
-        messageManager.noBowRewardMessage = new Message(convertMessage(config.getString("System.Messages.NoBowMessage", MessageManager.NO_BOW_REWARD_MESSAGE)), true);
-        messageManager.noCampMessage = new Message(convertMessage(config.getString("System.Messages.NoCampMessage", MessageManager.NO_CAMP_MESSAGE)), config.getBoolean("System.Messages.Spawner", false));
-        messageManager.deathPenaltyMessage = new Message(convertMessage(config.getString("System.Messages.DeathPenaltyMessage", MessageManager.DEATH_PENALTY_MESSAGE)), true);
-        messageManager.pvpRewardMessage = new Message(convertMessage(config.getString("System.Messages.PVPRewardMessage", MessageManager.PVP_REWARD_MESSAGE)), true);
-
-        return messageManager;
     }
 
     private RewardManager loadRewardConfig(FileConfiguration config)
     {
-        RewardManager rewardManager = new RewardManager(plugin);
+        RewardManager rewardManager = new RewardManager();
+
+        rewardManager.setMetricsManager(plugin.getMetrics());
+        rewardManager.setMessageManager(MessageManager.parseConfig(config));
+        rewardManager.setGainMultipliers(loadGainConfig(config));
 
         rewardManager.isIntegerCurrency = config.getBoolean("System.Economy.IntegerCurrency", false);
 
@@ -161,120 +168,37 @@ public class ConfigManager
         rewardManager.hasMobArenaRewards = config.getBoolean("System.Hunting.MobArenaRewards", false);
         rewardManager.hasCreativeModeRewards = config.getBoolean("System.Hunting.CreativeModeRewards", false);
 
-        ConfigurationSection groupGainConfig = config.getConfigurationSection("Gain.Groups");
-        if (groupGainConfig != null) {
-            for (String group : groupGainConfig.getKeys(false)) {
-                rewardManager.groupMultiplier.put(group.toLowerCase(), Double.valueOf(groupGainConfig.getConfigurationSection(group).getDouble("Amount", 0.0D)));
-            }
-        }
-
-        ConfigurationSection timeGainConfig = config.getConfigurationSection("Gain.Time");
-        if (timeGainConfig != null) {
-            for (String period : timeGainConfig.getKeys(false)) {
-                rewardManager.timeMultiplier.put(TimePeriod.fromName(period), Double.valueOf(timeGainConfig.getConfigurationSection(period).getDouble("Amount", 1.0D)));
-            }
-        }
-
-        ConfigurationSection envGainConfig = config.getConfigurationSection("Gain.Environment");
-        if (envGainConfig != null) {
-            for (String environment : envGainConfig.getKeys(false)) {
-                try {
-                    rewardManager.envMultiplier.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(envGainConfig.getConfigurationSection(environment).getDouble("Amount", 1.0D)));
-                }
-                catch (Exception e) {
-                    ecoCreature.getECLogger().warning("Skipping unknown environment name: " + environment);
-                }
-            }
-        }
-
-        ConfigurationSection worldGuardGainConfig = config.getConfigurationSection("Gain.WorldGuard");
-        if (worldGuardGainConfig != null) {
-            for (String regionName : worldGuardGainConfig.getKeys(false)) {
-                rewardManager.worldGuardMultiplier.put(regionName, Double.valueOf(worldGuardGainConfig.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
-            }
-        }
-
-        ConfigurationSection regiosGainConfig = config.getConfigurationSection("Gain.Regios");
-        if (regiosGainConfig != null) {
-            for (String regionName: regiosGainConfig.getKeys(false)) {
-                rewardManager.regiosMultiplier.put(regionName, Double.valueOf(regiosGainConfig.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
-            }
-        }
-
-        ConfigurationSection residenceGainConfig = config.getConfigurationSection("Gain.Residence");
-        if (residenceGainConfig != null) {
-            for (String residenceName: residenceGainConfig.getKeys(false)) {
-                rewardManager.residenceMultiplier.put(residenceName, Double.valueOf(residenceGainConfig.getConfigurationSection(residenceName).getDouble("Amount", 1.0D)));
-            }
-        }
-
-        ConfigurationSection factionsGainConfig = config.getConfigurationSection("Gain.Factions");
-        if (factionsGainConfig != null) {
-            for (String factionsTag: factionsGainConfig.getKeys(false)) {
-                rewardManager.factionsMultiplier.put(factionsTag, Double.valueOf(factionsGainConfig.getConfigurationSection(factionsTag).getDouble("Amount", 1.0D)));
-            }
-        }
-
-        ConfigurationSection townyGainConfig = config.getConfigurationSection("Gain.Towny");
-        if (townyGainConfig != null) {
-            for (String townName: townyGainConfig.getKeys(false)) {
-                rewardManager.townyMultiplier.put(townName, Double.valueOf(townyGainConfig.getConfigurationSection(townName).getDouble("Amount", 1.0D)));
-            }
-        }
-
-        ConfigurationSection mobArenaGainConfig = config.getConfigurationSection("Gain.MobArena.InArena");
-        if (mobArenaGainConfig != null) {
-            rewardManager.mobArenaMultiplier = mobArenaGainConfig.getDouble("Amount", 1.0D);
-            rewardManager.isMobArenaShare = mobArenaGainConfig.getBoolean("Share", true);
-        }
-        else {
-            rewardManager.mobArenaMultiplier = 1.0D;
-        }
-
-        ConfigurationSection heroesGainConfig = config.getConfigurationSection("Gain.Heroes.InParty");
-        if (heroesGainConfig != null) {
-            rewardManager.heroesPartyMultiplier = heroesGainConfig.getDouble("Amount", 1.0D);
-            rewardManager.isHeroesPartyShare = heroesGainConfig.getBoolean("Share", true);
-        }
-        else {
-            rewardManager.heroesPartyMultiplier = 1.0D;
-        }
-
-        ConfigurationSection mcMMOGainConfig = config.getConfigurationSection("Gain.mcMMO.InParty");
-        if (mcMMOGainConfig != null) {
-            rewardManager.mcMMOPartyMultiplier = mcMMOGainConfig.getDouble("Amount", 1.0D);
-            rewardManager.isMcMMOPartyShare = mcMMOGainConfig.getBoolean("Share", true);
-        }
-
         Map<String, Reward> rewardSet = new HashMap<String, Reward>();
         ConfigurationSection rewardSetsConfig = config.getConfigurationSection("RewardSets");
         if (rewardSetsConfig != null) {
             for (String setName : rewardSetsConfig.getKeys(false)) {
-                rewardSet.put(setName, createReward(RewardType.CUSTOM, rewardSetsConfig.getConfigurationSection(setName), rewardManager, config.getBoolean("System.Messages.NoReward", false)));
+                rewardSet.put(setName, createReward(RewardType.CUSTOM, rewardSetsConfig.getConfigurationSection(setName)));
             }
         }
 
         ConfigurationSection rewardTableConfig = config.getConfigurationSection("RewardTable");
         if (rewardTableConfig != null) {
+            Map<RewardType, List<Reward>> rewards = new HashMap<RewardType, List<Reward>>();
             for (String rewardName : rewardTableConfig.getKeys(false)) {
-                Reward reward = createReward(RewardType.fromName(rewardName), rewardTableConfig.getConfigurationSection(rewardName), rewardManager, config.getBoolean("System.Messages.NoReward", false));
+                Reward reward = createReward(RewardType.fromName(rewardName), rewardTableConfig.getConfigurationSection(rewardName));
 
-                if (!rewardManager.rewards.containsKey(reward.getRewardType())) {
-                    rewardManager.rewards.put(reward.getRewardType(), new ArrayList<Reward>());
+                if (!rewards.containsKey(reward.getType())) {
+                    rewards.put(reward.getType(), new ArrayList<Reward>());
                 }
 
                 if (rewardTableConfig.getConfigurationSection(rewardName).getList("Sets") != null) {
                     List<String> setList = rewardTableConfig.getConfigurationSection(rewardName).getStringList("Sets");
                     for (String setName : setList) {
                         if (rewardSet.containsKey(setName)) {
-                            rewardManager.rewards.get(reward.getRewardType()).add(mergeReward(reward, rewardSet.get(setName)));
+                            rewards.get(reward.getType()).add(mergeReward(reward, rewardSet.get(setName)));
                         }
                     }
                 }
                 else {
-                    rewardManager.rewards.get(reward.getRewardType()).add(reward);
+                    rewards.get(reward.getType()).add(reward);
                 }
             }
+            rewardManager.setRewards(rewards);
         }
 
         return rewardManager;
@@ -283,25 +207,37 @@ public class ConfigManager
     private static Reward mergeReward(Reward from, Reward to)
     {
         Reward reward = new Reward();
+        reward.setName(to.getName());
+        reward.setType(to.getType());
 
-        reward.setRewardName(to.getRewardName());
-        reward.setRewardType(to.getRewardType());
-
-        reward.setDrops(!from.getDrops().isEmpty() ? from.getDrops() : to.getDrops());
-
-        reward.setCoinMin(from.getCoinMin() > 0.0 ? from.getCoinMin() : to.getCoinMin());
-        reward.setCoinMax(from.getCoinMax() > 0.0 ? from.getCoinMax() : to.getCoinMax());
-        reward.setCoinPercentage(from.getCoinPercentage() > 0.0 ? from.getCoinPercentage() : to.getCoinPercentage());
-
-        reward.setExpMin(from.getExpMin() != null ? from.getExpMin() : to.getExpMin());
-        reward.setExpMax(from.getExpMax() != null ? from.getExpMax() : to.getExpMax());
-        reward.setExpPercentage(from.getExpPercentage() != null ? from.getExpPercentage() : to.getExpPercentage());
+        reward.setDrops(from.hasDrops() ? from.getDrops() : to.getDrops());
+        reward.setCoin(from.hasCoin() ? from.getCoin() : to.getCoin());
+        reward.setExp(from.hasExp() ? from.getExp() : to.getExp());
 
         reward.setNoRewardMessage(!from.getNoRewardMessage().equals(to.getNoRewardMessage()) ? from.getNoRewardMessage() : to.getNoRewardMessage());
         reward.setRewardMessage(!from.getRewardMessage().equals(to.getRewardMessage()) ? from.getRewardMessage() : to.getRewardMessage());
         reward.setPenaltyMessage(!from.getPenaltyMessage().equals(to.getPenaltyMessage()) ? from.getPenaltyMessage() : to.getPenaltyMessage());
 
         return reward;
+    }
+
+    private Set<Gain> loadGainConfig(ConfigurationSection config)
+    {
+        Set<Gain> gainMultipliers = new HashSet<Gain>();
+
+        gainMultipliers.add(GroupGain.parseConfig(config.getConfigurationSection("Gain.Groups")));
+        gainMultipliers.add(TimeGain.parseConfig(config.getConfigurationSection("Gain.Time")));
+        gainMultipliers.add(EnvironmentGain.parseConfig(config.getConfigurationSection("Gain.Environment")));
+        gainMultipliers.add(RegionGain.parseConfig(config.getConfigurationSection("Gain.WorldGuard")));
+        gainMultipliers.add(RegiosGain.parseConfig(config.getConfigurationSection("Gain.Regios")));
+        gainMultipliers.add(ResidenceGain.parseConfig(config.getConfigurationSection("Gain.Residence")));
+        gainMultipliers.add(FactionsGain.parseConfig(config.getConfigurationSection("Gain.Factions")));
+        gainMultipliers.add(TownyGain.parseConfig(config.getConfigurationSection("Gain.Towny")));
+        gainMultipliers.add(MobArenaGain.parseConfig(config.getConfigurationSection("Gain.MobArena.InArena")));
+        gainMultipliers.add(HeroesGain.parseConfig(config.getConfigurationSection("Gain.Heroes.InParty")));
+        gainMultipliers.add(McMMOGain.parseConfig(config.getConfigurationSection("Gain.mcMMO.InParty")));
+
+        return gainMultipliers;
     }
 
     private FileConfiguration getConfig(File file) throws IOException, InvalidConfigurationException
@@ -323,10 +259,10 @@ public class ConfigManager
             inputStream.close();
             outputStream.close();
 
-            ecoCreature.getECLogger().info("Default config written to " + file.getName());
+            ECLogger.getInstance().info("Default config written to " + file.getName());
         }
         else {
-            ecoCreature.getECLogger().severe("Default config could not be created!");
+            ECLogger.getInstance().severe("Default config could not be created!");
         }
 
         config.load(file);
@@ -336,50 +272,20 @@ public class ConfigManager
         return config;
     }
 
-    private static Reward createReward(RewardType rewardType, ConfigurationSection rewardConfig, RewardManager rewardManager, boolean isNoRewardMessage)
+    private static Reward createReward(RewardType type, ConfigurationSection config)
     {
         Reward reward = new Reward();
-        reward.setRewardName(rewardConfig.getName());
-        reward.setRewardType(rewardType);
+        reward.setName(config.getName());
+        reward.setType(type);
 
-        if (rewardConfig.getList("Drops") != null) {
-            List<String> dropsList = rewardConfig.getStringList("Drops");
-            reward.setDrops(Drop.parseDrops(dropsList, rewardManager.isFixedDrops));
-        }
-        else {
-            reward.setDrops(Drop.parseDrops(rewardConfig.getString("Drops"), rewardManager.isFixedDrops));
-        }
-        reward.setCoinMax(rewardConfig.getDouble("Coin_Maximum", 0));
-        reward.setCoinMin(rewardConfig.getDouble("Coin_Minimum", 0));
-        reward.setCoinPercentage(rewardConfig.getDouble("Coin_Percent", 0));
-        String expMin = rewardConfig.getString("ExpMin");
-        String expMax = rewardConfig.getString("ExpMax");
-        String expPercentage = rewardConfig.getString("ExpPercent");
-        if (expMin != null && expMax != null && expPercentage != null) {
-            try {
-                reward.setExpMin(Integer.parseInt(expMin));
-                reward.setExpMax(Integer.parseInt(expMax));
-                reward.setExpPercentage(Double.parseDouble(expPercentage));
-            }
-            catch (NumberFormatException e) {
-                ecoCreature.getECLogger().warning("Could not parse exp for " + rewardConfig.getName());
-            }
-        }
+        reward.setDrops(Drop.parseConfig(config));
+        reward.setCoin(Coin.parseConfig(config));
+        reward.setExp(Exp.parseConfig(config));
 
-        reward.setNoRewardMessage(new Message(convertMessage(rewardConfig.getString("NoReward_Message", MessageManager.NO_REWARD_MESSAGE)), isNoRewardMessage));
-        reward.setRewardMessage(new Message(convertMessage(rewardConfig.getString("Reward_Message", MessageManager.REWARD_MESSAGE)), true));
-        reward.setPenaltyMessage(new Message(convertMessage(rewardConfig.getString("Penalty_Message", MessageManager.PENALTY_MESSAGE)), true));
+        reward.setNoRewardMessage(MessageManager.convertMessage(config.getString("NoReward_Message", MessageManager.NO_REWARD_MESSAGE)));
+        reward.setRewardMessage(MessageManager.convertMessage(config.getString("Reward_Message", MessageManager.REWARD_MESSAGE)));
+        reward.setPenaltyMessage(MessageManager.convertMessage(config.getString("Penalty_Message", MessageManager.PENALTY_MESSAGE)));
 
         return reward;
     }
-
-    private static String convertMessage(String message)
-    {
-        if (message != null) {
-            return message.replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
-        }
-
-        return null;
-    }
-
 }

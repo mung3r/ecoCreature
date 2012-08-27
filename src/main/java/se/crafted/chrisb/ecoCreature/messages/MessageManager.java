@@ -1,16 +1,12 @@
 package se.crafted.chrisb.ecoCreature.messages;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 
 public class MessageManager
 {
-    private static final String PLAYER_TOKEN = "<plr>";
-    private static final String AMOUNT_TOKEN = "<amt>";
-    private static final String ITEM_TOKEN = "<itm>";
-    private static final String CREATURE_TOKEN = "<crt>";
-
     public static final String NO_CAMP_MESSAGE = "&7You find no rewards camping monster spawners.";
     public static final String NO_BOW_REWARD_MESSAGE = "&7You find no rewards on this creature.";
     public static final String DEATH_PENALTY_MESSAGE = "&7You wake up to find &6<amt>&7 missing from your pockets!";
@@ -21,82 +17,83 @@ public class MessageManager
     public static final String PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.";
 
     public boolean shouldOutputMessages;
+    public boolean shouldOutputNoReward;
+    public boolean shouldOutputSpawnerCamp;
     public boolean shouldLogCoinRewards;
 
-    public Message noBowRewardMessage;
-    public Message noCampMessage;
-    public Message deathPenaltyMessage;
-    public Message pvpRewardMessage;
+    public String noBowRewardMessage;
+    public String noCampMessage;
+    public String deathPenaltyMessage;
+    public String pvpRewardMessage;
 
-    private final ecoCreature plugin;
-
-    public MessageManager(ecoCreature plugin)
+    public void basicMessage(String template, Player player)
     {
-        this.plugin = plugin;
+        Message message = new BasicMessage(this);
+        message.setTemplate(template);
+        message.addParameter(MessageToken.PLAYER_TOKEN, player.getName());
+        message.send();
     }
 
-    public void sendMessage(Message message, Player player)
+    public void spawnerMessage(String template, Player player)
     {
-        if (shouldOutputMessages && message.isEnabled()) {
-            player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()));
-        }
+        Message message = new SpawnerMessage(this);
+        message.setTemplate(template);
+        message.addParameter(MessageToken.PLAYER_TOKEN, player.getName());
+        message.send();
     }
 
-    public void sendMessage(Message message, Player player, double amount)
+    public void penaltyMessage(String template, Player player, double amount)
     {
-        if (shouldOutputMessages && message.isEnabled() && plugin.hasEconomy()) {
-            player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()).replaceAll(AMOUNT_TOKEN, plugin.getEconomy().format(amount).replaceAll("\\$", "\\\\\\$")));
-        }
-
-        if (shouldLogCoinRewards) {
-            ecoCreature.getECLogger().info(player.getName() + " received " + plugin.getEconomy().format(amount));
-        }
+        Message message = new RewardMessage(this);
+        message.setTemplate(template);
+        message.addParameter(MessageToken.PLAYER_TOKEN, player.getName());
+        message.addParameter(MessageToken.AMOUNT_TOKEN, DependencyUtils.getEconomy().format(amount));
+        message.send();
     }
 
-    public void sendMessage(Message message, Player player, double amount, String creatureName, String weaponName)
+    public void rewardMessage(String template, Player player, double amount, String creatureName, String weaponName)
     {
-        if (shouldOutputMessages && message.isEnabled() && plugin.hasEconomy()) {
-            player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()).replaceAll(AMOUNT_TOKEN, plugin.getEconomy().format(amount).replaceAll("\\$", "\\\\\\$")).replaceAll(ITEM_TOKEN, toCamelCase(weaponName)).replaceAll(CREATURE_TOKEN, creatureName));
-        }
-
-        if (shouldLogCoinRewards) {
-            ecoCreature.getECLogger().info(player.getName() + " received " + plugin.getEconomy().format(amount));
-        }
+        Message message = new RewardMessage(this);
+        message.setTemplate(template);
+        message.addParameter(MessageToken.PLAYER_TOKEN, player.getName());
+        message.addParameter(MessageToken.AMOUNT_TOKEN, DependencyUtils.getEconomy().format(amount));
+        message.addParameter(MessageToken.CREATURE_TOKEN, creatureName);
+        message.addParameter(MessageToken.ITEM_TOKEN, weaponName);
+        message.send();
     }
 
-    public void sendMessage(Message message, Player player, String creatureName, String weaponName)
+    public void noRewardMessage(String template, Player player, String creatureName, String weaponName)
     {
-        if (shouldOutputMessages && message.isEnabled()) {
-            player.sendMessage(message.getMessage().replaceAll(PLAYER_TOKEN, player.getName()).replaceAll(CREATURE_TOKEN, creatureName).replaceAll(ITEM_TOKEN, toCamelCase(weaponName)));
-        }
+        Message message = new NoRewardMessage(this);
+        message.setTemplate(template);
+        message.addParameter(MessageToken.PLAYER_TOKEN, player.getName());
+        message.addParameter(MessageToken.CREATURE_TOKEN, creatureName);
+        message.addParameter(MessageToken.ITEM_TOKEN, weaponName);
+        message.send();
     }
 
-    private static String toCamelCase(String rawItemName)
+    public static MessageManager parseConfig(ConfigurationSection config)
     {
-        String[] rawItemNameParts = rawItemName.split("_");
-        StringBuilder itemNameBuilder = new StringBuilder("");
+        MessageManager messageManager = new MessageManager();
 
-        for (String itemNamePart : rawItemNameParts) {
-            itemNameBuilder.append(" ").append(toProperCase(itemNamePart));
-        }
+        messageManager.shouldOutputMessages = config.getBoolean("System.Messages.Output", true);
+        messageManager.shouldOutputNoReward = config.getBoolean("System.Messages.NoReward", false);
+        messageManager.shouldOutputSpawnerCamp = config.getBoolean("System.Messages.Spawner", false);
+        messageManager.shouldLogCoinRewards = config.getBoolean("System.Messages.LogCoinRewards", true);
+        messageManager.noBowRewardMessage = convertMessage(config.getString("System.Messages.NoBowMessage", MessageManager.NO_BOW_REWARD_MESSAGE));
+        messageManager.noCampMessage = convertMessage(config.getString("System.Messages.NoCampMessage", MessageManager.NO_CAMP_MESSAGE));
+        messageManager.deathPenaltyMessage = convertMessage(config.getString("System.Messages.DeathPenaltyMessage", MessageManager.DEATH_PENALTY_MESSAGE));
+        messageManager.pvpRewardMessage = convertMessage(config.getString("System.Messages.PVPRewardMessage", MessageManager.PVP_REWARD_MESSAGE));
 
-        String itemName = itemNameBuilder.toString();
-        if (itemName.trim().equals("Air")) {
-            itemName = "Fists";
-        }
-
-        if (itemName.trim().equals("Bow")) {
-            itemName = "Bow & Arrow";
-        }
-
-        return itemName.trim();
+        return messageManager;
     }
 
-    private static String toProperCase(String str)
+    public static String convertMessage(String message)
     {
-        if (str.length() < 1) {
-            return str;
+        if (message != null) {
+            return message.replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
         }
-        return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+
+        return null;
     }
 }

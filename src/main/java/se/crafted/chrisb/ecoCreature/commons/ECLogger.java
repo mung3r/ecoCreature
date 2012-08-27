@@ -5,12 +5,18 @@ import java.util.logging.Logger;
 public class ECLogger
 {
     private static final String LOG_NAME = "ecoCreature";
+    private static ECLogger instance = new ECLogger();
 
     private Logger logger;
     private String name;
     private boolean isDebug;
 
-    public ECLogger()
+    public static ECLogger getInstance()
+    {
+        return instance;
+    }
+
+    private ECLogger()
     {
         logger = Logger.getLogger("Minecraft");
         isDebug = false;

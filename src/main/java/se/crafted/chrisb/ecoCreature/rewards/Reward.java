@@ -2,49 +2,59 @@ package se.crafted.chrisb.ecoCreature.rewards;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.bukkit.inventory.ItemStack;
 
-import se.crafted.chrisb.ecoCreature.messages.Message;
-
-
 public class Reward
 {
-    private static Random random = new Random();
-
-    private String rewardName;
-    private RewardType rewardType;
+    private String name;
+    private RewardType type;
+    private Coin coin;
     private List<Drop> drops;
-    private Double coinMin;
-    private Double coinMax;
-    private Double coinPercentage;
-    private Integer expMin;
-    private Integer expMax;
-    private Double expPercentage;
+    private Exp exp;
 
-    private Message noRewardMessage;
-    private Message rewardMessage;
-    private Message penaltyMessage;
+    private String noRewardMessage;
+    private String rewardMessage;
+    private String penaltyMessage;
 
-    public String getRewardName()
+    public String getName()
     {
-        return rewardName;
+        return name;
     }
 
-    public void setRewardName(String rewardName)
+    public void setName(String name)
     {
-        this.rewardName = rewardName;
+        this.name = name;
     }
 
-    public void setRewardType(RewardType creatureType)
+    public void setType(RewardType type)
     {
-        this.rewardType = creatureType;
+        this.type = type;
     }
 
-    public RewardType getRewardType()
+    public RewardType getType()
     {
-        return rewardType;
+        return type;
+    }
+
+    public boolean hasCoin()
+    {
+        return coin != null;
+    }
+
+    public Coin getCoin()
+    {
+        return coin;
+    }
+
+    public void setCoin(Coin coin)
+    {
+        this.coin = coin;
+    }
+
+    public boolean hasDrops()
+    {
+        return drops != null;
     }
 
     public List<Drop> getDrops()
@@ -57,103 +67,58 @@ public class Reward
         this.drops = drops;
     }
 
-    public Double getCoinMin()
+    public boolean hasExp()
     {
-        return coinMin;
+        return exp != null;
     }
 
-    public void setCoinMin(Double coinMin)
+    public Exp getExp()
     {
-        this.coinMin = coinMin;
+        return exp;
     }
 
-    public Double getCoinMax()
+    public void setExp(Exp exp)
     {
-        return coinMax;
+        this.exp = exp;
     }
 
-    public void setCoinMax(Double coinMax)
-    {
-        this.coinMax = coinMax;
-    }
-
-    public Double getCoinPercentage()
-    {
-        return coinPercentage;
-    }
-
-    public void setCoinPercentage(Double coinPercentage)
-    {
-        this.coinPercentage = coinPercentage;
-    }
-
-    public Integer getExpMin()
-    {
-        return expMin;
-    }
-
-    public void setExpMin(Integer expMin)
-    {
-        this.expMin = expMin;
-    }
-
-    public Integer getExpMax()
-    {
-        return expMax;
-    }
-
-    public void setExpMax(Integer expMax)
-    {
-        this.expMax = expMax;
-    }
-
-    public Double getExpPercentage()
-    {
-        return expPercentage;
-    }
-
-    public void setExpPercentage(Double expPercentage)
-    {
-        this.expPercentage = expPercentage;
-    }
-
-    public Message getNoRewardMessage()
+    public String getNoRewardMessage()
     {
         return noRewardMessage;
     }
 
-    public void setNoRewardMessage(Message noRewardMessage)
+    public void setNoRewardMessage(String noRewardMessage)
     {
         this.noRewardMessage = noRewardMessage;
     }
 
-    public Message getRewardMessage()
+    public String getRewardMessage()
     {
         return rewardMessage;
     }
 
-    public void setRewardMessage(Message rewardMessage)
+    public void setRewardMessage(String rewardMessage)
     {
         this.rewardMessage = rewardMessage;
     }
 
-    public Message getPenaltyMessage()
+    public String getPenaltyMessage()
     {
         return penaltyMessage;
     }
 
-    public void setPenaltyMessage(Message penaltyMessage)
+    public void setPenaltyMessage(String penaltyMessage)
     {
         this.penaltyMessage = penaltyMessage;
     }
 
-    public List<ItemStack> computeDrops()
+    public List<ItemStack> computeDrops(boolean isFixedDrops)
     {
         List<ItemStack> stack = new ArrayList<ItemStack>();
 
         if (drops != null) {
             for (Drop drop : drops) {
-                ItemStack itemStack = drop.computeItemStack();
+                ItemStack itemStack = drop.computeItemStack(isFixedDrops);
                 if (itemStack != null) {
                     stack.add(itemStack);
                 }
@@ -163,58 +128,10 @@ public class Reward
         return stack;
     }
 
-    public double getRewardAmount()
-    {
-        double rewardAmount;
-
-        if (Math.random() > coinPercentage / 100.0D) {
-            rewardAmount = 0.0D;
-        }
-        else {
-            if (coinMin.equals(coinMax)) {
-                rewardAmount = coinMax;
-            }
-            else if (coinMin > coinMax) {
-                rewardAmount = coinMin;
-            }
-            else {
-                rewardAmount = coinMin + Math.random() * (coinMax - coinMin);
-            }
-        }
-
-        return rewardAmount;
-    }
-
-    public Integer getExpAmount()
-    {
-        Integer xpAmount;
-        if (expMin == null || expMax == null || expPercentage == null) {
-            xpAmount = null;
-        }
-        else {
-            if (Math.random() > expPercentage / 100.0D) {
-                xpAmount = 0;
-            }
-            else {
-                if (expMin.equals(expMax)) {
-                    xpAmount = expMin;
-                }
-                else if (expMin > expMax) {
-                    xpAmount = expMin;
-                }
-                else {
-                    xpAmount = expMin + random.nextInt(expMax - expMin + 1);
-                }
-            }
-        }
-
-        return xpAmount;
-    }
-
     @Override
     public String toString()
     {
-        return String.format("Reward [rewardName=%s, rewardType=%s, drops=%s, coinMin=%s, coinMax=%s, coinPercentage=%s, expMin=%s, expMax=%s, expPercentage=%s, noRewardMessage=%s, rewardMessage=%s, penaltyMessage=%s]", rewardName,
-                rewardType, drops, coinMin, coinMax, coinPercentage, expMin, expMax, expPercentage, noRewardMessage, rewardMessage, penaltyMessage);
+        return String.format("Reward [name=%s, type=%s, drops=%s, noRewardMessage=%s, rewardMessage=%s, penaltyMessage=%s]",
+                name, type, drops, noRewardMessage, rewardMessage, penaltyMessage);
     }
 }
