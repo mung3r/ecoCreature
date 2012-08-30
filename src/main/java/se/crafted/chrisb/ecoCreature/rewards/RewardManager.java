@@ -116,7 +116,7 @@ public class RewardManager
             if (reward.hasDrops() && shouldOverrideDrops) {
                 event.getDrops().clear();
             }
-            event.getDrops().addAll(reward.computeDrops(isFixedDrops));
+            event.getDrops().addAll(reward.getDropAmounts(isFixedDrops));
             if (reward.hasExp()) {
                 event.setDroppedExp(reward.getExp().getAmount());
             }
@@ -128,7 +128,7 @@ public class RewardManager
         if (amount > 0.0D && DependencyUtils.hasEconomy()) {
             amount = Math.min(amount, DependencyUtils.getEconomy().getBalance(event.getVictim().getName()));
             DependencyUtils.getEconomy().withdrawPlayer(event.getVictim().getName(), amount);
-            messageManager.penaltyMessage(messageManager.deathPenaltyMessage, event.getVictim(), amount);
+            messageManager.deathPenaltyMessage(messageManager.deathPenaltyMessage, event.getVictim(), amount);
 
             DependencyUtils.getEconomy().depositPlayer(event.getKiller().getName(), amount);
             messageManager.rewardMessage(messageManager.pvpRewardMessage, event.getKiller(), amount, event.getVictim().getName(), "");
@@ -144,7 +144,7 @@ public class RewardManager
         double amount = isPercentPenalty ? DependencyUtils.getEconomy().getBalance(player.getName()) * (penaltyAmount / 100.0D) : penaltyAmount;
         if (amount > 0.0D) {
             DependencyUtils.getEconomy().withdrawPlayer(player.getName(), amount);
-            messageManager.penaltyMessage(messageManager.deathPenaltyMessage, player, amount);
+            messageManager.deathPenaltyMessage(messageManager.deathPenaltyMessage, player, amount);
         }
     }
 
@@ -212,7 +212,7 @@ public class RewardManager
             }
             registerReward(event.getKiller(), reward, event.getWeaponName());
             try {
-                List<ItemStack> rewardDrops = reward.computeDrops(isFixedDrops);
+                List<ItemStack> rewardDrops = reward.getDropAmounts(isFixedDrops);
                 if (!rewardDrops.isEmpty()) {
                     if (!event.getDrops().isEmpty() && shouldOverrideDrops) {
                         event.getDrops().clear();
@@ -242,7 +242,7 @@ public class RewardManager
                 Reward reward = getRewardForType(RewardType.SPAWNER);
                 registerReward(player, reward, Material.getMaterial(player.getItemInHand().getTypeId()).name());
 
-                for (ItemStack itemStack : reward.computeDrops(isFixedDrops)) {
+                for (ItemStack itemStack : reward.getDropAmounts(isFixedDrops)) {
                     block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
                 }
             }
@@ -260,7 +260,7 @@ public class RewardManager
                 reward.getCoin().setMax(reward.getCoin().getMax() * deaths);
                 registerReward(player, reward, "");
 
-                for (ItemStack itemStack : reward.computeDrops(isFixedDrops)) {
+                for (ItemStack itemStack : reward.getDropAmounts(isFixedDrops)) {
                     player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
                 }
             }
@@ -278,7 +278,7 @@ public class RewardManager
                 reward.getCoin().setMax(reward.getCoin().getMax() * kills);
                 registerReward(player, reward, "");
 
-                for (ItemStack itemStack : reward.computeDrops(isFixedDrops)) {
+                for (ItemStack itemStack : reward.getDropAmounts(isFixedDrops)) {
                     player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
                 }
             }
@@ -391,7 +391,7 @@ public class RewardManager
             }
             else if (amount < 0.0D && DependencyUtils.hasEconomy()) {
                 DependencyUtils.getEconomy().withdrawPlayer(member.getName(), Math.abs(amount));
-                messageManager.rewardMessage(reward.getPenaltyMessage(), member, Math.abs(amount), reward.getName(), weaponName);
+                messageManager.penaltyMessage(reward.getPenaltyMessage(), member, amount, reward.getName(), weaponName);
             }
             else {
                 messageManager.noRewardMessage(reward.getNoRewardMessage(), member, reward.getName(), weaponName);

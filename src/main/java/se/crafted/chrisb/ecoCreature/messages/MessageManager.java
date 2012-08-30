@@ -42,7 +42,7 @@ public class MessageManager
         message.send();
     }
 
-    public void penaltyMessage(String template, Player player, double amount)
+    public void deathPenaltyMessage(String template, Player player, double amount)
     {
         Message message = new RewardMessage(this);
         message.setTemplate(template);
@@ -60,6 +60,11 @@ public class MessageManager
         message.addParameter(MessageToken.CREATURE_TOKEN, creatureName);
         message.addParameter(MessageToken.ITEM_TOKEN, weaponName);
         message.send();
+    }
+
+    public void penaltyMessage(String template, Player player, double amount, String creatureName, String weaponName)
+    {
+        rewardMessage(template, player, Math.abs(amount), creatureName, weaponName);
     }
 
     public void noRewardMessage(String template, Player player, String creatureName, String weaponName)

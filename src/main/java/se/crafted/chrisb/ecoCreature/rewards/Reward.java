@@ -112,7 +112,7 @@ public class Reward
         this.penaltyMessage = penaltyMessage;
     }
 
-    public List<ItemStack> computeDrops(boolean isFixedDrops)
+    public List<ItemStack> getDropAmounts(boolean isFixedDrops)
     {
         List<ItemStack> stacks = new ArrayList<ItemStack>();
 
