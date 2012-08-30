@@ -11,6 +11,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.commons.EventUtils;
+import se.crafted.chrisb.ecoCreature.rewards.RewardType;
 
 public class CreatureKilledByPlayerEvent extends Event
 {
@@ -48,12 +49,22 @@ public class CreatureKilledByPlayerEvent extends Event
         return (LivingEntity) event.getEntity();
     }
 
-    public Material getWeapon()
+    public String getWeaponName()
+    {
+        return usedTamedCreature() ? RewardType.fromEntity(getTamedCreature()).getName() : getWeapon().name();
+    }
+
+    public boolean usedTamedCreature()
+    {
+        return getTamedCreature() != null;
+    }
+
+    private Material getWeapon()
     {
         return Material.getMaterial(getPlayer().getItemInHand().getTypeId());
     }
 
-    public LivingEntity getTamedCreature()
+    private LivingEntity getTamedCreature()
     {
         return EventUtils.getTamedKillerFromDeathEvent(event);
     }

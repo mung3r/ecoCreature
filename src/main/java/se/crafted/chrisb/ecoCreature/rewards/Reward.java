@@ -114,18 +114,18 @@ public class Reward
 
     public List<ItemStack> computeDrops(boolean isFixedDrops)
     {
-        List<ItemStack> stack = new ArrayList<ItemStack>();
+        List<ItemStack> stacks = new ArrayList<ItemStack>();
 
         if (drops != null) {
             for (Drop drop : drops) {
                 ItemStack itemStack = drop.computeItemStack(isFixedDrops);
                 if (itemStack != null) {
-                    stack.add(itemStack);
+                    stacks.add(itemStack);
                 }
             }
         }
 
-        return stack;
+        return stacks;
     }
 
     @Override

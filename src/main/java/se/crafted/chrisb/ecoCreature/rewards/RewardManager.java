@@ -1,6 +1,7 @@
 package se.crafted.chrisb.ecoCreature.rewards;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,8 @@ import se.crafted.chrisb.ecoCreature.rewards.gain.Gain;
 
 public class RewardManager
 {
+    private static Random random = new Random();
+
     public boolean isIntegerCurrency;
 
     public boolean canCampSpawner;
@@ -69,44 +72,19 @@ public class RewardManager
 
     private Set<Integer> spawnerMobs;
 
-    public RewardManager()
-    {
-        spawnerMobs = new HashSet<Integer>();
-    }
-
-    public MetricsManager getMetricsManager()
-    {
-        return metricsManager;
-    }
-
-    public void setMetricsManager(MetricsManager metricsManager)
+    public RewardManager(MetricsManager metricsManager, MessageManager messageManager)
     {
         this.metricsManager = metricsManager;
-    }
-
-    public MessageManager getMessageManager()
-    {
-        return messageManager;
-    }
-
-    public void setMessageManager(MessageManager messageManager)
-    {
         this.messageManager = messageManager;
-    }
+        rewards = new HashMap<RewardType, List<Reward>>();
+        gainMultipliers = new HashSet<Gain>();
 
-    public Map<RewardType, List<Reward>> getRewards()
-    {
-        return rewards;
+        spawnerMobs = new HashSet<Integer>();
     }
 
     public void setRewards(Map<RewardType, List<Reward>> rewards)
     {
         this.rewards = rewards;
-    }
-
-    public Set<Gain> getGainMultipliers()
-    {
-        return gainMultipliers;
     }
 
     public void setGainMultipliers(Set<Gain> gainMultipliers)
@@ -121,8 +99,7 @@ public class RewardManager
 
     public void setSpawnerMob(Entity entity)
     {
-        // Only add to the array if we're tracking by entity. Avoids a memory
-        // leak.
+        // Only add to the array if we're tracking by entity. Avoids a memory leak.
         if (!canCampSpawner && campByEntity) {
             spawnerMobs.add(Integer.valueOf(entity.getEntityId()));
         }
@@ -136,18 +113,15 @@ public class RewardManager
 
         double amount = 0.0D;
 
-        if (rewards.containsKey(RewardType.PLAYER)) {
-            Reward reward = getRewardFromType(RewardType.PLAYER);
-
-            if (reward != null) {
-                amount = computeGain(event.getVictim(), reward.getCoin());
-                if (reward.hasDrops() && shouldOverrideDrops) {
-                    event.getDrops().clear();
-                }
-                event.getDrops().addAll(reward.computeDrops(isFixedDrops));
-                if (reward.hasExp()) {
-                    event.setDroppedExp(reward.getExp().getAmount());
-                }
+        if (hasReward(RewardType.PLAYER)) {
+            Reward reward = getRewardForType(RewardType.PLAYER);
+            amount = computeGain(event.getVictim(), reward.getCoin());
+            if (reward.hasDrops() && shouldOverrideDrops) {
+                event.getDrops().clear();
+            }
+            event.getDrops().addAll(reward.computeDrops(isFixedDrops));
+            if (reward.hasExp()) {
+                event.setDroppedExp(reward.getExp().getAmount());
             }
         }
         else if (DependencyUtils.hasEconomy()) {
@@ -194,7 +168,7 @@ public class RewardManager
             return;
         }
 
-        if (event.getTamedCreature() != null && !isWolverineMode) {
+        if (event.usedTamedCreature() && !isWolverineMode) {
             ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " killing with their pet.");
             return;
         }
@@ -233,14 +207,13 @@ public class RewardManager
             return;
         }
 
-        Reward reward = getRewardFromEntity(event.getKilledCreature());
+        if (hasReward(event.getKilledCreature())) {
+            Reward reward = getRewardForEntity(event.getKilledCreature());
 
-        if (reward != null) {
             if (reward.hasExp()) {
                 event.setDroppedExp(reward.getExp().getAmount());
             }
-            String weaponName = event.getTamedCreature() != null ? RewardType.fromEntity(event.getTamedCreature()).getName() : Material.getMaterial(event.getKiller().getItemInHand().getTypeId()).name();
-            registerReward(event.getKiller(), reward, weaponName);
+            registerReward(event.getKiller(), reward, event.getWeaponName());
             try {
                 List<ItemStack> rewardDrops = reward.computeDrops(isFixedDrops);
                 if (!rewardDrops.isEmpty()) {
@@ -268,9 +241,8 @@ public class RewardManager
 
         if (DependencyUtils.hasPermission(player, "reward.spawner") && rewards.containsKey(RewardType.SPAWNER)) {
 
-            Reward reward = getRewardFromType(RewardType.SPAWNER);
-
-            if (reward != null) {
+            if (hasReward(RewardType.SPAWNER)) {
+                Reward reward = getRewardForType(RewardType.SPAWNER);
                 registerReward(player, reward, Material.getMaterial(player.getItemInHand().getTypeId()).name());
 
                 for (ItemStack itemStack : reward.computeDrops(isFixedDrops)) {
@@ -284,9 +256,8 @@ public class RewardManager
     {
         if (DependencyUtils.hasPermission(player, "reward.deathstreak") && rewards.containsKey(RewardType.DEATH_STREAK)) {
 
-            Reward reward = getRewardFromType(RewardType.DEATH_STREAK);
-
-            if (reward != null) {
+            if (hasReward(RewardType.DEATH_STREAK)) {
+                Reward reward = getRewardForType(RewardType.DEATH_STREAK);
                 // TODO: incorrectly modifies the reward for subsequent calls
                 reward.getCoin().setMin(reward.getCoin().getMin() * deaths);
                 reward.getCoin().setMax(reward.getCoin().getMax() * deaths);
@@ -303,9 +274,8 @@ public class RewardManager
     {
         if (DependencyUtils.hasPermission(player, "reward.killstreak") && rewards.containsKey(RewardType.KILL_STREAK)) {
 
-            Reward reward = getRewardFromType(RewardType.KILL_STREAK);
-
-            if (reward != null) {
+            if (hasReward(RewardType.KILL_STREAK)) {
+                Reward reward = getRewardForType(RewardType.KILL_STREAK);
                 // TODO: incorrectly modifies the reward for subsequent calls
                 reward.getCoin().setMin(reward.getCoin().getMin() * kills);
                 reward.getCoin().setMax(reward.getCoin().getMax() * kills);
@@ -322,9 +292,8 @@ public class RewardManager
     {
         if (DependencyUtils.hasPermission(hero.getPlayer(), "reward.hero_mastered") && rewards.containsKey(RewardType.HERO_MASTERED)) {
 
-            Reward reward = getRewardFromType(RewardType.HERO_MASTERED);
-
-            if (reward != null) {
+            if (hasReward(RewardType.HERO_MASTERED)) {
+                Reward reward = getRewardForType(RewardType.HERO_MASTERED);
                 registerReward(hero.getPlayer(), reward, "");
             }
         }
@@ -351,13 +320,28 @@ public class RewardManager
         }
     }
 
-    private Reward getRewardFromEntity(Entity entity)
+    private boolean hasReward(Entity entity)
     {
-        RewardType rewardType = RewardType.fromEntity(entity);
+        boolean hasReward = false;
+
+        if (entity != null) {
+            hasReward(RewardType.fromEntity(entity));
+        }
+
+        return hasReward;
+    }
+
+    private boolean hasReward(RewardType type)
+    {
+        return rewards.containsKey(type) && !rewards.get(type).isEmpty();
+    }
+
+    private Reward getRewardForEntity(Entity entity)
+    {
         Reward reward = null;
 
-        if (rewardType != null) {
-            reward = getRewardFromType(rewardType);
+        if (hasReward(entity)) {
+            reward = getRewardForType(RewardType.fromEntity(entity));
         }
         else {
             ECLogger.getInstance().warning("No reward found for entity " + entity.getClass());
@@ -366,20 +350,17 @@ public class RewardManager
         return reward;
     }
 
-    private Reward getRewardFromType(RewardType rewardType)
+    private Reward getRewardForType(RewardType type)
     {
-        Random random = new Random();
         Reward reward = null;
 
-        if (rewards.containsKey(rewardType)) {
-            List<Reward> rewardList = rewards.get(rewardType);
-            if (rewardList.size() > 0) {
-                reward = rewardList.get(random.nextInt(rewardList.size()));
-            }
+        if (hasReward(type)) {
+            reward = rewards.get(type).get(random.nextInt(rewards.get(type).size()));
         }
         else {
-            ECLogger.getInstance().warning("No reward defined for " + rewardType);
+            ECLogger.getInstance().warning("No reward defined for " + type);
         }
+
         return reward;
     }
 

@@ -138,10 +138,8 @@ public class ConfigManager
 
     private RewardManager loadRewardConfig(FileConfiguration config)
     {
-        RewardManager rewardManager = new RewardManager();
+        RewardManager rewardManager = new RewardManager(plugin.getMetrics(), MessageManager.parseConfig(config));
 
-        rewardManager.setMetricsManager(plugin.getMetrics());
-        rewardManager.setMessageManager(MessageManager.parseConfig(config));
         rewardManager.setGainMultipliers(loadGainConfig(config));
 
         rewardManager.isIntegerCurrency = config.getBoolean("System.Economy.IntegerCurrency", false);
