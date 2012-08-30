@@ -1,6 +1,7 @@
 package se.crafted.chrisb.ecoCreature.commons;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.Entity;
@@ -44,5 +45,15 @@ public class EntityUtils
             }
         }
         return false;
+    }
+
+    public static String getItemNameInHand(Player player)
+    {
+        return getItemTypeInHand(player).name();
+    }
+
+    public static Material getItemTypeInHand(Player player)
+    {
+        return player.getItemInHand().getType();
     }
 }

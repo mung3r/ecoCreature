@@ -125,6 +125,9 @@ public class RewardManager
             amount = isPercentPvpReward ? DependencyUtils.getEconomy().getBalance(event.getVictim().getName()) * (pvpRewardAmount / 100.0D) : pvpRewardAmount;
         }
 
+        if (isIntegerCurrency) {
+            amount = Math.round(amount);
+        }
         if (amount > 0.0D && DependencyUtils.hasEconomy()) {
             amount = Math.min(amount, DependencyUtils.getEconomy().getBalance(event.getVictim().getName()));
             DependencyUtils.getEconomy().withdrawPlayer(event.getVictim().getName(), amount);
@@ -142,6 +145,9 @@ public class RewardManager
         }
 
         double amount = isPercentPenalty ? DependencyUtils.getEconomy().getBalance(player.getName()) * (penaltyAmount / 100.0D) : penaltyAmount;
+        if (isIntegerCurrency) {
+            amount = Math.round(amount);
+        }
         if (amount > 0.0D) {
             DependencyUtils.getEconomy().withdrawPlayer(player.getName(), amount);
             messageManager.deathPenaltyMessage(messageManager.deathPenaltyMessage, player, amount);
@@ -155,7 +161,7 @@ public class RewardManager
             event.setDroppedExp(0);
         }
 
-        if (event.getKiller().getItemInHand().getType().equals(Material.BOW) && !hasBowRewards) {
+        if (EntityUtils.getItemTypeInHand(event.getKiller()).equals(Material.BOW) && !hasBowRewards) {
             messageManager.basicMessage(messageManager.noBowRewardMessage, event.getKiller());
             return;
         }
@@ -240,7 +246,7 @@ public class RewardManager
 
             if (hasReward(RewardType.SPAWNER)) {
                 Reward reward = getRewardForType(RewardType.SPAWNER);
-                registerReward(player, reward, Material.getMaterial(player.getItemInHand().getTypeId()).name());
+                registerReward(player, reward, EntityUtils.getItemNameInHand(player));
 
                 for (ItemStack itemStack : reward.getDropAmounts(isFixedDrops)) {
                     block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
@@ -384,6 +390,9 @@ public class RewardManager
             party.add(player);
         }
 
+        if (isIntegerCurrency) {
+            amount = Math.round(amount);
+        }
         for (Player member : party) {
             if (amount > 0.0D && DependencyUtils.hasEconomy()) {
                 DependencyUtils.getEconomy().depositPlayer(member.getName(), amount);

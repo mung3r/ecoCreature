@@ -2,7 +2,6 @@ package se.crafted.chrisb.ecoCreature.events;
 
 import java.util.List;
 
-import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -10,6 +9,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
+import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 import se.crafted.chrisb.ecoCreature.commons.EventUtils;
 import se.crafted.chrisb.ecoCreature.rewards.RewardType;
 
@@ -51,17 +51,12 @@ public class CreatureKilledByPlayerEvent extends Event
 
     public String getWeaponName()
     {
-        return usedTamedCreature() ? RewardType.fromEntity(getTamedCreature()).getName() : getWeapon().name();
+        return usedTamedCreature() ? RewardType.fromEntity(getTamedCreature()).getName() : EntityUtils.getItemNameInHand(getPlayer());
     }
 
     public boolean usedTamedCreature()
     {
         return getTamedCreature() != null;
-    }
-
-    private Material getWeapon()
-    {
-        return Material.getMaterial(getPlayer().getItemInHand().getTypeId());
     }
 
     private LivingEntity getTamedCreature()
