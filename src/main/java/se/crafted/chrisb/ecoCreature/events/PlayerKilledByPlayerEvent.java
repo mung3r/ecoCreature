@@ -2,6 +2,7 @@ package se.crafted.chrisb.ecoCreature.events;
 
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -37,6 +38,16 @@ public class PlayerKilledByPlayerEvent extends Event
     public Player getKiller()
     {
         return (Player) event.getEntity().getLastDamageCause().getEntity();
+    }
+
+    public String getWeaponName()
+    {
+        return getWeapon().name();
+    }
+
+    private Material getWeapon()
+    {
+        return Material.getMaterial(getKiller().getItemInHand().getTypeId());
     }
 
     @Override

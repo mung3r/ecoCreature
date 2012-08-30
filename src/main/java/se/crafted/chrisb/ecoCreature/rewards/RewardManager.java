@@ -112,7 +112,7 @@ public class RewardManager
 
         if (hasReward(RewardType.PLAYER)) {
             Reward reward = getRewardForType(RewardType.PLAYER);
-            amount = computeGain(event.getVictim(), reward.getCoin());
+            amount = reward.getCoin().getAmount() * getGainMultiplier(event.getKiller());
             if (reward.hasDrops() && shouldOverrideDrops) {
                 event.getDrops().clear();
             }
@@ -131,7 +131,7 @@ public class RewardManager
             messageManager.deathPenaltyMessage(messageManager.deathPenaltyMessage, event.getVictim(), amount);
 
             DependencyUtils.getEconomy().depositPlayer(event.getKiller().getName(), amount);
-            messageManager.rewardMessage(messageManager.pvpRewardMessage, event.getKiller(), amount, event.getVictim().getName(), "");
+            messageManager.rewardMessage(messageManager.pvpRewardMessage, event.getKiller(), amount, event.getVictim().getName(), event.getWeaponName());
         }
     }
 
@@ -363,7 +363,7 @@ public class RewardManager
 
     private void registerReward(Player player, Reward reward, String weaponName)
     {
-        double amount = reward.hasCoin() ? computeGain(player, reward.getCoin()) : 0.0;
+        double amount = reward.hasCoin() ? reward.getCoin().getAmount() * getGainMultiplier(player) : 0.0;
         List<Player> party = new ArrayList<Player>();
 
         if (isHeroesPartyShare && DependencyUtils.hasHeroes() && DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {
@@ -401,16 +401,16 @@ public class RewardManager
         metricsManager.addCount(reward.getType());
     }
 
-    private double computeGain(Player player, Coin coin)
+    private double getGainMultiplier(Player player)
     {
-        double amount = coin.getAmount();
+        double multiplier = 1.0;
 
         for (Gain gain : gainMultipliers) {
             if (gain != null) {
-                amount *= gain.getMultiplier(player);
+                multiplier *= gain.getMultiplier(player);
             }
         }
 
-        return isIntegerCurrency ? (double) Math.round(amount) : amount;
+        return multiplier;
     }
 }
