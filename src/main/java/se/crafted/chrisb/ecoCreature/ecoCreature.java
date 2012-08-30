@@ -1,7 +1,5 @@
 package se.crafted.chrisb.ecoCreature;
 
-import java.io.IOException;
-
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -33,8 +31,8 @@ public class ecoCreature extends JavaPlugin
     public void onEnable()
     {
         DependencyUtils.init();
-        initMetrics();
 
+        metrics = new MetricsManager(this);
         configManager = new ConfigManager(this);
 
         addCommands();
@@ -88,18 +86,6 @@ public class ecoCreature extends JavaPlugin
     public CommandHandler getCommandHandler()
     {
         return commandHandler;
-    }
-
-    private void initMetrics()
-    {
-        try {
-            metrics = new MetricsManager(this);
-            metrics.setupGraphs();
-            metrics.start();
-        }
-        catch (IOException e) {
-            ECLogger.getInstance().warning("Metrics failed to load.");
-        }
     }
 
     private void addCommands()

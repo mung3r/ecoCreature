@@ -6,18 +6,20 @@ import java.util.Map;
 
 import org.bukkit.plugin.Plugin;
 
+import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.metrics.Metrics.Graph;
+import se.crafted.chrisb.ecoCreature.metrics.Metrics.Plotter;
 import se.crafted.chrisb.ecoCreature.rewards.RewardType;
 
-public class MetricsManager extends Metrics
+public class MetricsManager
 {
+    private Metrics metrics;
     private Map<RewardType, Integer> rewardTypeCount;
 
-    public MetricsManager(Plugin plugin) throws IOException
+    @SuppressWarnings("serial")
+    public MetricsManager(Plugin plugin)
     {
-        super(plugin);
         rewardTypeCount = new Hashtable<RewardType, Integer>() {
-            private static final long serialVersionUID = 1L;
-
             @Override
             public synchronized Integer get(Object key)
             {
@@ -27,11 +29,20 @@ public class MetricsManager extends Metrics
                 return super.get(key);
             };
         };
+
+        try {
+            metrics = new Metrics(plugin);
+            setupGraphs();
+            metrics.start();
+        }
+        catch (IOException e) {
+            ECLogger.getInstance().warning("Metrics failed to load.");
+        }
     }
 
     public void setupGraphs()
     {
-        Graph graph = createGraph("Reward Types");
+        Graph graph = metrics.createGraph("Reward Types");
 
         for (RewardType rewardType : RewardType.values()) {
 
