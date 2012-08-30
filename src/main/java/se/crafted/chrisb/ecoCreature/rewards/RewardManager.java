@@ -58,11 +58,8 @@ public class RewardManager
     public boolean noFarmFire;
     public boolean hasMobArenaRewards;
     public boolean hasCreativeModeRewards;
-    public double mobArenaMultiplier;
     public boolean isMobArenaShare;
-    public double heroesPartyMultiplier;
     public boolean isHeroesPartyShare;
-    public double mcMMOPartyMultiplier;
     public boolean isMcMMOPartyShare;
 
     private MetricsManager metricsManager;
