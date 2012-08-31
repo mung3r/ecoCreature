@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
 
@@ -21,6 +21,7 @@ public enum RewardType
     COW("Cow"),
     CREEPER("Creeper"),
     CUSTOM("Custom"),
+    DEATH_PENALTY("DeathPenalty"),
     DEATH_STREAK("DeathStreak"),
     ENDER_DRAGON("EnderDragon"),
     ENDERMAN("Enderman"),
@@ -84,37 +85,20 @@ public enum RewardType
         RewardType rewardType = null;
 
         if (entity instanceof Creeper) {
-            Creeper creeper = (Creeper) entity;
-            if (creeper.isPowered()) {
-                rewardType = RewardType.POWERED_CREEPER;
-            }
-            else {
-                rewardType = RewardType.CREEPER;
-            }
+            rewardType = ((Creeper) entity).isPowered() ? RewardType.POWERED_CREEPER : RewardType.CREEPER;
         }
         else if (entity instanceof Player) {
             rewardType = RewardType.PLAYER;
         }
         else if (entity instanceof Wolf) {
-            Wolf wolf = (Wolf) entity;
-            if (wolf.isAngry()) {
-                rewardType = ANGRY_WOLF;
-            }
-            else {
-                rewardType = WOLF;
-            }
+            rewardType = ((Wolf) entity).isAngry() ? RewardType.ANGRY_WOLF : RewardType.WOLF;
         }
-        else {
-            EntityType creatureType = entity.getType();
-            if (creatureType != null) {
-                rewardType = RewardType.fromName(creatureType.getName());
-                if (rewardType == null) {
-                    ECLogger.getInstance().warning("Unknown creature type: " + creatureType.getName());
-                }
-            }
+        else if (entity instanceof LivingEntity) {
+            rewardType = RewardType.fromName(entity.getType().getName());
         }
 
         if (rewardType == null) {
+            ECLogger.getInstance().warning("Unknown creature type: " + entity.getType().getName());
             rewardType = UNKNOWN;
         }
 
