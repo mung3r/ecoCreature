@@ -112,13 +112,13 @@ public class Reward
         this.penaltyMessage = penaltyMessage;
     }
 
-    public List<ItemStack> getDropAmounts(boolean isFixedDrops)
+    public List<ItemStack> getDropOutcomes(boolean isFixedDrops)
     {
         List<ItemStack> stacks = new ArrayList<ItemStack>();
 
         if (drops != null) {
             for (Drop drop : drops) {
-                ItemStack itemStack = drop.computeItemStack(isFixedDrops);
+                ItemStack itemStack = drop.getOutcome(isFixedDrops);
                 if (itemStack != null) {
                     stacks.add(itemStack);
                 }

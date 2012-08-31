@@ -10,7 +10,6 @@ import java.util.Set;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
@@ -24,45 +23,12 @@ public class Drop
     private int maxAmount;
     private int minAmount;
     private double percentage;
-    private Set<ecoEnchantment> enchantments;
+    private Set<Enchantment> enchantments;
     private final Random random = new Random();
 
     public Drop()
     {
-        this.enchantments = new HashSet<ecoEnchantment>();
-    }
-
-    private static class ecoEnchantment
-    {
-        private Enchantment enchantment;
-        private int minLevel;
-        private int maxLevel;
-        private final Random random = new Random();
-
-        public Enchantment getEnchantment()
-        {
-            return enchantment;
-        }
-
-        public void setEnchantment(Enchantment enchantment)
-        {
-            this.enchantment = enchantment;
-        }
-
-        public int getLevel()
-        {
-            return minLevel + random.nextInt(Math.abs(maxLevel - minLevel + 1));
-        }
-
-        public void setMinLevel(int minLevel)
-        {
-            this.minLevel = minLevel;
-        }
-
-        public void setMaxLevel(int maxLevel)
-        {
-            this.maxLevel = maxLevel;
-        }
+        this.enchantments = new HashSet<Enchantment>();
     }
 
     public Material getItem()
@@ -125,19 +91,19 @@ public class Drop
         this.percentage = percentage;
     }
 
-    public void addEnchantment(Enchantment enchantment, int minLevel, int maxLevel)
+    public void addEnchantment(org.bukkit.enchantments.Enchantment enchantment, int minLevel, int maxLevel)
     {
         if (enchantment == null) {
             throw new IllegalArgumentException();
         }
-        ecoEnchantment e = new ecoEnchantment();
+        Enchantment e = new Enchantment();
         e.setEnchantment(enchantment);
         e.setMinLevel(minLevel);
         e.setMaxLevel(maxLevel);
         enchantments.add(e);
     }
 
-    public ItemStack computeItemStack(boolean isFixedDrops)
+    public ItemStack getOutcome(boolean isFixedDrops)
     {
         if (Math.random() * 100.0D < percentage) {
             int dropAmount = isFixedDrops ? maxAmount : minAmount + random.nextInt(Math.abs(maxAmount - minAmount + 1));
@@ -154,12 +120,7 @@ public class Drop
                         itemStack.setDurability(durability);
                     }
                 }
-                for (ecoEnchantment e : enchantments) {
-                    int level = e.getLevel();
-                    if (level > 0) {
-                        itemStack.addEnchantment(e.getEnchantment(), level);
-                    }
-                }
+                itemStack.addEnchantments(Enchantment.getOutcome(enchantments));
                 if (itemStack.getAmount() > 0) {
                     return itemStack;
                 }
@@ -214,10 +175,10 @@ public class Drop
                                 String[] levelRange = enchantParts[1].split("-");
                                 int minLevel = Integer.parseInt(levelRange[0]);
                                 int maxLevel = levelRange.length > 1 ? Integer.parseInt(levelRange[1]) : minLevel;
-                                drop.addEnchantment(Enchantment.getByName(enchantParts[0].toUpperCase()), minLevel, maxLevel);
+                                drop.addEnchantment(org.bukkit.enchantments.Enchantment.getByName(enchantParts[0].toUpperCase()), minLevel, maxLevel);
                             }
                             else {
-                                drop.addEnchantment(Enchantment.getByName(enchantParts[0].toUpperCase()), 1, 1);
+                                drop.addEnchantment(org.bukkit.enchantments.Enchantment.getByName(enchantParts[0].toUpperCase()), 1, 1);
                             }
                         }
                     }

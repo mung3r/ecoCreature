@@ -42,7 +42,7 @@ public class Exp
         this.percentage = percentage;
     }
 
-    public int getAmount()
+    public int getOutcome()
     {
         int amount;
 

@@ -112,13 +112,13 @@ public class RewardManager
 
         if (hasReward(RewardType.PLAYER)) {
             Reward reward = getRewardForType(RewardType.PLAYER);
-            amount = reward.getCoin().getAmount() * getGainMultiplier(event.getKiller());
+            amount = reward.getCoin().getOutcome() * getGainMultiplier(event.getKiller());
             if (reward.hasDrops() && shouldOverrideDrops) {
                 event.getDrops().clear();
             }
-            event.getDrops().addAll(reward.getDropAmounts(isFixedDrops));
+            event.getDrops().addAll(reward.getDropOutcomes(isFixedDrops));
             if (reward.hasExp()) {
-                event.setDroppedExp(reward.getExp().getAmount());
+                event.setDroppedExp(reward.getExp().getOutcome());
             }
         }
         else if (DependencyUtils.hasEconomy()) {
@@ -214,11 +214,11 @@ public class RewardManager
             Reward reward = getRewardForEntity(event.getKilledCreature());
 
             if (reward.hasExp()) {
-                event.setDroppedExp(reward.getExp().getAmount());
+                event.setDroppedExp(reward.getExp().getOutcome());
             }
             registerReward(event.getKiller(), reward, event.getWeaponName());
             try {
-                List<ItemStack> rewardDrops = reward.getDropAmounts(isFixedDrops);
+                List<ItemStack> rewardDrops = reward.getDropOutcomes(isFixedDrops);
                 if (!rewardDrops.isEmpty()) {
                     if (!event.getDrops().isEmpty() && shouldOverrideDrops) {
                         event.getDrops().clear();
@@ -248,7 +248,7 @@ public class RewardManager
                 Reward reward = getRewardForType(RewardType.SPAWNER);
                 registerReward(player, reward, EntityUtils.getItemNameInHand(player));
 
-                for (ItemStack itemStack : reward.getDropAmounts(isFixedDrops)) {
+                for (ItemStack itemStack : reward.getDropOutcomes(isFixedDrops)) {
                     block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
                 }
             }
@@ -266,7 +266,7 @@ public class RewardManager
                 reward.getCoin().setMax(reward.getCoin().getMax() * deaths);
                 registerReward(player, reward, "");
 
-                for (ItemStack itemStack : reward.getDropAmounts(isFixedDrops)) {
+                for (ItemStack itemStack : reward.getDropOutcomes(isFixedDrops)) {
                     player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
                 }
             }
@@ -284,7 +284,7 @@ public class RewardManager
                 reward.getCoin().setMax(reward.getCoin().getMax() * kills);
                 registerReward(player, reward, "");
 
-                for (ItemStack itemStack : reward.getDropAmounts(isFixedDrops)) {
+                for (ItemStack itemStack : reward.getDropOutcomes(isFixedDrops)) {
                     player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
                 }
             }
@@ -369,7 +369,7 @@ public class RewardManager
 
     private void registerReward(Player player, Reward reward, String weaponName)
     {
-        double amount = reward.hasCoin() ? reward.getCoin().getAmount() * getGainMultiplier(player) : 0.0;
+        double amount = reward.hasCoin() ? reward.getCoin().getOutcome() * getGainMultiplier(player) : 0.0;
         List<Player> party = new ArrayList<Player>();
 
         if (isHeroesPartyShare && DependencyUtils.hasHeroes() && DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {

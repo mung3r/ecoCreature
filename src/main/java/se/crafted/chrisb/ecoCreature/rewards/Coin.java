@@ -38,7 +38,7 @@ public class Coin
         this.percentage = percentage;
     }
 
-    public double getAmount()
+    public double getOutcome()
     {
         double amount;
 
