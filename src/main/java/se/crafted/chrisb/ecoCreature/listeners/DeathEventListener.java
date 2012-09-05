@@ -28,7 +28,7 @@ public class DeathEventListener implements Listener
         if (EventUtils.isPVPDeath(event)) {
             Bukkit.getPluginManager().callEvent(new PlayerKilledByPlayerEvent(event));
         }
-        else {
+        else if (event.getEntity().getLastDamageCause() != null) {
             plugin.getRewardManager(event.getEntity().getWorld()).registerDeathPenalty(event.getEntity());
         }
     }
