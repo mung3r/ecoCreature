@@ -67,13 +67,17 @@ public class RewardEventListener implements Listener
                             economy.withdrawPlayer(member, Math.abs(amount));
                         }
 
-                        // TODO: send different message to party members
-                        Message message = reward.getMessage();
-                        message.addParameter(MessageToken.PLAYER, member);
-                        message.addParameter(MessageToken.AMOUNT, economy.format(Math.abs(amount)));
+                        if (member.equals(player.getName())) {
+                            Message message = reward.getMessage();
+                            message.addParameter(MessageToken.PLAYER, member);
+                            message.addParameter(MessageToken.AMOUNT, economy.format(Math.abs(amount)));
 
-                        MessageSender sender = new MessageSender(member, message);
-                        sender.send();
+                            MessageSender sender = new MessageSender(member, message);
+                            sender.send();
+                        }
+                        else {
+                            // TODO: send different message to party members
+                        }
                     }
                 }
 
