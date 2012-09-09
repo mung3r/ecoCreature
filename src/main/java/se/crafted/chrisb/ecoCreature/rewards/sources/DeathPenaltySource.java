@@ -39,11 +39,11 @@ public class DeathPenaltySource extends DefaultRewardSource
         Reward reward = new Reward(location);
         reward.setGain(percentPenalty ? -penaltyAmount / 100.0 : -1.0);
 
-        reward.setType(type);
-        reward.setName(name);
+        reward.setType(getType());
+        reward.setName(getName());
         reward.setCoin(percentPenalty ? 0.0 : penaltyAmount);
-        reward.setMessage(coinPenaltyMessage);
-        reward.setIntegerCurrency(integerCurrency);
+        reward.setMessage(getCoinPenaltyMessage());
+        reward.setIntegerCurrency(isIntegerCurrency());
 
         return reward;
     }

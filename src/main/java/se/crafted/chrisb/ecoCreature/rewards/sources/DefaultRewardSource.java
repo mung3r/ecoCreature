@@ -14,23 +14,23 @@ import se.crafted.chrisb.ecoCreature.rewards.Reward;
 
 public class DefaultRewardSource implements RewardSource
 {
-    protected static final String NO_COIN_REWARD_MESSAGE = "&7You slayed a &5<crt>&7 using a &3<itm>&7.";
-    protected static final String COIN_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.";
-    protected static final String COIN_PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.";
+    private static final String NO_COIN_REWARD_MESSAGE = "&7You slayed a &5<crt>&7 using a &3<itm>&7.";
+    private static final String COIN_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.";
+    private static final String COIN_PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.";
 
-    protected String name;
-    protected RewardSourceType type;
-    protected Coin coin;
-    protected List<Drop> drops;
-    protected Exp exp;
+    private String name;
+    private RewardSourceType type;
+    private Coin coin;
+    private List<Drop> drops;
+    private Exp exp;
 
-    protected Message noCoinRewardMessage;
-    protected Message coinRewardMessage;
-    protected Message coinPenaltyMessage;
+    private Message noCoinRewardMessage;
+    private Message coinRewardMessage;
+    private Message coinPenaltyMessage;
 
-    protected boolean fixedDrops;
-    protected boolean integerCurrency;
-    protected boolean overrideDrops;
+    private boolean fixedDrops;
+    private boolean integerCurrency;
+    private boolean overrideDrops;
 
     @Override
     public String getName()

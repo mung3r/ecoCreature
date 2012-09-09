@@ -1,6 +1,7 @@
 package se.crafted.chrisb.ecoCreature.messages;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -29,15 +30,15 @@ public class MessageSender
         Map<MessageToken, String> parameters = message.getParameters();
 
         if (template != null && template.length() > 0) {
-            for (MessageToken token : parameters.keySet()) {
-                if (token == MessageToken.AMOUNT) {
-                    template = template.replaceAll(token.toString(), parameters.get(token).replaceAll("\\$", "\\\\\\$"));
+            for (Entry<MessageToken, String> entry : parameters.entrySet()) {
+                if (entry.getKey() == MessageToken.AMOUNT) {
+                    template = template.replaceAll(entry.getKey().toString(), entry.getValue().replaceAll("\\$", "\\\\\\$"));
                 }
-                else if (token == MessageToken.ITEM) {
-                    template = template.replaceAll(token.toString(), toCamelCase(parameters.get(token)));
+                else if (entry.getKey() == MessageToken.ITEM) {
+                    template = template.replaceAll(entry.getKey().toString(), toCamelCase(entry.getValue()));
                 }
                 else {
-                    template = template.replaceAll(token.toString(), parameters.get(token));
+                    template = template.replaceAll(entry.getKey().toString(), entry.getValue());
                 }
             }
 

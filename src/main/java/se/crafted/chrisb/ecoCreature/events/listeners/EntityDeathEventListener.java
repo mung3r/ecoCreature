@@ -1,7 +1,6 @@
 package se.crafted.chrisb.ecoCreature.events.listeners;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -35,7 +34,7 @@ public class EntityDeathEventListener implements Listener
 
         handleDefaultDrops(event);
 
-        if (EventUtils.getKillerFromDeathEvent(event) instanceof Player) {
+        if (EventUtils.getKillerFromDeathEvent(event) != null) {
             for (RewardEvent rewardEvent : handler.getRewardEvents(EntityKilledEvent.createEvent(event))) {
                 Bukkit.getPluginManager().callEvent(rewardEvent);
             }

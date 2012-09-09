@@ -39,11 +39,11 @@ public class PVPRewardSource extends DefaultRewardSource
         Reward reward = new Reward(location);
         reward.setGain(percentReward ? rewardAmount / 100.0 : 1.0);
 
-        reward.setType(type);
-        reward.setName(name);
-        reward.setCoin(percentReward ? 0.0 : rewardAmount);
-        reward.setMessage(coinRewardMessage);
-        reward.setIntegerCurrency(integerCurrency);
+        reward.setType(getType());
+        reward.setName(getName());
+        reward.setCoin(isPercentReward() ? 0.0 : rewardAmount);
+        reward.setMessage(getCoinRewardMessage());
+        reward.setIntegerCurrency(isIntegerCurrency());
 
         return reward;
     }
