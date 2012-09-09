@@ -2,7 +2,7 @@ package se.crafted.chrisb.ecoCreature.messages;
 
 public class NoCoinRewardMessage extends DefaultMessage
 {
-    boolean noRewardMessageEnabled;
+    private boolean noRewardMessageEnabled;
 
     public NoCoinRewardMessage(String template)
     {
