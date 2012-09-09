@@ -7,7 +7,7 @@ import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
 public class TamedCreatureRule extends DefaultRule
 {
-    boolean wolverineMode;
+    private boolean wolverineMode;
 
     public TamedCreatureRule()
     {

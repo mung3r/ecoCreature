@@ -8,7 +8,7 @@ import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
 public class MobArenaRule extends DefaultRule
 {
-    boolean mobArenaRewards;
+    private boolean mobArenaRewards;
 
     public MobArenaRule()
     {

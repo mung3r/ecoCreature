@@ -11,7 +11,7 @@ public class UnderSeaLevelRule extends DefaultRule
 {
     private static final String NO_UNDER_SEA_LEVEL_MESSAGE = "&7You find no rewards on this creature.";
 
-    boolean huntUnderSeaLevel;
+    private boolean huntUnderSeaLevel;
 
     public UnderSeaLevelRule()
     {
