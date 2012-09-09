@@ -85,8 +85,10 @@ public class RewardEventListener implements Listener
                     reward.getWorld().dropItemNaturally(reward.getLocation(), stack);
                 }
 
-                ExperienceOrb orb = reward.getWorld().spawn(reward.getLocation(), ExperienceOrb.class);
-                orb.setExperience(reward.getExp());
+                if (reward.getExp() > 0) {
+                    ExperienceOrb orb = reward.getWorld().spawn(reward.getLocation(), ExperienceOrb.class);
+                    orb.setExperience(reward.getExp());
+                }
 
                 plugin.getMetrics().addCount(reward.getType());
             }
