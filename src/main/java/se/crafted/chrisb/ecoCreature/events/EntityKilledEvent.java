@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 import se.crafted.chrisb.ecoCreature.commons.EventUtils;
-import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSourceType;
 
 public class EntityKilledEvent extends EntityDeathEvent
 {
@@ -30,7 +29,7 @@ public class EntityKilledEvent extends EntityDeathEvent
 
     public String getWeaponName()
     {
-        return isTamedCreatureKill() ? RewardSourceType.fromEntity(getTamedCreature()).getName() : EntityUtils.getItemNameInHand(getKiller());
+        return isTamedCreatureKill() ? getTamedCreature().getType().getName() : EntityUtils.getItemNameInHand(getKiller());
     }
 
     public boolean isTamedCreatureKill()
