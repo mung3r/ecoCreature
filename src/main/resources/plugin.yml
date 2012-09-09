@@ -24,6 +24,7 @@ permissions:
             ecocreature.gain.group: true
             ecocreature.gain.time: true
             ecocreature.gain.environment: true
+            ecocreature.gain.weapon: true
             ecocreature.gain.heroes: true
             ecocreature.gain.mcmmo: true
             ecocreature.gain.mobarena: true
@@ -81,6 +82,9 @@ permissions:
         default: op
     ecocreature.gain.environment:
         description: Enables gain multiplier based on environment
+        default: op
+    ecocreature.gain.weapon:
+        description: Enables gain multiplier based on weapon
         default: op
     ecocreature.gain.heroes:
         description: Enables gain multiplier based on Heroes party status

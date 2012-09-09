@@ -34,6 +34,7 @@ import se.crafted.chrisb.ecoCreature.rewards.gain.RegiosGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.ResidenceGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.TimeGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.TownyGain;
+import se.crafted.chrisb.ecoCreature.rewards.gain.WeaponGain;
 import se.crafted.chrisb.ecoCreature.rewards.parties.HeroesParty;
 import se.crafted.chrisb.ecoCreature.rewards.parties.McMMOParty;
 import se.crafted.chrisb.ecoCreature.rewards.parties.MobArenaParty;
@@ -286,6 +287,7 @@ public class PluginConfig
         gainMultipliers.add(GroupGain.parseConfig(config.getConfigurationSection("Gain.Groups")));
         gainMultipliers.add(TimeGain.parseConfig(config.getConfigurationSection("Gain.Time")));
         gainMultipliers.add(EnvironmentGain.parseConfig(config.getConfigurationSection("Gain.Environment")));
+        gainMultipliers.add(WeaponGain.parseConfig(config.getConfigurationSection("Gain.Weapon")));
         gainMultipliers.add(RegionGain.parseConfig(config.getConfigurationSection("Gain.WorldGuard")));
         gainMultipliers.add(RegiosGain.parseConfig(config.getConfigurationSection("Gain.Regios")));
         gainMultipliers.add(ResidenceGain.parseConfig(config.getConfigurationSection("Gain.Residence")));

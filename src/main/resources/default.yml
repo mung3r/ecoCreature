@@ -199,7 +199,15 @@ Gain:
         InParty:
             Amount: 1.125
             Share: true 
-
+    Weapon:
+    #
+    # Multiply reward based on weapon used
+        wood_sword:
+            Amount: 1.5
+        iron_sword:
+            Amount: 1.0
+        diamond_sword:
+            Amount: 0.5
 RewardTable:
     ############################################################################
     # Drop format and Examples:
