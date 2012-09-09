@@ -2,7 +2,7 @@ package se.crafted.chrisb.ecoCreature.commons;
 
 import java.util.logging.Logger;
 
-public class ECLogger
+public final class ECLogger
 {
     private static final String LOG_NAME = "ecoCreature";
     private static ECLogger instance = new ECLogger();

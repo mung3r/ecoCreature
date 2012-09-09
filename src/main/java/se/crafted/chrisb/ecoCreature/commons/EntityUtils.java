@@ -8,7 +8,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
 
-public class EntityUtils
+public final class EntityUtils
 {
     private EntityUtils()
     {

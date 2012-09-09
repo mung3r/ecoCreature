@@ -19,7 +19,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 
 import couk.Adamki11s.Regios.API.RegiosAPI;
 
-public class DependencyUtils
+public final class DependencyUtils
 {
     private static Plugin vaultPlugin;
     private static Plugin deathTpPlusPlugin;
