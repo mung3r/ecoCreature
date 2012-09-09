@@ -2,6 +2,7 @@ package se.crafted.chrisb.ecoCreature.messages;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class DefaultMessage implements Message
 {
@@ -64,6 +65,12 @@ public class DefaultMessage implements Message
     }
 
     @Override
+    public boolean isAmountInMessage()
+    {
+        return template != null && template.contains(MessageToken.AMOUNT.toString());
+    }
+
+    @Override
     public void addParameter(MessageToken token, String parameter)
     {
         parameters.put(token, parameter);
@@ -79,6 +86,57 @@ public class DefaultMessage implements Message
     public Map<MessageToken, String> getParameters()
     {
         return parameters;
+    }
+
+    @Override
+    public String getAssembledMessage()
+    {
+        String assembledMessage = template;
+
+        if (assembledMessage != null && assembledMessage.length() > 0) {
+            for (Entry<MessageToken, String> entry : parameters.entrySet()) {
+                if (entry.getKey() == MessageToken.AMOUNT) {
+                    assembledMessage = assembledMessage.replaceAll(entry.getKey().toString(), entry.getValue().replaceAll("\\$", "\\\\\\$"));
+                }
+                else if (entry.getKey() == MessageToken.ITEM) {
+                    assembledMessage = assembledMessage.replaceAll(entry.getKey().toString(), toCamelCase(entry.getValue()));
+                }
+                else {
+                    assembledMessage = assembledMessage.replaceAll(entry.getKey().toString(), entry.getValue());
+                }
+            }
+        }
+
+        return assembledMessage;
+    }
+
+    private static String toCamelCase(String rawItemName)
+    {
+        String[] rawItemNameParts = rawItemName.split("_");
+        StringBuilder itemNameBuilder = new StringBuilder("");
+
+        for (String itemNamePart : rawItemNameParts) {
+            itemNameBuilder.append(" ").append(toProperCase(itemNamePart));
+        }
+
+        String itemName = itemNameBuilder.toString();
+        if (itemName.trim().equals("Air")) {
+            itemName = "Fists";
+        }
+
+        if (itemName.trim().equals("Bow")) {
+            itemName = "Bow & Arrow";
+        }
+
+        return itemName.trim();
+    }
+
+    private static String toProperCase(String str)
+    {
+        if (str.length() < 1) {
+            return str;
+        }
+        return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
     private static String convertMessage(String message)

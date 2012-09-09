@@ -16,7 +16,7 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.messages.Message;
-import se.crafted.chrisb.ecoCreature.messages.MessageSender;
+import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 
@@ -72,8 +72,8 @@ public class RewardEventListener implements Listener
                             message.addParameter(MessageToken.PLAYER, member);
                             message.addParameter(MessageToken.AMOUNT, economy.format(Math.abs(amount)));
 
-                            MessageSender sender = new MessageSender(member, message);
-                            sender.send();
+                            MessageHandler handler = new MessageHandler(member, message);
+                            handler.send();
                         }
                         else {
                             // TODO: send different message to party members

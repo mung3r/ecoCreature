@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
-import se.crafted.chrisb.ecoCreature.messages.MessageSender;
+import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
 import se.crafted.chrisb.ecoCreature.rewards.gain.Gain;
 import se.crafted.chrisb.ecoCreature.rewards.parties.Party;
 import se.crafted.chrisb.ecoCreature.rewards.rules.Rule;
@@ -189,7 +189,7 @@ public class RewardSettings
                     event.setDroppedExp(0);
                 }
 
-                MessageSender message = new MessageSender(event.getKiller(), rule.getMessage());
+                MessageHandler message = new MessageHandler(event.getKiller(), rule.getMessage());
                 message.send();
 
                 return true;

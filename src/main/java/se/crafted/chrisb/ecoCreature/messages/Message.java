@@ -16,9 +16,13 @@ public interface Message
 
     void setTemplate(String template);
 
+    boolean isAmountInMessage();
+
     void addParameter(MessageToken token, String parameter);
 
     void removeParameter(MessageToken token);
 
     Map<MessageToken, String> getParameters();
+
+    String getAssembledMessage();
 }
