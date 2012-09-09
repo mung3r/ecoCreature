@@ -43,11 +43,11 @@ public class FactionsGain extends DefaultGain
         Gain gain = null;
 
         if (config != null) {
-            Map<String, Double> factionsMultipliers = new HashMap<String, Double>();
+            Map<String, Double> multipliers = new HashMap<String, Double>();
             for (String factionsTag : config.getKeys(false)) {
-                factionsMultipliers.put(factionsTag, Double.valueOf(config.getConfigurationSection(factionsTag).getDouble("Amount", 1.0D)));
+                multipliers.put(factionsTag, Double.valueOf(config.getConfigurationSection(factionsTag).getDouble("Amount", 1.0D)));
             }
-            gain = new FactionsGain(factionsMultipliers);
+            gain = new FactionsGain(multipliers);
         }
 
         return gain;

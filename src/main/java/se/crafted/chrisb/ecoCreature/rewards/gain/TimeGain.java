@@ -37,11 +37,11 @@ public class TimeGain extends DefaultGain
         Gain gain = null;
 
         if (config != null) {
-            Map<TimePeriod, Double> timeMultipliers = new HashMap<TimePeriod, Double>();
+            Map<TimePeriod, Double> multipliers = new HashMap<TimePeriod, Double>();
             for (String period : config.getKeys(false)) {
-                timeMultipliers.put(TimePeriod.fromName(period), Double.valueOf(config.getConfigurationSection(period).getDouble("Amount", 1.0D)));
+                multipliers.put(TimePeriod.fromName(period), Double.valueOf(config.getConfigurationSection(period).getDouble("Amount", 1.0D)));
             }
-            gain = new TimeGain(timeMultipliers);
+            gain = new TimeGain(multipliers);
         }
 
         return gain;

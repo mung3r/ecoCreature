@@ -42,11 +42,11 @@ public class ResidenceGain extends DefaultGain
         Gain gain = null;
 
         if (config != null) {
-            Map<String, Double> residenceMultipliers = new HashMap<String, Double>();
+            Map<String, Double> multipliers = new HashMap<String, Double>();
             for (String residenceName : config.getKeys(false)) {
-                residenceMultipliers.put(residenceName, Double.valueOf(config.getConfigurationSection(residenceName).getDouble("Amount", 1.0D)));
+                multipliers.put(residenceName, Double.valueOf(config.getConfigurationSection(residenceName).getDouble("Amount", 1.0D)));
             }
-            gain = new ResidenceGain(residenceMultipliers);
+            gain = new ResidenceGain(multipliers);
         }
 
         return gain;

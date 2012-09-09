@@ -38,16 +38,16 @@ public class EnvironmentGain extends DefaultGain
         Gain gain = null;
 
         if (config != null) {
-            Map<Environment, Double> environmentMultipliers = new HashMap<World.Environment, Double>();
+            Map<Environment, Double> multipliers = new HashMap<World.Environment, Double>();
             for (String environment : config.getKeys(false)) {
                 try {
-                    environmentMultipliers.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(config.getConfigurationSection(environment).getDouble("Amount", 1.0D)));
+                    multipliers.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(config.getConfigurationSection(environment).getDouble("Amount", 1.0D)));
                 }
                 catch (Exception e) {
                     ECLogger.getInstance().warning("Skipping unknown environment name: " + environment);
                 }
             }
-            gain = new EnvironmentGain(environmentMultipliers);
+            gain = new EnvironmentGain(multipliers);
         }
 
         return gain;

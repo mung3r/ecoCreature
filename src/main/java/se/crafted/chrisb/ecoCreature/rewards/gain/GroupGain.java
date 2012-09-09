@@ -49,11 +49,11 @@ public class GroupGain extends DefaultGain
         Gain gain = null; 
 
         if (config != null) {
-            Map<String, Double> groupMultipliers = new HashMap<String, Double>();
+            Map<String, Double> multipliers = new HashMap<String, Double>();
             for (String group : config.getKeys(false)) {
-                groupMultipliers.put(group.toLowerCase(), Double.valueOf(config.getConfigurationSection(group).getDouble("Amount", 0.0D)));
+                multipliers.put(group.toLowerCase(), Double.valueOf(config.getConfigurationSection(group).getDouble("Amount", 0.0D)));
             }
-            gain = new GroupGain(groupMultipliers);
+            gain = new GroupGain(multipliers);
         }
 
         return gain;

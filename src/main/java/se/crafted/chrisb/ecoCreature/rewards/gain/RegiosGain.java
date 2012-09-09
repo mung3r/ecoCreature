@@ -40,11 +40,11 @@ public class RegiosGain extends DefaultGain
         Gain gain = null;
 
         if (config != null) {
-            Map<String, Double> regiosMultipliers = new HashMap<String, Double>();
+            Map<String, Double> multipliers = new HashMap<String, Double>();
             for (String regionName : config.getKeys(false)) {
-                regiosMultipliers.put(regionName, Double.valueOf(config.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
+                multipliers.put(regionName, Double.valueOf(config.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
             }
-            gain = new RegiosGain(regiosMultipliers);
+            gain = new RegiosGain(multipliers);
         }
 
         return gain;

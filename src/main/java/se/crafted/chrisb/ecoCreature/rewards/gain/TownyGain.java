@@ -42,11 +42,11 @@ public class TownyGain extends DefaultGain
         Gain gain = null;
 
         if (config != null) {
-            Map<String, Double> townyMultipliers = new HashMap<String, Double>();
+            Map<String, Double> multipliers = new HashMap<String, Double>();
             for (String townName : config.getKeys(false)) {
-                townyMultipliers.put(townName, Double.valueOf(config.getConfigurationSection(townName).getDouble("Amount", 1.0D)));
+                multipliers.put(townName, Double.valueOf(config.getConfigurationSection(townName).getDouble("Amount", 1.0D)));
             }
-            gain = new TownyGain(townyMultipliers);
+            gain = new TownyGain(multipliers);
         }
 
         return gain;
