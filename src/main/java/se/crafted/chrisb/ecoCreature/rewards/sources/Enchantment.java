@@ -7,10 +7,11 @@ import java.util.Set;
 
 public class Enchantment
 {
+    private final Random random = new Random();
+
     private org.bukkit.enchantments.Enchantment enchantment;
     private int minLevel;
     private int maxLevel;
-    private final Random random = new Random();
 
     public org.bukkit.enchantments.Enchantment getEnchantment()
     {
