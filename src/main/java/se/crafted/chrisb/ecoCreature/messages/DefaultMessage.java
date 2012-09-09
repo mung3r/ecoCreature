@@ -7,11 +7,11 @@ public class DefaultMessage implements Message
 {
     private static final String DEFAULT_TEMPLATE = "Default message";
 
-    protected boolean messageOutputEnabled;
-    protected boolean coinLoggingEnabled;
+    private boolean messageOutputEnabled;
+    private boolean coinLoggingEnabled;
 
-    protected String template;
-    protected Map<MessageToken, String> parameters;
+    private String template;
+    private Map<MessageToken, String> parameters;
 
     public DefaultMessage()
     {
