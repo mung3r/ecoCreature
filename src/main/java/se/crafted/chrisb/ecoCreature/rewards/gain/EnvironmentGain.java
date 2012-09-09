@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-public class EnvironmentGain extends BasicGain
+public class EnvironmentGain extends DefaultGain
 {
     private Map<Environment, Double> multipliers;
 

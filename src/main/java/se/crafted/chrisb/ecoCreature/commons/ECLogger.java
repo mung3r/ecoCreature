@@ -9,7 +9,7 @@ public class ECLogger
 
     private Logger logger;
     private String name;
-    private boolean isDebug;
+    private boolean debug;
 
     public static ECLogger getInstance()
     {
@@ -19,18 +19,18 @@ public class ECLogger
     private ECLogger()
     {
         logger = Logger.getLogger("Minecraft");
-        isDebug = false;
+        debug = false;
         name = LOG_NAME;
     }
 
     public boolean isDebug()
     {
-        return isDebug;
+        return debug;
     }
 
-    public void setDebug(boolean isDebug)
+    public void setDebug(boolean debug)
     {
-        this.isDebug = isDebug;
+        this.debug = debug;
     }
 
     public String getName()
@@ -60,7 +60,7 @@ public class ECLogger
 
     public void debug(String msg)
     {
-        if (isDebug) {
+        if (debug) {
             logger.info(format("DEBUG: " + msg));
         }
     }

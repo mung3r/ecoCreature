@@ -10,7 +10,7 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.commons.TimePeriod;
 
-public class TimeGain extends BasicGain
+public class TimeGain extends DefaultGain
 {
     Map<TimePeriod, Double> multipliers;
 

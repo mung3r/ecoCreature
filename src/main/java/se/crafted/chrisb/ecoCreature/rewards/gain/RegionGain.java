@@ -13,7 +13,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-public class RegionGain extends BasicGain
+public class RegionGain extends DefaultGain
 {
     private Map<String, Double> multipliers;
 

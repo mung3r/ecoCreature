@@ -12,42 +12,52 @@ import se.crafted.chrisb.ecoCreature.commands.ReloadCommand;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.UpdateTask;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
-import se.crafted.chrisb.ecoCreature.config.ConfigManager;
-import se.crafted.chrisb.ecoCreature.listeners.BlockEventListener;
-import se.crafted.chrisb.ecoCreature.listeners.DeathEventListener;
-import se.crafted.chrisb.ecoCreature.listeners.HeroMasteredListener;
-import se.crafted.chrisb.ecoCreature.listeners.KillEventListener;
-import se.crafted.chrisb.ecoCreature.listeners.SpawnEventListener;
-import se.crafted.chrisb.ecoCreature.listeners.StreakEventListener;
-import se.crafted.chrisb.ecoCreature.metrics.MetricsManager;
-import se.crafted.chrisb.ecoCreature.rewards.RewardManager;
+import se.crafted.chrisb.ecoCreature.events.handlers.BlockEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.EntityDeathEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.HeroEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.PlayerDeathEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.StreakEventHandler;
+import se.crafted.chrisb.ecoCreature.events.listeners.BlockEventListener;
+import se.crafted.chrisb.ecoCreature.events.listeners.EntityDeathEventListener;
+import se.crafted.chrisb.ecoCreature.events.listeners.PlayerDeathEventListener;
+import se.crafted.chrisb.ecoCreature.events.listeners.HeroEventListener;
+import se.crafted.chrisb.ecoCreature.events.listeners.RewardEventListener;
+import se.crafted.chrisb.ecoCreature.events.listeners.SpawnEventListener;
+import se.crafted.chrisb.ecoCreature.events.listeners.StreakEventListener;
+import se.crafted.chrisb.ecoCreature.metrics.RewardMetrics;
+import se.crafted.chrisb.ecoCreature.rewards.RewardSettings;
 
 public class ecoCreature extends JavaPlugin
 {
-    private MetricsManager metrics;
-    private ConfigManager configManager;
+    private RewardMetrics metrics;
+    private PluginConfig pluginConfig;
     private CommandHandler commandHandler;
 
     public void onEnable()
     {
         DependencyUtils.init();
 
-        metrics = new MetricsManager(this);
-        configManager = new ConfigManager(this);
+        metrics = new RewardMetrics(this);
+        pluginConfig = new PluginConfig(this);
 
-        addCommands();
-        registerEvents();
+        if (pluginConfig.isLoaded()) {
+            addCommands();
+            registerEvents();
 
-        new UpdateTask(this);
+            new UpdateTask(this);
 
-        ECLogger.getInstance().info(getDescription().getVersion() + " enabled.");
+            ECLogger.getInstance().info(getDescription().getVersion() + " enabled.");
+        }
+        else {
+            Bukkit.getPluginManager().disablePlugin(this);
+        }
     }
 
     @Override
     public void onDisable()
     {
         getServer().getScheduler().cancelTasks(this);
-        configManager.save();
+        pluginConfig.save();
         ECLogger.getInstance().info(getDescription().getVersion() + " is disabled.");
     }
 
@@ -61,26 +71,17 @@ public class ecoCreature extends JavaPlugin
     public void reloadConfig()
     {
         super.reloadConfig();
-        configManager = new ConfigManager(this);
+        pluginConfig = new PluginConfig(this);
     };
 
-    public MetricsManager getMetrics()
+    public RewardMetrics getMetrics()
     {
         return metrics;
     }
 
-    public ConfigManager getConfigManager()
+    public RewardSettings getRewardSettings(World world)
     {
-        return configManager;
-    }
-
-    public RewardManager getRewardManager(World world)
-    {
-        RewardManager rewardManager = configManager.getGlobalRewardManager().get(world.getName());
-        if (rewardManager == null) {
-            rewardManager = configManager.getGlobalRewardManager().get(ConfigManager.DEFAULT_WORLD);
-        }
-        return rewardManager;
+        return pluginConfig.getRewardSettings(world);
     }
 
     public CommandHandler getCommandHandler()
@@ -97,15 +98,17 @@ public class ecoCreature extends JavaPlugin
 
     private void registerEvents()
     {
-        Bukkit.getPluginManager().registerEvents(new BlockEventListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new DeathEventListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new KillEventListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new RewardEventListener(this), this);
         Bukkit.getPluginManager().registerEvents(new SpawnEventListener(this), this);
+
+        Bukkit.getPluginManager().registerEvents(new BlockEventListener(new BlockEventHandler(this)), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerDeathEventListener(new PlayerDeathEventHandler(this)), this);
+        Bukkit.getPluginManager().registerEvents(new EntityDeathEventListener(new EntityDeathEventHandler(this)), this);
         if (DependencyUtils.hasDeathTpPlus()) {
-            Bukkit.getPluginManager().registerEvents(new StreakEventListener(this), this);
+            Bukkit.getPluginManager().registerEvents(new StreakEventListener(new StreakEventHandler(this)), this);
         }
         if (DependencyUtils.hasHeroes()) {
-            Bukkit.getPluginManager().registerEvents(new HeroMasteredListener(this), this);
+            Bukkit.getPluginManager().registerEvents(new HeroEventListener(new HeroEventHandler(this)), this);
         }
     }
 }

@@ -11,7 +11,7 @@ import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
-public class TownyGain extends BasicGain
+public class TownyGain extends DefaultGain
 {
 
     private Map<String, Double> multipliers;

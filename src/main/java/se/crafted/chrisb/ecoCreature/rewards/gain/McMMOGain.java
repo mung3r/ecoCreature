@@ -6,14 +6,13 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-public class McMMOGain extends BasicGain
+public class McMMOGain extends DefaultGain
 {
     private double multiplier;
 
-    public McMMOGain(double multiplier, boolean isShared)
+    public McMMOGain(double multiplier)
     {
         this.multiplier = multiplier;
-        this.isShared = isShared;
     }
 
     @Override
@@ -32,7 +31,7 @@ public class McMMOGain extends BasicGain
         Gain gain = null;
 
         if (config != null) {
-            gain = new McMMOGain(config.getDouble("Amount", 1.0D), config.getBoolean("Share", true));
+            gain = new McMMOGain(config.getDouble("Amount", 1.0D));
         }
 
         return gain;

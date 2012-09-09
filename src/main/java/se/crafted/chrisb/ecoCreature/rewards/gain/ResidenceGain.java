@@ -12,7 +12,7 @@ import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import com.bekvon.bukkit.residence.Residence;
 import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 
-public class ResidenceGain extends BasicGain
+public class ResidenceGain extends DefaultGain
 {
     private Map<String, Double> multipliers;
 

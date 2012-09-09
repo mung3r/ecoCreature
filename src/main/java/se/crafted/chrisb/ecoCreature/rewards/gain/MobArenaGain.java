@@ -6,14 +6,13 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-public class MobArenaGain extends BasicGain
+public class MobArenaGain extends DefaultGain
 {
     private double multiplier;
 
-    public MobArenaGain(double multiplier, boolean isShared)
+    public MobArenaGain(double multiplier)
     {
         this.multiplier = multiplier;
-        this.isShared = isShared;
     }
 
     @Override
@@ -32,7 +31,7 @@ public class MobArenaGain extends BasicGain
         Gain gain = null;
 
         if (config != null) {
-            gain = new MobArenaGain(config.getDouble("Amount", 1.0D), config.getBoolean("Share", true));
+            gain = new MobArenaGain(config.getDouble("Amount", 1.0D));
         }
 
         return gain;

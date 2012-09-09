@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-public class GroupGain extends BasicGain
+public class GroupGain extends DefaultGain
 {
     private boolean warnGroupMultiplierSupport;
     private Map<String, Double> multipliers;

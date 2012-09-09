@@ -13,7 +13,7 @@ import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.Faction;
 
-public class FactionsGain extends BasicGain
+public class FactionsGain extends DefaultGain
 {
     private Map<String, Double> multipliers;
 

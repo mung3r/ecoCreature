@@ -1,10 +1,24 @@
 package se.crafted.chrisb.ecoCreature.messages;
 
+import java.util.Map;
+
 public interface Message
 {
-    public void setTemplate(String template);
+    boolean isMessageOutputEnabled();
 
-    public void addParameter(MessageToken token, String parameter);
+    void setMessageOutputEnabled(boolean messageOutputEnabled);
 
-    public void send();
+    boolean isCoinLoggingEnabled();
+
+    void setCoinLoggingEnabled(boolean coinLoggingEnabled);
+
+    String getTemplate();
+
+    void setTemplate(String template);
+
+    void addParameter(MessageToken token, String parameter);
+
+    void removeParameter(MessageToken token);
+
+    Map<MessageToken, String> getParameters();
 }

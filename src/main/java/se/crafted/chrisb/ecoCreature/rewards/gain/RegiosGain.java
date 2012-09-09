@@ -10,7 +10,7 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import couk.Adamki11s.Regios.Regions.Region;
 
-public class RegiosGain extends BasicGain
+public class RegiosGain extends DefaultGain
 {
     private Map<String, Double> multipliers;
 

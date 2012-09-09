@@ -25,8 +25,8 @@ System:
         #
         # If CampingByDistance is true, then this is how many blocks
         # away from a spawner you need to be to get a reward
-        # Default: 7
-        CampRadius: 7
+        # Default: 16
+        CampRadius: 16
         #
         # Do not drop anything except for rewards defined in this file
         # Default: false
@@ -59,6 +59,14 @@ System:
         PenalizeDeath: false
         PenalizeType: true
         PenalizeAmount: 0.05
+        #
+        # Legacy PVP reward player kills. Use PVPRewardType to select whether
+        # PVPRewardAmount is used as a percentage (PVPRewardType: true) or a
+        # fixed amount (PVPRewardType: false)
+        # Default: false
+        PVPReward: false
+        PVPRewardType: true
+        PVPRewardAmount: 0.05
         #
         # Remove drops from mobs killed by farming contraptions (mob death by
         # cacti, falling, drowning or suffocation)
@@ -98,6 +106,9 @@ System:
         #
         # Custom message for no rewards killing with bow & arrow
         NoBowMessage: '&7You find no rewards on this creature.'
+        #
+        # Custom message for no rewards killing under sea level
+        NoUnderSeaLevel: '&7You find no rewards on this creature.'
         #
         # Custom message for death penalty
         DeathPenaltyMessage: '&7You wake up to find &6<amt>&7 missing from your pockets!'
