@@ -10,8 +10,8 @@ import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
 public class MessageSender
 {
-    String playerName;
-    Message message;
+    private String playerName;
+    private Message message;
 
     public MessageSender(Player player, Message message)
     {
