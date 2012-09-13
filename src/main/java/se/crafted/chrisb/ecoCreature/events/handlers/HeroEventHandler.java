@@ -9,11 +9,9 @@ import org.bukkit.event.Event;
 import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.RewardSettings;
-import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSourceType;
 
 public class HeroEventHandler extends DefaultEventHandler
@@ -39,19 +37,15 @@ public class HeroEventHandler extends DefaultEventHandler
     {
         Set<RewardEvent> events = new HashSet<RewardEvent>();
 
-        if (event.getHero().getLevel() == event.getHeroClass().getMaxLevel()) {
-            Player player = event.getHero().getPlayer();
-            RewardSettings settings = plugin.getRewardSettings(player.getWorld());
+        Player player = event.getHero().getPlayer();
+        RewardSettings settings = plugin.getRewardSettings(player.getWorld());
 
-            if (DependencyUtils.hasPermission(player, "reward.hero_mastered") && settings.hasRewardSource(RewardSourceType.HERO_MASTERED)) {
-                RewardSource source = settings.getRewardSource(RewardSourceType.HERO_MASTERED);
-                Reward outcome = source.getOutcome(player.getLocation());
+        if (settings.hasRewardSource(event)) {
+            Reward outcome = settings.getRewardSource(RewardSourceType.HERO_MASTERED).getOutcome(event);
 
-                events.add(new RewardEvent(player, outcome));
-            }
+            events.add(new RewardEvent(player, outcome));
         }
 
         return events;
     }
-
 }

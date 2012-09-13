@@ -9,7 +9,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
@@ -17,6 +16,7 @@ import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.RewardSettings;
 import se.crafted.chrisb.ecoCreature.rewards.sources.DeathPenaltySource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.PVPRewardSource;
+import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSourceType;
 
 public class PlayerDeathEventHandler extends DefaultEventHandler
@@ -49,42 +49,36 @@ public class PlayerDeathEventHandler extends DefaultEventHandler
         Player victim = event.getVictim();
         RewardSettings settings = plugin.getRewardSettings(killer.getWorld());
 
-        if (DependencyUtils.hasPermission(killer, "reward.player")) {
-            Reward winnerOutcome = null;
+        if (settings.hasRewardSource(event)) {
+            RewardSource winnerSource = settings.getRewardSource(event);
+            Reward winnerOutcome = winnerSource.getOutcome(event);
 
-            if (settings.hasRewardSource(RewardSourceType.PLAYER)) {
-                winnerOutcome = settings.getRewardSource(RewardSourceType.PLAYER).getOutcome(victim.getLocation());
+            if (winnerSource instanceof PVPRewardSource && ((PVPRewardSource) winnerSource).isPercentReward()) {
+                winnerOutcome.setCoin(DependencyUtils.getEconomy().getBalance(victim.getName()));
+            }
+            else {
                 winnerOutcome.setGain(settings.getGainMultiplier(killer));
             }
-            else if (DependencyUtils.hasEconomy() && settings.getRewardSource(RewardSourceType.LEGACY_PVP) instanceof PVPRewardSource) {
-                PVPRewardSource reward = (PVPRewardSource) settings.getRewardSource(RewardSourceType.LEGACY_PVP);
-                winnerOutcome = reward.getOutcome(victim.getLocation());
-                if (reward.isPercentReward()) {
-                    winnerOutcome.setCoin(DependencyUtils.getEconomy().getBalance(victim.getName()));
-                }
+
+            winnerOutcome.getMessage().addParameter(MessageToken.CREATURE, victim.getName());
+
+            if (winnerOutcome.getExp() > 0) {
+                event.setDroppedExp(0);
             }
 
-            if (winnerOutcome != null) {
-                winnerOutcome.getMessage().addParameter(MessageToken.CREATURE, victim.getName());
+            if (settings.isOverrideDrops()) {
+                event.getDrops().clear();
+            }
 
-                if (winnerOutcome.getExp() > 0) {
-                    event.setDroppedExp(0);
-                }
+            events.add(new RewardEvent(killer, winnerOutcome));
 
-                if (settings.isOverrideDrops()) {
-                    event.getDrops().clear();
-                }
+            if (settings.hasRewardSource(RewardSourceType.DEATH_PENALTY)) {
+                DeathPenaltySource loserSource = (DeathPenaltySource) settings.getRewardSource(RewardSourceType.DEATH_PENALTY);
+                Reward loserOutcome = loserSource.getOutcome(event);
+                loserOutcome.setCoin(winnerOutcome.getCoin());
+                loserOutcome.setGain(-winnerOutcome.getGain());
 
-                events.add(new RewardEvent(killer, winnerOutcome));
-
-                if (settings.getRewardSource(RewardSourceType.DEATH_PENALTY) instanceof DeathPenaltySource) {
-                    DeathPenaltySource reward = (DeathPenaltySource) settings.getRewardSource(RewardSourceType.DEATH_PENALTY);
-                    Reward loserOutcome = reward.getOutcome(victim.getLocation());
-                    loserOutcome.setCoin(winnerOutcome.getCoin());
-                    loserOutcome.setGain(-winnerOutcome.getGain());
-
-                    events.add(new RewardEvent(victim, loserOutcome));
-                }
+                events.add(new RewardEvent(victim, loserOutcome));
             }
         }
 
@@ -98,20 +92,15 @@ public class PlayerDeathEventHandler extends DefaultEventHandler
         Player player = event.getEntity();
         RewardSettings settings = plugin.getRewardSettings(player.getWorld());
 
-        if (!DependencyUtils.hasPermission(player, "reward.deathpenalty") && DependencyUtils.hasEconomy()) {
-            if (DependencyUtils.hasEconomy() && settings.getRewardSource(RewardSourceType.DEATH_PENALTY) instanceof DeathPenaltySource) {
-                DeathPenaltySource reward = (DeathPenaltySource) settings.getRewardSource(RewardSourceType.DEATH_PENALTY);
-                Reward outcome = reward.getOutcome(player.getLocation());
+        if (settings.hasRewardSource(event)) {
+            RewardSource source = settings.getRewardSource(RewardSourceType.DEATH_PENALTY);
+            Reward outcome = source.getOutcome(event);
 
-                if (reward.isPercentPenalty()) {
-                    outcome.setCoin(DependencyUtils.getEconomy().getBalance(player.getName()));
-                }
-
-                events.add(new RewardEvent(player, outcome));
+            if (source instanceof DeathPenaltySource && ((DeathPenaltySource) source).isPercentPenalty()) {
+                outcome.setCoin(DependencyUtils.getEconomy().getBalance(player.getName()));
             }
-        }
-        else {
-            ECLogger.getInstance().debug("No reward for " + player.getName() + " due to lack of permission for " + RewardSourceType.DEATH_PENALTY.getName());
+
+            events.add(new RewardEvent(player, outcome));
         }
 
         return events;

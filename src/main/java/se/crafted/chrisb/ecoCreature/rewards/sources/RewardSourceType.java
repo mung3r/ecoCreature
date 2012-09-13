@@ -30,7 +30,7 @@ public enum RewardSourceType
     HERO_MASTERED("HeroMastered"),
     IRON_GOLEM("VillagerGolem"),
     KILL_STREAK("KillStreak"),
-    LEGACY_PVP("Player"),
+    LEGACY_PVP("LegacyPVP"),
     MAGMA_CUBE("LavaSlime"),
     MONSTER("Monster"),
     MUSHROOM_COW("MushroomCow"),

@@ -3,19 +3,15 @@ package se.crafted.chrisb.ecoCreature.events.handlers;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.RewardSettings;
-import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSourceType;
 
 public class EntityDeathEventHandler extends DefaultEventHandler
 {
@@ -41,31 +37,24 @@ public class EntityDeathEventHandler extends DefaultEventHandler
         Set<RewardEvent> events = new HashSet<RewardEvent>();
 
         Player killer = event.getKiller();
-        LivingEntity entity = event.getEntity();
         RewardSettings settings = plugin.getRewardSettings(killer.getWorld());
 
-        if (DependencyUtils.hasPermission(killer, "reward." + RewardSourceType.fromEntity(entity).getName())) {
+        if (settings.hasRewardSource(event)) {
+            Reward outcome = settings.getRewardSource(event).getOutcome(event);
+            outcome.setGain(settings.getGainMultiplier(killer));
+            outcome.setParty(settings.getParty(killer));
+            outcome.getMessage().addParameter(MessageToken.CREATURE, outcome.getName());
+            outcome.getMessage().addParameter(MessageToken.ITEM, event.getWeaponName());
 
-            if (!settings.isRuleBroken(event) && settings.hasRewardSource(entity)) {
-                Reward outcome = settings.getRewardSource(entity).getOutcome(entity.getLocation());
-                outcome.setGain(settings.getGainMultiplier(killer));
-                outcome.setParty(settings.getParty(killer));
-                outcome.getMessage().addParameter(MessageToken.CREATURE, outcome.getName());
-                outcome.getMessage().addParameter(MessageToken.ITEM, event.getWeaponName());
-
-                if (outcome.getExp() > 0) {
-                    event.setDroppedExp(0);
-                }
-
-                if (settings.isOverrideDrops()) {
-                    event.getDrops().clear();
-                }
-
-                events.add(new RewardEvent(killer, outcome));
+            if (outcome.getExp() > 0) {
+                event.setDroppedExp(0);
             }
-        }
-        else {
-            ECLogger.getInstance().debug("No reward for " + killer.getName() + " due to lack of permission for " + RewardSourceType.fromEntity(entity).getName());
+
+            if (settings.isOverrideDrops()) {
+                event.getDrops().clear();
+            }
+
+            events.add(new RewardEvent(killer, outcome));
         }
 
         return events;

@@ -9,11 +9,9 @@ import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
 import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.RewardSettings;
-import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSourceType;
 
 public class StreakEventHandler extends DefaultEventHandler
@@ -46,9 +44,8 @@ public class StreakEventHandler extends DefaultEventHandler
         int deaths = event.getDeaths();
         RewardSettings settings = plugin.getRewardSettings(player.getWorld());
 
-        if (DependencyUtils.hasPermission(player, "reward.deathstreak") && settings.hasRewardSource(RewardSourceType.DEATH_STREAK)) {
-            RewardSource source = settings.getRewardSource(RewardSourceType.DEATH_STREAK);
-            Reward outcome = source.getOutcome(player.getLocation());
+        if (settings.hasRewardSource(event)) {
+            Reward outcome = settings.getRewardSource(RewardSourceType.DEATH_STREAK).getOutcome(event);
             outcome.setGain(deaths);
 
             events.add(new RewardEvent(player, outcome));
@@ -65,9 +62,8 @@ public class StreakEventHandler extends DefaultEventHandler
         int kills = event.getKills();
         RewardSettings settings = plugin.getRewardSettings(player.getWorld());
 
-        if (DependencyUtils.hasPermission(player, "reward.killstreak") && settings.hasRewardSource(RewardSourceType.KILL_STREAK)) {
-            RewardSource source = settings.getRewardSource(RewardSourceType.KILL_STREAK);
-            Reward outcome = source.getOutcome(player.getLocation());
+        if (settings.hasRewardSource(event)) {
+            Reward outcome = settings.getRewardSource(RewardSourceType.KILL_STREAK).getOutcome(event);
             outcome.setGain(kills);
 
             events.add(new RewardEvent(player, outcome));

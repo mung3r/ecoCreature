@@ -5,8 +5,17 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.event.Event;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
+import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
+import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
+
+import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
+import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.NoCoinRewardMessage;
@@ -183,9 +192,9 @@ public class DefaultRewardSource implements RewardSource
     }
 
     @Override
-    public Reward getOutcome(Location location)
+    public Reward getOutcome(Event event)
     {
-        Reward reward = new Reward(location);
+        Reward reward = new Reward(getLocation(event));
 
         reward.setType(type);
         reward.setName(name);
@@ -212,6 +221,33 @@ public class DefaultRewardSource implements RewardSource
         reward.setIntegerCurrency(integerCurrency);
 
         return reward;
+    }
+
+    protected static Location getLocation(Event event)
+    {
+        if (event instanceof BlockBreakEvent) {
+            return ((BlockBreakEvent) event).getBlock().getLocation();
+        }
+        else if (event instanceof EntityKilledEvent) {
+            return ((EntityKilledEvent) event).getEntity().getLocation();
+        }
+        else if (event instanceof HeroChangeLevelEvent) {
+            return ((HeroChangeLevelEvent) event).getHero().getPlayer().getLocation();
+        }
+        else if (event instanceof PlayerKilledEvent) {
+            return ((PlayerKilledEvent) event).getVictim().getLocation();
+        }
+        else if (event instanceof PlayerDeathEvent) {
+            return ((PlayerDeathEvent) event).getEntity().getLocation();
+        }
+        else if (event instanceof DeathStreakEvent) {
+            return ((DeathStreakEvent) event).getPlayer().getLocation();
+        }
+        else if (event instanceof KillStreakEvent) {
+            return ((KillStreakEvent) event).getPlayer().getLocation();
+        }
+
+        return null;
     }
 
     private List<ItemStack> getDropOutcomes(boolean isFixedDrops)

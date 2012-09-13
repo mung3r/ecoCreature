@@ -1,7 +1,7 @@
 package se.crafted.chrisb.ecoCreature.rewards.sources;
 
-import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
@@ -34,9 +34,9 @@ public class PVPRewardSource extends DefaultRewardSource
     }
 
     @Override
-    public Reward getOutcome(Location location)
+    public Reward getOutcome(Event event)
     {
-        Reward reward = new Reward(location);
+        Reward reward = new Reward(getLocation(event));
         reward.setGain(percentReward ? rewardAmount / 100.0 : 1.0);
 
         reward.setType(getType());

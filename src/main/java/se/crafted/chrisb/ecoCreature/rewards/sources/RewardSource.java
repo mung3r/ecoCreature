@@ -2,7 +2,7 @@ package se.crafted.chrisb.ecoCreature.rewards.sources;
 
 import java.util.List;
 
-import org.bukkit.Location;
+import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
@@ -59,5 +59,5 @@ public interface RewardSource
 
     void setOverrideDrops(boolean overrideDrops);
 
-    Reward getOutcome(Location location);
+    Reward getOutcome(Event event);
 }
