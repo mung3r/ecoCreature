@@ -13,7 +13,6 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 
 public class TownyGain extends DefaultGain
 {
-
     private Map<String, Double> multipliers;
 
     public TownyGain(Map<String, Double> multipliers)

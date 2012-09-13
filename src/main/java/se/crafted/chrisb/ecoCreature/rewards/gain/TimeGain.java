@@ -12,7 +12,7 @@ import se.crafted.chrisb.ecoCreature.commons.TimePeriod;
 
 public class TimeGain extends DefaultGain
 {
-    Map<TimePeriod, Double> multipliers;
+    private Map<TimePeriod, Double> multipliers;
 
     public TimeGain(Map<TimePeriod, Double> multipliers)
     {
