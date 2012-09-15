@@ -53,6 +53,7 @@ public class RewardSettings
     {
         sources = new HashMap<RewardSourceType, List<RewardSource>>();
         gainMultipliers = new HashSet<Gain>();
+        parties = new HashSet<Party>();
         huntingRules = new HashSet<Rule>();
 
         for (Rule rule : huntingRules) {
@@ -233,8 +234,7 @@ public class RewardSettings
             return hasRewardSource(RewardSourceType.DEATH_STREAK);
         }
         else {
-            ECLogger.getInstance().debug(
-                    "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + RewardSourceType.DEATH_STREAK.getName());
+            ECLogger.getInstance().debug("No reward for " + event.getPlayer().getName() + " due to lack of permission for " + RewardSourceType.DEATH_STREAK.getName());
         }
 
         return false;
@@ -246,14 +246,13 @@ public class RewardSettings
             return hasRewardSource(RewardSourceType.KILL_STREAK);
         }
         else {
-            ECLogger.getInstance().debug(
-                    "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + RewardSourceType.KILL_STREAK.getName());
+            ECLogger.getInstance().debug("No reward for " + event.getPlayer().getName() + " due to lack of permission for " + RewardSourceType.KILL_STREAK.getName());
         }
 
         return false;
     }
 
-    public boolean hasRewardSource(Entity entity)
+    private boolean hasRewardSource(Entity entity)
     {
         return entity != null && hasRewardSource(RewardSourceType.fromEntity(entity));
     }
@@ -310,7 +309,7 @@ public class RewardSettings
 
         if (hasRewardSource(type)) {
             source = sources.get(type).get(random.nextInt(sources.get(type).size()));
-            
+
             if (source == null) {
                 source = (PVPRewardSource) getRewardSource(RewardSourceType.LEGACY_PVP);
             }
