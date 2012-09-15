@@ -58,17 +58,17 @@ public class PluginConfig
 {
     public static final String DEFAULT_WORLD = "__DEFAULT_WORLD__";
 
-    private static final String OLD_CONFIG_FILE = "ecoCreature.yml";
-    private static final String DEFAULT_CONFIG_FILE = "default.yml";
+    private static final String OLD_DEFAULT_FILE = "ecoCreature.yml";
+    private static final String DEFAULT_FILE = "default.yml";
 
     private final ecoCreature plugin;
     private final File dataWorldsFolder;
 
     private boolean loaded;
-    private File defaultConfigFile;
+    private File defaultFile;
     private FileConfiguration defaultConfig;
-    private Map<String, FileConfiguration> worldConfigs;
-    private Map<String, RewardSettings> rewardSettings;
+    private Map<String, FileConfiguration> fileConfigMap;
+    private Map<String, RewardSettings> rewardSettingsMap;
 
     public PluginConfig(ecoCreature plugin)
     {
@@ -96,9 +96,9 @@ public class PluginConfig
 
     public RewardSettings getRewardSettings(World world)
     {
-        RewardSettings settings = rewardSettings.get(world.getName());
+        RewardSettings settings = rewardSettingsMap.get(world.getName());
         if (settings == null) {
-            settings = rewardSettings.get(PluginConfig.DEFAULT_WORLD);
+            settings = rewardSettingsMap.get(PluginConfig.DEFAULT_WORLD);
         }
         return settings;
     }
@@ -106,45 +106,45 @@ public class PluginConfig
     private void load() throws IOException, InvalidConfigurationException
     {
         defaultConfig = new YamlConfiguration();
-        defaultConfigFile = new File(plugin.getDataFolder(), DEFAULT_CONFIG_FILE);
+        defaultFile = new File(plugin.getDataFolder(), DEFAULT_FILE);
 
-        File oldConfigFile = new File(plugin.getDataFolder(), OLD_CONFIG_FILE);
+        File oldDefaultFile = new File(plugin.getDataFolder(), OLD_DEFAULT_FILE);
 
-        if (defaultConfigFile.exists()) {
-            defaultConfig.load(defaultConfigFile);
+        if (defaultFile.exists()) {
+            defaultConfig.load(defaultFile);
         }
-        else if (oldConfigFile.exists()) {
+        else if (oldDefaultFile.exists()) {
             ECLogger.getInstance().info("Converting old config file.");
-            defaultConfig = getConfig(oldConfigFile);
-            if (oldConfigFile.delete()) {
+            defaultConfig = getConfig(oldDefaultFile);
+            if (oldDefaultFile.delete()) {
                 ECLogger.getInstance().info("Old config file converted.");
             }
         }
         else {
-            defaultConfig = getConfig(defaultConfigFile);
+            defaultConfig = getConfig(defaultFile);
         }
 
         ECLogger.getInstance().info("Loaded config defaults.");
         ECLogger.getInstance().setDebug(defaultConfig.getBoolean("System.Debug", false));
 
-        RewardSettings defaultFactory = loadRewardConfig(defaultConfig);
-        rewardSettings = new HashMap<String, RewardSettings>();
-        rewardSettings.put(DEFAULT_WORLD, defaultFactory);
+        RewardSettings defaultSettings = loadRewardConfig(defaultConfig);
+        rewardSettingsMap = new HashMap<String, RewardSettings>();
+        rewardSettingsMap.put(DEFAULT_WORLD, defaultSettings);
 
-        worldConfigs = new HashMap<String, FileConfiguration>();
+        fileConfigMap = new HashMap<String, FileConfiguration>();
 
         for (World world : plugin.getServer().getWorlds()) {
 
             File worldConfigFile = new File(dataWorldsFolder, world.getName() + ".yml");
 
             if (worldConfigFile.exists()) {
-                FileConfiguration worldConfig = getConfig(worldConfigFile);
+                FileConfiguration configFile = getConfig(worldConfigFile);
                 ECLogger.getInstance().info("Loaded config for " + world.getName() + " world.");
-                rewardSettings.put(world.getName(), loadRewardConfig(worldConfig));
-                worldConfigs.put(world.getName(), worldConfig);
+                rewardSettingsMap.put(world.getName(), loadRewardConfig(configFile));
+                fileConfigMap.put(world.getName(), configFile);
             }
             else {
-                rewardSettings.put(world.getName(), defaultFactory);
+                rewardSettingsMap.put(world.getName(), defaultSettings);
             }
         }
     }
@@ -153,10 +153,10 @@ public class PluginConfig
     {
         if (loaded) {
             try {
-                defaultConfig.save(defaultConfigFile);
+                defaultConfig.save(defaultFile);
 
-                for (String worldName : worldConfigs.keySet()) {
-                    FileConfiguration config = worldConfigs.get(worldName);
+                for (String worldName : fileConfigMap.keySet()) {
+                    FileConfiguration config = fileConfigMap.get(worldName);
                     File configFile = new File(dataWorldsFolder, worldName + ".yml");
                     config.save(configFile);
                 }
@@ -184,7 +184,7 @@ public class PluginConfig
         ConfigurationSection rewardSetsConfig = config.getConfigurationSection("RewardSets");
         if (rewardSetsConfig != null) {
             for (String setName : rewardSetsConfig.getKeys(false)) {
-                rewardSets.put(setName, configureSource(DefaultRewardSource.parseConfig(RewardSourceType.CUSTOM, rewardSetsConfig.getConfigurationSection(setName)), config));
+                rewardSets.put(setName, configureSource(DefaultRewardSource.parseConfig(RewardSourceType.SET, rewardSetsConfig.getConfigurationSection(setName)), config));
             }
         }
 
