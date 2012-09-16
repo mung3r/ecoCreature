@@ -8,210 +8,218 @@ softdepend: [Heroes,mcMMO,WorldGuard,Residence,Regios,DeathTpPlus,MobArena,Facti
 description: Coins and drops for PvM
 
 commands:
-    ecoc:
-        description: ecoCreature commands
-        usage: |
-               Usage:
-               /<command> reload - Reload config
+  ecoc:
+    description: ecoCreature commands
+    usage: |
+           Usage:
+           /<command> reload - Reload config
 permissions:
-    ecocreature.command.*:
-        description: Allows all commands
-        children:
-            ecocreature.command.reload: true
-    ecocreature.gain.*:
-        description: Allows all gain multipliers
-        children:
-            ecocreature.gain.group: true
-            ecocreature.gain.time: true
-            ecocreature.gain.environment: true
-            ecocreature.gain.weapon: true
-            ecocreature.gain.heroes: true
-            ecocreature.gain.mcmmo: true
-            ecocreature.gain.mobarena: true
-            ecocreature.gain.worldguard: true
-            ecocreature.gain.residence: true
-            ecocreature.gain.regios: true
-            ecocreature.gain.factions: true
-            ecocreature.gain.towny: true
-    ecocreature.reward.*:
-        description: Allows rewards for all creature types
-        children:
-            ecocreature.reward.angrywolf: true
-            ecocreature.reward.blaze: true
-            ecocreature.reward.cavespider: true
-            ecocreature.reward.chicken: true
-            ecocreature.reward.cow: true
-            ecocreature.reward.creeper: true
-            ecocreature.reward.custom: true
-            ecocreature.reward.deathpenalty: true
-            ecocreature.reward.deathstreak: true
-            ecocreature.reward.enderdragon: true
-            ecocreature.reward.enderman: true
-            ecocreature.reward.ghast: true
-            ecocreature.reward.giant: true
-            ecocreature.reward.hero_mastered: true
-            ecocreature.reward.killstreak: true
-            ecocreature.reward.magmacube: true
-            ecocreature.reward.monster: true
-            ecocreature.reward.mushroomcow: true
-            ecocreature.reward.ozelot: true
-            ecocreature.reward.pig: true
-            ecocreature.reward.pigzombie: true
-            ecocreature.reward.player: true
-            ecocreature.reward.poweredcreeper: true
-            ecocreature.reward.sheep: true
-            ecocreature.reward.silverfish: true
-            ecocreature.reward.skeleton: true
-            ecocreature.reward.slime: true
-            ecocreature.reward.snowman: true
-            ecocreature.reward.spawner: true
-            ecocreature.reward.spider: true
-            ecocreature.reward.squid: true
-            ecocreature.reward.villager: true
-            ecocreature.reward.villagergolem: true
-            ecocreature.reward.wolf: true
-            ecocreature.reward.zombie: true
-    ecocreature.command.reload:
-        description: Enables use of reload command
-        default: op
-    ecocreature.gain.group:
-        description: Enables gain multiplier based on group
-        default: op
-    ecocreature.gain.time:
-        description: Enables gain multiplier based on time period
-        default: op
-    ecocreature.gain.environment:
-        description: Enables gain multiplier based on environment
-        default: op
-    ecocreature.gain.weapon:
-        description: Enables gain multiplier based on weapon
-        default: op
-    ecocreature.gain.heroes:
-        description: Enables gain multiplier based on Heroes party status
-        default: op
-    ecocreature.gain.mcmmo:
-        description: Enables gain multiplier based on mcMMO party status
-        default: op
-    ecocreature.gain.mobarena:
-        description: Enables gain multiplier based on player arena status
-        default: op
-    ecocreature.gain.worldguard:
-        description: Enables gain multiplier based on WorldGurad region
-        default: op 
-    ecocreature.gain.regios:
-        description: Enables gain multiplier based on Regios region
-        default: op 
-    ecocreature.gain.residence:
-        description: Enables gain multiplier based on Residence region
-        default: op 
-    ecocreature.gain.towny:
-        description: Enables gain multiplier based on Towny region
-        default: op 
-    ecocreature.gain.factions:
-        description: Enables gain multiplier based on Factions region
-        default: op 
-    ecocreature.reward.angrywolf:
-        description: Enables rewards for angry wolves
-        default: op
-    ecocreature.reward.blaze:
-        description: Enables rewards for blazes
-        default: op
-    ecocreature.reward.cavespider:
-        description: Enables rewards for cave spiders
-        default: op
-    ecocreature.reward.chicken:
-        description: Enables rewards for chickens
-        default: op
-    ecocreature.reward.cow:
-        description: Enables rewards for cows
-        default: op
-    ecocreature.reward.creeper:
-        description: Enables rewards for creepers
-        default: op
-    ecocreature.reward.custom:
-        description: Enables rewards for custom sets
-        default: op
-    ecocreature.reward.deathpenalty:
-        description: Enables penalty for playe death
-        default: op
-    ecocreature.reward.deathstreak:
-        description: Enables penalty for death streaks via DeathTpPlus
-        default: op
-    ecocreature.reward.enderdragon:
-        description: Enables rewards for enderdragons
-        default: op
-    ecocreature.reward.enderman:
-        description: Enables rewards for endermen
-        default: op
-    ecocreature.reward.ghast:
-        description: Enables rewards for ghasts
-        default: op
-    ecocreature.reward.giant:
-        description: Enables rewards for giants
-        default: op
-    ecocreature.reward.hero_mastered:
-        description: Enables rewards for mastering a class in Heroes
-        default: op
-    ecocreature.reward.killstreak:
-        description: Enables rewards for kill streaks via DeathTpPlus
-        default: op
-    ecocreature.reward.magmacube:
-        description: Enables rewards for magmacubes
-        default: op
-    ecocreature.reward.monster:
-        description: Enables rewards for monsters
-        default: op
-    ecocreature.reward.mushroomcow:
-        description: Enables rewards for mushroomcows
-        default: op
-    ecocreature.reward.ozelot:
-        description: Enables rewards for ozelot
-        default: op
-    ecocreature.reward.pig:
-        description: Enables rewards for pigs
-        default: op
-    ecocreature.reward.pigzombie:
-        description: Enables rewards for pig zombies
-        default: op
-    ecocreature.reward.player:
-        description: Enables rewards for players (a.k.a. PVP reward)
-        default: op
-    ecocreature.reward.poweredcreeper:
-        description: Enables rewards for powered creepers
-        default: op
-    ecocreature.reward.sheep:
-        description: Enables rewards for sheep
-        default: op
-    ecocreature.reward.silverfish:
-        description: Enables rewards for silverfish
-        default: op
-    ecocreature.reward.skeleton:
-        description: Enables rewards for skeletons
-        default: op
-    ecocreature.reward.slime:
-        description: Enables rewards for slime
-        default: op
-    ecocreature.reward.snowman:
-        description: Enables rewards for snowmen
-        default: op
-    ecocreature.reward.spawner:
-        description: Enables rewards for spawners
-        default: op
-    ecocreature.reward.spider:
-        description: Enables rewards for spiders
-        default: op
-    ecocreature.reward.squid:
-        description: Enables rewards for squid
-        default: op
-    ecocreature.reward.villager:
-        description: Enables rewards for villagers
-        default: op
-    ecocreature.reward.villagergolem:
-        description: Enables rewards for villagergolems
-        default: op
-    ecocreature.reward.wolf:
-        description: Enables rewards for wolves
-        default: op
-    ecocreature.reward.zombie:
-        description: Enables rewards for zombies
-        default: op
+  ecocreature.command.*:
+    description: Allows all commands
+    children:
+      ecocreature.command.reload: true
+  ecocreature.gain.*:
+    description: Allows all gain multipliers
+    children:
+      ecocreature.gain.group: true
+      ecocreature.gain.time: true
+      ecocreature.gain.environment: true
+      ecocreature.gain.biome: true
+      ecocreature.gain.weather: true
+      ecocreature.gain.weapon: true
+      ecocreature.gain.heroes: true
+      ecocreature.gain.mcmmo: true
+      ecocreature.gain.mobarena: true
+      ecocreature.gain.worldguard: true
+      ecocreature.gain.residence: true
+      ecocreature.gain.regios: true
+      ecocreature.gain.factions: true
+      ecocreature.gain.towny: true
+  ecocreature.reward.*:
+    description: Allows rewards for all creature types
+    children:
+      ecocreature.reward.angrywolf: true
+      ecocreature.reward.blaze: true
+      ecocreature.reward.cavespider: true
+      ecocreature.reward.chicken: true
+      ecocreature.reward.cow: true
+      ecocreature.reward.creeper: true
+      ecocreature.reward.custom: true
+      ecocreature.reward.deathpenalty: true
+      ecocreature.reward.deathstreak: true
+      ecocreature.reward.enderdragon: true
+      ecocreature.reward.enderman: true
+      ecocreature.reward.ghast: true
+      ecocreature.reward.giant: true
+      ecocreature.reward.hero_mastered: true
+      ecocreature.reward.killstreak: true
+      ecocreature.reward.magmacube: true
+      ecocreature.reward.monster: true
+      ecocreature.reward.mushroomcow: true
+      ecocreature.reward.ozelot: true
+      ecocreature.reward.pig: true
+      ecocreature.reward.pigzombie: true
+      ecocreature.reward.player: true
+      ecocreature.reward.poweredcreeper: true
+      ecocreature.reward.sheep: true
+      ecocreature.reward.silverfish: true
+      ecocreature.reward.skeleton: true
+      ecocreature.reward.slime: true
+      ecocreature.reward.snowman: true
+      ecocreature.reward.spawner: true
+      ecocreature.reward.spider: true
+      ecocreature.reward.squid: true
+      ecocreature.reward.villager: true
+      ecocreature.reward.villagergolem: true
+      ecocreature.reward.wolf: true
+      ecocreature.reward.zombie: true
+  ecocreature.command.reload:
+    description: Enables use of reload command
+    default: op
+  ecocreature.gain.group:
+    description: Enables gain multiplier based on group
+    default: op
+  ecocreature.gain.time:
+    description: Enables gain multiplier based on time period
+    default: op
+  ecocreature.gain.environment:
+    description: Enables gain multiplier based on environment
+    default: op
+  ecocreature.gain.biome:
+    description: Enables gain multiplier based on biome
+    default: op
+  ecocreature.gain.weather:
+    description: Enables gain multiplier based on weather
+    default: op
+  ecocreature.gain.weapon:
+    description: Enables gain multiplier based on weapon
+    default: op
+  ecocreature.gain.heroes:
+    description: Enables gain multiplier based on Heroes party status
+    default: op
+  ecocreature.gain.mcmmo:
+    description: Enables gain multiplier based on mcMMO party status
+    default: op
+  ecocreature.gain.mobarena:
+    description: Enables gain multiplier based on player arena status
+    default: op
+  ecocreature.gain.worldguard:
+    description: Enables gain multiplier based on WorldGurad region
+    default: op 
+  ecocreature.gain.regios:
+    description: Enables gain multiplier based on Regios region
+    default: op 
+  ecocreature.gain.residence:
+    description: Enables gain multiplier based on Residence region
+    default: op 
+  ecocreature.gain.towny:
+    description: Enables gain multiplier based on Towny region
+    default: op 
+  ecocreature.gain.factions:
+    description: Enables gain multiplier based on Factions region
+    default: op 
+  ecocreature.reward.angrywolf:
+    description: Enables rewards for angry wolves
+    default: op
+  ecocreature.reward.blaze:
+    description: Enables rewards for blazes
+    default: op
+  ecocreature.reward.cavespider:
+    description: Enables rewards for cave spiders
+    default: op
+  ecocreature.reward.chicken:
+    description: Enables rewards for chickens
+    default: op
+  ecocreature.reward.cow:
+    description: Enables rewards for cows
+    default: op
+  ecocreature.reward.creeper:
+    description: Enables rewards for creepers
+    default: op
+  ecocreature.reward.custom:
+    description: Enables rewards for custom sets
+    default: op
+  ecocreature.reward.deathpenalty:
+    description: Enables penalty for playe death
+    default: op
+  ecocreature.reward.deathstreak:
+    description: Enables penalty for death streaks via DeathTpPlus
+    default: op
+  ecocreature.reward.enderdragon:
+    description: Enables rewards for enderdragons
+    default: op
+  ecocreature.reward.enderman:
+    description: Enables rewards for endermen
+    default: op
+  ecocreature.reward.ghast:
+    description: Enables rewards for ghasts
+    default: op
+  ecocreature.reward.giant:
+    description: Enables rewards for giants
+    default: op
+  ecocreature.reward.hero_mastered:
+    description: Enables rewards for mastering a class in Heroes
+    default: op
+  ecocreature.reward.killstreak:
+    description: Enables rewards for kill streaks via DeathTpPlus
+    default: op
+  ecocreature.reward.magmacube:
+    description: Enables rewards for magmacubes
+    default: op
+  ecocreature.reward.monster:
+    description: Enables rewards for monsters
+    default: op
+  ecocreature.reward.mushroomcow:
+    description: Enables rewards for mushroomcows
+    default: op
+  ecocreature.reward.ozelot:
+    description: Enables rewards for ozelot
+    default: op
+  ecocreature.reward.pig:
+    description: Enables rewards for pigs
+    default: op
+  ecocreature.reward.pigzombie:
+    description: Enables rewards for pig zombies
+    default: op
+  ecocreature.reward.player:
+    description: Enables rewards for players (a.k.a. PVP reward)
+    default: op
+  ecocreature.reward.poweredcreeper:
+    description: Enables rewards for powered creepers
+    default: op
+  ecocreature.reward.sheep:
+    description: Enables rewards for sheep
+    default: op
+  ecocreature.reward.silverfish:
+    description: Enables rewards for silverfish
+    default: op
+  ecocreature.reward.skeleton:
+    description: Enables rewards for skeletons
+    default: op
+  ecocreature.reward.slime:
+    description: Enables rewards for slime
+    default: op
+  ecocreature.reward.snowman:
+    description: Enables rewards for snowmen
+    default: op
+  ecocreature.reward.spawner:
+    description: Enables rewards for spawners
+    default: op
+  ecocreature.reward.spider:
+    description: Enables rewards for spiders
+    default: op
+  ecocreature.reward.squid:
+    description: Enables rewards for squid
+    default: op
+  ecocreature.reward.villager:
+    description: Enables rewards for villagers
+    default: op
+  ecocreature.reward.villagergolem:
+    description: Enables rewards for villagergolems
+    default: op
+  ecocreature.reward.wolf:
+    description: Enables rewards for wolves
+    default: op
+  ecocreature.reward.zombie:
+    description: Enables rewards for zombies
+    default: op
