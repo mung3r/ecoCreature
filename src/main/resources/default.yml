@@ -186,12 +186,16 @@ Gain:
     MyResidenceName2:
       Amount: 0.5
   #
-  # Multiply reward amount based on Faction region
+  # Multiply reward amount based on Factions relation
   Factions:
-    MyFactionName1:
-      Amount: 0.125
-    MyFactionName2:
-      Amount: 0.5
+    MEMBER:
+      Amount: -1.0
+    ALLY:
+      Amount: 0.0
+    NEUTRAL:
+      Amount: 1.125
+    ENEMY:
+      Amount: 1.25
   #
   # Multiply reward amount based on Towny region
   Towny:

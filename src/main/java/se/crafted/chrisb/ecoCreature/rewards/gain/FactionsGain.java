@@ -9,15 +9,15 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.struct.Relation;
 
 public class FactionsGain extends DefaultGain
 {
-    private Map<String, Double> multipliers;
+    private Map<Relation, Double> multipliers;
 
-    public FactionsGain(Map<String, Double> multipliers)
+    public FactionsGain(Map<Relation, Double> multipliers)
     {
         this.multipliers = multipliers;
     }
@@ -28,9 +28,9 @@ public class FactionsGain extends DefaultGain
         double multiplier = 1.0;
 
         if (DependencyUtils.hasPermission(player, "gain.factions") && DependencyUtils.hasFactions()) {
-            Faction faction = Board.getFactionAt(new FLocation(player.getLocation()));
-            if (faction != null && multipliers.containsKey(faction.getTag())) {
-                multiplier = multipliers.get(faction.getTag());
+            FPlayer fPlayer = FPlayers.i.get(player);
+            if (fPlayer != null && multipliers.containsKey(fPlayer.getRelationToLocation())) {
+                multiplier = multipliers.get(fPlayer.getRelationToLocation());
                 ECLogger.getInstance().debug("Factions multiplier: " + multiplier);
             }
         }
@@ -43,9 +43,9 @@ public class FactionsGain extends DefaultGain
         Gain gain = null;
 
         if (config != null) {
-            Map<String, Double> multipliers = new HashMap<String, Double>();
-            for (String factionsTag : config.getKeys(false)) {
-                multipliers.put(factionsTag, Double.valueOf(config.getConfigurationSection(factionsTag).getDouble("Amount", 1.0D)));
+            Map<Relation, Double> multipliers = new HashMap<Relation, Double>();
+            for (String relation : config.getKeys(false)) {
+                multipliers.put(Relation.valueOf(relation), Double.valueOf(config.getConfigurationSection(relation).getDouble("Amount", 1.0D)));
             }
             gain = new FactionsGain(multipliers);
         }
