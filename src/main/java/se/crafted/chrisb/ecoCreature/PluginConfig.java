@@ -246,22 +246,22 @@ public class PluginConfig
         ConfigurationSection setConfig = config.getConfigurationSection("RewardSets");
 
         if (tableConfig != null) {
-            for (String rewardName : tableConfig.getKeys(false)) {
-                Material material = Material.matchMaterial(rewardName);
+            for (String materialName : tableConfig.getKeys(false)) {
+                Material material = Material.matchMaterial(materialName);
 
                 // NOTE: backward compatibility
-                if (material == null && CustomType.LEGACY_SPAWNER.equals(CustomType.fromName(rewardName))) {
+                if (material == null && CustomType.LEGACY_SPAWNER.equals(CustomType.fromName(materialName))) {
                     material = Material.MOB_SPAWNER;
                 }
 
                 if (material != null) {
-                    RewardSource source = configureRewardSource(DefaultRewardSource.parseConfig(tableConfig.getConfigurationSection(rewardName)), config);
+                    RewardSource source = configureRewardSource(DefaultRewardSource.parseConfig(tableConfig.getConfigurationSection(materialName)), config);
 
                     if (!sources.containsKey(material)) {
                         sources.put(material, new ArrayList<RewardSource>());
                     }
 
-                    List<String> setList = tableConfig.getConfigurationSection(rewardName).getStringList("Sets");
+                    List<String> setList = tableConfig.getConfigurationSection(materialName).getStringList("Sets");
                     if (!setList.isEmpty()) {
                         for (String setName : setList) {
                             if (setConfig != null && setConfig.getConfigurationSection(setName) != null) {
@@ -287,16 +287,16 @@ public class PluginConfig
         ConfigurationSection setConfig = config.getConfigurationSection("RewardSets");
 
         if (tableConfig != null) {
-            for (String rewardName : tableConfig.getKeys(false)) {
-                EntityType entityType = EntityType.fromName(rewardName);
+            for (String entityName : tableConfig.getKeys(false)) {
+                EntityType entityType = EntityType.fromName(entityName);
                 if (entityType != null) {
-                    RewardSource source = configureRewardSource(DefaultRewardSource.parseConfig(tableConfig.getConfigurationSection(rewardName)), config);
+                    RewardSource source = configureRewardSource(DefaultRewardSource.parseConfig(tableConfig.getConfigurationSection(entityName)), config);
 
                     if (!sources.containsKey(entityType)) {
                         sources.put(entityType, new ArrayList<RewardSource>());
                     }
 
-                    List<String> setList = tableConfig.getConfigurationSection(rewardName).getStringList("Sets");
+                    List<String> setList = tableConfig.getConfigurationSection(entityName).getStringList("Sets");
                     if (!setList.isEmpty()) {
                         for (String setName : setList) {
                             if (setConfig != null && setConfig.getConfigurationSection(setName) != null) {
@@ -322,16 +322,16 @@ public class PluginConfig
         ConfigurationSection setConfig = config.getConfigurationSection("RewardSets");
 
         if (tableConfig != null) {
-            for (String rewardName : tableConfig.getKeys(false)) {
-                CustomType customType = CustomType.fromName(rewardName);
+            for (String customName : tableConfig.getKeys(false)) {
+                CustomType customType = CustomType.fromName(customName);
                 if (customType != null) {
-                    RewardSource source = configureRewardSource(DefaultRewardSource.parseConfig(tableConfig.getConfigurationSection(rewardName)), config);
+                    RewardSource source = configureRewardSource(DefaultRewardSource.parseConfig(tableConfig.getConfigurationSection(customName)), config);
 
                     if (!sources.containsKey(customType)) {
                         sources.put(customType, new ArrayList<RewardSource>());
                     }
 
-                    List<String> setList = tableConfig.getConfigurationSection(rewardName).getStringList("Sets");
+                    List<String> setList = tableConfig.getConfigurationSection(customName).getStringList("Sets");
                     if (!setList.isEmpty()) {
                         for (String setName : setList) {
                             if (setConfig != null && setConfig.getConfigurationSection(setName) != null) {
