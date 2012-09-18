@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 
 public class DefaultMessage implements Message
 {
-    private static final String DEFAULT_TEMPLATE = "Default message";
+    private static final String DEFAULT_TEMPLATE = "";
 
     private boolean messageOutputEnabled;
     private boolean coinLoggingEnabled;
