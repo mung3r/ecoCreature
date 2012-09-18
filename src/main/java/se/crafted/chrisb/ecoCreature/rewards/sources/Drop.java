@@ -104,7 +104,7 @@ public class Drop
 
     public ItemStack getOutcome(boolean isFixedDrops)
     {
-        if (Math.random() * 100.0D < percentage) {
+        if (Math.random() * 100.0D < percentage && item != null) {
             int dropAmount = isFixedDrops ? maxAmount : minAmount + random.nextInt(Math.abs(maxAmount - minAmount + 1));
 
             if (dropAmount > 0) {
