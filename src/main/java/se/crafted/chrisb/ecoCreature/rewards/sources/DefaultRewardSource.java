@@ -23,12 +23,11 @@ import se.crafted.chrisb.ecoCreature.rewards.Reward;
 
 public class DefaultRewardSource implements RewardSource
 {
-    private static final String NO_COIN_REWARD_MESSAGE = "&7You slayed a &5<crt>&7 using a &3<itm>&7.";
-    private static final String COIN_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.";
-    private static final String COIN_PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.";
+    protected static final String NO_COIN_REWARD_MESSAGE = "&7You slayed a &5<crt>&7 using a &3<itm>&7.";
+    protected static final String COIN_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.";
+    protected static final String COIN_PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.";
 
     private String name;
-    private RewardSourceType type;
     private Coin coin;
     private List<Drop> drops;
     private Exp exp;
@@ -51,18 +50,6 @@ public class DefaultRewardSource implements RewardSource
     public void setName(String name)
     {
         this.name = name;
-    }
-
-    @Override
-    public void setType(RewardSourceType type)
-    {
-        this.type = type;
-    }
-
-    @Override
-    public RewardSourceType getType()
-    {
-        return type;
     }
 
     @Override
@@ -196,7 +183,6 @@ public class DefaultRewardSource implements RewardSource
     {
         Reward reward = new Reward(getLocation(event));
 
-        reward.setType(type);
         reward.setName(name);
         reward.setDrops(getDropOutcomes(fixedDrops));
 
@@ -266,13 +252,12 @@ public class DefaultRewardSource implements RewardSource
         return stacks;
     }
 
-    public static RewardSource parseConfig(RewardSourceType type, ConfigurationSection config)
+    public static RewardSource parseConfig(ConfigurationSection config)
     {
         DefaultRewardSource source = new DefaultRewardSource();
 
-        if (type != null && config != null) {
+        if (config != null) {
             source.setName(config.getName());
-            source.setType(type);
 
             source.setDrops(Drop.parseConfig(config));
             source.setCoin(Coin.parseConfig(config));

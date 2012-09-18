@@ -1,5 +1,8 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -26,12 +29,12 @@ public class MobArenaGain extends DefaultGain
         return super.getMultiplier(player);
     }
 
-    public static Gain parseConfig(ConfigurationSection config)
+    public static Set<Gain> parseConfig(ConfigurationSection config)
     {
-        Gain gain = null;
+        Set<Gain> gain = new HashSet<Gain>();
 
         if (config != null) {
-            gain = new MobArenaGain(config.getDouble("Amount", 1.0D));
+            gain.add(new MobArenaGain(config.getDouble("Amount", 1.0D)));
         }
 
         return gain;

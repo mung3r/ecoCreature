@@ -11,7 +11,7 @@ import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
-import se.crafted.chrisb.ecoCreature.rewards.RewardSettings;
+import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 
 public class EntityDeathEventHandler extends DefaultEventHandler
 {
@@ -37,7 +37,7 @@ public class EntityDeathEventHandler extends DefaultEventHandler
         Set<RewardEvent> events = new HashSet<RewardEvent>();
 
         Player killer = event.getKiller();
-        RewardSettings settings = plugin.getRewardSettings(killer.getWorld());
+        WorldSettings settings = plugin.getWorldSettings(killer.getWorld());
 
         if (settings.hasRewardSource(event)) {
             Reward outcome = settings.getRewardSource(event).getOutcome(event);

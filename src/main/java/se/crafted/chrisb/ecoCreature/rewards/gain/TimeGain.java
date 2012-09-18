@@ -1,7 +1,9 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -32,16 +34,16 @@ public class TimeGain extends DefaultGain
         return multiplier;
     }
 
-    public static Gain parseConfig(ConfigurationSection config)
+    public static Set<Gain> parseConfig(ConfigurationSection config)
     {
-        Gain gain = null;
+        Set<Gain> gain = new HashSet<Gain>();
 
         if (config != null) {
             Map<TimePeriod, Double> multipliers = new HashMap<TimePeriod, Double>();
             for (String period : config.getKeys(false)) {
                 multipliers.put(TimePeriod.fromName(period), Double.valueOf(config.getConfigurationSection(period).getDouble("Amount", 1.0D)));
             }
-            gain = new TimeGain(multipliers);
+            gain.add(new TimeGain(multipliers));
         }
 
         return gain;

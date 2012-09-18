@@ -13,10 +13,6 @@ public interface RewardSource
 
     void setName(String name);
 
-    void setType(RewardSourceType type);
-
-    RewardSourceType getType();
-
     boolean hasCoin();
 
     Coin getCoin();

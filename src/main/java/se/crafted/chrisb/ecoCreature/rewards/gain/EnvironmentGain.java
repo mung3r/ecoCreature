@@ -1,7 +1,9 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -33,9 +35,9 @@ public class EnvironmentGain extends DefaultGain
         return multiplier;
     }
 
-    public static Gain parseConfig(ConfigurationSection config)
+    public static Set<Gain> parseConfig(ConfigurationSection config)
     {
-        Gain gain = null;
+        Set<Gain> gain = new HashSet<Gain>();
 
         if (config != null) {
             Map<Environment, Double> multipliers = new HashMap<World.Environment, Double>();
@@ -47,7 +49,7 @@ public class EnvironmentGain extends DefaultGain
                     ECLogger.getInstance().warning("Skipping unknown environment name: " + environment);
                 }
             }
-            gain = new EnvironmentGain(multipliers);
+            gain.add(new EnvironmentGain(multipliers));
         }
 
         return gain;

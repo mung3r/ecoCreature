@@ -70,18 +70,19 @@ public class SpawnerMobRule extends DefaultRule implements SpawnerMobTracking
         return ruleBroken;
     }
 
-    public static Rule parseConfig(ConfigurationSection config)
+    public static Set<Rule> parseConfig(ConfigurationSection config)
     {
-        SpawnerMobRule rule = null;
+        Set<Rule> rules = new HashSet<Rule>();
 
         if (config != null) {
-            rule = new SpawnerMobRule();
+            SpawnerMobRule rule = new SpawnerMobRule();
             rule.setCanCampSpawner(config.getBoolean("System.Hunting.AllowCamping", false));
             rule.setClearDropsEnabled(config.getBoolean("System.Hunting.ClearCampDrops", true));
             rule.setCampByEntity(config.getBoolean("System.Hunting.CampingByEntity", false));
             rule.setMessage(new DefaultMessage(config.getString("System.Messages.NoCampMessage", NO_CAMP_MESSAGE)));
+            rules.add(rule);
         }
 
-        return rule;
+        return rules;
     }
 }

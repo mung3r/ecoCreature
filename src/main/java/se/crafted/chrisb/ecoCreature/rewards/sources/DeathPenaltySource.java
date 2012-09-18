@@ -39,7 +39,6 @@ public class DeathPenaltySource extends DefaultRewardSource
         Reward reward = new Reward(getLocation(event));
         reward.setGain(percentPenalty ? -penaltyAmount / 100.0 : -1.0);
 
-        reward.setType(getType());
         reward.setName(getName());
         reward.setCoin(percentPenalty ? 0.0 : penaltyAmount);
         reward.setMessage(getCoinPenaltyMessage());
@@ -48,14 +47,13 @@ public class DeathPenaltySource extends DefaultRewardSource
         return reward;
     }
 
-    public static RewardSource parseConfig(RewardSourceType type, ConfigurationSection config)
+    public static RewardSource parseConfig(ConfigurationSection config)
     {
         DeathPenaltySource source = null;
 
         if (config != null) {
             source = new DeathPenaltySource();
-            source.setName(type.getName());
-            source.setType(type);
+            source.setName(CustomType.DEATH_PENALTY.getName());
             source.setPercentPenalty(config.getBoolean("System.Hunting.PenalizeType", true));
             source.setPenaltyAmount(config.getDouble("System.Hunting.PenalizeAmount", 0.05D));
             source.setCoinPenaltyMessage(new DefaultMessage(config.getString("System.Messages.DeathPenaltyMessage", DEATH_PENALTY_MESSAGE)));

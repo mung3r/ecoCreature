@@ -24,15 +24,16 @@ public class MobArenaParty extends DefaultParty
         return party;
     }
 
-    public static Party parseConfig(ConfigurationSection config)
+    public static Set<Party> parseConfig(ConfigurationSection config)
     {
-        MobArenaParty party = null;
+        Set<Party> parties = new HashSet<Party>();
 
         if (config != null) {
-            party = new MobArenaParty();
+            MobArenaParty party = new MobArenaParty();
             party.setShared(config.getBoolean("Share", false));
+            parties.add(party);
         }
 
-        return party;
+        return parties;
     }
 }

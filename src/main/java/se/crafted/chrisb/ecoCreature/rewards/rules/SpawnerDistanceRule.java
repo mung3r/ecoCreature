@@ -1,5 +1,8 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
@@ -55,19 +58,20 @@ public class SpawnerDistanceRule extends DefaultRule
         return ruleBroken;
     }
 
-    public static Rule parseConfig(ConfigurationSection config)
+    public static Set<Rule> parseConfig(ConfigurationSection config)
     {
-        SpawnerDistanceRule rule = null;
+        Set<Rule> rules = new HashSet<Rule>();
 
         if (config != null) {
-            rule = new SpawnerDistanceRule();
+            SpawnerDistanceRule rule = new SpawnerDistanceRule();
             rule.setCanCampSpawner(config.getBoolean("System.Hunting.AllowCamping", false));
             rule.setClearDropsEnabled(config.getBoolean("System.Hunting.ClearCampDrops", true));
             rule.setCampByDistance(config.getBoolean("System.Hunting.CampingByDistance", true));
             rule.setCampRadius(config.getInt("System.Hunting.CampRadius", 16));
             rule.setMessage(new DefaultMessage(config.getString("System.Messages.NoCampMessage", NO_CAMP_MESSAGE)));
+            rules.add(rule);
         }
 
-        return rule;
+        return rules;
     }
 }

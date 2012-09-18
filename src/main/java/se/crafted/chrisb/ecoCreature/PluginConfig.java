@@ -11,17 +11,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
 
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.NoCoinRewardMessage;
 import se.crafted.chrisb.ecoCreature.messages.SpawnerCampMessage;
-import se.crafted.chrisb.ecoCreature.rewards.RewardSettings;
+import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 import se.crafted.chrisb.ecoCreature.rewards.gain.BiomeGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.EnvironmentGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.FactionsGain;
@@ -54,7 +56,7 @@ import se.crafted.chrisb.ecoCreature.rewards.sources.DeathPenaltySource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.DefaultRewardSource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.PVPRewardSource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSource;
-import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSourceType;
+import se.crafted.chrisb.ecoCreature.rewards.sources.CustomType;
 
 public class PluginConfig
 {
@@ -70,7 +72,7 @@ public class PluginConfig
     private File defaultFile;
     private FileConfiguration defaultConfig;
     private Map<String, FileConfiguration> fileConfigMap;
-    private Map<String, RewardSettings> rewardSettingsMap;
+    private Map<String, WorldSettings> worldSettingsMap;
 
     public PluginConfig(ecoCreature plugin)
     {
@@ -96,11 +98,11 @@ public class PluginConfig
         return loaded;
     }
 
-    public RewardSettings getRewardSettings(World world)
+    public WorldSettings getWorldSettings(World world)
     {
-        RewardSettings settings = rewardSettingsMap.get(world.getName());
+        WorldSettings settings = worldSettingsMap.get(world.getName());
         if (settings == null) {
-            settings = rewardSettingsMap.get(PluginConfig.DEFAULT_WORLD);
+            settings = worldSettingsMap.get(PluginConfig.DEFAULT_WORLD);
         }
         return settings;
     }
@@ -129,9 +131,9 @@ public class PluginConfig
         ECLogger.getInstance().info("Loaded config defaults.");
         ECLogger.getInstance().setDebug(defaultConfig.getBoolean("System.Debug", false));
 
-        RewardSettings defaultSettings = loadRewardConfig(defaultConfig);
-        rewardSettingsMap = new HashMap<String, RewardSettings>();
-        rewardSettingsMap.put(DEFAULT_WORLD, defaultSettings);
+        WorldSettings defaultSettings = loadWorldSettings(defaultConfig);
+        worldSettingsMap = new HashMap<String, WorldSettings>();
+        worldSettingsMap.put(DEFAULT_WORLD, defaultSettings);
 
         fileConfigMap = new HashMap<String, FileConfiguration>();
 
@@ -142,11 +144,11 @@ public class PluginConfig
             if (worldConfigFile.exists()) {
                 FileConfiguration configFile = getConfig(worldConfigFile);
                 ECLogger.getInstance().info("Loaded config for " + world.getName() + " world.");
-                rewardSettingsMap.put(world.getName(), loadRewardConfig(configFile));
+                worldSettingsMap.put(world.getName(), loadWorldSettings(configFile));
                 fileConfigMap.put(world.getName(), configFile);
             }
             else {
-                rewardSettingsMap.put(world.getName(), defaultSettings);
+                worldSettingsMap.put(world.getName(), defaultSettings);
             }
         }
     }
@@ -169,75 +171,204 @@ public class PluginConfig
         }
     }
 
-    private static RewardSettings loadRewardConfig(FileConfiguration config)
+    private static WorldSettings loadWorldSettings(FileConfiguration config)
     {
-        RewardSettings settings = new RewardSettings();
+        WorldSettings settings = new WorldSettings();
 
         settings.setClearDefaultDrops(config.getBoolean("System.Hunting.ClearDefaultDrops", true));
         settings.setOverrideDrops(config.getBoolean("System.Hunting.OverrideDrops", true));
         settings.setNoFarm(config.getBoolean("System.Hunting.NoFarm", false));
         settings.setNoFarmFire(config.getBoolean("System.Hunting.NoFarmFire", false));
 
-        settings.setGainMultipliers(loadGainConfig(config));
-        settings.setParties(loadPartyConfig(config));
-        settings.setHuntingRules(loadRulesConfig(config));
-
-        Map<String, RewardSource> rewardSets = new HashMap<String, RewardSource>();
-        ConfigurationSection rewardSetsConfig = config.getConfigurationSection("RewardSets");
-        if (rewardSetsConfig != null) {
-            for (String setName : rewardSetsConfig.getKeys(false)) {
-                rewardSets.put(setName, configureSource(DefaultRewardSource.parseConfig(RewardSourceType.SET, rewardSetsConfig.getConfigurationSection(setName)), config));
-            }
-        }
-
-        ConfigurationSection rewardTableConfig = config.getConfigurationSection("RewardTable");
-        if (rewardTableConfig != null) {
-            Map<RewardSourceType, List<RewardSource>> sources = new HashMap<RewardSourceType, List<RewardSource>>();
-            for (String rewardName : rewardTableConfig.getKeys(false)) {
-                RewardSource source = configureSource(DefaultRewardSource.parseConfig(RewardSourceType.fromName(rewardName), rewardTableConfig.getConfigurationSection(rewardName)), config);
-
-                if (!sources.containsKey(source.getType())) {
-                    sources.put(source.getType(), new ArrayList<RewardSource>());
-                }
-
-                if (rewardTableConfig.getConfigurationSection(rewardName).getList("Sets") != null) {
-                    List<String> setList = rewardTableConfig.getConfigurationSection(rewardName).getStringList("Sets");
-                    for (String setName : setList) {
-                        if (rewardSets.containsKey(setName)) {
-                            sources.get(source.getType()).add(mergeRewardSource(source, rewardSets.get(setName)));
-                        }
-                    }
-                }
-                else {
-                    sources.get(source.getType()).add(source);
-                }
-            }
-
-            if (config.getBoolean("System.Hunting.PenalizeDeath", false)) {
-                RewardSource source = configureSource(DeathPenaltySource.parseConfig(RewardSourceType.DEATH_PENALTY, config), config);
-                if (!sources.containsKey(source.getType())) {
-                    sources.put(source.getType(), new ArrayList<RewardSource>());
-                }
-
-                sources.get(source.getType()).add(source);
-            }
-
-            if (config.getBoolean("System.Hunting.PVPReward", false)) {
-                RewardSource source = configureSource(PVPRewardSource.parseConfig(RewardSourceType.LEGACY_PVP, config), config);
-                if (!sources.containsKey(source.getType())) {
-                    sources.put(source.getType(), new ArrayList<RewardSource>());
-                }
-
-                sources.get(source.getType()).add(source);
-            }
-
-            settings.setRewardSources(sources);
-        }
+        settings.setGainMultipliers(loadGainMultipliers(config));
+        settings.setParties(loadParties(config));
+        settings.setHuntingRules(loadHuntingRules(config));
+        settings.setMaterialSources(loadMaterialSources(config));
+        settings.setEntitySources(loadEntitySources(config));
+        settings.setCustomSources(loadCustomSources(config));
 
         return settings;
     }
 
-    private static RewardSource configureSource(RewardSource source, ConfigurationSection config)
+    private static Set<Gain> loadGainMultipliers(ConfigurationSection config)
+    {
+        Set<Gain> gainMultipliers = new HashSet<Gain>();
+
+        gainMultipliers.addAll(GroupGain.parseConfig(config.getConfigurationSection("Gain.Groups")));
+        gainMultipliers.addAll(TimeGain.parseConfig(config.getConfigurationSection("Gain.Time")));
+        gainMultipliers.addAll(EnvironmentGain.parseConfig(config.getConfigurationSection("Gain.Environment")));
+        gainMultipliers.addAll(BiomeGain.parseConfig(config.getConfigurationSection("Gain.Biome")));
+        gainMultipliers.addAll(WeatherGain.parseConfig(config.getConfigurationSection("Gain.Weather")));
+        gainMultipliers.addAll(WeaponGain.parseConfig(config.getConfigurationSection("Gain.Weapon")));
+        gainMultipliers.addAll(RegionGain.parseConfig(config.getConfigurationSection("Gain.WorldGuard")));
+        gainMultipliers.addAll(RegiosGain.parseConfig(config.getConfigurationSection("Gain.Regios")));
+        gainMultipliers.addAll(ResidenceGain.parseConfig(config.getConfigurationSection("Gain.Residence")));
+        gainMultipliers.addAll(FactionsGain.parseConfig(config.getConfigurationSection("Gain.Factions")));
+        gainMultipliers.addAll(TownyGain.parseConfig(config.getConfigurationSection("Gain.Towny")));
+        gainMultipliers.addAll(MobArenaGain.parseConfig(config.getConfigurationSection("Gain.MobArena.InArena")));
+        gainMultipliers.addAll(HeroesGain.parseConfig(config.getConfigurationSection("Gain.Heroes.InParty")));
+        gainMultipliers.addAll(McMMOGain.parseConfig(config.getConfigurationSection("Gain.mcMMO.InParty")));
+
+        return gainMultipliers;
+    }
+
+    private static Set<Party> loadParties(ConfigurationSection config)
+    {
+        Set<Party> parties = new HashSet<Party>();
+
+        parties.addAll(MobArenaParty.parseConfig(config.getConfigurationSection("Gain.MobArena.InArena")));
+        parties.addAll(HeroesParty.parseConfig(config.getConfigurationSection("Gain.Heroes.InParty")));
+        parties.addAll(McMMOParty.parseConfig(config.getConfigurationSection("Gain.mcMMO.InParty")));
+
+        return parties;
+    }
+
+    private static Set<Rule> loadHuntingRules(ConfigurationSection config)
+    {
+        Set<Rule> rules = new HashSet<Rule>();
+
+        rules.addAll(CreativeModeRule.parseConfig(config));
+        rules.addAll(MobArenaRule.parseConfig(config));
+        rules.addAll(MurderedPetRule.parseConfig(config));
+        rules.addAll(ProjectileRule.parseConfig(config));
+        rules.addAll(SpawnerDistanceRule.parseConfig(config));
+        rules.addAll(SpawnerMobRule.parseConfig(config));
+        rules.addAll(TamedCreatureRule.parseConfig(config));
+        rules.addAll(UnderSeaLevelRule.parseConfig(config));
+
+        return rules;
+    }
+
+    private static Map<Material, List<RewardSource>> loadMaterialSources(FileConfiguration config)
+    {
+        Map<Material, List<RewardSource>> sources = new HashMap<Material, List<RewardSource>>();
+        ConfigurationSection tableConfig = config.getConfigurationSection("RewardTable");
+        ConfigurationSection setConfig = config.getConfigurationSection("RewardSets");
+
+        if (tableConfig != null) {
+            for (String rewardName : tableConfig.getKeys(false)) {
+                Material material = Material.matchMaterial(rewardName);
+
+                // NOTE: backward compatibility
+                if (material == null && CustomType.LEGACY_SPAWNER.equals(CustomType.fromName(rewardName))) {
+                    material = Material.MOB_SPAWNER;
+                }
+
+                if (material != null) {
+                    RewardSource source = configureRewardSource(DefaultRewardSource.parseConfig(tableConfig.getConfigurationSection(rewardName)), config);
+
+                    if (!sources.containsKey(material)) {
+                        sources.put(material, new ArrayList<RewardSource>());
+                    }
+
+                    List<String> setList = tableConfig.getConfigurationSection(rewardName).getStringList("Sets");
+                    if (!setList.isEmpty()) {
+                        for (String setName : setList) {
+                            if (setConfig != null && setConfig.getConfigurationSection(setName) != null) {
+                                RewardSource setSource = DefaultRewardSource.parseConfig(setConfig.getConfigurationSection(setName));
+                                sources.get(material).add(mergeRewardSource(source, setSource));
+                            }
+                        }
+                    }
+                    else {
+                        sources.get(material).add(source);
+                    }
+                }
+            }
+        }
+
+        return sources;
+    }
+
+    private static Map<EntityType, List<RewardSource>> loadEntitySources(FileConfiguration config)
+    {
+        Map<EntityType, List<RewardSource>> sources = new HashMap<EntityType, List<RewardSource>>();
+        ConfigurationSection tableConfig = config.getConfigurationSection("RewardTable");
+        ConfigurationSection setConfig = config.getConfigurationSection("RewardSets");
+
+        if (tableConfig != null) {
+            for (String rewardName : tableConfig.getKeys(false)) {
+                EntityType entityType = EntityType.fromName(rewardName);
+                if (entityType != null) {
+                    RewardSource source = configureRewardSource(DefaultRewardSource.parseConfig(tableConfig.getConfigurationSection(rewardName)), config);
+
+                    if (!sources.containsKey(entityType)) {
+                        sources.put(entityType, new ArrayList<RewardSource>());
+                    }
+
+                    List<String> setList = tableConfig.getConfigurationSection(rewardName).getStringList("Sets");
+                    if (!setList.isEmpty()) {
+                        for (String setName : setList) {
+                            if (setConfig != null && setConfig.getConfigurationSection(setName) != null) {
+                                RewardSource setSource = DefaultRewardSource.parseConfig(setConfig.getConfigurationSection(setName));
+                                sources.get(entityType).add(mergeRewardSource(source, setSource));
+                            }
+                        }
+                    }
+                    else {
+                        sources.get(entityType).add(source);
+                    }
+                }
+            }
+        }
+
+        return sources;
+    }
+
+    private static Map<CustomType, List<RewardSource>> loadCustomSources(FileConfiguration config)
+    {
+        Map<CustomType, List<RewardSource>> sources = new HashMap<CustomType, List<RewardSource>>();
+        ConfigurationSection tableConfig = config.getConfigurationSection("RewardTable");
+        ConfigurationSection setConfig = config.getConfigurationSection("RewardSets");
+
+        if (tableConfig != null) {
+            for (String rewardName : tableConfig.getKeys(false)) {
+                CustomType customType = CustomType.fromName(rewardName);
+                if (customType != null) {
+                    RewardSource source = configureRewardSource(DefaultRewardSource.parseConfig(tableConfig.getConfigurationSection(rewardName)), config);
+
+                    if (!sources.containsKey(customType)) {
+                        sources.put(customType, new ArrayList<RewardSource>());
+                    }
+
+                    List<String> setList = tableConfig.getConfigurationSection(rewardName).getStringList("Sets");
+                    if (!setList.isEmpty()) {
+                        for (String setName : setList) {
+                            if (setConfig != null && setConfig.getConfigurationSection(setName) != null) {
+                                RewardSource setSource = DefaultRewardSource.parseConfig(setConfig.getConfigurationSection(setName));
+                                sources.get(customType).add(mergeRewardSource(source, setSource));
+                            }
+                        }
+                    }
+                    else {
+                        sources.get(customType).add(source);
+                    }
+                }
+
+                if (config.getBoolean("System.Hunting.PenalizeDeath", false)) {
+                    RewardSource source = configureRewardSource(DeathPenaltySource.parseConfig(config), config);
+                    if (!sources.containsKey(CustomType.DEATH_PENALTY)) {
+                        sources.put(CustomType.DEATH_PENALTY, new ArrayList<RewardSource>());
+                    }
+
+                    sources.get(CustomType.DEATH_PENALTY).add(source);
+                }
+
+                if (config.getBoolean("System.Hunting.PVPReward", false)) {
+                    RewardSource source = configureRewardSource(PVPRewardSource.parseConfig(config), config);
+                    if (!sources.containsKey(CustomType.LEGACY_PVP)) {
+                        sources.put(CustomType.LEGACY_PVP, new ArrayList<RewardSource>());
+                    }
+
+                    sources.get(CustomType.LEGACY_PVP).add(source);
+                }
+            }
+        }
+
+        return sources;
+    }
+
+    private static RewardSource configureRewardSource(RewardSource source, ConfigurationSection config)
     {
         if (source != null && config != null) {
             source.setIntegerCurrency(config.getBoolean("System.Economy.IntegerCurrency", false));
@@ -280,55 +411,6 @@ public class PluginConfig
         to.setCoinPenaltyMessage(from.getCoinPenaltyMessage() != null ? from.getCoinPenaltyMessage() : to.getCoinPenaltyMessage());
 
         return to;
-    }
-
-    private static Set<Gain> loadGainConfig(ConfigurationSection config)
-    {
-        Set<Gain> gainMultipliers = new HashSet<Gain>();
-
-        gainMultipliers.add(GroupGain.parseConfig(config.getConfigurationSection("Gain.Groups")));
-        gainMultipliers.add(TimeGain.parseConfig(config.getConfigurationSection("Gain.Time")));
-        gainMultipliers.add(EnvironmentGain.parseConfig(config.getConfigurationSection("Gain.Environment")));
-        gainMultipliers.add(BiomeGain.parseConfig(config.getConfigurationSection("Gain.Biome")));
-        gainMultipliers.add(WeatherGain.parseConfig(config.getConfigurationSection("Gain.Weather")));
-        gainMultipliers.add(WeaponGain.parseConfig(config.getConfigurationSection("Gain.Weapon")));
-        gainMultipliers.add(RegionGain.parseConfig(config.getConfigurationSection("Gain.WorldGuard")));
-        gainMultipliers.add(RegiosGain.parseConfig(config.getConfigurationSection("Gain.Regios")));
-        gainMultipliers.add(ResidenceGain.parseConfig(config.getConfigurationSection("Gain.Residence")));
-        gainMultipliers.add(FactionsGain.parseConfig(config.getConfigurationSection("Gain.Factions")));
-        gainMultipliers.add(TownyGain.parseConfig(config.getConfigurationSection("Gain.Towny")));
-        gainMultipliers.add(MobArenaGain.parseConfig(config.getConfigurationSection("Gain.MobArena.InArena")));
-        gainMultipliers.add(HeroesGain.parseConfig(config.getConfigurationSection("Gain.Heroes.InParty")));
-        gainMultipliers.add(McMMOGain.parseConfig(config.getConfigurationSection("Gain.mcMMO.InParty")));
-
-        return gainMultipliers;
-    }
-
-    private static Set<Party> loadPartyConfig(ConfigurationSection config)
-    {
-        Set<Party> parties = new HashSet<Party>();
-
-        parties.add(MobArenaParty.parseConfig(config.getConfigurationSection("Gain.MobArena.InArena")));
-        parties.add(HeroesParty.parseConfig(config.getConfigurationSection("Gain.Heroes.InParty")));
-        parties.add(McMMOParty.parseConfig(config.getConfigurationSection("Gain.mcMMO.InParty")));
-
-        return parties;
-    }
-
-    private static Set<Rule> loadRulesConfig(ConfigurationSection config)
-    {
-        Set<Rule> rules = new HashSet<Rule>();
-
-        rules.add(CreativeModeRule.parseConfig(config));
-        rules.add(MobArenaRule.parseConfig(config));
-        rules.add(MurderedPetRule.parseConfig(config));
-        rules.add(ProjectileRule.parseConfig(config));
-        rules.add(SpawnerDistanceRule.parseConfig(config));
-        rules.add(SpawnerMobRule.parseConfig(config));
-        rules.add(TamedCreatureRule.parseConfig(config));
-        rules.add(UnderSeaLevelRule.parseConfig(config));
-
-        return rules;
     }
 
     private FileConfiguration getConfig(File file) throws IOException, InvalidConfigurationException

@@ -1,7 +1,9 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -34,9 +36,9 @@ public class WeaponGain extends DefaultGain
         return multiplier;
     }
 
-    public static Gain parseConfig(ConfigurationSection config)
+    public static Set<Gain> parseConfig(ConfigurationSection config)
     {
-        Gain gain = null;
+        Set<Gain> gain = new HashSet<Gain>();
 
         if (config != null) {
             Map<Material, Double> multipliers = new HashMap<Material, Double>();
@@ -45,7 +47,7 @@ public class WeaponGain extends DefaultGain
                 multipliers.put(Material.matchMaterial(material), Double.valueOf(config.getConfigurationSection(material).getDouble("Amount", 1.0)));
             }
 
-            gain = new WeaponGain(multipliers);
+            gain.add(new WeaponGain(multipliers));
         }
 
         return gain;

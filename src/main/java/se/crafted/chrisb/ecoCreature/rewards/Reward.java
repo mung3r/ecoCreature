@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
-import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSourceType;
+import se.crafted.chrisb.ecoCreature.rewards.sources.CustomType;
 
 public class Reward
 {
@@ -21,7 +21,6 @@ public class Reward
     private boolean integerCurrency;
 
     private String name;
-    private RewardSourceType type;
     private double coin;
     private List<ItemStack> drops;
     private int exp;
@@ -34,8 +33,7 @@ public class Reward
         party = new HashSet<String>();
         integerCurrency = false;
 
-        name = RewardSourceType.UNKNOWN.getName();
-        type = RewardSourceType.UNKNOWN;
+        name = CustomType.UNKNOWN.getName();
         coin = 0.0;
         drops = new ArrayList<ItemStack>();
         exp = 0;
@@ -106,16 +104,6 @@ public class Reward
     public void setName(String name)
     {
         this.name = name;
-    }
-
-    public RewardSourceType getType()
-    {
-        return type;
-    }
-
-    public void setType(RewardSourceType type)
-    {
-        this.type = type;
     }
 
     public double getCoin()

@@ -21,7 +21,7 @@ public class SpawnEventListener implements Listener
     public void onCreatureSpawn(CreatureSpawnEvent event)
     {
         if (!event.isCancelled() && event.getSpawnReason() == SpawnReason.SPAWNER) {
-            plugin.getRewardSettings(event.getEntity().getWorld()).addSpawnerMob(event.getEntity());
+            plugin.getWorldSettings(event.getEntity().getWorld()).addSpawnerMob(event.getEntity());
         }
     }
 }

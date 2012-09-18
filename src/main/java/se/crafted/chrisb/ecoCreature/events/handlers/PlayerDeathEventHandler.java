@@ -13,11 +13,11 @@ import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
-import se.crafted.chrisb.ecoCreature.rewards.RewardSettings;
+import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 import se.crafted.chrisb.ecoCreature.rewards.sources.DeathPenaltySource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.PVPRewardSource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSource;
-import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSourceType;
+import se.crafted.chrisb.ecoCreature.rewards.sources.CustomType;
 
 public class PlayerDeathEventHandler extends DefaultEventHandler
 {
@@ -47,7 +47,7 @@ public class PlayerDeathEventHandler extends DefaultEventHandler
 
         Player killer = event.getKiller();
         Player victim = event.getVictim();
-        RewardSettings settings = plugin.getRewardSettings(killer.getWorld());
+        WorldSettings settings = plugin.getWorldSettings(killer.getWorld());
 
         if (settings.hasRewardSource(event)) {
             RewardSource winnerSource = settings.getRewardSource(event);
@@ -72,8 +72,8 @@ public class PlayerDeathEventHandler extends DefaultEventHandler
 
             events.add(new RewardEvent(killer, winnerOutcome));
 
-            if (settings.hasRewardSource(RewardSourceType.DEATH_PENALTY)) {
-                DeathPenaltySource loserSource = (DeathPenaltySource) settings.getRewardSource(RewardSourceType.DEATH_PENALTY);
+            if (settings.hasRewardSource(CustomType.DEATH_PENALTY)) {
+                DeathPenaltySource loserSource = (DeathPenaltySource) settings.getRewardSource(CustomType.DEATH_PENALTY);
                 Reward loserOutcome = loserSource.getOutcome(event);
                 loserOutcome.setCoin(winnerOutcome.getCoin());
                 loserOutcome.setGain(-winnerOutcome.getGain());
@@ -90,10 +90,10 @@ public class PlayerDeathEventHandler extends DefaultEventHandler
         Set<RewardEvent> events = new HashSet<RewardEvent>();
 
         Player player = event.getEntity();
-        RewardSettings settings = plugin.getRewardSettings(player.getWorld());
+        WorldSettings settings = plugin.getWorldSettings(player.getWorld());
 
         if (settings.hasRewardSource(event)) {
-            RewardSource source = settings.getRewardSource(RewardSourceType.DEATH_PENALTY);
+            RewardSource source = settings.getRewardSource(CustomType.DEATH_PENALTY);
             Reward outcome = source.getOutcome(event);
 
             if (source instanceof DeathPenaltySource && ((DeathPenaltySource) source).isPercentPenalty()) {

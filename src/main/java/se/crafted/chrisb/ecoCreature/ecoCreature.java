@@ -25,7 +25,7 @@ import se.crafted.chrisb.ecoCreature.events.listeners.RewardEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.SpawnEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.StreakEventListener;
 import se.crafted.chrisb.ecoCreature.metrics.RewardMetrics;
-import se.crafted.chrisb.ecoCreature.rewards.RewardSettings;
+import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 
 public class ecoCreature extends JavaPlugin
 {
@@ -79,9 +79,9 @@ public class ecoCreature extends JavaPlugin
         return metrics;
     }
 
-    public RewardSettings getRewardSettings(World world)
+    public WorldSettings getWorldSettings(World world)
     {
-        return pluginConfig.getRewardSettings(world);
+        return pluginConfig.getWorldSettings(world);
     }
 
     public CommandHandler getCommandHandler()

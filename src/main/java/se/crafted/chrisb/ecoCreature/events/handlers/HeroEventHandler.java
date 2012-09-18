@@ -11,8 +11,8 @@ import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
-import se.crafted.chrisb.ecoCreature.rewards.RewardSettings;
-import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSourceType;
+import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
+import se.crafted.chrisb.ecoCreature.rewards.sources.CustomType;
 
 public class HeroEventHandler extends DefaultEventHandler
 {
@@ -38,10 +38,10 @@ public class HeroEventHandler extends DefaultEventHandler
         Set<RewardEvent> events = new HashSet<RewardEvent>();
 
         Player player = event.getHero().getPlayer();
-        RewardSettings settings = plugin.getRewardSettings(player.getWorld());
+        WorldSettings settings = plugin.getWorldSettings(player.getWorld());
 
         if (settings.hasRewardSource(event)) {
-            Reward outcome = settings.getRewardSource(RewardSourceType.HERO_MASTERED).getOutcome(event);
+            Reward outcome = settings.getRewardSource(CustomType.HERO_MASTERED).getOutcome(event);
 
             events.add(new RewardEvent(player, outcome));
         }

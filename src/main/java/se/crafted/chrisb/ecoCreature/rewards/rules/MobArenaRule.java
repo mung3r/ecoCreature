@@ -1,5 +1,8 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
@@ -32,15 +35,16 @@ public class MobArenaRule extends DefaultRule
         return ruleBroken;
     }
 
-    public static Rule parseConfig(ConfigurationSection config)
+    public static Set<Rule> parseConfig(ConfigurationSection config)
     {
-        MobArenaRule rule = null;
+        Set<Rule> rules = new HashSet<Rule>();
 
         if (config != null) {
-            rule = new MobArenaRule();
+            MobArenaRule rule = new MobArenaRule();
             rule.setMobArenaRewards(config.getBoolean("System.Hunting.MobArenaRewards"));
+            rules.add(rule);
         }
 
-        return rule;
+        return rules;
     }
 }

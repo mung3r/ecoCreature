@@ -1,7 +1,9 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -38,16 +40,21 @@ public class FactionsGain extends DefaultGain
         return multiplier;
     }
 
-    public static Gain parseConfig(ConfigurationSection config)
+    public static Set<Gain> parseConfig(ConfigurationSection config)
     {
-        Gain gain = null;
+        Set<Gain> gain = new HashSet<Gain>();
 
-        if (config != null) {
+        if (config != null && DependencyUtils.hasFactions()) {
             Map<Relation, Double> multipliers = new HashMap<Relation, Double>();
             for (String relation : config.getKeys(false)) {
-                multipliers.put(Relation.valueOf(relation), Double.valueOf(config.getConfigurationSection(relation).getDouble("Amount", 1.0D)));
+                try {
+                    multipliers.put(Relation.valueOf(relation), Double.valueOf(config.getConfigurationSection(relation).getDouble("Amount", 1.0D)));
+                }
+                catch (IllegalArgumentException e) {
+                    ECLogger.getInstance().warning("No Factions Relation: " + relation);
+                }
             }
-            gain = new FactionsGain(multipliers);
+            gain.add(new FactionsGain(multipliers));
         }
 
         return gain;

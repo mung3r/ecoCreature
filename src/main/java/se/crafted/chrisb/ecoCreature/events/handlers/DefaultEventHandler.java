@@ -8,7 +8,7 @@ import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.rewards.RewardSettings;
+import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 
 public class DefaultEventHandler implements RewardEventHandler
 {
@@ -26,8 +26,8 @@ public class DefaultEventHandler implements RewardEventHandler
     }
 
     @Override
-    public RewardSettings getSettings(World world)
+    public WorldSettings getSettings(World world)
     {
-        return plugin.getRewardSettings(world);
+        return plugin.getWorldSettings(world);
     }
 }

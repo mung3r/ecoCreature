@@ -1,7 +1,9 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.block.Biome;
 import org.bukkit.configuration.ConfigurationSection;
@@ -37,9 +39,9 @@ public class BiomeGain extends DefaultGain
         return player.getWorld().getBiome(player.getLocation().getBlockX(), player.getLocation().getBlockY());
     }
 
-    public static Gain parseConfig(ConfigurationSection config)
+    public static Set<Gain> parseConfig(ConfigurationSection config)
     {
-        Gain gain = null;
+        Set<Gain> gain = new HashSet<Gain>();
 
         if (config != null) {
             Map<Biome, Double> multipliers = new HashMap<Biome, Double>();
@@ -51,7 +53,7 @@ public class BiomeGain extends DefaultGain
                     ECLogger.getInstance().warning("Skipping unknown biome name: " + biome);
                 }
             }
-            gain = new BiomeGain(multipliers);
+            gain.add(new BiomeGain(multipliers));
         }
 
         return gain;

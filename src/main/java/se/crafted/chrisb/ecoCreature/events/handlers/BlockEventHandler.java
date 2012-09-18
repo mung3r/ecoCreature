@@ -12,7 +12,7 @@ import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
-import se.crafted.chrisb.ecoCreature.rewards.RewardSettings;
+import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 
 public class BlockEventHandler extends DefaultEventHandler
 {
@@ -38,7 +38,7 @@ public class BlockEventHandler extends DefaultEventHandler
         Set<RewardEvent> events = new HashSet<RewardEvent>();
 
         Player player = event.getPlayer();
-        RewardSettings settings = plugin.getRewardSettings(player.getWorld());
+        WorldSettings settings = plugin.getWorldSettings(player.getWorld());
 
         if (settings.hasRewardSource(event)) {
             Reward outcome = settings.getRewardSource(event).getOutcome(event);

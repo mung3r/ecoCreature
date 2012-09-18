@@ -1,5 +1,8 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
@@ -34,16 +37,17 @@ public class ProjectileRule extends DefaultRule
         return ruleBroken;
     }
 
-    public static Rule parseConfig(ConfigurationSection config)
+    public static Set<Rule> parseConfig(ConfigurationSection config)
     {
-        ProjectileRule rule = null;
+        Set<Rule> rules = new HashSet<Rule>();
 
         if (config != null) {
-            rule = new ProjectileRule();
+            ProjectileRule rule = new ProjectileRule();
             rule.setBowRewards(config.getBoolean("System.Hunting.BowRewards", true));
             rule.setMessage(new DefaultMessage(config.getString("System.Messages.NoBowMessage", NO_BOW_REWARD_MESSAGE)));
+            rules.add(rule);
         }
 
-        return rule;
+        return rules;
     }
 }

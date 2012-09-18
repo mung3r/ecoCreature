@@ -90,7 +90,7 @@ public class RewardEventListener implements Listener
                     orb.setExperience(reward.getExp());
                 }
 
-                plugin.getMetrics().addCount(reward.getType());
+                plugin.getMetrics().addCount(reward.getName());
             }
         }
     }

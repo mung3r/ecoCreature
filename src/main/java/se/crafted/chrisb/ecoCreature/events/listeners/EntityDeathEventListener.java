@@ -14,7 +14,7 @@ import se.crafted.chrisb.ecoCreature.commons.EventUtils;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.events.handlers.RewardEventHandler;
-import se.crafted.chrisb.ecoCreature.rewards.RewardSettings;
+import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 
 public class EntityDeathEventListener implements Listener
 {
@@ -46,7 +46,7 @@ public class EntityDeathEventListener implements Listener
 
     private void handleDefaultDrops(EntityDeathEvent event)
     {
-        RewardSettings settings = handler.getSettings(event.getEntity().getWorld());
+        WorldSettings settings = handler.getSettings(event.getEntity().getWorld());
 
         if (settings.isClearDefaultDrops()) {
             event.getDrops().clear();
@@ -56,7 +56,7 @@ public class EntityDeathEventListener implements Listener
 
     private void handleNoFarm(EntityDeathEvent event)
     {
-        RewardSettings settings = handler.getSettings(event.getEntity().getWorld());
+        WorldSettings settings = handler.getSettings(event.getEntity().getWorld());
 
         if (settings.isNoFarm()) {
             EntityDamageEvent damageEvent = event.getEntity().getLastDamageCause();

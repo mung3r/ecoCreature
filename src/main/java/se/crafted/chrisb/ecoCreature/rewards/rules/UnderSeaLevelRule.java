@@ -1,5 +1,8 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
@@ -35,16 +38,17 @@ public class UnderSeaLevelRule extends DefaultRule
         return ruleBroken;
     }
 
-    public static Rule parseConfig(ConfigurationSection config)
+    public static Set<Rule> parseConfig(ConfigurationSection config)
     {
-        UnderSeaLevelRule rule = null;
+        Set<Rule> rules = new HashSet<Rule>();
 
         if (config != null) {
-            rule = new UnderSeaLevelRule();
+            UnderSeaLevelRule rule = new UnderSeaLevelRule();
             rule.setHuntUnderSeaLevel(config.getBoolean("System.Hunting.AllowUnderSeaLVL", true));
             rule.setMessage(new DefaultMessage(config.getString("System.Messages.NoUnderSeaLevel", NO_UNDER_SEA_LEVEL_MESSAGE)));
+            rules.add(rule);
         }
 
-        return rule;
+        return rules;
     }
 }

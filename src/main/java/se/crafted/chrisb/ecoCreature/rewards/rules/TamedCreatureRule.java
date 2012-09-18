@@ -1,5 +1,8 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
@@ -31,15 +34,16 @@ public class TamedCreatureRule extends DefaultRule
         return ruleBroken;
     }
 
-    public static Rule parseConfig(ConfigurationSection config)
+    public static Set<Rule> parseConfig(ConfigurationSection config)
     {
-        TamedCreatureRule rule = null;
+        Set<Rule> rules = new HashSet<Rule>();
 
         if (config != null) {
-            rule = new TamedCreatureRule();
+            TamedCreatureRule rule = new TamedCreatureRule();
             rule.setWolverineMode(config.getBoolean("System.Hunting.WolverineMode", true));
+            rules.add(rule);
         }
 
-        return rule;
+        return rules;
     }
 }

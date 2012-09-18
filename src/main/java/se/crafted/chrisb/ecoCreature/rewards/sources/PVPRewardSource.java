@@ -39,7 +39,6 @@ public class PVPRewardSource extends DefaultRewardSource
         Reward reward = new Reward(getLocation(event));
         reward.setGain(percentReward ? rewardAmount / 100.0 : 1.0);
 
-        reward.setType(getType());
         reward.setName(getName());
         reward.setCoin(isPercentReward() ? 0.0 : rewardAmount);
         reward.setMessage(getCoinRewardMessage());
@@ -48,14 +47,13 @@ public class PVPRewardSource extends DefaultRewardSource
         return reward;
     }
 
-    public static RewardSource parseConfig(RewardSourceType type, ConfigurationSection config)
+    public static RewardSource parseConfig(ConfigurationSection config)
     {
         PVPRewardSource source = null;
 
         if (config != null) {
             source = new PVPRewardSource();
-            source.setName(type.getName());
-            source.setType(type);
+            source.setName(CustomType.LEGACY_PVP.getName());
             source.setPercentReward(config.getBoolean("System.Hunting.PVPRewardType", true));
             source.setRewardAmount(config.getDouble("System.Hunting.PVPRewardAmount", 0.05D));
             source.setCoinRewardMessage(new DefaultMessage(config.getString("System.Messages.PVPRewardMessage", PVP_REWARD_MESSAGE)));

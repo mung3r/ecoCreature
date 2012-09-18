@@ -11,8 +11,8 @@ import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
-import se.crafted.chrisb.ecoCreature.rewards.RewardSettings;
-import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSourceType;
+import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
+import se.crafted.chrisb.ecoCreature.rewards.sources.CustomType;
 
 public class StreakEventHandler extends DefaultEventHandler
 {
@@ -42,10 +42,10 @@ public class StreakEventHandler extends DefaultEventHandler
 
         Player player = event.getPlayer();
         int deaths = event.getDeaths();
-        RewardSettings settings = plugin.getRewardSettings(player.getWorld());
+        WorldSettings settings = plugin.getWorldSettings(player.getWorld());
 
         if (settings.hasRewardSource(event)) {
-            Reward outcome = settings.getRewardSource(RewardSourceType.DEATH_STREAK).getOutcome(event);
+            Reward outcome = settings.getRewardSource(CustomType.DEATH_STREAK).getOutcome(event);
             outcome.setGain(deaths);
 
             events.add(new RewardEvent(player, outcome));
@@ -60,10 +60,10 @@ public class StreakEventHandler extends DefaultEventHandler
 
         Player player = event.getPlayer();
         int kills = event.getKills();
-        RewardSettings settings = plugin.getRewardSettings(player.getWorld());
+        WorldSettings settings = plugin.getWorldSettings(player.getWorld());
 
         if (settings.hasRewardSource(event)) {
-            Reward outcome = settings.getRewardSource(RewardSourceType.KILL_STREAK).getOutcome(event);
+            Reward outcome = settings.getRewardSource(CustomType.KILL_STREAK).getOutcome(event);
             outcome.setGain(kills);
 
             events.add(new RewardEvent(player, outcome));

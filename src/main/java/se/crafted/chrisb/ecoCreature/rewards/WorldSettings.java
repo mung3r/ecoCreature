@@ -10,6 +10,7 @@ import java.util.Set;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -32,9 +33,9 @@ import se.crafted.chrisb.ecoCreature.rewards.rules.SpawnerMobTracking;
 import se.crafted.chrisb.ecoCreature.rewards.sources.DeathPenaltySource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.PVPRewardSource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSource;
-import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSourceType;
+import se.crafted.chrisb.ecoCreature.rewards.sources.CustomType;
 
-public class RewardSettings
+public class WorldSettings
 {
     private static Random random = new Random();
 
@@ -43,15 +44,20 @@ public class RewardSettings
     private boolean noFarm;
     private boolean noFarmFire;
 
-    private Map<RewardSourceType, List<RewardSource>> sources;
+    private Map<Material, List<RewardSource>> materialSources;
+    private Map<EntityType, List<RewardSource>> entitySources;
+    private Map<CustomType, List<RewardSource>> customSources;
     private Set<Gain> gainMultipliers;
     private Set<Party> parties;
     private Set<Rule> huntingRules;
     private SpawnerMobTracking spawnerMobTracking;
 
-    public RewardSettings()
+    public WorldSettings()
     {
-        sources = new HashMap<RewardSourceType, List<RewardSource>>();
+        materialSources = new HashMap<Material, List<RewardSource>>();
+        entitySources = new HashMap<EntityType, List<RewardSource>>();
+        customSources = new HashMap<CustomType, List<RewardSource>>();
+
         gainMultipliers = new HashSet<Gain>();
         parties = new HashSet<Party>();
         huntingRules = new HashSet<Rule>();
@@ -103,9 +109,19 @@ public class RewardSettings
         this.noFarmFire = noFarmFire;
     }
 
-    public void setRewardSources(Map<RewardSourceType, List<RewardSource>> rewardSources)
+    public void setMaterialSources(Map<Material, List<RewardSource>> materialSources)
     {
-        this.sources = rewardSources;
+        this.materialSources = materialSources;
+    }
+
+    public void setEntitySources(Map<EntityType, List<RewardSource>> entitySources)
+    {
+        this.entitySources = entitySources;
+    }
+
+    public void setCustomSources(Map<CustomType, List<RewardSource>> customSources)
+    {
+        this.customSources = customSources;
     }
 
     public void setGainMultipliers(Set<Gain> gainMultipliers)
@@ -162,13 +178,11 @@ public class RewardSettings
         Player player = event.getPlayer();
         Block block = event.getBlock();
 
-        if (DependencyUtils.hasPermission(player, "reward.spawner")) {
-            if (block.getType() == Material.MOB_SPAWNER) {
-                return hasRewardSource(RewardSourceType.SPAWNER);
-            }
+        if (DependencyUtils.hasPermission(player, "reward." + block.getType().name())) {
+            return hasRewardSource(block.getType());
         }
         else {
-            ECLogger.getInstance().debug("No reward for " + block.getType().name() + " due to lack of permission for " + RewardSourceType.SPAWNER.getName());
+            ECLogger.getInstance().debug("No reward for " + player.getName() + " due to lack of permission for " + block.getType().name());
         }
 
         return false;
@@ -176,13 +190,16 @@ public class RewardSettings
 
     private boolean hasRewardSource(EntityKilledEvent event)
     {
-        if (DependencyUtils.hasPermission(event.getKiller(), "reward." + RewardSourceType.fromEntity(event.getEntity()).getName())) {
+        Player killer = event.getKiller();
+        LivingEntity entity = event.getEntity();
+
+        if (DependencyUtils.hasPermission(killer, "reward." + entity.getType().getName())) {
             if (!isRuleBroken(event)) {
-                return hasRewardSource(event.getEntity());
+                return hasRewardSource(entity.getType());
             }
         }
         else {
-            ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " due to lack of permission for " + RewardSourceType.fromEntity(event.getEntity()).getName());
+            ECLogger.getInstance().debug("No reward for " + killer.getName() + " due to lack of permission for " + entity.getType().getName());
         }
 
         return false;
@@ -194,11 +211,11 @@ public class RewardSettings
 
         if (DependencyUtils.hasPermission(player, "reward.hero_mastered")) {
             if (event.getHero().getLevel() == event.getHeroClass().getMaxLevel()) {
-                return hasRewardSource(RewardSourceType.HERO_MASTERED);
+                return hasRewardSource(CustomType.HERO_MASTERED);
             }
         }
         else {
-            ECLogger.getInstance().debug("No reward for " + player.getName() + " due to lack of permission for " + RewardSourceType.HERO_MASTERED.getName());
+            ECLogger.getInstance().debug("No reward for " + player.getName() + " due to lack of permission for " + CustomType.HERO_MASTERED.getName());
         }
 
         return false;
@@ -207,10 +224,10 @@ public class RewardSettings
     private boolean hasRewardSource(PlayerKilledEvent event)
     {
         if (DependencyUtils.hasPermission(event.getKiller(), "reward.player")) {
-            return hasRewardSource(RewardSourceType.PLAYER) || (DependencyUtils.hasEconomy() && getRewardSource(RewardSourceType.LEGACY_PVP) instanceof PVPRewardSource);
+            return hasRewardSource(CustomType.PLAYER) || (DependencyUtils.hasEconomy() && getRewardSource(CustomType.LEGACY_PVP) instanceof PVPRewardSource);
         }
         else {
-            ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " due to lack of permission for " + RewardSourceType.PLAYER.getName());
+            ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " due to lack of permission for " + CustomType.PLAYER.getName());
         }
 
         return false;
@@ -219,10 +236,10 @@ public class RewardSettings
     private boolean hasRewardSource(PlayerDeathEvent event)
     {
         if (DependencyUtils.hasPermission(event.getEntity(), "reward.deathpenalty")) {
-            return getRewardSource(RewardSourceType.DEATH_PENALTY) instanceof DeathPenaltySource;
+            return getRewardSource(CustomType.DEATH_PENALTY) instanceof DeathPenaltySource;
         }
         else {
-            ECLogger.getInstance().debug("No reward for " + event.getEntity().getName() + " due to lack of permission for " + RewardSourceType.DEATH_PENALTY.getName());
+            ECLogger.getInstance().debug("No reward for " + event.getEntity().getName() + " due to lack of permission for " + CustomType.DEATH_PENALTY.getName());
         }
 
         return false;
@@ -231,10 +248,10 @@ public class RewardSettings
     private boolean hasRewardSource(DeathStreakEvent event)
     {
         if (DependencyUtils.hasPermission(event.getPlayer(), "reward.deathstreak")) {
-            return hasRewardSource(RewardSourceType.DEATH_STREAK);
+            return hasRewardSource(CustomType.DEATH_STREAK);
         }
         else {
-            ECLogger.getInstance().debug("No reward for " + event.getPlayer().getName() + " due to lack of permission for " + RewardSourceType.DEATH_STREAK.getName());
+            ECLogger.getInstance().debug("No reward for " + event.getPlayer().getName() + " due to lack of permission for " + CustomType.DEATH_STREAK.getName());
         }
 
         return false;
@@ -243,79 +260,126 @@ public class RewardSettings
     private boolean hasRewardSource(KillStreakEvent event)
     {
         if (DependencyUtils.hasPermission(event.getPlayer(), "reward.killstreak")) {
-            return hasRewardSource(RewardSourceType.KILL_STREAK);
+            return hasRewardSource(CustomType.KILL_STREAK);
         }
         else {
-            ECLogger.getInstance().debug("No reward for " + event.getPlayer().getName() + " due to lack of permission for " + RewardSourceType.KILL_STREAK.getName());
+            ECLogger.getInstance().debug("No reward for " + event.getPlayer().getName() + " due to lack of permission for " + CustomType.KILL_STREAK.getName());
         }
 
         return false;
     }
 
-    private boolean hasRewardSource(Entity entity)
+    private boolean hasRewardSource(Material material)
     {
-        return entity != null && hasRewardSource(RewardSourceType.fromEntity(entity));
+        return material != null && materialSources.containsKey(material) && !materialSources.get(material).isEmpty();
     }
 
-    public boolean hasRewardSource(RewardSourceType type)
+    private boolean hasRewardSource(EntityType type)
     {
-        return sources.containsKey(type) && !sources.get(type).isEmpty();
+        return type != null && entitySources.containsKey(type) && !entitySources.get(type).isEmpty();
+    }
+
+    public boolean hasRewardSource(CustomType type)
+    {
+        return type != null && customSources.containsKey(type) && !customSources.get(type).isEmpty();
     }
 
     public RewardSource getRewardSource(Event event)
     {
         if (event instanceof BlockBreakEvent) {
-            return getRewardSource(RewardSourceType.SPAWNER);
+            return getRewardSource(((BlockBreakEvent) event).getBlock());
         }
         else if (event instanceof EntityKilledEvent) {
             return getRewardSource(((EntityKilledEvent) event).getEntity());
         }
         else if (event instanceof HeroChangeLevelEvent) {
-            return getRewardSource(RewardSourceType.HERO_MASTERED);
+            return getRewardSource(CustomType.HERO_MASTERED);
         }
         else if (event instanceof PlayerKilledEvent) {
-            return getRewardSource(RewardSourceType.PLAYER);
+            return getRewardSource(CustomType.PLAYER);
         }
         else if (event instanceof PlayerDeathEvent) {
-            return getRewardSource(RewardSourceType.DEATH_PENALTY);
+            return getRewardSource(CustomType.DEATH_PENALTY);
         }
         else if (event instanceof DeathStreakEvent) {
-            return getRewardSource(RewardSourceType.DEATH_STREAK);
+            return getRewardSource(CustomType.DEATH_STREAK);
         }
         else if (event instanceof KillStreakEvent) {
-            return getRewardSource(RewardSourceType.KILL_STREAK);
+            return getRewardSource(CustomType.KILL_STREAK);
         }
 
         return null;
+    }
+
+    private RewardSource getRewardSource(Block block)
+    {
+        RewardSource source = null;
+
+        if (hasRewardSource(block.getType())) {
+            source = getRewardSource(block.getType());
+        }
+        else {
+            ECLogger.getInstance().warning("No reward found for entity " + block.getType().name());
+        }
+
+        return source;
     }
 
     private RewardSource getRewardSource(Entity entity)
     {
         RewardSource source = null;
 
-        if (hasRewardSource(entity)) {
-            source = getRewardSource(RewardSourceType.fromEntity(entity));
+        if (hasRewardSource(entity.getType())) {
+            source = getRewardSource(entity.getType());
         }
         else {
-            ECLogger.getInstance().warning("No reward found for entity " + entity.getClass());
+            ECLogger.getInstance().warning("No reward found for entity " + entity.getType().getName());
         }
 
         return source;
     }
 
-    public RewardSource getRewardSource(RewardSourceType type)
+    public RewardSource getRewardSource(Material material)
+    {
+        RewardSource source = null;
+
+        if (hasRewardSource(material)) {
+            source = materialSources.get(material).get(random.nextInt(materialSources.get(material).size()));
+        }
+        else {
+            ECLogger.getInstance().warning("No reward defined for " + material);
+        }
+
+        return source;
+    }
+
+    public RewardSource getRewardSource(EntityType entityType)
+    {
+        RewardSource source = null;
+
+        if (hasRewardSource(entityType)) {
+            source = entitySources.get(entityType).get(random.nextInt(entitySources.get(entityType).size()));
+        }
+        else {
+            ECLogger.getInstance().warning("No reward defined for " + entityType.getName());
+        }
+
+        return source;
+    }
+
+    public RewardSource getRewardSource(CustomType type)
     {
         RewardSource source = null;
 
         if (hasRewardSource(type)) {
-            source = sources.get(type).get(random.nextInt(sources.get(type).size()));
+            source = customSources.get(type).get(random.nextInt(customSources.get(type).size()));
 
             if (source == null) {
-                source = (PVPRewardSource) getRewardSource(RewardSourceType.LEGACY_PVP);
+                source = (PVPRewardSource) getRewardSource(CustomType.LEGACY_PVP);
             }
         }
         else {
-            ECLogger.getInstance().warning("No reward defined for " + type);
+            ECLogger.getInstance().warning("No reward defined for " + type.name());
         }
 
         return source;
@@ -326,9 +390,7 @@ public class RewardSettings
         double multiplier = 1.0;
 
         for (Gain gain : gainMultipliers) {
-            if (gain != null) {
-                multiplier *= gain.getMultiplier(player);
-            }
+            multiplier *= gain.getMultiplier(player);
         }
 
         return multiplier;
@@ -339,7 +401,7 @@ public class RewardSettings
         Set<String> players = new HashSet<String>();
 
         for (Party party : parties) {
-            if (party != null && party.isShared()) {
+            if (party.isShared()) {
                 players.addAll(party.getPlayers(player));
             }
         }
@@ -350,7 +412,7 @@ public class RewardSettings
     private boolean isRuleBroken(EntityKilledEvent event)
     {
         for (Rule rule : huntingRules) {
-            if (rule != null && rule.isBroken(event)) {
+            if (rule.isBroken(event)) {
                 if (rule.isClearDrops()) {
                     event.getDrops().clear();
                     event.setDroppedExp(0);

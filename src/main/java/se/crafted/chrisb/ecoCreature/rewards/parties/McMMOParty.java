@@ -26,15 +26,16 @@ public class McMMOParty extends DefaultParty
         return party;
     }
 
-    public static Party parseConfig(ConfigurationSection config)
+    public static Set<Party> parseConfig(ConfigurationSection config)
     {
-        McMMOParty party = null;
+        Set<Party> parties = new HashSet<Party>();
 
         if (config != null) {
-            party = new McMMOParty();
+            McMMOParty party = new McMMOParty();
             party.setShared(config.getBoolean("Share", false));
+            parties.add(party);
         }
 
-        return party;
+        return parties;
     }
 }

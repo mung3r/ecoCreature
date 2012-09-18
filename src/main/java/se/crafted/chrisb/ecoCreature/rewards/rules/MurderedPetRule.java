@@ -1,5 +1,8 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
@@ -20,8 +23,11 @@ public class MurderedPetRule extends DefaultRule
         return ruleBroken;
     }
 
-    public static Rule parseConfig(ConfigurationSection config)
+    public static Set<Rule> parseConfig(ConfigurationSection config)
     {
-        return new MurderedPetRule();
+        Set<Rule> rules = new HashSet<Rule>();
+        rules.add(new MurderedPetRule());
+
+        return rules;
     }
 }
