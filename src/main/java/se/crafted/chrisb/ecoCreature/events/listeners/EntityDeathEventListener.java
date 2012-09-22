@@ -32,8 +32,6 @@ public class EntityDeathEventListener implements Listener
             return;
         }
 
-        handleDefaultDrops(event);
-
         if (EventUtils.getKillerFromDeathEvent(event) != null) {
             for (RewardEvent rewardEvent : handler.getRewardEvents(EntityKilledEvent.createEvent(event))) {
                 Bukkit.getPluginManager().callEvent(rewardEvent);
@@ -41,16 +39,6 @@ public class EntityDeathEventListener implements Listener
         }
         else {
             handleNoFarm(event);
-        }
-    }
-
-    private void handleDefaultDrops(EntityDeathEvent event)
-    {
-        WorldSettings settings = handler.getSettings(event.getEntity().getWorld());
-
-        if (settings.isClearDefaultDrops()) {
-            event.getDrops().clear();
-            event.setDroppedExp(0);
         }
     }
 

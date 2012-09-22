@@ -39,7 +39,7 @@ public class WorldSettings
 {
     private static Random random = new Random();
 
-    private boolean clearDefaultDrops;
+    private boolean clearOnNoDrops;
     private boolean overrideDrops;
     private boolean noFarm;
     private boolean noFarmFire;
@@ -69,14 +69,14 @@ public class WorldSettings
         }
     }
 
-    public boolean isClearDefaultDrops()
+    public boolean isClearOnNoDrops()
     {
-        return clearDefaultDrops;
+        return clearOnNoDrops;
     }
 
-    public void setClearDefaultDrops(boolean clearDefaultDrops)
+    public void setClearOnNoDrops(boolean clearOnNoDrops)
     {
-        this.clearDefaultDrops = clearDefaultDrops;
+        this.clearOnNoDrops = clearOnNoDrops;
     }
 
     public boolean isOverrideDrops()

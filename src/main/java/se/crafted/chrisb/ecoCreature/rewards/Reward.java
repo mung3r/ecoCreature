@@ -119,7 +119,7 @@ public class Reward
 
     public boolean hasDrops()
     {
-        return !itemDrops.isEmpty();
+        return !itemDrops.isEmpty() && !entityDrops.isEmpty();
     }
 
     public List<ItemStack> getItemDrops()

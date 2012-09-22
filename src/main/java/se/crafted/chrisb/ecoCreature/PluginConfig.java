@@ -175,7 +175,7 @@ public class PluginConfig
     {
         WorldSettings settings = new WorldSettings();
 
-        settings.setClearDefaultDrops(config.getBoolean("System.Hunting.ClearDefaultDrops", true));
+        settings.setClearOnNoDrops(config.getBoolean("System.Hunting.ClearDefaultDrops", true));
         settings.setOverrideDrops(config.getBoolean("System.Hunting.OverrideDrops", true));
         settings.setNoFarm(config.getBoolean("System.Hunting.NoFarm", false));
         settings.setNoFarmFire(config.getBoolean("System.Hunting.NoFarmFire", false));

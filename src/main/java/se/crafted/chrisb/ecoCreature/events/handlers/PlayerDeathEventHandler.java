@@ -63,12 +63,12 @@ public class PlayerDeathEventHandler extends DefaultEventHandler
 
             winnerOutcome.getMessage().addParameter(MessageToken.CREATURE, victim.getName());
 
-            if (winnerOutcome.getEntityDrops().contains(EntityType.EXPERIENCE_ORB)) {
-                event.setDroppedExp(0);
+            if (settings.isOverrideDrops() || (settings.isClearOnNoDrops() && !winnerOutcome.hasDrops())) {
+                event.getDrops().clear();
             }
 
-            if (settings.isOverrideDrops()) {
-                event.getDrops().clear();
+            if (winnerOutcome.getEntityDrops().contains(EntityType.EXPERIENCE_ORB)) {
+                event.setDroppedExp(0);
             }
 
             events.add(new RewardEvent(killer, winnerOutcome));
