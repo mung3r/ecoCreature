@@ -97,25 +97,27 @@ public class EntityDrop
             }
 
             // NOTE: backward compatibility
-            drops.addAll(parseExpConfig(config));
+            EntityDrop exp = parseExpConfig(config);
+            if (exp != null) {
+                drops.add(exp);
+            }
         }
 
         return drops;
     }
 
-    private static List<EntityDrop> parseExpConfig(ConfigurationSection config)
+    private static EntityDrop parseExpConfig(ConfigurationSection config)
     {
-        List<EntityDrop> drops = new ArrayList<EntityDrop>();
+        EntityDrop exp = null;
 
         if (config != null && config.contains("ExpMin") && config.contains("ExpMax") && config.contains("ExpPercent")) {
-            EntityDrop exp = new EntityDrop();
+            exp = new EntityDrop();
             exp.setType(EntityType.EXPERIENCE_ORB);
             exp.setRange(new IntRange(config.getInt("ExpMin", 0), config.getInt("ExpMax", 0)));
             exp.setPercentage(config.getDouble("ExpPercent", 0.0D));
-            drops.add(exp);
         }
 
-        return drops;
+        return exp;
     }
 
     private static List<EntityDrop> parseDrops(String dropsString)
