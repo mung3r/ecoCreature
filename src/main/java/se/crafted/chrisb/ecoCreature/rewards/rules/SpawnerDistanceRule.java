@@ -65,7 +65,7 @@ public class SpawnerDistanceRule extends DefaultRule
         if (config != null) {
             SpawnerDistanceRule rule = new SpawnerDistanceRule();
             rule.setCanCampSpawner(config.getBoolean("System.Hunting.AllowCamping", false));
-            rule.setClearDropsEnabled(config.getBoolean("System.Hunting.ClearCampDrops", true));
+            rule.setClearDrops(config.getBoolean("System.Hunting.ClearCampDrops", true));
             rule.setCampByDistance(config.getBoolean("System.Hunting.CampingByDistance", true));
             rule.setCampRadius(config.getInt("System.Hunting.CampRadius", 16));
             rule.setMessage(new DefaultMessage(config.getString("System.Messages.NoCampMessage", NO_CAMP_MESSAGE)));

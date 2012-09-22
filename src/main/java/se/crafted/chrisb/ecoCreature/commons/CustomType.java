@@ -1,4 +1,4 @@
-package se.crafted.chrisb.ecoCreature.rewards.sources;
+package se.crafted.chrisb.ecoCreature.commons;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -10,7 +10,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
 
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
 public enum CustomType
 {
@@ -23,8 +22,7 @@ public enum CustomType
     LEGACY_SPAWNER("Spawner"),
     PLAYER("Player"),
     POWERED_CREEPER("PoweredCreeper"),
-    SET("Set"),
-    UNKNOWN("Unknown");
+    SET("Set");
 
     private static final Map<String, CustomType> NAME_MAP = new HashMap<String, CustomType>();
 
@@ -71,7 +69,6 @@ public enum CustomType
 
         if (rewardType == null) {
             ECLogger.getInstance().warning("Unknown creature type: " + entity.getType().getName());
-            rewardType = UNKNOWN;
         }
 
         return rewardType;
@@ -80,10 +77,5 @@ public enum CustomType
     public String getName()
     {
         return name;
-    }
-
-    public String getPermission()
-    {
-        return "ecocreature.reward." + name;
     }
 }

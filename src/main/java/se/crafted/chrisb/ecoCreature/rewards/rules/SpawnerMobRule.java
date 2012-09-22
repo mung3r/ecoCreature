@@ -77,7 +77,7 @@ public class SpawnerMobRule extends DefaultRule implements SpawnerMobTracking
         if (config != null) {
             SpawnerMobRule rule = new SpawnerMobRule();
             rule.setCanCampSpawner(config.getBoolean("System.Hunting.AllowCamping", false));
-            rule.setClearDropsEnabled(config.getBoolean("System.Hunting.ClearCampDrops", true));
+            rule.setClearDrops(config.getBoolean("System.Hunting.ClearCampDrops", true));
             rule.setCampByEntity(config.getBoolean("System.Hunting.CampingByEntity", false));
             rule.setMessage(new DefaultMessage(config.getString("System.Messages.NoCampMessage", NO_CAMP_MESSAGE)));
             rules.add(rule);

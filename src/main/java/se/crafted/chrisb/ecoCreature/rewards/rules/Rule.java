@@ -9,7 +9,7 @@ public interface Rule
 
     boolean isClearDrops();
 
-    void setClearDropsEnabled(boolean clearDrops);
+    void setClearDrops(boolean clearDrops);
 
     Message getMessage();
 

@@ -40,7 +40,7 @@ public class DefaultRule implements Rule
     }
 
     @Override
-    public void setClearDropsEnabled(boolean clearDrops)
+    public void setClearDrops(boolean clearDrops)
     {
         this.clearDrops = clearDrops;
     }

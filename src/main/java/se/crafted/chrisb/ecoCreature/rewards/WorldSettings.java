@@ -21,6 +21,7 @@ import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
 import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
+import se.crafted.chrisb.ecoCreature.commons.CustomType;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
@@ -33,7 +34,6 @@ import se.crafted.chrisb.ecoCreature.rewards.rules.SpawnerMobTracking;
 import se.crafted.chrisb.ecoCreature.rewards.sources.DeathPenaltySource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.PVPRewardSource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSource;
-import se.crafted.chrisb.ecoCreature.rewards.sources.CustomType;
 
 public class WorldSettings
 {
@@ -192,14 +192,27 @@ public class WorldSettings
     {
         Player killer = event.getKiller();
         LivingEntity entity = event.getEntity();
+        CustomType customType = CustomType.fromEntity(entity);
 
-        if (DependencyUtils.hasPermission(killer, "reward." + entity.getType().getName())) {
-            if (!isRuleBroken(event)) {
-                return hasRewardSource(entity.getType());
+        if (hasRewardSource(customType)) {
+            if (DependencyUtils.hasPermission(killer, "reward." + customType.getName())) {
+                if (!isRuleBroken(event)) {
+                    return hasRewardSource(customType);
+                }
+            }
+            else {
+                ECLogger.getInstance().debug("No reward for " + killer.getName() + " due to lack of permission for " + customType.getName());
             }
         }
         else {
-            ECLogger.getInstance().debug("No reward for " + killer.getName() + " due to lack of permission for " + entity.getType().getName());
+            if (DependencyUtils.hasPermission(killer, "reward." + entity.getType().getName())) {
+                if (!isRuleBroken(event) && hasRewardSource(entity.getType())) {
+                    return true;
+                }
+            }
+            else {
+                ECLogger.getInstance().debug("No reward for " + killer.getName() + " due to lack of permission for " + entity.getType().getName());
+            }
         }
 
         return false;
@@ -329,7 +342,10 @@ public class WorldSettings
     {
         RewardSource source = null;
 
-        if (hasRewardSource(entity.getType())) {
+        if (hasRewardSource(CustomType.fromEntity(entity))) {
+            source = getRewardSource(CustomType.fromEntity(entity));
+        }
+        else if (hasRewardSource(entity.getType())) {
             source = getRewardSource(entity.getType());
         }
         else {

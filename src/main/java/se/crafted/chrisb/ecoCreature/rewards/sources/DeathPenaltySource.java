@@ -3,6 +3,7 @@ package se.crafted.chrisb.ecoCreature.rewards.sources;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 
+import se.crafted.chrisb.ecoCreature.commons.CustomType;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 

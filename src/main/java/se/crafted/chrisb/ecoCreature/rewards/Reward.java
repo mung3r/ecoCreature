@@ -12,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
-import se.crafted.chrisb.ecoCreature.rewards.sources.CustomType;
 
 public class Reward
 {
@@ -34,7 +33,7 @@ public class Reward
         party = new HashSet<String>();
         integerCurrency = false;
 
-        name = CustomType.UNKNOWN.getName();
+        name = "Unknown";
         coin = 0.0;
         itemDrops = new ArrayList<ItemStack>();
         entityDrops = new ArrayList<EntityType>();
