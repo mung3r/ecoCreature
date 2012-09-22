@@ -5,20 +5,22 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-public class Enchantment
+import org.bukkit.enchantments.Enchantment;
+
+public class ItemEnchantment
 {
     private final Random random = new Random();
 
-    private org.bukkit.enchantments.Enchantment enchantment;
+    private Enchantment enchantment;
     private int minLevel;
     private int maxLevel;
 
-    public org.bukkit.enchantments.Enchantment getEnchantment()
+    public Enchantment getEnchantment()
     {
         return enchantment;
     }
 
-    public void setEnchantment(org.bukkit.enchantments.Enchantment enchantment)
+    public void setEnchantment(Enchantment enchantment)
     {
         this.enchantment = enchantment;
     }
@@ -48,11 +50,11 @@ public class Enchantment
         return minLevel + random.nextInt(Math.abs(maxLevel - minLevel + 1));
     }
 
-    public static Map<org.bukkit.enchantments.Enchantment, Integer> getOutcome(Set<Enchantment> enchantments)
+    public static Map<Enchantment, Integer> getOutcome(Set<ItemEnchantment> enchantments)
     {
-        Map<org.bukkit.enchantments.Enchantment, Integer> enchantmentMap = new HashMap<org.bukkit.enchantments.Enchantment, Integer>();
+        Map<Enchantment, Integer> enchantmentMap = new HashMap<Enchantment, Integer>();
 
-        for (Enchantment enchantment : enchantments) {
+        for (ItemEnchantment enchantment : enchantments) {
             int level = enchantment.getLevel();
             if (level > 0) {
                 enchantmentMap.put(enchantment.getEnchantment(), Integer.valueOf(level));

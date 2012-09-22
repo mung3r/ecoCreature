@@ -402,9 +402,9 @@ public class PluginConfig
 
     private static RewardSource mergeRewardSource(RewardSource from, RewardSource to)
     {
-        to.setDrops(from.hasDrops() ? from.getDrops() : to.getDrops());
+        to.setItemDrops(from.hasItemDrops() ? from.getItemDrops() : to.getItemDrops());
+        to.setEntityDrops(from.hasEntityDrops() ? from.getEntityDrops() : to.getEntityDrops());
         to.setCoin(from.hasCoin() ? from.getCoin() : to.getCoin());
-        to.setExp(from.hasExp() ? from.getExp() : to.getExp());
 
         to.setNoCoinRewardMessage(from.getNoCoinRewardMessage() != null ? from.getNoCoinRewardMessage() : to.getNoCoinRewardMessage());
         to.setCoinRewardMessage(from.getCoinRewardMessage() != null ? from.getCoinRewardMessage() : to.getCoinRewardMessage());

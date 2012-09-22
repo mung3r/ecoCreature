@@ -5,6 +5,8 @@ import java.util.Set;
 
 import net.milkbowl.vault.economy.Economy;
 
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -81,13 +83,15 @@ public class RewardEventListener implements Listener
                     }
                 }
 
-                for (ItemStack stack : reward.getDrops()) {
+                for (ItemStack stack : reward.getItemDrops()) {
                     reward.getWorld().dropItemNaturally(reward.getLocation(), stack);
                 }
 
-                if (reward.getExp() > 0) {
-                    ExperienceOrb orb = reward.getWorld().spawn(reward.getLocation(), ExperienceOrb.class);
-                    orb.setExperience(reward.getExp());
+                for (EntityType type : reward.getEntityDrops()) {
+                    Entity entity = reward.getWorld().spawn(reward.getLocation(), type.getEntityClass());
+                    if (entity instanceof ExperienceOrb) {
+                        ((ExperienceOrb) entity).setExperience(1);
+                    }
                 }
 
                 plugin.getMetrics().addCount(reward.getName());

@@ -15,21 +15,21 @@ public interface RewardSource
 
     boolean hasCoin();
 
-    Coin getCoin();
+    CoinDrop getCoin();
 
-    void setCoin(Coin coin);
+    void setCoin(CoinDrop coin);
 
-    boolean hasDrops();
+    boolean hasItemDrops();
 
-    List<Drop> getDrops();
+    List<ItemDrop> getItemDrops();
 
-    void setDrops(List<Drop> drops);
+    void setItemDrops(List<ItemDrop> itemDrops);
 
-    boolean hasExp();
+    boolean hasEntityDrops();
 
-    Exp getExp();
+    List<EntityDrop> getEntityDrops();
 
-    void setExp(Exp exp);
+    void setEntityDrops(List<EntityDrop> entityDrops);
 
     Message getNoCoinRewardMessage();
 

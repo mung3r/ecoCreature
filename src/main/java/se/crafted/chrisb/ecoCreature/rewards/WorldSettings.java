@@ -154,19 +154,19 @@ public class WorldSettings
         else if (event instanceof EntityKilledEvent) {
             return hasRewardSource((EntityKilledEvent) event);
         }
-        else if (event instanceof HeroChangeLevelEvent) {
-            return hasRewardSource((HeroChangeLevelEvent) event);
-        }
         else if (event instanceof PlayerKilledEvent) {
             return hasRewardSource((PlayerKilledEvent) event);
         }
         else if (event instanceof PlayerDeathEvent) {
             return hasRewardSource((PlayerDeathEvent) event);
         }
-        else if (event instanceof DeathStreakEvent) {
+        else if (DependencyUtils.hasHeroes() && event instanceof HeroChangeLevelEvent) {
+            return hasRewardSource((HeroChangeLevelEvent) event);
+        }
+        else if (DependencyUtils.hasDeathTpPlus() && event instanceof DeathStreakEvent) {
             return hasRewardSource((DeathStreakEvent) event);
         }
-        else if (event instanceof KillStreakEvent) {
+        else if (DependencyUtils.hasDeathTpPlus() && event instanceof KillStreakEvent) {
             return hasRewardSource((KillStreakEvent) event);
         }
 
@@ -292,19 +292,19 @@ public class WorldSettings
         else if (event instanceof EntityKilledEvent) {
             return getRewardSource(((EntityKilledEvent) event).getEntity());
         }
-        else if (event instanceof HeroChangeLevelEvent) {
-            return getRewardSource(CustomType.HERO_MASTERED);
-        }
         else if (event instanceof PlayerKilledEvent) {
             return getRewardSource(CustomType.PLAYER);
         }
         else if (event instanceof PlayerDeathEvent) {
             return getRewardSource(CustomType.DEATH_PENALTY);
         }
-        else if (event instanceof DeathStreakEvent) {
+        else if (DependencyUtils.hasHeroes() && event instanceof HeroChangeLevelEvent) {
+            return getRewardSource(CustomType.HERO_MASTERED);
+        }
+        else if (DependencyUtils.hasDeathTpPlus() && event instanceof DeathStreakEvent) {
             return getRewardSource(CustomType.DEATH_STREAK);
         }
-        else if (event instanceof KillStreakEvent) {
+        else if (DependencyUtils.hasDeathTpPlus() && event instanceof KillStreakEvent) {
             return getRewardSource(CustomType.KILL_STREAK);
         }
 

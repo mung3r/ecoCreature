@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
@@ -22,8 +23,8 @@ public class Reward
 
     private String name;
     private double coin;
-    private List<ItemStack> drops;
-    private int exp;
+    private List<ItemStack> itemDrops;
+    private List<EntityType> entityDrops;
     private Message message;
 
     public Reward(Location location)
@@ -35,8 +36,8 @@ public class Reward
 
         name = CustomType.UNKNOWN.getName();
         coin = 0.0;
-        drops = new ArrayList<ItemStack>();
-        exp = 0;
+        itemDrops = new ArrayList<ItemStack>();
+        entityDrops = new ArrayList<EntityType>();
         message = new DefaultMessage();
     }
 
@@ -118,27 +119,27 @@ public class Reward
 
     public boolean hasDrops()
     {
-        return !drops.isEmpty();
+        return !itemDrops.isEmpty();
     }
 
-    public List<ItemStack> getDrops()
+    public List<ItemStack> getItemDrops()
     {
-        return drops;
+        return itemDrops;
     }
 
-    public void setDrops(List<ItemStack> drops)
+    public void setItemDrops(List<ItemStack> itemDrops)
     {
-        this.drops = drops;
+        this.itemDrops = itemDrops;
     }
 
-    public int getExp()
+    public List<EntityType> getEntityDrops()
     {
-        return exp;
+        return entityDrops;
     }
 
-    public void setExp(int exp)
+    public void setEntityDrops(List<EntityType> entityDrops)
     {
-        this.exp = exp;
+        this.entityDrops = entityDrops;
     }
 
     public Message getMessage()

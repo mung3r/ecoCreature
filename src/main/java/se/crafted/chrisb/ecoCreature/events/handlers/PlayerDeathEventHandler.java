@@ -3,6 +3,7 @@ package se.crafted.chrisb.ecoCreature.events.handlers;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -62,7 +63,7 @@ public class PlayerDeathEventHandler extends DefaultEventHandler
 
             winnerOutcome.getMessage().addParameter(MessageToken.CREATURE, victim.getName());
 
-            if (winnerOutcome.getExp() > 0) {
+            if (winnerOutcome.getEntityDrops().contains(EntityType.EXPERIENCE_ORB)) {
                 event.setDroppedExp(0);
             }
 

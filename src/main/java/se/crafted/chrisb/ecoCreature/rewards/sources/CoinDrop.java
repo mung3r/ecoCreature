@@ -1,31 +1,21 @@
 package se.crafted.chrisb.ecoCreature.rewards.sources;
 
+import org.apache.commons.lang.math.DoubleRange;
 import org.bukkit.configuration.ConfigurationSection;
 
-public class Coin
+public class CoinDrop
 {
-    private double min;
-    private double max;
+    private DoubleRange range;
     private double percentage;
 
-    public double getMin()
+    public DoubleRange getRange()
     {
-        return min;
+        return range;
     }
 
-    public void setMin(double min)
+    public void setRange(DoubleRange range)
     {
-        this.min = min;
-    }
-
-    public double getMax()
-    {
-        return max;
-    }
-
-    public void setMax(double max)
-    {
-        this.max = max;
+        this.range = range;
     }
 
     public double getPercentage()
@@ -46,28 +36,27 @@ public class Coin
             amount = 0.0D;
         }
         else {
-            if (min == max) {
-                amount = max;
+            if (range.getMinimumDouble() == range.getMaximumDouble()) {
+                amount = range.getMaximumDouble();
             }
-            else if (min > max) {
-                amount = min;
+            else if (range.getMinimumDouble() > range.getMaximumDouble()) {
+                amount = range.getMinimumDouble();
             }
             else {
-                amount = min + Math.random() * (max - min);
+                amount = range.getMinimumDouble() + Math.random() * (range.getMaximumDouble() - range.getMinimumDouble());
             }
         }
 
         return amount;
     }
 
-    public static Coin parseConfig(ConfigurationSection config)
+    public static CoinDrop parseConfig(ConfigurationSection config)
     {
-        Coin coin = null;
+        CoinDrop coin = null;
 
         if (config != null && config.contains("Coin_Maximum") && config.contains("Coin_Minimum") && config.contains("Coin_Percent")) {
-            coin = new Coin();
-            coin.setMax(config.getDouble("Coin_Maximum", 0));
-            coin.setMin(config.getDouble("Coin_Minimum", 0));
+            coin = new CoinDrop();
+            coin.setRange(new DoubleRange(config.getDouble("Coin_Minimum", 0), config.getDouble("Coin_Maximum", 0)));
             coin.setPercentage(config.getDouble("Coin_Percent", 0.0D));
         }
 

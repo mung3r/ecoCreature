@@ -528,8 +528,9 @@ RewardTable:
     Coin_Percent: 1.0
   Zombie:
     Sets:
-    - Zombie
-    - CashZombie
+    - DefaultZombie
+    - MoneyZombie
+    - ZombieApocalypse
 
 ############################################################################
 # Drop set examples
@@ -555,12 +556,15 @@ RewardTable:
 # RewardTable
 ############################################################################
 RewardSets:
-  Zombie:
+  DefaultZombie:
     Drops:
     - 'rotten flesh:2:75'
-  CashZombie:
+  MoneyZombie:
     Drops:
     - 'rotten flesh:2:75'
     Coin_Minimum: 1.00
     Coin_Maximum: 3.50
     Coin_Percent: 100.0
+  ZombieApocalypse:
+    Drops:
+    - 'zombie:2:50'

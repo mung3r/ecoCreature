@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -14,6 +15,7 @@ import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
 import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
+import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
@@ -28,9 +30,9 @@ public class DefaultRewardSource implements RewardSource
     protected static final String COIN_PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.";
 
     private String name;
-    private Coin coin;
-    private List<Drop> drops;
-    private Exp exp;
+    private CoinDrop coin;
+    private List<ItemDrop> itemDrops;
+    private List<EntityDrop> entityDrops;
 
     private Message noCoinRewardMessage;
     private Message coinRewardMessage;
@@ -59,51 +61,51 @@ public class DefaultRewardSource implements RewardSource
     }
 
     @Override
-    public Coin getCoin()
+    public CoinDrop getCoin()
     {
         return coin;
     }
 
     @Override
-    public void setCoin(Coin coin)
+    public void setCoin(CoinDrop coin)
     {
         this.coin = coin;
     }
 
     @Override
-    public boolean hasDrops()
+    public boolean hasItemDrops()
     {
-        return drops != null;
+        return itemDrops != null && !itemDrops.isEmpty();
     }
 
     @Override
-    public List<Drop> getDrops()
+    public List<ItemDrop> getItemDrops()
     {
-        return drops;
+        return itemDrops;
     }
 
     @Override
-    public void setDrops(List<Drop> drops)
+    public void setItemDrops(List<ItemDrop> drops)
     {
-        this.drops = drops;
+        this.itemDrops = drops;
     }
 
     @Override
-    public boolean hasExp()
+    public boolean hasEntityDrops()
     {
-        return exp != null;
+        return entityDrops != null && !entityDrops.isEmpty();
     }
 
     @Override
-    public Exp getExp()
+    public List<EntityDrop> getEntityDrops()
     {
-        return exp;
+        return entityDrops;
     }
 
     @Override
-    public void setExp(Exp exp)
+    public void setEntityDrops(List<EntityDrop> entityDrops)
     {
-        this.exp = exp;
+        this.entityDrops = entityDrops;
     }
 
     @Override
@@ -184,7 +186,8 @@ public class DefaultRewardSource implements RewardSource
         Reward reward = new Reward(getLocation(event));
 
         reward.setName(name);
-        reward.setDrops(getDropOutcomes(fixedDrops));
+        reward.setItemDrops(getItemDropOutcomes(fixedDrops));
+        reward.setEntityDrops(getEntityDropOutcomes(fixedDrops));
 
         if (hasCoin()) {
             reward.setCoin(coin.getOutcome());
@@ -200,10 +203,6 @@ public class DefaultRewardSource implements RewardSource
             }
         }
 
-        if (hasExp()) {
-            reward.setExp(exp.getOutcome());
-        }
-
         reward.setIntegerCurrency(integerCurrency);
 
         return reward;
@@ -217,31 +216,31 @@ public class DefaultRewardSource implements RewardSource
         else if (event instanceof EntityKilledEvent) {
             return ((EntityKilledEvent) event).getEntity().getLocation();
         }
-        else if (event instanceof HeroChangeLevelEvent) {
-            return ((HeroChangeLevelEvent) event).getHero().getPlayer().getLocation();
-        }
         else if (event instanceof PlayerKilledEvent) {
             return ((PlayerKilledEvent) event).getVictim().getLocation();
         }
         else if (event instanceof PlayerDeathEvent) {
             return ((PlayerDeathEvent) event).getEntity().getLocation();
         }
-        else if (event instanceof DeathStreakEvent) {
+        else if (DependencyUtils.hasHeroes() && event instanceof HeroChangeLevelEvent) {
+            return ((HeroChangeLevelEvent) event).getHero().getPlayer().getLocation();
+        }
+        else if (DependencyUtils.hasDeathTpPlus() && event instanceof DeathStreakEvent) {
             return ((DeathStreakEvent) event).getPlayer().getLocation();
         }
-        else if (event instanceof KillStreakEvent) {
+        else if (DependencyUtils.hasDeathTpPlus() && event instanceof KillStreakEvent) {
             return ((KillStreakEvent) event).getPlayer().getLocation();
         }
 
         return null;
     }
 
-    private List<ItemStack> getDropOutcomes(boolean isFixedDrops)
+    private List<ItemStack> getItemDropOutcomes(boolean isFixedDrops)
     {
         List<ItemStack> stacks = new ArrayList<ItemStack>();
 
-        if (drops != null) {
-            for (Drop drop : drops) {
+        if (itemDrops != null) {
+            for (ItemDrop drop : itemDrops) {
                 ItemStack itemStack = drop.getOutcome(isFixedDrops);
                 if (itemStack != null) {
                     stacks.add(itemStack);
@@ -252,6 +251,19 @@ public class DefaultRewardSource implements RewardSource
         return stacks;
     }
 
+    private List<EntityType> getEntityDropOutcomes(boolean isFixedDrops)
+    {
+        List<EntityType> types = new ArrayList<EntityType>();
+
+        if (entityDrops != null) {
+            for (EntityDrop drop : entityDrops) {
+                types.addAll(drop.getOutcome());
+            }
+        }
+
+        return types;
+    }
+
     public static RewardSource parseConfig(ConfigurationSection config)
     {
         DefaultRewardSource source = new DefaultRewardSource();
@@ -259,9 +271,9 @@ public class DefaultRewardSource implements RewardSource
         if (config != null) {
             source.setName(config.getName());
 
-            source.setDrops(Drop.parseConfig(config));
-            source.setCoin(Coin.parseConfig(config));
-            source.setExp(Exp.parseConfig(config));
+            source.setItemDrops(ItemDrop.parseConfig(config));
+            source.setEntityDrops(EntityDrop.parseConfig(config));
+            source.setCoin(CoinDrop.parseConfig(config));
 
             source.setCoinRewardMessage(new DefaultMessage(config.getString("Reward_Message", COIN_REWARD_MESSAGE)));
             source.setCoinPenaltyMessage(new DefaultMessage(config.getString("Penalty_Message", COIN_PENALTY_MESSAGE)));
