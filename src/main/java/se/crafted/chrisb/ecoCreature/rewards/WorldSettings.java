@@ -339,7 +339,7 @@ public class WorldSettings
         return source;
     }
 
-    public RewardSource getRewardSource(Material material)
+    private RewardSource getRewardSource(Material material)
     {
         RewardSource source = null;
 
@@ -353,7 +353,7 @@ public class WorldSettings
         return source;
     }
 
-    public RewardSource getRewardSource(EntityType entityType)
+    private RewardSource getRewardSource(EntityType entityType)
     {
         RewardSource source = null;
 
