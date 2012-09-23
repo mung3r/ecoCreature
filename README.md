@@ -29,9 +29,9 @@ ecoCreature - Mob & PVP Rewards
 	* [Towny](http://dev.bukkit.org/server-mods/towny-advanced/) membership
 	* Weapon used
 * Customize items drops to include:
-	* Any Minecraft materials (list of [materials](http://jd.bukkit.org/apidocs/org/bukkit/Material.html)
-	* Any Minecraft enchantment (list of [enchantments](http://jd.bukkit.org/apidocs/org/bukkit/enchantments/Enchantment.html)
-	* Any Minecraft entity (list of [entities](http://jd.bukkit.org/apidocs/org/bukkit/entity/EntityType.html)
+	* Any Minecraft materials (list of [materials](http://jd.bukkit.org/apidocs/org/bukkit/Material.html))
+	* Any Minecraft enchantment (list of [enchantments](http://jd.bukkit.org/apidocs/org/bukkit/enchantments/Enchantment.html))
+	* Any Minecraft entity (list of [entities](http://jd.bukkit.org/apidocs/org/bukkit/entity/EntityType.html))
 * Integrate with [DeathTpPlus](http://dev.bukkit.org/server-mods/deathtpplus/):
 	* Rewards for kill streaks
 	* Penalties for death streaks
