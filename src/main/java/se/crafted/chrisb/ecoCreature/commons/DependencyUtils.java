@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-
 import com.bekvon.bukkit.residence.Residence;
 import com.garbagemule.MobArena.MobArenaHandler;
 import com.herocraftonline.heroes.Heroes;
@@ -19,7 +18,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 
 import couk.Adamki11s.Regios.API.RegiosAPI;
 
-public class DependencyUtils
+public final class DependencyUtils
 {
     private static Plugin vaultPlugin;
     private static Plugin deathTpPlusPlugin;
@@ -95,12 +94,10 @@ public class DependencyUtils
     public static boolean hasPermission(Player player, String perm)
     {
         if (hasPermission()) {
-            return permission.has(player.getWorld(), player.getName(), "ecoCreature." + perm) ||
-                    permission.has(player.getWorld(), player.getName(), "ecocreature." + perm.toLowerCase());
+            return permission.has(player.getWorld(), player.getName(), "ecoCreature." + perm) || permission.has(player.getWorld(), player.getName(), "ecocreature." + perm.toLowerCase());
         }
         else {
-            return player.hasPermission("ecoCreature." + perm) ||
-                    player.hasPermission("ecocreature." + perm.toLowerCase());
+            return player.hasPermission("ecoCreature." + perm) || player.hasPermission("ecocreature." + perm.toLowerCase());
         }
     }
 

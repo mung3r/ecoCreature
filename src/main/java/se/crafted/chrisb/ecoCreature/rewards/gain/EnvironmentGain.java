@@ -1,7 +1,9 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -11,7 +13,7 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-public class EnvironmentGain extends BasicGain
+public class EnvironmentGain extends DefaultGain
 {
     private Map<Environment, Double> multipliers;
 
@@ -33,21 +35,21 @@ public class EnvironmentGain extends BasicGain
         return multiplier;
     }
 
-    public static Gain parseConfig(ConfigurationSection config)
+    public static Set<Gain> parseConfig(ConfigurationSection config)
     {
-        Gain gain = null;
+        Set<Gain> gain = new HashSet<Gain>();
 
         if (config != null) {
-            Map<Environment, Double> environmentMultipliers = new HashMap<World.Environment, Double>();
+            Map<Environment, Double> multipliers = new HashMap<World.Environment, Double>();
             for (String environment : config.getKeys(false)) {
                 try {
-                    environmentMultipliers.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(config.getConfigurationSection(environment).getDouble("Amount", 1.0D)));
+                    multipliers.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(config.getConfigurationSection(environment).getDouble("Amount", 1.0D)));
                 }
                 catch (Exception e) {
                     ECLogger.getInstance().warning("Skipping unknown environment name: " + environment);
                 }
             }
-            gain = new EnvironmentGain(environmentMultipliers);
+            gain.add(new EnvironmentGain(multipliers));
         }
 
         return gain;

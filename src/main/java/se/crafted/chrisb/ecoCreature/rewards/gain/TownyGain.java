@@ -1,7 +1,9 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -11,9 +13,8 @@ import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
-public class TownyGain extends BasicGain
+public class TownyGain extends DefaultGain
 {
-
     private Map<String, Double> multipliers;
 
     public TownyGain(Map<String, Double> multipliers)
@@ -37,16 +38,16 @@ public class TownyGain extends BasicGain
         return multiplier;
     }
 
-    public static Gain parseConfig(ConfigurationSection config)
+    public static Set<Gain> parseConfig(ConfigurationSection config)
     {
-        Gain gain = null;
+        Set<Gain> gain = new HashSet<Gain>();
 
         if (config != null) {
-            Map<String, Double> townyMultipliers = new HashMap<String, Double>();
+            Map<String, Double> multipliers = new HashMap<String, Double>();
             for (String townName : config.getKeys(false)) {
-                townyMultipliers.put(townName, Double.valueOf(config.getConfigurationSection(townName).getDouble("Amount", 1.0D)));
+                multipliers.put(townName, Double.valueOf(config.getConfigurationSection(townName).getDouble("Amount", 1.0D)));
             }
-            gain = new TownyGain(townyMultipliers);
+            gain.add(new TownyGain(multipliers));
         }
 
         return gain;

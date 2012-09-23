@@ -1,21 +1,100 @@
 package se.crafted.chrisb.ecoCreature.rewards;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
+
+import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
+import se.crafted.chrisb.ecoCreature.messages.Message;
 
 public class Reward
 {
-    private String name;
-    private RewardType type;
-    private Coin coin;
-    private List<Drop> drops;
-    private Exp exp;
+    private Location location;
+    private double gain;
+    private Set<String> party;
+    private boolean integerCurrency;
 
-    private String noRewardMessage;
-    private String rewardMessage;
-    private String penaltyMessage;
+    private String name;
+    private double coin;
+    private List<ItemStack> itemDrops;
+    private List<EntityType> entityDrops;
+    private Message message;
+
+    public Reward(Location location)
+    {
+        this.location = location;
+        gain = 1.0;
+        party = new HashSet<String>();
+        integerCurrency = false;
+
+        name = "Unknown";
+        coin = 0.0;
+        itemDrops = new ArrayList<ItemStack>();
+        entityDrops = new ArrayList<EntityType>();
+        message = new DefaultMessage();
+    }
+
+    public World getWorld()
+    {
+        World world = null;
+
+        if (location != null) {
+            world = location.getWorld();
+        }
+
+        return world;
+    }
+
+    public Location getLocation()
+    {
+        return location;
+    }
+
+    public void setLocation(Location location)
+    {
+        this.location = location;
+    }
+
+    public double getGain()
+    {
+        return gain;
+    }
+
+    public void setGain(double gain)
+    {
+        this.gain = gain;
+    }
+
+    public boolean hasParty()
+    {
+        return party.size() > 0;
+    }
+
+    public Set<String> getParty()
+    {
+        return party;
+    }
+
+    public void setParty(Set<String> party)
+    {
+        this.party = party;
+    }
+
+    public boolean isIntegerCurrency()
+    {
+        return integerCurrency;
+    }
+
+    public void setIntegerCurrency(boolean integerCurrency)
+    {
+        this.integerCurrency = integerCurrency;
+    }
 
     public String getName()
     {
@@ -27,111 +106,48 @@ public class Reward
         this.name = name;
     }
 
-    public void setType(RewardType type)
-    {
-        this.type = type;
-    }
-
-    public RewardType getType()
-    {
-        return type;
-    }
-
-    public boolean hasCoin()
-    {
-        return coin != null;
-    }
-
-    public Coin getCoin()
+    public double getCoin()
     {
         return coin;
     }
 
-    public void setCoin(Coin coin)
+    public void setCoin(double coin)
     {
         this.coin = coin;
     }
 
     public boolean hasDrops()
     {
-        return drops != null;
+        return !itemDrops.isEmpty() && !entityDrops.isEmpty();
     }
 
-    public List<Drop> getDrops()
+    public List<ItemStack> getItemDrops()
     {
-        return drops;
+        return itemDrops;
     }
 
-    public void setDrops(List<Drop> drops)
+    public void setItemDrops(List<ItemStack> itemDrops)
     {
-        this.drops = drops;
+        this.itemDrops = itemDrops;
     }
 
-    public boolean hasExp()
+    public List<EntityType> getEntityDrops()
     {
-        return exp != null;
+        return entityDrops;
     }
 
-    public Exp getExp()
+    public void setEntityDrops(List<EntityType> entityDrops)
     {
-        return exp;
+        this.entityDrops = entityDrops;
     }
 
-    public void setExp(Exp exp)
+    public Message getMessage()
     {
-        this.exp = exp;
+        return message;
     }
 
-    public String getNoRewardMessage()
+    public void setMessage(Message message)
     {
-        return noRewardMessage;
-    }
-
-    public void setNoRewardMessage(String noRewardMessage)
-    {
-        this.noRewardMessage = noRewardMessage;
-    }
-
-    public String getRewardMessage()
-    {
-        return rewardMessage;
-    }
-
-    public void setRewardMessage(String rewardMessage)
-    {
-        this.rewardMessage = rewardMessage;
-    }
-
-    public String getPenaltyMessage()
-    {
-        return penaltyMessage;
-    }
-
-    public void setPenaltyMessage(String penaltyMessage)
-    {
-        this.penaltyMessage = penaltyMessage;
-    }
-
-    public List<ItemStack> computeDrops(boolean isFixedDrops)
-    {
-        List<ItemStack> stack = new ArrayList<ItemStack>();
-
-        if (drops != null) {
-            for (Drop drop : drops) {
-                ItemStack itemStack = drop.computeItemStack(isFixedDrops);
-                if (itemStack != null) {
-                    stack.add(itemStack);
-                }
-            }
-        }
-
-        return stack;
-    }
-
-    @Override
-    public String toString()
-    {
-        return String.format("Reward [name=%s, type=%s, drops=%s, noRewardMessage=%s, rewardMessage=%s, penaltyMessage=%s]",
-                name, type, drops, noRewardMessage, rewardMessage, penaltyMessage);
+        this.message = message;
     }
 }

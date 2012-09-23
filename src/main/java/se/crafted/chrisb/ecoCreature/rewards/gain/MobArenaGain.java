@@ -1,19 +1,21 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-public class MobArenaGain extends BasicGain
+public class MobArenaGain extends DefaultGain
 {
     private double multiplier;
 
-    public MobArenaGain(double multiplier, boolean isShared)
+    public MobArenaGain(double multiplier)
     {
         this.multiplier = multiplier;
-        this.isShared = isShared;
     }
 
     @Override
@@ -27,12 +29,12 @@ public class MobArenaGain extends BasicGain
         return super.getMultiplier(player);
     }
 
-    public static Gain parseConfig(ConfigurationSection config)
+    public static Set<Gain> parseConfig(ConfigurationSection config)
     {
-        Gain gain = null;
+        Set<Gain> gain = new HashSet<Gain>();
 
         if (config != null) {
-            gain = new MobArenaGain(config.getDouble("Amount", 1.0D), config.getBoolean("Share", true));
+            gain.add(new MobArenaGain(config.getDouble("Amount", 1.0D)));
         }
 
         return gain;

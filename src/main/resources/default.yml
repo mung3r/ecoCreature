@@ -1,530 +1,570 @@
 System:
-    Economy:
-        #
-        # Round reward amounts to the nearest integer
-        # Default : false
-        IntegerCurrency: false
+  Economy:
+    #
+    # Round reward amounts to the nearest integer
+    # Default : false
+    IntegerCurrency: false
 
-    Hunting:
-        #
-        # Give rewards for mob spawner camping
-        # Default: false
-        AllowCamping: false
-        #
-        # Clear drops from mobs killed near spawners
-        # Default: true
-        ClearCampDrops: true
-        #
-        # Determine camping by tracking mobs, spawned by mob spawners, ignoring distance
-        # Default: false
-        CampingByEntity: false
-        #
-        # Determine camping by closeness to spawner
-        # Default: true
-        CampingByDistance: true
-        #
-        # If CampingByDistance is true, then this is how many blocks
-        # away from a spawner you need to be to get a reward
-        # Default: 7
-        CampRadius: 7
-        #
-        # Do not drop anything except for rewards defined in this file
-        # Default: false
-        ClearDefaultDrops: false
-        #
-        # Replace instead of stack rewards drops/items
-        # Default: true
-        OverrideDrops: true
-        #
-        # Do not randomize amount of drop items. Always drop a fixed amount.
-        # Default: false
-        FixedDrops: false
-        #
-        # Enable rewards for mobs killed with bow & arrow
-        # Default: true
-        BowRewards: true
-        #
-        # Enable rewards for killing mobs under sea level
-        # Default: true
-        AllowUnderSeaLVL: true
-        #
-        # Enable rewards for kills with tamed creatures (wolves)
-        # Default: true
-        WolverineMode: true
-        #
-        # Penalize players when they die. Use PenalizeType to select whether
-        # PenalizeAmount is used as a percentage (PenalizeType: true) or a
-        # fixed amount (PenalizeType: false) taken from the player.
-        # Default: false
-        PenalizeDeath: false
-        PenalizeType: true
-        PenalizeAmount: 0.05
-        #
-        # Remove drops from mobs killed by farming contraptions (mob death by
-        # cacti, falling, drowning or suffocation)
-        # Default: false
-        NoFarm: false
-        # Set this to true to include fire and fire_tick.
-        NoFarmFire: false
-        #
-        # MobArena: allow rewards when players are in the arena
-        # Default: false
-        MobArenaRewards: false
-        #
-        # CreativeModeRewards: allow rewards in creative mode
-        # Default: false
-        CreativeModeRewards: false
-        
-    Messages:
-        #
-        # Enable all reward messages
-        # Default: true
-        Output: true
-        #
-        # Enable logging of coin rewards in server.log
-        # Default: false
-        LogCoinRewards: false
-        #
-        # Message players when they get no reward for a kill
-        # Default: true
-        NoReward: true
-        #
-        # Message players for camping spawners
-        # Default: false
-        Spawner: false
-        #
-        # Custom message for no camping mob spawners
-        NoCampMessage: '&7You find no rewards camping monster spawners.'
-        #
-        # Custom message for no rewards killing with bow & arrow
-        NoBowMessage: '&7You find no rewards on this creature.'
-        #
-        # Custom message for death penalty
-        DeathPenaltyMessage: '&7You wake up to find &6<amt>&7 missing from your pockets!'
+  Hunting:
+    #
+    # Give rewards for mob spawner camping
+    # Default: false
+    AllowCamping: false
+    #
+    # Clear drops from mobs killed near spawners
+    # Default: true
+    ClearCampDrops: true
+    #
+    # Determine camping by tracking mobs, spawned by mob spawners, ignoring distance
+    # Default: false
+    CampingByEntity: false
+    #
+    # Determine camping by closeness to spawner
+    # Default: true
+    CampingByDistance: true
+    #
+    # If CampingByDistance is true, then this is how many blocks
+    # away from a spawner you need to be to get a reward
+    # Default: 16
+    CampRadius: 16
+    #
+    # Do not drop anything except for rewards defined in this file
+    # Default: false
+    ClearDefaultDrops: false
+    #
+    # Replace instead of stack rewards drops/items
+    # Default: true
+    OverrideDrops: true
+    #
+    # Do not randomize amount of drop items. Always drop a fixed amount.
+    # Default: false
+    FixedDrops: false
+    #
+    # Enable rewards for mobs killed with bow & arrow
+    # Default: true
+    BowRewards: true
+    #
+    # Enable rewards for killing mobs under sea level
+    # Default: true
+    AllowUnderSeaLVL: true
+    #
+    # Enable rewards for kills with tamed creatures (wolves)
+    # Default: true
+    WolverineMode: true
+    #
+    # Penalize players when they die. Use PenalizeType to select whether
+    # PenalizeAmount is used as a percentage (PenalizeType: true) or a
+    # fixed amount (PenalizeType: false) taken from the player.
+    # Default: false
+    PenalizeDeath: false
+    PenalizeType: true
+    PenalizeAmount: 0.05
+    #
+    # Legacy PVP reward player kills. Use PVPRewardType to select whether
+    # PVPRewardAmount is used as a percentage (PVPRewardType: true) or a
+    # fixed amount (PVPRewardType: false)
+    # Default: false
+    PVPReward: false
+    PVPRewardType: true
+    PVPRewardAmount: 0.05
+    #
+    # Remove drops from mobs killed by farming contraptions (mob death by
+    # cacti, falling, drowning or suffocation)
+    # Default: false
+    NoFarm: false
+    # Set this to true to include fire and fire_tick.
+    NoFarmFire: false
+    #
+    # MobArena: allow rewards when players are in the arena
+    # Default: false
+    MobArenaRewards: false
+    #
+    # CreativeModeRewards: allow rewards in creative mode
+    # Default: false
+    CreativeModeRewards: false
+    
+  Messages:
+    #
+    # Enable all reward messages
+    # Default: true
+    Output: true
+    #
+    # Enable logging of coin rewards in server.log
+    # Default: false
+    LogCoinRewards: false
+    #
+    # Message players when they get no reward for a kill
+    # Default: true
+    NoReward: true
+    #
+    # Message players for camping spawners
+    # Default: false
+    Spawner: false
+    #
+    # Custom message for no camping mob spawners
+    NoCampMessage: '&7You find no rewards camping monster spawners.'
+    #
+    # Custom message for no rewards killing with bow & arrow
+    NoBowMessage: '&7You find no rewards on this creature.'
+    #
+    # Custom message for no rewards killing under sea level
+    NoUnderSeaLevel: '&7You find no rewards on this creature.'
+    #
+    # Custom message for death penalty
+    DeathPenaltyMessage: '&7You wake up to find &6<amt>&7 missing from your pockets!'
 
 Gain:
-    Groups:
-    #
-    # Multiply reward amount based on group (NOTE: requires a permission plugin
-    # that supports groups)
-        Default:
-            Amount: 1.0
-        Donors:
-            Amount: 2.0
-    Time:
-    #
-    # Multiply reward amount based on time period of day/night
-        Sunrise:
-            Amount: 1.0
-        Day:
-            Amount: 1.0
-        Sunset:
-            Amount: 1.0
-        Dusk:
-            Amount: 1.125
-        Night:
-            Amount: 1.25
-        Dawn:
-            Amount: 1.125
-    Environment:
-    #
-    # Multiply reward amount based on environment type
-        Normal:
-            Amount: 1.0
-        Nether:
-            Amount: 1.25
-        The_End:
-            Amount: 1.50
-    MobArena:
-    #
-    # Multiply reward amount based on player arena status
-        InArena:
-            Amount: 1.0
-            Share: true
-    WorldGuard:
-    #
-    # Multiply reward amount based on WorldGuard region
-        MyRegionName1:
-            Amount: 0.125
-        MyRegionName2:
-            Amount: 0.5
-    Regios:
-    #
-    # Multiply reward amount based on Regios region
-        MyRegiosName1:
-            Amount: 0.125
-        MyRegiosName2:
-            Amount: 0.5
-    Residence:
-    #
-    # Multiply reward amount based on Residence region
-        MyResidenceName1:
-            Amount: 0.125
-        MyResidenceName2:
-            Amount: 0.5
-    Factions:
-    #
-    # Multiply reward amount based on Faction region
-        MyFactionName1:
-            Amount: 0.125
-        MyFactionName2:
-            Amount: 0.5
-    Towny:
-    #
-    # Multiply reward amount based on Towny region
-        MyTownName1:
-            Amount: 0.125
-        MyTownName2:
-            Amount: 0.5
-    Heroes:
-    #
-    # Multiply reward based on Heroes party status
-        InParty:
-            Amount: 1.125
-            Share: true
-    mcMMO:
-    #
-    # Multiply reward based on mcMMO party status
-        InParty:
-            Amount: 1.125
-            Share: true 
+  #
+  # Multiply reward amount based on group (NOTE: requires a permission plugin
+  # that supports groups)
+  Groups:
+    Default:
+      Amount: 1.0
+    Donors:
+      Amount: 2.0
+  #
+  # Multiply reward amount based on time period of day/night
+  Time:
+    Sunrise:
+      Amount: 1.0
+    Day:
+      Amount: 1.0
+    Sunset:
+      Amount: 1.0
+    Dusk:
+      Amount: 1.125
+    Night:
+      Amount: 1.25
+    Dawn:
+      Amount: 1.125
+  #
+  # Multiply reward amount based on environment type
+  Environment:
+    Normal:
+      Amount: 1.0
+    Nether:
+      Amount: 1.25
+    The_End:
+      Amount: 1.50
+  #
+  # Multiply reward amount based on biome type
+  Biome:
+    HELL:
+      Amount: 1.25
+  #
+  # Multiply reward amount based on weather
+  Weather:
+    SUNNY:
+      Amount: 1.0
+    STORMY:
+      Amount: 1.125
+  #
+  # Multiply reward amount based on player arena status
+  MobArena:
+    InArena:
+      Amount: 1.0
+      Share: true
+  #
+  # Multiply reward amount based on WorldGuard region
+  WorldGuard:
+    MyRegionName1:
+      Amount: 0.125
+    MyRegionName2:
+      Amount: 0.5
+  #
+  # Multiply reward amount based on Regios region
+  Regios:
+    MyRegiosName1:
+      Amount: 0.125
+    MyRegiosName2:
+      Amount: 0.5
+  #
+  # Multiply reward amount based on Residence region
+  Residence:
+    MyResidenceName1:
+      Amount: 0.125
+    MyResidenceName2:
+      Amount: 0.5
+  #
+  # Multiply reward amount based on Factions relation
+  Factions:
+    MEMBER:
+      Amount: -1.0
+    ALLY:
+      Amount: 0.0
+    NEUTRAL:
+      Amount: 1.125
+    ENEMY:
+      Amount: 1.25
+  #
+  # Multiply reward amount based on Towny region
+  Towny:
+    MyTownName1:
+      Amount: 0.125
+    MyTownName2:
+      Amount: 0.5
+  #
+  # Multiply reward based on Heroes party status
+  Heroes:
+    InParty:
+      Amount: 1.125
+      Share: true
+  #
+  # Multiply reward based on mcMMO party status
+  mcMMO:
+    InParty:
+      Amount: 1.125
+      Share: true 
+  #
+  # Multiply reward based on weapon used
+  Weapon:
+    wood_sword:
+      Amount: 1.5
+    iron_sword:
+      Amount: 1.0
+    diamond_sword:
+      Amount: 0.5
 
+############################################################################
+# Drop format and Examples:
+############################################################################
+# Drop format:
+#   Drops:
+#   - ITEM_ID.DATA_ID,ENCHANTMENT.[MIN_LEVEL]-MAX_LEVEL:[MIN-]MAX:CHANCE
+#   - ITEM_ID.DATA_ID:[MIN-]MAX:CHANCE
+#   - ...
+#
+# Example 1: drop 0 to 5 diamonds 50% of the time
+#   Drops:
+#   - 'diamond:5:50'
+#
+# Example 2: drop 1 to 2 birch leaves 100% of the time
+#   Drops:
+#   - 'leaves.2:1-2:100'
+#
+# Example 3: drop 0 to 5 diamonds 50% of the time AND drop 1 to 2 birch
+# leaves 100% of the time
+#   Drops:
+#   - 'diamond:5:50'
+#   - 'leaves.2:1-2:100'
+#
+# Example 4: drop nothing
+#   Drops: ''
+#
+# Example 5: drop 0 to 1 diamond swords with a damage_all level 4
+# enchantment (a.k.a. Sharpness IV) 25% of the time
+#   Drops:
+#   - 'diamond_sword,damage_all.4:1:25'
+#
+# Example 6: drop 0 to 1 diamond swords with random damage_all level 1 to 4
+# enchantment (a.k.a. Sharpness IV) 25% of the time
+#   Drops:
+#   - 'diamond_sword,damage_all.1-4:1:25'
+#
+# Example 7: drop 0 to 1 diamond swords with up to 5 enchantments ranging
+# from 0 to 2,3 or 5 (depending on enchantment type) 25% of the time
+#   Drops:
+#   - 'diamond_sword,damage_all.0-5,damage_undead.0-5,damage_arthropods.0-5,knockback.0-2,fire_aspect.0-2,loot_bonus_mobs.0-3:1-1:100'
+#
+# Example 8: drop 0 to 1 potion type 2 (a.k.a. Swiftness) 25% of the time
+#   Drops:
+#   - 'potion.2:1:25'
+#
+# Example 9: go crazy :P
+#   Drops:
+#   - 'diamond_pickaxe,durability.3:1:25'
+#   - 'diamond_sword,damage_all.5:1:25'
+#   - 'potion.2:1-1:25'
+#
+############################################################################
+# Coin reward examples:
+############################################################################
+# Example 1: award 0 to 10 coin 50% of the time
+#   Coin_Minimum: 0.0 
+#   Coin_Maximum: 10.0
+#   Coin_percent: 50.0
+#
+# Example 2: award 10 coin 100% of the time
+#   Coin_Minimum: 10.0 
+#   Coin_Maximum: 10.0
+#   Coin_percent: 100.0
+#
+# Example 3: award nothing
+#   Coin_Minimum: 0.0 
+#   Coin_Maximum: 0.0
+#   Coin_percent: 0.0
+#
+# Example 4: penalize 0 to 10 coin 50% of the time
+#   Coin_Minimum: -10
+#   Coin_Maximum: 0
+#   Coin_percent: 50.0
+#
+############################################################################
+# Experience orb examples:
+############################################################################
+# Example 1: award 0 to 10 exp 50% of the time
+#   ExpMin: 0
+#   ExpMax: 10
+#   ExpPercent: 50.0
+#
+# Example 2: award 10 exp 100% of the time
+#   ExpMin: 10
+#   ExpMax: 10
+#   ExpPercent: 100.0
+#
+# Example 3: award nothing
+#   ExpMin: 0
+#   ExpMax: 0
+#   ExpPercent: 0.0
+#
+############################################################################
+# Custom reward message example:
+############################################################################
+# Example:
+#   NoReward_Message: '&7You slayed a &5<crt>&7 using a &3<itm>.'
+#   Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
+#   Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
+#
+# Color codes & replacement tokens:
+#   &[0-9,a-f,k,l,m,n,o,r] - color codes
+#   <plr> - display player name in a message
+#   <crt> - display creature name in a message
+#   <amt> - display amount in a message
+#   <itm> - display item used to kill in a message
+#
+############################################################################
 RewardTable:
-    ############################################################################
-    # Drop format and Examples:
-    ############################################################################
-    # Drop format:
-    #   Drops:
-    #   - ITEM_ID.DATA_ID,ENCHANTMENT.[MIN_LEVEL]-MAX_LEVEL:[MIN-]MAX:CHANCE
-    #   - ITEM_ID.DATA_ID:[MIN-]MAX:CHANCE
-    #   - ...
-    #
-    # Example 1: drop 0 to 5 diamonds 50% of the time
-    #   Drops:
-    #   - 'diamond:5:50'
-    #
-    # Example 2: drop 1 to 2 birch leaves 100% of the time
-    #   Drops:
-    #   - 'leaves.2:1-2:100'
-    #
-    # Example 3: drop 0 to 5 diamonds 50% of the time AND drop 1 to 2 birch
-    # leaves 100% of the time
-    #   Drops:
-    #   - 'diamond:5:50'
-    #   - 'leaves.2:1-2:100'
-    #
-    # Example 4: drop nothing
-    #   Drops: ''
-    #
-    # Example 5: drop 0 to 1 diamond swords with a damage_all level 4
-    # enchantment (a.k.a. Sharpness IV) 25% of the time
-    #   Drops:
-    #   - 'diamond_sword,damage_all.4:1:25'
-    #
-    # Example 6: drop 0 to 1 diamond swords with random damage_all level 1 to 4
-    # enchantment (a.k.a. Sharpness IV) 25% of the time
-    #   Drops:
-    #   - 'diamond_sword,damage_all.1-4:1:25'
-    #
-    # Example 7: drop 0 to 1 diamond swords with up to 5 enchantments ranging
-    # from 0 to 2,3 or 5 (depending on enchantment type) 25% of the time
-    #   Drops:
-    #   - 'diamond_sword,damage_all.0-5,damage_undead.0-5,damage_arthropods.0-5,knockback.0-2,fire_aspect.0-2,loot_bonus_mobs.0-3:1-1:100'
-    #
-    # Example 8: drop 0 to 1 potion type 2 (a.k.a. Swiftness) 25% of the time
-    #   Drops:
-    #   - 'potion.2:1:25'
-    #
-    # Example 9: go crazy :P
-    #   Drops:
-    #   - 'diamond_pickaxe,durability.3:1:25'
-    #   - 'diamond_sword,damage_all.5:1:25'
-    #   - 'potion.2:1-1:25'
-    #
-    ############################################################################
-    # Coin reward examples:
-    ############################################################################
-    # Example 1: award 0 to 10 coin 50% of the time
-    #   Coin_Minimum: 0.0 
-    #   Coin_Maximum: 10.0
-    #   Coin_percent: 50.0
-    #
-    # Example 2: award 10 coin 100% of the time
-    #   Coin_Minimum: 10.0 
-    #   Coin_Maximum: 10.0
-    #   Coin_percent: 100.0
-    #
-    # Example 3: award nothing
-    #   Coin_Minimum: 0.0 
-    #   Coin_Maximum: 0.0
-    #   Coin_percent: 0.0
-    #
-    # Example 4: penalize 0 to 10 coin 50% of the time
-    #   Coin_Minimum: -10
-    #   Coin_Maximum: 0
-    #   Coin_percent: 50.0
-    #
-    ############################################################################
-    # Experience orb examples:
-    ############################################################################
-    # Example 1: award 0 to 10 exp 50% of the time
-    #   ExpMin: 0
-    #   ExpMax: 10
-    #   ExpPercent: 50.0
-    #
-    # Example 2: award 10 exp 100% of the time
-    #   ExpMin: 10
-    #   ExpMax: 10
-    #   ExpPercent: 100.0
-    #
-    # Example 3: award nothing
-    #   ExpMin: 0
-    #   ExpMax: 0
-    #   ExpPercent: 0.0
-    #
-    ############################################################################
-    # Custom reward message example:
-    ############################################################################
-    # Example:
-    #   NoReward_Message: '&7You slayed a &5<crt>&7 using a &3<itm>.'
-    #   Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>.'
-    #   Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>.'
-    #
-    # Color codes & replacement tokens:
-    #   &[0-9,a-f,k,l,m,n,o,r] - color codes
-    #   <plr> - display player name in a message
-    #   <crt> - display creature name in a message
-    #   <amt> - display amount in a message
-    #   <itm> - display item used to kill in a message
-    #
-    ############################################################################
-    Blaze:
-        Coin_Minimum: 3.50
-        Coin_Maximum: 3.50
-        Coin_Percent: 50.0
-    CaveSpider:
-        Drops:
-        - 'string:2:75'
-        Coin_Minimum: 0.50
-        Coin_Maximum: 1.50
-        Coin_Percent: 50.0
-    Chicken:
-        Drops:
-        - 'feather:2:75'
-        - '365:1:75'
-        Coin_Minimum: 0.10
-        Coin_Maximum: 2.00
-        Coin_Percent: 1.0
-    Cow:
-        Drops:
-        - 'leather:2:75'
-        - 'raw beef:3:75'
-        Coin_Minimum: 0.10
-        Coin_Maximum: 2.50
-        Coin_Percent: 1.0
-    Creeper:
-        Drops:
-        - 'sulphur:2:75'
-        Coin_Minimum: 5.50
-        Coin_Maximum: 10.50
-        Coin_Percent: 50.0
-    PoweredCreeper:
-        Drops:
-        - 'sulphur:2:75'
-        Coin_Minimum: 10.50
-        Coin_Maximum: 15.50
-        Coin_Percent: 50.0
-    DeathStreak:
-    #
-    # DeathTpPlus plugin is required to use this reward.
-    # The penalty amount is multiplied by the number of deaths in the streak.
-        Coin_Minimum: -1.00
-        Coin_Maximum: -1.00
-        Coin_Percent: 100.00
-        NoReward_Message: ''
-        Reward_Message: '&7You earned &6<amt>&7 for that death streak!'
-        Penalty_Message: '&7That death streak cost you &6<amt>&7.'
-    EnderDragon:
-        Coin_Minimum: 5.00
-        Coin_Maximum: 10.50
-        Coin_Percent: 100.00
-    Enderman:
-        Drops:
-        - 'ender pearl:1:75'
-        Coin_Minimum: 1.00
-        Coin_Maximum: 3.50
-        Coin_Percent: 50.0
-    Ghast:
-        Drops:
-        - 'sulphur:2:75'
-        Coin_Minimum: 3.50
-        Coin_Maximum: 3.50
-        Coin_Percent: 50.0
-    Giant:
-        Coin_Minimum: 8.50
-        Coin_Maximum: 8.50
-        Coin_Percent: 50.00
-    #
-    # Heroes plugin is required to use this reward.
-    HeroMastered:
-        Coin_Minimum: 50.0
-        Coin_Maximum: 50.0
-        Coin_Percent: 100.00
-        Reward_Message: '&7You earned &6<amt>&7 mastering that class!'
-    KillStreak:
-    #
-    # DeathTpPlus plugin is required to use this reward.
-    # The reward amount is multiplied by the number of kills in the streak.
-        Drops:
-        - 'diamond:1:100'
-        Coin_Minimum: 2.00
-        Coin_Maximum: 2.00
-        Coin_Percent: 100.00
-        NoReward_Message: ''
-        Reward_Message: '&7You earned &6<amt>&7 for that kill streak!'
-        Penalty_Message: '&7That kill streak cost you &6<amt>&7.'
-    LavaSlime:
-        Coin_Minimum: 0.00
-        Coin_Maximum: 2.00
-        Coin_Percent: 50.00
-    Monster:
-        Coin_Minimum: 0.50
-        Coin_Maximum: 1.50
-        Coin_Percent: 50.0
-    MushroomCow:
-        Drops:
-        - 'leather:2:75'
-        - 'raw beef:3:75'
-        Coin_Minimum: 0.10
-        Coin_Maximum: 2.50
-        Coin_Percent: 1.0
-    Ozelot:
-        Coin_Minimum: 1.00
-        Coin_Maximum: 2.00
-        Coin_Percent: 1.0
-    Pig:
-        Drops:
-        - 'pork:2:75'
-        Coin_Minimum: 0.10
-        Coin_Maximum: 2.50
-        Coin_Percent: 1.0
-    PigZombie:
-        Drops:
-        - 'grilled pork:2:75'
-        Coin_Minimum: 1.00
-        Coin_Maximum: 3.50
-        Coin_Percent: 50.0
-    Player:
-    #
-    # IMPORTANT NOTE: If you define Drops, and OverrideDrops is set to true,
-    # the victim's inventory will be replaced! Also note that the amount
-    # awarded is taken from the victim.
-        Coin_Minimum: 5.00
-        Coin_Maximum: 10.50
-        Coin_Percent: 50.0
-        NoReward_Message: ''
-        Reward_Message: '&7You are awarded &6<amt>&7 for murdering &5<crt>&7.'
-        Penalty_Message: '&7You are penalized &6<amt>&7 for murdering &5<crt>&7.'
-    Sheep:
-        Drops:
-        - 'wool:1:75'
-        Coin_Minimum: 0.10
-        Coin_Maximum: 2.50
-        Coin_Percent: 1.0
-    Silverfish:
-        Coin_Minimum: 0.50
-        Coin_Maximum: 0.50
-        Coin_Percent: 50.0
-    Skeleton:
-        Drops:
-        - 'bone:2:75'
-        - 'arrow:2:75'
-        Coin_Minimum: 1.00
-        Coin_Maximum: 3.00
-        Coin_Percent: 50.0
-    Slime:
-        Drops:
-        - 'slime ball:2:75'
-        Coin_Minimum: 0.00
-        Coin_Maximum: 2.00
-        Coin_Percent: 50.00
-    SnowMan:
-        Coin_Minimum: 1.00
-        Coin_Maximum: 2.00
-        Coin_Percent: 100.0
-    Spawner:
-        Coin_Minimum: 0.10
-        Coin_Maximum: 15.00
-        Coin_Percent: 50.0
-        NoReward_Message: '&7You destroyed a &5<crt>&7 using a &3<itm>&7.'
-        Reward_Message: '&7You are awarded &6<amt>&7 for destroying a &5<crt>&7.'
-        Penalty_Message: '&7You are penalized &6<amt>&7 for destroying a &5<crt>&7.'
-    Spider:
-        Drops:
-        - 'string:2:75'
-        Coin_Minimum: 0.50
-        Coin_Maximum: 1.50
-        Coin_Percent: 50.0
-    Squid:
-        Drops:
-        - 'ink sack:3:75'
-        Coin_Minimum: 0.10
-        Coin_Maximum: 2.50
-        Coin_Percent: 1.0
-    Wolf:
-        Coin_Minimum: 1.00
-        Coin_Maximum: 2.00
-        Coin_Percent: 1.0
-    AngryWolf:
-        Coin_Minimum: 1.00
-        Coin_Maximum: 2.00
-        Coin_Percent: 50.0
-    Villager:
-        Coin_Minimum: 1.00
-        Coin_Maximum: 2.00
-        Coin_Percent: 1.0
-    VillagerGolem:
-        Drops:
-        - 'iron ingot:3-5:75'
-        - 'red rose:2:75'
-        Coin_Minimum: 1.00
-        Coin_Maximum: 3.50
-        Coin_Percent: 1.0
-    Zombie:
-        Sets:
-        - Zombie
-        - CashZombie
+  Blaze:
+    Coin_Minimum: 3.50
+    Coin_Maximum: 3.50
+    Coin_Percent: 50.0
+  CaveSpider:
+    Drops:
+    - 'string:2:75'
+    Coin_Minimum: 0.50
+    Coin_Maximum: 1.50
+    Coin_Percent: 50.0
+  Chicken:
+    Drops:
+    - 'feather:2:75'
+    - '365:1:75'
+    Coin_Minimum: 0.10
+    Coin_Maximum: 2.00
+    Coin_Percent: 1.0
+  Cow:
+    Drops:
+    - 'leather:2:75'
+    - 'raw beef:3:75'
+    Coin_Minimum: 0.10
+    Coin_Maximum: 2.50
+    Coin_Percent: 1.0
+  Creeper:
+    Drops:
+    - 'sulphur:2:75'
+    Coin_Minimum: 5.50
+    Coin_Maximum: 10.50
+    Coin_Percent: 50.0
+  PoweredCreeper:
+    Drops:
+    - 'sulphur:2:75'
+    Coin_Minimum: 10.50
+    Coin_Maximum: 15.50
+    Coin_Percent: 50.0
+  #
+  # DeathTpPlus plugin is required to use this reward.
+  # The penalty amount is multiplied by the number of deaths in the streak.
+  DeathStreak:
+    Coin_Minimum: -1.00
+    Coin_Maximum: -1.00
+    Coin_Percent: 100.00
+    NoReward_Message: ''
+    Reward_Message: '&7You earned &6<amt>&7 for that death streak!'
+    Penalty_Message: '&7That death streak cost you &6<amt>&7.'
+  EnderDragon:
+    Coin_Minimum: 5.00
+    Coin_Maximum: 10.50
+    Coin_Percent: 100.00
+  Enderman:
+    Drops:
+    - 'ender pearl:1:75'
+    Coin_Minimum: 1.00
+    Coin_Maximum: 3.50
+    Coin_Percent: 50.0
+  Ghast:
+    Drops:
+    - 'sulphur:2:75'
+    Coin_Minimum: 3.50
+    Coin_Maximum: 3.50
+    Coin_Percent: 50.0
+  Giant:
+    Coin_Minimum: 8.50
+    Coin_Maximum: 8.50
+    Coin_Percent: 50.00
+  #
+  # Heroes plugin is required to use this reward.
+  HeroMastered:
+    Coin_Minimum: 50.0
+    Coin_Maximum: 50.0
+    Coin_Percent: 100.00
+    Reward_Message: '&7You earned &6<amt>&7 mastering that class!'
+  #
+  # DeathTpPlus plugin is required to use this reward.
+  # The reward amount is multiplied by the number of kills in the streak.
+  KillStreak:
+    Drops:
+    - 'diamond:1:100'
+    Coin_Minimum: 2.00
+    Coin_Maximum: 2.00
+    Coin_Percent: 100.00
+    NoReward_Message: ''
+    Reward_Message: '&7You earned &6<amt>&7 for that kill streak!'
+    Penalty_Message: '&7That kill streak cost you &6<amt>&7.'
+  LavaSlime:
+    Coin_Minimum: 0.00
+    Coin_Maximum: 2.00
+    Coin_Percent: 50.00
+  Monster:
+    Coin_Minimum: 0.50
+    Coin_Maximum: 1.50
+    Coin_Percent: 50.0
+  MushroomCow:
+    Drops:
+    - 'leather:2:75'
+    - 'raw beef:3:75'
+    Coin_Minimum: 0.10
+    Coin_Maximum: 2.50
+    Coin_Percent: 1.0
+  Ozelot:
+    Coin_Minimum: 1.00
+    Coin_Maximum: 2.00
+    Coin_Percent: 1.0
+  Pig:
+    Drops:
+    - 'pork:2:75'
+    Coin_Minimum: 0.10
+    Coin_Maximum: 2.50
+    Coin_Percent: 1.0
+  PigZombie:
+    Drops:
+    - 'grilled pork:2:75'
+    Coin_Minimum: 1.00
+    Coin_Maximum: 3.50
+    Coin_Percent: 50.0
+  #
+  # IMPORTANT NOTE: If you define Drops, and OverrideDrops is set to true,
+  # the victim's inventory will be replaced! Also note that the amount
+  # awarded is taken from the victim.
+  Player:
+    Coin_Minimum: 5.00
+    Coin_Maximum: 10.50
+    Coin_Percent: 50.0
+    NoReward_Message: ''
+    Reward_Message: '&7You are awarded &6<amt>&7 for murdering &5<crt>&7.'
+    Penalty_Message: '&7You are penalized &6<amt>&7 for murdering &5<crt>&7.'
+  Sheep:
+    Drops:
+    - 'wool:1:75'
+    Coin_Minimum: 0.10
+    Coin_Maximum: 2.50
+    Coin_Percent: 1.0
+  Silverfish:
+    Coin_Minimum: 0.50
+    Coin_Maximum: 0.50
+    Coin_Percent: 50.0
+  Skeleton:
+    Drops:
+    - 'bone:2:75'
+    - 'arrow:2:75'
+    Coin_Minimum: 1.00
+    Coin_Maximum: 3.00
+    Coin_Percent: 50.0
+  Slime:
+    Drops:
+    - 'slime ball:2:75'
+    Coin_Minimum: 0.00
+    Coin_Maximum: 2.00
+    Coin_Percent: 50.00
+  SnowMan:
+    Coin_Minimum: 1.00
+    Coin_Maximum: 2.00
+    Coin_Percent: 100.0
+  Spawner:
+    Coin_Minimum: 0.10
+    Coin_Maximum: 15.00
+    Coin_Percent: 50.0
+    NoReward_Message: '&7You destroyed a &5<crt>&7 using a &3<itm>&7.'
+    Reward_Message: '&7You are awarded &6<amt>&7 for destroying a &5<crt>&7.'
+    Penalty_Message: '&7You are penalized &6<amt>&7 for destroying a &5<crt>&7.'
+  Spider:
+    Drops:
+    - 'string:2:75'
+    Coin_Minimum: 0.50
+    Coin_Maximum: 1.50
+    Coin_Percent: 50.0
+  Squid:
+    Drops:
+    - 'ink sack:3:75'
+    Coin_Minimum: 0.10
+    Coin_Maximum: 2.50
+    Coin_Percent: 1.0
+  Wolf:
+    Coin_Minimum: 1.00
+    Coin_Maximum: 2.00
+    Coin_Percent: 1.0
+  AngryWolf:
+    Coin_Minimum: 1.00
+    Coin_Maximum: 2.00
+    Coin_Percent: 50.0
+  Villager:
+    Coin_Minimum: 1.00
+    Coin_Maximum: 2.00
+    Coin_Percent: 1.0
+  VillagerGolem:
+    Drops:
+    - 'iron ingot:3-5:75'
+    - 'red rose:2:75'
+    Coin_Minimum: 1.00
+    Coin_Maximum: 3.50
+    Coin_Percent: 1.0
+  Zombie:
+    Sets:
+    - DefaultZombie
+    - MoneyZombie
+    - ZombieApocalypse
 
+############################################################################
+# Drop set examples
+############################################################################
+# Drop sets allow you to define groups or sets of drops for use in the
+# RewardTable. The most obvious benefit is that you no longer have to copy
+# and paste a list of common drops. You can also get really creative with
+# different combinations of sets.
+#
+# Example:
+#   MySetName:
+#     Drops:
+#     - 'diamond:5:50'
+#     - 'leaves.2:1-2:100'
+#     Coin_Minimum: 0.0 
+#     Coin_Maximum: 10.0
+#     Coin_percent: 50.0
+#     ExpMin: 0
+#     ExpMax: 10
+#     ExpPercent: 50.0
+#
+# See how the these example sets below are used for Zombies in the
+# RewardTable
+############################################################################
 RewardSets:
-    ############################################################################
-    # Drop set examples
-    ############################################################################
-    # Drop sets allow you to define groups or sets of drops for use in the
-    # RewardTable. The most obvious benefit is that you no longer have to copy
-    # and paste a list of common drops. You can also get really creative with
-    # different combinations of sets.
-    #
-    # Example:
-    #   MySetName:
-    #       Drops:
-    #       - 'diamond:5:50'
-    #       - 'leaves.2:1-2:100'
-    #       Coin_Minimum: 0.0 
-    #       Coin_Maximum: 10.0
-    #       Coin_percent: 50.0
-    #       ExpMin: 0
-    #       ExpMax: 10
-    #       ExpPercent: 50.0
-    #
-    # See how the these example sets below are used for Zombies in the
-    # RewardTable
-    ############################################################################
-    Zombie:
-        Drops:
-        - 'rotten flesh:2:75'
-    CashZombie:
-        Drops:
-        - 'rotten flesh:2:75'
-        Coin_Minimum: 1.00
-        Coin_Maximum: 3.50
-        Coin_Percent: 100.0
+  DefaultZombie:
+    Drops:
+    - 'rotten flesh:2:75'
+  MoneyZombie:
+    Drops:
+    - 'rotten flesh:2:75'
+    Coin_Minimum: 1.00
+    Coin_Maximum: 3.50
+    Coin_Percent: 100.0
+  ZombieApocalypse:
+    Drops:
+    - 'zombie:2:50'

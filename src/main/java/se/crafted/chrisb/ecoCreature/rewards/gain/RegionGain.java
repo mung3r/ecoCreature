@@ -1,8 +1,10 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -13,7 +15,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-public class RegionGain extends BasicGain
+public class RegionGain extends DefaultGain
 {
     private Map<String, Double> multipliers;
 
@@ -44,16 +46,16 @@ public class RegionGain extends BasicGain
         return multiplier;
     }
 
-    public static Gain parseConfig(ConfigurationSection config)
+    public static Set<Gain> parseConfig(ConfigurationSection config)
     {
-        Gain gain = null;
+        Set<Gain> gain = new HashSet<Gain>();
 
         if (config != null) {
-            Map<String, Double> regionMultipliers = new HashMap<String, Double>();
+            Map<String, Double> multipliers = new HashMap<String, Double>();
             for (String regionName : config.getKeys(false)) {
-                regionMultipliers.put(regionName, Double.valueOf(config.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
+                multipliers.put(regionName, Double.valueOf(config.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
             }
-            gain = new RegionGain(regionMultipliers);
+            gain.add(new RegionGain(multipliers));
         }
 
         return gain;

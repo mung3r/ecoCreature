@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-public class EventUtils
+public final class EventUtils
 {
     private EventUtils()
     {
@@ -61,5 +61,29 @@ public class EventUtils
     public static boolean isPVPDeath(PlayerDeathEvent event)
     {
         return event != null && event.getEntity().getKiller() != null;
+    }
+
+    public static boolean isSuicide(PlayerDeathEvent event)
+    {
+        return event != null && event.getEntity().getLastDamageCause() == null;
+    }
+
+    public static boolean isProjectileKill(EntityDeathEvent event)
+    {
+        boolean isProjectileKill = false;
+
+        if (event != null && event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+
+            Entity damager = ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
+
+            if (damager instanceof Projectile) {
+                Projectile projectile = (Projectile) damager;
+                if (projectile.getShooter() instanceof Player) {
+                    isProjectileKill = true;
+                }
+            }
+        }
+
+        return isProjectileKill;
     }
 }
