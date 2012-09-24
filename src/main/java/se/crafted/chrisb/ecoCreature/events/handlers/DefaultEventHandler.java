@@ -1,6 +1,6 @@
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
 
 import org.bukkit.World;
@@ -22,7 +22,7 @@ public class DefaultEventHandler implements RewardEventHandler
     @Override
     public Set<RewardEvent> getRewardEvents(Event event)
     {
-        return new HashSet<RewardEvent>();
+        return Collections.emptySet();
     }
 
     @Override

@@ -1,59 +1,243 @@
 package se.crafted.chrisb.ecoCreature.rewards.sources;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
 
+import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
+import se.crafted.chrisb.ecoCreature.messages.NoCoinRewardMessage;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
+import se.crafted.chrisb.ecoCreature.rewards.models.CoinDrop;
+import se.crafted.chrisb.ecoCreature.rewards.models.CoinReward;
+import se.crafted.chrisb.ecoCreature.rewards.models.EntityDrop;
+import se.crafted.chrisb.ecoCreature.rewards.models.EntityReward;
+import se.crafted.chrisb.ecoCreature.rewards.models.ItemDrop;
+import se.crafted.chrisb.ecoCreature.rewards.models.ItemReward;
 
-public interface RewardSource
+public abstract class RewardSource implements CoinReward, ItemReward, EntityReward
 {
-    String getName();
+    protected static final String NO_COIN_REWARD_MESSAGE = "&7You slayed a &5<crt>&7 using a &3<itm>&7.";
+    protected static final String COIN_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.";
+    protected static final String COIN_PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.";
 
-    void setName(String name);
+    protected String name;
+    protected CoinDrop coin;
+    protected List<ItemDrop> itemDrops;
+    protected List<EntityDrop> entityDrops;
 
-    boolean hasCoin();
+    protected Message noCoinRewardMessage;
+    protected Message coinRewardMessage;
+    protected Message coinPenaltyMessage;
 
-    CoinDrop getCoin();
+    protected boolean fixedDrops;
+    protected boolean integerCurrency;
+    protected boolean overrideDrops;
 
-    void setCoin(CoinDrop coin);
+    public RewardSource()
+    {
+    }
 
-    boolean hasItemDrops();
+    public RewardSource(ConfigurationSection config)
+    {
+        if (config == null) {
+            throw new IllegalArgumentException("Config cannot be null");
+        }
+        name = config.getName();
 
-    List<ItemDrop> getItemDrops();
+        itemDrops = ItemDrop.parseConfig(config);
+        entityDrops = EntityDrop.parseConfig(config);
+        coin = CoinDrop.parseConfig(config);
 
-    void setItemDrops(List<ItemDrop> itemDrops);
+        coinRewardMessage = new DefaultMessage(config.getString("Reward_Message", COIN_REWARD_MESSAGE));
+        coinPenaltyMessage = new DefaultMessage(config.getString("Penalty_Message", COIN_PENALTY_MESSAGE));
+        noCoinRewardMessage = new NoCoinRewardMessage(config.getString("NoReward_Message", NO_COIN_REWARD_MESSAGE));
+    }
 
-    boolean hasEntityDrops();
+    public String getName()
+    {
+        return name;
+    }
 
-    List<EntityDrop> getEntityDrops();
+    public void setName(String name)
+    {
+        this.name = name;
+    }
 
-    void setEntityDrops(List<EntityDrop> entityDrops);
+    @Override
+    public boolean hasCoin()
+    {
+        return coin != null;
+    }
 
-    Message getNoCoinRewardMessage();
+    @Override
+    public CoinDrop getCoin()
+    {
+        return coin;
+    }
 
-    void setNoCoinRewardMessage(Message noCoinRewardMessage);
+    @Override
+    public void setCoin(CoinDrop coin)
+    {
+        this.coin = coin;
+    }
 
-    Message getCoinRewardMessage();
+    @Override
+    public boolean hasItemDrops()
+    {
+        return itemDrops != null && !itemDrops.isEmpty();
+    }
 
-    void setCoinRewardMessage(Message coinRewardMessage);
+    @Override
+    public List<ItemDrop> getItemDrops()
+    {
+        return itemDrops;
+    }
 
-    Message getCoinPenaltyMessage();
+    @Override
+    public void setItemDrops(List<ItemDrop> drops)
+    {
+        this.itemDrops = drops;
+    }
 
-    void setCoinPenaltyMessage(Message coinPenaltyMessage);
+    @Override
+    public boolean hasEntityDrops()
+    {
+        return entityDrops != null && !entityDrops.isEmpty();
+    }
 
-    Boolean isFixedDrops();
+    @Override
+    public List<EntityDrop> getEntityDrops()
+    {
+        return entityDrops;
+    }
 
-    void setFixedDrops(Boolean fixedDrops);
+    @Override
+    public void setEntityDrops(List<EntityDrop> entityDrops)
+    {
+        this.entityDrops = entityDrops;
+    }
 
-    Boolean isIntegerCurrency();
+    @Override
+    public Message getNoCoinRewardMessage()
+    {
+        return noCoinRewardMessage;
+    }
 
-    void setIntegerCurrency(Boolean integerCurrency);
+    @Override
+    public void setNoCoinRewardMessage(Message noCoinRewardMessage)
+    {
+        this.noCoinRewardMessage = noCoinRewardMessage;
+    }
 
-    boolean isOverrideDrops();
+    @Override
+    public Message getCoinRewardMessage()
+    {
+        return coinRewardMessage;
+    }
 
-    void setOverrideDrops(boolean overrideDrops);
+    @Override
+    public void setCoinRewardMessage(Message coinRewardMessage)
+    {
+        this.coinRewardMessage = coinRewardMessage;
+    }
 
-    Reward getOutcome(Event event);
+    @Override
+    public Message getCoinPenaltyMessage()
+    {
+        return coinPenaltyMessage;
+    }
+
+    @Override
+    public void setCoinPenaltyMessage(Message coinPenaltyMessage)
+    {
+        this.coinPenaltyMessage = coinPenaltyMessage;
+    }
+
+    @Override
+    public Boolean isFixedDrops()
+    {
+        return fixedDrops;
+    }
+
+    @Override
+    public void setFixedDrops(Boolean fixedDrops)
+    {
+        this.fixedDrops = fixedDrops;
+    }
+
+    @Override
+    public Boolean isIntegerCurrency()
+    {
+        return integerCurrency;
+    }
+
+    @Override
+    public void setIntegerCurrency(Boolean integerCurrency)
+    {
+        this.integerCurrency = integerCurrency;
+    }
+
+    public Reward getOutcome(Event event)
+    {
+        Reward reward = new Reward(getLocation(event));
+
+        reward.setName(name);
+        reward.setItemDrops(getItemDropOutcomes());
+        reward.setEntityDrops(getEntityDropOutcomes());
+
+        if (hasCoin()) {
+            reward.setCoin(coin.getOutcome());
+
+            if (reward.getCoin() > 0.0) {
+                reward.setMessage(coinRewardMessage);
+            }
+            else if (reward.getCoin() < 0.0) {
+                reward.setMessage(coinPenaltyMessage);
+            }
+            else {
+                reward.setMessage(noCoinRewardMessage);
+            }
+        }
+
+        reward.setIntegerCurrency(integerCurrency);
+
+        return reward;
+    }
+
+    protected abstract Location getLocation(Event event);
+
+    private List<ItemStack> getItemDropOutcomes()
+    {
+        List<ItemStack> stacks = new ArrayList<ItemStack>();
+
+        if (itemDrops != null) {
+            for (ItemDrop drop : itemDrops) {
+                ItemStack itemStack = drop.getOutcome(fixedDrops);
+                if (itemStack != null) {
+                    stacks.add(itemStack);
+                }
+            }
+        }
+
+        return stacks;
+    }
+
+    private List<EntityType> getEntityDropOutcomes()
+    {
+        List<EntityType> types = new ArrayList<EntityType>();
+
+        if (entityDrops != null) {
+            for (EntityDrop drop : entityDrops) {
+                types.addAll(drop.getOutcome());
+            }
+        }
+
+        return types;
+    }
 }

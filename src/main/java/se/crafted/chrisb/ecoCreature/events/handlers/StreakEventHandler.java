@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,12 +25,14 @@ public class StreakEventHandler extends DefaultEventHandler
     @Override
     public Set<RewardEvent> getRewardEvents(Event event)
     {
-        Set<RewardEvent> events = new HashSet<RewardEvent>();
+        Set<RewardEvent> events = Collections.emptySet();
 
         if (event instanceof DeathStreakEvent) {
+            events = new HashSet<RewardEvent>();
             events.addAll(getEvent((DeathStreakEvent) event));
         }
         else if (event instanceof KillStreakEvent) {
+            events = new HashSet<RewardEvent>();
             events.addAll(getEvent((KillStreakEvent) event));
         }
 
@@ -38,7 +41,7 @@ public class StreakEventHandler extends DefaultEventHandler
 
     private Set<RewardEvent> getEvent(DeathStreakEvent event)
     {
-        Set<RewardEvent> events = new HashSet<RewardEvent>();
+        Set<RewardEvent> events = Collections.emptySet();
 
         Player player = event.getPlayer();
         int deaths = event.getDeaths();
@@ -48,6 +51,7 @@ public class StreakEventHandler extends DefaultEventHandler
             Reward outcome = settings.getRewardSource(CustomType.DEATH_STREAK).getOutcome(event);
             outcome.setGain(deaths);
 
+            events = new HashSet<RewardEvent>();
             events.add(new RewardEvent(player, outcome));
         }
 
@@ -56,7 +60,7 @@ public class StreakEventHandler extends DefaultEventHandler
 
     private Set<RewardEvent> getEvent(KillStreakEvent event)
     {
-        Set<RewardEvent> events = new HashSet<RewardEvent>();
+        Set<RewardEvent> events = Collections.emptySet();
 
         Player player = event.getPlayer();
         int kills = event.getKills();
@@ -66,6 +70,7 @@ public class StreakEventHandler extends DefaultEventHandler
             Reward outcome = settings.getRewardSource(CustomType.KILL_STREAK).getOutcome(event);
             outcome.setGain(kills);
 
+            events = new HashSet<RewardEvent>();
             events.add(new RewardEvent(player, outcome));
         }
 

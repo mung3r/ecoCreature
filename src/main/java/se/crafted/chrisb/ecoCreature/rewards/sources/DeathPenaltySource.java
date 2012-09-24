@@ -1,18 +1,32 @@
 package se.crafted.chrisb.ecoCreature.rewards.sources;
 
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.CustomType;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 
-public class DeathPenaltySource extends DefaultRewardSource
+public class DeathPenaltySource extends RewardSource
 {
     private static final String DEATH_PENALTY_MESSAGE = "&7You wake up to find &6<amt>&7 missing from your pockets!";
 
     private boolean percentPenalty;
     private double penaltyAmount;
+
+    public DeathPenaltySource(ConfigurationSection config)
+    {
+        if (config == null) {
+            throw new IllegalArgumentException("Config cannot be null");
+        }
+
+        name = CustomType.DEATH_PENALTY.getName();
+        percentPenalty = config.getBoolean("System.Hunting.PenalizeType", true);
+        penaltyAmount = config.getDouble("System.Hunting.PenalizeAmount", 0.05D);
+        coinPenaltyMessage = new DefaultMessage(config.getString("System.Messages.DeathPenaltyMessage", DEATH_PENALTY_MESSAGE));
+    }
 
     public boolean isPercentPenalty()
     {
@@ -35,6 +49,17 @@ public class DeathPenaltySource extends DefaultRewardSource
     }
 
     @Override
+    protected Location getLocation(Event event)
+    {
+        if (event instanceof PlayerDeathEvent) {
+            return ((PlayerDeathEvent) event).getEntity().getLocation();
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
     public Reward getOutcome(Event event)
     {
         Reward reward = new Reward(getLocation(event));
@@ -46,20 +71,5 @@ public class DeathPenaltySource extends DefaultRewardSource
         reward.setIntegerCurrency(isIntegerCurrency());
 
         return reward;
-    }
-
-    public static RewardSource parseConfig(ConfigurationSection config)
-    {
-        DeathPenaltySource source = null;
-
-        if (config != null) {
-            source = new DeathPenaltySource();
-            source.setName(CustomType.DEATH_PENALTY.getName());
-            source.setPercentPenalty(config.getBoolean("System.Hunting.PenalizeType", true));
-            source.setPenaltyAmount(config.getDouble("System.Hunting.PenalizeAmount", 0.05D));
-            source.setCoinPenaltyMessage(new DefaultMessage(config.getString("System.Messages.DeathPenaltyMessage", DEATH_PENALTY_MESSAGE)));
-        }
-
-        return source;
     }
 }

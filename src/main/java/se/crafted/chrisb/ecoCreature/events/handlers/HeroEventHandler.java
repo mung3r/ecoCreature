@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,9 +25,10 @@ public class HeroEventHandler extends DefaultEventHandler
     @Override
     public Set<RewardEvent> getRewardEvents(Event event)
     {
-        Set<RewardEvent> events = new HashSet<RewardEvent>();
+        Set<RewardEvent> events = Collections.emptySet();
 
         if (event instanceof HeroChangeLevelEvent) {
+            events = new HashSet<RewardEvent>();
             events.addAll(getRewardEvents((HeroChangeLevelEvent) event));
         }
 
@@ -35,7 +37,7 @@ public class HeroEventHandler extends DefaultEventHandler
 
     private Set<RewardEvent> getRewardEvents(HeroChangeLevelEvent event)
     {
-        Set<RewardEvent> events = new HashSet<RewardEvent>();
+        Set<RewardEvent> events = Collections.emptySet();
 
         Player player = event.getHero().getPlayer();
         WorldSettings settings = plugin.getWorldSettings(player.getWorld());
@@ -43,6 +45,7 @@ public class HeroEventHandler extends DefaultEventHandler
         if (settings.hasRewardSource(event)) {
             Reward outcome = settings.getRewardSource(CustomType.HERO_MASTERED).getOutcome(event);
 
+            events = new HashSet<RewardEvent>();
             events.add(new RewardEvent(player, outcome));
         }
 

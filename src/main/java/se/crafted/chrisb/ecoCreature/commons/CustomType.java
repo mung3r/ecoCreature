@@ -17,6 +17,7 @@ public enum CustomType
     DEATH_PENALTY("DeathPenalty"),
     DEATH_STREAK("DeathStreak"), 
     HERO_MASTERED("HeroMastered"),
+    INVALID("__Invalid__"),
     KILL_STREAK("KillStreak"),
     LEGACY_PVP("LegacyPVP"),
     LEGACY_SPAWNER("Spawner"),
@@ -43,8 +44,8 @@ public enum CustomType
 
     public static CustomType fromName(String name)
     {
-        CustomType rewardType = null;
-        if (name != null) {
+        CustomType rewardType = INVALID;
+        if (name != null && NAME_MAP.containsKey(name.toLowerCase())) {
             rewardType = NAME_MAP.get(name.toLowerCase());
         }
         return rewardType;
@@ -67,7 +68,7 @@ public enum CustomType
             rewardType = CustomType.fromName(entity.getType().getName());
         }
 
-        if (rewardType == null) {
+        if (rewardType == INVALID) {
             ECLogger.getInstance().warning("Unknown creature type: " + entity.getType().getName());
         }
 

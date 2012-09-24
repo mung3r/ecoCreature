@@ -1,18 +1,28 @@
 package se.crafted.chrisb.ecoCreature.rewards.sources;
 
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.commons.CustomType;
+import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 
-public class PVPRewardSource extends DefaultRewardSource
+public class PVPRewardSource extends RewardSource
 {
     private static final String PVP_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for murdering &5<crt>&7.";
 
     private boolean percentReward;
     private double rewardAmount;
+
+    public PVPRewardSource(ConfigurationSection config)
+    {
+        name = CustomType.LEGACY_PVP.getName();
+        percentReward = config.getBoolean("System.Hunting.PVPRewardType", true);
+        rewardAmount = config.getDouble("System.Hunting.PVPRewardAmount", 0.05D);
+        coinRewardMessage = new DefaultMessage(config.getString("System.Messages.PVPRewardMessage", PVP_REWARD_MESSAGE));
+    }
 
     public boolean isPercentReward()
     {
@@ -35,6 +45,17 @@ public class PVPRewardSource extends DefaultRewardSource
     }
 
     @Override
+    protected Location getLocation(Event event)
+    {
+        if (event instanceof PlayerKilledEvent) {
+            return ((PlayerKilledEvent) event).getVictim().getLocation();
+        }
+        else {
+            throw new IllegalArgumentException("Unrecognized event");
+        }
+    }
+
+    @Override
     public Reward getOutcome(Event event)
     {
         Reward reward = new Reward(getLocation(event));
@@ -46,20 +67,5 @@ public class PVPRewardSource extends DefaultRewardSource
         reward.setIntegerCurrency(isIntegerCurrency());
 
         return reward;
-    }
-
-    public static RewardSource parseConfig(ConfigurationSection config)
-    {
-        PVPRewardSource source = null;
-
-        if (config != null) {
-            source = new PVPRewardSource();
-            source.setName(CustomType.LEGACY_PVP.getName());
-            source.setPercentReward(config.getBoolean("System.Hunting.PVPRewardType", true));
-            source.setRewardAmount(config.getDouble("System.Hunting.PVPRewardAmount", 0.05D));
-            source.setCoinRewardMessage(new DefaultMessage(config.getString("System.Messages.PVPRewardMessage", PVP_REWARD_MESSAGE)));
-        }
-
-        return source;
     }
 }

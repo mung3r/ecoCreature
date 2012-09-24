@@ -32,8 +32,8 @@ import se.crafted.chrisb.ecoCreature.rewards.parties.Party;
 import se.crafted.chrisb.ecoCreature.rewards.rules.Rule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.SpawnerMobTracking;
 import se.crafted.chrisb.ecoCreature.rewards.sources.DeathPenaltySource;
-import se.crafted.chrisb.ecoCreature.rewards.sources.PVPRewardSource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSource;
+import se.crafted.chrisb.ecoCreature.rewards.sources.PVPRewardSource;
 
 public class WorldSettings
 {

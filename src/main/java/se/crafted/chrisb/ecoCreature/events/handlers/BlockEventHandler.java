@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,9 +25,10 @@ public class BlockEventHandler extends DefaultEventHandler
     @Override
     public Set<RewardEvent> getRewardEvents(Event event)
     {
-        Set<RewardEvent> events = new HashSet<RewardEvent>();
+        Set<RewardEvent> events = Collections.emptySet();
 
         if (event instanceof BlockBreakEvent) {
+            events = new HashSet<RewardEvent>();
             events.addAll(getRewardEvents((BlockBreakEvent) event));
         }
 

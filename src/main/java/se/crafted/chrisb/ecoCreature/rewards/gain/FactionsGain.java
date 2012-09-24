@@ -51,7 +51,7 @@ public class FactionsGain extends DefaultGain
                     multipliers.put(Relation.valueOf(relation), Double.valueOf(config.getConfigurationSection(relation).getDouble("Amount", 1.0D)));
                 }
                 catch (IllegalArgumentException e) {
-                    ECLogger.getInstance().warning("No Factions Relation: " + relation);
+                    ECLogger.getInstance().warning("Unrecognized Factions relation: " + relation);
                 }
             }
             gain.add(new FactionsGain(multipliers));

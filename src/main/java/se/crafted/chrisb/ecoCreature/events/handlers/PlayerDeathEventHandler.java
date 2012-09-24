@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,9 +17,9 @@ import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
+import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.DeathPenaltySource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.PVPRewardSource;
-import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSource;
 
 public class PlayerDeathEventHandler extends DefaultEventHandler
 {
@@ -30,12 +31,14 @@ public class PlayerDeathEventHandler extends DefaultEventHandler
     @Override
     public Set<RewardEvent> getRewardEvents(Event event)
     {
-        Set<RewardEvent> events = new HashSet<RewardEvent>();
+        Set<RewardEvent> events = Collections.emptySet();
 
         if (event instanceof PlayerKilledEvent) {
+            events = new HashSet<RewardEvent>();
             events.addAll(getRewardEvents((PlayerKilledEvent) event));
         }
         else if (event instanceof PlayerDeathEvent) {
+            events = new HashSet<RewardEvent>();
             events.addAll(getRewardEvents((PlayerDeathEvent) event));
         }
 
@@ -44,7 +47,7 @@ public class PlayerDeathEventHandler extends DefaultEventHandler
 
     private Set<RewardEvent> getRewardEvents(PlayerKilledEvent event)
     {
-        Set<RewardEvent> events = new HashSet<RewardEvent>();
+        Set<RewardEvent> events = Collections.emptySet();
 
         Player killer = event.getKiller();
         Player victim = event.getVictim();
@@ -71,10 +74,11 @@ public class PlayerDeathEventHandler extends DefaultEventHandler
                 event.setDroppedExp(0);
             }
 
+            events = new HashSet<RewardEvent>();
             events.add(new RewardEvent(killer, winnerOutcome));
 
             if (settings.hasRewardSource(CustomType.DEATH_PENALTY)) {
-                DeathPenaltySource loserSource = (DeathPenaltySource) settings.getRewardSource(CustomType.DEATH_PENALTY);
+                RewardSource loserSource = settings.getRewardSource(CustomType.DEATH_PENALTY);
                 Reward loserOutcome = loserSource.getOutcome(event);
                 loserOutcome.setCoin(winnerOutcome.getCoin());
                 loserOutcome.setGain(-winnerOutcome.getGain());
@@ -88,7 +92,7 @@ public class PlayerDeathEventHandler extends DefaultEventHandler
 
     private Set<RewardEvent> getRewardEvents(PlayerDeathEvent event)
     {
-        Set<RewardEvent> events = new HashSet<RewardEvent>();
+        Set<RewardEvent> events = Collections.emptySet();
 
         Player player = event.getEntity();
         WorldSettings settings = plugin.getWorldSettings(player.getWorld());
@@ -101,6 +105,7 @@ public class PlayerDeathEventHandler extends DefaultEventHandler
                 outcome.setCoin(DependencyUtils.getEconomy().getBalance(player.getName()));
             }
 
+            events = new HashSet<RewardEvent>();
             events.add(new RewardEvent(player, outcome));
         }
 

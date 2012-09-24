@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,9 +25,10 @@ public class EntityDeathEventHandler extends DefaultEventHandler
     @Override
     public Set<RewardEvent> getRewardEvents(Event event)
     {
-        Set<RewardEvent> events = new HashSet<RewardEvent>();
+        Set<RewardEvent> events = Collections.emptySet();
 
         if (event instanceof EntityKilledEvent) {
+            events = new HashSet<RewardEvent>();
             events.addAll(getRewardEvents((EntityKilledEvent) event));
         }
 
@@ -35,7 +37,7 @@ public class EntityDeathEventHandler extends DefaultEventHandler
 
     private Set<RewardEvent> getRewardEvents(EntityKilledEvent event)
     {
-        Set<RewardEvent> events = new HashSet<RewardEvent>();
+        Set<RewardEvent> events = Collections.emptySet();
 
         Player killer = event.getKiller();
         WorldSettings settings = plugin.getWorldSettings(killer.getWorld());
@@ -55,6 +57,7 @@ public class EntityDeathEventHandler extends DefaultEventHandler
                 event.setDroppedExp(0);
             }
 
+            events = new HashSet<RewardEvent>();
             events.add(new RewardEvent(killer, outcome));
         }
 
