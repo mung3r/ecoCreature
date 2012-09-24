@@ -21,6 +21,7 @@ public class RewardSourceFactory
         else {
             switch (CustomType.fromName(name)) {
                 case ANGRY_WOLF:
+                case PLAYER:
                 case POWERED_CREEPER:
                     source = new EntityRewardSource(config);
                     break;
@@ -39,9 +40,6 @@ public class RewardSourceFactory
                     break;
                 case LEGACY_SPAWNER:
                     source = new MaterialRewardSource(config);
-                    break;
-                case PLAYER:
-                    source = new EntityRewardSource(config);
                     break;
                 case SET:
                     source = new SetRewardSource(config);
