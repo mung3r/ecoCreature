@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,7 +11,7 @@ import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 
-public class UnderSeaLevelRule extends DefaultRule
+public class UnderSeaLevelRule extends AbstractRule
 {
     private static final String NO_UNDER_SEA_LEVEL_MESSAGE = "&7You find no rewards on this creature.";
 
@@ -40,12 +41,13 @@ public class UnderSeaLevelRule extends DefaultRule
 
     public static Set<Rule> parseConfig(ConfigurationSection config)
     {
-        Set<Rule> rules = new HashSet<Rule>();
+        Set<Rule> rules = Collections.emptySet();
 
         if (config != null) {
             UnderSeaLevelRule rule = new UnderSeaLevelRule();
             rule.setHuntUnderSeaLevel(config.getBoolean("System.Hunting.AllowUnderSeaLVL", true));
             rule.setMessage(new DefaultMessage(config.getString("System.Messages.NoUnderSeaLevel", NO_UNDER_SEA_LEVEL_MESSAGE)));
+            rules = new HashSet<Rule>();
             rules.add(rule);
         }
 

@@ -1,15 +1,16 @@
 package se.crafted.chrisb.ecoCreature.rewards.parties;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.entity.Player;
 
-public class DefaultParty implements Party
+public abstract class AbstractParty implements Party
 {
-    protected boolean shared;
+    private boolean shared;
 
-    public DefaultParty()
+    public AbstractParty()
     {
         shared = false;
     }
@@ -29,6 +30,6 @@ public class DefaultParty implements Party
     @Override
     public Set<String> getPlayers(Player player)
     {
-        return new HashSet<String>();
+        return Collections.emptySet();
     }
 }

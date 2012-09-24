@@ -9,7 +9,7 @@ import se.crafted.chrisb.ecoCreature.commons.CustomType;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 
-public class DeathPenaltySource extends RewardSource
+public class DeathPenaltySource extends AbstractRewardSource
 {
     private static final String DEATH_PENALTY_MESSAGE = "&7You wake up to find &6<amt>&7 missing from your pockets!";
 
@@ -22,10 +22,10 @@ public class DeathPenaltySource extends RewardSource
             throw new IllegalArgumentException("Config cannot be null");
         }
 
-        name = CustomType.DEATH_PENALTY.getName();
+        setName(CustomType.DEATH_PENALTY.getName());
         percentPenalty = config.getBoolean("System.Hunting.PenalizeType", true);
         penaltyAmount = config.getDouble("System.Hunting.PenalizeAmount", 0.05D);
-        coinPenaltyMessage = new DefaultMessage(config.getString("System.Messages.DeathPenaltyMessage", DEATH_PENALTY_MESSAGE));
+        setCoinPenaltyMessage(new DefaultMessage(config.getString("System.Messages.DeathPenaltyMessage", DEATH_PENALTY_MESSAGE)));
     }
 
     public boolean isPercentPenalty()

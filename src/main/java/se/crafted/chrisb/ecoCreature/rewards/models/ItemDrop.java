@@ -2,6 +2,7 @@ package se.crafted.chrisb.ecoCreature.rewards.models;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -28,7 +29,7 @@ public class ItemDrop
 
     public ItemDrop()
     {
-        this.enchantments = new HashSet<ItemEnchantment>();
+        this.enchantments = Collections.emptySet();
     }
 
     public Material getMaterial()
@@ -186,12 +187,14 @@ public class ItemDrop
 
     private static Set<ItemEnchantment> parseEnchantments(String dropString)
     {
-        Set<ItemEnchantment> enchantments = new HashSet<ItemEnchantment>();
+        Set<ItemEnchantment> enchantments = Collections.emptySet();
         String[] dropParts = dropString.split(":");
         String[] itemParts = dropParts[0].split(",");
 
         // check for enchantment
         if (itemParts.length > 1) {
+            enchantments = new HashSet<ItemEnchantment>();
+
             for (int i = 1; i < itemParts.length; i++) {
                 String[] enchantParts = itemParts[i].split("\\.");
                 // check enchantment level and range

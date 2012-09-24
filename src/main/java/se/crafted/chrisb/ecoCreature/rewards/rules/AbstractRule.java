@@ -4,12 +4,12 @@ import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 
-public class DefaultRule implements Rule
+public abstract class AbstractRule implements Rule
 {
     private boolean clearDrops;
     private Message message;
 
-    public DefaultRule()
+    public AbstractRule()
     {
         clearDrops = false;
         message = new DefaultMessage();

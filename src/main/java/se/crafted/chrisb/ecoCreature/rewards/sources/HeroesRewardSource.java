@@ -8,7 +8,7 @@ import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 
-public class HeroesRewardSource extends RewardSource
+public class HeroesRewardSource extends AbstractRewardSource
 {
     public HeroesRewardSource(ConfigurationSection config)
     {

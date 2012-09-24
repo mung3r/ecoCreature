@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -15,7 +16,7 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.struct.Relation;
 
-public class FactionsGain extends DefaultGain
+public class FactionsGain extends AbstractGain
 {
     private Map<Relation, Double> multipliers;
 
@@ -42,7 +43,7 @@ public class FactionsGain extends DefaultGain
 
     public static Set<Gain> parseConfig(ConfigurationSection config)
     {
-        Set<Gain> gain = new HashSet<Gain>();
+        Set<Gain> gain = Collections.emptySet();
 
         if (config != null && DependencyUtils.hasFactions()) {
             Map<Relation, Double> multipliers = new HashMap<Relation, Double>();
@@ -54,6 +55,7 @@ public class FactionsGain extends DefaultGain
                     ECLogger.getInstance().warning("Unrecognized Factions relation: " + relation);
                 }
             }
+            gain = new HashSet<Gain>();
             gain.add(new FactionsGain(multipliers));
         }
 

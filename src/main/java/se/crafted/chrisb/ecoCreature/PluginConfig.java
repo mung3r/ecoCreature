@@ -53,7 +53,7 @@ import se.crafted.chrisb.ecoCreature.rewards.rules.SpawnerDistanceRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.SpawnerMobRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.TamedCreatureRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.UnderSeaLevelRule;
-import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSource;
+import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSourceFactory;
 
 public class PluginConfig
@@ -237,9 +237,9 @@ public class PluginConfig
         return rules;
     }
 
-    private static Map<Material, List<RewardSource>> loadMaterialSources(FileConfiguration config)
+    private static Map<Material, List<AbstractRewardSource>> loadMaterialSources(FileConfiguration config)
     {
-        Map<Material, List<RewardSource>> sources = new HashMap<Material, List<RewardSource>>();
+        Map<Material, List<AbstractRewardSource>> sources = new HashMap<Material, List<AbstractRewardSource>>();
         ConfigurationSection tableConfig = config.getConfigurationSection("RewardTable");
         ConfigurationSection setConfig = config.getConfigurationSection("RewardSets");
 
@@ -253,17 +253,17 @@ public class PluginConfig
                 }
 
                 if (material != null) {
-                    RewardSource source = configureRewardSource(RewardSourceFactory.createSource(materialName, tableConfig.getConfigurationSection(materialName)), config);
+                    AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(materialName, tableConfig.getConfigurationSection(materialName)), config);
 
                     if (!sources.containsKey(material)) {
-                        sources.put(material, new ArrayList<RewardSource>());
+                        sources.put(material, new ArrayList<AbstractRewardSource>());
                     }
 
                     List<String> setList = tableConfig.getConfigurationSection(materialName).getStringList("Sets");
                     if (!setList.isEmpty()) {
                         for (String setName : setList) {
                             if (setConfig != null && setConfig.getConfigurationSection(setName) != null) {
-                                RewardSource setSource = RewardSourceFactory.createSource(CustomType.SET.getName(), setConfig.getConfigurationSection(setName));
+                                AbstractRewardSource setSource = RewardSourceFactory.createSource(CustomType.SET.getName(), setConfig.getConfigurationSection(setName));
                                 sources.get(material).add(mergeRewardSource(source, setSource));
                             }
                         }
@@ -278,9 +278,9 @@ public class PluginConfig
         return sources;
     }
 
-    private static Map<EntityType, List<RewardSource>> loadEntitySources(FileConfiguration config)
+    private static Map<EntityType, List<AbstractRewardSource>> loadEntitySources(FileConfiguration config)
     {
-        Map<EntityType, List<RewardSource>> sources = new HashMap<EntityType, List<RewardSource>>();
+        Map<EntityType, List<AbstractRewardSource>> sources = new HashMap<EntityType, List<AbstractRewardSource>>();
         ConfigurationSection tableConfig = config.getConfigurationSection("RewardTable");
         ConfigurationSection setConfig = config.getConfigurationSection("RewardSets");
 
@@ -288,17 +288,17 @@ public class PluginConfig
             for (String entityName : tableConfig.getKeys(false)) {
                 EntityType entityType = EntityType.fromName(entityName);
                 if (entityType != null) {
-                    RewardSource source = configureRewardSource(RewardSourceFactory.createSource(entityName, tableConfig.getConfigurationSection(entityName)), config);
+                    AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(entityName, tableConfig.getConfigurationSection(entityName)), config);
 
                     if (!sources.containsKey(entityType)) {
-                        sources.put(entityType, new ArrayList<RewardSource>());
+                        sources.put(entityType, new ArrayList<AbstractRewardSource>());
                     }
 
                     List<String> setList = tableConfig.getConfigurationSection(entityName).getStringList("Sets");
                     if (!setList.isEmpty()) {
                         for (String setName : setList) {
                             if (setConfig != null && setConfig.getConfigurationSection(setName) != null) {
-                                RewardSource setSource = RewardSourceFactory.createSource(CustomType.SET.getName(), setConfig.getConfigurationSection(setName));
+                                AbstractRewardSource setSource = RewardSourceFactory.createSource(CustomType.SET.getName(), setConfig.getConfigurationSection(setName));
                                 sources.get(entityType).add(mergeRewardSource(source, setSource));
                             }
                         }
@@ -313,9 +313,9 @@ public class PluginConfig
         return sources;
     }
 
-    private static Map<CustomType, List<RewardSource>> loadCustomSources(FileConfiguration config)
+    private static Map<CustomType, List<AbstractRewardSource>> loadCustomSources(FileConfiguration config)
     {
-        Map<CustomType, List<RewardSource>> sources = new HashMap<CustomType, List<RewardSource>>();
+        Map<CustomType, List<AbstractRewardSource>> sources = new HashMap<CustomType, List<AbstractRewardSource>>();
         ConfigurationSection tableConfig = config.getConfigurationSection("RewardTable");
         ConfigurationSection setConfig = config.getConfigurationSection("RewardSets");
 
@@ -323,17 +323,17 @@ public class PluginConfig
             for (String customName : tableConfig.getKeys(false)) {
                 CustomType customType = CustomType.fromName(customName);
                 if (customType != CustomType.INVALID) {
-                    RewardSource source = configureRewardSource(RewardSourceFactory.createSource(customName, tableConfig.getConfigurationSection(customName)), config);
+                    AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(customName, tableConfig.getConfigurationSection(customName)), config);
 
                     if (!sources.containsKey(customType)) {
-                        sources.put(customType, new ArrayList<RewardSource>());
+                        sources.put(customType, new ArrayList<AbstractRewardSource>());
                     }
 
                     List<String> setList = tableConfig.getConfigurationSection(customName).getStringList("Sets");
                     if (!setList.isEmpty()) {
                         for (String setName : setList) {
                             if (setConfig != null && setConfig.getConfigurationSection(setName) != null) {
-                                RewardSource setSource = RewardSourceFactory.createSource(CustomType.SET.getName(), setConfig.getConfigurationSection(setName));
+                                AbstractRewardSource setSource = RewardSourceFactory.createSource(CustomType.SET.getName(), setConfig.getConfigurationSection(setName));
                                 sources.get(customType).add(mergeRewardSource(source, setSource));
                             }
                         }
@@ -344,18 +344,18 @@ public class PluginConfig
                 }
 
                 if (config.getBoolean("System.Hunting.PenalizeDeath", false)) {
-                    RewardSource source = configureRewardSource(RewardSourceFactory.createSource(CustomType.DEATH_PENALTY.getName(), config), config);
+                    AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(CustomType.DEATH_PENALTY.getName(), config), config);
                     if (!sources.containsKey(CustomType.DEATH_PENALTY)) {
-                        sources.put(CustomType.DEATH_PENALTY, new ArrayList<RewardSource>());
+                        sources.put(CustomType.DEATH_PENALTY, new ArrayList<AbstractRewardSource>());
                     }
 
                     sources.get(CustomType.DEATH_PENALTY).add(source);
                 }
 
                 if (config.getBoolean("System.Hunting.PVPReward", false)) {
-                    RewardSource source = configureRewardSource(RewardSourceFactory.createSource(CustomType.LEGACY_PVP.getName(), config), config);
+                    AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(CustomType.LEGACY_PVP.getName(), config), config);
                     if (!sources.containsKey(CustomType.LEGACY_PVP)) {
-                        sources.put(CustomType.LEGACY_PVP, new ArrayList<RewardSource>());
+                        sources.put(CustomType.LEGACY_PVP, new ArrayList<AbstractRewardSource>());
                     }
 
                     sources.get(CustomType.LEGACY_PVP).add(source);
@@ -366,7 +366,7 @@ public class PluginConfig
         return sources;
     }
 
-    private static RewardSource configureRewardSource(RewardSource source, ConfigurationSection config)
+    private static AbstractRewardSource configureRewardSource(AbstractRewardSource source, ConfigurationSection config)
     {
         if (source != null && config != null) {
             source.setIntegerCurrency(config.getBoolean("System.Economy.IntegerCurrency", false));
@@ -398,7 +398,7 @@ public class PluginConfig
         return message;
     }
 
-    private static RewardSource mergeRewardSource(RewardSource from, RewardSource to)
+    private static AbstractRewardSource mergeRewardSource(AbstractRewardSource from, AbstractRewardSource to)
     {
         to.setItemDrops(from.hasItemDrops() ? from.getItemDrops() : to.getItemDrops());
         to.setEntityDrops(from.hasEntityDrops() ? from.getEntityDrops() : to.getEntityDrops());

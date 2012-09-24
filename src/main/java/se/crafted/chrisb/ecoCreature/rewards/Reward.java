@@ -1,7 +1,6 @@
 package se.crafted.chrisb.ecoCreature.rewards;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -30,13 +29,13 @@ public class Reward
     {
         this.location = location;
         gain = 1.0;
-        party = new HashSet<String>();
+        party = Collections.emptySet();
         integerCurrency = false;
 
         name = "Unknown";
         coin = 0.0;
-        itemDrops = new ArrayList<ItemStack>();
-        entityDrops = new ArrayList<EntityType>();
+        itemDrops = Collections.emptyList();
+        entityDrops = Collections.emptyList();
         message = new DefaultMessage();
     }
 

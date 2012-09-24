@@ -15,7 +15,7 @@ import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 
-public class EntityDeathEventHandler extends DefaultEventHandler
+public class EntityDeathEventHandler extends AbstractEventHandler
 {
     public EntityDeathEventHandler(ecoCreature plugin)
     {

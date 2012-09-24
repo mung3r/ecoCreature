@@ -10,11 +10,11 @@ import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 
-public class DefaultEventHandler implements RewardEventHandler
+public abstract class AbstractEventHandler implements RewardEventHandler
 {
     protected ecoCreature plugin;
 
-    public DefaultEventHandler(ecoCreature plugin)
+    public AbstractEventHandler(ecoCreature plugin)
     {
         this.plugin = plugin;
     }

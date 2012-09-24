@@ -8,9 +8,13 @@ import se.crafted.chrisb.ecoCreature.commons.CustomType;
 
 public class RewardSourceFactory
 {
-    public static RewardSource createSource(String name, ConfigurationSection config)
+    private RewardSourceFactory()
     {
-        RewardSource source = null;
+    }
+
+    public static AbstractRewardSource createSource(String name, ConfigurationSection config)
+    {
+        AbstractRewardSource source = null;
 
         if (Material.matchMaterial(name) != null) {
             source = new MaterialRewardSource(config);
@@ -45,7 +49,7 @@ public class RewardSourceFactory
                     source = new SetRewardSource(config);
                     break;
                 default:
-                    throw new IllegalArgumentException("Unsupported type: " + CustomType.fromName(name));
+                    throw new IllegalArgumentException("Unsupported type: " + name);
             }
         }
 

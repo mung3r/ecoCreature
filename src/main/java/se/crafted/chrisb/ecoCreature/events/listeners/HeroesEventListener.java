@@ -10,11 +10,11 @@ import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.events.handlers.RewardEventHandler;
 
-public class HeroEventListener implements Listener
+public class HeroesEventListener implements Listener
 {
     private final RewardEventHandler handler;
 
-    public HeroEventListener(RewardEventHandler handler)
+    public HeroesEventListener(RewardEventHandler handler)
     {
         this.handler = handler;
     }

@@ -1,6 +1,7 @@
 package se.crafted.chrisb.ecoCreature.rewards.sources;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -20,30 +21,29 @@ import se.crafted.chrisb.ecoCreature.rewards.models.EntityReward;
 import se.crafted.chrisb.ecoCreature.rewards.models.ItemDrop;
 import se.crafted.chrisb.ecoCreature.rewards.models.ItemReward;
 
-public abstract class RewardSource implements CoinReward, ItemReward, EntityReward
+public abstract class AbstractRewardSource implements CoinReward, ItemReward, EntityReward
 {
-    protected static final String NO_COIN_REWARD_MESSAGE = "&7You slayed a &5<crt>&7 using a &3<itm>&7.";
-    protected static final String COIN_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.";
-    protected static final String COIN_PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.";
+    private static final String NO_COIN_REWARD_MESSAGE = "&7You slayed a &5<crt>&7 using a &3<itm>&7.";
+    private static final String COIN_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.";
+    private static final String COIN_PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.";
 
-    protected String name;
-    protected CoinDrop coin;
-    protected List<ItemDrop> itemDrops;
-    protected List<EntityDrop> entityDrops;
+    private String name;
+    private CoinDrop coin;
+    private List<ItemDrop> itemDrops;
+    private List<EntityDrop> entityDrops;
 
-    protected Message noCoinRewardMessage;
-    protected Message coinRewardMessage;
-    protected Message coinPenaltyMessage;
+    private Message noCoinRewardMessage;
+    private Message coinRewardMessage;
+    private Message coinPenaltyMessage;
 
-    protected boolean fixedDrops;
-    protected boolean integerCurrency;
-    protected boolean overrideDrops;
+    private boolean fixedDrops;
+    private boolean integerCurrency;
 
-    public RewardSource()
+    public AbstractRewardSource()
     {
     }
 
-    public RewardSource(ConfigurationSection config)
+    public AbstractRewardSource(ConfigurationSection config)
     {
         if (config == null) {
             throw new IllegalArgumentException("Config cannot be null");
@@ -214,9 +214,11 @@ public abstract class RewardSource implements CoinReward, ItemReward, EntityRewa
 
     private List<ItemStack> getItemDropOutcomes()
     {
-        List<ItemStack> stacks = new ArrayList<ItemStack>();
+        List<ItemStack> stacks = Collections.emptyList();
 
         if (itemDrops != null) {
+            stacks = new ArrayList<ItemStack>();
+
             for (ItemDrop drop : itemDrops) {
                 ItemStack itemStack = drop.getOutcome(fixedDrops);
                 if (itemStack != null) {
@@ -230,9 +232,11 @@ public abstract class RewardSource implements CoinReward, ItemReward, EntityRewa
 
     private List<EntityType> getEntityDropOutcomes()
     {
-        List<EntityType> types = new ArrayList<EntityType>();
+        List<EntityType> types = Collections.emptyList();
 
         if (entityDrops != null) {
+            types = new ArrayList<EntityType>();
+
             for (EntityDrop drop : entityDrops) {
                 types.addAll(drop.getOutcome());
             }

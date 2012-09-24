@@ -17,11 +17,11 @@ import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
-import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSource;
+import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.DeathPenaltySource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.PVPRewardSource;
 
-public class PlayerDeathEventHandler extends DefaultEventHandler
+public class PlayerDeathEventHandler extends AbstractEventHandler
 {
     public PlayerDeathEventHandler(ecoCreature plugin)
     {
@@ -54,7 +54,7 @@ public class PlayerDeathEventHandler extends DefaultEventHandler
         WorldSettings settings = plugin.getWorldSettings(killer.getWorld());
 
         if (settings.hasRewardSource(event)) {
-            RewardSource winnerSource = settings.getRewardSource(event);
+            AbstractRewardSource winnerSource = settings.getRewardSource(event);
             Reward winnerOutcome = winnerSource.getOutcome(event);
 
             if (winnerSource instanceof PVPRewardSource && ((PVPRewardSource) winnerSource).isPercentReward()) {
@@ -78,7 +78,7 @@ public class PlayerDeathEventHandler extends DefaultEventHandler
             events.add(new RewardEvent(killer, winnerOutcome));
 
             if (settings.hasRewardSource(CustomType.DEATH_PENALTY)) {
-                RewardSource loserSource = settings.getRewardSource(CustomType.DEATH_PENALTY);
+                AbstractRewardSource loserSource = settings.getRewardSource(CustomType.DEATH_PENALTY);
                 Reward loserOutcome = loserSource.getOutcome(event);
                 loserOutcome.setCoin(winnerOutcome.getCoin());
                 loserOutcome.setGain(-winnerOutcome.getGain());
@@ -98,7 +98,7 @@ public class PlayerDeathEventHandler extends DefaultEventHandler
         WorldSettings settings = plugin.getWorldSettings(player.getWorld());
 
         if (settings.hasRewardSource(event)) {
-            RewardSource source = settings.getRewardSource(CustomType.DEATH_PENALTY);
+            AbstractRewardSource source = settings.getRewardSource(CustomType.DEATH_PENALTY);
             Reward outcome = source.getOutcome(event);
 
             if (source instanceof DeathPenaltySource && ((DeathPenaltySource) source).isPercentPenalty()) {

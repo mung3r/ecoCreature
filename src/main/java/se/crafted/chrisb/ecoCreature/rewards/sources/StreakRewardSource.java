@@ -8,7 +8,7 @@ import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 
-public class StreakRewardSource extends RewardSource
+public class StreakRewardSource extends AbstractRewardSource
 {
     public StreakRewardSource(ConfigurationSection config)
     {

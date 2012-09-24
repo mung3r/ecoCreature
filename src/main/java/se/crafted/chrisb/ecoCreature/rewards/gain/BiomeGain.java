@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,7 +13,7 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-public class BiomeGain extends DefaultGain
+public class BiomeGain extends AbstractGain
 {
     private Map<Biome, Double> multipliers;
 
@@ -41,7 +42,7 @@ public class BiomeGain extends DefaultGain
 
     public static Set<Gain> parseConfig(ConfigurationSection config)
     {
-        Set<Gain> gain = new HashSet<Gain>();
+        Set<Gain> gain = Collections.emptySet();
 
         if (config != null) {
             Map<Biome, Double> multipliers = new HashMap<Biome, Double>();
@@ -53,6 +54,7 @@ public class BiomeGain extends DefaultGain
                     ECLogger.getInstance().warning("Skipping unknown biome name: " + biome);
                 }
             }
+            gain = new HashSet<Gain>();
             gain.add(new BiomeGain(multipliers));
         }
 

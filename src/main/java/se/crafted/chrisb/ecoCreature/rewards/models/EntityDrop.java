@@ -2,6 +2,7 @@ package se.crafted.chrisb.ecoCreature.rewards.models;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -85,9 +86,11 @@ public class EntityDrop
 
     public static List<EntityDrop> parseConfig(ConfigurationSection config)
     {
-        List<EntityDrop> drops = new ArrayList<EntityDrop>();
+        List<EntityDrop> drops = Collections.emptyList();
 
         if (config != null) {
+            drops = new ArrayList<EntityDrop>();
+
             if (config.getList("Drops") != null) {
                 List<String> dropsList = config.getStringList("Drops");
                 drops = EntityDrop.parseDrops(dropsList);
@@ -133,7 +136,7 @@ public class EntityDrop
 
     private static List<EntityDrop> parseDrops(List<String> dropsList)
     {
-        List<EntityDrop> drops = new ArrayList<EntityDrop>();
+        List<EntityDrop> drops = Collections.emptyList();
 
         for (String dropString : dropsList) {
             EntityType type = parseType(dropString);
@@ -142,6 +145,7 @@ public class EntityDrop
                 drop.setType(type);
                 drop.setRange(parseRange(dropString));
                 drop.setPercentage(parsePercentage(dropString));
+                drops = new ArrayList<EntityDrop>();
                 drops.add(drop);
             }
         }

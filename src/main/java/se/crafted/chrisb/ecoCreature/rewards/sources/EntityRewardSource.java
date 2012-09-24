@@ -7,7 +7,7 @@ import org.bukkit.event.Event;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 
-public class EntityRewardSource extends RewardSource
+public class EntityRewardSource extends AbstractRewardSource
 {
     public EntityRewardSource(ConfigurationSection config)
     {

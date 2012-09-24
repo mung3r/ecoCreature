@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -13,7 +14,7 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-public class EnvironmentGain extends DefaultGain
+public class EnvironmentGain extends AbstractGain
 {
     private Map<Environment, Double> multipliers;
 
@@ -37,7 +38,7 @@ public class EnvironmentGain extends DefaultGain
 
     public static Set<Gain> parseConfig(ConfigurationSection config)
     {
-        Set<Gain> gain = new HashSet<Gain>();
+        Set<Gain> gain = Collections.emptySet();
 
         if (config != null) {
             Map<Environment, Double> multipliers = new HashMap<World.Environment, Double>();
@@ -49,6 +50,7 @@ public class EnvironmentGain extends DefaultGain
                     ECLogger.getInstance().warning("Skipping unknown environment name: " + environment);
                 }
             }
+            gain = new HashSet<Gain>();
             gain.add(new EnvironmentGain(multipliers));
         }
 

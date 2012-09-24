@@ -14,13 +14,13 @@ import se.crafted.chrisb.ecoCreature.commons.UpdateTask;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.events.handlers.BlockEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.EntityDeathEventHandler;
-import se.crafted.chrisb.ecoCreature.events.handlers.HeroEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.HeroesEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.PlayerDeathEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.StreakEventHandler;
 import se.crafted.chrisb.ecoCreature.events.listeners.BlockEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.EntityDeathEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.PlayerDeathEventListener;
-import se.crafted.chrisb.ecoCreature.events.listeners.HeroEventListener;
+import se.crafted.chrisb.ecoCreature.events.listeners.HeroesEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.RewardEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.SpawnEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.StreakEventListener;
@@ -108,7 +108,7 @@ public class ecoCreature extends JavaPlugin
             Bukkit.getPluginManager().registerEvents(new StreakEventListener(new StreakEventHandler(this)), this);
         }
         if (DependencyUtils.hasHeroes()) {
-            Bukkit.getPluginManager().registerEvents(new HeroEventListener(new HeroEventHandler(this)), this);
+            Bukkit.getPluginManager().registerEvents(new HeroesEventListener(new HeroesEventHandler(this)), this);
         }
     }
 }

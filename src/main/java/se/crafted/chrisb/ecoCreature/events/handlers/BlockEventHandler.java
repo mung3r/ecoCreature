@@ -15,7 +15,7 @@ import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 
-public class BlockEventHandler extends DefaultEventHandler
+public class BlockEventHandler extends AbstractEventHandler
 {
     public BlockEventHandler(ecoCreature plugin)
     {
@@ -37,7 +37,7 @@ public class BlockEventHandler extends DefaultEventHandler
 
     private Set<RewardEvent> getRewardEvents(BlockBreakEvent event)
     {
-        Set<RewardEvent> events = new HashSet<RewardEvent>();
+        Set<RewardEvent> events = Collections.emptySet();
 
         Player player = event.getPlayer();
         WorldSettings settings = plugin.getWorldSettings(player.getWorld());
@@ -48,6 +48,7 @@ public class BlockEventHandler extends DefaultEventHandler
             outcome.getMessage().addParameter(MessageToken.ITEM, EntityUtils.getItemNameInHand(player));
             outcome.getMessage().addParameter(MessageToken.CREATURE, outcome.getName());
 
+            events = new HashSet<RewardEvent>();
             events.add(new RewardEvent(player, outcome));
         }
 

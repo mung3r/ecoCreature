@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,7 +10,7 @@ import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
-public class MurderedPetRule extends DefaultRule
+public class MurderedPetRule extends AbstractRule
 {
     @Override
     public boolean isBroken(EntityKilledEvent event)
@@ -25,8 +26,12 @@ public class MurderedPetRule extends DefaultRule
 
     public static Set<Rule> parseConfig(ConfigurationSection config)
     {
-        Set<Rule> rules = new HashSet<Rule>();
-        rules.add(new MurderedPetRule());
+        Set<Rule> rules = Collections.emptySet();
+
+        if (config != null) {
+            rules = new HashSet<Rule>();
+            rules.add(new MurderedPetRule());
+        }
 
         return rules;
     }

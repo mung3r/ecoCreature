@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.rewards;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -32,7 +33,7 @@ import se.crafted.chrisb.ecoCreature.rewards.parties.Party;
 import se.crafted.chrisb.ecoCreature.rewards.rules.Rule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.SpawnerMobTracking;
 import se.crafted.chrisb.ecoCreature.rewards.sources.DeathPenaltySource;
-import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSource;
+import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.PVPRewardSource;
 
 public class WorldSettings
@@ -44,9 +45,9 @@ public class WorldSettings
     private boolean noFarm;
     private boolean noFarmFire;
 
-    private Map<Material, List<RewardSource>> materialSources;
-    private Map<EntityType, List<RewardSource>> entitySources;
-    private Map<CustomType, List<RewardSource>> customSources;
+    private Map<Material, List<AbstractRewardSource>> materialSources;
+    private Map<EntityType, List<AbstractRewardSource>> entitySources;
+    private Map<CustomType, List<AbstractRewardSource>> customSources;
     private Set<Gain> gainMultipliers;
     private Set<Party> parties;
     private Set<Rule> huntingRules;
@@ -54,13 +55,13 @@ public class WorldSettings
 
     public WorldSettings()
     {
-        materialSources = new HashMap<Material, List<RewardSource>>();
-        entitySources = new HashMap<EntityType, List<RewardSource>>();
-        customSources = new HashMap<CustomType, List<RewardSource>>();
+        materialSources = new HashMap<Material, List<AbstractRewardSource>>();
+        entitySources = new HashMap<EntityType, List<AbstractRewardSource>>();
+        customSources = new HashMap<CustomType, List<AbstractRewardSource>>();
 
-        gainMultipliers = new HashSet<Gain>();
-        parties = new HashSet<Party>();
-        huntingRules = new HashSet<Rule>();
+        gainMultipliers = Collections.emptySet();
+        parties = Collections.emptySet();
+        huntingRules = Collections.emptySet();
 
         for (Rule rule : huntingRules) {
             if (rule instanceof SpawnerMobTracking) {
@@ -109,17 +110,17 @@ public class WorldSettings
         this.noFarmFire = noFarmFire;
     }
 
-    public void setMaterialSources(Map<Material, List<RewardSource>> materialSources)
+    public void setMaterialSources(Map<Material, List<AbstractRewardSource>> materialSources)
     {
         this.materialSources = materialSources;
     }
 
-    public void setEntitySources(Map<EntityType, List<RewardSource>> entitySources)
+    public void setEntitySources(Map<EntityType, List<AbstractRewardSource>> entitySources)
     {
         this.entitySources = entitySources;
     }
 
-    public void setCustomSources(Map<CustomType, List<RewardSource>> customSources)
+    public void setCustomSources(Map<CustomType, List<AbstractRewardSource>> customSources)
     {
         this.customSources = customSources;
     }
@@ -297,7 +298,7 @@ public class WorldSettings
         return type != null && customSources.containsKey(type) && !customSources.get(type).isEmpty();
     }
 
-    public RewardSource getRewardSource(Event event)
+    public AbstractRewardSource getRewardSource(Event event)
     {
         if (event instanceof BlockBreakEvent) {
             return getRewardSource(((BlockBreakEvent) event).getBlock());
@@ -324,9 +325,9 @@ public class WorldSettings
         return null;
     }
 
-    private RewardSource getRewardSource(Block block)
+    private AbstractRewardSource getRewardSource(Block block)
     {
-        RewardSource source = null;
+        AbstractRewardSource source = null;
 
         if (hasRewardSource(block.getType())) {
             source = getRewardSource(block.getType());
@@ -338,9 +339,9 @@ public class WorldSettings
         return source;
     }
 
-    private RewardSource getRewardSource(Entity entity)
+    private AbstractRewardSource getRewardSource(Entity entity)
     {
-        RewardSource source = null;
+        AbstractRewardSource source = null;
 
         if (hasRewardSource(CustomType.fromEntity(entity))) {
             source = getRewardSource(CustomType.fromEntity(entity));
@@ -355,9 +356,9 @@ public class WorldSettings
         return source;
     }
 
-    private RewardSource getRewardSource(Material material)
+    private AbstractRewardSource getRewardSource(Material material)
     {
-        RewardSource source = null;
+        AbstractRewardSource source = null;
 
         if (hasRewardSource(material)) {
             source = materialSources.get(material).get(random.nextInt(materialSources.get(material).size()));
@@ -369,9 +370,9 @@ public class WorldSettings
         return source;
     }
 
-    private RewardSource getRewardSource(EntityType entityType)
+    private AbstractRewardSource getRewardSource(EntityType entityType)
     {
-        RewardSource source = null;
+        AbstractRewardSource source = null;
 
         if (hasRewardSource(entityType)) {
             source = entitySources.get(entityType).get(random.nextInt(entitySources.get(entityType).size()));
@@ -383,9 +384,9 @@ public class WorldSettings
         return source;
     }
 
-    public RewardSource getRewardSource(CustomType type)
+    public AbstractRewardSource getRewardSource(CustomType type)
     {
-        RewardSource source = null;
+        AbstractRewardSource source = null;
 
         if (hasRewardSource(type)) {
             source = customSources.get(type).get(random.nextInt(customSources.get(type).size()));
@@ -414,9 +415,11 @@ public class WorldSettings
 
     public Set<String> getParty(Player player)
     {
-        Set<String> players = new HashSet<String>();
+        Set<String> players = Collections.emptySet();
 
         for (Party party : parties) {
+            players = new HashSet<String>();
+
             if (party.isShared()) {
                 players.addAll(party.getPlayers(player));
             }

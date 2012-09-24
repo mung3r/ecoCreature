@@ -15,9 +15,9 @@ import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 
-public class HeroEventHandler extends DefaultEventHandler
+public class HeroesEventHandler extends AbstractEventHandler
 {
-    public HeroEventHandler(ecoCreature plugin)
+    public HeroesEventHandler(ecoCreature plugin)
     {
         super(plugin);
     }

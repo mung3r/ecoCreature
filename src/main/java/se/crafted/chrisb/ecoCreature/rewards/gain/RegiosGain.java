@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,7 +13,7 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import couk.Adamki11s.Regios.Regions.Region;
 
-public class RegiosGain extends DefaultGain
+public class RegiosGain extends AbstractGain
 {
     private Map<String, Double> multipliers;
 
@@ -39,13 +40,14 @@ public class RegiosGain extends DefaultGain
 
     public static Set<Gain> parseConfig(ConfigurationSection config)
     {
-        Set<Gain> gain = new HashSet<Gain>();
+        Set<Gain> gain = Collections.emptySet();
 
         if (config != null) {
             Map<String, Double> multipliers = new HashMap<String, Double>();
             for (String regionName : config.getKeys(false)) {
                 multipliers.put(regionName, Double.valueOf(config.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
             }
+            gain = new HashSet<Gain>();
             gain.add(new RegiosGain(multipliers));
         }
 

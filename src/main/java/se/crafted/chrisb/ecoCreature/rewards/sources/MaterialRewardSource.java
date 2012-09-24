@@ -5,7 +5,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 
-public class MaterialRewardSource extends RewardSource
+public class MaterialRewardSource extends AbstractRewardSource
 {
     public MaterialRewardSource(ConfigurationSection config)
     {

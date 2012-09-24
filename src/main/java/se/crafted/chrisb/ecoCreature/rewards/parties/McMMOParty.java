@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.parties;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,16 +12,18 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 
 import com.gmail.nossr50.api.PartyAPI;
 
-public class McMMOParty extends DefaultParty
+public class McMMOParty extends AbstractParty
 {
     @Override
     public Set<String> getPlayers(Player player)
     {
-        Set<String> party = new HashSet<String>();
+        Set<String> party = Collections.emptySet();
 
         if (DependencyUtils.hasMcMMO() && PartyAPI.inParty(player)) {
             List<Player> members = PartyAPI.getOnlineMembers(player);
             if (members != null) {
+                party = new HashSet<String>();
+
                 for (Player member : members) {
                     party.add(member.getName());
                 }
@@ -32,11 +35,12 @@ public class McMMOParty extends DefaultParty
 
     public static Set<Party> parseConfig(ConfigurationSection config)
     {
-        Set<Party> parties = new HashSet<Party>();
+        Set<Party> parties = Collections.emptySet();
 
         if (config != null) {
             McMMOParty party = new McMMOParty();
             party.setShared(config.getBoolean("Share", false));
+            parties = new HashSet<Party>();
             parties.add(party);
         }
 

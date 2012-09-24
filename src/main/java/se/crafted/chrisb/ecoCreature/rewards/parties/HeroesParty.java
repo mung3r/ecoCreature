@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.parties;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,14 +11,16 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 
 import com.herocraftonline.heroes.characters.Hero;
 
-public class HeroesParty extends DefaultParty
+public class HeroesParty extends AbstractParty
 {
     @Override
     public Set<String> getPlayers(Player player)
     {
-        Set<String> party = new HashSet<String>();
+        Set<String> party = Collections.emptySet();
 
         if (DependencyUtils.hasHeroes() && DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {
+            party = new HashSet<String>();
+
             for (Hero hero : DependencyUtils.getHeroes().getCharacterManager().getHero(player).getParty().getMembers()) {
                 party.add(hero.getPlayer().getName());
             }
@@ -27,11 +30,12 @@ public class HeroesParty extends DefaultParty
 
     public static Set<Party> parseConfig(ConfigurationSection config)
     {
-        Set<Party> parties = new HashSet<Party>();
+        Set<Party> parties = Collections.emptySet();
 
         if (config != null) {
             HeroesParty party = new HeroesParty();
             party.setShared(config.getBoolean("Share", false));
+            parties = new HashSet<Party>();
             parties.add(party);
         }
 

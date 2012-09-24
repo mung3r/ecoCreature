@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 
-public class SetRewardSource extends RewardSource
+public class SetRewardSource extends AbstractRewardSource
 {
     public SetRewardSource(ConfigurationSection config)
     {

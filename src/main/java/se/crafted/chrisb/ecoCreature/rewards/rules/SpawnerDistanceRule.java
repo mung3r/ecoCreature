@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,7 +11,7 @@ import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 
-public class SpawnerDistanceRule extends DefaultRule
+public class SpawnerDistanceRule extends AbstractRule
 {
     private static final String NO_CAMP_MESSAGE = "&7You find no rewards camping monster spawners.";
 
@@ -60,7 +61,7 @@ public class SpawnerDistanceRule extends DefaultRule
 
     public static Set<Rule> parseConfig(ConfigurationSection config)
     {
-        Set<Rule> rules = new HashSet<Rule>();
+        Set<Rule> rules = Collections.emptySet();
 
         if (config != null) {
             SpawnerDistanceRule rule = new SpawnerDistanceRule();
@@ -69,6 +70,7 @@ public class SpawnerDistanceRule extends DefaultRule
             rule.setCampByDistance(config.getBoolean("System.Hunting.CampingByDistance", true));
             rule.setCampRadius(config.getInt("System.Hunting.CampRadius", 16));
             rule.setMessage(new DefaultMessage(config.getString("System.Messages.NoCampMessage", NO_CAMP_MESSAGE)));
+            rules = new HashSet<Rule>();
             rules.add(rule);
         }
 

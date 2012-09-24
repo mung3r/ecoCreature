@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,7 +10,7 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
-public class MobArenaRule extends DefaultRule
+public class MobArenaRule extends AbstractRule
 {
     private boolean mobArenaRewards;
 
@@ -37,11 +38,12 @@ public class MobArenaRule extends DefaultRule
 
     public static Set<Rule> parseConfig(ConfigurationSection config)
     {
-        Set<Rule> rules = new HashSet<Rule>();
+        Set<Rule> rules = Collections.emptySet();
 
         if (config != null) {
             MobArenaRule rule = new MobArenaRule();
             rule.setMobArenaRewards(config.getBoolean("System.Hunting.MobArenaRewards"));
+            rules = new HashSet<Rule>();
             rules.add(rule);
         }
 

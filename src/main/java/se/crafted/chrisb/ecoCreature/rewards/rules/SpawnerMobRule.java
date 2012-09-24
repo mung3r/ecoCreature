@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,7 +11,7 @@ import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 
-public class SpawnerMobRule extends DefaultRule implements SpawnerMobTracking
+public class SpawnerMobRule extends AbstractRule implements SpawnerMobTracking
 {
     private static final String NO_CAMP_MESSAGE = "&7You find no rewards camping monster spawners.";
 
@@ -72,7 +73,7 @@ public class SpawnerMobRule extends DefaultRule implements SpawnerMobTracking
 
     public static Set<Rule> parseConfig(ConfigurationSection config)
     {
-        Set<Rule> rules = new HashSet<Rule>();
+        Set<Rule> rules = Collections.emptySet();
 
         if (config != null) {
             SpawnerMobRule rule = new SpawnerMobRule();
@@ -80,6 +81,7 @@ public class SpawnerMobRule extends DefaultRule implements SpawnerMobTracking
             rule.setClearDrops(config.getBoolean("System.Hunting.ClearCampDrops", true));
             rule.setCampByEntity(config.getBoolean("System.Hunting.CampingByEntity", false));
             rule.setMessage(new DefaultMessage(config.getString("System.Messages.NoCampMessage", NO_CAMP_MESSAGE)));
+            rules = new HashSet<Rule>();
             rules.add(rule);
         }
 

@@ -15,7 +15,7 @@ import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 
-public class StreakEventHandler extends DefaultEventHandler
+public class StreakEventHandler extends AbstractEventHandler
 {
     public StreakEventHandler(ecoCreature plugin)
     {

@@ -2,7 +2,7 @@ package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import org.bukkit.entity.Player;
 
-public class DefaultGain implements Gain
+public abstract class AbstractGain implements Gain
 {
     @Override
     public double getMultiplier(Player player)

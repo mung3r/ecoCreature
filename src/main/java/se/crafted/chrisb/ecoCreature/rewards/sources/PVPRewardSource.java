@@ -9,7 +9,7 @@ import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 
-public class PVPRewardSource extends RewardSource
+public class PVPRewardSource extends AbstractRewardSource
 {
     private static final String PVP_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for murdering &5<crt>&7.";
 
@@ -18,10 +18,10 @@ public class PVPRewardSource extends RewardSource
 
     public PVPRewardSource(ConfigurationSection config)
     {
-        name = CustomType.LEGACY_PVP.getName();
+        setName(CustomType.LEGACY_PVP.getName());
         percentReward = config.getBoolean("System.Hunting.PVPRewardType", true);
         rewardAmount = config.getDouble("System.Hunting.PVPRewardAmount", 0.05D);
-        coinRewardMessage = new DefaultMessage(config.getString("System.Messages.PVPRewardMessage", PVP_REWARD_MESSAGE));
+        setCoinRewardMessage(new DefaultMessage(config.getString("System.Messages.PVPRewardMessage", PVP_REWARD_MESSAGE)));
     }
 
     public boolean isPercentReward()

@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -14,7 +15,7 @@ import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import com.bekvon.bukkit.residence.Residence;
 import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 
-public class ResidenceGain extends DefaultGain
+public class ResidenceGain extends AbstractGain
 {
     private Map<String, Double> multipliers;
 
@@ -41,13 +42,14 @@ public class ResidenceGain extends DefaultGain
 
     public static Set<Gain> parseConfig(ConfigurationSection config)
     {
-        Set<Gain> gain = new HashSet<Gain>();
+        Set<Gain> gain = Collections.emptySet();
 
         if (config != null) {
             Map<String, Double> multipliers = new HashMap<String, Double>();
             for (String residenceName : config.getKeys(false)) {
                 multipliers.put(residenceName, Double.valueOf(config.getConfigurationSection(residenceName).getDouble("Amount", 1.0D)));
             }
+            gain = new HashSet<Gain>();
             gain.add(new ResidenceGain(multipliers));
         }
 

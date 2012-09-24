@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -11,7 +12,7 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-public class WeatherGain extends DefaultGain
+public class WeatherGain extends AbstractGain
 {
     public enum WEATHER
     {
@@ -57,7 +58,7 @@ public class WeatherGain extends DefaultGain
 
     public static Set<Gain> parseConfig(ConfigurationSection config)
     {
-        Set<Gain> gain = new HashSet<Gain>();
+        Set<Gain> gain = Collections.emptySet();
 
         if (config != null) {
             Map<WEATHER, Double> multipliers = new HashMap<WEATHER, Double>();
@@ -69,6 +70,7 @@ public class WeatherGain extends DefaultGain
                     ECLogger.getInstance().warning("Skipping unknown weather name: " + weather);
                 }
             }
+            gain = new HashSet<Gain>();
             gain.add(new WeatherGain(multipliers));
         }
 

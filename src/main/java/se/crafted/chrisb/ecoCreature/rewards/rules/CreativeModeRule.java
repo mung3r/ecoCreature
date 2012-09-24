@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,7 +10,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
-public class CreativeModeRule extends DefaultRule
+public class CreativeModeRule extends AbstractRule
 {
     private boolean creativeModeRewards;
 
@@ -37,11 +38,12 @@ public class CreativeModeRule extends DefaultRule
 
     public static Set<Rule> parseConfig(ConfigurationSection config)
     {
-        Set<Rule> rules = new HashSet<Rule>();
+        Set<Rule> rules = Collections.emptySet();
 
         if (config != null) {
             CreativeModeRule rule = new CreativeModeRule();
             rule.setCreativeModeRewards(config.getBoolean("System.Hunting.CreativeModeRewards", false));
+            rules = new HashSet<Rule>();
             rules.add(rule);
         }
 

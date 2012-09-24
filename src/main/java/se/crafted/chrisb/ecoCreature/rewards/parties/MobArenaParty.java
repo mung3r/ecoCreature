@@ -1,5 +1,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.parties;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,14 +9,16 @@ import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 
-public class MobArenaParty extends DefaultParty
+public class MobArenaParty extends AbstractParty
 {
     @Override
     public Set<String> getPlayers(Player player)
     {
-        Set<String> party = new HashSet<String>();
+        Set<String> party = Collections.emptySet();
 
         if (DependencyUtils.hasMobArena() && DependencyUtils.getMobArenaHandler().isPlayerInArena(player)) {
+            party = new HashSet<String>();
+
             for (Player member : DependencyUtils.getMobArenaHandler().getArenaWithPlayer(player).getAllPlayers()) {
                 party.add(member.getName());
             }
@@ -26,11 +29,12 @@ public class MobArenaParty extends DefaultParty
 
     public static Set<Party> parseConfig(ConfigurationSection config)
     {
-        Set<Party> parties = new HashSet<Party>();
+        Set<Party> parties = Collections.emptySet();
 
         if (config != null) {
             MobArenaParty party = new MobArenaParty();
             party.setShared(config.getBoolean("Share", false));
+            parties = new HashSet<Party>();
             parties.add(party);
         }
 
