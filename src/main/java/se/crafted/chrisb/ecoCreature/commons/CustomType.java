@@ -53,7 +53,7 @@ public enum CustomType
 
     public static CustomType fromEntity(Entity entity)
     {
-        CustomType rewardType = null;
+        CustomType rewardType = INVALID;
 
         if (entity instanceof Creeper && ((Creeper) entity).isPowered()) {
             rewardType = CustomType.POWERED_CREEPER;
