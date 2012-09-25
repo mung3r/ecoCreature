@@ -125,7 +125,7 @@ public class EntityDrop
 
     private static List<EntityDrop> parseDrops(String dropsString)
     {
-        List<EntityDrop> drops = null;
+        List<EntityDrop> drops = Collections.emptyList();
 
         if (dropsString != null && !dropsString.isEmpty()) {
             drops = parseDrops(Arrays.asList(dropsString.split(";")));

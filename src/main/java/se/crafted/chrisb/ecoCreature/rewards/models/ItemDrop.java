@@ -120,7 +120,7 @@ public class ItemDrop
 
     public static List<ItemDrop> parseConfig(ConfigurationSection config)
     {
-        List<ItemDrop> drops = null;
+        List<ItemDrop> drops = Collections.emptyList();
 
         if (config != null) {
             if (config.getList("Drops") != null) {
@@ -137,7 +137,7 @@ public class ItemDrop
 
     private static List<ItemDrop> parseDrops(String dropsString)
     {
-        List<ItemDrop> drops = null;
+        List<ItemDrop> drops = Collections.emptyList();
 
         if (dropsString != null && !dropsString.isEmpty()) {
             drops = parseDrops(Arrays.asList(dropsString.split(";")));
@@ -148,7 +148,7 @@ public class ItemDrop
 
     private static List<ItemDrop> parseDrops(List<String> dropsList)
     {
-        List<ItemDrop> drops = null;
+        List<ItemDrop> drops = Collections.emptyList();
 
         if (dropsList != null && !dropsList.isEmpty()) {
             drops = new ArrayList<ItemDrop>();
