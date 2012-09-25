@@ -333,7 +333,7 @@ public class WorldSettings
             source = getRewardSource(block.getType());
         }
         else {
-            ECLogger.getInstance().warning("No reward found for entity " + block.getType().name());
+            ECLogger.getInstance().warning("No reward found for block: " + block.getType().name());
         }
 
         return source;
@@ -350,7 +350,7 @@ public class WorldSettings
             source = getRewardSource(entity.getType());
         }
         else {
-            ECLogger.getInstance().warning("No reward found for entity " + entity.getType().getName());
+            ECLogger.getInstance().warning("No reward found for entity: " + entity.getType().getName());
         }
 
         return source;
@@ -364,7 +364,7 @@ public class WorldSettings
             source = materialSources.get(material).get(random.nextInt(materialSources.get(material).size()));
         }
         else {
-            ECLogger.getInstance().warning("No reward defined for " + material);
+            ECLogger.getInstance().warning("No reward defined for material: " + material);
         }
 
         return source;
@@ -378,7 +378,7 @@ public class WorldSettings
             source = entitySources.get(entityType).get(random.nextInt(entitySources.get(entityType).size()));
         }
         else {
-            ECLogger.getInstance().warning("No reward defined for " + entityType.getName());
+            ECLogger.getInstance().warning("No reward defined for entity type: " + entityType.getName());
         }
 
         return source;
@@ -396,7 +396,7 @@ public class WorldSettings
             }
         }
         else {
-            ECLogger.getInstance().warning("No reward defined for " + type.name());
+            ECLogger.getInstance().warning("No reward defined for custom type: " + type.name());
         }
 
         return source;
