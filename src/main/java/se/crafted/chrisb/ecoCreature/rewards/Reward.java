@@ -41,13 +41,7 @@ public class Reward
 
     public World getWorld()
     {
-        World world = null;
-
-        if (location != null) {
-            world = location.getWorld();
-        }
-
-        return world;
+        return location != null ? location.getWorld() : null;
     }
 
     public Location getLocation()
