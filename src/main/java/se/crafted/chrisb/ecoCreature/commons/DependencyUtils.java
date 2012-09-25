@@ -197,12 +197,12 @@ public final class DependencyUtils
         try {
             Class<?> testClass = Class.forName(className);
             if (testClass.isInstance(plugin) && plugin.isEnabled()) {
-                ECLogger.getInstance().info("Found plugin " + plugin.getDescription().getName());
+                ECLogger.getInstance().info("Found plugin: " + plugin.getDescription().getName());
                 return plugin;
             }
         }
         catch (ClassNotFoundException e) {
-            ECLogger.getInstance().warning("Did not find plugin " + pluginName);
+            ECLogger.getInstance().warning("Did not find plugin: " + pluginName);
         }
         return null;
     }
