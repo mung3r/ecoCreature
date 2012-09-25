@@ -40,7 +40,7 @@ public class ecoCreature extends JavaPlugin
         metrics = new RewardMetrics(this);
         pluginConfig = new PluginConfig(this);
 
-        if (pluginConfig.isLoaded()) {
+        if (pluginConfig.isInitialized()) {
             addCommands();
             registerEvents();
 
@@ -57,7 +57,6 @@ public class ecoCreature extends JavaPlugin
     public void onDisable()
     {
         getServer().getScheduler().cancelTasks(this);
-        pluginConfig.save();
         ECLogger.getInstance().info(getDescription().getVersion() + " is disabled.");
     }
 

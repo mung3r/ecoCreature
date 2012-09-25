@@ -60,7 +60,8 @@ System:
     PenalizeType: true
     PenalizeAmount: 0.05
     #
-    # Legacy PVP reward player kills. Use PVPRewardType to select whether
+    # Legacy PVP reward - Use RewardTable.Player instead.
+    # Use PVPRewardType to select whether
     # PVPRewardAmount is used as a percentage (PVPRewardType: true) or a
     # fixed amount (PVPRewardType: false)
     # Default: false
@@ -112,7 +113,10 @@ System:
     #
     # Custom message for death penalty
     DeathPenaltyMessage: '&7You wake up to find &6<amt>&7 missing from your pockets!'
-
+    #
+    # Legacy custom message for PVP - Use RewardTable.Player instead.
+    # Custom message for PVP reward
+    PVPRewardMessage: '&7You are awarded &6<amt>&7 for murdering &5<crt>.'
 Gain:
   #
   # Multiply reward amount based on group (NOTE: requires a permission plugin

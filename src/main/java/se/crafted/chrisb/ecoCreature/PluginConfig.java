@@ -65,35 +65,22 @@ public class PluginConfig
 
     private final ecoCreature plugin;
     private final File dataWorldsFolder;
+    private boolean initialized;
 
-    private boolean loaded;
-    private File defaultFile;
-    private FileConfiguration defaultConfig;
     private Map<String, FileConfiguration> fileConfigMap;
     private Map<String, WorldSettings> worldSettingsMap;
 
     public PluginConfig(ecoCreature plugin)
     {
         this.plugin = plugin;
-        loaded = false;
         dataWorldsFolder = new File(plugin.getDataFolder(), "worlds");
         dataWorldsFolder.mkdirs();
-
-        try {
-            load();
-            loaded = true;
-        }
-        catch (IOException ioe) {
-            ECLogger.getInstance().severe("Failed to read config: " + ioe.toString());
-        }
-        catch (InvalidConfigurationException ice) {
-            ECLogger.getInstance().severe("Failed to parse config: " + ice.toString());
-        }
+        initialized = initConfig();
     }
 
-    public boolean isLoaded()
+    public boolean isInitialized()
     {
-        return loaded;
+        return initialized;
     }
 
     public WorldSettings getWorldSettings(World world)
@@ -105,68 +92,45 @@ public class PluginConfig
         return settings;
     }
 
-    private void load() throws IOException, InvalidConfigurationException
+    private boolean initConfig()
     {
-        defaultConfig = new YamlConfiguration();
-        defaultFile = new File(plugin.getDataFolder(), DEFAULT_FILE);
+        FileConfiguration fileConfig = null;
 
-        File oldDefaultFile = new File(plugin.getDataFolder(), OLD_DEFAULT_FILE);
+        try {
+            fileConfig = getDefaultConfig();
+            ECLogger.getInstance().setDebug(fileConfig.getBoolean("System.Debug", false));
 
-        if (defaultFile.exists()) {
-            defaultConfig.load(defaultFile);
-        }
-        else if (oldDefaultFile.exists()) {
-            ECLogger.getInstance().info("Converting old config file.");
-            defaultConfig = getConfig(oldDefaultFile);
-            if (oldDefaultFile.delete()) {
-                ECLogger.getInstance().info("Old config file converted.");
-            }
-        }
-        else {
-            defaultConfig = getConfig(defaultFile);
-        }
+            WorldSettings defaultSettings = loadWorldSettings(fileConfig);
+            worldSettingsMap = new HashMap<String, WorldSettings>();
+            worldSettingsMap.put(DEFAULT_WORLD, defaultSettings);
 
-        ECLogger.getInstance().info("Loaded config defaults.");
-        ECLogger.getInstance().setDebug(defaultConfig.getBoolean("System.Debug", false));
+            fileConfigMap = new HashMap<String, FileConfiguration>();
 
-        WorldSettings defaultSettings = loadWorldSettings(defaultConfig);
-        worldSettingsMap = new HashMap<String, WorldSettings>();
-        worldSettingsMap.put(DEFAULT_WORLD, defaultSettings);
+            for (World world : plugin.getServer().getWorlds()) {
 
-        fileConfigMap = new HashMap<String, FileConfiguration>();
+                File worldConfigFile = new File(dataWorldsFolder, world.getName() + ".yml");
 
-        for (World world : plugin.getServer().getWorlds()) {
-
-            File worldConfigFile = new File(dataWorldsFolder, world.getName() + ".yml");
-
-            if (worldConfigFile.exists()) {
-                FileConfiguration configFile = getConfig(worldConfigFile);
-                ECLogger.getInstance().info("Loaded config for " + world.getName() + " world.");
-                worldSettingsMap.put(world.getName(), loadWorldSettings(configFile));
-                fileConfigMap.put(world.getName(), configFile);
-            }
-            else {
-                worldSettingsMap.put(world.getName(), defaultSettings);
-            }
-        }
-    }
-
-    public void save()
-    {
-        if (loaded) {
-            try {
-                defaultConfig.save(defaultFile);
-
-                for (String worldName : fileConfigMap.keySet()) {
-                    FileConfiguration config = fileConfigMap.get(worldName);
-                    File configFile = new File(dataWorldsFolder, worldName + ".yml");
-                    config.save(configFile);
+                if (worldConfigFile.exists()) {
+                    FileConfiguration configFile = getConfig(worldConfigFile);
+                    ECLogger.getInstance().info("Loaded config for " + world.getName() + " world.");
+                    worldSettingsMap.put(world.getName(), loadWorldSettings(configFile));
+                    fileConfigMap.put(world.getName(), configFile);
+                }
+                else {
+                    worldSettingsMap.put(world.getName(), defaultSettings);
                 }
             }
-            catch (IOException e) {
-                ECLogger.getInstance().severe("Failed to write config: " + e.getMessage());
-            }
+
+            return true;
         }
+        catch (IOException ioe) {
+            ECLogger.getInstance().severe("Failed to read config: " + ioe.toString());
+        }
+        catch (InvalidConfigurationException ice) {
+            ECLogger.getInstance().severe("Failed to parse config: " + ice.toString());
+        }
+
+        return false;
     }
 
     private static WorldSettings loadWorldSettings(FileConfiguration config)
@@ -342,24 +306,24 @@ public class PluginConfig
                         sources.get(customType).add(source);
                     }
                 }
+            }
 
-                if (config.getBoolean("System.Hunting.PenalizeDeath", false)) {
-                    AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(CustomType.DEATH_PENALTY.getName(), config), config);
-                    if (!sources.containsKey(CustomType.DEATH_PENALTY)) {
-                        sources.put(CustomType.DEATH_PENALTY, new ArrayList<AbstractRewardSource>());
-                    }
-
-                    sources.get(CustomType.DEATH_PENALTY).add(source);
+            if (config.getBoolean("System.Hunting.PenalizeDeath", false)) {
+                AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(CustomType.DEATH_PENALTY.getName(), config), config);
+                if (!sources.containsKey(CustomType.DEATH_PENALTY)) {
+                    sources.put(CustomType.DEATH_PENALTY, new ArrayList<AbstractRewardSource>());
                 }
 
-                if (config.getBoolean("System.Hunting.PVPReward", false)) {
-                    AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(CustomType.LEGACY_PVP.getName(), config), config);
-                    if (!sources.containsKey(CustomType.LEGACY_PVP)) {
-                        sources.put(CustomType.LEGACY_PVP, new ArrayList<AbstractRewardSource>());
-                    }
+                sources.get(CustomType.DEATH_PENALTY).add(source);
+            }
 
-                    sources.get(CustomType.LEGACY_PVP).add(source);
+            if (config.getBoolean("System.Hunting.PVPReward", false)) {
+                AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(CustomType.LEGACY_PVP.getName(), config), config);
+                if (!sources.containsKey(CustomType.LEGACY_PVP)) {
+                    sources.put(CustomType.LEGACY_PVP, new ArrayList<AbstractRewardSource>());
                 }
+
+                sources.get(CustomType.LEGACY_PVP).add(source);
             }
         }
 
@@ -411,6 +375,33 @@ public class PluginConfig
         return to;
     }
 
+    private FileConfiguration getDefaultConfig() throws IOException, InvalidConfigurationException
+    {
+        FileConfiguration fileConfig = new YamlConfiguration();
+        File defaultFile = new File(plugin.getDataFolder(), DEFAULT_FILE);
+
+        File oldDefaultFile = new File(plugin.getDataFolder(), OLD_DEFAULT_FILE);
+
+        if (defaultFile.exists()) {
+            fileConfig.load(defaultFile);
+        }
+        else if (oldDefaultFile.exists()) {
+            ECLogger.getInstance().info("Converting old config file.");
+            fileConfig = getConfig(oldDefaultFile);
+            fileConfig.save(defaultFile);
+            if (oldDefaultFile.delete()) {
+                ECLogger.getInstance().info("Old config file converted.");
+            }
+        }
+        else {
+            fileConfig = getConfig(defaultFile);
+            fileConfig.save(defaultFile);
+        }
+
+        ECLogger.getInstance().info("Loaded config defaults.");
+        return fileConfig;
+    }
+
     private FileConfiguration getConfig(File file) throws IOException, InvalidConfigurationException
     {
         FileConfiguration config = new YamlConfiguration();
@@ -430,14 +421,14 @@ public class PluginConfig
             inputStream.close();
             outputStream.close();
 
-            ECLogger.getInstance().info("Default config written to " + file.getName());
+            ECLogger.getInstance().info("Created config file: " + file.getName());
         }
         else {
-            ECLogger.getInstance().severe("Default config could not be created!");
+            ECLogger.getInstance().info("Found config file: " + file.getName());
         }
 
         config.load(file);
-        config.setDefaults(YamlConfiguration.loadConfiguration(plugin.getResource(file.getName())));
+        config.setDefaults(YamlConfiguration.loadConfiguration(plugin.getResource(DEFAULT_FILE)));
         config.options().copyDefaults(true);
 
         return config;
