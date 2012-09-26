@@ -93,10 +93,10 @@ public class EntityDrop
 
             if (config.getList("Drops") != null) {
                 List<String> dropsList = config.getStringList("Drops");
-                drops = EntityDrop.parseDrops(dropsList);
+                drops.addAll(EntityDrop.parseDrops(dropsList));
             }
             else {
-                drops = EntityDrop.parseDrops(config.getString("Drops"));
+                drops.addAll(EntityDrop.parseDrops(config.getString("Drops")));
             }
 
             // NOTE: backward compatibility
