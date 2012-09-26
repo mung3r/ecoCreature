@@ -76,7 +76,6 @@ public class RewardEventListener implements Listener
     {
         double amount = reward.getCoin() * reward.getGain();
         ECLogger.getInstance().debug("Amount to be awarded: " + amount);
-        amount /= reward.hasParty() ? reward.getParty().size() : 1;
 
         if (reward.getParty().size() > 1) {
             amount /= reward.getParty().size();
