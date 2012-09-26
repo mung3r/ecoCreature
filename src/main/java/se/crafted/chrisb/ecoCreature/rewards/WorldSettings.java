@@ -415,11 +415,9 @@ public class WorldSettings
 
     public Set<String> getParty(Player player)
     {
-        Set<String> players = Collections.emptySet();
+        Set<String> players = new HashSet<String>();
 
         for (Party party : parties) {
-            players = new HashSet<String>();
-
             if (party.isShared()) {
                 players.addAll(party.getPlayers(player));
             }
