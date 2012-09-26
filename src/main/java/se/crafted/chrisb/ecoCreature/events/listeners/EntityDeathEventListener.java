@@ -51,20 +51,23 @@ public class EntityDeathEventListener implements Listener
 
             if (damageEvent != null) {
                 if (damageEvent instanceof EntityDamageByBlockEvent && damageEvent.getCause().equals(DamageCause.CONTACT)) {
-                    event.getDrops().clear();
-                    event.setDroppedExp(0);
+                    deleteDrops(event);
                 }
                 else if (damageEvent.getCause() != null) {
                     if (damageEvent.getCause().equals(DamageCause.FALL) || damageEvent.getCause().equals(DamageCause.DROWNING) || damageEvent.getCause().equals(DamageCause.SUFFOCATION)) {
-                        event.getDrops().clear();
-                        event.setDroppedExp(0);
+                        deleteDrops(event);
                     }
                     else if (settings.isNoFarmFire() && (damageEvent.getCause().equals(DamageCause.FIRE) || damageEvent.getCause().equals(DamageCause.FIRE_TICK))) {
-                        event.getDrops().clear();
-                        event.setDroppedExp(0);
+                        deleteDrops(event);
                     }
                 }
             }
         }
+    }
+
+    private void deleteDrops(EntityDeathEvent event)
+    {
+        event.getDrops().clear();
+        event.setDroppedExp(0);
     }
 }
