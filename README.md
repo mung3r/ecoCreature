@@ -6,9 +6,10 @@ ecoCreature - Mob & PVP Rewards
 * Coin rewards, coin penalties and drops for:
     * Killing mobs
     * PVP
-    * Breaking blocks
     * Kill streaks
     * Death streaks
+    * Leveling
+    * Breaking blocks
 * Share coin rewards with:
     * [Heroes](http://dev.bukkit.org/server-mods/heroes/) party
     * [mcMMO](http://dev.bukkit.org/server-mods/mcmmo/) party
@@ -32,11 +33,14 @@ ecoCreature - Mob & PVP Rewards
     * Any Minecraft materials (list of [materials](http://jd.bukkit.org/apidocs/org/bukkit/Material.html))
     * Any Minecraft enchantment (list of [enchantments](http://jd.bukkit.org/apidocs/org/bukkit/enchantments/Enchantment.html))
     * Any Minecraft entity (list of [entities](http://jd.bukkit.org/apidocs/org/bukkit/entity/EntityType.html))
-* Integrate with [DeathTpPlus](http://dev.bukkit.org/server-mods/deathtpplus/):
+* [DeathTpPlus](http://dev.bukkit.org/server-mods/deathtpplus/) rewards:
     * Rewards for kill streaks
     * Penalties for death streaks
-* Integrate with [Heroes](http://dev.bukkit.org/server-mods/heroes/):
+* [Heroes](http://dev.bukkit.org/server-mods/heroes/) rewards:
     * Rewards for mastering a class
+    * Rewards leveling
+* [mcMMO](http://dev.bukkit.org/server-mods/mcmmo/) rewards:
+	* Rewards for leveling
 * Prevent exploits:
     * Camping around Mob Spawners
     * Mob farming
