@@ -51,9 +51,11 @@ permissions:
       ecocreature.reward.enderman: true
       ecocreature.reward.ghast: true
       ecocreature.reward.giant: true
+      ecocreature.reward.heroleveled: true
       ecocreature.reward.heromastered: true
       ecocreature.reward.killstreak: true
       ecocreature.reward.magmacube: true
+      ecocreature.reward.mcmmoleveled: true
       ecocreature.reward.monster: true
       ecocreature.reward.mushroomcow: true
       ecocreature.reward.ozelot: true
@@ -157,6 +159,9 @@ permissions:
   ecocreature.reward.giant:
     description: Enables rewards for giants
     default: op
+  ecocreature.reward.heroleveled:
+    description: Enables rewards for leveling in Heroes
+    default: op
   ecocreature.reward.heromastered:
     description: Enables rewards for mastering a class in Heroes
     default: op
@@ -165,6 +170,9 @@ permissions:
     default: op
   ecocreature.reward.magmacube:
     description: Enables rewards for magmacubes
+    default: op
+  ecocreature.reward.mcmmoleveled:
+    description: Enables rewards for leveling in mcMMO
     default: op
   ecocreature.reward.monster:
     description: Enables rewards for monsters

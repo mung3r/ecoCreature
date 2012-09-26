@@ -15,10 +15,12 @@ import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.events.handlers.BlockEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.EntityDeathEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.HeroesEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.McMMOEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.PlayerDeathEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.StreakEventHandler;
 import se.crafted.chrisb.ecoCreature.events.listeners.BlockEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.EntityDeathEventListener;
+import se.crafted.chrisb.ecoCreature.events.listeners.McMMOEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.PlayerDeathEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.HeroesEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.RewardEventListener;
@@ -33,6 +35,7 @@ public class ecoCreature extends JavaPlugin
     private PluginConfig pluginConfig;
     private CommandHandler commandHandler;
 
+    @Override
     public void onEnable()
     {
         DependencyUtils.init();
@@ -108,6 +111,9 @@ public class ecoCreature extends JavaPlugin
         }
         if (DependencyUtils.hasHeroes()) {
             Bukkit.getPluginManager().registerEvents(new HeroesEventListener(new HeroesEventHandler(this)), this);
+        }
+        if (DependencyUtils.hasMcMMO()) {
+            Bukkit.getPluginManager().registerEvents(new McMMOEventListener(new McMMOEventHandler(this)), this);
         }
     }
 }

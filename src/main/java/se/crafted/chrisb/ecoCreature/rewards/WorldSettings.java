@@ -20,6 +20,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
 import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
+import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.CustomType;
@@ -170,6 +171,9 @@ public class WorldSettings
         else if (DependencyUtils.hasDeathTpPlus() && event instanceof KillStreakEvent) {
             return hasRewardSource((KillStreakEvent) event);
         }
+        else if (DependencyUtils.hasMcMMO() && event instanceof McMMOPlayerLevelUpEvent) {
+            return hasRewardSource((McMMOPlayerLevelUpEvent) event);
+        }
 
         return false;
     }
@@ -223,10 +227,16 @@ public class WorldSettings
     {
         Player player = event.getHero().getPlayer();
 
-        if (DependencyUtils.hasPermission(player, "reward.hero_mastered")) {
+        if (DependencyUtils.hasPermission(player, "reward.heromastered")) {
             if (event.getHero().getLevel() == event.getHeroClass().getMaxLevel()) {
                 return hasRewardSource(CustomType.HERO_MASTERED);
             }
+            else if (DependencyUtils.hasPermission(player, "reward.heroleveled")) {
+                return hasRewardSource(CustomType.HERO_LEVELED);
+            }
+        }
+        else if (DependencyUtils.hasPermission(player, "reward.heroleveled")) {
+            return hasRewardSource(CustomType.HERO_LEVELED);
         }
         else {
             ECLogger.getInstance().debug("No reward for " + player.getName() + " due to lack of permission for " + CustomType.HERO_MASTERED.getName());
@@ -278,6 +288,18 @@ public class WorldSettings
         }
         else {
             ECLogger.getInstance().debug("No reward for " + event.getPlayer().getName() + " due to lack of permission for " + CustomType.KILL_STREAK.getName());
+        }
+
+        return false;
+    }
+
+    private boolean hasRewardSource(McMMOPlayerLevelUpEvent event)
+    {
+        if (DependencyUtils.hasPermission(event.getPlayer(), "reward.mcmmoleveled")) {
+            return hasRewardSource(CustomType.MCMMO_LEVELED);
+        }
+        else {
+            ECLogger.getInstance().debug("No reward for " + event.getPlayer().getName() + " due to lack of permission for " + CustomType.MCMMO_LEVELED.getName());
         }
 
         return false;

@@ -380,14 +380,14 @@ RewardTable:
   DeathStreak:
     Coin_Minimum: -1.00
     Coin_Maximum: -1.00
-    Coin_Percent: 100.00
+    Coin_Percent: 100.0
     NoReward_Message: ''
     Reward_Message: '&7You earned &6<amt>&7 for that death streak!'
     Penalty_Message: '&7That death streak cost you &6<amt>&7.'
   EnderDragon:
     Coin_Minimum: 5.00
     Coin_Maximum: 10.50
-    Coin_Percent: 100.00
+    Coin_Percent: 100.0
   Enderman:
     Drops:
     - 'ender pearl:1:75'
@@ -403,14 +403,23 @@ RewardTable:
   Giant:
     Coin_Minimum: 8.50
     Coin_Maximum: 8.50
-    Coin_Percent: 50.00
+    Coin_Percent: 50.0
   #
   # Heroes plugin is required to use this reward.
   HeroMastered:
-    Coin_Minimum: 50.0
-    Coin_Maximum: 50.0
-    Coin_Percent: 100.00
+    Drops:
+    - 'diamond:1:100'
+    Coin_Minimum: 25.0
+    Coin_Maximum: 100.0
+    Coin_Percent: 100.0
     Reward_Message: '&7You earned &6<amt>&7 mastering that class!'
+  #
+  # Heroes plugin is required to use this reward.
+  HeroLeveled:
+    Coin_Minimum: 2.5
+    Coin_Maximum: 10.0
+    Coin_Percent: 25.0
+    Reward_Message: '&7You earned &6<amt>&7 by leveling!'
   #
   # DeathTpPlus plugin is required to use this reward.
   # The reward amount is multiplied by the number of kills in the streak.
@@ -419,14 +428,21 @@ RewardTable:
     - 'diamond:1:100'
     Coin_Minimum: 2.00
     Coin_Maximum: 2.00
-    Coin_Percent: 100.00
+    Coin_Percent: 100.0
     NoReward_Message: ''
     Reward_Message: '&7You earned &6<amt>&7 for that kill streak!'
     Penalty_Message: '&7That kill streak cost you &6<amt>&7.'
   LavaSlime:
     Coin_Minimum: 0.00
     Coin_Maximum: 2.00
-    Coin_Percent: 50.00
+    Coin_Percent: 50.0
+  #
+  # mcMMO plugin is required to use this reward
+  mcMMOLeveled:
+    Coin_Minimum: 2.5
+    Coin_Maximum: 10.0
+    Coin_Percent: 25.0
+    Reward_Message: '&7You earned &6<amt>&7 by leveling!'
   Monster:
     Coin_Minimum: 0.50
     Coin_Maximum: 1.50
@@ -487,7 +503,7 @@ RewardTable:
     - 'slime ball:2:75'
     Coin_Minimum: 0.00
     Coin_Maximum: 2.00
-    Coin_Percent: 50.00
+    Coin_Percent: 50.0
   SnowMan:
     Coin_Minimum: 1.00
     Coin_Maximum: 2.00
@@ -532,8 +548,8 @@ RewardTable:
     Coin_Percent: 1.0
   Zombie:
     Sets:
-    - DefaultZombie
-    - MoneyZombie
+    - PoorZombie
+    - RichZombie
     - ZombieApocalypse
 
 ############################################################################
@@ -560,15 +576,15 @@ RewardTable:
 # RewardTable
 ############################################################################
 RewardSets:
-  DefaultZombie:
+  PoorZombie:
     Drops:
     - 'rotten flesh:2:75'
-  MoneyZombie:
+  RichZombie:
     Drops:
     - 'rotten flesh:2:75'
     Coin_Minimum: 1.00
     Coin_Maximum: 3.50
-    Coin_Percent: 100.0
+    Coin_Percent: 50.0
   ZombieApocalypse:
     Drops:
     - 'zombie:2:50'

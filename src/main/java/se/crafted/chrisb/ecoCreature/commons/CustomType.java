@@ -15,12 +15,14 @@ public enum CustomType
 {
     ANGRY_WOLF("AngryWolf"),
     DEATH_PENALTY("DeathPenalty"),
-    DEATH_STREAK("DeathStreak"), 
+    DEATH_STREAK("DeathStreak"),
+    HERO_LEVELED("HeroLeveled"),
     HERO_MASTERED("HeroMastered"),
     INVALID("__Invalid__"),
     KILL_STREAK("KillStreak"),
     LEGACY_PVP("LegacyPVP"),
     LEGACY_SPAWNER("Spawner"),
+    MCMMO_LEVELED("mcMMOLeveled"),
     PLAYER("Player"),
     POWERED_CREEPER("PoweredCreeper"),
     SET("Set");
