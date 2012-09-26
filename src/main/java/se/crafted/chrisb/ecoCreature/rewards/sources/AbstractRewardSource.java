@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
-import se.crafted.chrisb.ecoCreature.messages.NoCoinRewardMessage;
+import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.models.CoinDrop;
 import se.crafted.chrisb.ecoCreature.rewards.models.CoinReward;
@@ -56,7 +56,7 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
 
         coinRewardMessage = new DefaultMessage(config.getString("Reward_Message", COIN_REWARD_MESSAGE));
         coinPenaltyMessage = new DefaultMessage(config.getString("Penalty_Message", COIN_PENALTY_MESSAGE));
-        noCoinRewardMessage = new NoCoinRewardMessage(config.getString("NoReward_Message", NO_COIN_REWARD_MESSAGE));
+        noCoinRewardMessage = new NoCoinMessageDecorator(new DefaultMessage(config.getString("NoReward_Message", NO_COIN_REWARD_MESSAGE)));
     }
 
     public String getName()

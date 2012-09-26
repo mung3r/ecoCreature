@@ -1,13 +1,13 @@
 package se.crafted.chrisb.ecoCreature.messages;
 
-public class SpawnerCampMessage extends DefaultMessage
+public class NoCampMessageDecorator extends AbstractMessageDecorator
 {
     private boolean spawnerCampMessageEnabled;
 
-    public SpawnerCampMessage(String template)
+    public NoCampMessageDecorator(Message decoratedMessage)
     {
-        super(template);
-        spawnerCampMessageEnabled = true;
+        super(decoratedMessage);
+        spawnerCampMessageEnabled = false;
     }
 
     public boolean isSpawnerCampMessageEnabled()

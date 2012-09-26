@@ -22,8 +22,7 @@ import org.bukkit.entity.EntityType;
 import se.crafted.chrisb.ecoCreature.commons.CustomType;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.messages.Message;
-import se.crafted.chrisb.ecoCreature.messages.NoCoinRewardMessage;
-import se.crafted.chrisb.ecoCreature.messages.SpawnerCampMessage;
+import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
 import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 import se.crafted.chrisb.ecoCreature.rewards.gain.BiomeGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.EnvironmentGain;
@@ -350,12 +349,8 @@ public class PluginConfig
             message.setMessageOutputEnabled(config.getBoolean("System.Messages.Output", true));
             message.setCoinLoggingEnabled(config.getBoolean("System.Messages.LogCoinRewards", true));
 
-            if (message instanceof NoCoinRewardMessage) {
-                ((NoCoinRewardMessage) message).setNoRewardMessageEnabled(config.getBoolean("System.Messages.NoReward", false));
-            }
-
-            if (message instanceof SpawnerCampMessage) {
-                ((SpawnerCampMessage) message).setSpawnerCampMessageEnabled(config.getBoolean("System.Messages.Spawner", false));
+            if (message instanceof NoCoinMessageDecorator) {
+                ((NoCoinMessageDecorator) message).setNoRewardMessageEnabled(config.getBoolean("System.Messages.NoReward", false));
             }
         }
 
