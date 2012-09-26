@@ -69,7 +69,7 @@ public enum CustomType
         }
 
         if (rewardType == INVALID) {
-            ECLogger.getInstance().warning("Unknown creature type: " + entity.getType().getName());
+            ECLogger.getInstance().debug("Unknown custom type: " + entity.getType().getName());
         }
 
         return rewardType;
