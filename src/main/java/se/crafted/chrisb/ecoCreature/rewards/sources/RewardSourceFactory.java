@@ -45,6 +45,9 @@ public class RewardSourceFactory
                 case LEGACY_SPAWNER:
                     source = new MaterialRewardSource(config);
                     break;
+                case MCMMO_LEVELED:
+                    source = new McMMORewardSource(config);
+                    break;
                 case SET:
                     source = new SetRewardSource(config);
                     break;
