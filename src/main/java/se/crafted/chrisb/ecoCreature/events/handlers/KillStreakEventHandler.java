@@ -32,7 +32,7 @@ public class KillStreakEventHandler extends AbstractEventHandler
     {
         Set<RewardEvent> events = Collections.emptySet();
 
-        if (canCreateRewardEvents(event)) {
+        if (event instanceof KillStreakEvent) {
             events = new HashSet<RewardEvent>();
             events.addAll(getEvent((KillStreakEvent) event));
         }

@@ -35,7 +35,7 @@ public class PlayerDeathEventHandler extends AbstractEventHandler
     {
         Set<RewardEvent> events = Collections.emptySet();
 
-        if (canCreateRewardEvents(event)) {
+        if (event instanceof PlayerDeathEvent) {
             events = new HashSet<RewardEvent>();
             events.addAll(getRewardEvents((PlayerDeathEvent) event));
         }

@@ -33,7 +33,7 @@ public class EntityDeathEventHandler extends AbstractEventHandler
     {
         Set<RewardEvent> events = Collections.emptySet();
 
-        if (canCreateRewardEvents(event)) {
+        if (event instanceof EntityKilledEvent) {
             events = new HashSet<RewardEvent>();
             events.addAll(getRewardEvents((EntityKilledEvent) event));
         }

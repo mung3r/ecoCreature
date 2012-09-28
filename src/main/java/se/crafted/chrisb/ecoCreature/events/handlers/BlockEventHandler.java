@@ -33,7 +33,7 @@ public class BlockEventHandler extends AbstractEventHandler
     {
         Set<RewardEvent> events = Collections.emptySet();
 
-        if (canCreateRewardEvents(event)) {
+        if (event instanceof BlockBreakEvent) {
             events = new HashSet<RewardEvent>();
             events.addAll(getRewardEvents((BlockBreakEvent) event));
         }

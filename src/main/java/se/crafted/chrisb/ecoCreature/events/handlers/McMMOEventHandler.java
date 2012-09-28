@@ -33,7 +33,7 @@ public class McMMOEventHandler extends AbstractEventHandler
     {
         Set<RewardEvent> events = Collections.emptySet();
 
-        if (canCreateRewardEvents(event)) {
+        if (event instanceof McMMOPlayerLevelUpEvent) {
             events = new HashSet<RewardEvent>();
             events.addAll(getRewards((McMMOPlayerLevelUpEvent) event));
         }

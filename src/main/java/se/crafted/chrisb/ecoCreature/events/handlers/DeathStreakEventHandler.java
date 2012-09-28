@@ -32,7 +32,7 @@ public class DeathStreakEventHandler extends AbstractEventHandler
     {
         Set<RewardEvent> events = Collections.emptySet();
 
-        if (canCreateRewardEvents(event)) {
+        if (event instanceof DeathStreakEvent) {
             events = new HashSet<RewardEvent>();
             events.addAll(getEvent((DeathStreakEvent) event));
         }

@@ -33,7 +33,7 @@ public class HeroesEventHandler extends AbstractEventHandler
     {
         Set<RewardEvent> events = Collections.emptySet();
 
-        if (canCreateRewardEvents(event)) {
+        if (event instanceof HeroChangeLevelEvent) {
             events = new HashSet<RewardEvent>();
             events.addAll(getRewardEvents((HeroChangeLevelEvent) event));
         }

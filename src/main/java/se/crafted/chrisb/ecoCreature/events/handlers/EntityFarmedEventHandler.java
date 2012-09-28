@@ -26,7 +26,7 @@ public class EntityFarmedEventHandler extends AbstractEventHandler
     @Override
     public Set<RewardEvent> createRewardEvents(Event event)
     {
-        if (canCreateRewardEvents(event)) {
+        if (event instanceof EntityFarmedEvent) {
             handleNoFarm((EntityFarmedEvent) event);
         }
 
