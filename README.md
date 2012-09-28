@@ -38,7 +38,7 @@ ecoCreature - Mob & PVP Rewards
     * Penalties for death streaks
 * [Heroes](http://dev.bukkit.org/server-mods/heroes/) rewards:
     * Rewards for mastering a class
-    * Rewards leveling
+    * Rewards for leveling
 * [mcMMO](http://dev.bukkit.org/server-mods/mcmmo/) rewards:
 	* Rewards for leveling
 * Prevent exploits:
