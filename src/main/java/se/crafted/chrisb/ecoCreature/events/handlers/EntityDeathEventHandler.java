@@ -23,11 +23,17 @@ public class EntityDeathEventHandler extends AbstractEventHandler
     }
 
     @Override
-    public Set<RewardEvent> getRewardEvents(Event event)
+    public boolean canCreateRewardEvents(Event event)
+    {
+        return event instanceof EntityKilledEvent;
+    }
+
+    @Override
+    public Set<RewardEvent> createRewardEvents(Event event)
     {
         Set<RewardEvent> events = Collections.emptySet();
 
-        if (event instanceof EntityKilledEvent) {
+        if (canCreateRewardEvents(event)) {
             events = new HashSet<RewardEvent>();
             events.addAll(getRewardEvents((EntityKilledEvent) event));
         }
@@ -40,7 +46,7 @@ public class EntityDeathEventHandler extends AbstractEventHandler
         Set<RewardEvent> events = Collections.emptySet();
 
         Player killer = event.getKiller();
-        WorldSettings settings = plugin.getWorldSettings(killer.getWorld());
+        WorldSettings settings = getSettings(killer.getWorld());
 
         if (settings.hasRewardSource(event)) {
             Reward outcome = settings.getRewardSource(event).getOutcome(event);

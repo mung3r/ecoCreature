@@ -6,18 +6,17 @@ import java.util.Set;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
+import se.crafted.chrisb.ecoCreature.commons.CustomType;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 
-public class BlockEventHandler extends AbstractEventHandler
+public class KillStreakEventHandler extends AbstractEventHandler
 {
-    public BlockEventHandler(ecoCreature plugin)
+    public KillStreakEventHandler(ecoCreature plugin)
     {
         super(plugin);
     }
@@ -25,7 +24,7 @@ public class BlockEventHandler extends AbstractEventHandler
     @Override
     public boolean canCreateRewardEvents(Event event)
     {
-        return event instanceof BlockBreakEvent;
+        return event instanceof KillStreakEvent;
     }
 
     @Override
@@ -35,24 +34,23 @@ public class BlockEventHandler extends AbstractEventHandler
 
         if (canCreateRewardEvents(event)) {
             events = new HashSet<RewardEvent>();
-            events.addAll(getRewardEvents((BlockBreakEvent) event));
+            events.addAll(getEvent((KillStreakEvent) event));
         }
 
         return events;
     }
 
-    private Set<RewardEvent> getRewardEvents(BlockBreakEvent event)
+    private Set<RewardEvent> getEvent(KillStreakEvent event)
     {
         Set<RewardEvent> events = Collections.emptySet();
 
         Player player = event.getPlayer();
+        int kills = event.getKills();
         WorldSettings settings = getSettings(player.getWorld());
 
         if (settings.hasRewardSource(event)) {
-            Reward outcome = settings.getRewardSource(event).getOutcome(event);
-            outcome.setGain(settings.getGainMultiplier(player));
-            outcome.getMessage().addParameter(MessageToken.ITEM, EntityUtils.getItemNameInHand(player));
-            outcome.getMessage().addParameter(MessageToken.CREATURE, outcome.getName());
+            Reward outcome = settings.getRewardSource(CustomType.KILL_STREAK).getOutcome(event);
+            outcome.setGain(kills);
 
             events = new HashSet<RewardEvent>();
             events.add(new RewardEvent(player, outcome));

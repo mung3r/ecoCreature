@@ -1,26 +1,26 @@
 package se.crafted.chrisb.ecoCreature.events.listeners;
 
+import java.util.Collections;
+import java.util.Set;
+
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import se.crafted.chrisb.ecoCreature.commons.EventUtils;
+import se.crafted.chrisb.ecoCreature.events.EntityFarmedEvent;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.events.handlers.RewardEventHandler;
-import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
+import se.crafted.chrisb.ecoCreature.events.handlers.GameEventHandler;
 
 public class EntityDeathEventListener implements Listener
 {
-    private final RewardEventHandler handler;
+    private final GameEventHandler handler;
 
-    public EntityDeathEventListener(RewardEventHandler handler)
+    public EntityDeathEventListener(GameEventHandler handler)
     {
         this.handler = handler;
     }
@@ -32,42 +32,17 @@ public class EntityDeathEventListener implements Listener
             return;
         }
 
+        Set<RewardEvent> events = Collections.emptySet();
+
         if (EventUtils.getKillerFromDeathEvent(event) != null) {
-            for (RewardEvent rewardEvent : handler.getRewardEvents(EntityKilledEvent.createEvent(event))) {
-                Bukkit.getPluginManager().callEvent(rewardEvent);
-            }
+            events = handler.createRewardEvents(EntityKilledEvent.createEvent(event));
         }
-        else {
-            handleNoFarm(event);
+        else if (EventUtils.isEntityFarmed(event) || EventUtils.isEntityFireFarmed(event)) {
+            events = handler.createRewardEvents(EntityFarmedEvent.createEvent(event));
         }
-    }
 
-    private void handleNoFarm(EntityDeathEvent event)
-    {
-        WorldSettings settings = handler.getSettings(event.getEntity().getWorld());
-
-        if (settings.isNoFarm()) {
-            EntityDamageEvent damageEvent = event.getEntity().getLastDamageCause();
-
-            if (damageEvent != null) {
-                if (damageEvent instanceof EntityDamageByBlockEvent && damageEvent.getCause().equals(DamageCause.CONTACT)) {
-                    deleteDrops(event);
-                }
-                else if (damageEvent.getCause() != null) {
-                    if (damageEvent.getCause().equals(DamageCause.FALL) || damageEvent.getCause().equals(DamageCause.DROWNING) || damageEvent.getCause().equals(DamageCause.SUFFOCATION)) {
-                        deleteDrops(event);
-                    }
-                    else if (settings.isNoFarmFire() && (damageEvent.getCause().equals(DamageCause.FIRE) || damageEvent.getCause().equals(DamageCause.FIRE_TICK))) {
-                        deleteDrops(event);
-                    }
-                }
-            }
+        for (RewardEvent rewardEvent : events) {
+            Bukkit.getPluginManager().callEvent(rewardEvent);
         }
-    }
-
-    private void deleteDrops(EntityDeathEvent event)
-    {
-        event.getDrops().clear();
-        event.setDroppedExp(0);
     }
 }

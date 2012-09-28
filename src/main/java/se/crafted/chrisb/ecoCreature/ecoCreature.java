@@ -13,11 +13,15 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.UpdateTask;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.events.handlers.BlockEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.DeathStreakEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.EntityDeathEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.GameEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.EntityFarmedEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.HeroesEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.McMMOEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.PlayerDeathEventHandler;
-import se.crafted.chrisb.ecoCreature.events.handlers.StreakEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.KillStreakEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.PlayerKilledEventHandler;
 import se.crafted.chrisb.ecoCreature.events.listeners.BlockEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.EntityDeathEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.McMMOEventListener;
@@ -60,7 +64,6 @@ public class ecoCreature extends JavaPlugin
     public void onDisable()
     {
         getServer().getScheduler().cancelTasks(this);
-        ECLogger.getInstance().info(getDescription().getVersion() + " is disabled.");
     }
 
     @Override
@@ -103,17 +106,31 @@ public class ecoCreature extends JavaPlugin
         Bukkit.getPluginManager().registerEvents(new RewardEventListener(this), this);
         Bukkit.getPluginManager().registerEvents(new SpawnEventListener(this), this);
 
-        Bukkit.getPluginManager().registerEvents(new BlockEventListener(new BlockEventHandler(this)), this);
-        Bukkit.getPluginManager().registerEvents(new PlayerDeathEventListener(new PlayerDeathEventHandler(this)), this);
-        Bukkit.getPluginManager().registerEvents(new EntityDeathEventListener(new EntityDeathEventHandler(this)), this);
+        GameEventHandler eventHandler = new GameEventHandler();
+        eventHandler.add(new BlockEventHandler(this));
+        eventHandler.add(new PlayerKilledEventHandler(this));
+        eventHandler.add(new PlayerDeathEventHandler(this));
+        eventHandler.add(new EntityDeathEventHandler(this));
+        eventHandler.add(new EntityFarmedEventHandler(this));
+
+        Bukkit.getPluginManager().registerEvents(new BlockEventListener(eventHandler), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerDeathEventListener(eventHandler), this);
+        Bukkit.getPluginManager().registerEvents(new EntityDeathEventListener(eventHandler), this);
+
         if (DependencyUtils.hasDeathTpPlus()) {
-            Bukkit.getPluginManager().registerEvents(new StreakEventListener(new StreakEventHandler(this)), this);
+            eventHandler.add(new KillStreakEventHandler(this));
+            eventHandler.add(new DeathStreakEventHandler(this));
+            Bukkit.getPluginManager().registerEvents(new StreakEventListener(eventHandler), this);
         }
+
         if (DependencyUtils.hasHeroes()) {
-            Bukkit.getPluginManager().registerEvents(new HeroesEventListener(new HeroesEventHandler(this)), this);
+            eventHandler.add(new HeroesEventHandler(this));
+            Bukkit.getPluginManager().registerEvents(new HeroesEventListener(eventHandler), this);
         }
+
         if (DependencyUtils.hasMcMMO()) {
-            Bukkit.getPluginManager().registerEvents(new McMMOEventListener(new McMMOEventHandler(this)), this);
+            eventHandler.add(new McMMOEventHandler(this));
+            Bukkit.getPluginManager().registerEvents(new McMMOEventListener(eventHandler), this);
         }
     }
 }

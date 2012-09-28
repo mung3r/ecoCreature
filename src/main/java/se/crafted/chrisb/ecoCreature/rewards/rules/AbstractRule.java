@@ -28,10 +28,7 @@ public abstract class AbstractRule implements Rule
     }
 
     @Override
-    public boolean isBroken(EntityKilledEvent event)
-    {
-        return false;
-    }
+    public abstract boolean isBroken(EntityKilledEvent event);
 
     @Override
     public boolean isClearDrops()

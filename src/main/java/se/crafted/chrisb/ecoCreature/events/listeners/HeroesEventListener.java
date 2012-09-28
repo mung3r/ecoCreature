@@ -8,13 +8,13 @@ import org.bukkit.event.Listener;
 import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.events.handlers.RewardEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.GameEventHandler;
 
 public class HeroesEventListener implements Listener
 {
-    private final RewardEventHandler handler;
+    private final GameEventHandler handler;
 
-    public HeroesEventListener(RewardEventHandler handler)
+    public HeroesEventListener(GameEventHandler handler)
     {
         this.handler = handler;
     }
@@ -22,7 +22,7 @@ public class HeroesEventListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onHeroChangeLevel(HeroChangeLevelEvent event)
     {
-        for (RewardEvent rewardEvent : handler.getRewardEvents(event)) {
+        for (RewardEvent rewardEvent : handler.createRewardEvents(event)) {
             Bukkit.getPluginManager().callEvent(rewardEvent);
         }
     }

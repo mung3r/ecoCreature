@@ -23,11 +23,17 @@ public class HeroesEventHandler extends AbstractEventHandler
     }
 
     @Override
-    public Set<RewardEvent> getRewardEvents(Event event)
+    public boolean canCreateRewardEvents(Event event)
+    {
+        return event instanceof HeroChangeLevelEvent;
+    }
+
+    @Override
+    public Set<RewardEvent> createRewardEvents(Event event)
     {
         Set<RewardEvent> events = Collections.emptySet();
 
-        if (event instanceof HeroChangeLevelEvent) {
+        if (canCreateRewardEvents(event)) {
             events = new HashSet<RewardEvent>();
             events.addAll(getRewardEvents((HeroChangeLevelEvent) event));
         }
@@ -40,7 +46,7 @@ public class HeroesEventHandler extends AbstractEventHandler
         Set<RewardEvent> events = Collections.emptySet();
 
         Player player = event.getHero().getPlayer();
-        WorldSettings settings = plugin.getWorldSettings(player.getWorld());
+        WorldSettings settings = getSettings(player.getWorld());
 
         if (settings.hasRewardSource(event)) {
             Reward outcome = settings.getRewardSource(CustomType.HERO_MASTERED).getOutcome(event);

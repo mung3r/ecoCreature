@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 import se.crafted.chrisb.ecoCreature.commons.EventUtils;
 
-public class EntityKilledEvent extends EntityDeathEvent
+public final class EntityKilledEvent extends EntityDeathEvent
 {
     public static EntityKilledEvent createEvent(EntityDeathEvent event)
     {

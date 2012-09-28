@@ -6,7 +6,7 @@ import org.bukkit.entity.EntityType;
 
 import se.crafted.chrisb.ecoCreature.commons.CustomType;
 
-public class RewardSourceFactory
+public final class RewardSourceFactory
 {
     private RewardSourceFactory()
     {

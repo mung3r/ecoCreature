@@ -8,13 +8,13 @@ import org.bukkit.event.Listener;
 import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.events.handlers.RewardEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.GameEventHandler;
 
 public class McMMOEventListener implements Listener
 {
-    private final RewardEventHandler handler;
+    private final GameEventHandler handler;
 
-    public McMMOEventListener(RewardEventHandler handler)
+    public McMMOEventListener(GameEventHandler handler)
     {
         this.handler = handler;
     }
@@ -22,7 +22,7 @@ public class McMMOEventListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onMcMMOPlayerLevelUp(McMMOPlayerLevelUpEvent event)
     {
-        for (RewardEvent rewardEvent : handler.getRewardEvents(event)) {
+        for (RewardEvent rewardEvent : handler.createRewardEvents(event)) {
             Bukkit.getPluginManager().callEvent(rewardEvent);
         }
     }

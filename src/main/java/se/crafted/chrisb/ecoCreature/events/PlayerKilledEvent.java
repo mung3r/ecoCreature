@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 
-public class PlayerKilledEvent extends PlayerDeathEvent
+public final class PlayerKilledEvent extends PlayerDeathEvent
 {
     public static PlayerKilledEvent createEvent(PlayerDeathEvent event)
     {

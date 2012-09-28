@@ -17,18 +17,23 @@ import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 
 public class McMMOEventHandler extends AbstractEventHandler
 {
-
     public McMMOEventHandler(ecoCreature plugin)
     {
         super(plugin);
     }
 
     @Override
-    public Set<RewardEvent> getRewardEvents(Event event)
+    public boolean canCreateRewardEvents(Event event)
+    {
+        return event instanceof McMMOPlayerLevelUpEvent;
+    }
+
+    @Override
+    public Set<RewardEvent> createRewardEvents(Event event)
     {
         Set<RewardEvent> events = Collections.emptySet();
 
-        if (event instanceof McMMOPlayerLevelUpEvent) {
+        if (canCreateRewardEvents(event)) {
             events = new HashSet<RewardEvent>();
             events.addAll(getRewards((McMMOPlayerLevelUpEvent) event));
         }
@@ -41,7 +46,7 @@ public class McMMOEventHandler extends AbstractEventHandler
         Set<RewardEvent> events = Collections.emptySet();
 
         Player player = event.getPlayer();
-        WorldSettings settings = plugin.getWorldSettings(player.getWorld());
+        WorldSettings settings = getSettings(player.getWorld());
 
         if (settings.hasRewardSource(event)) {
             Reward outcome = settings.getRewardSource(CustomType.MCMMO_LEVELED).getOutcome(event);

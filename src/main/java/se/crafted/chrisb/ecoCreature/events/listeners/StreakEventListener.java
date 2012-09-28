@@ -8,13 +8,13 @@ import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
 import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.events.handlers.RewardEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.GameEventHandler;
 
 public class StreakEventListener implements Listener
 {
-    private final RewardEventHandler handler;
+    private final GameEventHandler handler;
 
-    public StreakEventListener(RewardEventHandler handler)
+    public StreakEventListener(GameEventHandler handler)
     {
         this.handler = handler;
     }
@@ -22,7 +22,7 @@ public class StreakEventListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onDeathStreakEvent(DeathStreakEvent event)
     {
-        for (RewardEvent rewardEvent : handler.getRewardEvents(event)) {
+        for (RewardEvent rewardEvent : handler.createRewardEvents(event)) {
             Bukkit.getPluginManager().callEvent(rewardEvent);
         }
     }
@@ -30,7 +30,7 @@ public class StreakEventListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onKillStreakEvent(KillStreakEvent event)
     {
-        for (RewardEvent rewardEvent : handler.getRewardEvents(event)) {
+        for (RewardEvent rewardEvent : handler.createRewardEvents(event)) {
             Bukkit.getPluginManager().callEvent(rewardEvent);
         }
     }

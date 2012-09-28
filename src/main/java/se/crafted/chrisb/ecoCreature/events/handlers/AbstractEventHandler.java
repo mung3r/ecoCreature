@@ -1,6 +1,5 @@
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
-import java.util.Collections;
 import java.util.Set;
 
 import org.bukkit.World;
@@ -10,9 +9,9 @@ import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 
-public abstract class AbstractEventHandler implements RewardEventHandler
+public abstract class AbstractEventHandler implements RewardEventCreator
 {
-    protected ecoCreature plugin;
+    private ecoCreature plugin;
 
     public AbstractEventHandler(ecoCreature plugin)
     {
@@ -20,10 +19,10 @@ public abstract class AbstractEventHandler implements RewardEventHandler
     }
 
     @Override
-    public Set<RewardEvent> getRewardEvents(Event event)
-    {
-        return Collections.emptySet();
-    }
+    public abstract boolean canCreateRewardEvents(Event event);
+
+    @Override
+    public abstract Set<RewardEvent> createRewardEvents(Event event);
 
     @Override
     public WorldSettings getSettings(World world)

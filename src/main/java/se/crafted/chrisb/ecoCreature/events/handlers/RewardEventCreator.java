@@ -8,9 +8,11 @@ import org.bukkit.event.Event;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 
-public interface RewardEventHandler
+public interface RewardEventCreator
 {
-    Set<RewardEvent> getRewardEvents(Event event);
+    boolean canCreateRewardEvents(Event event);
+
+    Set<RewardEvent> createRewardEvents(Event event);
 
     WorldSettings getSettings(World world);
 }
