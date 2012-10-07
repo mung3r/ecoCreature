@@ -36,6 +36,7 @@ public final class RewardSourceFactory
                 case KILL_STREAK:
                     source = new StreakRewardSource(config);
                     break;
+                case HERO_LEVELED:
                 case HERO_MASTERED:
                     source = new HeroesRewardSource(config);
                     break;
