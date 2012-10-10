@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
@@ -15,6 +16,7 @@ import se.crafted.chrisb.ecoCreature.messages.Message;
 public class Reward
 {
     private Location location;
+    private String worldName;
     private double gain;
     private Set<String> party;
     private boolean integerCurrency;
@@ -28,6 +30,7 @@ public class Reward
     public Reward(Location location)
     {
         this.location = location;
+        worldName = location.getWorld().getName();
         gain = 1.0;
         party = Collections.emptySet();
         integerCurrency = false;
@@ -41,7 +44,7 @@ public class Reward
 
     public World getWorld()
     {
-        return location != null ? location.getWorld() : null;
+        return Bukkit.getWorld(worldName);
     }
 
     public Location getLocation()
