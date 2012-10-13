@@ -1,5 +1,7 @@
 package se.crafted.chrisb.ecoCreature.commands;
 
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 
 public interface Command {
@@ -10,7 +12,7 @@ public interface Command {
 
     public String getDescription();
 
-    public String[] getIdentifiers();
+    public List<String> getIdentifiers();
 
     public int getMaxArguments();
 
@@ -18,7 +20,7 @@ public interface Command {
 
     public String getName();
 
-    public String[] getNotes();
+    public List<String> getNotes();
 
     public String getPermission();
 

@@ -1,20 +1,31 @@
 package se.crafted.chrisb.ecoCreature.commands;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 
 public abstract class BasicCommand implements Command {
 
     private String name;
-    private String description = "";
-    private String usage = "";
-    private String permission = "";
-    private String[] notes = new String[0];
-    private String[] identifiers = new String[0];
-    private int minArguments = 0;
-    private int maxArguments = 0;
+    private String description;
+    private String usage;
+    private String permission;
+    private List<String> notes;
+    private List<String> identifiers;
+    private int minArguments;
+    private int maxArguments;
 
     public BasicCommand(String name) {
         this.name = name;
+        description = "";
+        usage = "";
+        permission = "";
+        notes = new ArrayList<String>();
+        identifiers = new ArrayList<String>();
+        minArguments = 0;
+        maxArguments = 0;
     }
 
     @Override
@@ -26,7 +37,7 @@ public abstract class BasicCommand implements Command {
     }
 
     @Override
-    public String[] getIdentifiers() {
+    public List<String> getIdentifiers() {
         return identifiers;
     }
 
@@ -46,7 +57,7 @@ public abstract class BasicCommand implements Command {
     }
 
     @Override
-    public String[] getNotes() {
+    public List<String> getNotes() {
         return notes;
     }
 
@@ -95,11 +106,11 @@ public abstract class BasicCommand implements Command {
     }
 
     public void setIdentifiers(String... identifiers) {
-        this.identifiers = identifiers;
+        this.identifiers.addAll(Arrays.asList(identifiers));
     }
 
     public void setNotes(String... notes) {
-        this.notes = notes;
+        this.notes.addAll(Arrays.asList(notes));
     }
 
     public void setPermission(String permission) {
