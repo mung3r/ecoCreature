@@ -18,6 +18,7 @@ permissions:
     description: Allows all commands
     children:
       ecocreature.command.reload: true
+      ecocreature.command.debug: true
   ecocreature.gain.*:
     description: Allows all gain multipliers
     children:
@@ -77,6 +78,9 @@ permissions:
       ecocreature.reward.zombie: true
   ecocreature.command.reload:
     description: Enables use of reload command
+    default: op
+  ecocreature.command.debug:
+    description: Enables use of debug command
     default: op
   ecocreature.gain.group:
     description: Enables gain multiplier based on group

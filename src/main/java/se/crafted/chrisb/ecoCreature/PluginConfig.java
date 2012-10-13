@@ -90,7 +90,7 @@ public class PluginConfig
 
         try {
             fileConfig = getDefaultConfig();
-            ECLogger.getInstance().setDebug(fileConfig.getBoolean("System.Debug", false));
+            ECLogger.getInstance().setDebug(fileConfig.getBoolean("System.Debug", ECLogger.getInstance().isDebug()));
 
             WorldSettings defaultSettings = loadWorldSettings(fileConfig);
             worldSettingsMap = new HashMap<String, WorldSettings>();

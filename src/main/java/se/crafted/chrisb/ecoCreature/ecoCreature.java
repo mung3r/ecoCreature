@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import se.crafted.chrisb.ecoCreature.commands.CommandHandler;
+import se.crafted.chrisb.ecoCreature.commands.DebugCommand;
 import se.crafted.chrisb.ecoCreature.commands.HelpCommand;
 import se.crafted.chrisb.ecoCreature.commands.ReloadCommand;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
@@ -97,6 +98,7 @@ public class ecoCreature extends JavaPlugin
         commandHandler = new CommandHandler();
         commandHandler.addCommand(new HelpCommand(this));
         commandHandler.addCommand(new ReloadCommand(this));
+        commandHandler.addCommand(new DebugCommand());
     }
 
     private void registerEvents()
