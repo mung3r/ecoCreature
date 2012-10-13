@@ -5,28 +5,24 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.LivingEntity;
 
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.NoCampMessageDecorator;
+import se.crafted.chrisb.ecoCreature.settings.SpawnerMobTracking;
 
-public class SpawnerMobRule extends AbstractRule implements SpawnerMobTracking
+public class SpawnerMobRule extends AbstractRule
 {
     private static final String NO_CAMP_MESSAGE = "&7You find no rewards camping monster spawners.";
 
     private boolean canCampSpawner;
     private boolean campByEntity;
 
-    private Set<Integer> spawnerMobs;
-
     public SpawnerMobRule()
     {
         canCampSpawner = false;
         campByEntity = false;
-
-        spawnerMobs = new HashSet<Integer>();
     }
 
     public void setCanCampSpawner(boolean canCampSpawner)
@@ -40,33 +36,19 @@ public class SpawnerMobRule extends AbstractRule implements SpawnerMobTracking
     }
 
     @Override
-    public boolean isSpawnerMob(LivingEntity entity)
-    {
-        return spawnerMobs.remove(Integer.valueOf(entity.getEntityId()));
-    }
-
-    @Override
-    public void addSpawnerMob(LivingEntity entity)
-    {
-        // Only add to the array if we're tracking by entity. Avoids a memory leak.
-        if (!canCampSpawner && campByEntity) {
-            spawnerMobs.add(Integer.valueOf(entity.getEntityId()));
-        }
-    }
-
-    @Override
     public boolean isBroken(EntityKilledEvent event)
     {
         boolean ruleBroken = false;
 
         if (!canCampSpawner && campByEntity) {
-            if (isSpawnerMob(event.getEntity())) {
+            SpawnerMobTracking tracking = event.getSpawnerMobTracking();
+            if (tracking != null && tracking.isSpawnerMob(event.getEntity())) {
                 ruleBroken = true;
             }
         }
 
         if (ruleBroken) {
-            ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " spawner camping.");
+            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " spawner camping.");
         }
 
         return ruleBroken;

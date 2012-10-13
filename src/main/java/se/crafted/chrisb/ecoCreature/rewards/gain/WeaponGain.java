@@ -14,7 +14,7 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 
-public class WeaponGain extends AbstractGain
+public class WeaponGain extends AbstractPlayerGain
 {
     private Map<Material, Double> multipliers;
 
@@ -31,15 +31,15 @@ public class WeaponGain extends AbstractGain
 
         if (DependencyUtils.hasPermission(player, "gain.weapon") && multipliers.containsKey(material)) {
             multiplier = multipliers.get(material);
-            ECLogger.getInstance().debug("Weapon multiplier: " + multiplier);
+            ECLogger.getInstance().debug(this.getClass(), "Weapon multiplier: " + multiplier);
         }
 
         return multiplier;
     }
 
-    public static Set<Gain> parseConfig(ConfigurationSection config)
+    public static Set<PlayerGain> parseConfig(ConfigurationSection config)
     {
-        Set<Gain> gain = Collections.emptySet();
+        Set<PlayerGain> gain = Collections.emptySet();
 
         if (config != null) {
             Map<Material, Double> multipliers = new HashMap<Material, Double>();
@@ -47,7 +47,7 @@ public class WeaponGain extends AbstractGain
             for (String material : config.getKeys(false)) {
                 multipliers.put(Material.matchMaterial(material), Double.valueOf(config.getConfigurationSection(material).getDouble("Amount", 1.0)));
             }
-            gain = new HashSet<Gain>();
+            gain = new HashSet<PlayerGain>();
             gain.add(new WeaponGain(multipliers));
         }
 

@@ -11,23 +11,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.EntityType;
 
-import se.crafted.chrisb.ecoCreature.commons.CustomType;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
-import se.crafted.chrisb.ecoCreature.messages.Message;
-import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
-import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 import se.crafted.chrisb.ecoCreature.rewards.gain.BiomeGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.EnvironmentGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.FactionsGain;
-import se.crafted.chrisb.ecoCreature.rewards.gain.Gain;
+import se.crafted.chrisb.ecoCreature.rewards.gain.PlayerGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.GroupGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.HeroesGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.McMMOGain;
@@ -43,17 +37,16 @@ import se.crafted.chrisb.ecoCreature.rewards.parties.HeroesParty;
 import se.crafted.chrisb.ecoCreature.rewards.parties.McMMOParty;
 import se.crafted.chrisb.ecoCreature.rewards.parties.MobArenaParty;
 import se.crafted.chrisb.ecoCreature.rewards.parties.Party;
-import se.crafted.chrisb.ecoCreature.rewards.rules.CreativeModeRule;
-import se.crafted.chrisb.ecoCreature.rewards.rules.MobArenaRule;
-import se.crafted.chrisb.ecoCreature.rewards.rules.MurderedPetRule;
-import se.crafted.chrisb.ecoCreature.rewards.rules.ProjectileRule;
-import se.crafted.chrisb.ecoCreature.rewards.rules.Rule;
-import se.crafted.chrisb.ecoCreature.rewards.rules.SpawnerDistanceRule;
-import se.crafted.chrisb.ecoCreature.rewards.rules.SpawnerMobRule;
-import se.crafted.chrisb.ecoCreature.rewards.rules.TamedCreatureRule;
-import se.crafted.chrisb.ecoCreature.rewards.rules.UnderSeaLevelRule;
-import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
-import se.crafted.chrisb.ecoCreature.rewards.sources.RewardSourceFactory;
+import se.crafted.chrisb.ecoCreature.settings.AbstractRewardSettings;
+import se.crafted.chrisb.ecoCreature.settings.CustomEntityRewardSettings;
+import se.crafted.chrisb.ecoCreature.settings.CustomMaterialRewardSettings;
+import se.crafted.chrisb.ecoCreature.settings.CustomRewardSettings;
+import se.crafted.chrisb.ecoCreature.settings.DeathTpPlusRewardSettings;
+import se.crafted.chrisb.ecoCreature.settings.EntityRewardSettings;
+import se.crafted.chrisb.ecoCreature.settings.HeroesRewardSettings;
+import se.crafted.chrisb.ecoCreature.settings.MaterialRewardSettings;
+import se.crafted.chrisb.ecoCreature.settings.McMMORewardSettings;
+import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
 public class PluginConfig
 {
@@ -143,17 +136,17 @@ public class PluginConfig
 
         settings.setGainMultipliers(loadGainMultipliers(config));
         settings.setParties(loadParties(config));
-        settings.setHuntingRules(loadHuntingRules(config));
-        settings.setMaterialSources(loadMaterialSources(config));
-        settings.setEntitySources(loadEntitySources(config));
-        settings.setCustomSources(loadCustomSources(config));
+        settings.setSettings(loadRewardSettings(config));
+
+        settings.setCanCampSpawner(config.getBoolean("System.Hunting.AllowCamping", false));
+        settings.setCampByEntity(config.getBoolean("System.Hunting.CampingByEntity", false));
 
         return settings;
     }
 
-    private static Set<Gain> loadGainMultipliers(ConfigurationSection config)
+    private static Set<PlayerGain> loadGainMultipliers(ConfigurationSection config)
     {
-        Set<Gain> gainMultipliers = new HashSet<Gain>();
+        Set<PlayerGain> gainMultipliers = new HashSet<PlayerGain>();
 
         gainMultipliers.addAll(GroupGain.parseConfig(config.getConfigurationSection("Gain.Groups")));
         gainMultipliers.addAll(TimeGain.parseConfig(config.getConfigurationSection("Gain.Time")));
@@ -184,190 +177,20 @@ public class PluginConfig
         return parties;
     }
 
-    private static Set<Rule> loadHuntingRules(ConfigurationSection config)
+    private static List<AbstractRewardSettings> loadRewardSettings(ConfigurationSection config)
     {
-        Set<Rule> rules = new HashSet<Rule>();
+        List<AbstractRewardSettings> rewardSettings = new ArrayList<AbstractRewardSettings>();
 
-        rules.addAll(CreativeModeRule.parseConfig(config));
-        rules.addAll(MobArenaRule.parseConfig(config));
-        rules.addAll(MurderedPetRule.parseConfig(config));
-        rules.addAll(ProjectileRule.parseConfig(config));
-        rules.addAll(SpawnerDistanceRule.parseConfig(config));
-        rules.addAll(SpawnerMobRule.parseConfig(config));
-        rules.addAll(TamedCreatureRule.parseConfig(config));
-        rules.addAll(UnderSeaLevelRule.parseConfig(config));
+        rewardSettings.add(CustomMaterialRewardSettings.parseConfig(config));
+        rewardSettings.add(MaterialRewardSettings.parseConfig(config));
+        rewardSettings.add(CustomEntityRewardSettings.parseConfig(config));
+        rewardSettings.add(EntityRewardSettings.parseConfig(config));
+        rewardSettings.add(CustomRewardSettings.parseConfig(config));
+        rewardSettings.add(DeathTpPlusRewardSettings.parseConfig(config));
+        rewardSettings.add(HeroesRewardSettings.parseConfig(config));
+        rewardSettings.add(McMMORewardSettings.parseConfig(config));
 
-        return rules;
-    }
-
-    private static Map<Material, List<AbstractRewardSource>> loadMaterialSources(FileConfiguration config)
-    {
-        Map<Material, List<AbstractRewardSource>> sources = new HashMap<Material, List<AbstractRewardSource>>();
-        ConfigurationSection tableConfig = config.getConfigurationSection("RewardTable");
-        ConfigurationSection setConfig = config.getConfigurationSection("RewardSets");
-
-        if (tableConfig != null) {
-            for (String materialName : tableConfig.getKeys(false)) {
-                Material material = Material.matchMaterial(materialName);
-
-                // NOTE: backward compatibility
-                if (material == null && CustomType.LEGACY_SPAWNER.equals(CustomType.fromName(materialName))) {
-                    material = Material.MOB_SPAWNER;
-                }
-
-                if (material != null) {
-                    AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(materialName, tableConfig.getConfigurationSection(materialName)), config);
-
-                    if (!sources.containsKey(material)) {
-                        sources.put(material, new ArrayList<AbstractRewardSource>());
-                    }
-
-                    List<String> setList = tableConfig.getConfigurationSection(materialName).getStringList("Sets");
-                    if (!setList.isEmpty()) {
-                        for (String setName : setList) {
-                            if (setConfig != null && setConfig.getConfigurationSection(setName) != null) {
-                                AbstractRewardSource setSource = RewardSourceFactory.createSource(CustomType.SET.getName(), setConfig.getConfigurationSection(setName));
-                                sources.get(material).add(mergeRewardSource(source, setSource));
-                            }
-                        }
-                    }
-                    else {
-                        sources.get(material).add(source);
-                    }
-                }
-            }
-        }
-
-        return sources;
-    }
-
-    private static Map<EntityType, List<AbstractRewardSource>> loadEntitySources(FileConfiguration config)
-    {
-        Map<EntityType, List<AbstractRewardSource>> sources = new HashMap<EntityType, List<AbstractRewardSource>>();
-        ConfigurationSection tableConfig = config.getConfigurationSection("RewardTable");
-        ConfigurationSection setConfig = config.getConfigurationSection("RewardSets");
-
-        if (tableConfig != null) {
-            for (String entityName : tableConfig.getKeys(false)) {
-                EntityType entityType = EntityType.fromName(entityName);
-                if (entityType != null) {
-                    AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(entityName, tableConfig.getConfigurationSection(entityName)), config);
-
-                    if (!sources.containsKey(entityType)) {
-                        sources.put(entityType, new ArrayList<AbstractRewardSource>());
-                    }
-
-                    List<String> setList = tableConfig.getConfigurationSection(entityName).getStringList("Sets");
-                    if (!setList.isEmpty()) {
-                        for (String setName : setList) {
-                            if (setConfig != null && setConfig.getConfigurationSection(setName) != null) {
-                                AbstractRewardSource setSource = RewardSourceFactory.createSource(CustomType.SET.getName(), setConfig.getConfigurationSection(setName));
-                                sources.get(entityType).add(mergeRewardSource(source, setSource));
-                            }
-                        }
-                    }
-                    else {
-                        sources.get(entityType).add(source);
-                    }
-                }
-            }
-        }
-
-        return sources;
-    }
-
-    private static Map<CustomType, List<AbstractRewardSource>> loadCustomSources(FileConfiguration config)
-    {
-        Map<CustomType, List<AbstractRewardSource>> sources = new HashMap<CustomType, List<AbstractRewardSource>>();
-        ConfigurationSection tableConfig = config.getConfigurationSection("RewardTable");
-        ConfigurationSection setConfig = config.getConfigurationSection("RewardSets");
-
-        if (tableConfig != null) {
-            for (String customName : tableConfig.getKeys(false)) {
-                CustomType customType = CustomType.fromName(customName);
-                if (customType != CustomType.INVALID) {
-                    AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(customName, tableConfig.getConfigurationSection(customName)), config);
-
-                    if (!sources.containsKey(customType)) {
-                        sources.put(customType, new ArrayList<AbstractRewardSource>());
-                    }
-
-                    List<String> setList = tableConfig.getConfigurationSection(customName).getStringList("Sets");
-                    if (!setList.isEmpty()) {
-                        for (String setName : setList) {
-                            if (setConfig != null && setConfig.getConfigurationSection(setName) != null) {
-                                AbstractRewardSource setSource = RewardSourceFactory.createSource(CustomType.SET.getName(), setConfig.getConfigurationSection(setName));
-                                sources.get(customType).add(mergeRewardSource(source, setSource));
-                            }
-                        }
-                    }
-                    else {
-                        sources.get(customType).add(source);
-                    }
-                }
-            }
-
-            if (config.getBoolean("System.Hunting.PenalizeDeath", false)) {
-                AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(CustomType.DEATH_PENALTY.getName(), config), config);
-                if (!sources.containsKey(CustomType.DEATH_PENALTY)) {
-                    sources.put(CustomType.DEATH_PENALTY, new ArrayList<AbstractRewardSource>());
-                }
-
-                sources.get(CustomType.DEATH_PENALTY).add(source);
-            }
-
-            if (config.getBoolean("System.Hunting.PVPReward", false)) {
-                AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(CustomType.LEGACY_PVP.getName(), config), config);
-                if (!sources.containsKey(CustomType.LEGACY_PVP)) {
-                    sources.put(CustomType.LEGACY_PVP, new ArrayList<AbstractRewardSource>());
-                }
-
-                sources.get(CustomType.LEGACY_PVP).add(source);
-            }
-        }
-
-        return sources;
-    }
-
-    private static AbstractRewardSource configureRewardSource(AbstractRewardSource source, ConfigurationSection config)
-    {
-        if (source != null && config != null) {
-            source.setIntegerCurrency(config.getBoolean("System.Economy.IntegerCurrency", false));
-            source.setFixedDrops(config.getBoolean("System.Hunting.FixedDrops", false));
-
-            source.setCoinRewardMessage(configureMessage(source.getCoinRewardMessage(), config));
-            source.setCoinPenaltyMessage(configureMessage(source.getCoinPenaltyMessage(), config));
-            source.setNoCoinRewardMessage(configureMessage(source.getNoCoinRewardMessage(), config));
-        }
-
-        return source;
-    }
-
-    private static Message configureMessage(Message message, ConfigurationSection config)
-    {
-        if (message != null && config != null) {
-            message.setMessageOutputEnabled(config.getBoolean("System.Messages.Output", true));
-            message.setCoinLoggingEnabled(config.getBoolean("System.Messages.LogCoinRewards", true));
-
-            if (message instanceof NoCoinMessageDecorator) {
-                ((NoCoinMessageDecorator) message).setNoRewardMessageEnabled(config.getBoolean("System.Messages.NoReward", false));
-            }
-        }
-
-        return message;
-    }
-
-    private static AbstractRewardSource mergeRewardSource(AbstractRewardSource from, AbstractRewardSource to)
-    {
-        to.setItemDrops(from.hasItemDrops() ? from.getItemDrops() : to.getItemDrops());
-        to.setEntityDrops(from.hasEntityDrops() ? from.getEntityDrops() : to.getEntityDrops());
-        to.setCoin(from.hasCoin() ? from.getCoin() : to.getCoin());
-
-        to.setNoCoinRewardMessage(from.getNoCoinRewardMessage() != null ? from.getNoCoinRewardMessage() : to.getNoCoinRewardMessage());
-        to.setCoinRewardMessage(from.getCoinRewardMessage() != null ? from.getCoinRewardMessage() : to.getCoinRewardMessage());
-        to.setCoinPenaltyMessage(from.getCoinPenaltyMessage() != null ? from.getCoinPenaltyMessage() : to.getCoinPenaltyMessage());
-
-        return to;
+        return rewardSettings;
     }
 
     private FileConfiguration getDefaultConfig() throws IOException, InvalidConfigurationException

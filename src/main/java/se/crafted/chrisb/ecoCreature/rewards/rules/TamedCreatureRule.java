@@ -29,7 +29,7 @@ public class TamedCreatureRule extends AbstractRule
         boolean ruleBroken = !wolverineMode && event.isTamedCreatureKill();
 
         if (ruleBroken) {
-            ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " using tamed creatures.");
+            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " using tamed creatures.");
         }
 
         return ruleBroken;

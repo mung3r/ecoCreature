@@ -7,13 +7,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.events.handlers.GameEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.PluginEventHandler;
 
 public class BlockEventListener implements Listener
 {
-    private final GameEventHandler handler;
+    private final PluginEventHandler handler;
 
-    public BlockEventListener(GameEventHandler handler)
+    public BlockEventListener(PluginEventHandler handler)
     {
         this.handler = handler;
     }

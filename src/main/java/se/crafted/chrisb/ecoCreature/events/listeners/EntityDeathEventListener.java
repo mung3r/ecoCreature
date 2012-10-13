@@ -14,13 +14,13 @@ import se.crafted.chrisb.ecoCreature.commons.EventUtils;
 import se.crafted.chrisb.ecoCreature.events.EntityFarmedEvent;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.events.handlers.GameEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.PluginEventHandler;
 
 public class EntityDeathEventListener implements Listener
 {
-    private final GameEventHandler handler;
+    private final PluginEventHandler handler;
 
-    public EntityDeathEventListener(GameEventHandler handler)
+    public EntityDeathEventListener(PluginEventHandler handler)
     {
         this.handler = handler;
     }
@@ -34,7 +34,7 @@ public class EntityDeathEventListener implements Listener
 
         Set<RewardEvent> events = Collections.emptySet();
 
-        if (EventUtils.getKillerFromDeathEvent(event) != null) {
+        if (EventUtils.isEntityKilledEvent(event)) {
             events = handler.createRewardEvents(EntityKilledEvent.createEvent(event));
         }
         else if (EventUtils.isEntityFarmed(event) || EventUtils.isEntityFireFarmed(event)) {

@@ -8,13 +8,13 @@ import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
 import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.events.handlers.GameEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.PluginEventHandler;
 
 public class StreakEventListener implements Listener
 {
-    private final GameEventHandler handler;
+    private final PluginEventHandler handler;
 
-    public StreakEventListener(GameEventHandler handler)
+    public StreakEventListener(PluginEventHandler handler)
     {
         this.handler = handler;
     }

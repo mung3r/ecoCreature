@@ -12,13 +12,13 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import se.crafted.chrisb.ecoCreature.commons.EventUtils;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.events.handlers.GameEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.PluginEventHandler;
 
 public class PlayerDeathEventListener implements Listener
 {
-    private final GameEventHandler handler;
+    private final PluginEventHandler handler;
 
-    public PlayerDeathEventListener(GameEventHandler handler)
+    public PlayerDeathEventListener(PluginEventHandler handler)
     {
         this.handler = handler;
     }

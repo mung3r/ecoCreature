@@ -18,7 +18,7 @@ public class MurderedPetRule extends AbstractRule
         boolean ruleBroken = EntityUtils.isOwner(event.getKiller(), event.getEntity());
 
         if (ruleBroken) {
-            ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " murdering pets.");
+            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " murdering pets.");
         }
 
         return ruleBroken;

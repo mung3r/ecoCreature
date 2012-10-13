@@ -202,7 +202,7 @@ public final class DependencyUtils
             }
         }
         catch (ClassNotFoundException e) {
-            ECLogger.getInstance().warning("Did not find plugin: " + pluginName);
+            ECLogger.getInstance().info("Did not find plugin: " + pluginName);
         }
         return null;
     }

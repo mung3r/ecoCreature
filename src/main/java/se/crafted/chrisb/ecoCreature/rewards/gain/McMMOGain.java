@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-public class McMMOGain extends AbstractGain
+public class McMMOGain extends AbstractPlayerGain
 {
     private double multiplier;
 
@@ -23,19 +23,19 @@ public class McMMOGain extends AbstractGain
     public double getMultiplier(Player player)
     {
         if (DependencyUtils.hasPermission(player, "gain.mcmmo") && DependencyUtils.hasMcMMO()) {
-            ECLogger.getInstance().debug("mcMMO multiplier applied");
+            ECLogger.getInstance().debug(this.getClass(), "mcMMO multiplier applied");
             return multiplier;
         }
 
-        return super.getMultiplier(player);
+        return NO_GAIN;
     }
 
-    public static Set<Gain> parseConfig(ConfigurationSection config)
+    public static Set<PlayerGain> parseConfig(ConfigurationSection config)
     {
-        Set<Gain> gain = Collections.emptySet();
+        Set<PlayerGain> gain = Collections.emptySet();
 
         if (config != null) {
-            gain = new HashSet<Gain>();
+            gain = new HashSet<PlayerGain>();
             gain.add(new McMMOGain(config.getDouble("Amount", 1.0D)));
         }
 

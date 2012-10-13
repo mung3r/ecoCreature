@@ -33,7 +33,7 @@ public class UnderSeaLevelRule extends AbstractRule
         boolean ruleBroken = !huntUnderSeaLevel && EntityUtils.isUnderSeaLevel(event.getKiller());
 
         if (ruleBroken) {
-            ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " killing under sea level.");
+            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " killing under sea level.");
         }
 
         return ruleBroken;

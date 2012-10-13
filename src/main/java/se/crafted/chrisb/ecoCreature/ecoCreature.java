@@ -1,7 +1,6 @@
 package se.crafted.chrisb.ecoCreature;
 
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,7 +14,7 @@ import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.events.handlers.BlockEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.DeathStreakEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.EntityDeathEventHandler;
-import se.crafted.chrisb.ecoCreature.events.handlers.GameEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.PluginEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.EntityFarmedEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.HeroesEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.McMMOEventHandler;
@@ -31,7 +30,6 @@ import se.crafted.chrisb.ecoCreature.events.listeners.RewardEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.SpawnEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.StreakEventListener;
 import se.crafted.chrisb.ecoCreature.metrics.RewardMetrics;
-import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
 
 public class ecoCreature extends JavaPlugin
 {
@@ -84,9 +82,9 @@ public class ecoCreature extends JavaPlugin
         return metrics;
     }
 
-    public WorldSettings getWorldSettings(World world)
+    public PluginConfig getPluginConfig()
     {
-        return pluginConfig.getWorldSettings(world);
+        return pluginConfig;
     }
 
     public CommandHandler getCommandHandler()
@@ -106,7 +104,7 @@ public class ecoCreature extends JavaPlugin
         Bukkit.getPluginManager().registerEvents(new RewardEventListener(this), this);
         Bukkit.getPluginManager().registerEvents(new SpawnEventListener(this), this);
 
-        GameEventHandler eventHandler = new GameEventHandler();
+        PluginEventHandler eventHandler = new PluginEventHandler();
         eventHandler.add(new BlockEventHandler(this));
         eventHandler.add(new PlayerKilledEventHandler(this));
         eventHandler.add(new PlayerDeathEventHandler(this));

@@ -10,10 +10,9 @@ import org.bukkit.event.Event;
 import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.commons.CustomType;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
-import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
+import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
 public class HeroesEventHandler extends AbstractEventHandler
 {
@@ -48,11 +47,11 @@ public class HeroesEventHandler extends AbstractEventHandler
         Player player = event.getHero().getPlayer();
         WorldSettings settings = getSettings(player.getWorld());
 
-        if (settings.hasRewardSource(event)) {
-            Reward outcome = settings.getRewardSource(CustomType.HERO_MASTERED).getOutcome(event);
+        if (settings.hasReward(event)) {
+            Reward reward = settings.getReward(event);
 
             events = new HashSet<RewardEvent>();
-            events.add(new RewardEvent(player, outcome));
+            events.add(new RewardEvent(player, reward));
         }
 
         return events;

@@ -53,7 +53,7 @@ public class SpawnerDistanceRule extends AbstractRule
         }
 
         if (ruleBroken) {
-            ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " spawner camping.");
+            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " spawner camping.");
         }
 
         return ruleBroken;

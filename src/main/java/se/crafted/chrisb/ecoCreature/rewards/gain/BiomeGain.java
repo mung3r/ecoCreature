@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-public class BiomeGain extends AbstractGain
+public class BiomeGain extends AbstractPlayerGain
 {
     private Map<Biome, Double> multipliers;
 
@@ -29,7 +29,7 @@ public class BiomeGain extends AbstractGain
 
         if (DependencyUtils.hasPermission(player, "gain.biome") && multipliers.containsKey(getBiome(player))) {
             multiplier = multipliers.get(getBiome(player));
-            ECLogger.getInstance().debug("Biome multiplier: " + multiplier);
+            ECLogger.getInstance().debug(this.getClass(), "Biome multiplier: " + multiplier);
         }
 
         return multiplier;
@@ -40,9 +40,9 @@ public class BiomeGain extends AbstractGain
         return player.getWorld().getBiome(player.getLocation().getBlockX(), player.getLocation().getBlockY());
     }
 
-    public static Set<Gain> parseConfig(ConfigurationSection config)
+    public static Set<PlayerGain> parseConfig(ConfigurationSection config)
     {
-        Set<Gain> gain = Collections.emptySet();
+        Set<PlayerGain> gain = Collections.emptySet();
 
         if (config != null) {
             Map<Biome, Double> multipliers = new HashMap<Biome, Double>();
@@ -54,7 +54,7 @@ public class BiomeGain extends AbstractGain
                     ECLogger.getInstance().warning("Skipping unknown biome name: " + biome);
                 }
             }
-            gain = new HashSet<Gain>();
+            gain = new HashSet<PlayerGain>();
             gain.add(new BiomeGain(multipliers));
         }
 

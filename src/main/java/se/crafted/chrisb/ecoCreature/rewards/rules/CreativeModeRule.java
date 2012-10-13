@@ -30,7 +30,7 @@ public class CreativeModeRule extends AbstractRule
         boolean ruleBroken = !creativeModeRewards && event.getKiller().getGameMode() == GameMode.CREATIVE;
 
         if (ruleBroken) {
-            ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " in creative mode.");
+            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " in creative mode.");
         }
 
         return ruleBroken;

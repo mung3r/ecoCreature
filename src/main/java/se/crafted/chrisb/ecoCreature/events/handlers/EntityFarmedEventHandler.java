@@ -8,7 +8,7 @@ import org.bukkit.event.Event;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.EntityFarmedEvent;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
+import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
 public class EntityFarmedEventHandler extends AbstractEventHandler
 {

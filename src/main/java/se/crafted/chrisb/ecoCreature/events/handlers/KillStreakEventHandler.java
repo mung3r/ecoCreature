@@ -9,10 +9,9 @@ import org.bukkit.event.Event;
 import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.commons.CustomType;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
-import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
+import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
 public class KillStreakEventHandler extends AbstractEventHandler
 {
@@ -34,13 +33,13 @@ public class KillStreakEventHandler extends AbstractEventHandler
 
         if (event instanceof KillStreakEvent) {
             events = new HashSet<RewardEvent>();
-            events.addAll(getEvent((KillStreakEvent) event));
+            events.addAll(getRewardEvents((KillStreakEvent) event));
         }
 
         return events;
     }
 
-    private Set<RewardEvent> getEvent(KillStreakEvent event)
+    private Set<RewardEvent> getRewardEvents(KillStreakEvent event)
     {
         Set<RewardEvent> events = Collections.emptySet();
 
@@ -48,12 +47,12 @@ public class KillStreakEventHandler extends AbstractEventHandler
         int kills = event.getKills();
         WorldSettings settings = getSettings(player.getWorld());
 
-        if (settings.hasRewardSource(event)) {
-            Reward outcome = settings.getRewardSource(CustomType.KILL_STREAK).getOutcome(event);
-            outcome.setGain(kills);
+        if (settings.hasReward(event)) {
+            Reward reward = settings.getReward(event);
+            reward.setGain(kills);
 
             events = new HashSet<RewardEvent>();
-            events.add(new RewardEvent(player, outcome));
+            events.add(new RewardEvent(player, reward));
         }
 
         return events;

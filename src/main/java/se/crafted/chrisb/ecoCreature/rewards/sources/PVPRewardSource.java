@@ -2,12 +2,14 @@ package se.crafted.chrisb.ecoCreature.rewards.sources;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-import se.crafted.chrisb.ecoCreature.commons.CustomType;
+import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
+import se.crafted.chrisb.ecoCreature.settings.types.CustomRewardType;
 
 public class PVPRewardSource extends AbstractRewardSource
 {
@@ -18,7 +20,7 @@ public class PVPRewardSource extends AbstractRewardSource
 
     public PVPRewardSource(ConfigurationSection config)
     {
-        setName(CustomType.LEGACY_PVP.getName());
+        setName(CustomRewardType.LEGACY_PVP.getName());
         percentReward = config.getBoolean("System.Hunting.PVPRewardType", true);
         rewardAmount = config.getDouble("System.Hunting.PVPRewardAmount", 0.05D);
         setCoinRewardMessage(new DefaultMessage(config.getString("System.Messages.PVPRewardMessage", PVP_REWARD_MESSAGE)));
@@ -59,10 +61,18 @@ public class PVPRewardSource extends AbstractRewardSource
     public Reward getOutcome(Event event)
     {
         Reward reward = new Reward(getLocation(event));
-        reward.setGain(percentReward ? rewardAmount / 100.0 : 1.0);
 
         reward.setName(getName());
-        reward.setCoin(isPercentReward() ? 0.0 : rewardAmount);
+
+        if (percentReward && event instanceof PlayerKilledEvent && DependencyUtils.hasEconomy()) {
+            Player victim = ((PlayerKilledEvent) event).getVictim();
+            reward.setCoin(DependencyUtils.getEconomy().getBalance(victim.getName()));
+            reward.setGain(rewardAmount / 100.0);
+        }
+        else {
+            reward.setCoin(rewardAmount);
+        }
+
         reward.setMessage(getCoinRewardMessage());
         reward.setIntegerCurrency(isIntegerCurrency());
 

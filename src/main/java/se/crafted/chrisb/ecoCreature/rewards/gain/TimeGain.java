@@ -13,7 +13,7 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.commons.TimePeriod;
 
-public class TimeGain extends AbstractGain
+public class TimeGain extends AbstractPlayerGain
 {
     private Map<TimePeriod, Double> multipliers;
 
@@ -29,22 +29,22 @@ public class TimeGain extends AbstractGain
 
         if (DependencyUtils.hasPermission(player, "gain.time") && multipliers.containsKey(TimePeriod.fromEntity(player))) {
             multiplier = multipliers.get(TimePeriod.fromEntity(player));
-            ECLogger.getInstance().debug("Time multiplier: " + multiplier);
+            ECLogger.getInstance().debug(this.getClass(), "Time multiplier: " + multiplier);
         }
 
         return multiplier;
     }
 
-    public static Set<Gain> parseConfig(ConfigurationSection config)
+    public static Set<PlayerGain> parseConfig(ConfigurationSection config)
     {
-        Set<Gain> gain = Collections.emptySet();
+        Set<PlayerGain> gain = Collections.emptySet();
 
         if (config != null) {
             Map<TimePeriod, Double> multipliers = new HashMap<TimePeriod, Double>();
             for (String period : config.getKeys(false)) {
                 multipliers.put(TimePeriod.fromName(period), Double.valueOf(config.getConfigurationSection(period).getDouble("Amount", 1.0D)));
             }
-            gain = new HashSet<Gain>();
+            gain = new HashSet<PlayerGain>();
             gain.add(new TimeGain(multipliers));
         }
 

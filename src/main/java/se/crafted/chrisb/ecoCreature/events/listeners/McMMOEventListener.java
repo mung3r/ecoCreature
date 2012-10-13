@@ -8,13 +8,13 @@ import org.bukkit.event.Listener;
 import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.events.handlers.GameEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.PluginEventHandler;
 
 public class McMMOEventListener implements Listener
 {
-    private final GameEventHandler handler;
+    private final PluginEventHandler handler;
 
-    public McMMOEventListener(GameEventHandler handler)
+    public McMMOEventListener(PluginEventHandler handler)
     {
         this.handler = handler;
     }

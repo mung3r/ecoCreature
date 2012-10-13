@@ -16,7 +16,7 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.struct.Relation;
 
-public class FactionsGain extends AbstractGain
+public class FactionsGain extends AbstractPlayerGain
 {
     private Map<Relation, Double> multipliers;
 
@@ -34,16 +34,16 @@ public class FactionsGain extends AbstractGain
             FPlayer fPlayer = FPlayers.i.get(player);
             if (fPlayer != null && multipliers.containsKey(fPlayer.getRelationToLocation())) {
                 multiplier = multipliers.get(fPlayer.getRelationToLocation());
-                ECLogger.getInstance().debug("Factions multiplier: " + multiplier);
+                ECLogger.getInstance().debug(this.getClass(), "Factions multiplier: " + multiplier);
             }
         }
 
         return multiplier;
     }
 
-    public static Set<Gain> parseConfig(ConfigurationSection config)
+    public static Set<PlayerGain> parseConfig(ConfigurationSection config)
     {
-        Set<Gain> gain = Collections.emptySet();
+        Set<PlayerGain> gain = Collections.emptySet();
 
         if (config != null && DependencyUtils.hasFactions()) {
             Map<Relation, Double> multipliers = new HashMap<Relation, Double>();
@@ -55,7 +55,7 @@ public class FactionsGain extends AbstractGain
                     ECLogger.getInstance().warning("Unrecognized Factions relation: " + relation);
                 }
             }
-            gain = new HashSet<Gain>();
+            gain = new HashSet<PlayerGain>();
             gain.add(new FactionsGain(multipliers));
         }
 

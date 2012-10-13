@@ -10,10 +10,9 @@ import org.bukkit.event.Event;
 import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.commons.CustomType;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
-import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
+import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
 public class McMMOEventHandler extends AbstractEventHandler
 {
@@ -35,24 +34,24 @@ public class McMMOEventHandler extends AbstractEventHandler
 
         if (event instanceof McMMOPlayerLevelUpEvent) {
             events = new HashSet<RewardEvent>();
-            events.addAll(getRewards((McMMOPlayerLevelUpEvent) event));
+            events.addAll(getRewardEvents((McMMOPlayerLevelUpEvent) event));
         }
 
         return events;
     }
 
-    private Set<RewardEvent> getRewards(McMMOPlayerLevelUpEvent event)
+    private Set<RewardEvent> getRewardEvents(McMMOPlayerLevelUpEvent event)
     {
         Set<RewardEvent> events = Collections.emptySet();
 
         Player player = event.getPlayer();
         WorldSettings settings = getSettings(player.getWorld());
 
-        if (settings.hasRewardSource(event)) {
-            Reward outcome = settings.getRewardSource(CustomType.MCMMO_LEVELED).getOutcome(event);
+        if (settings.hasReward(event)) {
+            Reward reward = settings.getReward(event);
 
             events = new HashSet<RewardEvent>();
-            events.add(new RewardEvent(player, outcome));
+            events.add(new RewardEvent(player, reward));
         }
 
         return events;

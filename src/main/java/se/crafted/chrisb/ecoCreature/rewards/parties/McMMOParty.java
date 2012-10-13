@@ -9,6 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
 import com.gmail.nossr50.api.PartyAPI;
 
@@ -29,6 +30,7 @@ public class McMMOParty extends AbstractParty
                 }
             }
         }
+        ECLogger.getInstance().debug(this.getClass(), "Heroes party size: " + party.size());
 
         return party;
     }

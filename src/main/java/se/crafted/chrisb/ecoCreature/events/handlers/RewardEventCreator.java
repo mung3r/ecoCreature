@@ -6,7 +6,7 @@ import org.bukkit.World;
 import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
+import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
 public interface RewardEventCreator
 {

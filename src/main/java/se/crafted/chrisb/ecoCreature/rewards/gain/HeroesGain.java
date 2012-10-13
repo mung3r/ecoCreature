@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-public class HeroesGain extends AbstractGain
+public class HeroesGain extends AbstractPlayerGain
 {
     private double multiplier;
 
@@ -23,19 +23,19 @@ public class HeroesGain extends AbstractGain
     public double getMultiplier(Player player)
     {
         if (DependencyUtils.hasPermission(player, "gain.heroes") && DependencyUtils.hasHeroes() && DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {
-            ECLogger.getInstance().debug("Heroes multiplier: " + multiplier);
+            ECLogger.getInstance().debug(this.getClass(), "Heroes multiplier: " + multiplier);
             return multiplier;
         }
 
-        return super.getMultiplier(player);
+        return NO_GAIN;
     }
 
-    public static Set<Gain> parseConfig(ConfigurationSection config)
+    public static Set<PlayerGain> parseConfig(ConfigurationSection config)
     {
-        Set<Gain> gain = Collections.emptySet();
+        Set<PlayerGain> gain = Collections.emptySet();
 
         if (config != null) {
-            gain = new HashSet<Gain>();
+            gain = new HashSet<PlayerGain>();
             gain.add(new HeroesGain(config.getDouble("Amount", 1.0D)));
         }
 

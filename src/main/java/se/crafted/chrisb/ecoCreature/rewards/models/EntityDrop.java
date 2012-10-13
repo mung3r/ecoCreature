@@ -166,7 +166,7 @@ public class EntityDrop
 
         EntityType type = EntityType.fromName(itemSubParts[0]);
         if (type == null) {
-            ECLogger.getInstance().debug("Invalid entity type: " + itemParts[0]);
+            ECLogger.getInstance().debug(EntityDrop.class, "No match for entity type: " + itemParts[0]);
         }
 
         return type;

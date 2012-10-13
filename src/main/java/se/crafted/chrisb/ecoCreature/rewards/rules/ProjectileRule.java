@@ -32,7 +32,7 @@ public class ProjectileRule extends AbstractRule
         boolean ruleBroken = !bowRewards && event.isProjectileKill();
 
         if (ruleBroken) {
-            ECLogger.getInstance().debug("No reward for " + event.getKiller().getName() + " using projectiles.");
+            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " using projectiles.");
         }
 
         return ruleBroken;

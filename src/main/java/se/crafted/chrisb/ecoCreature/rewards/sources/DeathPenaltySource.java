@@ -2,12 +2,14 @@ package se.crafted.chrisb.ecoCreature.rewards.sources;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import se.crafted.chrisb.ecoCreature.commons.CustomType;
+import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
+import se.crafted.chrisb.ecoCreature.settings.types.CustomRewardType;
 
 public class DeathPenaltySource extends AbstractRewardSource
 {
@@ -22,7 +24,7 @@ public class DeathPenaltySource extends AbstractRewardSource
             throw new IllegalArgumentException("Config cannot be null");
         }
 
-        setName(CustomType.DEATH_PENALTY.getName());
+        setName(CustomRewardType.DEATH_PENALTY.getName());
         percentPenalty = config.getBoolean("System.Hunting.PenalizeType", true);
         penaltyAmount = config.getDouble("System.Hunting.PenalizeAmount", 0.05D);
         setCoinPenaltyMessage(new DefaultMessage(config.getString("System.Messages.DeathPenaltyMessage", DEATH_PENALTY_MESSAGE)));
@@ -63,10 +65,19 @@ public class DeathPenaltySource extends AbstractRewardSource
     public Reward getOutcome(Event event)
     {
         Reward reward = new Reward(getLocation(event));
-        reward.setGain(percentPenalty ? -penaltyAmount / 100.0 : -1.0);
 
         reward.setName(getName());
-        reward.setCoin(percentPenalty ? 0.0 : penaltyAmount);
+
+        if (percentPenalty && event instanceof PlayerDeathEvent && DependencyUtils.hasEconomy()) {
+            Player player = ((PlayerDeathEvent) event).getEntity();
+            reward.setCoin(DependencyUtils.getEconomy().getBalance(player.getName()));
+            reward.setGain(-penaltyAmount / 100.0);
+        }
+        else {
+            reward.setCoin(penaltyAmount);
+            reward.setGain(-1.0);
+        }
+
         reward.setMessage(getCoinPenaltyMessage());
         reward.setIntegerCurrency(isIntegerCurrency());
 

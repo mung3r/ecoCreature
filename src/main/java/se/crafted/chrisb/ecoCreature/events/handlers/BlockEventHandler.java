@@ -13,7 +13,7 @@ import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
-import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
+import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
 public class BlockEventHandler extends AbstractEventHandler
 {
@@ -48,14 +48,14 @@ public class BlockEventHandler extends AbstractEventHandler
         Player player = event.getPlayer();
         WorldSettings settings = getSettings(player.getWorld());
 
-        if (settings.hasRewardSource(event)) {
-            Reward outcome = settings.getRewardSource(event).getOutcome(event);
-            outcome.setGain(settings.getGainMultiplier(player));
-            outcome.getMessage().addParameter(MessageToken.ITEM, EntityUtils.getItemNameInHand(player));
-            outcome.getMessage().addParameter(MessageToken.CREATURE, outcome.getName());
+        if (settings.hasReward(event)) {
+            Reward reward = settings.getReward(event);
+            reward.setGain(settings.getGainMultiplier(player));
+            reward.getMessage().addParameter(MessageToken.ITEM, EntityUtils.getItemNameInHand(player));
+            reward.getMessage().addParameter(MessageToken.CREATURE, reward.getName());
 
             events = new HashSet<RewardEvent>();
-            events.add(new RewardEvent(player, outcome));
+            events.add(new RewardEvent(player, reward));
         }
 
         return events;

@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-public class GroupGain extends AbstractGain
+public class GroupGain extends AbstractPlayerGain
 {
     private boolean warnGroupMultiplierSupport;
     private Map<String, Double> multipliers;
@@ -33,7 +33,7 @@ public class GroupGain extends AbstractGain
                 String group = DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName()).toLowerCase();
                 if (DependencyUtils.hasPermission(player, "gain.group") && multipliers.containsKey(group)) {
                     multiplier = multipliers.get(group);
-                    ECLogger.getInstance().debug("Group multiplier: " + multiplier);
+                    ECLogger.getInstance().debug(this.getClass(), "Group multiplier: " + multiplier);
                 }
             }
         }
@@ -47,16 +47,16 @@ public class GroupGain extends AbstractGain
         return multiplier;
     }
 
-    public static Set<Gain> parseConfig(ConfigurationSection config)
+    public static Set<PlayerGain> parseConfig(ConfigurationSection config)
     {
-        Set<Gain> gain = Collections.emptySet();
+        Set<PlayerGain> gain = Collections.emptySet();
 
         if (config != null) {
             Map<String, Double> multipliers = new HashMap<String, Double>();
             for (String group : config.getKeys(false)) {
                 multipliers.put(group.toLowerCase(), Double.valueOf(config.getConfigurationSection(group).getDouble("Amount", 0.0D)));
             }
-            gain = new HashSet<Gain>();
+            gain = new HashSet<PlayerGain>();
             gain.add(new GroupGain(multipliers));
         }
 

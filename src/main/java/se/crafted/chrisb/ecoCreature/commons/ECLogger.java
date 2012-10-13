@@ -58,10 +58,10 @@ public final class ECLogger
         logger.severe(format(msg));
     }
 
-    public void debug(String msg)
+    public void debug(Class<?> aClass, String msg)
     {
         if (debug) {
-            logger.info(format("DEBUG: " + msg));
+            logger.info(format(aClass.getSimpleName() + ": " + msg));
         }
     }
 

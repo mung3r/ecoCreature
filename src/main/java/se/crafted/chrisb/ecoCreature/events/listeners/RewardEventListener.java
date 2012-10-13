@@ -75,15 +75,15 @@ public class RewardEventListener implements Listener
     private double calculateAmount(Reward reward)
     {
         double amount = reward.getCoin() * reward.getGain();
-        ECLogger.getInstance().debug("Amount to be awarded: " + amount);
+        ECLogger.getInstance().debug(this.getClass(), "Amount to be awarded: " + amount);
 
         if (reward.getParty().size() > 1) {
             amount /= reward.getParty().size();
-            ECLogger.getInstance().debug("Amount divided with party: " + amount);
+            ECLogger.getInstance().debug(this.getClass(), "Amount divided with party: " + amount);
         }
 
         if (reward.isIntegerCurrency()) {
-            ECLogger.getInstance().debug("Amount to be rounded: " + amount);
+            ECLogger.getInstance().debug(this.getClass(), "Amount to be rounded: " + amount);
             amount = Math.round(amount);
         }
 

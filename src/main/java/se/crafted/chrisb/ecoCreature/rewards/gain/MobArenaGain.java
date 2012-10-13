@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-public class MobArenaGain extends AbstractGain
+public class MobArenaGain extends AbstractPlayerGain
 {
     private double multiplier;
 
@@ -23,19 +23,19 @@ public class MobArenaGain extends AbstractGain
     public double getMultiplier(Player player)
     {
         if (DependencyUtils.hasPermission(player, "gain.mobarena") && DependencyUtils.hasMobArena() && DependencyUtils.getMobArenaHandler().isPlayerInArena(player)) {
-            ECLogger.getInstance().debug("MobArena multiplier applied");
+            ECLogger.getInstance().debug(this.getClass(), "MobArena multiplier applied");
             return multiplier;
         }
 
-        return super.getMultiplier(player);
+        return NO_GAIN;
     }
 
-    public static Set<Gain> parseConfig(ConfigurationSection config)
+    public static Set<PlayerGain> parseConfig(ConfigurationSection config)
     {
-        Set<Gain> gain = Collections.emptySet();
+        Set<PlayerGain> gain = Collections.emptySet();
 
         if (config != null) {
-            gain = new HashSet<Gain>();
+            gain = new HashSet<PlayerGain>();
             gain.add(new MobArenaGain(config.getDouble("Amount", 1.0D)));
         }
 

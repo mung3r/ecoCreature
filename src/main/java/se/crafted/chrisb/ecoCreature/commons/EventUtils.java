@@ -55,6 +55,11 @@ public final class EventUtils
         return isFireFarmed;
     }
 
+    public static boolean isEntityKilledEvent(EntityDeathEvent event)
+    {
+        return getKillerFromDeathEvent(event) != null;
+    }
+
     public static Player getKillerFromDeathEvent(EntityDeathEvent event)
     {
         if (event != null && event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {

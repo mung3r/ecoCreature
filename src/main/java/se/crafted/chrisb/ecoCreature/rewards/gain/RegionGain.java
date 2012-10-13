@@ -16,7 +16,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-public class RegionGain extends AbstractGain
+public class RegionGain extends AbstractPlayerGain
 {
     private Map<String, Double> multipliers;
 
@@ -38,7 +38,7 @@ public class RegionGain extends AbstractGain
                     String regionName = regions.next().getId();
                     if (multipliers.containsKey(regionName)) {
                         multiplier = multipliers.get(regionName);
-                        ECLogger.getInstance().debug("Region multiplier: " + multiplier);
+                        ECLogger.getInstance().debug(this.getClass(), "Region multiplier: " + multiplier);
                     }
                 }
             }
@@ -47,16 +47,16 @@ public class RegionGain extends AbstractGain
         return multiplier;
     }
 
-    public static Set<Gain> parseConfig(ConfigurationSection config)
+    public static Set<PlayerGain> parseConfig(ConfigurationSection config)
     {
-        Set<Gain> gain = Collections.emptySet();
+        Set<PlayerGain> gain = Collections.emptySet();
 
         if (config != null) {
             Map<String, Double> multipliers = new HashMap<String, Double>();
             for (String regionName : config.getKeys(false)) {
                 multipliers.put(regionName, Double.valueOf(config.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
             }
-            gain = new HashSet<Gain>();
+            gain = new HashSet<PlayerGain>();
             gain.add(new RegionGain(multipliers));
         }
 

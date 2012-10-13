@@ -13,7 +13,7 @@ import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
-import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
+import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
 public class EntityDeathEventHandler extends AbstractEventHandler
 {
@@ -47,24 +47,25 @@ public class EntityDeathEventHandler extends AbstractEventHandler
 
         Player killer = event.getKiller();
         WorldSettings settings = getSettings(killer.getWorld());
+        event.setSpawnerMobTracking(settings);
 
-        if (settings.hasRewardSource(event)) {
-            Reward outcome = settings.getRewardSource(event).getOutcome(event);
-            outcome.setGain(settings.getGainMultiplier(killer));
-            outcome.setParty(settings.getParty(killer));
-            outcome.getMessage().addParameter(MessageToken.CREATURE, outcome.getName());
-            outcome.getMessage().addParameter(MessageToken.ITEM, event.getWeaponName());
+        if (settings.hasReward(event)) {
+            Reward reward = settings.getReward(event);
+            reward.setGain(settings.getGainMultiplier(killer));
+            reward.setParty(settings.getParty(killer));
+            reward.getMessage().addParameter(MessageToken.CREATURE, reward.getName());
+            reward.getMessage().addParameter(MessageToken.ITEM, event.getWeaponName());
 
-            if (settings.isOverrideDrops() || (settings.isClearOnNoDrops() && !outcome.hasDrops())) {
+            if (settings.isOverrideDrops() || (settings.isClearOnNoDrops() && !reward.hasDrops())) {
                 event.getDrops().clear();
             }
 
-            if (outcome.getEntityDrops().contains(EntityType.EXPERIENCE_ORB)) {
+            if (reward.getEntityDrops().contains(EntityType.EXPERIENCE_ORB)) {
                 event.setDroppedExp(0);
             }
 
             events = new HashSet<RewardEvent>();
-            events.add(new RewardEvent(killer, outcome));
+            events.add(new RewardEvent(killer, reward));
         }
 
         return events;

@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
-public class EnvironmentGain extends AbstractGain
+public class EnvironmentGain extends AbstractPlayerGain
 {
     private Map<Environment, Double> multipliers;
 
@@ -30,15 +30,15 @@ public class EnvironmentGain extends AbstractGain
 
         if (DependencyUtils.hasPermission(player, "gain.environment") && multipliers.containsKey(player.getWorld().getEnvironment())) {
             multiplier = multipliers.get(player.getWorld().getEnvironment());
-            ECLogger.getInstance().debug("Environment multiplier: " + multiplier);
+            ECLogger.getInstance().debug(this.getClass(), "Environment multiplier: " + multiplier);
         }
 
         return multiplier;
     }
 
-    public static Set<Gain> parseConfig(ConfigurationSection config)
+    public static Set<PlayerGain> parseConfig(ConfigurationSection config)
     {
-        Set<Gain> gain = Collections.emptySet();
+        Set<PlayerGain> gain = Collections.emptySet();
 
         if (config != null) {
             Map<Environment, Double> multipliers = new HashMap<World.Environment, Double>();
@@ -50,7 +50,7 @@ public class EnvironmentGain extends AbstractGain
                     ECLogger.getInstance().warning("Skipping unknown environment name: " + environment);
                 }
             }
-            gain = new HashSet<Gain>();
+            gain = new HashSet<PlayerGain>();
             gain.add(new EnvironmentGain(multipliers));
         }
 

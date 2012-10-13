@@ -9,13 +9,9 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.commons.CustomType;
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
-import se.crafted.chrisb.ecoCreature.rewards.WorldSettings;
-import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
-import se.crafted.chrisb.ecoCreature.rewards.sources.DeathPenaltySource;
+import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
 public class PlayerDeathEventHandler extends AbstractEventHandler
 {
@@ -50,16 +46,11 @@ public class PlayerDeathEventHandler extends AbstractEventHandler
         Player player = event.getEntity();
         WorldSettings settings = getSettings(player.getWorld());
 
-        if (settings.hasRewardSource(event)) {
-            AbstractRewardSource source = settings.getRewardSource(CustomType.DEATH_PENALTY);
-            Reward outcome = source.getOutcome(event);
-
-            if (source instanceof DeathPenaltySource && ((DeathPenaltySource) source).isPercentPenalty()) {
-                outcome.setCoin(DependencyUtils.getEconomy().getBalance(player.getName()));
-            }
+        if (settings.hasReward(event)) {
+            Reward reward = settings.getReward(event);
 
             events = new HashSet<RewardEvent>();
-            events.add(new RewardEvent(player, outcome));
+            events.add(new RewardEvent(player, reward));
         }
 
         return events;
