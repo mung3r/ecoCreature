@@ -66,7 +66,7 @@ public class McMMORewardSettings extends AbstractRewardSettings
         AbstractRewardSource source = null;
 
         if (hasRewardSource(type)) {
-            source = sources.get(type).get(random.nextInt(sources.get(type).size()));
+            source = sources.get(type).get(nextInt(sources.get(type).size()));
         }
         else {
             ECLogger.getInstance().warning("No reward defined for custom type: " + type.name());

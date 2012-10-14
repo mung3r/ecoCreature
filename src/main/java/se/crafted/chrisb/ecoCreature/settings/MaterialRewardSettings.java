@@ -84,7 +84,7 @@ public class MaterialRewardSettings extends AbstractRewardSettings
         AbstractRewardSource source = null;
 
         if (hasRewardSource(material)) {
-            source = sources.get(material).get(random.nextInt(sources.get(material).size()));
+            source = sources.get(material).get(nextInt(sources.get(material).size()));
         }
         else {
             ECLogger.getInstance().warning("No reward defined for material: " + material);

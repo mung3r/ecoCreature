@@ -98,7 +98,7 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings
         AbstractRewardSource source = null;
 
         if (hasRewardSource(entityType)) {
-            source = sources.get(entityType).get(random.nextInt(sources.get(entityType).size()));
+            source = sources.get(entityType).get(nextInt(sources.get(entityType).size()));
         }
         else {
             ECLogger.getInstance().warning("No reward defined for entity type: " + entityType.getName());

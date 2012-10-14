@@ -12,7 +12,7 @@ import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 
 public class PluginEventHandler
 {
-    List<RewardEventCreator> handlers;
+    private List<RewardEventCreator> handlers;
 
     public PluginEventHandler()
     {

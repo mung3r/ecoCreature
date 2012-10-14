@@ -4,7 +4,7 @@ import java.util.Map;
 
 abstract class AbstractMessageDecorator implements Message
 {
-    protected Message decoratedMessage;
+    private Message decoratedMessage;
 
     public AbstractMessageDecorator(Message decoratedMessage)
     {
