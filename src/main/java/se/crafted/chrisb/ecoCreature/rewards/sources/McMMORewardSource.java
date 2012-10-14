@@ -7,6 +7,7 @@ import org.bukkit.event.Event;
 import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.settings.types.McMMORewardType;
 
 public class McMMORewardSource extends AbstractRewardSource
 {
@@ -24,5 +25,19 @@ public class McMMORewardSource extends AbstractRewardSource
         else {
             throw new IllegalArgumentException();
         }
+    }
+
+    public static AbstractRewardSource createRewardSource(String name, ConfigurationSection config)
+    {
+        AbstractRewardSource source = null;
+
+        switch (McMMORewardType.fromName(name)) {
+            case MCMMO_LEVELED:
+                source = new McMMORewardSource(config);
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported type: " + name);
+        }
+        return source;
     }
 }

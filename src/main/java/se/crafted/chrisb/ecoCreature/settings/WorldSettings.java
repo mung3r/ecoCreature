@@ -21,7 +21,7 @@ public class WorldSettings implements SpawnerMobTracking
     private boolean noFarm;
     private boolean noFarmFire;
 
-    private List<AbstractRewardSettings> settings;
+    private List<AbstractRewardSettings> rewardSettings;
     private Set<PlayerGain> gainMultipliers;
     private Set<Party> parties;
 
@@ -31,7 +31,7 @@ public class WorldSettings implements SpawnerMobTracking
 
     public WorldSettings()
     {
-        settings = new ArrayList<AbstractRewardSettings>();
+        rewardSettings = new ArrayList<AbstractRewardSettings>();
         gainMultipliers = Collections.emptySet();
         parties = Collections.emptySet();
 
@@ -88,16 +88,16 @@ public class WorldSettings implements SpawnerMobTracking
         this.parties = parties;
     }
 
-    public void setSettings(List<AbstractRewardSettings> settings)
+    public void setRewardSettings(List<AbstractRewardSettings> rewardSettings)
     {
-        this.settings = settings;
+        this.rewardSettings = rewardSettings;
     }
 
     public boolean hasReward(Event event)
     {
         boolean hasReward = false;
 
-        for (AbstractRewardSettings settings : this.settings) {
+        for (AbstractRewardSettings settings : this.rewardSettings) {
             if (settings.hasRewardSource(event)) {
                 hasReward = true;
                 break;
@@ -109,7 +109,7 @@ public class WorldSettings implements SpawnerMobTracking
 
     public Reward getReward(Event event)
     {
-        for (AbstractRewardSettings settings : this.settings) {
+        for (AbstractRewardSettings settings : this.rewardSettings) {
             if (settings.hasRewardSource(event)) {
                 return settings.getRewardSource(event).getOutcome(event);
             }

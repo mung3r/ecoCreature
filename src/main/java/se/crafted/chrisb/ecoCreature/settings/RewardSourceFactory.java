@@ -17,7 +17,7 @@ import se.crafted.chrisb.ecoCreature.rewards.sources.StreakRewardSource;
 import se.crafted.chrisb.ecoCreature.settings.types.CustomEntityRewardType;
 import se.crafted.chrisb.ecoCreature.settings.types.CustomMaterialRewardType;
 import se.crafted.chrisb.ecoCreature.settings.types.CustomRewardType;
-import se.crafted.chrisb.ecoCreature.settings.types.DeathTpPlusRewardType;
+import se.crafted.chrisb.ecoCreature.settings.types.StreakRewardType;
 import se.crafted.chrisb.ecoCreature.settings.types.HeroesRewardType;
 import se.crafted.chrisb.ecoCreature.settings.types.McMMORewardType;
 
@@ -32,78 +32,82 @@ public final class RewardSourceFactory
         AbstractRewardSource source = null;
 
         if (CustomMaterialRewardType.fromName(name) != CustomMaterialRewardType.INVALID) {
-            switch (CustomMaterialRewardType.fromName(name)) {
-                case LEGACY_SPAWNER:
-                    source = new MaterialRewardSource(config);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unsupported type: " + name);
-            }
+            source = createCustomMaterialSource(name, config);
         }
         else if (Material.matchMaterial(name) != null) {
             source = new MaterialRewardSource(config);
         }
         else if (CustomEntityRewardType.fromName(name) != CustomEntityRewardType.INVALID) {
-            switch (CustomEntityRewardType.fromName(name)) {
-                case ANGRY_WOLF:
-                case PLAYER:
-                case POWERED_CREEPER:
-                    source = new EntityRewardSource(config);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unsupported type: " + name);
-            }
+            source = createCustomEntitySource(name, config);
         }
         else if (EntityType.fromName(name) != null) {
             source = new EntityRewardSource(config);
         }
         else if (CustomRewardType.fromName(name) != CustomRewardType.INVALID) {
-            switch (CustomRewardType.fromName(name)) {
-                case DEATH_PENALTY:
-                    source = new DeathPenaltySource(config);
-                    break;
-                case LEGACY_PVP:
-                    source = new PVPRewardSource(config);
-                    break;
-                case SET:
-                    source = new SetRewardSource(config);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unsupported type: " + name);
-            }
+            source = createCustomSource(name, config);
         }
-        else if (DeathTpPlusRewardType.fromName(name) != DeathTpPlusRewardType.INVALID) {
-            switch (DeathTpPlusRewardType.fromName(name)) {
-                case DEATH_STREAK:
-                case KILL_STREAK:
-                    source = new StreakRewardSource(config);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unsupported type: " + name);
-            }
+        else if (StreakRewardType.fromName(name) != StreakRewardType.INVALID) {
+            source = StreakRewardSource.createRewardSource(name, config);
         }
         else if (HeroesRewardType.fromName(name) != HeroesRewardType.INVALID) {
-            switch (HeroesRewardType.fromName(name)) {
-                case HERO_LEVELED:
-                case HERO_MASTERED:
-                    source = new HeroesRewardSource(config);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unsupported type: " + name);
-            }
+            source = HeroesRewardSource.createRewardSource(name, config);
         }
         else if (McMMORewardType.fromName(name) != McMMORewardType.INVALID) {
-            switch (McMMORewardType.fromName(name)) {
-                case MCMMO_LEVELED:
-                    source = new McMMORewardSource(config);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unsupported type: " + name);
-            }
+            source = McMMORewardSource.createRewardSource(name, config);
         }
 
         if (source != null) {
             ECLogger.getInstance().debug(RewardSourceFactory.class, name + " mapped to " + source.getClass().getSimpleName());
+        }
+        return source;
+    }
+
+    private static AbstractRewardSource createCustomMaterialSource(String name, ConfigurationSection config)
+    {
+        AbstractRewardSource source = null;
+
+        switch (CustomMaterialRewardType.fromName(name)) {
+            case LEGACY_SPAWNER:
+                source = new MaterialRewardSource(config);
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported type: " + name);
+        }
+        return source;
+    }
+
+    private static AbstractRewardSource createCustomEntitySource(String name, ConfigurationSection config)
+    {
+        AbstractRewardSource source = null;
+
+        switch (CustomEntityRewardType.fromName(name)) {
+            case ANGRY_WOLF:
+            case PLAYER:
+            case POWERED_CREEPER:
+                source = new EntityRewardSource(config);
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported type: " + name);
+        }
+        return source;
+    }
+
+    private static AbstractRewardSource createCustomSource(String name, ConfigurationSection config)
+    {
+        AbstractRewardSource source = null;
+
+        switch (CustomRewardType.fromName(name)) {
+            case DEATH_PENALTY:
+                source = new DeathPenaltySource(config);
+                break;
+            case LEGACY_PVP:
+                source = new PVPRewardSource(config);
+                break;
+            case SET:
+                source = new SetRewardSource(config);
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported type: " + name);
         }
         return source;
     }

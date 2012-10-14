@@ -4,32 +4,32 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum DeathTpPlusRewardType
+public enum StreakRewardType
 {
     DEATH_STREAK("DeathStreak"),
     KILL_STREAK("KillStreak"),
     INVALID("__Invalid__");
 
-    private static final Map<String, DeathTpPlusRewardType> NAME_MAP = new HashMap<String, DeathTpPlusRewardType>();
+    private static final Map<String, StreakRewardType> NAME_MAP = new HashMap<String, StreakRewardType>();
 
     static {
-        for (DeathTpPlusRewardType type : EnumSet.allOf(DeathTpPlusRewardType.class)) {
+        for (StreakRewardType type : EnumSet.allOf(StreakRewardType.class)) {
             NAME_MAP.put(type.name, type);
         }
     }
 
     private String name;
 
-    DeathTpPlusRewardType(String name)
+    StreakRewardType(String name)
     {
         if (name != null) {
             this.name = name.toLowerCase();
         }
     }
 
-    public static DeathTpPlusRewardType fromName(String name)
+    public static StreakRewardType fromName(String name)
     {
-        DeathTpPlusRewardType rewardType = INVALID;
+        StreakRewardType rewardType = INVALID;
         if (name != null && NAME_MAP.containsKey(name.toLowerCase())) {
             rewardType = NAME_MAP.get(name.toLowerCase());
         }

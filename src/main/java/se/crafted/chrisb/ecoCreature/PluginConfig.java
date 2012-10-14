@@ -41,7 +41,7 @@ import se.crafted.chrisb.ecoCreature.settings.AbstractRewardSettings;
 import se.crafted.chrisb.ecoCreature.settings.CustomEntityRewardSettings;
 import se.crafted.chrisb.ecoCreature.settings.CustomMaterialRewardSettings;
 import se.crafted.chrisb.ecoCreature.settings.CustomRewardSettings;
-import se.crafted.chrisb.ecoCreature.settings.DeathTpPlusRewardSettings;
+import se.crafted.chrisb.ecoCreature.settings.StreakRewardSettings;
 import se.crafted.chrisb.ecoCreature.settings.EntityRewardSettings;
 import se.crafted.chrisb.ecoCreature.settings.HeroesRewardSettings;
 import se.crafted.chrisb.ecoCreature.settings.MaterialRewardSettings;
@@ -136,7 +136,7 @@ public class PluginConfig
 
         settings.setGainMultipliers(loadGainMultipliers(config));
         settings.setParties(loadParties(config));
-        settings.setSettings(loadRewardSettings(config));
+        settings.setRewardSettings(loadRewardSettings(config));
 
         settings.setCanCampSpawner(config.getBoolean("System.Hunting.AllowCamping", false));
         settings.setCampByEntity(config.getBoolean("System.Hunting.CampingByEntity", false));
@@ -186,7 +186,7 @@ public class PluginConfig
         rewardSettings.add(CustomEntityRewardSettings.parseConfig(config));
         rewardSettings.add(EntityRewardSettings.parseConfig(config));
         rewardSettings.add(CustomRewardSettings.parseConfig(config));
-        rewardSettings.add(DeathTpPlusRewardSettings.parseConfig(config));
+        rewardSettings.add(StreakRewardSettings.parseConfig(config));
         rewardSettings.add(HeroesRewardSettings.parseConfig(config));
         rewardSettings.add(McMMORewardSettings.parseConfig(config));
 

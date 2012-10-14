@@ -13,13 +13,13 @@ import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
-import se.crafted.chrisb.ecoCreature.settings.types.DeathTpPlusRewardType;
+import se.crafted.chrisb.ecoCreature.settings.types.StreakRewardType;
 
-public class DeathTpPlusRewardSettings extends AbstractRewardSettings
+public class StreakRewardSettings extends AbstractRewardSettings
 {
-    private Map<DeathTpPlusRewardType, List<AbstractRewardSource>> sources;
+    private Map<StreakRewardType, List<AbstractRewardSource>> sources;
 
-    public DeathTpPlusRewardSettings(Map<DeathTpPlusRewardType, List<AbstractRewardSource>> sources)
+    public StreakRewardSettings(Map<StreakRewardType, List<AbstractRewardSource>> sources)
     {
         this.sources = sources;
     }
@@ -40,10 +40,10 @@ public class DeathTpPlusRewardSettings extends AbstractRewardSettings
     private boolean hasRewardSource(DeathStreakEvent event)
     {
         if (DependencyUtils.hasPermission(event.getPlayer(), "reward.deathstreak")) {
-            return hasRewardSource(DeathTpPlusRewardType.DEATH_STREAK);
+            return hasRewardSource(StreakRewardType.DEATH_STREAK);
         }
         else {
-            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + DeathTpPlusRewardType.DEATH_STREAK.getName());
+            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + StreakRewardType.DEATH_STREAK.getName());
         }
 
         return false;
@@ -52,16 +52,16 @@ public class DeathTpPlusRewardSettings extends AbstractRewardSettings
     private boolean hasRewardSource(KillStreakEvent event)
     {
         if (DependencyUtils.hasPermission(event.getPlayer(), "reward.killstreak")) {
-            return hasRewardSource(DeathTpPlusRewardType.KILL_STREAK);
+            return hasRewardSource(StreakRewardType.KILL_STREAK);
         }
         else {
-            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + DeathTpPlusRewardType.KILL_STREAK.getName());
+            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + StreakRewardType.KILL_STREAK.getName());
         }
 
         return false;
     }
 
-    private boolean hasRewardSource(DeathTpPlusRewardType type)
+    private boolean hasRewardSource(StreakRewardType type)
     {
         return type != null && sources.containsKey(type) && !sources.get(type).isEmpty();
     }
@@ -70,16 +70,16 @@ public class DeathTpPlusRewardSettings extends AbstractRewardSettings
     public AbstractRewardSource getRewardSource(Event event)
     {
         if (DependencyUtils.hasDeathTpPlus() && event instanceof DeathStreakEvent) {
-            return getRewardSource(DeathTpPlusRewardType.DEATH_STREAK);
+            return getRewardSource(StreakRewardType.DEATH_STREAK);
         }
         else if (DependencyUtils.hasDeathTpPlus() && event instanceof KillStreakEvent) {
-            return getRewardSource(DeathTpPlusRewardType.KILL_STREAK);
+            return getRewardSource(StreakRewardType.KILL_STREAK);
         }
 
         return null;
     }
 
-    private AbstractRewardSource getRewardSource(DeathTpPlusRewardType type)
+    private AbstractRewardSource getRewardSource(StreakRewardType type)
     {
         AbstractRewardSource source = null;
 
@@ -95,14 +95,14 @@ public class DeathTpPlusRewardSettings extends AbstractRewardSettings
 
     public static AbstractRewardSettings parseConfig(ConfigurationSection config)
     {
-        Map<DeathTpPlusRewardType, List<AbstractRewardSource>> sources = new HashMap<DeathTpPlusRewardType, List<AbstractRewardSource>>();
+        Map<StreakRewardType, List<AbstractRewardSource>> sources = new HashMap<StreakRewardType, List<AbstractRewardSource>>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {
             for (String typeName : rewardTable.getKeys(false)) {
-                DeathTpPlusRewardType type = DeathTpPlusRewardType.fromName(typeName);
+                StreakRewardType type = StreakRewardType.fromName(typeName);
 
-                if (type != DeathTpPlusRewardType.INVALID) {
+                if (type != StreakRewardType.INVALID) {
                     AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(typeName, rewardTable.getConfigurationSection(typeName)), config);
 
                     if (!sources.containsKey(type)) {
@@ -114,6 +114,6 @@ public class DeathTpPlusRewardSettings extends AbstractRewardSettings
             }
         }
 
-        return new DeathTpPlusRewardSettings(sources);
+        return new StreakRewardSettings(sources);
     }
 }
