@@ -14,7 +14,7 @@ import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 public class SpawnerDistanceRule extends AbstractRule
 {
     private static final String NO_CAMP_MESSAGE = "&7You find no rewards camping monster spawners.";
-    private static int CAMP_RADIUS = 16;
+    private static final int CAMP_RADIUS = 16;
 
     private boolean canCampSpawner;
     private boolean campByDistance;
@@ -47,10 +47,8 @@ public class SpawnerDistanceRule extends AbstractRule
     {
         boolean ruleBroken = false;
 
-        if (!canCampSpawner && campByDistance) {
-            if (EntityUtils.isNearSpawner(event.getKiller(), campRadius) || EntityUtils.isNearSpawner(event.getEntity(), campRadius)) {
-                ruleBroken = true;
-            }
+        if (!canCampSpawner && campByDistance && isEntityKilledEventNearSpawner(event)) {
+            ruleBroken = true;
         }
 
         if (ruleBroken) {
@@ -58,6 +56,11 @@ public class SpawnerDistanceRule extends AbstractRule
         }
 
         return ruleBroken;
+    }
+
+    private boolean isEntityKilledEventNearSpawner(EntityKilledEvent event)
+    {
+    	return EntityUtils.isNearSpawner(event.getKiller(), campRadius) || EntityUtils.isNearSpawner(event.getEntity(), campRadius);
     }
 
     public static Set<Rule> parseConfig(ConfigurationSection config)

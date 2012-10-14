@@ -39,10 +39,8 @@ public class HelpCommand extends BasicCommand
 
         // Build list of permitted commands
         for (Command command : sortCommands) {
-            if (command.isShownOnHelpMenu()) {
-                if (commandHandler.hasPermission(sender, command.getPermission())) {
-                    commands.add(command);
-                }
+            if (command.isShownOnHelpMenu() && commandHandler.hasPermission(sender, command.getPermission())) {
+                commands.add(command);
             }
         }
 

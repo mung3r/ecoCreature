@@ -69,7 +69,7 @@ public class Metrics {
     /**
      * The current revision number
      */
-    private final static int REVISION = 5;
+    private static final int REVISION = 5;
 
     /**
      * The base url of the metrics domain
