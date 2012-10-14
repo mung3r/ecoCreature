@@ -14,6 +14,7 @@ import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 public class SpawnerDistanceRule extends AbstractRule
 {
     private static final String NO_CAMP_MESSAGE = "&7You find no rewards camping monster spawners.";
+    private static int CAMP_RADIUS = 16;
 
     private boolean canCampSpawner;
     private boolean campByDistance;
@@ -23,7 +24,7 @@ public class SpawnerDistanceRule extends AbstractRule
     {
         canCampSpawner = false;
         campByDistance = true;
-        campRadius = 16;
+        campRadius = CAMP_RADIUS;
     }
 
     public void setCanCampSpawner(boolean canCampSpawner)
@@ -68,7 +69,7 @@ public class SpawnerDistanceRule extends AbstractRule
             rule.setCanCampSpawner(config.getBoolean("System.Hunting.AllowCamping", false));
             rule.setClearDrops(config.getBoolean("System.Hunting.ClearCampDrops", true));
             rule.setCampByDistance(config.getBoolean("System.Hunting.CampingByDistance", true));
-            rule.setCampRadius(config.getInt("System.Hunting.CampRadius", 16));
+            rule.setCampRadius(config.getInt("System.Hunting.CampRadius", CAMP_RADIUS));
             rule.setMessage(new DefaultMessage(config.getString("System.Messages.NoCampMessage", NO_CAMP_MESSAGE)));
             rules = new HashSet<Rule>();
             rules.add(rule);
