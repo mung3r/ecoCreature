@@ -50,7 +50,7 @@ public class RewardEventListener implements Listener
 
     private void dropCoin(String player, Reward reward)
     {
-        if (!DependencyUtils.hasDeathTpPlus()) {
+        if (!DependencyUtils.hasEconomy()) {
             return;
         }
 
