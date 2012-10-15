@@ -40,11 +40,7 @@ public class EntityRewardSettings extends AbstractRewardSettings
     @Override
     public boolean hasRewardSource(Event event)
     {
-        if (event instanceof EntityKilledEvent) {
-            return hasRewardSource((EntityKilledEvent) event);
-        }
-
-        return false;
+        return event instanceof EntityKilledEvent && hasRewardSource((EntityKilledEvent) event);
     }
 
     private boolean hasRewardSource(EntityKilledEvent event)

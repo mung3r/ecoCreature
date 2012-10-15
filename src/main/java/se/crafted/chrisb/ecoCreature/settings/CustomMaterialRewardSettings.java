@@ -28,11 +28,7 @@ public class CustomMaterialRewardSettings extends AbstractRewardSettings
     @Override
     public boolean hasRewardSource(Event event)
     {
-        if (event instanceof BlockBreakEvent) {
-            return hasRewardSource((BlockBreakEvent) event);
-        }
-
-        return false;
+        return event instanceof BlockBreakEvent && hasRewardSource((BlockBreakEvent) event);
     }
 
     private boolean hasRewardSource(BlockBreakEvent event)

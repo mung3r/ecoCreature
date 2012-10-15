@@ -28,11 +28,8 @@ public class HeroesRewardSettings extends AbstractRewardSettings
     @Override
     public boolean hasRewardSource(Event event)
     {
-        if (DependencyUtils.hasHeroes() && event instanceof HeroChangeLevelEvent) {
-            return hasRewardSource((HeroChangeLevelEvent) event);
-        }
-
-        return false;
+        return DependencyUtils.hasHeroes() && event instanceof HeroChangeLevelEvent &&
+        		hasRewardSource((HeroChangeLevelEvent) event);
     }
 
     private boolean hasRewardSource(HeroChangeLevelEvent event)

@@ -27,12 +27,14 @@ public class StreakRewardSettings extends AbstractRewardSettings
     @Override
     public boolean hasRewardSource(Event event)
     {
-        if (DependencyUtils.hasDeathTpPlus() && event instanceof DeathStreakEvent) {
-            return hasRewardSource((DeathStreakEvent) event);
-        }
-        else if (DependencyUtils.hasDeathTpPlus() && event instanceof KillStreakEvent) {
-            return hasRewardSource((KillStreakEvent) event);
-        }
+    	if (DependencyUtils.hasDeathTpPlus()) {
+	        if (event instanceof DeathStreakEvent) {
+	            return hasRewardSource((DeathStreakEvent) event);
+	        }
+	        else if (event instanceof KillStreakEvent) {
+	            return hasRewardSource((KillStreakEvent) event);
+	        }
+    	}
 
         return false;
     }

@@ -27,11 +27,8 @@ public class McMMORewardSettings extends AbstractRewardSettings
     @Override
     public boolean hasRewardSource(Event event)
     {
-        if (DependencyUtils.hasMcMMO() && event instanceof McMMOPlayerLevelUpEvent) {
-            return hasRewardSource((McMMOPlayerLevelUpEvent) event);
-        }
-
-        return false;
+        return DependencyUtils.hasMcMMO() && event instanceof McMMOPlayerLevelUpEvent && 
+        		hasRewardSource((McMMOPlayerLevelUpEvent) event);
     }
 
     private boolean hasRewardSource(McMMOPlayerLevelUpEvent event)
