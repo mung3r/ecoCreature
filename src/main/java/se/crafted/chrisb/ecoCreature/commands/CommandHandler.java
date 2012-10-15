@@ -22,7 +22,7 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 public class CommandHandler
 {
 
-    protected Map<String, Command> commands;
+    private Map<String, Command> commands;
 
     public CommandHandler()
     {

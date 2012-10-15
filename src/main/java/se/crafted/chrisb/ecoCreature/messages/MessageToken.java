@@ -6,7 +6,7 @@ public enum MessageToken {
     ITEM("<itm>"),
     CREATURE("<crt>");
 
-    String name;
+    private String name;
 
     private MessageToken(String name)
     {

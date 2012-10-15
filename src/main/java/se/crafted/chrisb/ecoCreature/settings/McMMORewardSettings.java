@@ -27,11 +27,8 @@ public class McMMORewardSettings extends AbstractRewardSettings
     @Override
     public boolean hasRewardSource(Event event)
     {
-        if (DependencyUtils.hasMcMMO() && event instanceof McMMOPlayerLevelUpEvent) {
-            return hasRewardSource((McMMOPlayerLevelUpEvent) event);
-        }
-
-        return false;
+        return DependencyUtils.hasMcMMO() && event instanceof McMMOPlayerLevelUpEvent && 
+        		hasRewardSource((McMMOPlayerLevelUpEvent) event);
     }
 
     private boolean hasRewardSource(McMMOPlayerLevelUpEvent event)
@@ -66,7 +63,7 @@ public class McMMORewardSettings extends AbstractRewardSettings
         AbstractRewardSource source = null;
 
         if (hasRewardSource(type)) {
-            source = sources.get(type).get(random.nextInt(sources.get(type).size()));
+            source = sources.get(type).get(nextInt(sources.get(type).size()));
         }
         else {
             ECLogger.getInstance().warning("No reward defined for custom type: " + type.name());

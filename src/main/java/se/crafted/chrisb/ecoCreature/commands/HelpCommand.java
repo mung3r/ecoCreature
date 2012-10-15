@@ -34,17 +34,7 @@ public class HelpCommand extends BasicCommand
             }
         }
 
-        List<Command> sortCommands = commandHandler.getCommands();
-        List<Command> commands = new ArrayList<Command>();
-
-        // Build list of permitted commands
-        for (Command command : sortCommands) {
-            if (command.isShownOnHelpMenu()) {
-                if (commandHandler.hasPermission(sender, command.getPermission())) {
-                    commands.add(command);
-                }
-            }
-        }
+        List<Command> commands = getCommandsForSender(sender);
 
         int numPages = commands.size() / CMDS_PER_PAGE;
         if (commands.size() % CMDS_PER_PAGE != 0) {
@@ -54,6 +44,7 @@ public class HelpCommand extends BasicCommand
         if (page >= numPages || page < 0) {
             page = 0;
         }
+
         sender.sendMessage("§c-----[ " + "§fecoCreature Help <" + (page + 1) + "/" + numPages + ">§c ]-----");
         int start = page * CMDS_PER_PAGE;
         int end = start + CMDS_PER_PAGE;
@@ -70,4 +61,17 @@ public class HelpCommand extends BasicCommand
         return true;
     }
 
+    private List<Command> getCommandsForSender(CommandSender sender)
+    {
+        List<Command> commands = new ArrayList<Command>();
+
+        // Build list of permitted commands
+        for (Command command : commandHandler.getCommands()) {
+            if (command.isShownOnHelpMenu() && commandHandler.hasPermission(sender, command.getPermission())) {
+                commands.add(command);
+            }
+        }
+
+        return commands;
+    }
 }

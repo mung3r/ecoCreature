@@ -28,11 +28,8 @@ public class HeroesRewardSettings extends AbstractRewardSettings
     @Override
     public boolean hasRewardSource(Event event)
     {
-        if (DependencyUtils.hasHeroes() && event instanceof HeroChangeLevelEvent) {
-            return hasRewardSource((HeroChangeLevelEvent) event);
-        }
-
-        return false;
+        return DependencyUtils.hasHeroes() && event instanceof HeroChangeLevelEvent &&
+        		hasRewardSource((HeroChangeLevelEvent) event);
     }
 
     private boolean hasRewardSource(HeroChangeLevelEvent event)
@@ -77,7 +74,7 @@ public class HeroesRewardSettings extends AbstractRewardSettings
         AbstractRewardSource source = null;
 
         if (hasRewardSource(type)) {
-            source = sources.get(type).get(random.nextInt(sources.get(type).size()));
+            source = sources.get(type).get(nextInt(sources.get(type).size()));
         }
         else {
             ECLogger.getInstance().warning("No reward defined for custom type: " + type.name());

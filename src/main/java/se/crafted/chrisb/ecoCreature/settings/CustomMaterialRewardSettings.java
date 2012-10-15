@@ -28,11 +28,7 @@ public class CustomMaterialRewardSettings extends AbstractRewardSettings
     @Override
     public boolean hasRewardSource(Event event)
     {
-        if (event instanceof BlockBreakEvent) {
-            return hasRewardSource((BlockBreakEvent) event);
-        }
-
-        return false;
+        return event instanceof BlockBreakEvent && hasRewardSource((BlockBreakEvent) event);
     }
 
     private boolean hasRewardSource(BlockBreakEvent event)
@@ -84,7 +80,7 @@ public class CustomMaterialRewardSettings extends AbstractRewardSettings
         AbstractRewardSource source = null;
 
         if (hasRewardSource(material)) {
-            source = sources.get(material).get(random.nextInt(sources.get(material).size()));
+            source = sources.get(material).get(nextInt(sources.get(material).size()));
         }
         else {
             ECLogger.getInstance().warning("No reward defined for material: " + material);

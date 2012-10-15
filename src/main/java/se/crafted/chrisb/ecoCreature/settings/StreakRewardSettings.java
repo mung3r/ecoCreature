@@ -27,12 +27,14 @@ public class StreakRewardSettings extends AbstractRewardSettings
     @Override
     public boolean hasRewardSource(Event event)
     {
-        if (DependencyUtils.hasDeathTpPlus() && event instanceof DeathStreakEvent) {
-            return hasRewardSource((DeathStreakEvent) event);
-        }
-        else if (DependencyUtils.hasDeathTpPlus() && event instanceof KillStreakEvent) {
-            return hasRewardSource((KillStreakEvent) event);
-        }
+    	if (DependencyUtils.hasDeathTpPlus()) {
+	        if (event instanceof DeathStreakEvent) {
+	            return hasRewardSource((DeathStreakEvent) event);
+	        }
+	        else if (event instanceof KillStreakEvent) {
+	            return hasRewardSource((KillStreakEvent) event);
+	        }
+    	}
 
         return false;
     }
@@ -84,7 +86,7 @@ public class StreakRewardSettings extends AbstractRewardSettings
         AbstractRewardSource source = null;
 
         if (hasRewardSource(type)) {
-            source = sources.get(type).get(random.nextInt(sources.get(type).size()));
+            source = sources.get(type).get(nextInt(sources.get(type).size()));
         }
         else {
             ECLogger.getInstance().warning("No reward defined for custom type: " + type.name());

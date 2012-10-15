@@ -24,7 +24,12 @@ import se.crafted.chrisb.ecoCreature.settings.types.CustomRewardType;
 
 public abstract class AbstractRewardSettings
 {
-    protected static Random random = new Random();
+    private static Random random = new Random();
+
+    public int nextInt(int n)
+    {
+        return random.nextInt(n);
+    }
 
     public abstract boolean hasRewardSource(Event event);
 
