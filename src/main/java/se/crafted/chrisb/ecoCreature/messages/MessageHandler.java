@@ -1,5 +1,7 @@
 package se.crafted.chrisb.ecoCreature.messages;
 
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -7,23 +9,23 @@ import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 
 public class MessageHandler
 {
-    private String playerName;
     private Message message;
+    private Map<MessageToken, String> parameters;
 
-    public MessageHandler(Player player, Message message)
+    public MessageHandler(Message message, Map<MessageToken, String> parameters)
     {
-        this(player.getName(), message);
-    }
-
-    public MessageHandler(String playerName, Message message)
-    {
-        this.playerName = playerName;
         this.message = message;
+        this.parameters = parameters;
     }
 
-    public void send()
+    public void send(Player player)
     {
-        String assembledMessage = message.getAssembledMessage();
+        send(player.getName());
+    }
+
+    public void send(String playerName)
+    {
+        String assembledMessage = message.getAssembledMessage(parameters);
 
         if (assembledMessage != null && assembledMessage.length() > 0) {
             if (message.isMessageOutputEnabled()) {
@@ -39,9 +41,9 @@ public class MessageHandler
         }
     }
 
-    private static String getAwardedPlayerName(Message message)
+    private String getAwardedPlayerName(Message message)
     {
-        return message.getParameters().get(MessageToken.PLAYER);
+        return parameters.get(MessageToken.PLAYER);
     }
 
     private static String removeColorCodes(String msg)

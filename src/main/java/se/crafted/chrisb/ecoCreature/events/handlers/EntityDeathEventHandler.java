@@ -53,8 +53,8 @@ public class EntityDeathEventHandler extends AbstractEventHandler
             Reward reward = settings.getReward(event);
             reward.setGain(settings.getGainMultiplier(killer));
             reward.setParty(settings.getParty(killer));
-            reward.getMessage().addParameter(MessageToken.CREATURE, reward.getName());
-            reward.getMessage().addParameter(MessageToken.ITEM, event.getWeaponName());
+            reward.addParameter(MessageToken.CREATURE, reward.getName())
+                .addParameter(MessageToken.ITEM, event.getWeaponName());
 
             if (settings.isOverrideDrops() || (settings.isClearOnNoDrops() && !reward.hasDrops())) {
                 event.getDrops().clear();

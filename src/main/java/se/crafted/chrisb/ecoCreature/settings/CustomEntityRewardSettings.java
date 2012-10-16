@@ -17,6 +17,7 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
+import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.rewards.rules.Rule;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.settings.types.CustomEntityRewardType;
@@ -40,7 +41,7 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings
     @Override
     public boolean hasRewardSource(Event event)
     {
-    	return event instanceof EntityKilledEvent && hasRewardSource((EntityKilledEvent) event);
+        return event instanceof EntityKilledEvent && hasRewardSource((EntityKilledEvent) event);
     }
 
     private boolean hasRewardSource(EntityKilledEvent event)
@@ -112,8 +113,9 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings
                     event.setDroppedExp(0);
                 }
 
-                MessageHandler message = new MessageHandler(event.getKiller(), rule.getMessage());
-                message.send();
+                Map<MessageToken, String> parameters = Collections.emptyMap();
+                MessageHandler message = new MessageHandler(rule.getMessage(), parameters);
+                message.send(event.getKiller());
 
                 return true;
             }

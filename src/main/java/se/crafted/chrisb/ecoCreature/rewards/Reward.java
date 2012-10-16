@@ -1,7 +1,9 @@
 package se.crafted.chrisb.ecoCreature.rewards;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
@@ -12,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
+import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 
 public class Reward
 {
@@ -26,6 +29,7 @@ public class Reward
     private List<ItemStack> itemDrops;
     private List<EntityType> entityDrops;
     private Message message;
+    private Map<MessageToken, String> parameters;
 
     public Reward(Location location)
     {
@@ -40,6 +44,7 @@ public class Reward
         itemDrops = Collections.emptyList();
         entityDrops = Collections.emptyList();
         message = new DefaultMessage();
+        parameters = new HashMap<MessageToken, String>();
     }
 
     public World getWorld()
@@ -145,5 +150,16 @@ public class Reward
     public void setMessage(Message message)
     {
         this.message = message;
+    }
+
+    public Map<MessageToken, String> getParameters()
+    {
+        return parameters;
+    }
+
+    public Reward addParameter(MessageToken key, String value)
+    {
+        parameters.put(key, value);
+        return this;
     }
 }

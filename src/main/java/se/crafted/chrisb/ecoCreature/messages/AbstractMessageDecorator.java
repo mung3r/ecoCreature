@@ -54,26 +54,8 @@ abstract class AbstractMessageDecorator implements Message
     }
 
     @Override
-    public void addParameter(MessageToken token, String parameter)
+    public String getAssembledMessage(Map<MessageToken, String> parameters)
     {
-        decoratedMessage.addParameter(token, parameter);
-    }
-
-    @Override
-    public void removeParameter(MessageToken token)
-    {
-        decoratedMessage.removeParameter(token);
-    }
-
-    @Override
-    public Map<MessageToken, String> getParameters()
-    {
-        return decoratedMessage.getParameters();
-    }
-
-    @Override
-    public String getAssembledMessage()
-    {
-        return decoratedMessage.getAssembledMessage();
+        return decoratedMessage.getAssembledMessage(parameters);
     }
 }
