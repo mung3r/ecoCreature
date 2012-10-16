@@ -1,7 +1,6 @@
 package se.crafted.chrisb.ecoCreature.events.listeners;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.entity.Entity;
