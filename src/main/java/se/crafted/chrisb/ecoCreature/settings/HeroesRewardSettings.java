@@ -36,13 +36,8 @@ public class HeroesRewardSettings extends AbstractRewardSettings
     {
         Player player = event.getHero().getPlayer();
 
-        if (DependencyUtils.hasPermission(player, "reward.heromastered")) {
-            if (event.getHero().getLevel() == event.getHeroClass().getMaxLevel()) {
-                return hasRewardSource(HeroesRewardType.HERO_MASTERED);
-            }
-            else if (DependencyUtils.hasPermission(player, "reward.heroleveled")) {
-                return hasRewardSource(HeroesRewardType.HERO_LEVELED);
-            }
+        if (DependencyUtils.hasPermission(player, "reward.heromastered") && event.getHero().getLevel() == event.getHeroClass().getMaxLevel()) {
+            return hasRewardSource(HeroesRewardType.HERO_MASTERED);
         }
         else if (DependencyUtils.hasPermission(player, "reward.heroleveled")) {
             return hasRewardSource(HeroesRewardType.HERO_LEVELED);
@@ -63,7 +58,14 @@ public class HeroesRewardSettings extends AbstractRewardSettings
     public AbstractRewardSource getRewardSource(Event event)
     {
         if (DependencyUtils.hasHeroes() && event instanceof HeroChangeLevelEvent) {
-            return getRewardSource(HeroesRewardType.HERO_MASTERED);
+            HeroChangeLevelEvent changeLevelEvent = (HeroChangeLevelEvent) event;
+
+            if (changeLevelEvent.getHero().getLevel() == changeLevelEvent.getHeroClass().getMaxLevel()) {
+                return getRewardSource(HeroesRewardType.HERO_MASTERED);
+            }
+            else {
+                return getRewardSource(HeroesRewardType.HERO_LEVELED);
+            }
         }
 
         return null;
