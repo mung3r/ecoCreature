@@ -51,8 +51,8 @@ public class BlockEventHandler extends AbstractEventHandler
         if (settings.hasReward(event)) {
             Reward reward = settings.getReward(event);
             reward.setGain(settings.getGainMultiplier(player));
-            reward.getMessage().addParameter(MessageToken.ITEM, EntityUtils.getItemNameInHand(player));
-            reward.getMessage().addParameter(MessageToken.CREATURE, reward.getName());
+            reward.addParameter(MessageToken.ITEM, EntityUtils.getItemNameInHand(player))
+                .addParameter(MessageToken.CREATURE, reward.getName());
 
             events = new HashSet<RewardEvent>();
             events.add(new RewardEvent(player, reward));

@@ -1,6 +1,7 @@
 package se.crafted.chrisb.ecoCreature.events.listeners;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.entity.Entity;
@@ -64,11 +65,11 @@ public class RewardEventListener implements Listener
             registerAmount(member, amount);
 
             Message message = member.equals(player) ? reward.getMessage() : getPartyMessage(amount);
-            message.addParameter(MessageToken.PLAYER, member);
-            message.addParameter(MessageToken.AMOUNT, DependencyUtils.getEconomy().format(Math.abs(amount)));
+            reward.addParameter(MessageToken.PLAYER, member)
+                .addParameter(MessageToken.AMOUNT, DependencyUtils.getEconomy().format(Math.abs(amount)));
 
-            MessageHandler handler = new MessageHandler(member, message);
-            handler.send();
+            MessageHandler handler = new MessageHandler(message, reward.getParameters());
+            handler.send(member);
         }
     }
 

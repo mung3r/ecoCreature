@@ -18,11 +18,5 @@ public interface Message
 
     boolean isAmountInMessage();
 
-    void addParameter(MessageToken token, String parameter);
-
-    void removeParameter(MessageToken token);
-
-    Map<MessageToken, String> getParameters();
-
-    String getAssembledMessage();
+    String getAssembledMessage(Map<MessageToken, String> parameters);
 }

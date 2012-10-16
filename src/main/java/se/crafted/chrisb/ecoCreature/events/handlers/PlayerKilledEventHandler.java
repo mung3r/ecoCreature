@@ -74,8 +74,7 @@ public class PlayerKilledEventHandler extends AbstractEventHandler
     {
         WorldSettings settings = getSettings(event.getEntity().getWorld());
         Reward reward = settings.getReward(event);
-
-        reward.getMessage().addParameter(MessageToken.CREATURE, event.getVictim().getName());
+        reward.addParameter(MessageToken.CREATURE, event.getVictim().getName());
 
         if (settings.isOverrideDrops() || (settings.isClearOnNoDrops() && !reward.hasDrops())) {
             event.getDrops().clear();

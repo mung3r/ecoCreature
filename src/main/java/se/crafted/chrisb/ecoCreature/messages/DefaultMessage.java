@@ -1,6 +1,5 @@
 package se.crafted.chrisb.ecoCreature.messages;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -12,7 +11,6 @@ public class DefaultMessage implements Message
     private boolean coinLoggingEnabled;
 
     private String template;
-    private Map<MessageToken, String> parameters;
 
     public DefaultMessage()
     {
@@ -22,7 +20,6 @@ public class DefaultMessage implements Message
     public DefaultMessage(String template)
     {
         this.template = convertMessage(template);
-        parameters = new HashMap<MessageToken, String>();
 
         messageOutputEnabled = true;
         coinLoggingEnabled = false;
@@ -71,25 +68,7 @@ public class DefaultMessage implements Message
     }
 
     @Override
-    public void addParameter(MessageToken token, String parameter)
-    {
-        parameters.put(token, parameter);
-    }
-
-    @Override
-    public void removeParameter(MessageToken token)
-    {
-        parameters.remove(token);
-    }
-
-    @Override
-    public Map<MessageToken, String> getParameters()
-    {
-        return parameters;
-    }
-
-    @Override
-    public String getAssembledMessage()
+    public String getAssembledMessage(Map<MessageToken, String> parameters)
     {
         String assembledMessage = template;
 
