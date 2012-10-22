@@ -40,11 +40,16 @@ public class RewardEventListener implements Listener
             Reward reward = event.getReward();
             Player player = event.getPlayer();
 
-            dropCoin(player.getName(), reward);
-            dropItems(reward);
-            dropEntities(reward);
+            if (player != null) { // TODO: fix this upstream for citizens2
+                dropCoin(player.getName(), reward);
+                dropItems(reward);
+                dropEntities(reward);
 
-            plugin.getMetrics().addCount(reward.getName());
+                plugin.getMetrics().addCount(reward.getName());
+                if (ECLogger.getInstance().isDebug()) {
+                    ECLogger.getInstance().debug(this.getClass(), "Added metrics count for " + reward.getName());
+                }
+            }
         }
     }
 
