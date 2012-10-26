@@ -36,11 +36,13 @@ public class MaterialRewardSettings extends AbstractRewardSettings
         Player player = event.getPlayer();
         Block block = event.getBlock();
 
-        if (DependencyUtils.hasPermission(player, "reward." + block.getType().name())) {
-            return hasRewardSource(block.getType());
-        }
-        else {
-            ECLogger.getInstance().debug(this.getClass(), "No reward for " + player.getName() + " due to lack of permission for " + block.getType().name());
+        if (block != null) { // TODO: fix this properly for BuildCraft
+            if (DependencyUtils.hasPermission(player, "reward." + block.getType().name())) {
+                return hasRewardSource(block.getType());
+            }
+            else {
+                ECLogger.getInstance().debug(this.getClass(), "No reward for " + player.getName() + " due to lack of permission for " + block.getType().name());
+            }
         }
 
         return false;
