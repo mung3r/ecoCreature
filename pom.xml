@@ -5,6 +5,30 @@
   <artifactId>ecoCreature</artifactId>
   <name>ecoCreature</name>
   <version>0.1.2-SNAPSHOT</version>
+  <description>Player vs. Monster/Enemy Rewards</description>
+  <url>http://dev.bukkit.org/server-mods/ecocreature/</url>
+  <inceptionYear>2011</inceptionYear>
+  <organization>
+    <name>R. Ramos</name>
+    <url>http://github.com/mung3r</url>
+  </organization>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <currentYear>2012</currentYear>
+  </properties>
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/mung3r/ecoCreature/issues</url>
+  </issueManagement>
+  <ciManagement>
+    <system>jenkins</system>
+    <url>http://ci.bighatchet.com/job/ecoCreature/</url>
+  </ciManagement>
+  <scm>
+    <connection>scm:git:git://github.com:mung3r/ecoCreature.git</connection>
+    <developerConnection>scm:git:git@github.com:mung3r/ecoCreature.git</developerConnection>
+    <url>https://github.com/mung3r/ecoCreature</url>
+  </scm>
   <repositories>
     <repository>
       <id>bukkit-repo</id>
@@ -104,24 +128,6 @@
       <systemPath>${project.basedir}/lib/Factions.jar</systemPath>
     </dependency>
   </dependencies>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-  <description>Player vs. Monster/Enemy Rewards</description>
-  <url>http://dev.bukkit.org/server-mods/ecocreature/</url>
-  <issueManagement>
-    <system>GitHub</system>
-    <url>https://github.com/mung3r/ecoCreature/issues</url>
-  </issueManagement>
-  <ciManagement>
-    <system>jenkins</system>
-    <url>http://ci.bighatchet.com/job/ecoCreature/</url>
-  </ciManagement>
-  <scm>
-    <connection>scm:git:git://github.com:mung3r/ecoCreature.git</connection>
-    <developerConnection>scm:git:git@github.com:mung3r/ecoCreature.git</developerConnection>
-    <url>https://github.com/mung3r/ecoCreature</url>
-  </scm>
   <build>
     <defaultGoal>clean install</defaultGoal>
     <resources>
@@ -139,6 +145,45 @@
           <source>1.6</source>
           <target>1.6</target>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.mycila.maven-license-plugin</groupId>
+        <artifactId>maven-license-plugin</artifactId>
+        <version>1.10.b1</version>
+        <executions>
+          <execution>
+            <configuration>
+              <properties>
+                <name>${project.name}</name>
+                <url>${project.organization.url}</url>
+                <copyright>Copyright (c) ${project.inceptionYear}-${currentYear}, ${project.organization.name}</copyright>
+              </properties>
+              <quiet>true</quiet>
+              <encoding>UTF-8</encoding>
+              <strictCheck>true</strictCheck>
+              <header>${basedir}/HEADER.txt</header>
+              <mapping>
+                <java>SLASHSTAR_STYLE</java>
+              </mapping>
+              <keywords>
+                <keyword>${project.name}</keyword>
+                <keyword>license</keyword>
+              </keywords>
+              <includes>
+                <include>src/main/java/**</include>
+                <include>src/test/java/**</include>
+              </includes>
+              <excludes>
+                <exclude>src/main/java/**/CommandHandler.java</exclude>
+                <exclude>src/main/java/**/Metrics.java</exclude>
+              </excludes>
+            </configuration>
+            <phase>clean</phase>
+            <goals>
+              <goal>format</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
