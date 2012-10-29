@@ -27,7 +27,6 @@ public class DefaultMessage implements Message
     private static final String DEFAULT_TEMPLATE = "";
 
     private boolean messageOutputEnabled;
-    private boolean coinLoggingEnabled;
 
     private String template;
 
@@ -39,9 +38,7 @@ public class DefaultMessage implements Message
     public DefaultMessage(String template)
     {
         this.template = convertMessage(template);
-
         messageOutputEnabled = true;
-        coinLoggingEnabled = false;
     }
 
     @Override
@@ -57,18 +54,6 @@ public class DefaultMessage implements Message
     }
 
     @Override
-    public boolean isCoinLoggingEnabled()
-    {
-        return coinLoggingEnabled;
-    }
-
-    @Override
-    public void setCoinLoggingEnabled(boolean coinLoggingEnabled)
-    {
-        this.coinLoggingEnabled = coinLoggingEnabled;
-    }
-
-    @Override
     public String getTemplate()
     {
         return template;
@@ -78,12 +63,6 @@ public class DefaultMessage implements Message
     public void setTemplate(String template)
     {
         this.template = template;
-    }
-
-    @Override
-    public boolean isAmountInMessage()
-    {
-        return template != null && template.contains(MessageToken.AMOUNT.toString());
     }
 
     @Override

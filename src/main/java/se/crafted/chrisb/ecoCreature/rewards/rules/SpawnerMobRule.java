@@ -28,6 +28,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
+import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.NoCampMessageDecorator;
 import se.crafted.chrisb.ecoCreature.settings.SpawnerMobTracking;
 
@@ -82,13 +83,18 @@ public class SpawnerMobRule extends AbstractRule
             rule.setCanCampSpawner(config.getBoolean("System.Hunting.AllowCamping", false));
             rule.setClearDrops(config.getBoolean("System.Hunting.ClearCampDrops", true));
             rule.setCampByEntity(config.getBoolean("System.Hunting.CampingByEntity", false));
-            NoCampMessageDecorator message = new NoCampMessageDecorator(new DefaultMessage(config.getString("System.Messages.NoCampMessage", NO_CAMP_MESSAGE)));
-            message.setSpawnerCampMessageEnabled(config.getBoolean("System.Messages.Spawner", false));
-            rule.setMessage(message);
+            rule.setMessage(getNoCampMessage(config));
             rules = new HashSet<Rule>();
             rules.add(rule);
         }
 
         return rules;
+    }
+
+    private static Message getNoCampMessage(ConfigurationSection config)
+    {
+        NoCampMessageDecorator message = new NoCampMessageDecorator(new DefaultMessage(config.getString("System.Messages.NoCampMessage", NO_CAMP_MESSAGE)));
+        message.setSpawnerCampMessageEnabled(config.getBoolean("System.Messages.Spawner", false));
+        return message;
     }
 }

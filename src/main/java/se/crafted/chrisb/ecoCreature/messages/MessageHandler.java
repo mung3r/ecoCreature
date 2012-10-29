@@ -54,7 +54,7 @@ public class MessageHandler
                 }
             }
 
-            if (message.isAmountInMessage() && message.isCoinLoggingEnabled()) {
+            if (message instanceof CoinMessageDecorator && ((CoinMessageDecorator) message).isCoinLoggingEnabled()) {
                 ECLogger.getInstance().info(removeColorCodes(String.format("%s: %s", getAwardedPlayerName(message), assembledMessage)));
             }
         }

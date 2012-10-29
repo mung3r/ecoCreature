@@ -43,18 +43,6 @@ abstract class AbstractMessageDecorator implements Message
     }
 
     @Override
-    public boolean isCoinLoggingEnabled()
-    {
-        return decoratedMessage.isCoinLoggingEnabled();
-    }
-
-    @Override
-    public void setCoinLoggingEnabled(boolean coinLoggingEnabled)
-    {
-        decoratedMessage.setCoinLoggingEnabled(coinLoggingEnabled);
-    }
-
-    @Override
     public String getTemplate()
     {
         return decoratedMessage.getTemplate();
@@ -64,12 +52,6 @@ abstract class AbstractMessageDecorator implements Message
     public void setTemplate(String template)
     {
         decoratedMessage.setTemplate(template);
-    }
-
-    @Override
-    public boolean isAmountInMessage()
-    {
-        return decoratedMessage.isAmountInMessage();
     }
 
     @Override
