@@ -17,11 +17,25 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.rewards.gain;
+package se.crafted.chrisb.ecoCreature.messages;
 
-import org.bukkit.entity.Player;
-
-public interface PlayerGain
+public class CoinMessageDecorator extends AbstractMessageDecorator
 {
-    double getMultiplier(Player player);
+    private boolean coinLoggingEnabled;
+
+    public CoinMessageDecorator(Message decoratedMessage)
+    {
+        super(decoratedMessage);
+        coinLoggingEnabled = false;
+    }
+
+    public boolean isCoinLoggingEnabled()
+    {
+        return coinLoggingEnabled;
+    }
+
+    public void setCoinLoggingEnabled(boolean coinLoggingEnabled)
+    {
+        this.coinLoggingEnabled = coinLoggingEnabled;
+    }
 }

@@ -1,3 +1,22 @@
+/*
+ * This file is part of ecoCreature.
+ *
+ * Copyright (c) 2011-2012, R. Ramos <http://github.com/mung3r/>
+ * ecoCreature is licensed under the GNU Lesser General Public License.
+ *
+ * ecoCreature is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ecoCreature is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package se.crafted.chrisb.ecoCreature.settings;
 
 import java.util.HashSet;
@@ -8,6 +27,7 @@ import java.util.Set;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 
+import se.crafted.chrisb.ecoCreature.messages.CoinMessageDecorator;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
 import se.crafted.chrisb.ecoCreature.rewards.rules.CreativeModeRule;
@@ -82,8 +102,9 @@ public abstract class AbstractRewardSettings
     {
         if (message != null && config != null) {
             message.setMessageOutputEnabled(config.getBoolean("System.Messages.Output", true));
-            message.setCoinLoggingEnabled(config.getBoolean("System.Messages.LogCoinRewards", true));
-
+            if (message instanceof CoinMessageDecorator) {
+                ((CoinMessageDecorator) message).setCoinLoggingEnabled(config.getBoolean("System.Messages.LogCoinRewards", true));
+            }
             if (message instanceof NoCoinMessageDecorator) {
                 ((NoCoinMessageDecorator) message).setNoRewardMessageEnabled(config.getBoolean("System.Messages.NoReward", false));
             }
