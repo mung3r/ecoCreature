@@ -51,7 +51,9 @@ public class PluginEventHandler
             if (handler.canCreateRewardEvents(event)) {
                 events = new HashSet<RewardEvent>();
                 events.addAll(handler.createRewardEvents(event));
-                break;
+                if (!events.isEmpty()) {
+                    break;
+                }
             }
         }
 
