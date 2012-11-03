@@ -40,7 +40,6 @@ import se.crafted.chrisb.ecoCreature.rewards.rules.SpawnerMobRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.TamedCreatureRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.UnderSeaLevelRule;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
-import se.crafted.chrisb.ecoCreature.settings.types.CustomRewardType;
 
 public abstract class AbstractRewardSettings
 {
