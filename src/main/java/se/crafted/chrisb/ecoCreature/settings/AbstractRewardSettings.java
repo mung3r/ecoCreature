@@ -40,6 +40,7 @@ import se.crafted.chrisb.ecoCreature.rewards.rules.SpawnerMobRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.TamedCreatureRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.UnderSeaLevelRule;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
+import se.crafted.chrisb.ecoCreature.settings.types.CustomRewardType;
 
 public abstract class AbstractRewardSettings
 {
@@ -61,7 +62,8 @@ public abstract class AbstractRewardSettings
         if (!sets.isEmpty() && rewardSets != null) {
             for (String setName : sets) {
                 if (rewardSets.getConfigurationSection(setName) != null) {
-                    AbstractRewardSource setSource = RewardSourceFactory.createSource(source.getName(), rewardSets.getConfigurationSection(setName));
+                    AbstractRewardSource setSource = RewardSourceFactory.createSource(CustomRewardType.SET.getName(), rewardSets.getConfigurationSection(setName));
+                    setSource.setName(source.getName());
                     source = mergeRewardSource(source, setSource);
                 }
             }

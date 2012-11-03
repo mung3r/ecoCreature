@@ -35,6 +35,7 @@ import org.bukkit.event.Event;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.ECLogger;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
+import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.rewards.rules.Rule;
@@ -60,7 +61,26 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings
     @Override
     public boolean hasRewardSource(Event event)
     {
-        return event instanceof EntityKilledEvent && hasRewardSource((EntityKilledEvent) event);
+        if (event instanceof PlayerKilledEvent) {
+            return hasRewardSource((PlayerKilledEvent) event);
+        }
+        else if (event instanceof EntityKilledEvent) {
+            return hasRewardSource((EntityKilledEvent) event);
+        }
+
+        return false;
+    }
+
+    private boolean hasRewardSource(PlayerKilledEvent event)
+    {
+        if (DependencyUtils.hasPermission(event.getKiller(), "reward.player") && hasRewardSource(CustomEntityRewardType.PLAYER)) {
+            return true;
+        }
+        else {
+            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " due to lack of permission for " + CustomEntityRewardType.PLAYER);
+        }
+
+        return false;
     }
 
     private boolean hasRewardSource(EntityKilledEvent event)
@@ -88,7 +108,10 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings
     @Override
     public AbstractRewardSource getRewardSource(Event event)
     {
-        if (event instanceof EntityKilledEvent) {
+        if (event instanceof PlayerKilledEvent) {
+            return getRewardSource(((PlayerKilledEvent) event).getEntity());
+        }
+        else if (event instanceof EntityKilledEvent) {
             return getRewardSource(((EntityKilledEvent) event).getEntity());
         }
 
