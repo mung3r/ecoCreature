@@ -75,7 +75,7 @@ public class EntityDeathEventHandler extends AbstractEventHandler
             reward.addParameter(MessageToken.CREATURE, reward.getName())
                 .addParameter(MessageToken.ITEM, event.getWeaponName());
 
-            if (settings.isOverrideDrops() || (settings.isClearOnNoDrops() && !reward.hasDrops())) {
+            if ((settings.isOverrideDrops() && reward.hasDrops()) || (settings.isClearOnNoDrops() && !reward.hasDrops())) {
                 event.getDrops().clear();
             }
 
