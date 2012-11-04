@@ -26,6 +26,7 @@ import org.bukkit.event.Event;
 import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.settings.types.HeroesRewardType;
 
 public class HeroesRewardSource extends AbstractRewardSource
@@ -33,6 +34,7 @@ public class HeroesRewardSource extends AbstractRewardSource
     public HeroesRewardSource(ConfigurationSection config)
     {
         super(config);
+        setNoCoinRewardMessage(new DefaultMessage());
     }
 
     @Override

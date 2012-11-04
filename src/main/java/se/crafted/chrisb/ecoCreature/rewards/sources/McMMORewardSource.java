@@ -26,6 +26,7 @@ import org.bukkit.event.Event;
 import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.settings.types.McMMORewardType;
 
 public class McMMORewardSource extends AbstractRewardSource
@@ -33,6 +34,7 @@ public class McMMORewardSource extends AbstractRewardSource
     public McMMORewardSource(ConfigurationSection config)
     {
         super(config);
+        setNoCoinRewardMessage(new DefaultMessage());
     }
 
     @Override
