@@ -63,6 +63,7 @@ public abstract class AbstractRewardSettings
             for (String setName : sets) {
                 if (rewardSets.getConfigurationSection(setName) != null) {
                     AbstractRewardSource setSource = RewardSourceFactory.createSource(CustomRewardType.SET.getName(), rewardSets.getConfigurationSection(setName));
+                    setSource.setName(source.getName());
                     source = mergeRewardSource(source, setSource);
                 }
             }
