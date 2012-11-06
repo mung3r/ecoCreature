@@ -338,6 +338,10 @@ Gain:
 #
 ############################################################################
 RewardTable:
+  Bat:
+    Coin_Minimum: 0.10
+    Coin_Maximum: 2.00
+    Coin_Percent: 1.0
   Blaze:
     Coin_Minimum: 3.50
     Coin_Maximum: 3.50
@@ -530,6 +534,14 @@ RewardTable:
     Coin_Minimum: 0.10
     Coin_Maximum: 2.50
     Coin_Percent: 1.0
+  Witch:
+    Coin_Minimum: 3.50
+    Coin_Maximum: 3.50
+    Coin_Percent: 50.0
+  Wither:
+    Coin_Minimum: 5.00
+    Coin_Maximum: 10.50
+    Coin_Percent: 100.0
   Wolf:
     Coin_Minimum: 1.00
     Coin_Maximum: 2.00
