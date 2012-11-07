@@ -338,6 +338,10 @@ Gain:
 #
 ############################################################################
 RewardTable:
+  Bat:
+    Coin_Minimum: 0.10
+    Coin_Maximum: 2.00
+    Coin_Percent: 1.0
   Blaze:
     Coin_Minimum: 3.50
     Coin_Maximum: 3.50
@@ -391,6 +395,8 @@ RewardTable:
     Coin_Minimum: 5.00
     Coin_Maximum: 10.50
     Coin_Percent: 100.0
+    Drops:
+    - 'dragon egg:1-1:100'
   Enderman:
     Drops:
     - 'ender pearl:1:75'
@@ -530,6 +536,25 @@ RewardTable:
     Coin_Minimum: 0.10
     Coin_Maximum: 2.50
     Coin_Percent: 1.0
+  Witch:
+    Coin_Minimum: 3.50
+    Coin_Maximum: 3.50
+    Coin_Percent: 50.0
+    Drops:
+    - 'glass bottle:6:0.125'
+    - 'glowstone dust:6:0.125'
+    - 'gunpowder:6:0.125'
+    - 'redstone:6:0.125'
+    - 'spider eye:6:0.125'
+    - 'stick:6:0.125'
+    - 'sugar:6:0.125'
+    - 'potion.0:6:0.125'
+  Wither:
+    Coin_Minimum: 5.00
+    Coin_Maximum: 10.50
+    Coin_Percent: 100.0
+    Drops:
+    - 'nether star:1-1:100'
   Wolf:
     Coin_Minimum: 1.00
     Coin_Maximum: 2.00
