@@ -30,7 +30,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
 
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class EntityDrop
 {
@@ -185,7 +185,7 @@ public class EntityDrop
 
         EntityType type = EntityType.fromName(itemSubParts[0]);
         if (type == null) {
-            ECLogger.getInstance().debug(EntityDrop.class, "No match for entity type: " + itemParts[0]);
+            LoggerUtil.getInstance().debug(EntityDrop.class, "No match for entity type: " + itemParts[0]);
         }
 
         return type;

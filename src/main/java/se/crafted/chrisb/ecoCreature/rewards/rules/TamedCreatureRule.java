@@ -25,7 +25,7 @@ import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
 public class TamedCreatureRule extends AbstractRule
@@ -48,7 +48,7 @@ public class TamedCreatureRule extends AbstractRule
         boolean ruleBroken = !wolverineMode && event.isTamedCreatureKill();
 
         if (ruleBroken) {
-            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " using tamed creatures.");
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " using tamed creatures.");
         }
 
         return ruleBroken;

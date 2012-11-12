@@ -23,7 +23,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
 
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.DeathPenaltySource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.EntityRewardSource;
@@ -76,7 +76,7 @@ public final class RewardSourceFactory
         }
 
         if (source != null) {
-            ECLogger.getInstance().debug(RewardSourceFactory.class, name + " mapped to " + source.getClass().getSimpleName());
+            LoggerUtil.getInstance().debug(RewardSourceFactory.class, name + " mapped to " + source.getClass().getSimpleName());
         }
         return source;
     }

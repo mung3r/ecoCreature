@@ -30,7 +30,7 @@ import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
 import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.settings.types.StreakRewardType;
 
@@ -64,7 +64,7 @@ public class StreakRewardSettings extends AbstractRewardSettings
             return hasRewardSource(StreakRewardType.DEATH_STREAK);
         }
         else {
-            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + StreakRewardType.DEATH_STREAK.getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + StreakRewardType.DEATH_STREAK.getName());
         }
 
         return false;
@@ -76,7 +76,7 @@ public class StreakRewardSettings extends AbstractRewardSettings
             return hasRewardSource(StreakRewardType.KILL_STREAK);
         }
         else {
-            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + StreakRewardType.KILL_STREAK.getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + StreakRewardType.KILL_STREAK.getName());
         }
 
         return false;
@@ -108,7 +108,7 @@ public class StreakRewardSettings extends AbstractRewardSettings
             source = sources.get(type).get(nextInt(sources.get(type).size()));
         }
         else {
-            ECLogger.getInstance().warning("No reward defined for custom type: " + type.name());
+            LoggerUtil.getInstance().warning("No reward defined for custom type: " + type.name());
         }
 
         return source;

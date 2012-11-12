@@ -36,7 +36,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.gain.BiomeGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.EnvironmentGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.FactionsGain;
@@ -109,7 +109,7 @@ public class PluginConfig
 
         try {
             fileConfig = getDefaultConfig();
-            ECLogger.getInstance().setDebug(fileConfig.getBoolean("System.Debug", ECLogger.getInstance().isDebug()));
+            LoggerUtil.getInstance().setDebug(fileConfig.getBoolean("System.Debug", LoggerUtil.getInstance().isDebug()));
 
             WorldSettings defaultSettings = loadWorldSettings(fileConfig);
             worldSettingsMap = new HashMap<String, WorldSettings>();
@@ -123,7 +123,7 @@ public class PluginConfig
 
                 if (worldConfigFile.exists()) {
                     FileConfiguration configFile = getConfig(worldConfigFile);
-                    ECLogger.getInstance().info("Loaded config for " + world.getName() + " world.");
+                    LoggerUtil.getInstance().info("Loaded config for " + world.getName() + " world.");
                     worldSettingsMap.put(world.getName(), loadWorldSettings(configFile));
                     fileConfigMap.put(world.getName(), configFile);
                 }
@@ -135,10 +135,10 @@ public class PluginConfig
             return true;
         }
         catch (IOException ioe) {
-            ECLogger.getInstance().severe("Failed to read config: " + ioe.toString());
+            LoggerUtil.getInstance().severe("Failed to read config: " + ioe.toString());
         }
         catch (InvalidConfigurationException ice) {
-            ECLogger.getInstance().severe("Failed to parse config: " + ice.toString());
+            LoggerUtil.getInstance().severe("Failed to parse config: " + ice.toString());
         }
 
         return false;
@@ -223,11 +223,11 @@ public class PluginConfig
             fileConfig.load(defaultFile);
         }
         else if (oldDefaultFile.exists()) {
-            ECLogger.getInstance().info("Converting old config file.");
+            LoggerUtil.getInstance().info("Converting old config file.");
             fileConfig = getConfig(oldDefaultFile);
             fileConfig.save(defaultFile);
             if (oldDefaultFile.delete()) {
-                ECLogger.getInstance().info("Old config file converted.");
+                LoggerUtil.getInstance().info("Old config file converted.");
             }
         }
         else {
@@ -235,7 +235,7 @@ public class PluginConfig
             fileConfig.save(defaultFile);
         }
 
-        ECLogger.getInstance().info("Loaded config defaults.");
+        LoggerUtil.getInstance().info("Loaded config defaults.");
         return fileConfig;
     }
 
@@ -258,10 +258,10 @@ public class PluginConfig
             inputStream.close();
             outputStream.close();
 
-            ECLogger.getInstance().info("Created config file: " + file.getName());
+            LoggerUtil.getInstance().info("Created config file: " + file.getName());
         }
         else {
-            ECLogger.getInstance().info("Found config file: " + file.getName());
+            LoggerUtil.getInstance().info("Found config file: " + file.getName());
         }
 
         config.load(file);

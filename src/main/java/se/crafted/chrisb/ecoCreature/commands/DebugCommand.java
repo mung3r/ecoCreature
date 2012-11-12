@@ -21,7 +21,7 @@ package se.crafted.chrisb.ecoCreature.commands;
 
 import org.bukkit.command.CommandSender;
 
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class DebugCommand extends BasicCommand
 {
@@ -38,8 +38,8 @@ public class DebugCommand extends BasicCommand
     @Override
     public boolean execute(CommandSender sender, String identifier, String[] args)
     {
-        ECLogger.getInstance().setDebug(!ECLogger.getInstance().isDebug());
-        sender.sendMessage(ECLogger.getInstance().isDebug() ? "debug log enabled." : "debug log disabled.");
+        LoggerUtil.getInstance().setDebug(!LoggerUtil.getInstance().isDebug());
+        sender.sendMessage(LoggerUtil.getInstance().isDebug() ? "debug log enabled." : "debug log disabled.");
         return true;
     }
 }

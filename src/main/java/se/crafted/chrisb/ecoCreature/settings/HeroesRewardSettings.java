@@ -31,7 +31,7 @@ import org.bukkit.event.Event;
 import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.settings.types.HeroesRewardType;
 
@@ -62,7 +62,7 @@ public class HeroesRewardSettings extends AbstractRewardSettings
             return hasRewardSource(HeroesRewardType.HERO_LEVELED);
         }
         else {
-            ECLogger.getInstance().debug(this.getClass(), "No reward for " + player.getName() + " due to lack of permission for " + HeroesRewardType.HERO_MASTERED.getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + player.getName() + " due to lack of permission for " + HeroesRewardType.HERO_MASTERED.getName());
         }
 
         return false;
@@ -98,7 +98,7 @@ public class HeroesRewardSettings extends AbstractRewardSettings
             source = sources.get(type).get(nextInt(sources.get(type).size()));
         }
         else {
-            ECLogger.getInstance().warning("No reward defined for custom type: " + type.name());
+            LoggerUtil.getInstance().warning("No reward defined for custom type: " + type.name());
         }
 
         return source;

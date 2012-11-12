@@ -29,7 +29,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.TimePeriod;
 
 public class TimeGain extends AbstractPlayerGain
@@ -48,7 +48,7 @@ public class TimeGain extends AbstractPlayerGain
 
         if (DependencyUtils.hasPermission(player, "gain.time") && multipliers.containsKey(TimePeriod.fromEntity(player))) {
             multiplier = multipliers.get(TimePeriod.fromEntity(player));
-            ECLogger.getInstance().debug(this.getClass(), "Time multiplier: " + multiplier);
+            LoggerUtil.getInstance().debug(this.getClass(), "Time multiplier: " + multiplier);
         }
 
         return multiplier;

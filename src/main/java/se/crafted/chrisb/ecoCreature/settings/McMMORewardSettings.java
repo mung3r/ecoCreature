@@ -30,7 +30,7 @@ import org.bukkit.event.Event;
 import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.settings.types.McMMORewardType;
 
@@ -56,7 +56,7 @@ public class McMMORewardSettings extends AbstractRewardSettings
             return hasRewardSource(McMMORewardType.MCMMO_LEVELED);
         }
         else {
-            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + McMMORewardType.MCMMO_LEVELED.getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + McMMORewardType.MCMMO_LEVELED.getName());
         }
 
         return false;
@@ -85,7 +85,7 @@ public class McMMORewardSettings extends AbstractRewardSettings
             source = sources.get(type).get(nextInt(sources.get(type).size()));
         }
         else {
-            ECLogger.getInstance().warning("No reward defined for custom type: " + type.name());
+            LoggerUtil.getInstance().warning("No reward defined for custom type: " + type.name());
         }
 
         return source;

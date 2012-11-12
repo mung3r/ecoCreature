@@ -29,7 +29,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.rewards.sources.DeathPenaltySource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
@@ -64,7 +64,7 @@ public class CustomRewardSettings extends AbstractRewardSettings
             return DependencyUtils.hasEconomy() && getRewardSource(CustomRewardType.LEGACY_PVP) instanceof PVPRewardSource;
         }
         else {
-            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " due to lack of permission for " + CustomRewardType.LEGACY_PVP);
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " due to lack of permission for " + CustomRewardType.LEGACY_PVP);
         }
 
         return false;
@@ -76,7 +76,7 @@ public class CustomRewardSettings extends AbstractRewardSettings
             return getRewardSource(CustomRewardType.DEATH_PENALTY) instanceof DeathPenaltySource;
         }
         else {
-            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getEntity().getName() + " due to lack of permission for " + CustomRewardType.DEATH_PENALTY.getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getEntity().getName() + " due to lack of permission for " + CustomRewardType.DEATH_PENALTY.getName());
         }
 
         return false;
@@ -108,7 +108,7 @@ public class CustomRewardSettings extends AbstractRewardSettings
             source = sources.get(type).get(nextInt(sources.get(type).size()));
         }
         else {
-            ECLogger.getInstance().warning("No reward defined for custom type: " + type.name());
+            LoggerUtil.getInstance().warning("No reward defined for custom type: " + type.name());
         }
 
         return source;

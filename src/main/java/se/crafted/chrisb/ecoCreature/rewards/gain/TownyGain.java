@@ -29,7 +29,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
@@ -51,7 +51,7 @@ public class TownyGain extends AbstractPlayerGain
             String townName = TownyUniverse.getTownName(player.getLocation());
             if (townName != null && multipliers.containsKey(townName)) {
                 multiplier = multipliers.get(townName);
-                ECLogger.getInstance().debug(this.getClass(), "Towny multiplier: " + multiplier);
+                LoggerUtil.getInstance().debug(this.getClass(), "Towny multiplier: " + multiplier);
             }
         }
 

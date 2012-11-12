@@ -48,7 +48,7 @@ public class UpdateTask implements Runnable
         latestVersion = pluginVersion;
 
         if (Bukkit.getScheduler().scheduleAsyncRepeatingTask(plugin, this, CHECK_DELAY, CHECK_PERIOD) < 0) {
-            ECLogger.getInstance().warning("Failed to schedule UpdateTask task.");
+            LoggerUtil.getInstance().warning("Failed to schedule UpdateTask task.");
         }
     }
 
@@ -79,7 +79,7 @@ public class UpdateTask implements Runnable
             }
         }
         catch (Exception e) {
-            ECLogger.getInstance().warning(e.getMessage());
+            LoggerUtil.getInstance().warning(e.getMessage());
         }
     }
 
@@ -92,7 +92,7 @@ public class UpdateTask implements Runnable
             isOutOfDate = Double.parseDouble(pluginVersion.replaceFirst("\\.", "")) < Double.parseDouble(latestVersion.replaceFirst("\\.", ""));
         }
         catch (NumberFormatException e) {
-            ECLogger.getInstance().warning(e.getMessage());
+            LoggerUtil.getInstance().warning(e.getMessage());
         }
 
         return isOutOfDate;
@@ -102,8 +102,8 @@ public class UpdateTask implements Runnable
     public void run()
     {
         if (isOutOfDate()) {
-            ECLogger.getInstance().warning(pluginName + " " + latestVersion + " is out! You are running: " + pluginName + " " + pluginVersion);
-            ECLogger.getInstance().warning("Update ecoCreature at: " + DEV_BUKKIT_URL);
+            LoggerUtil.getInstance().warning(pluginName + " " + latestVersion + " is out! You are running: " + pluginName + " " + pluginVersion);
+            LoggerUtil.getInstance().warning("Update ecoCreature at: " + DEV_BUKKIT_URL);
         }
     }
 }
