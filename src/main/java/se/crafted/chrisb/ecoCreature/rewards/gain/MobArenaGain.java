@@ -27,7 +27,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class MobArenaGain extends AbstractPlayerGain
 {
@@ -42,7 +42,7 @@ public class MobArenaGain extends AbstractPlayerGain
     public double getMultiplier(Player player)
     {
         if (DependencyUtils.hasPermission(player, "gain.mobarena") && DependencyUtils.hasMobArena() && DependencyUtils.getMobArenaHandler().isPlayerInArena(player)) {
-            ECLogger.getInstance().debug(this.getClass(), "MobArena multiplier applied");
+            LoggerUtil.getInstance().debug(this.getClass(), "MobArena multiplier applied");
             return multiplier;
         }
 

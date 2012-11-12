@@ -33,7 +33,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
@@ -77,7 +77,7 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings
             return true;
         }
         else {
-            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " due to lack of permission for " + CustomEntityRewardType.PLAYER);
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " due to lack of permission for " + CustomEntityRewardType.PLAYER);
         }
 
         return false;
@@ -94,7 +94,7 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings
             }
         }
         else {
-            ECLogger.getInstance().debug(this.getClass(), "No reward for " + killer.getName() + " due to lack of permission for " + entity.getType().getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + killer.getName() + " due to lack of permission for " + entity.getType().getName());
         }
 
         return false;
@@ -126,7 +126,7 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings
             source = getRewardSource(CustomEntityRewardType.fromEntity(entity));
         }
         else {
-            ECLogger.getInstance().warning("No reward found for entity: " + entity.getType().getName());
+            LoggerUtil.getInstance().warning("No reward found for entity: " + entity.getType().getName());
         }
 
         return source;
@@ -140,7 +140,7 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings
             source = sources.get(entityType).get(nextInt(sources.get(entityType).size()));
         }
         else {
-            ECLogger.getInstance().warning("No reward defined for entity type: " + entityType.getName());
+            LoggerUtil.getInstance().warning("No reward defined for entity type: " + entityType.getName());
         }
 
         return source;

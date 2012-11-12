@@ -26,7 +26,7 @@ import java.util.Set;
 import org.bukkit.configuration.ConfigurationSection;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
 public class MobArenaRule extends AbstractRule
@@ -49,7 +49,7 @@ public class MobArenaRule extends AbstractRule
         boolean ruleBroken = !mobArenaRewards && DependencyUtils.hasMobArena() && DependencyUtils.getMobArenaHandler().isPlayerInArena(event.getKiller());
 
         if (ruleBroken) {
-            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " in Mob Arena.");
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " in Mob Arena.");
         }
 
         return ruleBroken;

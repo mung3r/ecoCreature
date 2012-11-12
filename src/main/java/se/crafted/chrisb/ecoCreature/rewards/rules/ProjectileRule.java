@@ -25,7 +25,7 @@ import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 
@@ -51,7 +51,7 @@ public class ProjectileRule extends AbstractRule
         boolean ruleBroken = !bowRewards && event.isProjectileKill();
 
         if (ruleBroken) {
-            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " using projectiles.");
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " using projectiles.");
         }
 
         return ruleBroken;

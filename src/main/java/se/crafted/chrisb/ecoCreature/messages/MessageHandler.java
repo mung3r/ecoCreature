@@ -24,7 +24,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class MessageHandler
 {
@@ -55,7 +55,7 @@ public class MessageHandler
             }
 
             if (message instanceof CoinMessageDecorator && ((CoinMessageDecorator) message).isCoinLoggingEnabled()) {
-                ECLogger.getInstance().info(removeColorCodes(String.format("%s: %s", getAwardedPlayerName(message), assembledMessage)));
+                LoggerUtil.getInstance().info(removeColorCodes(String.format("%s: %s", getAwardedPlayerName(message), assembledMessage)));
             }
         }
     }

@@ -29,7 +29,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
@@ -53,7 +53,7 @@ public class FactionsGain extends AbstractPlayerGain
             FPlayer fPlayer = FPlayers.i.get(player);
             if (fPlayer != null && multipliers.containsKey(fPlayer.getRelationToLocation())) {
                 multiplier = multipliers.get(fPlayer.getRelationToLocation());
-                ECLogger.getInstance().debug(this.getClass(), "Factions multiplier: " + multiplier);
+                LoggerUtil.getInstance().debug(this.getClass(), "Factions multiplier: " + multiplier);
             }
         }
 
@@ -71,7 +71,7 @@ public class FactionsGain extends AbstractPlayerGain
                     multipliers.put(Relation.valueOf(relation), Double.valueOf(config.getConfigurationSection(relation).getDouble("Amount", 1.0D)));
                 }
                 catch (IllegalArgumentException e) {
-                    ECLogger.getInstance().warning("Unrecognized Factions relation: " + relation);
+                    LoggerUtil.getInstance().warning("Unrecognized Factions relation: " + relation);
                 }
             }
             gain = new HashSet<PlayerGain>();

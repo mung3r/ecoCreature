@@ -30,7 +30,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 
 public class WeaponGain extends AbstractPlayerGain
@@ -50,7 +50,7 @@ public class WeaponGain extends AbstractPlayerGain
 
         if (DependencyUtils.hasPermission(player, "gain.weapon") && multipliers.containsKey(material)) {
             multiplier = multipliers.get(material);
-            ECLogger.getInstance().debug(this.getClass(), "Weapon multiplier: " + multiplier);
+            LoggerUtil.getInstance().debug(this.getClass(), "Weapon multiplier: " + multiplier);
         }
 
         return multiplier;

@@ -29,7 +29,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
 
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public enum CustomEntityRewardType
 {
@@ -82,7 +82,7 @@ public enum CustomEntityRewardType
         }
 
         if (entityType == INVALID) {
-            ECLogger.getInstance().debug(CustomEntityRewardType.class, "No match for entity type: " + entity.getType().getName());
+            LoggerUtil.getInstance().debug(CustomEntityRewardType.class, "No match for entity type: " + entity.getType().getName());
         }
 
         return entityType;

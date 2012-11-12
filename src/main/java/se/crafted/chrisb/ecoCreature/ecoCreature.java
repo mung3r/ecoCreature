@@ -30,7 +30,7 @@ import se.crafted.chrisb.ecoCreature.commands.HelpCommand;
 import se.crafted.chrisb.ecoCreature.commands.ReloadCommand;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.UpdateTask;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.handlers.BlockEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.DeathStreakEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.EntityDeathEventHandler;
@@ -71,7 +71,7 @@ public class ecoCreature extends JavaPlugin
 
             new UpdateTask(this);
 
-            ECLogger.getInstance().info(getDescription().getVersion() + " enabled.");
+            LoggerUtil.getInstance().info(getDescription().getVersion() + " enabled.");
         }
         else {
             Bukkit.getPluginManager().disablePlugin(this);

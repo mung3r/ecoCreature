@@ -27,7 +27,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class McMMOGain extends AbstractPlayerGain
 {
@@ -42,7 +42,7 @@ public class McMMOGain extends AbstractPlayerGain
     public double getMultiplier(Player player)
     {
         if (DependencyUtils.hasPermission(player, "gain.mcmmo") && DependencyUtils.hasMcMMO()) {
-            ECLogger.getInstance().debug(this.getClass(), "mcMMO multiplier applied");
+            LoggerUtil.getInstance().debug(this.getClass(), "mcMMO multiplier applied");
             return multiplier;
         }
 

@@ -32,7 +32,7 @@ import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
@@ -65,8 +65,8 @@ public class RewardEventListener implements Listener
                 dropEntities(reward);
 
                 plugin.getMetrics().addCount(reward.getName());
-                if (ECLogger.getInstance().isDebug()) {
-                    ECLogger.getInstance().debug(this.getClass(), "Added metrics count for " + reward.getName());
+                if (LoggerUtil.getInstance().isDebug()) {
+                    LoggerUtil.getInstance().debug(this.getClass(), "Added metrics count for " + reward.getName());
                 }
             }
         }
@@ -98,18 +98,18 @@ public class RewardEventListener implements Listener
 
     private double calculateAmount(Reward reward)
     {
-        ECLogger.getInstance().debug(this.getClass(), "Initial amount: " + reward.getCoin());
-        ECLogger.getInstance().debug(this.getClass(), "Combined gain: " + reward.getGain());
+        LoggerUtil.getInstance().debug(this.getClass(), "Initial amount: " + reward.getCoin());
+        LoggerUtil.getInstance().debug(this.getClass(), "Combined gain: " + reward.getGain());
         double amount = reward.getCoin() * reward.getGain();
-        ECLogger.getInstance().debug(this.getClass(), "Final amount: " + amount);
+        LoggerUtil.getInstance().debug(this.getClass(), "Final amount: " + amount);
 
         if (reward.getParty().size() > 1) {
             amount /= reward.getParty().size();
-            ECLogger.getInstance().debug(this.getClass(), "Party amount: " + amount);
+            LoggerUtil.getInstance().debug(this.getClass(), "Party amount: " + amount);
         }
 
         if (reward.isIntegerCurrency()) {
-            ECLogger.getInstance().debug(this.getClass(), "Rounded amount: " + amount);
+            LoggerUtil.getInstance().debug(this.getClass(), "Rounded amount: " + amount);
             amount = Math.round(amount);
         }
 
