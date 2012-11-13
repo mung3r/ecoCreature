@@ -1,6 +1,6 @@
 name: ecoCreature
 main: se.crafted.chrisb.ecoCreature.ecoCreature
-version: 0.2.1-b${BUILD_NUMBER}
+version: 0.2.2-b${BUILD_NUMBER}
 authors: [chrisb, mung3r]
 website: http://dev.bukkit.org/server-mods/ecocreature
 depend: [Vault]
