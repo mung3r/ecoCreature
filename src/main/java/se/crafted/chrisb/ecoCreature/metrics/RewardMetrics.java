@@ -53,6 +53,11 @@ public class RewardMetrics
 
     public void addCount(String name)
     {
+        if (name == null) {
+            LoggerUtil.getInstance().warning("Null type name passed into metrics.");
+            return;
+        }
+
         if (graph != null) {
             if (!typeCount.containsKey(name)) {
                 typeCount.put(name, 0);
