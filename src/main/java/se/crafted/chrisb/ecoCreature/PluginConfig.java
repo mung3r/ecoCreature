@@ -249,14 +249,20 @@ public class PluginConfig
             InputStream inputStream = plugin.getResource(file.getName());
             FileOutputStream outputStream = new FileOutputStream(file);
 
-            byte[] buffer = new byte[8192];
-            int length = 0;
-            while ((length = inputStream.read(buffer)) > 0) {
-                outputStream.write(buffer, 0, length);
+            try {
+                byte[] buffer = new byte[8192];
+                int length = 0;
+                while ((length = inputStream.read(buffer)) > 0) {
+                    outputStream.write(buffer, 0, length);
+                }
             }
-
-            inputStream.close();
-            outputStream.close();
+            catch (IOException e) {
+                LoggerUtil.getInstance().warning("Could not read config file.");
+            }
+            finally {
+                inputStream.close();
+                outputStream.close();
+            }
 
             LoggerUtil.getInstance().info("Created config file: " + file.getName());
         }
