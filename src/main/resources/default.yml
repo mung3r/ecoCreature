@@ -490,6 +490,9 @@ RewardTable:
     NoReward_Message: ''
     Reward_Message: '&7You are awarded &6<amt>&7 for murdering &5<crt>&7.'
     Penalty_Message: '&7You are penalized &6<amt>&7 for murdering &5<crt>&7.'
+    # Adding a skull item to Player drops the victim's head
+    Drops:
+    - 'skull item:1-1:100'
   Sheep:
     Drops:
     - 'wool:1:75'
