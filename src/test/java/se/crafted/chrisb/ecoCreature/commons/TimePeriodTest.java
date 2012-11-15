@@ -12,7 +12,7 @@ public class TimePeriodTest
     private static final long TEST_NIGHT = 18000;
     private static final long TEST_DAWN = 22500;
     private static final long TEST_SUNRISE = 23500;
-    private static final long TEST_NONE = 25000;
+    private static final long TEST_NONE = 30000;
 
     @Test
     public void testFromTime()

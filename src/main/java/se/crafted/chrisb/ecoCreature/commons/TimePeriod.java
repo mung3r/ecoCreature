@@ -38,7 +38,7 @@ public enum TimePeriod
     private static final long NIGHT_START = 14000;
     private static final long DAWN_START = 22000;
     private static final long SUNRISE_START = 23000;
-    private static final long DAY_END = 30000;
+    private static final long DAY_END = 24000;
 
     static {
         for (TimePeriod type : TimePeriod.values()) {
