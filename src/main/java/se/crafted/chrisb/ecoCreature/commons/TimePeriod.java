@@ -22,13 +22,15 @@ package se.crafted.chrisb.ecoCreature.commons;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.math.LongRange;
 import org.bukkit.entity.Entity;
 
 public enum TimePeriod
 {
-    DAY, SUNSET, DUSK, NIGHT, DAWN, SUNRISE, IDENTITY;
+    DAY, SUNSET, DUSK, NIGHT, DAWN, SUNRISE, NONE;
 
     private static final Map<String, TimePeriod> NAME_MAP = new HashMap<String, TimePeriod>();
+    private static final Map<LongRange, TimePeriod> PERIOD_MAP = new HashMap<LongRange, TimePeriod>();
 
     private static final long DAY_START = 0;
     private static final long SUNSET_START = 13000;
@@ -36,11 +38,19 @@ public enum TimePeriod
     private static final long NIGHT_START = 14000;
     private static final long DAWN_START = 22000;
     private static final long SUNRISE_START = 23000;
+    private static final long DAY_END = 30000;
 
     static {
         for (TimePeriod type : TimePeriod.values()) {
             NAME_MAP.put(type.toString(), type);
         }
+
+        PERIOD_MAP.put(new LongRange(DAY_START, SUNSET_START - 1), DAY);
+        PERIOD_MAP.put(new LongRange(SUNSET_START, DUSK_START - 1), SUNSET);
+        PERIOD_MAP.put(new LongRange(DUSK_START, NIGHT_START - 1), DUSK);
+        PERIOD_MAP.put(new LongRange(NIGHT_START, DAWN_START - 1), NIGHT);
+        PERIOD_MAP.put(new LongRange(DAWN_START, SUNRISE_START - 1), DAWN);
+        PERIOD_MAP.put(new LongRange(SUNRISE_START, DAY_END - 1), SUNRISE);
     }
 
     public static TimePeriod fromName(String period)
@@ -50,28 +60,23 @@ public enum TimePeriod
 
     public static TimePeriod fromEntity(Entity entity)
     {
-        TimePeriod timePeriod = IDENTITY;
+        TimePeriod timePeriod = NONE;
 
         if (entity != null) {
-            long time = entity.getWorld().getTime();
+            timePeriod = fromTime(entity.getWorld().getTime());
+        }
 
-            if (time >= DAY_START && time < SUNSET_START) {
-                timePeriod = DAY;
-            }
-            else if (time >= SUNSET_START && time < DUSK_START) {
-                timePeriod = SUNSET;
-            }
-            else if (time >= DUSK_START && time < NIGHT_START) {
-                timePeriod = DUSK;
-            }
-            else if (time >= NIGHT_START && time < DAWN_START) {
-                timePeriod = NIGHT;
-            }
-            else if (time >= DAWN_START && time < SUNRISE_START) {
-                timePeriod = DAWN;
-            }
-            else if (time >= SUNRISE_START && time < DAY_START) {
-                timePeriod = SUNRISE;
+        return timePeriod;
+    }
+
+    public static TimePeriod fromTime(long time)
+    {
+        TimePeriod timePeriod = NONE;
+
+        for (LongRange period : PERIOD_MAP.keySet()) {
+            if (period.containsLong(time)) {
+                timePeriod = PERIOD_MAP.get(period);
+                break;
             }
         }
 
