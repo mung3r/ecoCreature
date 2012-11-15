@@ -63,26 +63,13 @@ public abstract class AbstractRewardSettings
             for (String setName : sets) {
                 if (rewardSets.getConfigurationSection(setName) != null) {
                     AbstractRewardSource setSource = RewardSourceFactory.createSource(CustomRewardType.SET.getName(), rewardSets.getConfigurationSection(setName));
-                    setSource.setName(source.getName());
-                    source = mergeRewardSource(source, setSource);
+                    setSource.merge(source);
+                    source = setSource;
                 }
             }
         }
 
         return source;
-    }
-
-    private static AbstractRewardSource mergeRewardSource(AbstractRewardSource from, AbstractRewardSource to)
-    {
-        to.setItemDrops(from.hasItemDrops() ? from.getItemDrops() : to.getItemDrops());
-        to.setEntityDrops(from.hasEntityDrops() ? from.getEntityDrops() : to.getEntityDrops());
-        to.setCoin(from.hasCoin() ? from.getCoin() : to.getCoin());
-
-        to.setNoCoinRewardMessage(from.getNoCoinRewardMessage() != null ? from.getNoCoinRewardMessage() : to.getNoCoinRewardMessage());
-        to.setCoinRewardMessage(from.getCoinRewardMessage() != null ? from.getCoinRewardMessage() : to.getCoinRewardMessage());
-        to.setCoinPenaltyMessage(from.getCoinPenaltyMessage() != null ? from.getCoinPenaltyMessage() : to.getCoinPenaltyMessage());
-
-        return to;
     }
 
     protected static AbstractRewardSource configureRewardSource(AbstractRewardSource source, ConfigurationSection config)
