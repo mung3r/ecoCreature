@@ -17,29 +17,26 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.commands;
+package se.crafted.chrisb.ecoCreature.commons;
 
-import org.bukkit.command.CommandSender;
+import net.minecraft.server.ItemStack;
+import net.minecraft.server.NBTTagCompound;
 
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 
-public class DebugCommand extends BasicCommand
+public final class PlayerSkullUtil
 {
-    public DebugCommand()
+    private PlayerSkullUtil()
     {
-        super("Debug");
-        setDescription("Toggle debug log output");
-        setUsage("/ecoc debug");
-        setArgumentRange(0, 0);
-        setIdentifiers("debug");
-        setPermission("ecocreature.command.debug");
     }
 
-    @Override
-    public boolean execute(CommandSender sender, String identifier, String[] args)
+    public static CraftItemStack createPlayerSkull(String playerName)
     {
-        LoggerUtil.getInstance().setDebug(!LoggerUtil.getInstance().isDebug());
-        sender.sendMessage(LoggerUtil.getInstance().isDebug() ? "debug log enabled." : "debug log disabled.");
-        return true;
+        CraftItemStack craftHeadItem = new CraftItemStack(397, 1, (short) 0, (byte) 3);
+        ItemStack headItem = craftHeadItem.getHandle();
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setString("SkullOwner", playerName);
+        headItem.tag = tag;
+        return craftHeadItem;
     }
 }

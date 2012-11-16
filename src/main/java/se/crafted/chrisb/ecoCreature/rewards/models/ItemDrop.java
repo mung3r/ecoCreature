@@ -34,7 +34,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class ItemDrop
 {
@@ -198,7 +198,7 @@ public class ItemDrop
 
         Material material = Material.matchMaterial(itemSubParts[0]);
         if (material == null) {
-            ECLogger.getInstance().debug(ItemDrop.class, "No match for material type: " + itemParts[0]);
+            LoggerUtil.getInstance().debug(ItemDrop.class, "No match for material type: " + itemParts[0]);
         }
 
         return material;

@@ -21,21 +21,21 @@ package se.crafted.chrisb.ecoCreature.commons;
 
 import java.util.logging.Logger;
 
-public final class ECLogger
+public final class LoggerUtil
 {
     private static final String LOG_NAME = "ecoCreature";
-    private static ECLogger instance = new ECLogger();
+    private static LoggerUtil instance = new LoggerUtil();
 
     private Logger logger;
     private String name;
     private boolean debug;
 
-    public static ECLogger getInstance()
+    public static LoggerUtil getInstance()
     {
         return instance;
     }
 
-    private ECLogger()
+    private LoggerUtil()
     {
         logger = Logger.getLogger("Minecraft");
         debug = false;

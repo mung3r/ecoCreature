@@ -27,7 +27,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class MobArenaParty extends AbstractParty
 {
@@ -43,7 +43,7 @@ public class MobArenaParty extends AbstractParty
                 party.add(member.getName());
             }
         }
-        ECLogger.getInstance().debug(this.getClass(), "Heroes party size: " + party.size());
+        LoggerUtil.getInstance().debug(this.getClass(), "Heroes party size: " + party.size());
 
         return party;
     }

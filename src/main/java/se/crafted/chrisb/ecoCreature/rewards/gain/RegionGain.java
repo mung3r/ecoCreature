@@ -33,7 +33,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class RegionGain extends AbstractPlayerGain
 {
@@ -57,7 +57,7 @@ public class RegionGain extends AbstractPlayerGain
                     String regionName = regions.next().getId();
                     if (multipliers.containsKey(regionName)) {
                         multiplier = multipliers.get(regionName);
-                        ECLogger.getInstance().debug(this.getClass(), "Region multiplier: " + multiplier);
+                        LoggerUtil.getInstance().debug(this.getClass(), "Region multiplier: " + multiplier);
                     }
                 }
             }

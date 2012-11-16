@@ -25,7 +25,7 @@ import java.util.Set;
 import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityFarmedEvent;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
@@ -58,12 +58,12 @@ public class EntityFarmedEventHandler extends AbstractEventHandler
         WorldSettings settings = getSettings(event.getEntity().getWorld());
 
         if (settings.isNoFarm() && event.isFarmed()) {
-            ECLogger.getInstance().debug(this.getClass(), "Mob farming detected");
+            LoggerUtil.getInstance().debug(this.getClass(), "Mob farming detected");
             deleteDrops(event);
         }
 
         if (settings.isNoFarmFire() && event.isFireFarmed()) {
-            ECLogger.getInstance().debug(this.getClass(), "Mob farming by fire detected");
+            LoggerUtil.getInstance().debug(this.getClass(), "Mob farming by fire detected");
             deleteDrops(event);
         }
     }

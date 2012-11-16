@@ -29,7 +29,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import couk.Adamki11s.Regios.Regions.Region;
 
 public class RegiosGain extends AbstractPlayerGain
@@ -50,7 +50,7 @@ public class RegiosGain extends AbstractPlayerGain
             Region region = DependencyUtils.getRegiosAPI().getRegion(player.getLocation());
             if (region != null && multipliers.containsKey(region.getName())) {
                 multiplier = multipliers.get(region.getName());
-                ECLogger.getInstance().debug(this.getClass(), "Regios multiplier: " + multiplier);
+                LoggerUtil.getInstance().debug(this.getClass(), "Regios multiplier: " + multiplier);
             }
         }
 

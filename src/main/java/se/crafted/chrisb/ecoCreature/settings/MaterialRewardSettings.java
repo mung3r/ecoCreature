@@ -32,7 +32,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 
 public class MaterialRewardSettings extends AbstractRewardSettings
@@ -60,7 +60,7 @@ public class MaterialRewardSettings extends AbstractRewardSettings
                 return hasRewardSource(block.getType());
             }
             else {
-                ECLogger.getInstance().debug(this.getClass(), "No reward for " + player.getName() + " due to lack of permission for " + block.getType().name());
+                LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + player.getName() + " due to lack of permission for " + block.getType().name());
             }
         }
 
@@ -90,7 +90,7 @@ public class MaterialRewardSettings extends AbstractRewardSettings
             source = getRewardSource(block.getType());
         }
         else {
-            ECLogger.getInstance().warning("No reward found for block: " + block.getType().name());
+            LoggerUtil.getInstance().warning("No reward found for block: " + block.getType().name());
         }
 
         return source;
@@ -104,7 +104,7 @@ public class MaterialRewardSettings extends AbstractRewardSettings
             source = sources.get(material).get(nextInt(sources.get(material).size()));
         }
         else {
-            ECLogger.getInstance().warning("No reward defined for material: " + material);
+            LoggerUtil.getInstance().warning("No reward defined for material: " + material);
         }
 
         return source;

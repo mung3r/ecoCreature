@@ -36,7 +36,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.gain.BiomeGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.EnvironmentGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.FactionsGain;
@@ -73,6 +73,7 @@ public class PluginConfig
 
     private static final String OLD_DEFAULT_FILE = "ecoCreature.yml";
     private static final String DEFAULT_FILE = "default.yml";
+    private static final int BUFFER_SIZE = 8192;
 
     private final ecoCreature plugin;
     private final File dataWorldsFolder;
@@ -109,7 +110,7 @@ public class PluginConfig
 
         try {
             fileConfig = getDefaultConfig();
-            ECLogger.getInstance().setDebug(fileConfig.getBoolean("System.Debug", ECLogger.getInstance().isDebug()));
+            LoggerUtil.getInstance().setDebug(fileConfig.getBoolean("System.Debug", LoggerUtil.getInstance().isDebug()));
 
             WorldSettings defaultSettings = loadWorldSettings(fileConfig);
             worldSettingsMap = new HashMap<String, WorldSettings>();
@@ -123,7 +124,7 @@ public class PluginConfig
 
                 if (worldConfigFile.exists()) {
                     FileConfiguration configFile = getConfig(worldConfigFile);
-                    ECLogger.getInstance().info("Loaded config for " + world.getName() + " world.");
+                    LoggerUtil.getInstance().info("Loaded config for " + world.getName() + " world.");
                     worldSettingsMap.put(world.getName(), loadWorldSettings(configFile));
                     fileConfigMap.put(world.getName(), configFile);
                 }
@@ -135,10 +136,10 @@ public class PluginConfig
             return true;
         }
         catch (IOException ioe) {
-            ECLogger.getInstance().severe("Failed to read config: " + ioe.toString());
+            LoggerUtil.getInstance().severe("Failed to read config: " + ioe.toString());
         }
         catch (InvalidConfigurationException ice) {
-            ECLogger.getInstance().severe("Failed to parse config: " + ice.toString());
+            LoggerUtil.getInstance().severe("Failed to parse config: " + ice.toString());
         }
 
         return false;
@@ -223,11 +224,11 @@ public class PluginConfig
             fileConfig.load(defaultFile);
         }
         else if (oldDefaultFile.exists()) {
-            ECLogger.getInstance().info("Converting old config file.");
+            LoggerUtil.getInstance().info("Converting old config file.");
             fileConfig = getConfig(oldDefaultFile);
             fileConfig.save(defaultFile);
             if (oldDefaultFile.delete()) {
-                ECLogger.getInstance().info("Old config file converted.");
+                LoggerUtil.getInstance().info("Old config file converted.");
             }
         }
         else {
@@ -235,7 +236,7 @@ public class PluginConfig
             fileConfig.save(defaultFile);
         }
 
-        ECLogger.getInstance().info("Loaded config defaults.");
+        LoggerUtil.getInstance().info("Loaded config defaults.");
         return fileConfig;
     }
 
@@ -249,19 +250,25 @@ public class PluginConfig
             InputStream inputStream = plugin.getResource(file.getName());
             FileOutputStream outputStream = new FileOutputStream(file);
 
-            byte[] buffer = new byte[8192];
-            int length = 0;
-            while ((length = inputStream.read(buffer)) > 0) {
-                outputStream.write(buffer, 0, length);
+            try {
+                byte[] buffer = new byte[BUFFER_SIZE];
+                int length = 0;
+                while ((length = inputStream.read(buffer)) > 0) {
+                    outputStream.write(buffer, 0, length);
+                }
+            }
+            catch (IOException e) {
+                LoggerUtil.getInstance().warning("Could not read config file.");
+            }
+            finally {
+                inputStream.close();
+                outputStream.close();
             }
 
-            inputStream.close();
-            outputStream.close();
-
-            ECLogger.getInstance().info("Created config file: " + file.getName());
+            LoggerUtil.getInstance().info("Created config file: " + file.getName());
         }
         else {
-            ECLogger.getInstance().info("Found config file: " + file.getName());
+            LoggerUtil.getInstance().info("Found config file: " + file.getName());
         }
 
         config.load(file);

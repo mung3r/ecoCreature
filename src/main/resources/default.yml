@@ -193,9 +193,9 @@ Gain:
   # Multiply reward amount based on Factions relation
   Factions:
     MEMBER:
-      Amount: -1.0
+      Amount: 1.0
     ALLY:
-      Amount: 0.0
+      Amount: 1.0
     NEUTRAL:
       Amount: 1.125
     ENEMY:
@@ -338,6 +338,10 @@ Gain:
 #
 ############################################################################
 RewardTable:
+  Bat:
+    Coin_Minimum: 0.10
+    Coin_Maximum: 2.00
+    Coin_Percent: 1.0
   Blaze:
     Coin_Minimum: 3.50
     Coin_Maximum: 3.50
@@ -368,9 +372,12 @@ RewardTable:
     Coin_Minimum: 5.50
     Coin_Maximum: 10.50
     Coin_Percent: 50.0
-  Dirt:
-    Drops:
-    - 'iron_ingot:1:1'
+  #
+  # Example reward for a Dirt block-break
+  # 
+  #Dirt:
+  #  Drops:
+  #  - 'iron_ingot:1:1'
   PoweredCreeper:
     Drops:
     - 'sulphur:2:75'
@@ -391,6 +398,8 @@ RewardTable:
     Coin_Minimum: 5.00
     Coin_Maximum: 10.50
     Coin_Percent: 100.0
+    Drops:
+    - 'dragon egg:1-1:100'
   Enderman:
     Drops:
     - 'ender pearl:1:75'
@@ -484,6 +493,16 @@ RewardTable:
     NoReward_Message: ''
     Reward_Message: '&7You are awarded &6<amt>&7 for murdering &5<crt>&7.'
     Penalty_Message: '&7You are penalized &6<amt>&7 for murdering &5<crt>&7.'
+    # Adding a skull item to Player drops the victim's head
+    Drops:
+    - 'skull item:1-1:100'
+    - drop: 'written book:1-1:100'
+      title: A Book Title
+      author: An Author
+      pages:
+      - This is page one of the book
+      - This is page two of the book
+      - This is page three of the book
   Sheep:
     Drops:
     - 'wool:1:75'
@@ -530,6 +549,25 @@ RewardTable:
     Coin_Minimum: 0.10
     Coin_Maximum: 2.50
     Coin_Percent: 1.0
+  Witch:
+    Coin_Minimum: 3.50
+    Coin_Maximum: 3.50
+    Coin_Percent: 50.0
+    Drops:
+    - 'glass bottle:6:0.125'
+    - 'glowstone dust:6:0.125'
+    - 'gunpowder:6:0.125'
+    - 'redstone:6:0.125'
+    - 'spider eye:6:0.125'
+    - 'stick:6:0.125'
+    - 'sugar:6:0.125'
+    - 'potion.0:6:0.125'
+  WitherBoss:
+    Coin_Minimum: 5.00
+    Coin_Maximum: 10.50
+    Coin_Percent: 100.0
+    Drops:
+    - 'nether star:1-1:100'
   Wolf:
     Coin_Minimum: 1.00
     Coin_Maximum: 2.00

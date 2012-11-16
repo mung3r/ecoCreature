@@ -27,7 +27,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 import com.herocraftonline.heroes.characters.Hero;
 
@@ -45,7 +45,7 @@ public class HeroesParty extends AbstractParty
                 party.add(hero.getPlayer().getName());
             }
         }
-        ECLogger.getInstance().debug(this.getClass(), "Heroes party size: " + party.size());
+        LoggerUtil.getInstance().debug(this.getClass(), "Heroes party size: " + party.size());
 
         return party;
     }

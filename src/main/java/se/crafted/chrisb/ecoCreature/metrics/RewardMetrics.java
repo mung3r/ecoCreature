@@ -25,7 +25,7 @@ import java.util.Map;
 
 import org.bukkit.plugin.Plugin;
 
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.metrics.Metrics.Graph;
 import se.crafted.chrisb.ecoCreature.metrics.Metrics.Plotter;
 
@@ -41,7 +41,7 @@ public class RewardMetrics
             metrics = new Metrics(plugin);
         }
         catch (IOException e) {
-            ECLogger.getInstance().warning("Metrics failed to load.");
+            LoggerUtil.getInstance().warning("Metrics failed to load.");
         }
 
         if (metrics != null) {
@@ -53,6 +53,11 @@ public class RewardMetrics
 
     public void addCount(String name)
     {
+        if (name == null) {
+            LoggerUtil.getInstance().warning("Null type name passed into metrics.");
+            return;
+        }
+
         if (graph != null) {
             if (!typeCount.containsKey(name)) {
                 typeCount.put(name, 0);

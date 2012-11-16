@@ -29,7 +29,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class WeatherGain extends AbstractPlayerGain
 {
@@ -69,7 +69,7 @@ public class WeatherGain extends AbstractPlayerGain
 
         if (DependencyUtils.hasPermission(player, "gain.weather") && multipliers.containsKey(weather)) {
             multiplier = multipliers.get(weather);
-            ECLogger.getInstance().debug(this.getClass(), "Weather multiplier: " + multiplier);
+            LoggerUtil.getInstance().debug(this.getClass(), "Weather multiplier: " + multiplier);
         }
 
         return multiplier;
@@ -86,7 +86,7 @@ public class WeatherGain extends AbstractPlayerGain
                     multipliers.put(WEATHER.valueOf(weather.toUpperCase()), Double.valueOf(config.getConfigurationSection(weather).getDouble("Amount", 1.0D)));
                 }
                 catch (Exception e) {
-                    ECLogger.getInstance().warning("Skipping unknown weather name: " + weather);
+                    LoggerUtil.getInstance().warning("Skipping unknown weather name: " + weather);
                 }
             }
             gain = new HashSet<PlayerGain>();

@@ -29,7 +29,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class GroupGain extends AbstractPlayerGain
 {
@@ -52,13 +52,13 @@ public class GroupGain extends AbstractPlayerGain
                 String group = DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName()).toLowerCase();
                 if (DependencyUtils.hasPermission(player, "gain.group") && multipliers.containsKey(group)) {
                     multiplier = multipliers.get(group);
-                    ECLogger.getInstance().debug(this.getClass(), "Group multiplier: " + multiplier);
+                    LoggerUtil.getInstance().debug(this.getClass(), "Group multiplier: " + multiplier);
                 }
             }
         }
         catch (UnsupportedOperationException e) {
             if (warnGroupMultiplierSupport) {
-                ECLogger.getInstance().warning(e.getMessage());
+                LoggerUtil.getInstance().warning(e.getMessage());
                 warnGroupMultiplierSupport = false;
             }
         }

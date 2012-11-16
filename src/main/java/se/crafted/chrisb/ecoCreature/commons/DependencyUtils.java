@@ -91,22 +91,22 @@ public final class DependencyUtils
             RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
             if (permissionProvider != null) {
                 permission = permissionProvider.getProvider();
-                ECLogger.getInstance().info("Found permission provider " + permission.getName());
+                LoggerUtil.getInstance().info("Found permission provider " + permission.getName());
             }
 
             RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
             if (economyProvider != null) {
                 economy = economyProvider.getProvider();
-                ECLogger.getInstance().info("Found economy provider " + economy.getName());
+                LoggerUtil.getInstance().info("Found economy provider " + economy.getName());
             }
         }
 
         if (!hasPermission()) {
-            ECLogger.getInstance().warning("Did not find permission provider");
+            LoggerUtil.getInstance().warning("Did not find permission provider");
         }
 
         if (!hasEconomy()) {
-            ECLogger.getInstance().warning("Did not find economy provider");
+            LoggerUtil.getInstance().warning("Did not find economy provider");
         }
     }
 
@@ -216,12 +216,12 @@ public final class DependencyUtils
         try {
             Class<?> testClass = Class.forName(className);
             if (testClass.isInstance(plugin) && plugin.isEnabled()) {
-                ECLogger.getInstance().info("Found plugin: " + plugin.getDescription().getName());
+                LoggerUtil.getInstance().info("Found plugin: " + plugin.getDescription().getName());
                 return plugin;
             }
         }
         catch (ClassNotFoundException e) {
-            ECLogger.getInstance().info("Did not find plugin: " + pluginName);
+            LoggerUtil.getInstance().info("Did not find plugin: " + pluginName);
         }
         return null;
     }

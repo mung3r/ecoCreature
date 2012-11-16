@@ -27,7 +27,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class HeroesGain extends AbstractPlayerGain
 {
@@ -42,7 +42,7 @@ public class HeroesGain extends AbstractPlayerGain
     public double getMultiplier(Player player)
     {
         if (DependencyUtils.hasPermission(player, "gain.heroes") && DependencyUtils.hasHeroes() && DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {
-            ECLogger.getInstance().debug(this.getClass(), "Heroes multiplier: " + multiplier);
+            LoggerUtil.getInstance().debug(this.getClass(), "Heroes multiplier: " + multiplier);
             return multiplier;
         }
 

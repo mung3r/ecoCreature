@@ -51,7 +51,6 @@ public class CommandHandler
 
     public boolean dispatch(CommandSender sender, org.bukkit.command.Command command, String label, String[] args)
     {
-
         String[] arguments;
         if (args.length < 1) {
             arguments = new String[] { command.getName() };

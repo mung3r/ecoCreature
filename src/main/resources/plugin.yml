@@ -1,6 +1,6 @@
 name: ecoCreature
 main: se.crafted.chrisb.ecoCreature.ecoCreature
-version: 0.2.1-b${BUILD_NUMBER}
+version: 0.2.2-b${BUILD_NUMBER}
 authors: [chrisb, mung3r]
 website: http://dev.bukkit.org/server-mods/ecocreature
 depend: [Vault]
@@ -40,6 +40,7 @@ permissions:
     description: Allows rewards for all creature types
     children:
       ecocreature.reward.angrywolf: true
+      ecocreature.reward.bat: true
       ecocreature.reward.blaze: true
       ecocreature.reward.cavespider: true
       ecocreature.reward.chicken: true
@@ -74,6 +75,8 @@ permissions:
       ecocreature.reward.squid: true
       ecocreature.reward.villager: true
       ecocreature.reward.villagergolem: true
+      ecocreature.reward.witch: true
+      ecocreature.reward.wither: true
       ecocreature.reward.wolf: true
       ecocreature.reward.zombie: true
   ecocreature.command.reload:
@@ -126,6 +129,9 @@ permissions:
     default: op 
   ecocreature.reward.angrywolf:
     description: Enables rewards for angry wolves
+    default: op
+  ecocreature.reward.bat:
+    description: Enables rewards for bat
     default: op
   ecocreature.reward.blaze:
     description: Enables rewards for blazes
@@ -228,6 +234,12 @@ permissions:
     default: op
   ecocreature.reward.villagergolem:
     description: Enables rewards for villagergolems
+    default: op
+  ecocreature.reward.witch:
+    description: Enables rewards for wolves
+    default: op
+  ecocreature.reward.wither:
+    description: Enables rewards for wolves
     default: op
   ecocreature.reward.wolf:
     description: Enables rewards for wolves

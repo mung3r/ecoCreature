@@ -34,7 +34,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
@@ -74,7 +74,7 @@ public class EntityRewardSettings extends AbstractRewardSettings
             }
         }
         else {
-            ECLogger.getInstance().debug(this.getClass(), "No reward for " + killer.getName() + " due to lack of permission for " + entity.getType().getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + killer.getName() + " due to lack of permission for " + entity.getType().getName());
         }
 
         return false;
@@ -103,7 +103,7 @@ public class EntityRewardSettings extends AbstractRewardSettings
             source = getRewardSource(entity.getType());
         }
         else {
-            ECLogger.getInstance().warning("No reward found for entity: " + entity.getType().getName());
+            LoggerUtil.getInstance().warning("No reward found for entity: " + entity.getType().getName());
         }
 
         return source;
@@ -117,7 +117,7 @@ public class EntityRewardSettings extends AbstractRewardSettings
             source = sources.get(entityType).get(nextInt(sources.get(entityType).size()));
         }
         else {
-            ECLogger.getInstance().warning("No reward defined for entity type: " + entityType.getName());
+            LoggerUtil.getInstance().warning("No reward defined for entity type: " + entityType.getName());
         }
 
         return source;

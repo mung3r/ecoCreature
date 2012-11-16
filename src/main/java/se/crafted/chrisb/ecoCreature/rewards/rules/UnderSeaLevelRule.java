@@ -25,7 +25,7 @@ import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import se.crafted.chrisb.ecoCreature.commons.ECLogger;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
@@ -52,7 +52,7 @@ public class UnderSeaLevelRule extends AbstractRule
         boolean ruleBroken = !huntUnderSeaLevel && EntityUtils.isUnderSeaLevel(event.getKiller());
 
         if (ruleBroken) {
-            ECLogger.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " killing under sea level.");
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " killing under sea level.");
         }
 
         return ruleBroken;
