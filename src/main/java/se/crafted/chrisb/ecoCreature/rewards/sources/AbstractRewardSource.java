@@ -203,6 +203,19 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         this.integerCurrency = integerCurrency;
     }
 
+    public void merge(AbstractRewardSource source)
+    {
+        name = source.getName();
+
+        itemDrops = source.hasItemDrops() ? source.getItemDrops() : itemDrops;
+        entityDrops = source.hasEntityDrops() ? source.getEntityDrops() : entityDrops;
+        coin = source.hasCoin() ? source.getCoin() : coin;
+
+        noCoinRewardMessage = source.getNoCoinRewardMessage() != null ? source.getNoCoinRewardMessage() : noCoinRewardMessage;
+        coinRewardMessage = source.getCoinRewardMessage() != null ? source.getCoinRewardMessage() : coinRewardMessage;
+        coinPenaltyMessage = source.getCoinPenaltyMessage() != null ? source.getCoinPenaltyMessage() : coinPenaltyMessage;
+    }
+
     public Reward getOutcome(Event event)
     {
         Reward reward = new Reward(getLocation(event));

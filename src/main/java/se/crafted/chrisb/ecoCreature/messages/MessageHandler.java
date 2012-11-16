@@ -55,12 +55,12 @@ public class MessageHandler
             }
 
             if (message instanceof CoinMessageDecorator && ((CoinMessageDecorator) message).isCoinLoggingEnabled()) {
-                LoggerUtil.getInstance().info(removeColorCodes(String.format("%s: %s", getAwardedPlayerName(message), assembledMessage)));
+                LoggerUtil.getInstance().info(removeColorCodes(String.format("%s: %s", getAwardedPlayerName(), assembledMessage)));
             }
         }
     }
 
-    private String getAwardedPlayerName(Message message)
+    private String getAwardedPlayerName()
     {
         return parameters.get(MessageToken.PLAYER);
     }
