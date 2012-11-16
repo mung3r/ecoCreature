@@ -57,19 +57,20 @@ public abstract class AbstractRewardSettings
 
     protected static AbstractRewardSource mergeSets(AbstractRewardSource source, ConfigurationSection rewardConfig, ConfigurationSection rewardSets)
     {
+        AbstractRewardSource newSource = source;
         List<String> sets = rewardConfig.getStringList("Sets");
 
         if (!sets.isEmpty() && rewardSets != null) {
             for (String setName : sets) {
                 if (rewardSets.getConfigurationSection(setName) != null) {
                     AbstractRewardSource setSource = RewardSourceFactory.createSource(CustomRewardType.SET.getName(), rewardSets.getConfigurationSection(setName));
-                    setSource.merge(source);
-                    source = setSource;
+                    setSource.merge(newSource);
+                    newSource = setSource;
                 }
             }
         }
 
-        return source;
+        return newSource;
     }
 
     protected static AbstractRewardSource configureRewardSource(AbstractRewardSource source, ConfigurationSection config)
