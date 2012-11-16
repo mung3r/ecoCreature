@@ -193,9 +193,9 @@ Gain:
   # Multiply reward amount based on Factions relation
   Factions:
     MEMBER:
-      Amount: -1.0
+      Amount: 1.0
     ALLY:
-      Amount: 0.0
+      Amount: 1.0
     NEUTRAL:
       Amount: 1.125
     ENEMY:
@@ -496,6 +496,13 @@ RewardTable:
     # Adding a skull item to Player drops the victim's head
     Drops:
     - 'skull item:1-1:100'
+    - drop: 'written book:1-1:100'
+      title: A Book Title
+      author: An Author
+      pages:
+      - This is page one of the book
+      - This is page two of the book
+      - This is page three of the book
   Sheep:
     Drops:
     - 'wool:1:75'
