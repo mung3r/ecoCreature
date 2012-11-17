@@ -31,7 +31,7 @@ public class BookItem {
 		if(item instanceof CraftItemStack) {
 			stack = (CraftItemStack)item;
 			this.item = stack.getHandle();
-		}else if(item instanceof org.bukkit.inventory.ItemStack) {
+		}else {
 			stack = new CraftItemStack(item);
 			this.item = stack.getHandle();
 		}
