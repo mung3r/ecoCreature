@@ -496,13 +496,6 @@ RewardTable:
     # Adding a skull item to Player drops the victim's head
     Drops:
     - 'skull item:1-1:100'
-    - drop: 'written book:1-1:100'
-      title: A Book Title
-      author: An Author
-      pages:
-      - This is page one of the book
-      - This is page two of the book
-      - This is page three of the book
   Sheep:
     Drops:
     - 'wool:1:75'
@@ -590,6 +583,7 @@ RewardTable:
   Zombie:
     Sets:
     - PoorZombie
+    - BookZombie
     - RichZombie
     - ZombieApocalypse
 
@@ -620,6 +614,16 @@ RewardSets:
   PoorZombie:
     Drops:
     - 'rotten flesh:2:75'
+  BookZombie:
+    Drops:
+    - 'rotten flesh:2:75'
+    - item: 'written book:1-1:100'
+      title: Journal of a Zombie
+      author: Decaying-EarNibbler
+      pages:
+      - 'Day 1: No people to be found today. Very hungry.'
+      - 'Day 2: Another day with out brains. Starving.'
+      - 'Day 3: Just saw someone I can feast on! Will write later how that goes.'
   RichZombie:
     Drops:
     - 'rotten flesh:2:75'

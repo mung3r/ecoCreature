@@ -19,14 +19,22 @@
  */
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.PluginConfig;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.commons.PlayerSkullUtil;
+import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
+import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
+import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
 public abstract class AbstractEventHandler implements RewardEventCreator
@@ -58,5 +66,49 @@ public abstract class AbstractEventHandler implements RewardEventCreator
     protected WorldSettings getWorldSettings(World world)
     {
         return getPluginConfig().getWorldSettings(world);
+    }
+
+    protected static void addPlayerSkullToEvent(Reward reward, Event event)
+    {
+        if (event instanceof PlayerKilledEvent) {
+            PlayerKilledEvent playerKilledEvent = (PlayerKilledEvent) event;
+
+            if (reward != null && !reward.getItemDrops().isEmpty()) {
+                List<ItemStack> itemDrops = new ArrayList<ItemStack>();
+
+                for (ItemStack itemStack : reward.getItemDrops()) {
+                    if (itemStack.getType() == Material.SKULL_ITEM) {
+                        playerKilledEvent.getDrops().add(PlayerSkullUtil.createPlayerSkull(playerKilledEvent.getVictim().getName()));
+                    }
+                    else {
+                        itemDrops.add(itemStack);
+                    }
+                }
+
+                reward.setItemDrops(itemDrops);
+            }
+        }
+    }
+
+    protected static void addBooksToEvent(Reward reward, Event event)
+    {
+        if (event instanceof EntityKilledEvent) {
+            EntityKilledEvent entityKilledEvent = (EntityKilledEvent) event;
+
+            if (reward != null && !reward.getItemDrops().isEmpty()) {
+                List<ItemStack> itemDrops = new ArrayList<ItemStack>();
+
+                for (ItemStack itemStack : reward.getItemDrops()) {
+                    if (itemStack.getType() == Material.WRITTEN_BOOK) {
+                        entityKilledEvent.getDrops().add(itemStack);
+                    }
+                    else {
+                        itemDrops.add(itemStack);
+                    }
+                }
+
+                reward.setItemDrops(itemDrops);
+            }
+        }
     }
 }

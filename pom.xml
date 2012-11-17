@@ -181,6 +181,7 @@
               <excludes>
                 <exclude>src/main/java/**/CommandHandler.java</exclude>
                 <exclude>src/main/java/**/Metrics.java</exclude>
+                <exclude>src/main/java/**/BookItem.java</exclude>
               </excludes>
             </configuration>
             <phase>clean</phase>
