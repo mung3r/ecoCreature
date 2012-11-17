@@ -34,6 +34,8 @@ import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
+import se.crafted.chrisb.ecoCreature.rewards.models.AbstractItemDrop;
+import se.crafted.chrisb.ecoCreature.rewards.models.BookDrop;
 import se.crafted.chrisb.ecoCreature.rewards.models.CoinDrop;
 import se.crafted.chrisb.ecoCreature.rewards.models.CoinReward;
 import se.crafted.chrisb.ecoCreature.rewards.models.EntityDrop;
@@ -49,7 +51,7 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
 
     private String name;
     private CoinDrop coin;
-    private List<ItemDrop> itemDrops;
+    private List<AbstractItemDrop> itemDrops;
     private List<EntityDrop> entityDrops;
 
     private Message noCoinRewardMessage;
@@ -70,7 +72,9 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         }
         name = config.getName();
 
-        itemDrops = ItemDrop.parseConfig(config);
+        itemDrops = new ArrayList<AbstractItemDrop>();
+        itemDrops.addAll(ItemDrop.parseConfig(config));
+        itemDrops.addAll(BookDrop.parseConfig(config));
         entityDrops = EntityDrop.parseConfig(config);
         coin = CoinDrop.parseConfig(config);
 
@@ -114,13 +118,13 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
     }
 
     @Override
-    public List<ItemDrop> getItemDrops()
+    public List<AbstractItemDrop> getItemDrops()
     {
         return itemDrops;
     }
 
     @Override
-    public void setItemDrops(List<ItemDrop> drops)
+    public void setItemDrops(List<AbstractItemDrop> drops)
     {
         this.itemDrops = drops;
     }
@@ -252,7 +256,7 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         if (itemDrops != null) {
             stacks = new ArrayList<ItemStack>();
 
-            for (ItemDrop drop : itemDrops) {
+            for (AbstractItemDrop drop : itemDrops) {
                 ItemStack itemStack = drop.getOutcome(fixedDrops);
                 if (itemStack != null) {
                     stacks.add(itemStack);

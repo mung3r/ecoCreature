@@ -24,139 +24,42 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.lang.math.IntRange;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-public class ItemDrop
+public class ItemDrop extends AbstractItemDrop
 {
-    private Material material;
-    private Byte data;
-    private Short durability;
-    private IntRange range;
-    private double percentage;
-    private Set<ItemEnchantment> enchantments;
-    private final Random random = new Random();
-
-    public ItemDrop()
+    public ItemDrop(Material material)
     {
-        this.enchantments = Collections.emptySet();
+        super(material);
     }
 
-    public Material getMaterial()
+    public static List<AbstractItemDrop> parseConfig(ConfigurationSection config)
     {
-        return material;
-    }
-
-    public void setMaterial(Material item)
-    {
-        this.material = item;
-    }
-
-    public Byte getData()
-    {
-        return data;
-    }
-
-    public void setData(Byte data)
-    {
-        this.data = data;
-    }
-
-    public Short getDurability()
-    {
-        return durability;
-    }
-
-    public void setDurability(Short durability)
-    {
-        this.durability = durability;
-    }
-
-    public IntRange getRange()
-    {
-        return range;
-    }
-
-    public void setRange(IntRange range)
-    {
-        this.range = range;
-    }
-
-    public double getPercentage()
-    {
-        return percentage;
-    }
-
-    public void setPercentage(double percentage)
-    {
-        this.percentage = percentage;
-    }
-
-    public Set<ItemEnchantment> getEnchantments()
-    {
-        return enchantments;
-    }
-
-    public void setEnchantments(Set<ItemEnchantment> enchantments)
-    {
-        this.enchantments = enchantments;
-    }
-
-    public ItemStack getOutcome(boolean isFixedDrops)
-    {
-        if (Math.random() * 100.0D < percentage && material != null) {
-            int dropAmount = isFixedDrops ? range.getMaximumInteger() : range.getMinimumInteger() + random.nextInt(Math.abs(range.getMaximumInteger() - range.getMinimumInteger() + 1));
-
-            if (dropAmount > 0) {
-                ItemStack itemStack;
-                if (data == null) {
-                    itemStack = new ItemStack(material, dropAmount);
-                }
-                else {
-                    MaterialData materialData = new MaterialData(material, data);
-                    itemStack = materialData.toItemStack(dropAmount);
-                    if (durability != null) {
-                        itemStack.setDurability(durability);
-                    }
-                }
-                itemStack.addEnchantments(ItemEnchantment.getOutcome(enchantments));
-                if (itemStack.getAmount() > 0) {
-                    return itemStack;
-                }
-            }
-        }
-        return null;
-    }
-
-    public static List<ItemDrop> parseConfig(ConfigurationSection config)
-    {
-        List<ItemDrop> drops = Collections.emptyList();
+        List<AbstractItemDrop> drops = Collections.emptyList();
 
         if (config != null) {
             if (config.getList("Drops") != null) {
                 List<String> dropsList = config.getStringList("Drops");
-                drops = ItemDrop.parseDrops(dropsList);
+                drops = parseDrops(dropsList);
             }
             else {
-                drops = ItemDrop.parseDrops(config.getString("Drops"));
+                drops = parseDrops(config.getString("Drops"));
             }
         }
 
         return drops;
     }
 
-    private static List<ItemDrop> parseDrops(String dropsString)
+    private static List<AbstractItemDrop> parseDrops(String dropsString)
     {
-        List<ItemDrop> drops = Collections.emptyList();
+        List<AbstractItemDrop> drops = Collections.emptyList();
 
         if (dropsString != null && !dropsString.isEmpty()) {
             drops = parseDrops(Arrays.asList(dropsString.split(";")));
@@ -165,32 +68,45 @@ public class ItemDrop
         return drops;
     }
 
-    private static List<ItemDrop> parseDrops(List<String> dropsList)
+    private static List<AbstractItemDrop> parseDrops(List<String> dropsList)
     {
-        List<ItemDrop> drops = Collections.emptyList();
+        List<AbstractItemDrop> drops = Collections.emptyList();
 
         if (dropsList != null && !dropsList.isEmpty()) {
-            drops = new ArrayList<ItemDrop>();
+            drops = new ArrayList<AbstractItemDrop>();
 
             for (String dropString : dropsList) {
-                Material material = parseMaterial(dropString);
-                if (material != null) {
-                    ItemDrop drop = new ItemDrop();
-                    drop.setMaterial(material);
-                    drop.setEnchantments(parseEnchantments(dropString));
-                    drop.setData(parseData(dropString));
-                    drop.setDurability(parseDurability(dropString));
-                    drop.setRange(parseRange(dropString));
-                    drop.setPercentage(parsePercentage(dropString));
-                    drops.add(drop);
-                }
+                drops.addAll(parseItem(dropString));
             }
         }
 
         return drops;
     }
 
-    private static Material parseMaterial(String dropString)
+    protected static List<AbstractItemDrop> parseItem(String dropString)
+    {
+        List<AbstractItemDrop> drops = Collections.emptyList();
+
+        if (parseMaterial(dropString) != null) {
+            drops = new ArrayList<AbstractItemDrop>();
+            drops.add(populateItemDrop(new ItemDrop(parseMaterial(dropString)), dropString));
+        }
+
+        return drops;
+    }
+
+    protected static AbstractItemDrop populateItemDrop(AbstractItemDrop drop, String dropString)
+    {
+        drop.setEnchantments(parseEnchantments(dropString));
+        drop.setData(parseData(dropString));
+        drop.setDurability(parseDurability(dropString));
+        drop.setRange(parseRange(dropString));
+        drop.setPercentage(parsePercentage(dropString));
+
+        return drop;
+    }
+
+    protected static Material parseMaterial(String dropString)
     {
         String[] dropParts = dropString.split(":");
         String[] itemParts = dropParts[0].split(",");

@@ -26,9 +26,9 @@ public interface ItemReward
 {
     boolean hasItemDrops();
 
-    List<ItemDrop> getItemDrops();
+    List<AbstractItemDrop> getItemDrops();
 
-    void setItemDrops(List<ItemDrop> itemDrops);
+    void setItemDrops(List<AbstractItemDrop> itemDrops);
 
     Boolean isFixedDrops();
 

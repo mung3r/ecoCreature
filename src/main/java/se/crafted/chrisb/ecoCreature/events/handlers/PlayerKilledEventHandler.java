@@ -19,21 +19,16 @@
  */
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.commons.PlayerSkullUtil;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
@@ -108,20 +103,8 @@ public class PlayerKilledEventHandler extends AbstractEventHandler
             event.setDroppedExp(0);
         }
 
-        if (!reward.getItemDrops().isEmpty()) {
-            List<ItemStack> itemDrops = new ArrayList<ItemStack>();
-
-            for (ItemStack itemStack : reward.getItemDrops()) {
-                if (itemStack.getType().equals(Material.SKULL_ITEM)) {
-                    event.getDrops().add(PlayerSkullUtil.createPlayerSkull(event.getVictim().getName()));
-                }
-                else {
-                    itemDrops.add(itemStack);
-                }
-            }
-
-            reward.setItemDrops(itemDrops);
-        }
+        addPlayerSkullToEvent(reward, event);
+        addBooksToEvent(reward, event);
 
         return reward;
     }

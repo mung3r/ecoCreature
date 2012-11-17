@@ -83,6 +83,9 @@ public class EntityDeathEventHandler extends AbstractEventHandler
                 event.setDroppedExp(0);
             }
 
+            addPlayerSkullToEvent(reward, event);
+            addBooksToEvent(reward, event);
+
             events = new HashSet<RewardEvent>();
             events.add(new RewardEvent(killer, reward));
         }
