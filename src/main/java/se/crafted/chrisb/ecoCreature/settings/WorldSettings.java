@@ -126,11 +126,11 @@ public class WorldSettings implements SpawnerMobTracking
         return hasReward;
     }
 
-    public Reward getReward(Event event)
+    public Reward createReward(Event event)
     {
         for (AbstractRewardSettings settings : this.rewardSettings) {
             if (settings.hasRewardSource(event)) {
-                return settings.getRewardSource(event).getOutcome(event);
+                return settings.getRewardSource(event).createReward(event);
             }
         }
 

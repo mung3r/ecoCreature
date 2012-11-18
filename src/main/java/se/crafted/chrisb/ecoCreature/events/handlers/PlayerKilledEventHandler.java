@@ -55,13 +55,13 @@ public class PlayerKilledEventHandler extends AbstractEventHandler
 
         if (event instanceof PlayerKilledEvent) {
             events = new HashSet<RewardEvent>();
-            events.addAll(getRewardEvents((PlayerKilledEvent) event));
+            events.addAll(createRewardEvents((PlayerKilledEvent) event));
         }
 
         return events;
     }
 
-    private Set<RewardEvent> getRewardEvents(PlayerKilledEvent event)
+    private Set<RewardEvent> createRewardEvents(PlayerKilledEvent event)
     {
         Set<RewardEvent> events = Collections.emptySet();
 
@@ -70,7 +70,7 @@ public class PlayerKilledEventHandler extends AbstractEventHandler
         WorldSettings settings = getSettings(killer.getWorld());
 
         if (settings.hasReward(event)) {
-            Reward killerReward = getWinnerReward(event);
+            Reward killerReward = createWinnerReward(event);
 
             events = new HashSet<RewardEvent>();
             events.add(new RewardEvent(killer, killerReward));
@@ -78,7 +78,7 @@ public class PlayerKilledEventHandler extends AbstractEventHandler
             PlayerDeathEvent deathEvent = new PlayerDeathEvent(event.getEntity(), event.getDrops(), event.getDroppedExp(), event.getNewExp(),
                     event.getNewTotalExp(), event.getNewLevel(), event.getDeathMessage());
             if (settings.hasReward(deathEvent)) {
-                Reward penalty = settings.getReward(deathEvent);
+                Reward penalty = settings.createReward(deathEvent);
                 penalty.setCoin(killerReward.getCoin());
                 penalty.setGain(-killerReward.getGain());
 
@@ -89,15 +89,15 @@ public class PlayerKilledEventHandler extends AbstractEventHandler
         return events;
     }
 
-    private Reward getWinnerReward(PlayerKilledEvent event)
+    private Reward createWinnerReward(PlayerKilledEvent event)
     {
         WorldSettings settings = getSettings(event.getEntity().getWorld());
-        Reward reward = settings.getReward(event);
+        Reward reward = settings.createReward(event);
         reward.addParameter(MessageToken.CREATURE, event.getVictim().getName());
 
-        if ((settings.isOverrideDrops() && reward.hasDrops()) || (settings.isClearOnNoDrops() && !reward.hasDrops())) {
+        /*if ((settings.isOverrideDrops() && reward.hasDrops()) || (settings.isClearOnNoDrops() && !reward.hasDrops())) {
             event.getDrops().clear();
-        }
+        }*/
 
         if (reward.getEntityDrops().contains(EntityType.EXPERIENCE_ORB)) {
             event.setDroppedExp(0);

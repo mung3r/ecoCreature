@@ -117,7 +117,7 @@ public class EntityRewardSettings extends AbstractRewardSettings
             source = sources.get(entityType).get(nextInt(sources.get(entityType).size()));
         }
         else {
-            LoggerUtil.getInstance().warning("No reward defined for entity type: " + entityType.getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward defined for entity type: " + entityType.getName());
         }
 
         return source;

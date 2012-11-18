@@ -23,9 +23,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.commons.BookItem;
@@ -96,15 +98,17 @@ public class BookDrop extends ItemDrop
 
             for (Object obj : config.getList("Drops")) {
                 if (obj instanceof LinkedHashMap) {
-                    LinkedHashMap<?, ?> itemConfig = (LinkedHashMap<?, ?>) obj;
+                    MemoryConfiguration itemConfig = new MemoryConfiguration();
+                    itemConfig.addDefaults((Map<String, Object>) obj);
+                    Material material = parseMaterial(itemConfig.getString("item"));
 
-                    String dropString = (String) itemConfig.get("item");
-                    if (parseMaterial(dropString).equals(Material.WRITTEN_BOOK)) {
-                        BookDrop drop = new BookDrop(parseMaterial(dropString));
-                        drop.setTitle((String) itemConfig.get("title"));
-                        drop.setAuthor((String) itemConfig.get("author"));
-                        drop.setPages((List<String>) itemConfig.get("pages"));
-                        populateItemDrop(drop, dropString);
+                    if (material == Material.WRITTEN_BOOK) {
+                        BookDrop drop = new BookDrop(material);
+                        drop.setTitle(itemConfig.getString("title", "No Title"));
+                        drop.setAuthor(itemConfig.getString("author", "No Author"));
+                        drop.setPages(itemConfig.getStringList("pages"));
+                        populateItemDrop(drop, itemConfig.getString("item"));
+
                         drops.add(drop);
                     }
                 }

@@ -54,13 +54,13 @@ public class BlockEventHandler extends AbstractEventHandler
 
         if (event instanceof BlockBreakEvent) {
             events = new HashSet<RewardEvent>();
-            events.addAll(getRewardEvents((BlockBreakEvent) event));
+            events.addAll(createRewardEvents((BlockBreakEvent) event));
         }
 
         return events;
     }
 
-    private Set<RewardEvent> getRewardEvents(BlockBreakEvent event)
+    private Set<RewardEvent> createRewardEvents(BlockBreakEvent event)
     {
         Set<RewardEvent> events = Collections.emptySet();
 
@@ -68,7 +68,7 @@ public class BlockEventHandler extends AbstractEventHandler
         WorldSettings settings = getSettings(player.getWorld());
 
         if (settings.hasReward(event)) {
-            Reward reward = settings.getReward(event);
+            Reward reward = settings.createReward(event);
             reward.setGain(settings.getGainMultiplier(player));
             reward.addParameter(MessageToken.ITEM, EntityUtils.getItemNameInHand(player))
                 .addParameter(MessageToken.CREATURE, reward.getName());

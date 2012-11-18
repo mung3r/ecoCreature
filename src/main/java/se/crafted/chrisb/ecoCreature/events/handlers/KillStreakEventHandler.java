@@ -52,13 +52,13 @@ public class KillStreakEventHandler extends AbstractEventHandler
 
         if (event instanceof KillStreakEvent) {
             events = new HashSet<RewardEvent>();
-            events.addAll(getRewardEvents((KillStreakEvent) event));
+            events.addAll(createRewardEvents((KillStreakEvent) event));
         }
 
         return events;
     }
 
-    private Set<RewardEvent> getRewardEvents(KillStreakEvent event)
+    private Set<RewardEvent> createRewardEvents(KillStreakEvent event)
     {
         Set<RewardEvent> events = Collections.emptySet();
 
@@ -67,7 +67,7 @@ public class KillStreakEventHandler extends AbstractEventHandler
         WorldSettings settings = getSettings(player.getWorld());
 
         if (settings.hasReward(event)) {
-            Reward reward = settings.getReward(event);
+            Reward reward = settings.createReward(event);
             reward.setGain(kills);
 
             events = new HashSet<RewardEvent>();

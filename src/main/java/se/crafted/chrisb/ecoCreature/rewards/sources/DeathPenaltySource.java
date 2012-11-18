@@ -81,7 +81,7 @@ public class DeathPenaltySource extends AbstractRewardSource
     }
 
     @Override
-    public Reward getOutcome(Event event)
+    public Reward createReward(Event event)
     {
         Reward reward = new Reward(getLocation(event));
 

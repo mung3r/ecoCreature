@@ -54,13 +54,13 @@ public class EntityDeathEventHandler extends AbstractEventHandler
 
         if (event instanceof EntityKilledEvent) {
             events = new HashSet<RewardEvent>();
-            events.addAll(getRewardEvents((EntityKilledEvent) event));
+            events.addAll(createRewardEvents((EntityKilledEvent) event));
         }
 
         return events;
     }
 
-    private Set<RewardEvent> getRewardEvents(EntityKilledEvent event)
+    private Set<RewardEvent> createRewardEvents(EntityKilledEvent event)
     {
         Set<RewardEvent> events = Collections.emptySet();
 
@@ -69,7 +69,7 @@ public class EntityDeathEventHandler extends AbstractEventHandler
         event.setSpawnerMobTracking(settings);
 
         if (settings.hasReward(event)) {
-            Reward reward = settings.getReward(event);
+            Reward reward = settings.createReward(event);
             reward.setGain(settings.getGainMultiplier(killer));
             reward.setParty(settings.getParty(killer));
             reward.addParameter(MessageToken.CREATURE, reward.getName())

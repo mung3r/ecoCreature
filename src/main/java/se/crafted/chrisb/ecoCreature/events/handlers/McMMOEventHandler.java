@@ -53,13 +53,13 @@ public class McMMOEventHandler extends AbstractEventHandler
 
         if (event instanceof McMMOPlayerLevelUpEvent) {
             events = new HashSet<RewardEvent>();
-            events.addAll(getRewardEvents((McMMOPlayerLevelUpEvent) event));
+            events.addAll(createRewardEvents((McMMOPlayerLevelUpEvent) event));
         }
 
         return events;
     }
 
-    private Set<RewardEvent> getRewardEvents(McMMOPlayerLevelUpEvent event)
+    private Set<RewardEvent> createRewardEvents(McMMOPlayerLevelUpEvent event)
     {
         Set<RewardEvent> events = Collections.emptySet();
 
@@ -67,7 +67,7 @@ public class McMMOEventHandler extends AbstractEventHandler
         WorldSettings settings = getSettings(player.getWorld());
 
         if (settings.hasReward(event)) {
-            Reward reward = settings.getReward(event);
+            Reward reward = settings.createReward(event);
 
             events = new HashSet<RewardEvent>();
             events.add(new RewardEvent(player, reward));

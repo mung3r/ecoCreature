@@ -53,13 +53,13 @@ public class HeroesEventHandler extends AbstractEventHandler
 
         if (event instanceof HeroChangeLevelEvent) {
             events = new HashSet<RewardEvent>();
-            events.addAll(getRewardEvents((HeroChangeLevelEvent) event));
+            events.addAll(createRewardEvents((HeroChangeLevelEvent) event));
         }
 
         return events;
     }
 
-    private Set<RewardEvent> getRewardEvents(HeroChangeLevelEvent event)
+    private Set<RewardEvent> createRewardEvents(HeroChangeLevelEvent event)
     {
         Set<RewardEvent> events = Collections.emptySet();
 
@@ -67,7 +67,7 @@ public class HeroesEventHandler extends AbstractEventHandler
         WorldSettings settings = getSettings(player.getWorld());
 
         if (settings.hasReward(event)) {
-            Reward reward = settings.getReward(event);
+            Reward reward = settings.createReward(event);
 
             events = new HashSet<RewardEvent>();
             events.add(new RewardEvent(player, reward));

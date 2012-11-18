@@ -104,7 +104,7 @@ public class MaterialRewardSettings extends AbstractRewardSettings
             source = sources.get(material).get(nextInt(sources.get(material).size()));
         }
         else {
-            LoggerUtil.getInstance().warning("No reward defined for material: " + material);
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward defined for material: " + material);
         }
 
         return source;
