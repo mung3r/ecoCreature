@@ -52,13 +52,13 @@ public class PlayerDeathEventHandler extends AbstractEventHandler
 
         if (event instanceof PlayerDeathEvent) {
             events = new HashSet<RewardEvent>();
-            events.addAll(getRewardEvents((PlayerDeathEvent) event));
+            events.addAll(createRewardEvents((PlayerDeathEvent) event));
         }
 
         return events;
     }
 
-    private Set<RewardEvent> getRewardEvents(PlayerDeathEvent event)
+    private Set<RewardEvent> createRewardEvents(PlayerDeathEvent event)
     {
         Set<RewardEvent> events = Collections.emptySet();
 
@@ -66,7 +66,7 @@ public class PlayerDeathEventHandler extends AbstractEventHandler
         WorldSettings settings = getSettings(player.getWorld());
 
         if (settings.hasReward(event)) {
-            Reward reward = settings.getReward(event);
+            Reward reward = settings.createReward(event);
 
             events = new HashSet<RewardEvent>();
             events.add(new RewardEvent(player, reward));

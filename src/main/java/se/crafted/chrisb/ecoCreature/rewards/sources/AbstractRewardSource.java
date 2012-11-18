@@ -220,7 +220,7 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         coinPenaltyMessage = source.getCoinPenaltyMessage() != null ? source.getCoinPenaltyMessage() : coinPenaltyMessage;
     }
 
-    public Reward getOutcome(Event event)
+    public Reward createReward(Event event)
     {
         Reward reward = new Reward(getLocation(event));
 
