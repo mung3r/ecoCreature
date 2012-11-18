@@ -98,7 +98,7 @@ public class HeroesRewardSettings extends AbstractRewardSettings
             source = sources.get(type).get(nextInt(sources.get(type).size()));
         }
         else {
-            LoggerUtil.getInstance().warning("No reward defined for custom type: " + type.name());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward defined for custom type: " + type.name());
         }
 
         return source;
