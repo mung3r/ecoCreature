@@ -61,12 +61,12 @@
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
-      <version>1.4.4-R0.1-SNAPSHOT</version>
+      <version>1.4.5-R0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>craftbukkit</artifactId>
-      <version>1.4.4-R0.1-SNAPSHOT</version>
+      <version>1.4.5-R0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>net.milkbowl.vault</groupId>
@@ -76,7 +76,7 @@
     <dependency>
       <groupId>org.simiancage.deathtpplus</groupId>
       <artifactId>DeathTpPlus</artifactId>
-      <version>1.95-SNAPSHOT</version>
+      <version>4.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.sk89q</groupId>
