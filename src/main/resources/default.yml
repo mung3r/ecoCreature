@@ -561,6 +561,10 @@ RewardTable:
     Coin_Percent: 100.0
     Drops:
     - 'nether star:1-1:100'
+  WitherSkeleton:
+    Coin_Minimum: 1.00
+    Coin_Maximum: 3.00
+    Coin_Percent: 50.0
   Wolf:
     Coin_Minimum: 1.00
     Coin_Maximum: 2.00
