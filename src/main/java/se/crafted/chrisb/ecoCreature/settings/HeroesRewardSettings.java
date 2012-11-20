@@ -58,7 +58,7 @@ public class HeroesRewardSettings extends AbstractRewardSettings
         if (DependencyUtils.hasPermission(player, "reward.heromastered") && event.getHero().getLevel() == event.getHeroClass().getMaxLevel()) {
             return hasRewardSource(HeroesRewardType.HERO_MASTERED);
         }
-        else if (DependencyUtils.hasPermission(player, "reward.heroleveled")) {
+        else if (DependencyUtils.hasPermission(player, "reward.heroleveled") && (event.getTo() - event.getFrom()) > 0) {
             return hasRewardSource(HeroesRewardType.HERO_LEVELED);
         }
         else {

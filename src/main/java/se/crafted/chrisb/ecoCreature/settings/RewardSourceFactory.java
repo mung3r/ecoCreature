@@ -103,6 +103,7 @@ public final class RewardSourceFactory
             case ANGRY_WOLF:
             case PLAYER:
             case POWERED_CREEPER:
+            case WITHER_SKELETON:
                 source = new EntityRewardSource(config);
                 break;
             default:

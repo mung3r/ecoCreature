@@ -27,6 +27,8 @@ import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.entity.Wolf;
 
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
@@ -36,6 +38,7 @@ public enum CustomEntityRewardType
     ANGRY_WOLF("AngryWolf"),
     PLAYER("Player"),
     POWERED_CREEPER("PoweredCreeper"),
+    WITHER_SKELETON("WitherSkeleton"),
     INVALID("__Invalid__");
 
     private static final Map<String, CustomEntityRewardType> NAME_MAP = new HashMap<String, CustomEntityRewardType>();
@@ -76,6 +79,9 @@ public enum CustomEntityRewardType
         }
         else if (entity instanceof Wolf && ((Wolf) entity).isAngry()) {
             entityType = CustomEntityRewardType.ANGRY_WOLF;
+        }
+        else if (entity instanceof Skeleton && ((Skeleton) entity).getSkeletonType() == SkeletonType.WITHER) {
+            entityType = CustomEntityRewardType.WITHER_SKELETON;
         }
         else if (entity instanceof LivingEntity) {
             entityType = CustomEntityRewardType.fromName(entity.getType().getName());
