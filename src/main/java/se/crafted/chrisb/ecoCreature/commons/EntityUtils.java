@@ -37,8 +37,8 @@ public final class EntityUtils
     {
         Location loc = entity.getLocation();
         BlockState[] tileEntities = entity.getLocation().getChunk().getTileEntities();
-        int r = radius;
-        r *= r;
+        int r = radius * radius;
+
         for (BlockState state : tileEntities) {
             if (state instanceof CreatureSpawner && state.getBlock().getLocation().distanceSquared(loc) <= r) {
                 return true;

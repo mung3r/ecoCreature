@@ -28,13 +28,17 @@ import java.util.Set;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.metadata.FixedMetadataValue;
 
+import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.gain.PlayerGain;
 import se.crafted.chrisb.ecoCreature.rewards.parties.Party;
 
 public class WorldSettings implements SpawnerMobTracking
 {
+    public static final String SPAWNERMOB_TAG_MDID = "ecoCreature.spawnerMob";
+
     private boolean clearOnNoDrops;
     private boolean overrideDrops;
     private boolean noFarm;
@@ -44,17 +48,15 @@ public class WorldSettings implements SpawnerMobTracking
     private Set<PlayerGain> gainMultipliers;
     private Set<Party> parties;
 
-    private Set<Integer> spawnerMobs;
-    private boolean canCampSpawner;
-    private boolean campByEntity;
+    private final FixedMetadataValue spawnerMobTag;
 
-    public WorldSettings()
+    public WorldSettings(ecoCreature plugin)
     {
         rewardSettings = new ArrayList<AbstractRewardSettings>();
         gainMultipliers = Collections.emptySet();
         parties = Collections.emptySet();
 
-        spawnerMobs = new HashSet<Integer>();
+        spawnerMobTag = new FixedMetadataValue(plugin, true);
     }
 
     public boolean isClearOnNoDrops()
@@ -164,25 +166,12 @@ public class WorldSettings implements SpawnerMobTracking
     @Override
     public void addSpawnerMob(LivingEntity entity)
     {
-        // Only add to the array if we're tracking by entity. Avoids a memory leak.
-        if (!canCampSpawner && campByEntity) {
-            spawnerMobs.add(Integer.valueOf(entity.getEntityId()));
-        }
+        entity.setMetadata(SPAWNERMOB_TAG_MDID, spawnerMobTag);
     }
 
     @Override
     public boolean isSpawnerMob(LivingEntity entity)
     {
-        return spawnerMobs.remove(Integer.valueOf(entity.getEntityId()));
-    }
-
-    public void setCanCampSpawner(boolean canCampSpawner)
-    {
-        this.canCampSpawner = canCampSpawner;
-    }
-
-    public void setCampByEntity(boolean campByEntity)
-    {
-        this.campByEntity = campByEntity;
+        return entity.hasMetadata(SPAWNERMOB_TAG_MDID);
     }
 }
