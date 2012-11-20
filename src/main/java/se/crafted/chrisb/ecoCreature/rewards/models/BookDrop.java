@@ -82,13 +82,14 @@ public class BookDrop extends ItemDrop
             BookItem book = new BookItem(itemStack);
             book.setTitle(title);
             book.setAuthor(author);
-            book.setPages(pages.toArray(new String[pages.size()]));
+            book.setPages(pages);
             return book.getItemStack();
         }
 
         return itemStack;
     }
 
+    @SuppressWarnings("unchecked")
     public static List<AbstractItemDrop> parseConfig(ConfigurationSection config)
     {
         List<AbstractItemDrop> drops = Collections.emptyList();
