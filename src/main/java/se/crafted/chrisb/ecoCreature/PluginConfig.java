@@ -112,7 +112,7 @@ public class PluginConfig
             fileConfig = getDefaultConfig();
             LoggerUtil.getInstance().setDebug(fileConfig.getBoolean("System.Debug", LoggerUtil.getInstance().isDebug()));
 
-            WorldSettings defaultSettings = loadWorldSettings(fileConfig);
+            WorldSettings defaultSettings = loadWorldSettings(new WorldSettings(plugin), fileConfig);
             worldSettingsMap = new HashMap<String, WorldSettings>();
             worldSettingsMap.put(DEFAULT_WORLD, defaultSettings);
 
@@ -125,7 +125,7 @@ public class PluginConfig
                 if (worldConfigFile.exists()) {
                     FileConfiguration configFile = getConfig(worldConfigFile);
                     LoggerUtil.getInstance().info("Loaded config for " + world.getName() + " world.");
-                    worldSettingsMap.put(world.getName(), loadWorldSettings(configFile));
+                    worldSettingsMap.put(world.getName(), loadWorldSettings(new WorldSettings(plugin), configFile));
                     fileConfigMap.put(world.getName(), configFile);
                 }
                 else {
@@ -145,10 +145,8 @@ public class PluginConfig
         return false;
     }
 
-    private static WorldSettings loadWorldSettings(FileConfiguration config)
+    private static WorldSettings loadWorldSettings(WorldSettings settings, FileConfiguration config)
     {
-        WorldSettings settings = new WorldSettings();
-
         settings.setClearOnNoDrops(config.getBoolean("System.Hunting.ClearDefaultDrops", true));
         settings.setOverrideDrops(config.getBoolean("System.Hunting.OverrideDrops", true));
         settings.setNoFarm(config.getBoolean("System.Hunting.NoFarm", false));
@@ -157,9 +155,6 @@ public class PluginConfig
         settings.setGainMultipliers(loadGainMultipliers(config));
         settings.setParties(loadParties(config));
         settings.setRewardSettings(loadRewardSettings(config));
-
-        settings.setCanCampSpawner(config.getBoolean("System.Hunting.AllowCamping", false));
-        settings.setCampByEntity(config.getBoolean("System.Hunting.CampingByEntity", false));
 
         return settings;
     }

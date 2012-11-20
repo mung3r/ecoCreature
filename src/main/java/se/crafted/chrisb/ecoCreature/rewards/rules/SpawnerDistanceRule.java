@@ -29,6 +29,7 @@ import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
+import se.crafted.chrisb.ecoCreature.settings.SpawnerMobTracking;
 
 public class SpawnerDistanceRule extends AbstractRule
 {
@@ -64,11 +65,8 @@ public class SpawnerDistanceRule extends AbstractRule
     @Override
     public boolean isBroken(EntityKilledEvent event)
     {
-        boolean ruleBroken = false;
-
-        if (!canCampSpawner && campByDistance && isEntityKilledEventNearSpawner(event)) {
-            ruleBroken = true;
-        }
+        SpawnerMobTracking tracking = event.getSpawnerMobTracking();
+        boolean ruleBroken = !canCampSpawner && campByDistance && tracking.isSpawnerMob(event.getEntity()) && isEntityKilledEventNearSpawner(event);
 
         if (ruleBroken) {
             LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " spawner camping.");
@@ -79,7 +77,7 @@ public class SpawnerDistanceRule extends AbstractRule
 
     private boolean isEntityKilledEventNearSpawner(EntityKilledEvent event)
     {
-    	return EntityUtils.isNearSpawner(event.getKiller(), campRadius) || EntityUtils.isNearSpawner(event.getEntity(), campRadius);
+        return EntityUtils.isNearSpawner(event.getKiller(), campRadius) || EntityUtils.isNearSpawner(event.getEntity(), campRadius);
     }
 
     public static Set<Rule> parseConfig(ConfigurationSection config)

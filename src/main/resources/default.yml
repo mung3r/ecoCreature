@@ -17,11 +17,11 @@ System:
     #
     # Determine camping by tracking mobs, spawned by mob spawners, ignoring distance
     # Default: false
-    CampingByEntity: false
+    CampingByEntity: true
     #
     # Determine camping by closeness to spawner
     # Default: true
-    CampingByDistance: true
+    CampingByDistance: false
     #
     # If CampingByDistance is true, then this is how many blocks
     # away from a spawner you need to be to get a reward

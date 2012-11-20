@@ -65,9 +65,7 @@ public class RewardEventListener implements Listener
                 dropEntities(reward);
 
                 plugin.getMetrics().addCount(reward.getName());
-                if (LoggerUtil.getInstance().isDebug()) {
-                    LoggerUtil.getInstance().debug(this.getClass(), "Added metrics count for " + reward.getName());
-                }
+                LoggerUtil.getInstance().debug(this.getClass(), "Added metrics count for " + reward.getName());
             }
         }
     }
