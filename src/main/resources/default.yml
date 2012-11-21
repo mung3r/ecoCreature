@@ -346,23 +346,26 @@ RewardTable:
     Coin_Minimum: 3.50
     Coin_Maximum: 3.50
     Coin_Percent: 50.0
+    Drops:
+    - 'blaze rod:1:75'
   CaveSpider:
     Drops:
     - 'string:2:75'
+    - 'spider eye:1:75'
     Coin_Minimum: 0.50
     Coin_Maximum: 1.50
     Coin_Percent: 50.0
   Chicken:
     Drops:
     - 'feather:2:75'
-    - '365:1:75'
+    - 'raw chicken:1-1:75'
     Coin_Minimum: 0.10
     Coin_Maximum: 2.00
     Coin_Percent: 1.0
   Cow:
     Drops:
     - 'leather:2:75'
-    - 'raw beef:3:75'
+    - 'raw beef:1-3:75'
     Coin_Minimum: 0.10
     Coin_Maximum: 2.50
     Coin_Percent: 1.0
@@ -409,6 +412,7 @@ RewardTable:
   Ghast:
     Drops:
     - 'sulphur:2:75'
+    - 'ghast tear:1:75'
     Coin_Minimum: 3.50
     Coin_Maximum: 3.50
     Coin_Percent: 50.0
@@ -448,6 +452,8 @@ RewardTable:
     Coin_Minimum: 0.00
     Coin_Maximum: 2.00
     Coin_Percent: 50.0
+    Drops:
+    - 'magma cream:1:75'
   #
   # mcMMO plugin is required to use this reward
   mcMMOLeveled:
@@ -462,7 +468,7 @@ RewardTable:
   MushroomCow:
     Drops:
     - 'leather:2:75'
-    - 'raw beef:3:75'
+    - 'raw beef:1-3:75'
     Coin_Minimum: 0.10
     Coin_Maximum: 2.50
     Coin_Percent: 1.0
@@ -472,13 +478,14 @@ RewardTable:
     Coin_Percent: 1.0
   Pig:
     Drops:
-    - 'pork:2:75'
+    - 'pork:1-3:75'
     Coin_Minimum: 0.10
     Coin_Maximum: 2.50
     Coin_Percent: 1.0
   PigZombie:
     Drops:
-    - 'grilled pork:2:75'
+    - 'rotten flesh:1:75'
+    - 'gold nugget:1:75'
     Coin_Minimum: 1.00
     Coin_Maximum: 3.50
     Coin_Percent: 50.0
@@ -498,7 +505,7 @@ RewardTable:
     - 'skull item:1-1:100'
   Sheep:
     Drops:
-    - 'wool:1:75'
+    - 'wool:1-1:75'
     Coin_Minimum: 0.10
     Coin_Maximum: 2.50
     Coin_Percent: 1.0
@@ -523,6 +530,8 @@ RewardTable:
     Coin_Minimum: 1.00
     Coin_Maximum: 2.00
     Coin_Percent: 100.0
+    Drops:
+    - 'snow ball:15:75'
   Spawner:
     Coin_Minimum: 0.10
     Coin_Maximum: 15.00
@@ -533,12 +542,13 @@ RewardTable:
   Spider:
     Drops:
     - 'string:2:75'
+    - 'spider eye:1:75'
     Coin_Minimum: 0.50
     Coin_Maximum: 1.50
     Coin_Percent: 50.0
   Squid:
     Drops:
-    - 'ink sack:3:75'
+    - 'ink sack:1-3:75'
     Coin_Minimum: 0.10
     Coin_Maximum: 2.50
     Coin_Percent: 1.0
@@ -565,6 +575,9 @@ RewardTable:
     Coin_Minimum: 1.00
     Coin_Maximum: 3.00
     Coin_Percent: 50.0
+    Drops:
+    - 'coal:1:75'
+    - 'bone:2:75'
   Wolf:
     Coin_Minimum: 1.00
     Coin_Maximum: 2.00
@@ -590,6 +603,12 @@ RewardTable:
     - BookZombie
     - RichZombie
     - ZombieApocalypse
+  ZombieVillager:
+    Coin_Minimum: 1.00
+    Coin_Maximum: 3.50
+    Coin_Percent: 50.0
+    Drops:
+    - 'rotten flesh:2:75'
 
 ############################################################################
 # Drop set examples

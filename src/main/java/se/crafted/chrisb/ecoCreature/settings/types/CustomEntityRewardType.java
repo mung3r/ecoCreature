@@ -30,6 +30,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.entity.Wolf;
+import org.bukkit.entity.Zombie;
 
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
@@ -39,6 +40,7 @@ public enum CustomEntityRewardType
     PLAYER("Player"),
     POWERED_CREEPER("PoweredCreeper"),
     WITHER_SKELETON("WitherSkeleton"),
+    ZOMBIE_VILLAGER("ZombieVillager"),
     INVALID("__Invalid__");
 
     private static final Map<String, CustomEntityRewardType> NAME_MAP = new HashMap<String, CustomEntityRewardType>();
@@ -82,6 +84,9 @@ public enum CustomEntityRewardType
         }
         else if (entity instanceof Skeleton && ((Skeleton) entity).getSkeletonType() == SkeletonType.WITHER) {
             entityType = CustomEntityRewardType.WITHER_SKELETON;
+        }
+        else if (entity instanceof Zombie && ((Zombie) entity).isVillager()) {
+            entityType = CustomEntityRewardType.ZOMBIE_VILLAGER;
         }
         else if (entity instanceof LivingEntity) {
             entityType = CustomEntityRewardType.fromName(entity.getType().getName());
