@@ -105,8 +105,8 @@ public class BookDrop extends ItemDrop
 
                     if (material == Material.WRITTEN_BOOK) {
                         BookDrop drop = new BookDrop(material);
-                        drop.setTitle(itemConfig.getString("title", "No Title"));
-                        drop.setAuthor(itemConfig.getString("author", "No Author"));
+                        drop.setTitle(itemConfig.getString("title"));
+                        drop.setAuthor(itemConfig.getString("author"));
                         drop.setPages(itemConfig.getStringList("pages"));
                         populateItemDrop(drop, itemConfig.getString("item"));
 
