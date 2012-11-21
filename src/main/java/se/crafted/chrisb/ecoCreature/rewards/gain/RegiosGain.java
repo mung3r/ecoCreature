@@ -25,12 +25,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import net.jzx7.regiosapi.regions.Region;
+
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
-import couk.Adamki11s.Regios.Regions.Region;
 
 public class RegiosGain extends AbstractPlayerGain
 {
