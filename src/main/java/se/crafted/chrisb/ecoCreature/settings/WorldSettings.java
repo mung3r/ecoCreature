@@ -28,6 +28,7 @@ import java.util.Set;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
@@ -38,12 +39,14 @@ import se.crafted.chrisb.ecoCreature.rewards.parties.Party;
 public class WorldSettings implements SpawnerMobTracking
 {
     public static final String SPAWNERMOB_TAG_MDID = "ecoCreature.spawnerMob";
+    public static final String SPAWNERLOC_TAG_MDID = "ecoCreature.spawnerLoc";
 
     private boolean clearOnNoDrops;
     private boolean overrideDrops;
     private boolean noFarm;
     private boolean noFarmFire;
 
+    private ecoCreature plugin;
     private List<AbstractRewardSettings> rewardSettings;
     private Set<PlayerGain> gainMultipliers;
     private Set<Party> parties;
@@ -52,6 +55,7 @@ public class WorldSettings implements SpawnerMobTracking
 
     public WorldSettings(ecoCreature plugin)
     {
+        this.plugin = plugin;
         rewardSettings = new ArrayList<AbstractRewardSettings>();
         gainMultipliers = Collections.emptySet();
         parties = Collections.emptySet();
@@ -164,9 +168,10 @@ public class WorldSettings implements SpawnerMobTracking
     }
 
     @Override
-    public void addSpawnerMob(LivingEntity entity)
+    public void addSpawnerMob(CreatureSpawnEvent event)
     {
-        entity.setMetadata(SPAWNERMOB_TAG_MDID, spawnerMobTag);
+        event.getEntity().setMetadata(SPAWNERMOB_TAG_MDID, spawnerMobTag);
+        event.getEntity().setMetadata(SPAWNERLOC_TAG_MDID, new FixedMetadataValue(plugin, event.getLocation()));
     }
 
     @Override

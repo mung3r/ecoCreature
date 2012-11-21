@@ -20,10 +20,11 @@
 package se.crafted.chrisb.ecoCreature.settings;
 
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 
 public interface SpawnerMobTracking
 {
-    void addSpawnerMob(LivingEntity entity);
+    void addSpawnerMob(CreatureSpawnEvent event);
 
     boolean isSpawnerMob(LivingEntity entity);
 }

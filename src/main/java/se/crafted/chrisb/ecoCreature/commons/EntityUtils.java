@@ -19,13 +19,16 @@
  */
 package se.crafted.chrisb.ecoCreature.commons;
 
+import java.util.List;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
+import org.bukkit.metadata.MetadataValue;
+
+import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
 public final class EntityUtils
 {
@@ -36,12 +39,18 @@ public final class EntityUtils
     public static boolean isNearSpawner(Entity entity, int radius)
     {
         Location loc = entity.getLocation();
-        BlockState[] tileEntities = entity.getLocation().getChunk().getTileEntities();
         int r = radius * radius;
+        List<MetadataValue> metaDataValues = entity.getMetadata(WorldSettings.SPAWNERLOC_TAG_MDID);
 
-        for (BlockState state : tileEntities) {
-            if (state instanceof CreatureSpawner && state.getBlock().getLocation().distanceSquared(loc) <= r) {
-                return true;
+        if (!metaDataValues.isEmpty()) {
+            MetadataValue metaDataValue = metaDataValues.get(0);
+
+            if (metaDataValue.value() instanceof Location) {
+                Location spawnerLoc = (Location) metaDataValue.value();
+
+                if (spawnerLoc.distanceSquared(loc) <= r) {
+                    return true;
+                }
             }
         }
         return false;
