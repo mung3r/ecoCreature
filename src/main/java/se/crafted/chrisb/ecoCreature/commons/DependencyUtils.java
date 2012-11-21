@@ -19,6 +19,7 @@
  */
 package se.crafted.chrisb.ecoCreature.commons;
 
+import net.jzx7.regiosapi.RegiosAPI;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
@@ -34,8 +35,6 @@ import com.herocraftonline.heroes.Heroes;
 import com.palmergames.bukkit.towny.Towny;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
-
-import couk.Adamki11s.Regios.API.RegiosAPI;
 
 public final class DependencyUtils
 {
@@ -74,9 +73,9 @@ public final class DependencyUtils
         factionsPlugin = getPlugin("Factions", "com.massivecraft.factions.P");
         mcMMOPlugin = getPlugin("mcMMO", "com.gmail.nossr50.mcMMO");
 
-        Plugin regiosPlugin = getPlugin("Regios", "couk.Adamki11s.Regios.Main.Regios");
-        if (regiosPlugin != null) {
-            regiosAPI = new RegiosAPI();
+        Plugin regiosPlugin = getPlugin("Regios", "net.jzx7.regios.RegiosPlugin");
+        if (regiosPlugin instanceof RegiosAPI) {
+            regiosAPI = (RegiosAPI) regiosPlugin;
         }
 
         Plugin mobArenaPlugin = getPlugin("MobArena", "com.garbagemule.MobArena.MobArena");

@@ -26,11 +26,13 @@ public class CoinDrop
 {
     private DoubleRange range;
     private double percentage;
+    private double multiplier;
 
-    public CoinDrop(DoubleRange range, double percentage)
+    public CoinDrop(DoubleRange range, double percentage, double multiplier)
     {
         this.range = range;
         this.percentage = percentage;
+        this.multiplier = multiplier;
     }
 
     public DoubleRange getRange()
@@ -41,6 +43,11 @@ public class CoinDrop
     public double getPercentage()
     {
         return percentage;
+    }
+
+    public double getMultiplier()
+    {
+        return multiplier;
     }
 
     public double getOutcome()
@@ -62,7 +69,7 @@ public class CoinDrop
             }
         }
 
-        return amount;
+        return amount * multiplier;
     }
 
     public static CoinDrop parseConfig(ConfigurationSection config)
@@ -71,7 +78,7 @@ public class CoinDrop
 
         if (config != null && config.contains("Coin_Maximum") && config.contains("Coin_Minimum") && config.contains("Coin_Percent")) {
             coin = new CoinDrop(new DoubleRange(config.getDouble("Coin_Minimum", 0), config.getDouble("Coin_Maximum", 0)),
-                    config.getDouble("Coin_Percent", 0.0D));
+                    config.getDouble("Coin_Percent", 0.0D), config.getDouble("Coin_Gain", 1.0D));
         }
 
         return coin;

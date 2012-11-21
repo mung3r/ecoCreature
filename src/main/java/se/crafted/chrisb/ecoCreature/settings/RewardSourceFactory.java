@@ -104,6 +104,7 @@ public final class RewardSourceFactory
             case PLAYER:
             case POWERED_CREEPER:
             case WITHER_SKELETON:
+            case ZOMBIE_VILLAGER:
                 source = new EntityRewardSource(config);
                 break;
             default:
