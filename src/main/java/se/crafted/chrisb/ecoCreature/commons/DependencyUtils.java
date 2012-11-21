@@ -73,7 +73,7 @@ public final class DependencyUtils
         factionsPlugin = getPlugin("Factions", "com.massivecraft.factions.P");
         mcMMOPlugin = getPlugin("mcMMO", "com.gmail.nossr50.mcMMO");
 
-        Plugin regiosPlugin = getPlugin("Regios", "couk.Adamki11s.Regios.Main.Regios");
+        Plugin regiosPlugin = getPlugin("Regios", "net.jzx7.regios.RegiosPlugin");
         if (regiosPlugin instanceof RegiosAPI) {
             regiosAPI = (RegiosAPI) regiosPlugin;
         }
