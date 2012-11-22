@@ -54,7 +54,7 @@ public class MobArenaParty extends AbstractParty
 
         if (config != null) {
             MobArenaParty party = new MobArenaParty();
-            party.setShared(config.getBoolean("Share", false));
+            party.setShared(config.getBoolean("InArena.Share", false));
             parties = new HashSet<Party>();
             parties.add(party);
         }

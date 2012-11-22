@@ -45,7 +45,7 @@ public class EnvironmentGain extends AbstractPlayerGain
     @Override
     public double getMultiplier(Player player)
     {
-        double multiplier = 1.0;
+        double multiplier = NO_GAIN;
 
         if (DependencyUtils.hasPermission(player, "gain.environment") && multipliers.containsKey(player.getWorld().getEnvironment())) {
             multiplier = multipliers.get(player.getWorld().getEnvironment());
@@ -63,7 +63,7 @@ public class EnvironmentGain extends AbstractPlayerGain
             Map<Environment, Double> multipliers = new HashMap<World.Environment, Double>();
             for (String environment : config.getKeys(false)) {
                 try {
-                    multipliers.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(config.getConfigurationSection(environment).getDouble("Amount", 1.0D)));
+                    multipliers.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(config.getConfigurationSection(environment).getDouble("Amount", NO_GAIN)));
                 }
                 catch (Exception e) {
                     LoggerUtil.getInstance().warning("Skipping unknown environment name: " + environment);

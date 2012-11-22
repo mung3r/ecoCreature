@@ -20,7 +20,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -47,7 +46,7 @@ public class RegionGain extends AbstractPlayerGain
     @Override
     public double getMultiplier(Player player)
     {
-        double multiplier = 1.0;
+        double multiplier = NO_GAIN;
 
         if (DependencyUtils.hasPermission(player, "gain.worldguard") && DependencyUtils.hasWorldGuard()) {
             RegionManager regionManager = DependencyUtils.getRegionManager(player.getWorld());
@@ -71,12 +70,8 @@ public class RegionGain extends AbstractPlayerGain
         Set<PlayerGain> gain = Collections.emptySet();
 
         if (config != null) {
-            Map<String, Double> multipliers = new HashMap<String, Double>();
-            for (String regionName : config.getKeys(false)) {
-                multipliers.put(regionName, Double.valueOf(config.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
-            }
             gain = new HashSet<PlayerGain>();
-            gain.add(new RegionGain(multipliers));
+            gain.add(new RegionGain(parseMultipliers(config)));
         }
 
         return gain;

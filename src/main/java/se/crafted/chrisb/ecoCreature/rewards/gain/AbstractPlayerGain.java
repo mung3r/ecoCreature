@@ -19,12 +19,31 @@
  */
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 public abstract class AbstractPlayerGain implements PlayerGain
 {
     protected static final double NO_GAIN = 1.0;
-    
+
     @Override
     public abstract double getMultiplier(Player player);
+
+    protected static Map<String, Double> parseMultipliers(ConfigurationSection config)
+    {
+        Map<String, Double> multipliers = Collections.emptyMap();
+
+        if (config != null) {
+            multipliers = new HashMap<String, Double>();
+            for (String key : config.getKeys(false)) {
+                multipliers.put(key, Double.valueOf(config.getConfigurationSection(key).getDouble("Amount", NO_GAIN)));
+            }
+        }
+
+        return multipliers;
+    }
 }

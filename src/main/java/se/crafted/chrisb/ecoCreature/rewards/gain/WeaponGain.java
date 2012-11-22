@@ -45,7 +45,7 @@ public class WeaponGain extends AbstractPlayerGain
     @Override
     public double getMultiplier(Player player)
     {
-        double multiplier = 1.0;
+        double multiplier = NO_GAIN;
         Material material = EntityUtils.getItemTypeInHand(player);
 
         if (DependencyUtils.hasPermission(player, "gain.weapon") && multipliers.containsKey(material)) {
@@ -64,7 +64,7 @@ public class WeaponGain extends AbstractPlayerGain
             Map<Material, Double> multipliers = new HashMap<Material, Double>();
 
             for (String material : config.getKeys(false)) {
-                multipliers.put(Material.matchMaterial(material), Double.valueOf(config.getConfigurationSection(material).getDouble("Amount", 1.0)));
+                multipliers.put(Material.matchMaterial(material), Double.valueOf(config.getConfigurationSection(material).getDouble("Amount", NO_GAIN)));
             }
             gain = new HashSet<PlayerGain>();
             gain.add(new WeaponGain(multipliers));

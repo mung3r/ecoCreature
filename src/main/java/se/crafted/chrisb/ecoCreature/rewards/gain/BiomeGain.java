@@ -44,7 +44,7 @@ public class BiomeGain extends AbstractPlayerGain
     @Override
     public double getMultiplier(Player player)
     {
-        double multiplier = 1.0;
+        double multiplier = NO_GAIN;
 
         if (DependencyUtils.hasPermission(player, "gain.biome") && multipliers.containsKey(getBiome(player))) {
             multiplier = multipliers.get(getBiome(player));
@@ -67,7 +67,7 @@ public class BiomeGain extends AbstractPlayerGain
             Map<Biome, Double> multipliers = new HashMap<Biome, Double>();
             for (String biome : config.getKeys(false)) {
                 try {
-                    multipliers.put(Biome.valueOf(biome.toUpperCase()), Double.valueOf(config.getConfigurationSection(biome).getDouble("Amount", 1.0D)));
+                    multipliers.put(Biome.valueOf(biome.toUpperCase()), Double.valueOf(config.getConfigurationSection(biome).getDouble("Amount", NO_GAIN)));
                 }
                 catch (Exception e) {
                     LoggerUtil.getInstance().warning("Skipping unknown biome name: " + biome);

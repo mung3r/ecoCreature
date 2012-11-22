@@ -56,7 +56,7 @@ public class HeroesParty extends AbstractParty
 
         if (config != null) {
             HeroesParty party = new HeroesParty();
-            party.setShared(config.getBoolean("Share", false));
+            party.setShared(config.getBoolean("InParty.Share", false));
             parties = new HashSet<Party>();
             parties.add(party);
         }

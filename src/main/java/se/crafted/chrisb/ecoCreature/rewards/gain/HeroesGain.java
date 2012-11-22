@@ -55,7 +55,7 @@ public class HeroesGain extends AbstractPlayerGain
 
         if (config != null) {
             gain = new HashSet<PlayerGain>();
-            gain.add(new HeroesGain(config.getDouble("Amount", 1.0D)));
+            gain.add(new HeroesGain(config.getDouble("InParty.Amount", NO_GAIN)));
         }
 
         return gain;

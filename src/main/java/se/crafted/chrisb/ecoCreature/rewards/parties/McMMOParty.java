@@ -60,7 +60,7 @@ public class McMMOParty extends AbstractParty
 
         if (config != null) {
             McMMOParty party = new McMMOParty();
-            party.setShared(config.getBoolean("Share", false));
+            party.setShared(config.getBoolean("InParty.Share", false));
             parties = new HashSet<Party>();
             parties.add(party);
         }

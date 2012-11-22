@@ -44,7 +44,7 @@ public class TimeGain extends AbstractPlayerGain
     @Override
     public double getMultiplier(Player player)
     {
-        double multiplier = 1.0;
+        double multiplier = NO_GAIN;
 
         if (DependencyUtils.hasPermission(player, "gain.time") && multipliers.containsKey(TimePeriod.fromEntity(player))) {
             multiplier = multipliers.get(TimePeriod.fromEntity(player));
@@ -61,7 +61,7 @@ public class TimeGain extends AbstractPlayerGain
         if (config != null) {
             Map<TimePeriod, Double> multipliers = new HashMap<TimePeriod, Double>();
             for (String period : config.getKeys(false)) {
-                multipliers.put(TimePeriod.fromName(period), Double.valueOf(config.getConfigurationSection(period).getDouble("Amount", 1.0D)));
+                multipliers.put(TimePeriod.fromName(period), Double.valueOf(config.getConfigurationSection(period).getDouble("Amount", NO_GAIN)));
             }
             gain = new HashSet<PlayerGain>();
             gain.add(new TimeGain(multipliers));

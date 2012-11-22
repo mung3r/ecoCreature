@@ -174,9 +174,9 @@ public class PluginConfig
         gainMultipliers.addAll(ResidenceGain.parseConfig(config.getConfigurationSection("Gain.Residence")));
         gainMultipliers.addAll(FactionsGain.parseConfig(config.getConfigurationSection("Gain.Factions")));
         gainMultipliers.addAll(TownyGain.parseConfig(config.getConfigurationSection("Gain.Towny")));
-        gainMultipliers.addAll(MobArenaGain.parseConfig(config.getConfigurationSection("Gain.MobArena.InArena")));
-        gainMultipliers.addAll(HeroesGain.parseConfig(config.getConfigurationSection("Gain.Heroes.InParty")));
-        gainMultipliers.addAll(McMMOGain.parseConfig(config.getConfigurationSection("Gain.mcMMO.InParty")));
+        gainMultipliers.addAll(MobArenaGain.parseConfig(config.getConfigurationSection("Gain.MobArena")));
+        gainMultipliers.addAll(HeroesGain.parseConfig(config.getConfigurationSection("Gain.Heroes")));
+        gainMultipliers.addAll(McMMOGain.parseConfig(config.getConfigurationSection("Gain.mcMMO")));
 
         return gainMultipliers;
     }
@@ -185,9 +185,9 @@ public class PluginConfig
     {
         Set<Party> parties = new HashSet<Party>();
 
-        parties.addAll(MobArenaParty.parseConfig(config.getConfigurationSection("Gain.MobArena.InArena")));
-        parties.addAll(HeroesParty.parseConfig(config.getConfigurationSection("Gain.Heroes.InParty")));
-        parties.addAll(McMMOParty.parseConfig(config.getConfigurationSection("Gain.mcMMO.InParty")));
+        parties.addAll(MobArenaParty.parseConfig(config.getConfigurationSection("Gain.MobArena")));
+        parties.addAll(HeroesParty.parseConfig(config.getConfigurationSection("Gain.Heroes")));
+        parties.addAll(McMMOParty.parseConfig(config.getConfigurationSection("Gain.mcMMO")));
 
         return parties;
     }

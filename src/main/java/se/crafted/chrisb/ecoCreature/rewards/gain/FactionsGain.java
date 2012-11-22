@@ -47,7 +47,7 @@ public class FactionsGain extends AbstractPlayerGain
     @Override
     public double getMultiplier(Player player)
     {
-        double multiplier = 1.0;
+        double multiplier = NO_GAIN;
 
         if (DependencyUtils.hasPermission(player, "gain.factions") && DependencyUtils.hasFactions()) {
             FPlayer fPlayer = FPlayers.i.get(player);
@@ -68,7 +68,7 @@ public class FactionsGain extends AbstractPlayerGain
             Map<Relation, Double> multipliers = new HashMap<Relation, Double>();
             for (String relation : config.getKeys(false)) {
                 try {
-                    multipliers.put(Relation.valueOf(relation), Double.valueOf(config.getConfigurationSection(relation).getDouble("Amount", 1.0D)));
+                    multipliers.put(Relation.valueOf(relation), Double.valueOf(config.getConfigurationSection(relation).getDouble("Amount", NO_GAIN)));
                 }
                 catch (IllegalArgumentException e) {
                     LoggerUtil.getInstance().warning("Unrecognized Factions relation: " + relation);

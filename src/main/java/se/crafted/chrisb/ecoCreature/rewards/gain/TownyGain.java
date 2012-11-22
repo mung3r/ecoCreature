@@ -20,7 +20,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -63,12 +62,8 @@ public class TownyGain extends AbstractPlayerGain
         Set<PlayerGain> gain = Collections.emptySet();
 
         if (config != null) {
-            Map<String, Double> multipliers = new HashMap<String, Double>();
-            for (String townName : config.getKeys(false)) {
-                multipliers.put(townName, Double.valueOf(config.getConfigurationSection(townName).getDouble("Amount", 1.0D)));
-            }
             gain = new HashSet<PlayerGain>();
-            gain.add(new TownyGain(multipliers));
+            gain.add(new TownyGain(parseMultipliers(config)));
         }
 
         return gain;

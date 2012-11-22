@@ -55,7 +55,7 @@ public class McMMOGain extends AbstractPlayerGain
 
         if (config != null) {
             gain = new HashSet<PlayerGain>();
-            gain.add(new McMMOGain(config.getDouble("Amount", 1.0D)));
+            gain.add(new McMMOGain(config.getDouble("InParty.Amount", NO_GAIN)));
         }
 
         return gain;

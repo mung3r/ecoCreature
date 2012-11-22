@@ -20,7 +20,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -71,12 +70,8 @@ public class GroupGain extends AbstractPlayerGain
         Set<PlayerGain> gain = Collections.emptySet();
 
         if (config != null) {
-            Map<String, Double> multipliers = new HashMap<String, Double>();
-            for (String group : config.getKeys(false)) {
-                multipliers.put(group.toLowerCase(), Double.valueOf(config.getConfigurationSection(group).getDouble("Amount", 0.0D)));
-            }
             gain = new HashSet<PlayerGain>();
-            gain.add(new GroupGain(multipliers));
+            gain.add(new GroupGain(parseMultipliers(config)));
         }
 
         return gain;

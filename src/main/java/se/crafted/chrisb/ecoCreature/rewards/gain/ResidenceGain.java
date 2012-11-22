@@ -20,7 +20,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -46,7 +45,7 @@ public class ResidenceGain extends AbstractPlayerGain
     @Override
     public double getMultiplier(Player player)
     {
-        double multiplier = 1.0;
+        double multiplier = NO_GAIN;
 
         if (DependencyUtils.hasPermission(player, "gain.residence") && DependencyUtils.hasResidence()) {
             ClaimedResidence residence = Residence.getResidenceManager().getByLoc(player.getLocation());
@@ -64,12 +63,8 @@ public class ResidenceGain extends AbstractPlayerGain
         Set<PlayerGain> gain = Collections.emptySet();
 
         if (config != null) {
-            Map<String, Double> multipliers = new HashMap<String, Double>();
-            for (String residenceName : config.getKeys(false)) {
-                multipliers.put(residenceName, Double.valueOf(config.getConfigurationSection(residenceName).getDouble("Amount", 1.0D)));
-            }
             gain = new HashSet<PlayerGain>();
-            gain.add(new ResidenceGain(multipliers));
+            gain.add(new ResidenceGain(parseMultipliers(config)));
         }
 
         return gain;
