@@ -56,7 +56,7 @@ public class McMMORewardSettings extends AbstractRewardSettings
             return hasRewardSource(McMMORewardType.MCMMO_LEVELED);
         }
         else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + McMMORewardType.MCMMO_LEVELED.getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + McMMORewardType.MCMMO_LEVELED);
         }
 
         return false;

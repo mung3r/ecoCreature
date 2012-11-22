@@ -43,7 +43,7 @@ public class DeathPenaltySource extends AbstractRewardSource
             throw new IllegalArgumentException("Config cannot be null");
         }
 
-        setName(CustomRewardType.DEATH_PENALTY.getName());
+        setName(CustomRewardType.DEATH_PENALTY.toString());
         percentPenalty = config.getBoolean("System.Hunting.PenalizeType", true);
         penaltyAmount = config.getDouble("System.Hunting.PenalizeAmount", 0.05D);
         setCoinPenaltyMessage(new DefaultMessage(config.getString("System.Messages.DeathPenaltyMessage", DEATH_PENALTY_MESSAGE)));

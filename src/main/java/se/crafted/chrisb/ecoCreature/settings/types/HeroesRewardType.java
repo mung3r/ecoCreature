@@ -55,7 +55,8 @@ public enum HeroesRewardType
         return rewardType;
     }
 
-    public String getName()
+    @Override
+    public String toString()
     {
         return name;
     }

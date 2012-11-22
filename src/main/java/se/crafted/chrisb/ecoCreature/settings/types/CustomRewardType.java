@@ -56,7 +56,8 @@ public enum CustomRewardType
         return rewardType;
     }
 
-    public String getName()
+    @Override
+    public String toString()
     {
         return name;
     }

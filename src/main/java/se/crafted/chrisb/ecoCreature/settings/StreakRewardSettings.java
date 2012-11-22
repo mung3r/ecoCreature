@@ -64,7 +64,7 @@ public class StreakRewardSettings extends AbstractRewardSettings
             return hasRewardSource(StreakRewardType.DEATH_STREAK);
         }
         else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + StreakRewardType.DEATH_STREAK.getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + StreakRewardType.DEATH_STREAK);
         }
 
         return false;
@@ -76,7 +76,7 @@ public class StreakRewardSettings extends AbstractRewardSettings
             return hasRewardSource(StreakRewardType.KILL_STREAK);
         }
         else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + StreakRewardType.KILL_STREAK.getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + StreakRewardType.KILL_STREAK);
         }
 
         return false;

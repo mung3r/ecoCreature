@@ -88,13 +88,13 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings
         Player killer = event.getKiller();
         LivingEntity entity = event.getEntity();
 
-        if (DependencyUtils.hasPermission(killer, "reward." + entity.getType().getName())) {
+        if (DependencyUtils.hasPermission(killer, "reward." + CustomEntityRewardType.fromEntity(entity))) {
             if (hasRewardSource(CustomEntityRewardType.fromEntity(entity)) && !isRuleBroken(event)) {
                 return true;
             }
         }
         else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + killer.getName() + " due to lack of permission for " + entity.getType().getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + killer.getName() + " due to lack of permission for " + CustomEntityRewardType.fromEntity(entity));
         }
 
         return false;
@@ -126,7 +126,7 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings
             source = getRewardSource(CustomEntityRewardType.fromEntity(entity));
         }
         else {
-            LoggerUtil.getInstance().warning("No reward found for entity: " + entity.getType().getName());
+            LoggerUtil.getInstance().warning("No reward found for entity: " + CustomEntityRewardType.fromEntity(entity));
         }
 
         return source;
@@ -140,7 +140,7 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings
             source = sources.get(entityType).get(nextInt(sources.get(entityType).size()));
         }
         else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward defined for entity type: " + entityType.getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward defined for entity type: " + entityType);
         }
 
         return source;

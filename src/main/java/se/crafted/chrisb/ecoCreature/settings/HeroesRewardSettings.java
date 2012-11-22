@@ -62,7 +62,7 @@ public class HeroesRewardSettings extends AbstractRewardSettings
             return hasRewardSource(HeroesRewardType.HERO_LEVELED);
         }
         else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + player.getName() + " due to lack of permission for " + HeroesRewardType.HERO_MASTERED.getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + player.getName() + " due to lack of permission for " + HeroesRewardType.HERO_MASTERED);
         }
 
         return false;

@@ -54,7 +54,8 @@ public enum McMMORewardType
         return rewardType;
     }
 
-    public String getName()
+    @Override
+    public String toString()
     {
         return name;
     }

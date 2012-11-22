@@ -76,7 +76,7 @@ public class CustomRewardSettings extends AbstractRewardSettings
             return getRewardSource(CustomRewardType.DEATH_PENALTY) instanceof DeathPenaltySource;
         }
         else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getEntity().getName() + " due to lack of permission for " + CustomRewardType.DEATH_PENALTY.getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getEntity().getName() + " due to lack of permission for " + CustomRewardType.DEATH_PENALTY);
         }
 
         return false;
@@ -135,7 +135,7 @@ public class CustomRewardSettings extends AbstractRewardSettings
             }
 
             if (config.getBoolean("System.Hunting.PenalizeDeath", false)) {
-                AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(CustomRewardType.DEATH_PENALTY.getName(), config), config);
+                AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(CustomRewardType.DEATH_PENALTY.toString(), config), config);
                 if (!sources.containsKey(CustomRewardType.DEATH_PENALTY)) {
                     sources.put(CustomRewardType.DEATH_PENALTY, new ArrayList<AbstractRewardSource>());
                 }
@@ -144,7 +144,7 @@ public class CustomRewardSettings extends AbstractRewardSettings
             }
 
             if (config.getBoolean("System.Hunting.PVPReward", false)) {
-                AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(CustomRewardType.LEGACY_PVP.getName(), config), config);
+                AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(CustomRewardType.LEGACY_PVP.toString(), config), config);
                 if (!sources.containsKey(CustomRewardType.LEGACY_PVP)) {
                     sources.put(CustomRewardType.LEGACY_PVP, new ArrayList<AbstractRewardSource>());
                 }

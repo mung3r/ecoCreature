@@ -39,7 +39,7 @@ public class PVPRewardSource extends AbstractRewardSource
 
     public PVPRewardSource(ConfigurationSection config)
     {
-        setName(CustomRewardType.LEGACY_PVP.getName());
+        setName(CustomRewardType.LEGACY_PVP.toString());
         percentReward = config.getBoolean("System.Hunting.PVPRewardType", true);
         rewardAmount = config.getDouble("System.Hunting.PVPRewardAmount", 0.05D);
         setCoinRewardMessage(new DefaultMessage(config.getString("System.Messages.PVPRewardMessage", PVP_REWARD_MESSAGE)));

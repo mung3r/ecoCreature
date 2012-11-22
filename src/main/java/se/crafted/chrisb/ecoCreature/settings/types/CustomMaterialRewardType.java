@@ -67,7 +67,8 @@ public enum CustomMaterialRewardType
         return type;
     }
 
-    public String getName()
+    @Override
+    public String toString()
     {
         return name;
     }
