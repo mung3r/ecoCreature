@@ -89,7 +89,6 @@ public class BookDrop extends ItemDrop
         return itemStack;
     }
 
-    @SuppressWarnings("unchecked")
     public static List<AbstractItemDrop> parseConfig(ConfigurationSection config)
     {
         List<AbstractItemDrop> drops = Collections.emptyList();
@@ -99,8 +98,7 @@ public class BookDrop extends ItemDrop
 
             for (Object obj : config.getList("Drops")) {
                 if (obj instanceof LinkedHashMap) {
-                    MemoryConfiguration itemConfig = new MemoryConfiguration();
-                    itemConfig.addDefaults((Map<String, Object>) obj);
+                    ConfigurationSection itemConfig = createItemConfig(obj);
                     Material material = parseMaterial(itemConfig.getString("item"));
 
                     if (material == Material.WRITTEN_BOOK) {
@@ -117,5 +115,13 @@ public class BookDrop extends ItemDrop
         }
 
         return drops;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static ConfigurationSection createItemConfig(Object obj)
+    {
+        MemoryConfiguration itemConfig = new MemoryConfiguration();
+        itemConfig.addDefaults((Map<String, Object>) obj);
+        return itemConfig;
     }
 }
