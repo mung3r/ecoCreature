@@ -21,6 +21,7 @@ package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -29,21 +30,19 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-public class HeroesGain extends AbstractPlayerGain
+public class HeroesGain extends AbstractPlayerGain<String>
 {
-    private double multiplier;
-
-    public HeroesGain(double multiplier)
+    public HeroesGain(Map<String, Double> multipliers)
     {
-        this.multiplier = multiplier;
+        super(multipliers);
     }
 
     @Override
     public double getMultiplier(Player player)
     {
         if (DependencyUtils.hasPermission(player, "gain.heroes") && DependencyUtils.hasHeroes() && DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {
-            LoggerUtil.getInstance().debug(this.getClass(), "Heroes multiplier: " + multiplier);
-            return multiplier;
+            LoggerUtil.getInstance().debug(this.getClass(), "Heroes multiplier: " + getMultipliers().get(AMOUNT_KEY));
+            return getMultipliers().get(AMOUNT_KEY);
         }
 
         return NO_GAIN;
@@ -55,7 +54,7 @@ public class HeroesGain extends AbstractPlayerGain
 
         if (config != null) {
             gain = new HashSet<PlayerGain>();
-            gain.add(new HeroesGain(config.getDouble("InParty.Amount", NO_GAIN)));
+            gain.add(new HeroesGain(parseMultiplier(config.getConfigurationSection("InParty"))));
         }
 
         return gain;

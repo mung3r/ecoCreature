@@ -34,13 +34,11 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-public class RegionGain extends AbstractPlayerGain
+public class RegionGain extends AbstractPlayerGain<String>
 {
-    private Map<String, Double> multipliers;
-
     public RegionGain(Map<String, Double> multipliers)
     {
-        this.multipliers = multipliers;
+        super(multipliers);
     }
 
     @Override
@@ -54,8 +52,8 @@ public class RegionGain extends AbstractPlayerGain
                 Iterator<ProtectedRegion> regions = regionManager.getApplicableRegions(player.getLocation()).iterator();
                 while (regions.hasNext()) {
                     String regionName = regions.next().getId();
-                    if (multipliers.containsKey(regionName)) {
-                        multiplier = multipliers.get(regionName);
+                    if (getMultipliers().containsKey(regionName)) {
+                        multiplier = getMultipliers().get(regionName);
                         LoggerUtil.getInstance().debug(this.getClass(), "Region multiplier: " + multiplier);
                     }
                 }

@@ -21,6 +21,7 @@ package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -29,13 +30,11 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-public class McMMOGain extends AbstractPlayerGain
+public class McMMOGain extends AbstractPlayerGain<String>
 {
-    private double multiplier;
-
-    public McMMOGain(double multiplier)
+    public McMMOGain(Map<String, Double> multipliers)
     {
-        this.multiplier = multiplier;
+        super(multipliers);
     }
 
     @Override
@@ -43,7 +42,7 @@ public class McMMOGain extends AbstractPlayerGain
     {
         if (DependencyUtils.hasPermission(player, "gain.mcmmo") && DependencyUtils.hasMcMMO()) {
             LoggerUtil.getInstance().debug(this.getClass(), "mcMMO multiplier applied");
-            return multiplier;
+            return getMultipliers().get(AMOUNT_KEY);
         }
 
         return NO_GAIN;
@@ -55,7 +54,7 @@ public class McMMOGain extends AbstractPlayerGain
 
         if (config != null) {
             gain = new HashSet<PlayerGain>();
-            gain.add(new McMMOGain(config.getDouble("InParty.Amount", NO_GAIN)));
+            gain.add(new McMMOGain(parseMultiplier(config.getConfigurationSection("InParty"))));
         }
 
         return gain;

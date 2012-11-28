@@ -47,7 +47,7 @@ public class WorldSettings implements SpawnerMobTracking
     private boolean noFarmFire;
 
     private ecoCreature plugin;
-    private List<AbstractRewardSettings> rewardSettings;
+    private List<AbstractRewardSettings<?>> rewardSettings;
     private Set<PlayerGain> gainMultipliers;
     private Set<Party> parties;
 
@@ -56,7 +56,7 @@ public class WorldSettings implements SpawnerMobTracking
     public WorldSettings(ecoCreature plugin)
     {
         this.plugin = plugin;
-        rewardSettings = new ArrayList<AbstractRewardSettings>();
+        rewardSettings = new ArrayList<AbstractRewardSettings<?>>();
         gainMultipliers = Collections.emptySet();
         parties = Collections.emptySet();
 
@@ -113,7 +113,7 @@ public class WorldSettings implements SpawnerMobTracking
         this.parties = parties;
     }
 
-    public void setRewardSettings(List<AbstractRewardSettings> rewardSettings)
+    public void setRewardSettings(List<AbstractRewardSettings<?>> rewardSettings)
     {
         this.rewardSettings = rewardSettings;
     }
@@ -122,7 +122,7 @@ public class WorldSettings implements SpawnerMobTracking
     {
         boolean hasReward = false;
 
-        for (AbstractRewardSettings settings : this.rewardSettings) {
+        for (AbstractRewardSettings<?> settings : this.rewardSettings) {
             if (settings.hasRewardSource(event)) {
                 hasReward = true;
                 break;
@@ -134,7 +134,7 @@ public class WorldSettings implements SpawnerMobTracking
 
     public Reward createReward(Event event)
     {
-        for (AbstractRewardSettings settings : this.rewardSettings) {
+        for (AbstractRewardSettings<?> settings : this.rewardSettings) {
             if (settings.hasRewardSource(event)) {
                 return settings.getRewardSource(event).createReward(event);
             }
@@ -154,13 +154,13 @@ public class WorldSettings implements SpawnerMobTracking
         return multiplier;
     }
 
-    public Set<String> getParty(Player player)
+    public Set<String> getPartyMembers(Player player)
     {
         Set<String> players = new HashSet<String>();
 
         for (Party party : parties) {
             if (party.isShared()) {
-                players.addAll(party.getPlayers(player));
+                players.addAll(party.getMembers(player));
             }
         }
 

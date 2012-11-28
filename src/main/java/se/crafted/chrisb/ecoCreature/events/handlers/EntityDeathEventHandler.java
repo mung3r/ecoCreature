@@ -71,7 +71,7 @@ public class EntityDeathEventHandler extends AbstractEventHandler
         if (settings.hasReward(event)) {
             Reward reward = settings.createReward(event);
             reward.setGain(settings.getGainMultiplier(killer));
-            reward.setParty(settings.getParty(killer));
+            reward.setParty(settings.getPartyMembers(killer));
             reward.addParameter(MessageToken.CREATURE, reward.getName())
                 .addParameter(MessageToken.ITEM, event.getWeaponName());
 

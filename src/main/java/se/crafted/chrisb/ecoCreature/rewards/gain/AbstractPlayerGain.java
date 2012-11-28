@@ -26,9 +26,22 @@ import java.util.Map;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-public abstract class AbstractPlayerGain implements PlayerGain
+public abstract class AbstractPlayerGain<T> implements PlayerGain
 {
     protected static final double NO_GAIN = 1.0;
+    protected static final String AMOUNT_KEY = "Amount";
+
+    private final Map<T, Double> multipliers;
+
+    public AbstractPlayerGain(Map<T, Double> multipliers)
+    {
+        this.multipliers = multipliers;
+    }
+
+    public Map<T, Double> getMultipliers()
+    {
+        return multipliers;
+    }
 
     @Override
     public abstract double getMultiplier(Player player);
@@ -42,6 +55,18 @@ public abstract class AbstractPlayerGain implements PlayerGain
             for (String key : config.getKeys(false)) {
                 multipliers.put(key, Double.valueOf(config.getConfigurationSection(key).getDouble("Amount", NO_GAIN)));
             }
+        }
+
+        return multipliers;
+    }
+
+    protected static Map<String, Double> parseMultiplier(ConfigurationSection config)
+    {
+        Map<String, Double> multipliers = Collections.emptyMap();
+
+        if (config != null) {
+            multipliers = new HashMap<String, Double>();
+            multipliers.put(AMOUNT_KEY, config.getDouble("Amount", NO_GAIN));
         }
 
         return multipliers;

@@ -32,7 +32,7 @@ import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 public class MobArenaParty extends AbstractParty
 {
     @Override
-    public Set<String> getPlayers(Player player)
+    public Set<String> getMembers(Player player)
     {
         Set<String> party = Collections.emptySet();
 

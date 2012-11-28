@@ -35,13 +35,11 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.struct.Relation;
 
-public class FactionsGain extends AbstractPlayerGain
+public class FactionsGain extends AbstractPlayerGain<Relation>
 {
-    private Map<Relation, Double> multipliers;
-
     public FactionsGain(Map<Relation, Double> multipliers)
     {
-        this.multipliers = multipliers;
+        super(multipliers);
     }
 
     @Override
@@ -51,8 +49,8 @@ public class FactionsGain extends AbstractPlayerGain
 
         if (DependencyUtils.hasPermission(player, "gain.factions") && DependencyUtils.hasFactions()) {
             FPlayer fPlayer = FPlayers.i.get(player);
-            if (fPlayer != null && multipliers.containsKey(fPlayer.getRelationToLocation())) {
-                multiplier = multipliers.get(fPlayer.getRelationToLocation());
+            if (fPlayer != null && getMultipliers().containsKey(fPlayer.getRelationToLocation())) {
+                multiplier = getMultipliers().get(fPlayer.getRelationToLocation());
                 LoggerUtil.getInstance().debug(this.getClass(), "Factions multiplier: " + multiplier);
             }
         }

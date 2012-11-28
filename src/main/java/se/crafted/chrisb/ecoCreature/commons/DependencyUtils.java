@@ -66,10 +66,10 @@ public final class DependencyUtils
     {
         vaultPlugin = getPlugin("Vault", "net.milkbowl.vault.Vault");
         deathTpPlusPlugin = getPlugin("DeathTpPlus", "org.simiancage.DeathTpPlus.DeathTpPlus");
-        heroesPlugin = (Heroes) getPlugin("Heroes", "com.herocraftonline.heroes.Heroes");
-        worldGuardPlugin = (WorldGuardPlugin) getPlugin("WorldGuard", "com.sk89q.worldguard.bukkit.WorldGuardPlugin");
-        residencePlugin = (Residence) getPlugin("Residence", "com.bekvon.bukkit.residence.Residence");
-        townyPlugin = (Towny) getPlugin("Towny", "com.palmergames.bukkit.towny.Towny");
+        heroesPlugin = getPlugin("Heroes", "com.herocraftonline.heroes.Heroes");
+        worldGuardPlugin = getPlugin("WorldGuard", "com.sk89q.worldguard.bukkit.WorldGuardPlugin");
+        residencePlugin = getPlugin("Residence", "com.bekvon.bukkit.residence.Residence");
+        townyPlugin = getPlugin("Towny", "com.palmergames.bukkit.towny.Towny");
         factionsPlugin = getPlugin("Factions", "com.massivecraft.factions.P");
         mcMMOPlugin = getPlugin("mcMMO", "com.gmail.nossr50.mcMMO");
 
@@ -209,14 +209,15 @@ public final class DependencyUtils
         return deathTpPlusPlugin != null;
     }
 
-    private static Plugin getPlugin(String pluginName, String className)
+    @SuppressWarnings("unchecked")
+    private static <T> T getPlugin(String pluginName, String className)
     {
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
         try {
             Class<?> testClass = Class.forName(className);
             if (testClass.isInstance(plugin) && plugin.isEnabled()) {
                 LoggerUtil.getInstance().info("Found plugin: " + plugin.getDescription().getName());
-                return plugin;
+                return (T) plugin;
             }
         }
         catch (ClassNotFoundException e) {

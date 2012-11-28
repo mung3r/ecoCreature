@@ -32,13 +32,11 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.TimePeriod;
 
-public class TimeGain extends AbstractPlayerGain
+public class TimeGain extends AbstractPlayerGain<TimePeriod>
 {
-    private Map<TimePeriod, Double> multipliers;
-
     public TimeGain(Map<TimePeriod, Double> multipliers)
     {
-        this.multipliers = multipliers;
+        super(multipliers);
     }
 
     @Override
@@ -46,8 +44,8 @@ public class TimeGain extends AbstractPlayerGain
     {
         double multiplier = NO_GAIN;
 
-        if (DependencyUtils.hasPermission(player, "gain.time") && multipliers.containsKey(TimePeriod.fromEntity(player))) {
-            multiplier = multipliers.get(TimePeriod.fromEntity(player));
+        if (DependencyUtils.hasPermission(player, "gain.time") && getMultipliers().containsKey(TimePeriod.fromEntity(player))) {
+            multiplier = getMultipliers().get(TimePeriod.fromEntity(player));
             LoggerUtil.getInstance().debug(this.getClass(), "Time multiplier: " + multiplier);
         }
 

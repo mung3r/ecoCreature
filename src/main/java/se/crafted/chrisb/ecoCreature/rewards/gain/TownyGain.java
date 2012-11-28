@@ -32,13 +32,11 @@ import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
-public class TownyGain extends AbstractPlayerGain
+public class TownyGain extends AbstractPlayerGain<String>
 {
-    private Map<String, Double> multipliers;
-
     public TownyGain(Map<String, Double> multipliers)
     {
-        this.multipliers = multipliers;
+        super(multipliers);
     }
 
     @Override
@@ -48,8 +46,8 @@ public class TownyGain extends AbstractPlayerGain
 
         if (DependencyUtils.hasPermission(player, "gain.towny") && DependencyUtils.hasTowny()) {
             String townName = TownyUniverse.getTownName(player.getLocation());
-            if (townName != null && multipliers.containsKey(townName)) {
-                multiplier = multipliers.get(townName);
+            if (townName != null && getMultipliers().containsKey(townName)) {
+                multiplier = getMultipliers().get(townName);
                 LoggerUtil.getInstance().debug(this.getClass(), "Towny multiplier: " + multiplier);
             }
         }

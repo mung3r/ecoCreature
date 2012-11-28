@@ -32,13 +32,11 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-public class BiomeGain extends AbstractPlayerGain
+public class BiomeGain extends AbstractPlayerGain<Biome>
 {
-    private Map<Biome, Double> multipliers;
-
     public BiomeGain(Map<Biome, Double> multipliers)
     {
-        this.multipliers = multipliers;
+        super(multipliers);
     }
 
     @Override
@@ -46,8 +44,8 @@ public class BiomeGain extends AbstractPlayerGain
     {
         double multiplier = NO_GAIN;
 
-        if (DependencyUtils.hasPermission(player, "gain.biome") && multipliers.containsKey(getBiome(player))) {
-            multiplier = multipliers.get(getBiome(player));
+        if (DependencyUtils.hasPermission(player, "gain.biome") && getMultipliers().containsKey(getBiome(player))) {
+            multiplier = getMultipliers().get(getBiome(player));
             LoggerUtil.getInstance().debug(this.getClass(), "Biome multiplier: " + multiplier);
         }
 

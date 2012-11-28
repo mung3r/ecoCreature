@@ -32,13 +32,11 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-public class RegiosGain extends AbstractPlayerGain
+public class RegiosGain extends AbstractPlayerGain<String>
 {
-    private Map<String, Double> multipliers;
-
     public RegiosGain(Map<String, Double> multipliers)
     {
-        this.multipliers = multipliers;
+        super(multipliers);
     }
 
     @Override
@@ -48,8 +46,8 @@ public class RegiosGain extends AbstractPlayerGain
 
         if (DependencyUtils.hasPermission(player, "gain.regios") && DependencyUtils.hasRegios()) {
             Region region = DependencyUtils.getRegiosAPI().getRegion(player.getLocation());
-            if (region != null && multipliers.containsKey(region.getName())) {
-                multiplier = multipliers.get(region.getName());
+            if (region != null && getMultipliers().containsKey(region.getName())) {
+                multiplier = getMultipliers().get(region.getName());
                 LoggerUtil.getInstance().debug(this.getClass(), "Regios multiplier: " + multiplier);
             }
         }

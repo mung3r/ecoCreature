@@ -33,13 +33,11 @@ import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import com.bekvon.bukkit.residence.Residence;
 import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 
-public class ResidenceGain extends AbstractPlayerGain
+public class ResidenceGain extends AbstractPlayerGain<String>
 {
-    private Map<String, Double> multipliers;
-
     public ResidenceGain(Map<String, Double> multipliers)
     {
-        this.multipliers = multipliers;
+        super(multipliers);
     }
 
     @Override
@@ -49,8 +47,8 @@ public class ResidenceGain extends AbstractPlayerGain
 
         if (DependencyUtils.hasPermission(player, "gain.residence") && DependencyUtils.hasResidence()) {
             ClaimedResidence residence = Residence.getResidenceManager().getByLoc(player.getLocation());
-            if (residence != null && multipliers.containsKey(residence.getName())) {
-                multiplier = multipliers.get(residence.getName());
+            if (residence != null && getMultipliers().containsKey(residence.getName())) {
+                multiplier = getMultipliers().get(residence.getName());
                 LoggerUtil.getInstance().debug(this.getClass(), "Residence multiplier: " + multiplier);
             }
         }

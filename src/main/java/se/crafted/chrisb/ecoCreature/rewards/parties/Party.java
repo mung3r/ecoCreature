@@ -29,5 +29,5 @@ public interface Party
 
     void setShared(boolean shared);
 
-    Set<String> getPlayers(Player player);
+    Set<String> getMembers(Player player);
 }

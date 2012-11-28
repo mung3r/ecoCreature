@@ -30,15 +30,14 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-public class GroupGain extends AbstractPlayerGain
+public class GroupGain extends AbstractPlayerGain<String>
 {
     private boolean warnGroupMultiplierSupport;
-    private Map<String, Double> multipliers;
 
     public GroupGain(Map<String, Double> multipliers)
     {
+        super(multipliers);
         warnGroupMultiplierSupport = true;
-        this.multipliers = multipliers;
     }
 
     @Override
@@ -49,8 +48,8 @@ public class GroupGain extends AbstractPlayerGain
         try {
             if (DependencyUtils.hasPermission() && DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName()) != null) {
                 String group = DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName()).toLowerCase();
-                if (DependencyUtils.hasPermission(player, "gain.group") && multipliers.containsKey(group)) {
-                    multiplier = multipliers.get(group);
+                if (DependencyUtils.hasPermission(player, "gain.group") && getMultipliers().containsKey(group)) {
+                    multiplier = getMultipliers().get(group);
                     LoggerUtil.getInstance().debug(this.getClass(), "Group multiplier: " + multiplier);
                 }
             }

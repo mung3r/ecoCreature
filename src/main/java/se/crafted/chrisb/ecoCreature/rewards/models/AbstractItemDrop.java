@@ -106,7 +106,7 @@ public abstract class AbstractItemDrop
 
     public ItemStack getOutcome(boolean isFixedDrops)
     {
-        if (Math.random() * 100.0D < percentage && material != null) {
+        if (random.nextDouble() * 100.0D < percentage && material != null) {
             int dropAmount = isFixedDrops ? range.getMaximumInteger() : range.getMinimumInteger()
                     + random.nextInt(Math.abs(range.getMaximumInteger() - range.getMinimumInteger() + 1));
 

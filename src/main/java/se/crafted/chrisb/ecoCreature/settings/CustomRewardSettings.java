@@ -36,13 +36,11 @@ import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.PVPRewardSource;
 import se.crafted.chrisb.ecoCreature.settings.types.CustomRewardType;
 
-public class CustomRewardSettings extends AbstractRewardSettings
+public class CustomRewardSettings extends AbstractRewardSettings<CustomRewardType>
 {
-    private Map<CustomRewardType, List<AbstractRewardSource>> sources;
-
     public CustomRewardSettings(Map<CustomRewardType, List<AbstractRewardSource>> sources)
     {
-        this.sources = sources;
+        super(sources);
     }
 
     @Override
@@ -84,7 +82,7 @@ public class CustomRewardSettings extends AbstractRewardSettings
 
     private boolean hasRewardSource(CustomRewardType type)
     {
-        return type != null && sources.containsKey(type) && !sources.get(type).isEmpty();
+        return type != null && getSources().containsKey(type) && !getSources().get(type).isEmpty();
     }
 
     @Override
@@ -105,7 +103,7 @@ public class CustomRewardSettings extends AbstractRewardSettings
         AbstractRewardSource source = null;
 
         if (hasRewardSource(type)) {
-            source = sources.get(type).get(nextInt(sources.get(type).size()));
+            source = getSources().get(type).get(nextInt(getSources().get(type).size()));
         }
         else {
             LoggerUtil.getInstance().debug(this.getClass(), "No reward defined for custom type: " + type.name());
@@ -114,7 +112,7 @@ public class CustomRewardSettings extends AbstractRewardSettings
         return source;
     }
 
-    public static AbstractRewardSettings parseConfig(ConfigurationSection config)
+    public static AbstractRewardSettings<CustomRewardType> parseConfig(ConfigurationSection config)
     {
         Map<CustomRewardType, List<AbstractRewardSource>> sources = new HashMap<CustomRewardType, List<AbstractRewardSource>>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");

@@ -85,7 +85,7 @@ public class EntityDrop
     {
         int amount;
 
-        if (Math.random() > percentage / 100.0D) {
+        if (random.nextDouble() > percentage / 100.0D) {
             amount = 0;
         }
         else {

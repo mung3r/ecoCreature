@@ -155,8 +155,7 @@ public class ItemDrop extends AbstractItemDrop
         }
         ItemEnchantment enchantment = new ItemEnchantment();
         enchantment.setEnchantment(Enchantment.getByName(name.toUpperCase()));
-        enchantment.setMinLevel(minLevel);
-        enchantment.setMaxLevel(maxLevel);
+        enchantment.setLevelRange(new IntRange(minLevel, maxLevel));
 
         return enchantment;
     }

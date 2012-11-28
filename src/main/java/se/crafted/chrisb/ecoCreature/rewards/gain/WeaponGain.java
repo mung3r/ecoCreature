@@ -33,13 +33,11 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 
-public class WeaponGain extends AbstractPlayerGain
+public class WeaponGain extends AbstractPlayerGain<Material>
 {
-    private Map<Material, Double> multipliers;
-
-    public WeaponGain(Map<Material, Double> materialMultipliers)
+    public WeaponGain(Map<Material, Double> multipliers)
     {
-        this.multipliers = materialMultipliers;
+        super(multipliers);
     }
 
     @Override
@@ -48,8 +46,8 @@ public class WeaponGain extends AbstractPlayerGain
         double multiplier = NO_GAIN;
         Material material = EntityUtils.getItemTypeInHand(player);
 
-        if (DependencyUtils.hasPermission(player, "gain.weapon") && multipliers.containsKey(material)) {
-            multiplier = multipliers.get(material);
+        if (DependencyUtils.hasPermission(player, "gain.weapon") && getMultipliers().containsKey(material)) {
+            multiplier = getMultipliers().get(material);
             LoggerUtil.getInstance().debug(this.getClass(), "Weapon multiplier: " + multiplier);
         }
 

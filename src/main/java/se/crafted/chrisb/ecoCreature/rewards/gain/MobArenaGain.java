@@ -21,6 +21,7 @@ package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -29,13 +30,11 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-public class MobArenaGain extends AbstractPlayerGain
+public class MobArenaGain extends AbstractPlayerGain<String>
 {
-    private double multiplier;
-
-    public MobArenaGain(double multiplier)
+    public MobArenaGain(Map<String, Double> multipliers)
     {
-        this.multiplier = multiplier;
+        super(multipliers);
     }
 
     @Override
@@ -43,7 +42,7 @@ public class MobArenaGain extends AbstractPlayerGain
     {
         if (DependencyUtils.hasPermission(player, "gain.mobarena") && DependencyUtils.hasMobArena() && DependencyUtils.getMobArenaHandler().isPlayerInArena(player)) {
             LoggerUtil.getInstance().debug(this.getClass(), "MobArena multiplier applied");
-            return multiplier;
+            return getMultipliers().get(AMOUNT_KEY);
         }
 
         return NO_GAIN;
@@ -55,7 +54,7 @@ public class MobArenaGain extends AbstractPlayerGain
 
         if (config != null) {
             gain = new HashSet<PlayerGain>();
-            gain.add(new MobArenaGain(config.getDouble("InArena.Amount", NO_GAIN)));
+            gain.add(new MobArenaGain(parseMultiplier(config.getConfigurationSection("InArena"))));
         }
 
         return gain;

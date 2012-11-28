@@ -69,7 +69,7 @@ import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
 public class PluginConfig
 {
-    public static final String DEFAULT_WORLD = "__DEFAULT_WORLD__";
+    private static final String DEFAULT_WORLD = "__DEFAULT_WORLD__";
 
     private static final String OLD_DEFAULT_FILE = "ecoCreature.yml";
     private static final String DEFAULT_FILE = "default.yml";
@@ -192,9 +192,9 @@ public class PluginConfig
         return parties;
     }
 
-    private static List<AbstractRewardSettings> loadRewardSettings(ConfigurationSection config)
+    private static List<AbstractRewardSettings<?>> loadRewardSettings(ConfigurationSection config)
     {
-        List<AbstractRewardSettings> rewardSettings = new ArrayList<AbstractRewardSettings>();
+        List<AbstractRewardSettings<?>> rewardSettings = new ArrayList<AbstractRewardSettings<?>>();
 
         rewardSettings.add(CustomMaterialRewardSettings.parseConfig(config));
         rewardSettings.add(MaterialRewardSettings.parseConfig(config));

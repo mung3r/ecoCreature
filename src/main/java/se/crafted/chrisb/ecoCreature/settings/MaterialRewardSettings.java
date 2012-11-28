@@ -35,13 +35,11 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 
-public class MaterialRewardSettings extends AbstractRewardSettings
+public class MaterialRewardSettings extends AbstractRewardSettings<Material>
 {
-    private Map<Material, List<AbstractRewardSource>> sources;
-
     public MaterialRewardSettings(Map<Material, List<AbstractRewardSource>> sources)
     {
-        this.sources = sources;
+        super(sources);
     }
 
     @Override
@@ -69,7 +67,7 @@ public class MaterialRewardSettings extends AbstractRewardSettings
 
     private boolean hasRewardSource(Material material)
     {
-        return material != null && sources.containsKey(material) && !sources.get(material).isEmpty();
+        return material != null && getSources().containsKey(material) && !getSources().get(material).isEmpty();
     }
 
     @Override
@@ -101,7 +99,7 @@ public class MaterialRewardSettings extends AbstractRewardSettings
         AbstractRewardSource source = null;
 
         if (hasRewardSource(material)) {
-            source = sources.get(material).get(nextInt(sources.get(material).size()));
+            source = getSources().get(material).get(nextInt(getSources().get(material).size()));
         }
         else {
             LoggerUtil.getInstance().debug(this.getClass(), "No reward defined for material: " + material);
@@ -110,7 +108,7 @@ public class MaterialRewardSettings extends AbstractRewardSettings
         return source;
     }
 
-    public static AbstractRewardSettings parseConfig(ConfigurationSection config)
+    public static AbstractRewardSettings<Material> parseConfig(ConfigurationSection config)
     {
         Map<Material, List<AbstractRewardSource>> sources = new HashMap<Material, List<AbstractRewardSource>>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");

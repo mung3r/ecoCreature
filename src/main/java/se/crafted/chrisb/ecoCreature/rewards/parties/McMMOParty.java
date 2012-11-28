@@ -35,7 +35,7 @@ import com.gmail.nossr50.api.PartyAPI;
 public class McMMOParty extends AbstractParty
 {
     @Override
-    public Set<String> getPlayers(Player player)
+    public Set<String> getMembers(Player player)
     {
         Set<String> party = Collections.emptySet();
 

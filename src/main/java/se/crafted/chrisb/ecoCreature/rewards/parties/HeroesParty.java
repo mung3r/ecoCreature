@@ -34,7 +34,7 @@ import com.herocraftonline.heroes.characters.Hero;
 public class HeroesParty extends AbstractParty
 {
     @Override
-    public Set<String> getPlayers(Player player)
+    public Set<String> getMembers(Player player)
     {
         Set<String> party = Collections.emptySet();
 
