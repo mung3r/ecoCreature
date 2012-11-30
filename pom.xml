@@ -132,6 +132,13 @@
       <scope>system</scope>
       <systemPath>${project.basedir}/lib/Factions.jar</systemPath>
     </dependency>
+    <dependency>
+      <groupId>com.massivecraft.factions</groupId>
+      <artifactId>Factions-beta</artifactId>
+      <version>1.7.8_beta</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/Factions-beta.jar</systemPath>
+    </dependency>
   </dependencies>
   <build>
     <defaultGoal>clean install</defaultGoal>
