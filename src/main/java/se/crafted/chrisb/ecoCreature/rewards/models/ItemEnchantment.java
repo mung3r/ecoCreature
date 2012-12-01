@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import org.apache.commons.lang.math.IntRange;
+import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.enchantments.Enchantment;
 
 public class ItemEnchantment
@@ -32,7 +32,7 @@ public class ItemEnchantment
     private final Random random = new Random();
 
     private Enchantment enchantment;
-    private IntRange levelRange;
+    private NumberRange levelRange;
 
     public Enchantment getEnchantment()
     {
@@ -44,12 +44,12 @@ public class ItemEnchantment
         this.enchantment = enchantment;
     }
 
-    public IntRange getLevelRange()
+    public NumberRange getLevelRange()
     {
         return levelRange;
     }
 
-    public void setLevelRange(IntRange levelRange)
+    public void setLevelRange(NumberRange levelRange)
     {
         this.levelRange = levelRange;
     }

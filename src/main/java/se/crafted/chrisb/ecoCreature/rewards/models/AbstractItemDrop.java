@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.Set;
 
-import org.apache.commons.lang.math.IntRange;
+import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
@@ -33,7 +33,7 @@ public abstract class AbstractItemDrop
     private Material material;
     private Byte data;
     private Short durability;
-    private IntRange range;
+    private NumberRange range;
     private double percentage;
     private Set<ItemEnchantment> enchantments;
     private final Random random = new Random();
@@ -74,12 +74,12 @@ public abstract class AbstractItemDrop
         this.durability = durability;
     }
 
-    public IntRange getRange()
+    public NumberRange getRange()
     {
         return range;
     }
 
-    public void setRange(IntRange range)
+    public void setRange(NumberRange range)
     {
         this.range = range;
     }
