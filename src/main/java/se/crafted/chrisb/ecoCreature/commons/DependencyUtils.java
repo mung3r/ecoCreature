@@ -201,7 +201,12 @@ public final class DependencyUtils
 
     public static boolean hasFactions()
     {
-        return factionsPlugin != null;
+        return factionsPlugin != null && !factionsPlugin.getDescription().getVersion().contains("beta");
+    }
+
+    public static boolean hasFactionsBeta()
+    {
+        return factionsPlugin != null && factionsPlugin.getDescription().getVersion().contains("beta");
     }
 
     public static boolean hasDeathTpPlus()
