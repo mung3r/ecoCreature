@@ -30,7 +30,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.inventory.ItemStack;
 
-import se.crafted.chrisb.ecoCreature.commons.BookItem;
+import tux2.inventory.BookItem;
 
 public class BookDrop extends ItemDrop
 {

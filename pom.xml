@@ -188,7 +188,7 @@
               <excludes>
                 <exclude>src/main/java/**/CommandHandler.java</exclude>
                 <exclude>src/main/java/org/mcstats/**</exclude>
-                <exclude>src/main/java/**/BookItem.java</exclude>
+                <exclude>src/main/java/tux2/**</exclude>
               </excludes>
             </configuration>
             <phase>clean</phase>
