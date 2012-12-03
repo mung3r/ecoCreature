@@ -61,7 +61,7 @@ public class EnvironmentGain extends AbstractPlayerGain<Environment>
             Map<Environment, Double> multipliers = new HashMap<World.Environment, Double>();
             for (String environment : config.getKeys(false)) {
                 try {
-                    multipliers.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(config.getConfigurationSection(environment).getDouble("Amount", NO_GAIN)));
+                    multipliers.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(config.getConfigurationSection(environment).getDouble(AMOUNT_KEY, NO_GAIN)));
                 }
                 catch (Exception e) {
                     LoggerUtil.getInstance().warning("Skipping unknown environment name: " + environment);

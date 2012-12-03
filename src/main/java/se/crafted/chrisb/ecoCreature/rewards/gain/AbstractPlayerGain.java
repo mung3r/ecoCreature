@@ -28,8 +28,8 @@ import org.bukkit.entity.Player;
 
 public abstract class AbstractPlayerGain<T> implements PlayerGain
 {
-    protected static final double NO_GAIN = 1.0;
     protected static final String AMOUNT_KEY = "Amount";
+    protected static final double NO_GAIN = 1.0;
 
     private final Map<T, Double> multipliers;
 
@@ -53,7 +53,7 @@ public abstract class AbstractPlayerGain<T> implements PlayerGain
         if (config != null) {
             multipliers = new HashMap<String, Double>();
             for (String key : config.getKeys(false)) {
-                multipliers.put(key, Double.valueOf(config.getConfigurationSection(key).getDouble("Amount", NO_GAIN)));
+                multipliers.put(key, Double.valueOf(config.getConfigurationSection(key).getDouble(AMOUNT_KEY, NO_GAIN)));
             }
         }
 
@@ -66,7 +66,7 @@ public abstract class AbstractPlayerGain<T> implements PlayerGain
 
         if (config != null) {
             multipliers = new HashMap<String, Double>();
-            multipliers.put(AMOUNT_KEY, config.getDouble("Amount", NO_GAIN));
+            multipliers.put(AMOUNT_KEY, config.getDouble(AMOUNT_KEY, NO_GAIN));
         }
 
         return multipliers;

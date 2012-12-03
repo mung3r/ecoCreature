@@ -59,7 +59,7 @@ public class TimeGain extends AbstractPlayerGain<TimePeriod>
         if (config != null) {
             Map<TimePeriod, Double> multipliers = new HashMap<TimePeriod, Double>();
             for (String period : config.getKeys(false)) {
-                multipliers.put(TimePeriod.fromName(period), Double.valueOf(config.getConfigurationSection(period).getDouble("Amount", NO_GAIN)));
+                multipliers.put(TimePeriod.fromName(period), Double.valueOf(config.getConfigurationSection(period).getDouble(AMOUNT_KEY, NO_GAIN)));
             }
             gain = new HashSet<PlayerGain>();
             gain.add(new TimeGain(multipliers));

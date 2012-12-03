@@ -36,18 +36,18 @@ public class EntityDrop
 {
     private static Random random = new Random();
 
-    private EntityType type;
+    private final EntityType type;
     private NumberRange range;
     private double percentage;
+
+    public EntityDrop(EntityType type)
+    {
+        this.type = type;
+    }
 
     public EntityType getType()
     {
         return type;
-    }
-
-    public void setType(EntityType type)
-    {
-        this.type = type;
     }
 
     public NumberRange getRange()
@@ -133,8 +133,7 @@ public class EntityDrop
         EntityDrop exp = null;
 
         if (config != null && config.contains("ExpMin") && config.contains("ExpMax") && config.contains("ExpPercent")) {
-            exp = new EntityDrop();
-            exp.setType(EntityType.EXPERIENCE_ORB);
+            exp = new EntityDrop(EntityType.EXPERIENCE_ORB);
             exp.setRange(new NumberRange(config.getInt("ExpMin", 0), config.getInt("ExpMax", 0)));
             exp.setPercentage(config.getDouble("ExpPercent", 0.0D));
         }
@@ -160,8 +159,7 @@ public class EntityDrop
         for (String dropString : dropsList) {
             EntityType type = parseType(dropString);
             if (type != null && !isAmbiguous(type)) {
-                EntityDrop drop = new EntityDrop();
-                drop.setType(type);
+                EntityDrop drop = new EntityDrop(type);
                 drop.setRange(parseRange(dropString));
                 drop.setPercentage(parsePercentage(dropString));
                 drops = new ArrayList<EntityDrop>();

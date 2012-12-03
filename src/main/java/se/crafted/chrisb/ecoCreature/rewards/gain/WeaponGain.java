@@ -62,7 +62,7 @@ public class WeaponGain extends AbstractPlayerGain<Material>
             Map<Material, Double> multipliers = new HashMap<Material, Double>();
 
             for (String material : config.getKeys(false)) {
-                multipliers.put(Material.matchMaterial(material), Double.valueOf(config.getConfigurationSection(material).getDouble("Amount", NO_GAIN)));
+                multipliers.put(Material.matchMaterial(material), Double.valueOf(config.getConfigurationSection(material).getDouble(AMOUNT_KEY, NO_GAIN)));
             }
             gain = new HashSet<PlayerGain>();
             gain.add(new WeaponGain(multipliers));

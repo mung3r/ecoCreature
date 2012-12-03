@@ -19,44 +19,36 @@
  */
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
-import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-import com.massivecraft.factions.struct.Rel;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
 
-public class FactionsBetaGain extends AbstractFactionsGain<Rel>
+public abstract class AbstractFactionsGain<T> extends AbstractPlayerGain<T>
 {
-    public FactionsBetaGain(Map<Rel, Double> multipliers)
+    public AbstractFactionsGain(Map<T, Double> multipliers)
     {
         super(multipliers);
     }
 
-    public static Set<PlayerGain> parseConfig(ConfigurationSection config)
+    @Override
+    public double getMultiplier(Player player)
     {
-        Set<PlayerGain> gain = Collections.emptySet();
+        double multiplier = NO_GAIN;
 
-        if (config != null && DependencyUtils.hasFactionsBeta()) {
-            Map<Rel, Double> multipliers = new HashMap<Rel, Double>();
-            for (String relation : config.getKeys(false)) {
-                try {
-                    multipliers.put(Rel.valueOf(relation), Double.valueOf(config.getConfigurationSection(relation).getDouble(AMOUNT_KEY, NO_GAIN)));
-                }
-                catch (IllegalArgumentException e) {
-                    LoggerUtil.getInstance().warning("Unrecognized Factions relation: " + relation);
-                }
+        if (DependencyUtils.hasPermission(player, "gain.factions") && DependencyUtils.hasFactions()) {
+            FPlayer fPlayer = FPlayers.i.get(player);
+            if (fPlayer != null && getMultipliers().containsKey(fPlayer.getRelationToLocation())) {
+                multiplier = getMultipliers().get(fPlayer.getRelationToLocation());
+                LoggerUtil.getInstance().debug(this.getClass(), "Factions multiplier: " + multiplier);
             }
-            gain = new HashSet<PlayerGain>();
-            gain.add(new FactionsBetaGain(multipliers));
         }
 
-        return gain;
+        return multiplier;
     }
 }

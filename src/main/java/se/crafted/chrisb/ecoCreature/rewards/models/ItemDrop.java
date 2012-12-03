@@ -197,7 +197,7 @@ public class ItemDrop extends AbstractItemDrop
         return new NumberRange(min, max);
     }
 
-    private static Double parsePercentage(String dropString)
+    private static double parsePercentage(String dropString)
     {
         String[] dropParts = dropString.split(":");
 

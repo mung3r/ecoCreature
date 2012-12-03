@@ -30,7 +30,7 @@ import org.bukkit.material.MaterialData;
 
 public abstract class AbstractItemDrop
 {
-    private Material material;
+    private final Material material;
     private Byte data;
     private Short durability;
     private NumberRange range;
@@ -47,11 +47,6 @@ public abstract class AbstractItemDrop
     public Material getMaterial()
     {
         return material;
-    }
-
-    public void setMaterial(Material item)
-    {
-        this.material = item;
     }
 
     public Byte getData()
