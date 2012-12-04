@@ -17,7 +17,6 @@
 package tux2.inventory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.server.NBTTagCompound;
@@ -49,9 +48,8 @@ public class BookItem
 
     public List<String> getPages()
     {
-        List<String> pageList = Collections.emptyList();
         NBTTagList pages = getItemTag().getList(TAG_PAGES);
-        pageList = new ArrayList<String>(pages.size());
+        List<String> pageList = new ArrayList<String>(pages.size());
         for (int i = 0; i < pages.size(); i++) {
             pageList.add(pages.get(i).toString());
         }
