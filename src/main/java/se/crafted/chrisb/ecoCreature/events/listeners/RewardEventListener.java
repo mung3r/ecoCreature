@@ -107,8 +107,8 @@ public class RewardEventListener implements Listener
         }
 
         if (reward.isIntegerCurrency()) {
-            LoggerUtil.getInstance().debug(this.getClass(), "Rounded amount: " + amount);
             amount = Math.round(amount);
+            LoggerUtil.getInstance().debug(this.getClass(), "Rounded amount: " + amount);
         }
 
         return amount;
