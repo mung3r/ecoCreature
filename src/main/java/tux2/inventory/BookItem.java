@@ -24,6 +24,7 @@ import net.minecraft.server.NBTTagCompound;
 import net.minecraft.server.NBTTagList;
 import net.minecraft.server.NBTTagString;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
@@ -34,101 +35,75 @@ public class BookItem
     private static final String TAG_PAGES = "pages";
     private static final NBTTagString BLANK_PAGE = new NBTTagString("1", "");
 
-    private net.minecraft.server.ItemStack item = null;
-    private CraftItemStack stack = null;
+    private final CraftItemStack stack;
 
     public BookItem(ItemStack item)
     {
-        stack = new CraftItemStack(item);
-        this.item = stack.getHandle();
+        this(new CraftItemStack(item));
     }
 
     public BookItem(CraftItemStack item)
     {
-        stack = (CraftItemStack) item;
-        this.item = stack.getHandle();
+        stack = item;
     }
 
     public List<String> getPages()
     {
-        List<String> pagestrings = Collections.emptyList();
-        if (item.getTag() != null) {
-            NBTTagList pages = item.getTag().getList(TAG_PAGES);
-            pagestrings = new ArrayList<String>(pages.size());
-            for (int i = 0; i < pages.size(); i++) {
-                pagestrings.add(pages.get(i).toString());
-            }
+        List<String> pageList = Collections.emptyList();
+        NBTTagList pages = getItemTag().getList(TAG_PAGES);
+        pageList = new ArrayList<String>(pages.size());
+        for (int i = 0; i < pages.size(); i++) {
+            pageList.add(pages.get(i).toString());
         }
-        return pagestrings;
+        return pageList;
     }
 
     public String getAuthor()
     {
-        String author = null;
-        if (item.getTag() != null) {
-            author = item.getTag().getString(TAG_AUTHOR);
-        }
-        return author;
+        return getItemTag().getString(TAG_AUTHOR);
     }
 
     public String getTitle()
     {
-        String title = null;
-        if (item.getTag() != null) {
-            title = item.getTag().getString(TAG_TITLE);
-        }
-        return title;
+        return getItemTag().getString(TAG_TITLE);
     }
 
-    public void setPages(List<String> newpages)
+    public void setPages(List<String> pages)
     {
-        NBTTagList pages = new NBTTagList(TAG_PAGES);
+        getItemTag().set(TAG_PAGES, new NBTTagList(TAG_PAGES));
+        addPages(pages);
+    }
+
+    public void addPages(List<String> pages)
+    {
+        NBTTagList newPages = getItemTag().getList(TAG_PAGES);
+        if (newPages.size() == 0) {
+            newPages = new NBTTagList(TAG_PAGES);
+            getItemTag().set(TAG_PAGES, newPages);
+        }
         // we don't want to throw any errors if the book is blank!
-        if (newpages.isEmpty()) {
-            pages.add(BLANK_PAGE);
+        if (pages == null || pages.isEmpty()) {
+            newPages.add(BLANK_PAGE);
         }
         else {
-            int pageNum = 0;
-            for (String newpage : newpages) {
-                pages.add(new NBTTagString(String.valueOf(pageNum), newpage));
+            int pageNum = newPages.size();
+            for (String page : pages) {
+                newPages.add(new NBTTagString(String.valueOf(pageNum), page));
                 pageNum++;
             }
         }
-        getItemTag().set(TAG_PAGES, pages);
-    }
-
-    public void addPages(List<String> newpages)
-    {
-        NBTTagCompound tag = getItemTag();
-        NBTTagList pages;
-        if (getPages() == null) {
-            pages = new NBTTagList(TAG_PAGES);
-        }
-        else {
-            pages = tag.getList(TAG_PAGES);
-        }
-        // we don't want to throw any errors if the book is blank!
-        if (newpages.isEmpty() && pages.size() == 0) {
-            pages.add(BLANK_PAGE);
-        }
-        else {
-            for (String newpage : newpages) {
-                pages.add(new NBTTagString(String.valueOf(pages.size()), newpage));
-            }
-        }
-        tag.set(TAG_PAGES, pages);
     }
 
     public void setAuthor(String author)
     {
-        if (author != null && !author.isEmpty()) {
+        if (StringUtils.isNotEmpty(author)) {
             getItemTag().setString(TAG_AUTHOR, author);
         }
     }
 
     public void setTitle(String title)
     {
-        if (title != null && !title.isEmpty()) {
+        if (StringUtils.isNotEmpty(title)) {
             getItemTag().setString(TAG_TITLE, title);
         }
     }
@@ -140,9 +115,11 @@ public class BookItem
 
     private NBTTagCompound getItemTag()
     {
-        if (item.getTag() == null) {
-            item.setTag(new NBTTagCompound());
+        NBTTagCompound tag = stack.getHandle().getTag();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+            stack.getHandle().setTag(tag);
         }
-        return item.getTag();
+        return tag;
     }
 }
