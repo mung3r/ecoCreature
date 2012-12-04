@@ -153,8 +153,7 @@ public class ItemDrop extends AbstractItemDrop
         if (name == null || Enchantment.getByName(name.toUpperCase()) == null) {
             throw new IllegalArgumentException("Unrecognized enchantment: " + name);
         }
-        ItemEnchantment enchantment = new ItemEnchantment();
-        enchantment.setEnchantment(Enchantment.getByName(name.toUpperCase()));
+        ItemEnchantment enchantment = new ItemEnchantment(Enchantment.getByName(name.toUpperCase()));
         enchantment.setLevelRange(new NumberRange(minLevel, maxLevel));
 
         return enchantment;

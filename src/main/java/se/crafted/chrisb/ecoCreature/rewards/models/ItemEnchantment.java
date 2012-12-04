@@ -31,17 +31,17 @@ public class ItemEnchantment
 {
     private final Random random = new Random();
 
-    private Enchantment enchantment;
+    private final Enchantment enchantment;
     private NumberRange levelRange;
+
+    public ItemEnchantment(Enchantment enchantment)
+    {
+        this.enchantment = enchantment;
+    }
 
     public Enchantment getEnchantment()
     {
         return enchantment;
-    }
-
-    public void setEnchantment(Enchantment enchantment)
-    {
-        this.enchantment = enchantment;
     }
 
     public NumberRange getLevelRange()
