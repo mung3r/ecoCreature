@@ -38,14 +38,17 @@ public class HeroesGain extends AbstractPlayerGain<String>
     }
 
     @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "gain.heroes") && DependencyUtils.hasHeroes();
+    }
+
+    @Override
     public double getMultiplier(Player player)
     {
-        if (DependencyUtils.hasPermission(player, "gain.heroes") && DependencyUtils.hasHeroes() && DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {
-            LoggerUtil.getInstance().debug(this.getClass(), "Heroes multiplier: " + getMultipliers().get(AMOUNT_KEY));
-            return getMultipliers().get(AMOUNT_KEY);
-        }
-
-        return NO_GAIN;
+        double multiplier = DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty() ? getMultipliers().get(AMOUNT_KEY) : NO_GAIN;
+        LoggerUtil.getInstance().debug(this.getClass(), "Heroes multiplier: " + multiplier);
+        return multiplier;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

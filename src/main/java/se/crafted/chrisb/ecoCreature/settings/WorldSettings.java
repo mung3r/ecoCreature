@@ -148,7 +148,9 @@ public class WorldSettings implements SpawnerMobTracking
         double multiplier = 1.0;
 
         for (PlayerGain gain : gainMultipliers) {
-            multiplier *= gain.getMultiplier(player);
+            if (gain.hasPermission(player)) {
+                multiplier *= gain.getMultiplier(player);
+            }
         }
 
         return multiplier;

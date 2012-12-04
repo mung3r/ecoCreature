@@ -38,14 +38,17 @@ public class MobArenaGain extends AbstractPlayerGain<String>
     }
 
     @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "gain.mobarena") && DependencyUtils.hasMobArena();
+    }
+
+    @Override
     public double getMultiplier(Player player)
     {
-        if (DependencyUtils.hasPermission(player, "gain.mobarena") && DependencyUtils.hasMobArena() && DependencyUtils.getMobArenaHandler().isPlayerInArena(player)) {
-            LoggerUtil.getInstance().debug(this.getClass(), "MobArena multiplier applied");
-            return getMultipliers().get(AMOUNT_KEY);
-        }
-
-        return NO_GAIN;
+        double multiplier = DependencyUtils.getMobArenaHandler().isPlayerInArena(player) ? getMultipliers().get(AMOUNT_KEY) : NO_GAIN;
+        LoggerUtil.getInstance().debug(this.getClass(), "MobArena multiplier applied");
+        return multiplier;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

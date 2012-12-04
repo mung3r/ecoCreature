@@ -46,6 +46,9 @@ public abstract class AbstractPlayerGain<T> implements PlayerGain
     @Override
     public abstract double getMultiplier(Player player);
 
+    @Override
+    public abstract boolean hasPermission(Player player);
+
     protected static Map<String, Double> parseMultipliers(ConfigurationSection config)
     {
         Map<String, Double> multipliers = Collections.emptyMap();

@@ -41,15 +41,17 @@ public class EnvironmentGain extends AbstractPlayerGain<Environment>
     }
 
     @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "gain.environment");
+    }
+
+    @Override
     public double getMultiplier(Player player)
     {
-        double multiplier = NO_GAIN;
-
-        if (DependencyUtils.hasPermission(player, "gain.environment") && getMultipliers().containsKey(player.getWorld().getEnvironment())) {
-            multiplier = getMultipliers().get(player.getWorld().getEnvironment());
-            LoggerUtil.getInstance().debug(this.getClass(), "Environment multiplier: " + multiplier);
-        }
-
+        double multiplier = getMultipliers().containsKey(player.getWorld().getEnvironment()) ?
+                getMultipliers().get(player.getWorld().getEnvironment()) : NO_GAIN;
+        LoggerUtil.getInstance().debug(this.getClass(), "Environment multiplier: " + multiplier);
         return multiplier;
     }
 
@@ -61,7 +63,8 @@ public class EnvironmentGain extends AbstractPlayerGain<Environment>
             Map<Environment, Double> multipliers = new HashMap<World.Environment, Double>();
             for (String environment : config.getKeys(false)) {
                 try {
-                    multipliers.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(config.getConfigurationSection(environment).getDouble(AMOUNT_KEY, NO_GAIN)));
+                    multipliers.put(Environment.valueOf(environment.toUpperCase()), 
+                            Double.valueOf(config.getConfigurationSection(environment).getDouble(AMOUNT_KEY, NO_GAIN)));
                 }
                 catch (Exception e) {
                     LoggerUtil.getInstance().warning("Skipping unknown environment name: " + environment);

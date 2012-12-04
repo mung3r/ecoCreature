@@ -40,15 +40,16 @@ public class TimeGain extends AbstractPlayerGain<TimePeriod>
     }
 
     @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "gain.time");
+    }
+
+    @Override
     public double getMultiplier(Player player)
     {
-        double multiplier = NO_GAIN;
-
-        if (DependencyUtils.hasPermission(player, "gain.time") && getMultipliers().containsKey(TimePeriod.fromEntity(player))) {
-            multiplier = getMultipliers().get(TimePeriod.fromEntity(player));
-            LoggerUtil.getInstance().debug(this.getClass(), "Time multiplier: " + multiplier);
-        }
-
+        double multiplier = getMultipliers().containsKey(TimePeriod.fromEntity(player)) ? getMultipliers().get(TimePeriod.fromEntity(player)) : NO_GAIN;
+        LoggerUtil.getInstance().debug(this.getClass(), "Time multiplier: " + multiplier);
         return multiplier;
     }
 

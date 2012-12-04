@@ -40,16 +40,17 @@ public class WeatherGain extends AbstractPlayerGain<WeatherType>
     }
 
     @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "gain.weather");
+    }
+
+    @Override
     public double getMultiplier(Player player)
     {
-        double multiplier = 1.0;
         WeatherType weather = WeatherType.fromBoolean(player.getWorld().hasStorm());
-
-        if (DependencyUtils.hasPermission(player, "gain.weather") && getMultipliers().containsKey(weather)) {
-            multiplier = getMultipliers().get(weather);
-            LoggerUtil.getInstance().debug(this.getClass(), "Weather multiplier: " + multiplier);
-        }
-
+        double multiplier = getMultipliers().containsKey(weather) ? getMultipliers().get(weather) : NO_GAIN;
+        LoggerUtil.getInstance().debug(this.getClass(), "Weather multiplier: " + multiplier);
         return multiplier;
     }
 
@@ -61,7 +62,8 @@ public class WeatherGain extends AbstractPlayerGain<WeatherType>
             Map<WeatherType, Double> multipliers = new HashMap<WeatherType, Double>();
             for (String weather : config.getKeys(false)) {
                 try {
-                    multipliers.put(WeatherType.valueOf(weather.toUpperCase()), Double.valueOf(config.getConfigurationSection(weather).getDouble(AMOUNT_KEY, 1.0D)));
+                    multipliers.put(WeatherType.valueOf(weather.toUpperCase()),
+                            Double.valueOf(config.getConfigurationSection(weather).getDouble(AMOUNT_KEY, 1.0D)));
                 }
                 catch (Exception e) {
                     LoggerUtil.getInstance().warning("Skipping unknown weather name: " + weather);

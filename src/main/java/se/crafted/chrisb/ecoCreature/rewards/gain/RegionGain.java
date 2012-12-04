@@ -42,20 +42,24 @@ public class RegionGain extends AbstractPlayerGain<String>
     }
 
     @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "gain.worldguard") && DependencyUtils.hasWorldGuard();
+    }
+
+    @Override
     public double getMultiplier(Player player)
     {
         double multiplier = NO_GAIN;
 
-        if (DependencyUtils.hasPermission(player, "gain.worldguard") && DependencyUtils.hasWorldGuard()) {
-            RegionManager regionManager = DependencyUtils.getRegionManager(player.getWorld());
-            if (regionManager != null) {
-                Iterator<ProtectedRegion> regions = regionManager.getApplicableRegions(player.getLocation()).iterator();
-                while (regions.hasNext()) {
-                    String regionName = regions.next().getId();
-                    if (getMultipliers().containsKey(regionName)) {
-                        multiplier = getMultipliers().get(regionName);
-                        LoggerUtil.getInstance().debug(this.getClass(), "Region multiplier: " + multiplier);
-                    }
+        RegionManager regionManager = DependencyUtils.getRegionManager(player.getWorld());
+        if (regionManager != null) {
+            Iterator<ProtectedRegion> regions = regionManager.getApplicableRegions(player.getLocation()).iterator();
+            while (regions.hasNext()) {
+                String regionName = regions.next().getId();
+                if (getMultipliers().containsKey(regionName)) {
+                    multiplier = getMultipliers().get(regionName);
+                    LoggerUtil.getInstance().debug(this.getClass(), "Region multiplier: " + multiplier);
                 }
             }
         }

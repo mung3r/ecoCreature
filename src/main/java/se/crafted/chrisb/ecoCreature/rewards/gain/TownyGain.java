@@ -40,16 +40,20 @@ public class TownyGain extends AbstractPlayerGain<String>
     }
 
     @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "gain.towny") && DependencyUtils.hasTowny();
+    }
+
+    @Override
     public double getMultiplier(Player player)
     {
         double multiplier = 1.0;
 
-        if (DependencyUtils.hasPermission(player, "gain.towny") && DependencyUtils.hasTowny()) {
-            String townName = TownyUniverse.getTownName(player.getLocation());
-            if (townName != null && getMultipliers().containsKey(townName)) {
-                multiplier = getMultipliers().get(townName);
-                LoggerUtil.getInstance().debug(this.getClass(), "Towny multiplier: " + multiplier);
-            }
+        String townName = TownyUniverse.getTownName(player.getLocation());
+        if (townName != null && getMultipliers().containsKey(townName)) {
+            multiplier = getMultipliers().get(townName);
+            LoggerUtil.getInstance().debug(this.getClass(), "Towny multiplier: " + multiplier);
         }
 
         return multiplier;

@@ -41,16 +41,20 @@ public class ResidenceGain extends AbstractPlayerGain<String>
     }
 
     @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "gain.residence") && DependencyUtils.hasResidence();
+    }
+
+    @Override
     public double getMultiplier(Player player)
     {
         double multiplier = NO_GAIN;
 
-        if (DependencyUtils.hasPermission(player, "gain.residence") && DependencyUtils.hasResidence()) {
-            ClaimedResidence residence = Residence.getResidenceManager().getByLoc(player.getLocation());
-            if (residence != null && getMultipliers().containsKey(residence.getName())) {
-                multiplier = getMultipliers().get(residence.getName());
-                LoggerUtil.getInstance().debug(this.getClass(), "Residence multiplier: " + multiplier);
-            }
+        ClaimedResidence residence = Residence.getResidenceManager().getByLoc(player.getLocation());
+        if (residence != null && getMultipliers().containsKey(residence.getName())) {
+            multiplier = getMultipliers().get(residence.getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "Residence multiplier: " + multiplier);
         }
 
         return multiplier;

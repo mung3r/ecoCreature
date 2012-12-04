@@ -41,16 +41,17 @@ public class WeaponGain extends AbstractPlayerGain<Material>
     }
 
     @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "gain.weapon");
+    }
+
+    @Override
     public double getMultiplier(Player player)
     {
-        double multiplier = NO_GAIN;
         Material material = EntityUtils.getItemTypeInHand(player);
-
-        if (DependencyUtils.hasPermission(player, "gain.weapon") && getMultipliers().containsKey(material)) {
-            multiplier = getMultipliers().get(material);
-            LoggerUtil.getInstance().debug(this.getClass(), "Weapon multiplier: " + multiplier);
-        }
-
+        double multiplier = getMultipliers().containsKey(material) ? getMultipliers().get(material) : NO_GAIN;
+        LoggerUtil.getInstance().debug(this.getClass(), "Weapon multiplier: " + multiplier);
         return multiplier;
     }
 

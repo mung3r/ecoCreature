@@ -38,14 +38,17 @@ public class McMMOGain extends AbstractPlayerGain<String>
     }
 
     @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "gain.mcmmo") && DependencyUtils.hasMcMMO();
+    }
+
+    @Override
     public double getMultiplier(Player player)
     {
-        if (DependencyUtils.hasPermission(player, "gain.mcmmo") && DependencyUtils.hasMcMMO()) {
-            LoggerUtil.getInstance().debug(this.getClass(), "mcMMO multiplier applied");
-            return getMultipliers().get(AMOUNT_KEY);
-        }
-
-        return NO_GAIN;
+        double multiplier = getMultipliers().get(AMOUNT_KEY);
+        LoggerUtil.getInstance().debug(this.getClass(), "mcMMO multiplier applied");
+        return multiplier;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

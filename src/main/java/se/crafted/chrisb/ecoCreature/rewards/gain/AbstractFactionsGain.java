@@ -37,16 +37,20 @@ public abstract class AbstractFactionsGain<T> extends AbstractPlayerGain<T>
     }
 
     @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "gain.factions") && DependencyUtils.hasFactions();
+    }
+
+    @Override
     public double getMultiplier(Player player)
     {
         double multiplier = NO_GAIN;
 
-        if (DependencyUtils.hasPermission(player, "gain.factions") && DependencyUtils.hasFactions()) {
-            FPlayer fPlayer = FPlayers.i.get(player);
-            if (fPlayer != null && getMultipliers().containsKey(fPlayer.getRelationToLocation())) {
-                multiplier = getMultipliers().get(fPlayer.getRelationToLocation());
-                LoggerUtil.getInstance().debug(this.getClass(), "Factions multiplier: " + multiplier);
-            }
+        FPlayer fPlayer = FPlayers.i.get(player);
+        if (fPlayer != null && getMultipliers().containsKey(fPlayer.getRelationToLocation())) {
+            multiplier = getMultipliers().get(fPlayer.getRelationToLocation());
+            LoggerUtil.getInstance().debug(this.getClass(), "Factions multiplier: " + multiplier);
         }
 
         return multiplier;
