@@ -24,49 +24,39 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.enchantments.Enchantment;
 
 public class ItemEnchantment
 {
     private final Random random = new Random();
 
-    private Enchantment enchantment;
-    private int minLevel;
-    private int maxLevel;
+    private final Enchantment enchantment;
+    private NumberRange levelRange;
+
+    public ItemEnchantment(Enchantment enchantment)
+    {
+        this.enchantment = enchantment;
+    }
 
     public Enchantment getEnchantment()
     {
         return enchantment;
     }
 
-    public void setEnchantment(Enchantment enchantment)
+    public NumberRange getLevelRange()
     {
-        this.enchantment = enchantment;
+        return levelRange;
     }
 
-    public int getMinLevel()
+    public void setLevelRange(NumberRange levelRange)
     {
-        return minLevel;
-    }
-
-    public void setMinLevel(int minLevel)
-    {
-        this.minLevel = minLevel;
-    }
-
-    public int getMaxLevel()
-    {
-        return maxLevel;
-    }
-
-    public void setMaxLevel(int maxLevel)
-    {
-        this.maxLevel = maxLevel;
+        this.levelRange = levelRange;
     }
 
     public int getLevel()
     {
-        return minLevel + random.nextInt(Math.abs(maxLevel - minLevel + 1));
+        return levelRange.getMinimumInteger() + random.nextInt(Math.abs(levelRange.getMaximumInteger() - levelRange.getMinimumInteger() + 1));
     }
 
     public static Map<Enchantment, Integer> getOutcome(Set<ItemEnchantment> enchantments)

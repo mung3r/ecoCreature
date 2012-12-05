@@ -35,13 +35,11 @@ import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.settings.types.HeroesRewardType;
 
-public class HeroesRewardSettings extends AbstractRewardSettings
+public class HeroesRewardSettings extends AbstractRewardSettings<HeroesRewardType>
 {
-    private Map<HeroesRewardType, List<AbstractRewardSource>> sources;
-
     public HeroesRewardSettings(Map<HeroesRewardType, List<AbstractRewardSource>> sources)
     {
-        this.sources = sources;
+        super(sources);
     }
 
     @Override
@@ -62,7 +60,7 @@ public class HeroesRewardSettings extends AbstractRewardSettings
             return hasRewardSource(HeroesRewardType.HERO_LEVELED);
         }
         else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + player.getName() + " due to lack of permission for " + HeroesRewardType.HERO_MASTERED.getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + player.getName() + " due to lack of permission for " + HeroesRewardType.HERO_MASTERED);
         }
 
         return false;
@@ -70,7 +68,7 @@ public class HeroesRewardSettings extends AbstractRewardSettings
 
     private boolean hasRewardSource(HeroesRewardType type)
     {
-        return type != null && sources.containsKey(type) && !sources.get(type).isEmpty();
+        return type != null && getSources().containsKey(type) && !getSources().get(type).isEmpty();
     }
 
     @Override
@@ -95,7 +93,7 @@ public class HeroesRewardSettings extends AbstractRewardSettings
         AbstractRewardSource source = null;
 
         if (hasRewardSource(type)) {
-            source = sources.get(type).get(nextInt(sources.get(type).size()));
+            source = getSources().get(type).get(nextInt(getSources().get(type).size()));
         }
         else {
             LoggerUtil.getInstance().debug(this.getClass(), "No reward defined for custom type: " + type.name());
@@ -104,7 +102,7 @@ public class HeroesRewardSettings extends AbstractRewardSettings
         return source;
     }
 
-    public static AbstractRewardSettings parseConfig(ConfigurationSection config)
+    public static AbstractRewardSettings<HeroesRewardType> parseConfig(ConfigurationSection config)
     {
         Map<HeroesRewardType, List<AbstractRewardSource>> sources = new HashMap<HeroesRewardType, List<AbstractRewardSource>>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");

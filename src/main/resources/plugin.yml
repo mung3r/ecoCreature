@@ -77,8 +77,10 @@ permissions:
       ecocreature.reward.villagergolem: true
       ecocreature.reward.witch: true
       ecocreature.reward.wither: true
+      ecocreature.reward.witherskeleton: true
       ecocreature.reward.wolf: true
       ecocreature.reward.zombie: true
+      ecocreature.reward.zombievillager: true
   ecocreature.command.reload:
     description: Enables use of reload command
     default: op
@@ -241,9 +243,16 @@ permissions:
   ecocreature.reward.wither:
     description: Enables rewards for wolves
     default: op
+  ecocreature.reward.witherskeleton:
+    description: Enables rewards for wolves
+    default: op
   ecocreature.reward.wolf:
     description: Enables rewards for wolves
     default: op
   ecocreature.reward.zombie:
     description: Enables rewards for zombies
     default: op
+  ecocreature.reward.zombievillager:
+    description: Enables rewards for zombies
+    default: op
+    

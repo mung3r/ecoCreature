@@ -20,60 +20,41 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
-
-import com.sk89q.worldguard.protection.managers.RegionManager;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-public class RegionGain extends AbstractPlayerGain<String>
+import com.massivecraft.factions.struct.Rel;
+
+public class FactionsBetaGain extends AbstractFactionsGain<Rel>
 {
-    public RegionGain(Map<String, Double> multipliers)
+    public FactionsBetaGain(Map<Rel, Double> multipliers)
     {
         super(multipliers);
-    }
-
-    @Override
-    public boolean hasPermission(Player player)
-    {
-        return DependencyUtils.hasPermission(player, "gain.worldguard") && DependencyUtils.hasWorldGuard();
-    }
-
-    @Override
-    public double getMultiplier(Player player)
-    {
-        double multiplier = NO_GAIN;
-
-        RegionManager regionManager = DependencyUtils.getRegionManager(player.getWorld());
-        if (regionManager != null) {
-            Iterator<ProtectedRegion> regions = regionManager.getApplicableRegions(player.getLocation()).iterator();
-            while (regions.hasNext()) {
-                String regionName = regions.next().getId();
-                if (getMultipliers().containsKey(regionName)) {
-                    multiplier = getMultipliers().get(regionName);
-                    LoggerUtil.getInstance().debug(this.getClass(), "Region multiplier: " + multiplier);
-                }
-            }
-        }
-
-        return multiplier;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)
     {
         Set<PlayerGain> gain = Collections.emptySet();
 
-        if (config != null) {
+        if (config != null && DependencyUtils.hasFactionsBeta()) {
+            Map<Rel, Double> multipliers = new HashMap<Rel, Double>();
+            for (String relation : config.getKeys(false)) {
+                try {
+                    multipliers.put(Rel.valueOf(relation), Double.valueOf(config.getConfigurationSection(relation).getDouble(AMOUNT_KEY, NO_GAIN)));
+                }
+                catch (IllegalArgumentException e) {
+                    LoggerUtil.getInstance().warning("Unrecognized Factions relation: " + relation);
+                }
+            }
             gain = new HashSet<PlayerGain>();
-            gain.add(new RegionGain(parseMultipliers(config)));
+            gain.add(new FactionsBetaGain(multipliers));
         }
 
         return gain;

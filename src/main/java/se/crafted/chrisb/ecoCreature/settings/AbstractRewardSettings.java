@@ -19,16 +19,21 @@
  */
 package se.crafted.chrisb.ecoCreature.settings;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 
+import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.CoinMessageDecorator;
 import se.crafted.chrisb.ecoCreature.messages.Message;
+import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
+import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
 import se.crafted.chrisb.ecoCreature.rewards.rules.CreativeModeRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.MobArenaRule;
@@ -42,18 +47,57 @@ import se.crafted.chrisb.ecoCreature.rewards.rules.UnderSeaLevelRule;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.settings.types.CustomRewardType;
 
-public abstract class AbstractRewardSettings
+public abstract class AbstractRewardSettings<T>
 {
+    private Map<T, List<AbstractRewardSource>> sources;
+    private Set<Rule> huntingRules;
+
     private static Random random = new Random();
 
-    public int nextInt(int n)
+    public AbstractRewardSettings(Map<T, List<AbstractRewardSource>> sources)
     {
-        return random.nextInt(n);
+        this.sources = sources;
+        huntingRules = Collections.emptySet();
+    }
+
+    public Map<T, List<AbstractRewardSource>> getSources()
+    {
+        return sources;
+    }
+
+    public void setHuntingRules(Set<Rule> huntingRules)
+    {
+        this.huntingRules = huntingRules;
     }
 
     public abstract boolean hasRewardSource(Event event);
 
     public abstract AbstractRewardSource getRewardSource(Event event);
+
+    protected boolean isRuleBroken(EntityKilledEvent event)
+    {
+        for (Rule rule : huntingRules) {
+            if (rule.isBroken(event)) {
+                if (rule.isClearDrops()) {
+                    event.getDrops().clear();
+                    event.setDroppedExp(0);
+                }
+
+                Map<MessageToken, String> parameters = Collections.emptyMap();
+                MessageHandler message = new MessageHandler(rule.getMessage(), parameters);
+                message.send(event.getKiller());
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected static int nextInt(int n)
+    {
+        return random.nextInt(n);
+    }
 
     protected static AbstractRewardSource mergeSets(AbstractRewardSource source, ConfigurationSection rewardConfig, ConfigurationSection rewardSets)
     {
@@ -63,7 +107,7 @@ public abstract class AbstractRewardSettings
         if (!sets.isEmpty() && rewardSets != null) {
             for (String setName : sets) {
                 if (rewardSets.getConfigurationSection(setName) != null) {
-                    AbstractRewardSource setSource = RewardSourceFactory.createSource(CustomRewardType.SET.getName(), rewardSets.getConfigurationSection(setName));
+                    AbstractRewardSource setSource = RewardSourceFactory.createSource(CustomRewardType.SET.toString(), rewardSets.getConfigurationSection(setName));
                     setSource.merge(newSource);
                     newSource = setSource;
                 }

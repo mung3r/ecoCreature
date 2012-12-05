@@ -19,23 +19,23 @@
  */
 package se.crafted.chrisb.ecoCreature.rewards.models;
 
-import org.apache.commons.lang.math.DoubleRange;
+import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class CoinDrop
 {
-    private DoubleRange range;
+    private NumberRange range;
     private double percentage;
     private double multiplier;
 
-    public CoinDrop(DoubleRange range, double percentage, double multiplier)
+    public CoinDrop(NumberRange range, double percentage, double multiplier)
     {
         this.range = range;
         this.percentage = percentage;
         this.multiplier = multiplier;
     }
 
-    public DoubleRange getRange()
+    public NumberRange getRange()
     {
         return range;
     }
@@ -77,7 +77,7 @@ public class CoinDrop
         CoinDrop coin = null;
 
         if (config != null && config.contains("Coin_Maximum") && config.contains("Coin_Minimum") && config.contains("Coin_Percent")) {
-            coin = new CoinDrop(new DoubleRange(config.getDouble("Coin_Minimum", 0), config.getDouble("Coin_Maximum", 0)),
+            coin = new CoinDrop(new NumberRange(config.getDouble("Coin_Minimum", 0), config.getDouble("Coin_Maximum", 0)),
                     config.getDouble("Coin_Percent", 0.0D), config.getDouble("Coin_Gain", 1.0D));
         }
 

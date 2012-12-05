@@ -33,26 +33,25 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 
-public class WeaponGain extends AbstractPlayerGain
+public class WeaponGain extends AbstractPlayerGain<Material>
 {
-    private Map<Material, Double> multipliers;
-
-    public WeaponGain(Map<Material, Double> materialMultipliers)
+    public WeaponGain(Map<Material, Double> multipliers)
     {
-        this.multipliers = materialMultipliers;
+        super(multipliers);
+    }
+
+    @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "gain.weapon");
     }
 
     @Override
     public double getMultiplier(Player player)
     {
-        double multiplier = 1.0;
         Material material = EntityUtils.getItemTypeInHand(player);
-
-        if (DependencyUtils.hasPermission(player, "gain.weapon") && multipliers.containsKey(material)) {
-            multiplier = multipliers.get(material);
-            LoggerUtil.getInstance().debug(this.getClass(), "Weapon multiplier: " + multiplier);
-        }
-
+        double multiplier = getMultipliers().containsKey(material) ? getMultipliers().get(material) : NO_GAIN;
+        LoggerUtil.getInstance().debug(this.getClass(), "Weapon multiplier: " + multiplier);
         return multiplier;
     }
 
@@ -64,7 +63,7 @@ public class WeaponGain extends AbstractPlayerGain
             Map<Material, Double> multipliers = new HashMap<Material, Double>();
 
             for (String material : config.getKeys(false)) {
-                multipliers.put(Material.matchMaterial(material), Double.valueOf(config.getConfigurationSection(material).getDouble("Amount", 1.0)));
+                multipliers.put(Material.matchMaterial(material), Double.valueOf(config.getConfigurationSection(material).getDouble(AMOUNT_KEY, NO_GAIN)));
             }
             gain = new HashSet<PlayerGain>();
             gain.add(new WeaponGain(multipliers));

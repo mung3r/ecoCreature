@@ -23,5 +23,7 @@ import org.bukkit.entity.Player;
 
 public interface PlayerGain
 {
+    boolean hasPermission(Player player);
+
     double getMultiplier(Player player);
 }

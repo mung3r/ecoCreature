@@ -39,6 +39,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.gain.BiomeGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.EnvironmentGain;
+import se.crafted.chrisb.ecoCreature.rewards.gain.FactionsBetaGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.FactionsGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.PlayerGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.GroupGain;
@@ -69,7 +70,7 @@ import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
 public class PluginConfig
 {
-    public static final String DEFAULT_WORLD = "__DEFAULT_WORLD__";
+    private static final String DEFAULT_WORLD = "__DEFAULT_WORLD__";
 
     private static final String OLD_DEFAULT_FILE = "ecoCreature.yml";
     private static final String DEFAULT_FILE = "default.yml";
@@ -173,10 +174,11 @@ public class PluginConfig
         gainMultipliers.addAll(RegiosGain.parseConfig(config.getConfigurationSection("Gain.Regios")));
         gainMultipliers.addAll(ResidenceGain.parseConfig(config.getConfigurationSection("Gain.Residence")));
         gainMultipliers.addAll(FactionsGain.parseConfig(config.getConfigurationSection("Gain.Factions")));
+        gainMultipliers.addAll(FactionsBetaGain.parseConfig(config.getConfigurationSection("Gain.Factions")));
         gainMultipliers.addAll(TownyGain.parseConfig(config.getConfigurationSection("Gain.Towny")));
-        gainMultipliers.addAll(MobArenaGain.parseConfig(config.getConfigurationSection("Gain.MobArena.InArena")));
-        gainMultipliers.addAll(HeroesGain.parseConfig(config.getConfigurationSection("Gain.Heroes.InParty")));
-        gainMultipliers.addAll(McMMOGain.parseConfig(config.getConfigurationSection("Gain.mcMMO.InParty")));
+        gainMultipliers.addAll(MobArenaGain.parseConfig(config.getConfigurationSection("Gain.MobArena")));
+        gainMultipliers.addAll(HeroesGain.parseConfig(config.getConfigurationSection("Gain.Heroes")));
+        gainMultipliers.addAll(McMMOGain.parseConfig(config.getConfigurationSection("Gain.mcMMO")));
 
         return gainMultipliers;
     }
@@ -185,16 +187,16 @@ public class PluginConfig
     {
         Set<Party> parties = new HashSet<Party>();
 
-        parties.addAll(MobArenaParty.parseConfig(config.getConfigurationSection("Gain.MobArena.InArena")));
-        parties.addAll(HeroesParty.parseConfig(config.getConfigurationSection("Gain.Heroes.InParty")));
-        parties.addAll(McMMOParty.parseConfig(config.getConfigurationSection("Gain.mcMMO.InParty")));
+        parties.addAll(MobArenaParty.parseConfig(config.getConfigurationSection("Gain.MobArena")));
+        parties.addAll(HeroesParty.parseConfig(config.getConfigurationSection("Gain.Heroes")));
+        parties.addAll(McMMOParty.parseConfig(config.getConfigurationSection("Gain.mcMMO")));
 
         return parties;
     }
 
-    private static List<AbstractRewardSettings> loadRewardSettings(ConfigurationSection config)
+    private static List<AbstractRewardSettings<?>> loadRewardSettings(ConfigurationSection config)
     {
-        List<AbstractRewardSettings> rewardSettings = new ArrayList<AbstractRewardSettings>();
+        List<AbstractRewardSettings<?>> rewardSettings = new ArrayList<AbstractRewardSettings<?>>();
 
         rewardSettings.add(CustomMaterialRewardSettings.parseConfig(config));
         rewardSettings.add(MaterialRewardSettings.parseConfig(config));

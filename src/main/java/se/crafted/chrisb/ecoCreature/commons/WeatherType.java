@@ -17,14 +17,25 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.settings;
+package se.crafted.chrisb.ecoCreature.commons;
 
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-
-public interface SpawnerMobTracking
+public enum WeatherType
 {
-    void addSpawnerMob(CreatureSpawnEvent event);
+    STORMY, SUNNY;
 
-    boolean isSpawnerMob(LivingEntity entity);
+    public static WeatherType fromBoolean(boolean hasStorm)
+    {
+        return hasStorm ? STORMY : SUNNY;
+    }
+
+    public static WeatherType fromName(String name)
+    {
+        for (WeatherType weather : WeatherType.values()) {
+            if (weather.toString().equalsIgnoreCase(name)) {
+                return weather;
+            }
+        }
+
+        return null;
+    }
 }

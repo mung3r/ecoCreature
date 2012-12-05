@@ -35,13 +35,11 @@ import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.settings.types.CustomMaterialRewardType;
 
-public class CustomMaterialRewardSettings extends AbstractRewardSettings
+public class CustomMaterialRewardSettings extends AbstractRewardSettings<CustomMaterialRewardType>
 {
-    private Map<CustomMaterialRewardType, List<AbstractRewardSource>> sources;
-
     public CustomMaterialRewardSettings(Map<CustomMaterialRewardType, List<AbstractRewardSource>> sources)
     {
-        this.sources = sources;
+        super(sources);
     }
 
     @Override
@@ -67,7 +65,7 @@ public class CustomMaterialRewardSettings extends AbstractRewardSettings
 
     private boolean hasRewardSource(CustomMaterialRewardType material)
     {
-        return material != null && sources.containsKey(material) && !sources.get(material).isEmpty();
+        return material != null && getSources().containsKey(material) && !getSources().get(material).isEmpty();
     }
 
     @Override
@@ -99,7 +97,7 @@ public class CustomMaterialRewardSettings extends AbstractRewardSettings
         AbstractRewardSource source = null;
 
         if (hasRewardSource(material)) {
-            source = sources.get(material).get(nextInt(sources.get(material).size()));
+            source = getSources().get(material).get(nextInt(getSources().get(material).size()));
         }
         else {
             LoggerUtil.getInstance().debug(this.getClass(), "No reward defined for material: " + material);
@@ -108,7 +106,7 @@ public class CustomMaterialRewardSettings extends AbstractRewardSettings
         return source;
     }
 
-    public static AbstractRewardSettings parseConfig(ConfigurationSection config)
+    public static AbstractRewardSettings<CustomMaterialRewardType> parseConfig(ConfigurationSection config)
     {
         Map<CustomMaterialRewardType, List<AbstractRewardSource>> sources = new HashMap<CustomMaterialRewardType, List<AbstractRewardSource>>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");

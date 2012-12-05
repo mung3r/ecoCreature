@@ -23,17 +23,17 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.Set;
 
-import org.apache.commons.lang.math.IntRange;
+import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
 public abstract class AbstractItemDrop
 {
-    private Material material;
+    private final Material material;
     private Byte data;
     private Short durability;
-    private IntRange range;
+    private NumberRange range;
     private double percentage;
     private Set<ItemEnchantment> enchantments;
     private final Random random = new Random();
@@ -47,11 +47,6 @@ public abstract class AbstractItemDrop
     public Material getMaterial()
     {
         return material;
-    }
-
-    public void setMaterial(Material item)
-    {
-        this.material = item;
     }
 
     public Byte getData()
@@ -74,12 +69,12 @@ public abstract class AbstractItemDrop
         this.durability = durability;
     }
 
-    public IntRange getRange()
+    public NumberRange getRange()
     {
         return range;
     }
 
-    public void setRange(IntRange range)
+    public void setRange(NumberRange range)
     {
         this.range = range;
     }
@@ -106,7 +101,7 @@ public abstract class AbstractItemDrop
 
     public ItemStack getOutcome(boolean isFixedDrops)
     {
-        if (Math.random() * 100.0D < percentage && material != null) {
+        if (random.nextDouble() * 100.0D < percentage && material != null) {
             int dropAmount = isFixedDrops ? range.getMaximumInteger() : range.getMinimumInteger()
                     + random.nextInt(Math.abs(range.getMaximumInteger() - range.getMinimumInteger() + 1));
 

@@ -46,7 +46,7 @@ public abstract class AbstractParty implements Party
     }
 
     @Override
-    public Set<String> getPlayers(Player player)
+    public Set<String> getMembers(Player player)
     {
         return Collections.emptySet();
     }

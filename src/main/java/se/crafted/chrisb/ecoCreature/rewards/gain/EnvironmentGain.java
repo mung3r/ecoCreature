@@ -33,25 +33,25 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-public class EnvironmentGain extends AbstractPlayerGain
+public class EnvironmentGain extends AbstractPlayerGain<Environment>
 {
-    private Map<Environment, Double> multipliers;
-
     public EnvironmentGain(Map<Environment, Double> multipliers)
     {
-        this.multipliers = multipliers;
+        super(multipliers);
+    }
+
+    @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "gain.environment");
     }
 
     @Override
     public double getMultiplier(Player player)
     {
-        double multiplier = 1.0;
-
-        if (DependencyUtils.hasPermission(player, "gain.environment") && multipliers.containsKey(player.getWorld().getEnvironment())) {
-            multiplier = multipliers.get(player.getWorld().getEnvironment());
-            LoggerUtil.getInstance().debug(this.getClass(), "Environment multiplier: " + multiplier);
-        }
-
+        double multiplier = getMultipliers().containsKey(player.getWorld().getEnvironment()) ?
+                getMultipliers().get(player.getWorld().getEnvironment()) : NO_GAIN;
+        LoggerUtil.getInstance().debug(this.getClass(), "Environment multiplier: " + multiplier);
         return multiplier;
     }
 
@@ -63,7 +63,8 @@ public class EnvironmentGain extends AbstractPlayerGain
             Map<Environment, Double> multipliers = new HashMap<World.Environment, Double>();
             for (String environment : config.getKeys(false)) {
                 try {
-                    multipliers.put(Environment.valueOf(environment.toUpperCase()), Double.valueOf(config.getConfigurationSection(environment).getDouble("Amount", 1.0D)));
+                    multipliers.put(Environment.valueOf(environment.toUpperCase()), 
+                            Double.valueOf(config.getConfigurationSection(environment).getDouble(AMOUNT_KEY, NO_GAIN)));
                 }
                 catch (Exception e) {
                     LoggerUtil.getInstance().warning("Skipping unknown environment name: " + environment);

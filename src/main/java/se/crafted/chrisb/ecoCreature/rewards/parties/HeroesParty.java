@@ -34,7 +34,7 @@ import com.herocraftonline.heroes.characters.Hero;
 public class HeroesParty extends AbstractParty
 {
     @Override
-    public Set<String> getPlayers(Player player)
+    public Set<String> getMembers(Player player)
     {
         Set<String> party = Collections.emptySet();
 
@@ -56,7 +56,7 @@ public class HeroesParty extends AbstractParty
 
         if (config != null) {
             HeroesParty party = new HeroesParty();
-            party.setShared(config.getBoolean("Share", false));
+            party.setShared(config.getBoolean("InParty.Share", false));
             parties = new HashSet<Party>();
             parties.add(party);
         }

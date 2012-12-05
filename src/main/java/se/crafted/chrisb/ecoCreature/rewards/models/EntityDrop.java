@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.lang.math.IntRange;
+import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
@@ -36,26 +36,26 @@ public class EntityDrop
 {
     private static Random random = new Random();
 
-    private EntityType type;
-    private IntRange range;
+    private final EntityType type;
+    private NumberRange range;
     private double percentage;
+
+    public EntityDrop(EntityType type)
+    {
+        this.type = type;
+    }
 
     public EntityType getType()
     {
         return type;
     }
 
-    public void setType(EntityType type)
-    {
-        this.type = type;
-    }
-
-    public IntRange getRange()
+    public NumberRange getRange()
     {
         return range;
     }
 
-    public void setRange(IntRange range)
+    public void setRange(NumberRange range)
     {
         this.range = range;
     }
@@ -85,7 +85,7 @@ public class EntityDrop
     {
         int amount;
 
-        if (Math.random() > percentage / 100.0D) {
+        if (random.nextDouble() > percentage / 100.0D) {
             amount = 0;
         }
         else {
@@ -133,9 +133,8 @@ public class EntityDrop
         EntityDrop exp = null;
 
         if (config != null && config.contains("ExpMin") && config.contains("ExpMax") && config.contains("ExpPercent")) {
-            exp = new EntityDrop();
-            exp.setType(EntityType.EXPERIENCE_ORB);
-            exp.setRange(new IntRange(config.getInt("ExpMin", 0), config.getInt("ExpMax", 0)));
+            exp = new EntityDrop(EntityType.EXPERIENCE_ORB);
+            exp.setRange(new NumberRange(config.getInt("ExpMin", 0), config.getInt("ExpMax", 0)));
             exp.setPercentage(config.getDouble("ExpPercent", 0.0D));
         }
 
@@ -160,8 +159,7 @@ public class EntityDrop
         for (String dropString : dropsList) {
             EntityType type = parseType(dropString);
             if (type != null && !isAmbiguous(type)) {
-                EntityDrop drop = new EntityDrop();
-                drop.setType(type);
+                EntityDrop drop = new EntityDrop(type);
                 drop.setRange(parseRange(dropString));
                 drop.setPercentage(parsePercentage(dropString));
                 drops = new ArrayList<EntityDrop>();
@@ -191,7 +189,7 @@ public class EntityDrop
         return type;
     }
 
-    private static IntRange parseRange(String dropString)
+    private static NumberRange parseRange(String dropString)
     {
         String[] dropParts = dropString.split(":");
         String[] amountRange = dropParts[1].split("-");
@@ -207,7 +205,7 @@ public class EntityDrop
             max = Integer.parseInt(dropParts[1]);
         }
 
-        return new IntRange(min, max);
+        return new NumberRange(min, max);
     }
 
     private static double parsePercentage(String dropString)

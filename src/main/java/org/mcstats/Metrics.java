@@ -1,4 +1,4 @@
-package se.crafted.chrisb.ecoCreature.metrics;
+package org.mcstats;
 /*
  * Copyright 2011 Tyler Blair. All rights reserved.
  *

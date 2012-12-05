@@ -20,11 +20,9 @@
 package se.crafted.chrisb.ecoCreature.settings;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
@@ -36,26 +34,14 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
-import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
-import se.crafted.chrisb.ecoCreature.messages.MessageToken;
-import se.crafted.chrisb.ecoCreature.rewards.rules.Rule;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.settings.types.CustomEntityRewardType;
 
-public class CustomEntityRewardSettings extends AbstractRewardSettings
+public class CustomEntityRewardSettings extends AbstractRewardSettings<CustomEntityRewardType>
 {
-    private Map<CustomEntityRewardType, List<AbstractRewardSource>> sources;
-    private Set<Rule> huntingRules;
-
     public CustomEntityRewardSettings(Map<CustomEntityRewardType, List<AbstractRewardSource>> sources)
     {
-        huntingRules = Collections.emptySet();
-        this.sources = sources;
-    }
-
-    public void setHuntingRules(Set<Rule> huntingRules)
-    {
-        this.huntingRules = huntingRules;
+        super(sources);
     }
 
     @Override
@@ -88,13 +74,13 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings
         Player killer = event.getKiller();
         LivingEntity entity = event.getEntity();
 
-        if (DependencyUtils.hasPermission(killer, "reward." + entity.getType().getName())) {
+        if (DependencyUtils.hasPermission(killer, "reward." + CustomEntityRewardType.fromEntity(entity))) {
             if (hasRewardSource(CustomEntityRewardType.fromEntity(entity)) && !isRuleBroken(event)) {
                 return true;
             }
         }
         else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + killer.getName() + " due to lack of permission for " + entity.getType().getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + killer.getName() + " due to lack of permission for " + CustomEntityRewardType.fromEntity(entity));
         }
 
         return false;
@@ -102,7 +88,7 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings
 
     private boolean hasRewardSource(CustomEntityRewardType type)
     {
-        return type != null && sources.containsKey(type) && !sources.get(type).isEmpty();
+        return type != null && getSources().containsKey(type) && !getSources().get(type).isEmpty();
     }
 
     @Override
@@ -126,7 +112,7 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings
             source = getRewardSource(CustomEntityRewardType.fromEntity(entity));
         }
         else {
-            LoggerUtil.getInstance().warning("No reward found for entity: " + entity.getType().getName());
+            LoggerUtil.getInstance().warning("No reward found for entity: " + CustomEntityRewardType.fromEntity(entity));
         }
 
         return source;
@@ -137,36 +123,16 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings
         AbstractRewardSource source = null;
 
         if (hasRewardSource(entityType)) {
-            source = sources.get(entityType).get(nextInt(sources.get(entityType).size()));
+            source = getSources().get(entityType).get(nextInt(getSources().get(entityType).size()));
         }
         else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward defined for entity type: " + entityType.getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward defined for entity type: " + entityType);
         }
 
         return source;
     }
 
-    protected boolean isRuleBroken(EntityKilledEvent event)
-    {
-        for (Rule rule : huntingRules) {
-            if (rule.isBroken(event)) {
-                if (rule.isClearDrops()) {
-                    event.getDrops().clear();
-                    event.setDroppedExp(0);
-                }
-
-                Map<MessageToken, String> parameters = Collections.emptyMap();
-                MessageHandler message = new MessageHandler(rule.getMessage(), parameters);
-                message.send(event.getKiller());
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static AbstractRewardSettings parseConfig(ConfigurationSection config)
+    public static AbstractRewardSettings<CustomEntityRewardType> parseConfig(ConfigurationSection config)
     {
         Map<CustomEntityRewardType, List<AbstractRewardSource>> sources = new HashMap<CustomEntityRewardType, List<AbstractRewardSource>>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");

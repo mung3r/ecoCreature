@@ -26,7 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang.math.IntRange;
+import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
@@ -153,10 +153,8 @@ public class ItemDrop extends AbstractItemDrop
         if (name == null || Enchantment.getByName(name.toUpperCase()) == null) {
             throw new IllegalArgumentException("Unrecognized enchantment: " + name);
         }
-        ItemEnchantment enchantment = new ItemEnchantment();
-        enchantment.setEnchantment(Enchantment.getByName(name.toUpperCase()));
-        enchantment.setMinLevel(minLevel);
-        enchantment.setMaxLevel(maxLevel);
+        ItemEnchantment enchantment = new ItemEnchantment(Enchantment.getByName(name.toUpperCase()));
+        enchantment.setLevelRange(new NumberRange(minLevel, maxLevel));
 
         return enchantment;
     }
@@ -179,7 +177,7 @@ public class ItemDrop extends AbstractItemDrop
         return itemSubParts.length > 2 ? Short.parseShort(itemSubParts[2]) : null;
     }
 
-    private static IntRange parseRange(String dropString)
+    private static NumberRange parseRange(String dropString)
     {
         String[] dropParts = dropString.split(":");
         String[] amountRange = dropParts[1].split("-");
@@ -195,10 +193,10 @@ public class ItemDrop extends AbstractItemDrop
             max = Integer.parseInt(dropParts[1]);
         }
 
-        return new IntRange(min, max);
+        return new NumberRange(min, max);
     }
 
-    private static Double parsePercentage(String dropString)
+    private static double parsePercentage(String dropString)
     {
         String[] dropParts = dropString.split(":");
 

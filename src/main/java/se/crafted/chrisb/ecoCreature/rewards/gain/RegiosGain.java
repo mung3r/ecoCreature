@@ -20,7 +20,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -33,26 +32,28 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-public class RegiosGain extends AbstractPlayerGain
+public class RegiosGain extends AbstractPlayerGain<String>
 {
-    private Map<String, Double> multipliers;
-
     public RegiosGain(Map<String, Double> multipliers)
     {
-        this.multipliers = multipliers;
+        super(multipliers);
+    }
+
+    @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "gain.regios") && DependencyUtils.hasRegios();
     }
 
     @Override
     public double getMultiplier(Player player)
     {
-        double multiplier = 1.0;
+        double multiplier = NO_GAIN;
 
-        if (DependencyUtils.hasPermission(player, "gain.regios") && DependencyUtils.hasRegios()) {
-            Region region = DependencyUtils.getRegiosAPI().getRegion(player.getLocation());
-            if (region != null && multipliers.containsKey(region.getName())) {
-                multiplier = multipliers.get(region.getName());
-                LoggerUtil.getInstance().debug(this.getClass(), "Regios multiplier: " + multiplier);
-            }
+        Region region = DependencyUtils.getRegiosAPI().getRegion(player.getLocation());
+        if (region != null && getMultipliers().containsKey(region.getName())) {
+            multiplier = getMultipliers().get(region.getName());
+            LoggerUtil.getInstance().debug(this.getClass(), "Regios multiplier: " + multiplier);
         }
 
         return multiplier;
@@ -63,12 +64,8 @@ public class RegiosGain extends AbstractPlayerGain
         Set<PlayerGain> gain = Collections.emptySet();
 
         if (config != null) {
-            Map<String, Double> multipliers = new HashMap<String, Double>();
-            for (String regionName : config.getKeys(false)) {
-                multipliers.put(regionName, Double.valueOf(config.getConfigurationSection(regionName).getDouble("Amount", 1.0D)));
-            }
             gain = new HashSet<PlayerGain>();
-            gain.add(new RegiosGain(multipliers));
+            gain.add(new RegiosGain(parseMultipliers(config)));
         }
 
         return gain;

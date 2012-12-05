@@ -20,11 +20,9 @@
 package se.crafted.chrisb.ecoCreature.settings;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
@@ -36,25 +34,13 @@ import org.bukkit.event.Event;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
-import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
-import se.crafted.chrisb.ecoCreature.messages.MessageToken;
-import se.crafted.chrisb.ecoCreature.rewards.rules.Rule;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 
-public class EntityRewardSettings extends AbstractRewardSettings
+public class EntityRewardSettings extends AbstractRewardSettings<EntityType>
 {
-    private Map<EntityType, List<AbstractRewardSource>> sources;
-    private Set<Rule> huntingRules;
-
     public EntityRewardSettings(Map<EntityType, List<AbstractRewardSource>> sources)
     {
-        huntingRules = Collections.emptySet();
-        this.sources = sources;
-    }
-
-    public void setHuntingRules(Set<Rule> huntingRules)
-    {
-        this.huntingRules = huntingRules;
+        super(sources);
     }
 
     @Override
@@ -82,7 +68,7 @@ public class EntityRewardSettings extends AbstractRewardSettings
 
     private boolean hasRewardSource(EntityType type)
     {
-        return type != null && sources.containsKey(type) && !sources.get(type).isEmpty();
+        return type != null && getSources().containsKey(type) && !getSources().get(type).isEmpty();
     }
 
     @Override
@@ -114,7 +100,7 @@ public class EntityRewardSettings extends AbstractRewardSettings
         AbstractRewardSource source = null;
 
         if (hasRewardSource(entityType)) {
-            source = sources.get(entityType).get(nextInt(sources.get(entityType).size()));
+            source = getSources().get(entityType).get(nextInt(getSources().get(entityType).size()));
         }
         else {
             LoggerUtil.getInstance().debug(this.getClass(), "No reward defined for entity type: " + entityType.getName());
@@ -123,27 +109,7 @@ public class EntityRewardSettings extends AbstractRewardSettings
         return source;
     }
 
-    protected boolean isRuleBroken(EntityKilledEvent event)
-    {
-        for (Rule rule : huntingRules) {
-            if (rule.isBroken(event)) {
-                if (rule.isClearDrops()) {
-                    event.getDrops().clear();
-                    event.setDroppedExp(0);
-                }
-
-                Map<MessageToken, String> parameters = Collections.emptyMap();
-                MessageHandler message = new MessageHandler(rule.getMessage(), parameters);
-                message.send(event.getKiller());
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static AbstractRewardSettings parseConfig(ConfigurationSection config)
+    public static AbstractRewardSettings<EntityType> parseConfig(ConfigurationSection config)
     {
         Map<EntityType, List<AbstractRewardSource>> sources = new HashMap<EntityType, List<AbstractRewardSource>>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");

@@ -30,7 +30,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.inventory.ItemStack;
 
-import se.crafted.chrisb.ecoCreature.commons.BookItem;
+import tux2.inventory.BookItem;
 
 public class BookDrop extends ItemDrop
 {
@@ -89,7 +89,6 @@ public class BookDrop extends ItemDrop
         return itemStack;
     }
 
-    @SuppressWarnings("unchecked")
     public static List<AbstractItemDrop> parseConfig(ConfigurationSection config)
     {
         List<AbstractItemDrop> drops = Collections.emptyList();
@@ -99,14 +98,13 @@ public class BookDrop extends ItemDrop
 
             for (Object obj : config.getList("Drops")) {
                 if (obj instanceof LinkedHashMap) {
-                    MemoryConfiguration itemConfig = new MemoryConfiguration();
-                    itemConfig.addDefaults((Map<String, Object>) obj);
+                    ConfigurationSection itemConfig = createItemConfig(obj);
                     Material material = parseMaterial(itemConfig.getString("item"));
 
                     if (material == Material.WRITTEN_BOOK) {
                         BookDrop drop = new BookDrop(material);
-                        drop.setTitle(itemConfig.getString("title", "No Title"));
-                        drop.setAuthor(itemConfig.getString("author", "No Author"));
+                        drop.setTitle(itemConfig.getString("title"));
+                        drop.setAuthor(itemConfig.getString("author"));
                         drop.setPages(itemConfig.getStringList("pages"));
                         populateItemDrop(drop, itemConfig.getString("item"));
 
@@ -117,5 +115,13 @@ public class BookDrop extends ItemDrop
         }
 
         return drops;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static ConfigurationSection createItemConfig(Object obj)
+    {
+        MemoryConfiguration itemConfig = new MemoryConfiguration();
+        itemConfig.addDefaults((Map<String, Object>) obj);
+        return itemConfig;
     }
 }

@@ -26,38 +26,17 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.struct.Relation;
 
-public class FactionsGain extends AbstractPlayerGain
+public class FactionsGain extends AbstractFactionsGain<Relation>
 {
-    private Map<Relation, Double> multipliers;
-
     public FactionsGain(Map<Relation, Double> multipliers)
     {
-        this.multipliers = multipliers;
-    }
-
-    @Override
-    public double getMultiplier(Player player)
-    {
-        double multiplier = 1.0;
-
-        if (DependencyUtils.hasPermission(player, "gain.factions") && DependencyUtils.hasFactions()) {
-            FPlayer fPlayer = FPlayers.i.get(player);
-            if (fPlayer != null && multipliers.containsKey(fPlayer.getRelationToLocation())) {
-                multiplier = multipliers.get(fPlayer.getRelationToLocation());
-                LoggerUtil.getInstance().debug(this.getClass(), "Factions multiplier: " + multiplier);
-            }
-        }
-
-        return multiplier;
+        super(multipliers);
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)
@@ -68,7 +47,7 @@ public class FactionsGain extends AbstractPlayerGain
             Map<Relation, Double> multipliers = new HashMap<Relation, Double>();
             for (String relation : config.getKeys(false)) {
                 try {
-                    multipliers.put(Relation.valueOf(relation), Double.valueOf(config.getConfigurationSection(relation).getDouble("Amount", 1.0D)));
+                    multipliers.put(Relation.valueOf(relation), Double.valueOf(config.getConfigurationSection(relation).getDouble(AMOUNT_KEY, NO_GAIN)));
                 }
                 catch (IllegalArgumentException e) {
                     LoggerUtil.getInstance().warning("Unrecognized Factions relation: " + relation);

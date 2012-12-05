@@ -30,48 +30,27 @@ import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
+import se.crafted.chrisb.ecoCreature.commons.WeatherType;
 
-public class WeatherGain extends AbstractPlayerGain
+public class WeatherGain extends AbstractPlayerGain<WeatherType>
 {
-    public enum WEATHER
+    public WeatherGain(Map<WeatherType, Double> multipliers)
     {
-        STORMY, SUNNY;
-
-        public static WEATHER fromBoolean(boolean hasStorm)
-        {
-            return hasStorm ? STORMY : SUNNY;
-        }
-
-        public static WEATHER fromName(String name)
-        {
-            for (WEATHER weather : WEATHER.values()) {
-                if (weather.toString().equalsIgnoreCase(name)) {
-                    return weather;
-                }
-            }
-
-            return null;
-        }
+        super(multipliers);
     }
 
-    private Map<WEATHER, Double> multipliers;
-
-    public WeatherGain(Map<WEATHER, Double> multipliers)
+    @Override
+    public boolean hasPermission(Player player)
     {
-        this.multipliers = multipliers;
+        return DependencyUtils.hasPermission(player, "gain.weather");
     }
 
     @Override
     public double getMultiplier(Player player)
     {
-        double multiplier = 1.0;
-        WEATHER weather = WEATHER.fromBoolean(player.getWorld().hasStorm());
-
-        if (DependencyUtils.hasPermission(player, "gain.weather") && multipliers.containsKey(weather)) {
-            multiplier = multipliers.get(weather);
-            LoggerUtil.getInstance().debug(this.getClass(), "Weather multiplier: " + multiplier);
-        }
-
+        WeatherType weather = WeatherType.fromBoolean(player.getWorld().hasStorm());
+        double multiplier = getMultipliers().containsKey(weather) ? getMultipliers().get(weather) : NO_GAIN;
+        LoggerUtil.getInstance().debug(this.getClass(), "Weather multiplier: " + multiplier);
         return multiplier;
     }
 
@@ -80,10 +59,11 @@ public class WeatherGain extends AbstractPlayerGain
         Set<PlayerGain> gain = Collections.emptySet();
 
         if (config != null) {
-            Map<WEATHER, Double> multipliers = new HashMap<WEATHER, Double>();
+            Map<WeatherType, Double> multipliers = new HashMap<WeatherType, Double>();
             for (String weather : config.getKeys(false)) {
                 try {
-                    multipliers.put(WEATHER.valueOf(weather.toUpperCase()), Double.valueOf(config.getConfigurationSection(weather).getDouble("Amount", 1.0D)));
+                    multipliers.put(WeatherType.valueOf(weather.toUpperCase()),
+                            Double.valueOf(config.getConfigurationSection(weather).getDouble(AMOUNT_KEY, 1.0D)));
                 }
                 catch (Exception e) {
                     LoggerUtil.getInstance().warning("Skipping unknown weather name: " + weather);

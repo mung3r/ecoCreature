@@ -32,25 +32,24 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-public class BiomeGain extends AbstractPlayerGain
+public class BiomeGain extends AbstractPlayerGain<Biome>
 {
-    private Map<Biome, Double> multipliers;
-
     public BiomeGain(Map<Biome, Double> multipliers)
     {
-        this.multipliers = multipliers;
+        super(multipliers);
+    }
+
+    @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "gain.biome");
     }
 
     @Override
     public double getMultiplier(Player player)
     {
-        double multiplier = 1.0;
-
-        if (DependencyUtils.hasPermission(player, "gain.biome") && multipliers.containsKey(getBiome(player))) {
-            multiplier = multipliers.get(getBiome(player));
-            LoggerUtil.getInstance().debug(this.getClass(), "Biome multiplier: " + multiplier);
-        }
-
+        double multiplier = getMultipliers().containsKey(getBiome(player)) ? getMultipliers().get(getBiome(player)) : NO_GAIN;
+        LoggerUtil.getInstance().debug(this.getClass(), "Biome multiplier: " + multiplier);
         return multiplier;
     }
 
@@ -67,7 +66,7 @@ public class BiomeGain extends AbstractPlayerGain
             Map<Biome, Double> multipliers = new HashMap<Biome, Double>();
             for (String biome : config.getKeys(false)) {
                 try {
-                    multipliers.put(Biome.valueOf(biome.toUpperCase()), Double.valueOf(config.getConfigurationSection(biome).getDouble("Amount", 1.0D)));
+                    multipliers.put(Biome.valueOf(biome.toUpperCase()), Double.valueOf(config.getConfigurationSection(biome).getDouble(AMOUNT_KEY, NO_GAIN)));
                 }
                 catch (Exception e) {
                     LoggerUtil.getInstance().warning("Skipping unknown biome name: " + biome);

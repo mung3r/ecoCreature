@@ -32,25 +32,24 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.TimePeriod;
 
-public class TimeGain extends AbstractPlayerGain
+public class TimeGain extends AbstractPlayerGain<TimePeriod>
 {
-    private Map<TimePeriod, Double> multipliers;
-
     public TimeGain(Map<TimePeriod, Double> multipliers)
     {
-        this.multipliers = multipliers;
+        super(multipliers);
+    }
+
+    @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "gain.time");
     }
 
     @Override
     public double getMultiplier(Player player)
     {
-        double multiplier = 1.0;
-
-        if (DependencyUtils.hasPermission(player, "gain.time") && multipliers.containsKey(TimePeriod.fromEntity(player))) {
-            multiplier = multipliers.get(TimePeriod.fromEntity(player));
-            LoggerUtil.getInstance().debug(this.getClass(), "Time multiplier: " + multiplier);
-        }
-
+        double multiplier = getMultipliers().containsKey(TimePeriod.fromEntity(player)) ? getMultipliers().get(TimePeriod.fromEntity(player)) : NO_GAIN;
+        LoggerUtil.getInstance().debug(this.getClass(), "Time multiplier: " + multiplier);
         return multiplier;
     }
 
@@ -61,7 +60,7 @@ public class TimeGain extends AbstractPlayerGain
         if (config != null) {
             Map<TimePeriod, Double> multipliers = new HashMap<TimePeriod, Double>();
             for (String period : config.getKeys(false)) {
-                multipliers.put(TimePeriod.fromName(period), Double.valueOf(config.getConfigurationSection(period).getDouble("Amount", 1.0D)));
+                multipliers.put(TimePeriod.fromName(period), Double.valueOf(config.getConfigurationSection(period).getDouble(AMOUNT_KEY, NO_GAIN)));
             }
             gain = new HashSet<PlayerGain>();
             gain.add(new TimeGain(multipliers));

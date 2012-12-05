@@ -35,7 +35,7 @@ import com.gmail.nossr50.api.PartyAPI;
 public class McMMOParty extends AbstractParty
 {
     @Override
-    public Set<String> getPlayers(Player player)
+    public Set<String> getMembers(Player player)
     {
         Set<String> party = Collections.emptySet();
 
@@ -60,7 +60,7 @@ public class McMMOParty extends AbstractParty
 
         if (config != null) {
             McMMOParty party = new McMMOParty();
-            party.setShared(config.getBoolean("Share", false));
+            party.setShared(config.getBoolean("InParty.Share", false));
             parties = new HashSet<Party>();
             parties.add(party);
         }

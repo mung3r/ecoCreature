@@ -20,7 +20,6 @@
 package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -31,27 +30,32 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-public class GroupGain extends AbstractPlayerGain
+public class GroupGain extends AbstractPlayerGain<String>
 {
     private boolean warnGroupMultiplierSupport;
-    private Map<String, Double> multipliers;
 
     public GroupGain(Map<String, Double> multipliers)
     {
+        super(multipliers);
         warnGroupMultiplierSupport = true;
-        this.multipliers = multipliers;
+    }
+
+    @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "gain.group");
     }
 
     @Override
     public double getMultiplier(Player player)
     {
-        double multiplier = 1.0;
+        double multiplier = NO_GAIN;
 
         try {
-            if (DependencyUtils.hasPermission() && DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName()) != null) {
+            if (DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName()) != null) {
                 String group = DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName()).toLowerCase();
-                if (DependencyUtils.hasPermission(player, "gain.group") && multipliers.containsKey(group)) {
-                    multiplier = multipliers.get(group);
+                if (getMultipliers().containsKey(group)) {
+                    multiplier = getMultipliers().get(group);
                     LoggerUtil.getInstance().debug(this.getClass(), "Group multiplier: " + multiplier);
                 }
             }
@@ -71,12 +75,8 @@ public class GroupGain extends AbstractPlayerGain
         Set<PlayerGain> gain = Collections.emptySet();
 
         if (config != null) {
-            Map<String, Double> multipliers = new HashMap<String, Double>();
-            for (String group : config.getKeys(false)) {
-                multipliers.put(group.toLowerCase(), Double.valueOf(config.getConfigurationSection(group).getDouble("Amount", 0.0D)));
-            }
             gain = new HashSet<PlayerGain>();
-            gain.add(new GroupGain(multipliers));
+            gain.add(new GroupGain(parseMultipliers(config)));
         }
 
         return gain;

@@ -21,6 +21,7 @@ package se.crafted.chrisb.ecoCreature.rewards.gain;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -29,24 +30,25 @@ import org.bukkit.entity.Player;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-public class HeroesGain extends AbstractPlayerGain
+public class HeroesGain extends AbstractPlayerGain<String>
 {
-    private double multiplier;
-
-    public HeroesGain(double multiplier)
+    public HeroesGain(Map<String, Double> multipliers)
     {
-        this.multiplier = multiplier;
+        super(multipliers);
+    }
+
+    @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "gain.heroes") && DependencyUtils.hasHeroes();
     }
 
     @Override
     public double getMultiplier(Player player)
     {
-        if (DependencyUtils.hasPermission(player, "gain.heroes") && DependencyUtils.hasHeroes() && DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {
-            LoggerUtil.getInstance().debug(this.getClass(), "Heroes multiplier: " + multiplier);
-            return multiplier;
-        }
-
-        return NO_GAIN;
+        double multiplier = DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty() ? getMultipliers().get(AMOUNT_KEY) : NO_GAIN;
+        LoggerUtil.getInstance().debug(this.getClass(), "Heroes multiplier: " + multiplier);
+        return multiplier;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)
@@ -55,7 +57,7 @@ public class HeroesGain extends AbstractPlayerGain
 
         if (config != null) {
             gain = new HashSet<PlayerGain>();
-            gain.add(new HeroesGain(config.getDouble("Amount", 1.0D)));
+            gain.add(new HeroesGain(parseMultiplier(config.getConfigurationSection("InParty"))));
         }
 
         return gain;
