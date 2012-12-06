@@ -70,16 +70,14 @@ public class CustomRewardSettings extends AbstractRewardSettings<CustomRewardTyp
     @Override
     public AbstractRewardSource getRewardSource(Event event)
     {
-        AbstractRewardSource source = null;
-
         if (event instanceof PlayerKilledEvent) {
-            source = getRewardSource(CustomRewardType.LEGACY_PVP);
+            return getRewardSource(CustomRewardType.LEGACY_PVP);
         }
         else if (event instanceof PlayerDeathEvent) {
-            source = getRewardSource(CustomRewardType.DEATH_PENALTY);
+            return getRewardSource(CustomRewardType.DEATH_PENALTY);
         }
 
-        return source;
+        return null;
     }
 
     public static AbstractRewardSettings<CustomRewardType> parseConfig(ConfigurationSection config)

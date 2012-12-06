@@ -30,7 +30,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 
 public class MaterialRewardSettings extends AbstractRewardSettings<Material>
@@ -62,24 +61,10 @@ public class MaterialRewardSettings extends AbstractRewardSettings<Material>
     public AbstractRewardSource getRewardSource(Event event)
     {
         if (event instanceof BlockBreakEvent) {
-            return getRewardSource(((BlockBreakEvent) event).getBlock());
+            return getRewardSource(((BlockBreakEvent) event).getBlock().getType());
         }
 
         return null;
-    }
-
-    private AbstractRewardSource getRewardSource(Block block)
-    {
-        AbstractRewardSource source = null;
-
-        if (hasRewardSource(block.getType())) {
-            source = getRewardSource(block.getType());
-        }
-        else {
-            LoggerUtil.getInstance().warning("No reward found for block: " + block.getType().name());
-        }
-
-        return source;
     }
 
     public static AbstractRewardSettings<Material> parseConfig(ConfigurationSection config)

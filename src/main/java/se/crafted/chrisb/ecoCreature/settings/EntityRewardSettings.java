@@ -25,12 +25,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 
@@ -57,24 +55,10 @@ public class EntityRewardSettings extends AbstractRewardSettings<EntityType>
     public AbstractRewardSource getRewardSource(Event event)
     {
         if (event instanceof EntityKilledEvent) {
-            return getRewardSource(((EntityKilledEvent) event).getEntity());
+            return getRewardSource(((EntityKilledEvent) event).getEntity().getType());
         }
 
         return null;
-    }
-
-    private AbstractRewardSource getRewardSource(Entity entity)
-    {
-        AbstractRewardSource source = null;
-
-        if (hasRewardSource(entity.getType())) {
-            source = getRewardSource(entity.getType());
-        }
-        else {
-            LoggerUtil.getInstance().warning("No reward found for entity: " + entity.getType().getName());
-        }
-
-        return source;
     }
 
     public static AbstractRewardSettings<EntityType> parseConfig(ConfigurationSection config)
