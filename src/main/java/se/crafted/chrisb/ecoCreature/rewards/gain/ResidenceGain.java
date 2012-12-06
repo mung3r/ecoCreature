@@ -37,13 +37,13 @@ public class ResidenceGain extends AbstractPlayerGain<String>
 {
     public ResidenceGain(Map<String, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.residence");
     }
 
     @Override
     public boolean hasPermission(Player player)
     {
-        return DependencyUtils.hasPermission(player, "gain.residence") && DependencyUtils.hasResidence();
+        return super.hasPermission(player) && DependencyUtils.hasResidence();
     }
 
     @Override

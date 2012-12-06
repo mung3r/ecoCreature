@@ -38,13 +38,13 @@ public class RegionGain extends AbstractPlayerGain<String>
 {
     public RegionGain(Map<String, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.worldguard");
     }
 
     @Override
     public boolean hasPermission(Player player)
     {
-        return DependencyUtils.hasPermission(player, "gain.worldguard") && DependencyUtils.hasWorldGuard();
+        return super.hasPermission(player) && DependencyUtils.hasWorldGuard();
     }
 
     @Override

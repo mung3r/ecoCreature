@@ -36,13 +36,13 @@ public class RegiosGain extends AbstractPlayerGain<String>
 {
     public RegiosGain(Map<String, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.regios");
     }
 
     @Override
     public boolean hasPermission(Player player)
     {
-        return DependencyUtils.hasPermission(player, "gain.regios") && DependencyUtils.hasRegios();
+        return super.hasPermission(player) && DependencyUtils.hasRegios();
     }
 
     @Override

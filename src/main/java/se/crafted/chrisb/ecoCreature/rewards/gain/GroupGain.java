@@ -36,14 +36,8 @@ public class GroupGain extends AbstractPlayerGain<String>
 
     public GroupGain(Map<String, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.group");
         warnGroupMultiplierSupport = true;
-    }
-
-    @Override
-    public boolean hasPermission(Player player)
-    {
-        return DependencyUtils.hasPermission(player, "gain.group");
     }
 
     @Override

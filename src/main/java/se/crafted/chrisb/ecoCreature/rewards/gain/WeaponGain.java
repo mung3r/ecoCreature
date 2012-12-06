@@ -29,7 +29,6 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 
@@ -37,13 +36,7 @@ public class WeaponGain extends AbstractPlayerGain<Material>
 {
     public WeaponGain(Map<Material, Double> multipliers)
     {
-        super(multipliers);
-    }
-
-    @Override
-    public boolean hasPermission(Player player)
-    {
-        return DependencyUtils.hasPermission(player, "gain.weapon");
+        super(multipliers, "gain.weapon");
     }
 
     @Override

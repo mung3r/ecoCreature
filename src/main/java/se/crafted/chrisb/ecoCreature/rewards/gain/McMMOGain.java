@@ -34,13 +34,13 @@ public class McMMOGain extends AbstractPlayerGain<String>
 {
     public McMMOGain(Map<String, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.mcmmo");
     }
 
     @Override
     public boolean hasPermission(Player player)
     {
-        return DependencyUtils.hasPermission(player, "gain.mcmmo") && DependencyUtils.hasMcMMO();
+        return super.hasPermission(player) && DependencyUtils.hasMcMMO();
     }
 
     @Override

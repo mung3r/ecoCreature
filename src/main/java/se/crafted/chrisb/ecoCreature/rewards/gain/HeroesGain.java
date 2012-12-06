@@ -34,13 +34,13 @@ public class HeroesGain extends AbstractPlayerGain<String>
 {
     public HeroesGain(Map<String, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.heroes");
     }
 
     @Override
     public boolean hasPermission(Player player)
     {
-        return DependencyUtils.hasPermission(player, "gain.heroes") && DependencyUtils.hasHeroes();
+        return super.hasPermission(player) && DependencyUtils.hasHeroes();
     }
 
     @Override

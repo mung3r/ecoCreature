@@ -28,7 +28,6 @@ import java.util.Set;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.TimePeriod;
 
@@ -36,13 +35,7 @@ public class TimeGain extends AbstractPlayerGain<TimePeriod>
 {
     public TimeGain(Map<TimePeriod, Double> multipliers)
     {
-        super(multipliers);
-    }
-
-    @Override
-    public boolean hasPermission(Player player)
-    {
-        return DependencyUtils.hasPermission(player, "gain.time");
+        super(multipliers, "gain.time");
     }
 
     @Override

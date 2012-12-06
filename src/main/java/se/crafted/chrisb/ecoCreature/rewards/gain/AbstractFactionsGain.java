@@ -33,13 +33,13 @@ public abstract class AbstractFactionsGain<T> extends AbstractPlayerGain<T>
 {
     public AbstractFactionsGain(Map<T, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.factions");
     }
 
     @Override
     public boolean hasPermission(Player player)
     {
-        return DependencyUtils.hasPermission(player, "gain.factions") && DependencyUtils.hasFactions();
+        return super.hasPermission(player) && DependencyUtils.hasFactions();
     }
 
     @Override

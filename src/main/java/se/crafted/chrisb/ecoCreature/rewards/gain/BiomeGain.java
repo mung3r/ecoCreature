@@ -29,20 +29,13 @@ import org.bukkit.block.Biome;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class BiomeGain extends AbstractPlayerGain<Biome>
 {
     public BiomeGain(Map<Biome, Double> multipliers)
     {
-        super(multipliers);
-    }
-
-    @Override
-    public boolean hasPermission(Player player)
-    {
-        return DependencyUtils.hasPermission(player, "gain.biome");
+        super(multipliers, "gain.biome");
     }
 
     @Override

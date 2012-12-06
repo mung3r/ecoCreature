@@ -36,13 +36,7 @@ public class WeatherGain extends AbstractPlayerGain<WeatherType>
 {
     public WeatherGain(Map<WeatherType, Double> multipliers)
     {
-        super(multipliers);
-    }
-
-    @Override
-    public boolean hasPermission(Player player)
-    {
-        return DependencyUtils.hasPermission(player, "gain.weather");
+        super(multipliers, "gain.weather");
     }
 
     @Override

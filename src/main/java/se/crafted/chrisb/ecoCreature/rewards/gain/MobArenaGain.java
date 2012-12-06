@@ -34,13 +34,13 @@ public class MobArenaGain extends AbstractPlayerGain<String>
 {
     public MobArenaGain(Map<String, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.mobarena");
     }
 
     @Override
     public boolean hasPermission(Player player)
     {
-        return DependencyUtils.hasPermission(player, "gain.mobarena") && DependencyUtils.hasMobArena();
+        return super.hasPermission(player) && DependencyUtils.hasMobArena();
     }
 
     @Override

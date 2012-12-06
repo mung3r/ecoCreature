@@ -36,13 +36,13 @@ public class TownyGain extends AbstractPlayerGain<String>
 {
     public TownyGain(Map<String, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.towny");
     }
 
     @Override
     public boolean hasPermission(Player player)
     {
-        return DependencyUtils.hasPermission(player, "gain.towny") && DependencyUtils.hasTowny();
+        return super.hasPermission(player) && DependencyUtils.hasTowny();
     }
 
     @Override
