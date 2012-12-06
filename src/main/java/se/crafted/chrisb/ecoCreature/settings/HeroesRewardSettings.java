@@ -31,7 +31,6 @@ import org.bukkit.event.Event;
 import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.settings.types.HeroesRewardType;
 
@@ -53,22 +52,14 @@ public class HeroesRewardSettings extends AbstractRewardSettings<HeroesRewardTyp
     {
         Player player = event.getHero().getPlayer();
 
-        if (DependencyUtils.hasPermission(player, "reward.heromastered") && event.getHero().getLevel() == event.getHeroClass().getMaxLevel()) {
-            return hasRewardSource(HeroesRewardType.HERO_MASTERED);
+        if (event.getHero().getLevel() == event.getHeroClass().getMaxLevel()) {
+            return hasRewardSource(HeroesRewardType.HERO_MASTERED) && getRewardSource(HeroesRewardType.HERO_MASTERED).hasPermission(player);
         }
-        else if (DependencyUtils.hasPermission(player, "reward.heroleveled") && (event.getTo() - event.getFrom()) > 0) {
-            return hasRewardSource(HeroesRewardType.HERO_LEVELED);
-        }
-        else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + player.getName() + " due to lack of permission for " + HeroesRewardType.HERO_MASTERED);
+        else if ((event.getTo() - event.getFrom()) > 0) {
+            return hasRewardSource(HeroesRewardType.HERO_LEVELED) && getRewardSource(HeroesRewardType.HERO_LEVELED).hasPermission(player);
         }
 
         return false;
-    }
-
-    private boolean hasRewardSource(HeroesRewardType type)
-    {
-        return type != null && getSources().containsKey(type) && !getSources().get(type).isEmpty();
     }
 
     @Override
@@ -86,20 +77,6 @@ public class HeroesRewardSettings extends AbstractRewardSettings<HeroesRewardTyp
         }
 
         return null;
-    }
-
-    private AbstractRewardSource getRewardSource(HeroesRewardType type)
-    {
-        AbstractRewardSource source = null;
-
-        if (hasRewardSource(type)) {
-            source = getSources().get(type).get(nextInt(getSources().get(type).size()));
-        }
-        else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward defined for custom type: " + type.name());
-        }
-
-        return source;
     }
 
     public static AbstractRewardSettings<HeroesRewardType> parseConfig(ConfigurationSection config)

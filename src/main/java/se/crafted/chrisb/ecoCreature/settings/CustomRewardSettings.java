@@ -29,7 +29,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.rewards.sources.DeathPenaltySource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
@@ -58,55 +57,26 @@ public class CustomRewardSettings extends AbstractRewardSettings<CustomRewardTyp
 
     private boolean hasRewardSource(PlayerKilledEvent event)
     {
-        if (DependencyUtils.hasPermission(event.getKiller(), "reward.player")) {
-            return DependencyUtils.hasEconomy() && getRewardSource(CustomRewardType.LEGACY_PVP) instanceof PVPRewardSource;
-        }
-        else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " due to lack of permission for " + CustomRewardType.LEGACY_PVP);
-        }
-
-        return false;
+        return DependencyUtils.hasEconomy() && getRewardSource(CustomRewardType.LEGACY_PVP) instanceof PVPRewardSource
+                && getRewardSource(CustomRewardType.LEGACY_PVP).hasPermission(event.getKiller());
     }
 
     private boolean hasRewardSource(PlayerDeathEvent event)
     {
-        if (DependencyUtils.hasPermission(event.getEntity(), "reward.deathpenalty")) {
-            return getRewardSource(CustomRewardType.DEATH_PENALTY) instanceof DeathPenaltySource;
-        }
-        else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getEntity().getName() + " due to lack of permission for " + CustomRewardType.DEATH_PENALTY);
-        }
-
-        return false;
-    }
-
-    private boolean hasRewardSource(CustomRewardType type)
-    {
-        return type != null && getSources().containsKey(type) && !getSources().get(type).isEmpty();
+        return getRewardSource(CustomRewardType.DEATH_PENALTY) instanceof DeathPenaltySource
+                && getRewardSource(CustomRewardType.DEATH_PENALTY).hasPermission(event.getEntity());
     }
 
     @Override
     public AbstractRewardSource getRewardSource(Event event)
     {
-        if (event instanceof PlayerKilledEvent) {
-            return getRewardSource(CustomRewardType.LEGACY_PVP);
-        }
-        else if (event instanceof PlayerDeathEvent) {
-            return getRewardSource(CustomRewardType.DEATH_PENALTY);
-        }
-
-        return null;
-    }
-
-    private AbstractRewardSource getRewardSource(CustomRewardType type)
-    {
         AbstractRewardSource source = null;
 
-        if (hasRewardSource(type)) {
-            source = getSources().get(type).get(nextInt(getSources().get(type).size()));
+        if (event instanceof PlayerKilledEvent) {
+            source = getRewardSource(CustomRewardType.LEGACY_PVP);
         }
-        else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward defined for custom type: " + type.name());
+        else if (event instanceof PlayerDeathEvent) {
+            source = getRewardSource(CustomRewardType.DEATH_PENALTY);
         }
 
         return source;

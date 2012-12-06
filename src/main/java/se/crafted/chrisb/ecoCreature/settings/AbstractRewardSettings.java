@@ -29,6 +29,7 @@ import java.util.Set;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.CoinMessageDecorator;
 import se.crafted.chrisb.ecoCreature.messages.Message;
@@ -73,6 +74,22 @@ public abstract class AbstractRewardSettings<T>
     public abstract boolean hasRewardSource(Event event);
 
     public abstract AbstractRewardSource getRewardSource(Event event);
+
+    protected boolean hasRewardSource(T type)
+    {
+        return type != null && getSources().containsKey(type) && !getSources().get(type).isEmpty();
+    }
+
+    protected AbstractRewardSource getRewardSource(T type)
+    {
+        AbstractRewardSource source = hasRewardSource(type) ? getSources().get(type).get(nextInt(getSources().get(type).size())) : null;
+
+        if (source == null) {
+            LoggerUtil.getInstance().debug(this.getClass(), "No reward defined for type: " + type);
+        }
+
+        return source;
+    }
 
     protected boolean isRuleBroken(EntityKilledEvent event)
     {
