@@ -24,7 +24,6 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
@@ -43,16 +42,10 @@ public abstract class AbstractFactionsGain<T> extends AbstractPlayerGain<T>
     }
 
     @Override
-    public double getMultiplier(Player player)
+    public double getGain(Player player)
     {
-        double multiplier = NO_GAIN;
-
         FPlayer fPlayer = FPlayers.i.get(player);
-        if (fPlayer != null && getMultipliers().containsKey(fPlayer.getRelationToLocation())) {
-            multiplier = getMultipliers().get(fPlayer.getRelationToLocation());
-            LoggerUtil.getInstance().debug(this.getClass(), "Factions multiplier: " + multiplier);
-        }
-
-        return multiplier;
+        return fPlayer != null && getMultipliers().containsKey(fPlayer.getRelationToLocation()) ?
+                getMultipliers().get(fPlayer.getRelationToLocation()) : NO_GAIN;
     }
 }

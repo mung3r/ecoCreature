@@ -39,11 +39,9 @@ public class BiomeGain extends AbstractPlayerGain<Biome>
     }
 
     @Override
-    public double getMultiplier(Player player)
+    public double getGain(Player player)
     {
-        double multiplier = getMultipliers().containsKey(getBiome(player)) ? getMultipliers().get(getBiome(player)) : NO_GAIN;
-        LoggerUtil.getInstance().debug(this.getClass(), "Biome multiplier: " + multiplier);
-        return multiplier;
+        return getMultiplier(getBiome(player));
     }
 
     private static Biome getBiome(Player player)

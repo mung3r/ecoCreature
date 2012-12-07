@@ -65,7 +65,7 @@ public class RewardEventListener implements Listener
                 dropEntities(reward);
 
                 plugin.getMetrics().addCount(reward.getName());
-                LoggerUtil.getInstance().debug(this.getClass(), "Added metrics count for " + reward.getName());
+                LoggerUtil.getInstance().debug("Added metrics count for " + reward.getName());
             }
         }
     }
@@ -96,19 +96,19 @@ public class RewardEventListener implements Listener
 
     private double calculateAmount(Reward reward)
     {
-        LoggerUtil.getInstance().debug(this.getClass(), "Initial amount: " + reward.getCoin());
-        LoggerUtil.getInstance().debug(this.getClass(), "Combined gain: " + reward.getGain());
+        LoggerUtil.getInstance().debug("Initial amount: " + reward.getCoin());
+        LoggerUtil.getInstance().debug("Combined gain: " + reward.getGain());
         double amount = reward.getCoin() * reward.getGain();
-        LoggerUtil.getInstance().debug(this.getClass(), "Final amount: " + amount);
+        LoggerUtil.getInstance().debug("Final amount: " + amount);
 
         if (reward.getParty().size() > 1) {
             amount /= reward.getParty().size();
-            LoggerUtil.getInstance().debug(this.getClass(), "Party amount: " + amount);
+            LoggerUtil.getInstance().debug("Party amount: " + amount);
         }
 
         if (reward.isIntegerCurrency()) {
             amount = Math.round(amount);
-            LoggerUtil.getInstance().debug(this.getClass(), "Rounded amount: " + amount);
+            LoggerUtil.getInstance().debug("Rounded amount: " + amount);
         }
 
         return amount;

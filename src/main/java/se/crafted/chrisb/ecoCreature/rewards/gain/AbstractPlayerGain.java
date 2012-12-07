@@ -27,6 +27,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public abstract class AbstractPlayerGain<T> implements PlayerGain
 {
@@ -42,18 +43,25 @@ public abstract class AbstractPlayerGain<T> implements PlayerGain
         this.permission = permission;
     }
 
-    public Map<T, Double> getMultipliers()
-    {
-        return multipliers;
-    }
-
-    @Override
-    public abstract double getMultiplier(Player player);
-
     @Override
     public boolean hasPermission(Player player)
     {
         return DependencyUtils.hasPermission(player, permission);
+    }
+
+    @Override
+    public abstract double getGain(Player player);
+
+    protected double getMultiplier(T type)
+    {
+        double multiplier = type != null && getMultipliers().containsKey(type) ? getMultipliers().get(type) : NO_GAIN;
+        LoggerUtil.getInstance().debug("Multiplier: " + multiplier);
+        return multiplier;
+    }
+
+    protected Map<T, Double> getMultipliers()
+    {
+        return multipliers;
     }
 
     protected static Map<String, Double> parseMultipliers(ConfigurationSection config)

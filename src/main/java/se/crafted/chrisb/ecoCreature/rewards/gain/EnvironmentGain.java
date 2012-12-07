@@ -40,12 +40,9 @@ public class EnvironmentGain extends AbstractPlayerGain<Environment>
     }
 
     @Override
-    public double getMultiplier(Player player)
+    public double getGain(Player player)
     {
-        double multiplier = getMultipliers().containsKey(player.getWorld().getEnvironment()) ?
-                getMultipliers().get(player.getWorld().getEnvironment()) : NO_GAIN;
-        LoggerUtil.getInstance().debug(this.getClass(), "Environment multiplier: " + multiplier);
-        return multiplier;
+        return getMultiplier(player.getWorld().getEnvironment());
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

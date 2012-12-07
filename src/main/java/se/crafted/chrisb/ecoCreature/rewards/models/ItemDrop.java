@@ -114,7 +114,7 @@ public class ItemDrop extends AbstractItemDrop
 
         Material material = Material.matchMaterial(itemSubParts[0]);
         if (material == null) {
-            LoggerUtil.getInstance().debug(ItemDrop.class, "No match for material type: " + itemParts[0]);
+            LoggerUtil.getInstance().debug("No match for type: " + itemParts[0]);
         }
 
         return material;

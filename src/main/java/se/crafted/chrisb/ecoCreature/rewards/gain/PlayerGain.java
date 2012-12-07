@@ -25,5 +25,5 @@ public interface PlayerGain
 {
     boolean hasPermission(Player player);
 
-    double getMultiplier(Player player);
+    double getGain(Player player);
 }

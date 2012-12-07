@@ -77,9 +77,12 @@ public final class LoggerUtil
         logger.severe(format(msg));
     }
 
-    public void debug(Class<?> aClass, String msg)
+    public void debug(String msg)
     {
         if (debug) {
+            @SuppressWarnings("restriction")
+            Class<?> aClass = sun.reflect.Reflection.getCallerClass(2);
+
             logger.info(format(aClass.getSimpleName() + ": " + msg));
         }
     }

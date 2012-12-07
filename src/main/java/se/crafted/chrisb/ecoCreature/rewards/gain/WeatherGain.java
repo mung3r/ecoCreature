@@ -39,12 +39,9 @@ public class WeatherGain extends AbstractPlayerGain<WeatherType>
     }
 
     @Override
-    public double getMultiplier(Player player)
+    public double getGain(Player player)
     {
-        WeatherType weather = WeatherType.fromBoolean(player.getWorld().hasStorm());
-        double multiplier = getMultipliers().containsKey(weather) ? getMultipliers().get(weather) : NO_GAIN;
-        LoggerUtil.getInstance().debug(this.getClass(), "Weather multiplier: " + multiplier);
-        return multiplier;
+        return getMultiplier(WeatherType.fromBoolean(player.getWorld().hasStorm()));
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

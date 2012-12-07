@@ -28,7 +28,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 import com.bekvon.bukkit.residence.Residence;
 import com.bekvon.bukkit.residence.protection.ClaimedResidence;
@@ -47,17 +46,10 @@ public class ResidenceGain extends AbstractPlayerGain<String>
     }
 
     @Override
-    public double getMultiplier(Player player)
+    public double getGain(Player player)
     {
-        double multiplier = NO_GAIN;
-
         ClaimedResidence residence = Residence.getResidenceManager().getByLoc(player.getLocation());
-        if (residence != null && getMultipliers().containsKey(residence.getName())) {
-            multiplier = getMultipliers().get(residence.getName());
-            LoggerUtil.getInstance().debug(this.getClass(), "Residence multiplier: " + multiplier);
-        }
-
-        return multiplier;
+        return residence != null ? getMultiplier(residence.getName()) : NO_GAIN;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

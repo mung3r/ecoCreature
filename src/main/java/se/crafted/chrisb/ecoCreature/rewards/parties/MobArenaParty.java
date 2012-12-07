@@ -43,7 +43,7 @@ public class MobArenaParty extends AbstractParty
                 party.add(member.getName());
             }
         }
-        LoggerUtil.getInstance().debug(this.getClass(), "Heroes party size: " + party.size());
+        LoggerUtil.getInstance().debug("Party size: " + party.size());
 
         return party;
     }

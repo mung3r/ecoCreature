@@ -27,8 +27,9 @@ import java.util.Set;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import com.gmail.nossr50.api.PartyAPI;
+
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class McMMOGain extends AbstractPlayerGain<String>
 {
@@ -44,11 +45,9 @@ public class McMMOGain extends AbstractPlayerGain<String>
     }
 
     @Override
-    public double getMultiplier(Player player)
+    public double getGain(Player player)
     {
-        double multiplier = getMultipliers().get(AMOUNT_KEY);
-        LoggerUtil.getInstance().debug(this.getClass(), "mcMMO multiplier applied");
-        return multiplier;
+        return PartyAPI.inParty(player) ? getMultiplier(AMOUNT_KEY) : NO_GAIN;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

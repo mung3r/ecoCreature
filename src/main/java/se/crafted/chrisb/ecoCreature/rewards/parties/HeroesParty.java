@@ -45,7 +45,7 @@ public class HeroesParty extends AbstractParty
                 party.add(hero.getPlayer().getName());
             }
         }
-        LoggerUtil.getInstance().debug(this.getClass(), "Heroes party size: " + party.size());
+        LoggerUtil.getInstance().debug("Party size: " + party.size());
 
         return party;
     }

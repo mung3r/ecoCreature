@@ -118,7 +118,7 @@ public final class DependencyUtils
                 || player.hasPermission(mixedCasePerm.toLowerCase());
 
         if (!isAllowed) {
-            LoggerUtil.getInstance().debug(DependencyUtils.class, player.getName() + " denied permission for " + mixedCasePerm.toLowerCase());
+            LoggerUtil.getInstance().debug(player.getName() + " denied permission for " + mixedCasePerm.toLowerCase());
         }
 
         return isAllowed;

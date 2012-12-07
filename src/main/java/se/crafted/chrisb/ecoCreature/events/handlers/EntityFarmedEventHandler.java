@@ -58,12 +58,12 @@ public class EntityFarmedEventHandler extends AbstractEventHandler
         WorldSettings settings = getSettings(event.getEntity().getWorld());
 
         if (settings.isNoFarm() && event.isFarmed()) {
-            LoggerUtil.getInstance().debug(this.getClass(), "Mob farming detected");
+            LoggerUtil.getInstance().debug("Mob farming detected");
             deleteDrops(event);
         }
 
         if (settings.isNoFarmFire() && event.isFireFarmed()) {
-            LoggerUtil.getInstance().debug(this.getClass(), "Mob farming by fire detected");
+            LoggerUtil.getInstance().debug("Mob farming by fire detected");
             deleteDrops(event);
         }
     }
