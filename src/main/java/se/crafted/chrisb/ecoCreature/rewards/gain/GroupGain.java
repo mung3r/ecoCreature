@@ -36,28 +36,19 @@ public class GroupGain extends AbstractPlayerGain<String>
 
     public GroupGain(Map<String, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.group");
         warnGroupMultiplierSupport = true;
     }
 
     @Override
-    public boolean hasPermission(Player player)
-    {
-        return DependencyUtils.hasPermission(player, "gain.group");
-    }
-
-    @Override
-    public double getMultiplier(Player player)
+    public double getGain(Player player)
     {
         double multiplier = NO_GAIN;
 
         try {
-            if (DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName()) != null) {
-                String group = DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName()).toLowerCase();
-                if (getMultipliers().containsKey(group)) {
-                    multiplier = getMultipliers().get(group);
-                    LoggerUtil.getInstance().debug(this.getClass(), "Group multiplier: " + multiplier);
-                }
+            String group = DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName());
+            if (group != null) {
+                multiplier = getMultiplier(group.toLowerCase());
             }
         }
         catch (UnsupportedOperationException e) {

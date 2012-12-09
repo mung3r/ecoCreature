@@ -149,7 +149,7 @@ public class WorldSettings implements SpawnerMobTracking
 
         for (PlayerGain gain : gainMultipliers) {
             if (gain.hasPermission(player)) {
-                multiplier *= gain.getMultiplier(player);
+                multiplier *= gain.getGain(player);
             }
         }
 

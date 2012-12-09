@@ -26,12 +26,8 @@ import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
@@ -59,36 +55,13 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings<CustomEnt
 
     private boolean hasRewardSource(PlayerKilledEvent event)
     {
-        if (DependencyUtils.hasPermission(event.getKiller(), "reward.player") && hasRewardSource(CustomEntityRewardType.PLAYER)) {
-            return true;
-        }
-        else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " due to lack of permission for " + CustomEntityRewardType.PLAYER);
-        }
-
-        return false;
+        return hasRewardSource(CustomEntityRewardType.PLAYER) && getRewardSource(CustomEntityRewardType.PLAYER).hasPermission(event.getKiller());
     }
 
     private boolean hasRewardSource(EntityKilledEvent event)
     {
-        Player killer = event.getKiller();
-        LivingEntity entity = event.getEntity();
-
-        if (DependencyUtils.hasPermission(killer, "reward." + CustomEntityRewardType.fromEntity(entity))) {
-            if (hasRewardSource(CustomEntityRewardType.fromEntity(entity)) && !isRuleBroken(event)) {
-                return true;
-            }
-        }
-        else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + killer.getName() + " due to lack of permission for " + CustomEntityRewardType.fromEntity(entity));
-        }
-
-        return false;
-    }
-
-    private boolean hasRewardSource(CustomEntityRewardType type)
-    {
-        return type != null && getSources().containsKey(type) && !getSources().get(type).isEmpty();
+        CustomEntityRewardType type = CustomEntityRewardType.fromEntity(event.getEntity());
+        return hasRewardSource(type) && getRewardSource(type).hasPermission(event.getKiller()) && !isRuleBroken(event);
     }
 
     @Override
@@ -106,30 +79,7 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings<CustomEnt
 
     private AbstractRewardSource getRewardSource(Entity entity)
     {
-        AbstractRewardSource source = null;
-
-        if (hasRewardSource(CustomEntityRewardType.fromEntity(entity))) {
-            source = getRewardSource(CustomEntityRewardType.fromEntity(entity));
-        }
-        else {
-            LoggerUtil.getInstance().warning("No reward found for entity: " + CustomEntityRewardType.fromEntity(entity));
-        }
-
-        return source;
-    }
-
-    private AbstractRewardSource getRewardSource(CustomEntityRewardType entityType)
-    {
-        AbstractRewardSource source = null;
-
-        if (hasRewardSource(entityType)) {
-            source = getSources().get(entityType).get(nextInt(getSources().get(entityType).size()));
-        }
-        else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward defined for entity type: " + entityType);
-        }
-
-        return source;
+        return getRewardSource(CustomEntityRewardType.fromEntity(entity));
     }
 
     public static AbstractRewardSettings<CustomEntityRewardType> parseConfig(ConfigurationSection config)

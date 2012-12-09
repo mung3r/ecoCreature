@@ -49,7 +49,7 @@ public class McMMOParty extends AbstractParty
                 }
             }
         }
-        LoggerUtil.getInstance().debug(this.getClass(), "Heroes party size: " + party.size());
+        LoggerUtil.getInstance().debug("Party size: " + party.size());
 
         return party;
     }

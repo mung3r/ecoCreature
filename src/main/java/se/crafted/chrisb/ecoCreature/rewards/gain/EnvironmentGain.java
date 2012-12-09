@@ -30,29 +30,19 @@ import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class EnvironmentGain extends AbstractPlayerGain<Environment>
 {
     public EnvironmentGain(Map<Environment, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.environment");
     }
 
     @Override
-    public boolean hasPermission(Player player)
+    public double getGain(Player player)
     {
-        return DependencyUtils.hasPermission(player, "gain.environment");
-    }
-
-    @Override
-    public double getMultiplier(Player player)
-    {
-        double multiplier = getMultipliers().containsKey(player.getWorld().getEnvironment()) ?
-                getMultipliers().get(player.getWorld().getEnvironment()) : NO_GAIN;
-        LoggerUtil.getInstance().debug(this.getClass(), "Environment multiplier: " + multiplier);
-        return multiplier;
+        return getMultiplier(player.getWorld().getEnvironment());
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

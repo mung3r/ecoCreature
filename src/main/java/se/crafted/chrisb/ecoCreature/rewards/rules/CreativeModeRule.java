@@ -49,7 +49,7 @@ public class CreativeModeRule extends AbstractRule
         boolean ruleBroken = !creativeModeRewards && event.getKiller().getGameMode() == GameMode.CREATIVE;
 
         if (ruleBroken) {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " in creative mode.");
+            LoggerUtil.getInstance().debug("No reward for " + event.getKiller().getName() + " in creative mode.");
         }
 
         return ruleBroken;

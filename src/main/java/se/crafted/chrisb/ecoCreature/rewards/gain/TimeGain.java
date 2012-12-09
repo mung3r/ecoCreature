@@ -28,29 +28,19 @@ import java.util.Set;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.TimePeriod;
 
 public class TimeGain extends AbstractPlayerGain<TimePeriod>
 {
     public TimeGain(Map<TimePeriod, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.time");
     }
 
     @Override
-    public boolean hasPermission(Player player)
+    public double getGain(Player player)
     {
-        return DependencyUtils.hasPermission(player, "gain.time");
-    }
-
-    @Override
-    public double getMultiplier(Player player)
-    {
-        double multiplier = getMultipliers().containsKey(TimePeriod.fromEntity(player)) ? getMultipliers().get(TimePeriod.fromEntity(player)) : NO_GAIN;
-        LoggerUtil.getInstance().debug(this.getClass(), "Time multiplier: " + multiplier);
-        return multiplier;
+        return getMultiplier(TimePeriod.fromEntity(player));
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

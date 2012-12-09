@@ -29,28 +29,19 @@ import org.bukkit.block.Biome;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class BiomeGain extends AbstractPlayerGain<Biome>
 {
     public BiomeGain(Map<Biome, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.biome");
     }
 
     @Override
-    public boolean hasPermission(Player player)
+    public double getGain(Player player)
     {
-        return DependencyUtils.hasPermission(player, "gain.biome");
-    }
-
-    @Override
-    public double getMultiplier(Player player)
-    {
-        double multiplier = getMultipliers().containsKey(getBiome(player)) ? getMultipliers().get(getBiome(player)) : NO_GAIN;
-        LoggerUtil.getInstance().debug(this.getClass(), "Biome multiplier: " + multiplier);
-        return multiplier;
+        return getMultiplier(getBiome(player));
     }
 
     private static Biome getBiome(Player player)

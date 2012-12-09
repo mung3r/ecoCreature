@@ -76,7 +76,7 @@ public final class RewardSourceFactory
         }
 
         if (source != null) {
-            LoggerUtil.getInstance().debug(RewardSourceFactory.class, name + " mapped to " + source.getClass().getSimpleName());
+            LoggerUtil.getInstance().debug(name + " mapped to " + source.getClass().getSimpleName());
         }
         return source;
     }

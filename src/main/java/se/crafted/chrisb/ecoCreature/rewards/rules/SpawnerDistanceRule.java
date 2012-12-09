@@ -69,7 +69,7 @@ public class SpawnerDistanceRule extends AbstractRule
         boolean ruleBroken = !canCampSpawner && campByDistance && tracking.isSpawnerMob(event.getEntity()) && isEntityKilledEventNearSpawner(event);
 
         if (ruleBroken) {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " spawner camping.");
+            LoggerUtil.getInstance().debug("No reward for " + event.getKiller().getName() + " spawner camping.");
         }
 
         return ruleBroken;

@@ -26,9 +26,11 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
+import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.messages.CoinMessageDecorator;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
@@ -91,6 +93,11 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, "reward." + name);
     }
 
     @Override

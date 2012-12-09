@@ -28,27 +28,24 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class MobArenaGain extends AbstractPlayerGain<String>
 {
     public MobArenaGain(Map<String, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.mobarena");
     }
 
     @Override
     public boolean hasPermission(Player player)
     {
-        return DependencyUtils.hasPermission(player, "gain.mobarena") && DependencyUtils.hasMobArena();
+        return super.hasPermission(player) && DependencyUtils.hasMobArena();
     }
 
     @Override
-    public double getMultiplier(Player player)
+    public double getGain(Player player)
     {
-        double multiplier = DependencyUtils.getMobArenaHandler().isPlayerInArena(player) ? getMultipliers().get(AMOUNT_KEY) : NO_GAIN;
-        LoggerUtil.getInstance().debug(this.getClass(), "MobArena multiplier applied");
-        return multiplier;
+        return DependencyUtils.getMobArenaHandler().isPlayerInArena(player) ? getMultiplier(AMOUNT_KEY) : NO_GAIN;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

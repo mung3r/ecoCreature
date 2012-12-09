@@ -27,28 +27,27 @@ import java.util.Set;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import com.gmail.nossr50.api.PartyAPI;
+
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class McMMOGain extends AbstractPlayerGain<String>
 {
     public McMMOGain(Map<String, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.mcmmo");
     }
 
     @Override
     public boolean hasPermission(Player player)
     {
-        return DependencyUtils.hasPermission(player, "gain.mcmmo") && DependencyUtils.hasMcMMO();
+        return super.hasPermission(player) && DependencyUtils.hasMcMMO();
     }
 
     @Override
-    public double getMultiplier(Player player)
+    public double getGain(Player player)
     {
-        double multiplier = getMultipliers().get(AMOUNT_KEY);
-        LoggerUtil.getInstance().debug(this.getClass(), "mcMMO multiplier applied");
-        return multiplier;
+        return PartyAPI.inParty(player) ? getMultiplier(AMOUNT_KEY) : NO_GAIN;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)
