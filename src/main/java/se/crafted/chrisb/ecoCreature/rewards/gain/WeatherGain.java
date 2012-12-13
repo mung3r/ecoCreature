@@ -41,7 +41,7 @@ public class WeatherGain extends AbstractPlayerGain<WeatherType>
     @Override
     public double getGain(Player player)
     {
-        return getMultiplier(WeatherType.fromBoolean(player.getWorld().hasStorm()));
+        return getMultiplier(WeatherType.fromEntity(player));
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)
@@ -55,7 +55,7 @@ public class WeatherGain extends AbstractPlayerGain<WeatherType>
                     multipliers.put(WeatherType.valueOf(weather.toUpperCase()),
                             Double.valueOf(config.getConfigurationSection(weather).getDouble(AMOUNT_KEY, 1.0D)));
                 }
-                catch (Exception e) {
+                catch (IllegalArgumentException e) {
                     LoggerUtil.getInstance().warning("Skipping unknown weather name: " + weather);
                 }
             }
