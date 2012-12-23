@@ -29,8 +29,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.inventory.ItemStack;
-
-import tux2.inventory.BookItem;
+import org.bukkit.inventory.meta.BookMeta;
 
 public class BookDrop extends ItemDrop
 {
@@ -78,12 +77,11 @@ public class BookDrop extends ItemDrop
     {
         ItemStack itemStack = super.getOutcome(isFixedDrops);
 
-        if (itemStack != null) {
-            BookItem book = new BookItem(itemStack);
-            book.setTitle(title);
-            book.setAuthor(author);
-            book.setPages(pages);
-            return book.getItemStack();
+        if (itemStack != null && itemStack.getItemMeta() instanceof BookMeta) {
+            BookMeta bookMeta = (BookMeta) itemStack.getItemMeta();
+            bookMeta.setTitle(title);
+            bookMeta.setAuthor(author);
+            bookMeta.setPages(pages);
         }
 
         return itemStack;
