@@ -29,7 +29,6 @@ public enum TimePeriod
 {
     DAY, SUNSET, DUSK, NIGHT, DAWN, SUNRISE, NONE;
 
-    private static final Map<String, TimePeriod> NAME_MAP = new HashMap<String, TimePeriod>();
     private static final Map<LongRange, TimePeriod> PERIOD_MAP = new HashMap<LongRange, TimePeriod>();
 
     private static final long DAY_START = 0;
@@ -41,21 +40,12 @@ public enum TimePeriod
     private static final long DAY_END = 24000;
 
     static {
-        for (TimePeriod type : TimePeriod.values()) {
-            NAME_MAP.put(type.toString(), type);
-        }
-
         PERIOD_MAP.put(new LongRange(DAY_START, SUNSET_START - 1), DAY);
         PERIOD_MAP.put(new LongRange(SUNSET_START, DUSK_START - 1), SUNSET);
         PERIOD_MAP.put(new LongRange(DUSK_START, NIGHT_START - 1), DUSK);
         PERIOD_MAP.put(new LongRange(NIGHT_START, DAWN_START - 1), NIGHT);
         PERIOD_MAP.put(new LongRange(DAWN_START, SUNRISE_START - 1), DAWN);
         PERIOD_MAP.put(new LongRange(SUNRISE_START, DAY_END - 1), SUNRISE);
-    }
-
-    public static TimePeriod fromName(String period)
-    {
-        return NAME_MAP.get(period.toUpperCase());
     }
 
     public static TimePeriod fromEntity(Entity entity)

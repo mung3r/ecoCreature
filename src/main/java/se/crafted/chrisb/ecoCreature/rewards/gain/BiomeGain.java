@@ -59,7 +59,7 @@ public class BiomeGain extends AbstractPlayerGain<Biome>
                 try {
                     multipliers.put(Biome.valueOf(biome.toUpperCase()), Double.valueOf(config.getConfigurationSection(biome).getDouble(AMOUNT_KEY, NO_GAIN)));
                 }
-                catch (Exception e) {
+                catch (IllegalArgumentException e) {
                     LoggerUtil.getInstance().warning("Skipping unknown biome name: " + biome);
                 }
             }

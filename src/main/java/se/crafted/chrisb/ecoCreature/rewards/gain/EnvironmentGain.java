@@ -56,7 +56,7 @@ public class EnvironmentGain extends AbstractPlayerGain<Environment>
                     multipliers.put(Environment.valueOf(environment.toUpperCase()), 
                             Double.valueOf(config.getConfigurationSection(environment).getDouble(AMOUNT_KEY, NO_GAIN)));
                 }
-                catch (Exception e) {
+                catch (IllegalArgumentException e) {
                     LoggerUtil.getInstance().warning("Skipping unknown environment name: " + environment);
                 }
             }
