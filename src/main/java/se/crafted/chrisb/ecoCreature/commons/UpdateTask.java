@@ -24,6 +24,7 @@ import java.net.URL;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitTask;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -47,7 +48,8 @@ public class UpdateTask implements Runnable
         pluginVersion = plugin.getDescription().getVersion().split("-")[0];
         latestVersion = pluginVersion;
 
-        if (Bukkit.getScheduler().scheduleAsyncRepeatingTask(plugin, this, CHECK_DELAY, CHECK_PERIOD) < 0) {
+        BukkitTask task = Bukkit.getScheduler().runTaskTimer(plugin, this, CHECK_DELAY, CHECK_PERIOD);
+        if (task.getTaskId() < 0) {
             LoggerUtil.getInstance().warning("Failed to schedule UpdateTask task.");
         }
     }
