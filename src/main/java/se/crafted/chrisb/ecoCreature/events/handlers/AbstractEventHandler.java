@@ -78,8 +78,7 @@ public abstract class AbstractEventHandler implements RewardEventCreator
 
                 for (ItemStack itemStack : reward.getItemDrops()) {
                     if (itemStack.getType() == Material.SKULL_ITEM) {
-                        SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
-                        skullMeta.setOwner(playerKilledEvent.getVictim().getName());
+                        playerKilledEvent.getDrops().add(createSkullItem(playerKilledEvent.getVictim().getName()));
                     }
                     else {
                         itemDrops.add(itemStack);
@@ -89,6 +88,15 @@ public abstract class AbstractEventHandler implements RewardEventCreator
                 reward.setItemDrops(itemDrops);
             }
         }
+    }
+
+    private static ItemStack createSkullItem(String playerName)
+    {
+        ItemStack skullItem = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
+        skullMeta.setOwner(playerName);
+        skullItem.setItemMeta(skullMeta);
+        return skullItem;
     }
 
     protected static void addBooksToEvent(Reward reward, Event event)
