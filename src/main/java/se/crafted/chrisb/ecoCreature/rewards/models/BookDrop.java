@@ -82,6 +82,7 @@ public class BookDrop extends ItemDrop
             bookMeta.setTitle(title);
             bookMeta.setAuthor(author);
             bookMeta.setPages(pages);
+            itemStack.setItemMeta(bookMeta);
         }
 
         return itemStack;
