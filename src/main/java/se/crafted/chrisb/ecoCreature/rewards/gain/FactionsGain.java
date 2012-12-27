@@ -30,11 +30,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-import com.massivecraft.factions.struct.Relation;
+import com.massivecraft.factions.struct.Rel;
 
-public class FactionsGain extends AbstractFactionsGain<Relation>
+public class FactionsGain extends AbstractFactionsGain<Rel>
 {
-    public FactionsGain(Map<Relation, Double> multipliers)
+    public FactionsGain(Map<Rel, Double> multipliers)
     {
         super(multipliers);
     }
@@ -43,11 +43,11 @@ public class FactionsGain extends AbstractFactionsGain<Relation>
     {
         Set<PlayerGain> gain = Collections.emptySet();
 
-        if (config != null && DependencyUtils.hasFactions()) {
-            Map<Relation, Double> multipliers = new HashMap<Relation, Double>();
+        if (config != null && DependencyUtils.hasFactionsBeta()) {
+            Map<Rel, Double> multipliers = new HashMap<Rel, Double>();
             for (String relation : config.getKeys(false)) {
                 try {
-                    multipliers.put(Relation.valueOf(relation), Double.valueOf(config.getConfigurationSection(relation).getDouble(AMOUNT_KEY, NO_GAIN)));
+                    multipliers.put(Rel.valueOf(relation), Double.valueOf(config.getConfigurationSection(relation).getDouble(AMOUNT_KEY, NO_GAIN)));
                 }
                 catch (IllegalArgumentException e) {
                     LoggerUtil.getInstance().warning("Unrecognized Factions relation: " + relation);

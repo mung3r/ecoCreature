@@ -39,7 +39,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.gain.BiomeGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.EnvironmentGain;
-import se.crafted.chrisb.ecoCreature.rewards.gain.FactionsBetaGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.FactionsGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.PlayerGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.GroupGain;
@@ -174,7 +173,6 @@ public class PluginConfig
         gainMultipliers.addAll(RegiosGain.parseConfig(config.getConfigurationSection("Gain.Regios")));
         gainMultipliers.addAll(ResidenceGain.parseConfig(config.getConfigurationSection("Gain.Residence")));
         gainMultipliers.addAll(FactionsGain.parseConfig(config.getConfigurationSection("Gain.Factions")));
-        gainMultipliers.addAll(FactionsBetaGain.parseConfig(config.getConfigurationSection("Gain.Factions")));
         gainMultipliers.addAll(TownyGain.parseConfig(config.getConfigurationSection("Gain.Towny")));
         gainMultipliers.addAll(MobArenaGain.parseConfig(config.getConfigurationSection("Gain.MobArena")));
         gainMultipliers.addAll(HeroesGain.parseConfig(config.getConfigurationSection("Gain.Heroes")));
