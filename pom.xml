@@ -129,16 +129,9 @@
     <dependency>
       <groupId>com.massivecraft.factions</groupId>
       <artifactId>Factions</artifactId>
-      <version>1.6.9.2</version>
+      <version>1.8.0</version>
       <scope>system</scope>
       <systemPath>${project.basedir}/lib/Factions.jar</systemPath>
-    </dependency>
-    <dependency>
-      <groupId>com.massivecraft.factions</groupId>
-      <artifactId>Factions-beta</artifactId>
-      <version>1.7.8_beta</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/Factions-beta.jar</systemPath>
     </dependency>
   </dependencies>
   <build>
