@@ -183,7 +183,7 @@ public class EntityDrop
 
         EntityType type = EntityType.fromName(itemSubParts[0]);
         if (type == null) {
-            LoggerUtil.getInstance().debug(EntityDrop.class, "No match for entity type: " + itemParts[0]);
+            LoggerUtil.getInstance().debug("No match for type: " + itemParts[0]);
         }
 
         return type;

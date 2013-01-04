@@ -27,12 +27,9 @@ import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 
 public class MaterialRewardSettings extends AbstractRewardSettings<Material>
@@ -50,62 +47,24 @@ public class MaterialRewardSettings extends AbstractRewardSettings<Material>
 
     private boolean hasRewardSource(BlockBreakEvent event)
     {
-        Player player = event.getPlayer();
         Block block = event.getBlock();
 
-        if (block != null) { // TODO: fix this properly for BuildCraft
-            if (DependencyUtils.hasPermission(player, "reward." + block.getType().name())) {
-                return hasRewardSource(block.getType());
-            }
-            else {
-                LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + player.getName() + " due to lack of permission for " + block.getType().name());
-            }
+        // TODO: fix this properly for BuildCraft
+        if (block == null) {
+            return false;
         }
 
-        return false;
-    }
-
-    private boolean hasRewardSource(Material material)
-    {
-        return material != null && getSources().containsKey(material) && !getSources().get(material).isEmpty();
+        return hasRewardSource(block.getType()) && getRewardSource(block.getType()).hasPermission(event.getPlayer());
     }
 
     @Override
     public AbstractRewardSource getRewardSource(Event event)
     {
         if (event instanceof BlockBreakEvent) {
-            return getRewardSource(((BlockBreakEvent) event).getBlock());
+            return getRewardSource(((BlockBreakEvent) event).getBlock().getType());
         }
 
         return null;
-    }
-
-    private AbstractRewardSource getRewardSource(Block block)
-    {
-        AbstractRewardSource source = null;
-
-        if (hasRewardSource(block.getType())) {
-            source = getRewardSource(block.getType());
-        }
-        else {
-            LoggerUtil.getInstance().warning("No reward found for block: " + block.getType().name());
-        }
-
-        return source;
-    }
-
-    private AbstractRewardSource getRewardSource(Material material)
-    {
-        AbstractRewardSource source = null;
-
-        if (hasRewardSource(material)) {
-            source = getSources().get(material).get(nextInt(getSources().get(material).size()));
-        }
-        else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward defined for material: " + material);
-        }
-
-        return source;
     }
 
     public static AbstractRewardSettings<Material> parseConfig(ConfigurationSection config)

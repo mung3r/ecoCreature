@@ -28,7 +28,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
@@ -36,27 +35,19 @@ public class TownyGain extends AbstractPlayerGain<String>
 {
     public TownyGain(Map<String, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.towny");
     }
 
     @Override
     public boolean hasPermission(Player player)
     {
-        return DependencyUtils.hasPermission(player, "gain.towny") && DependencyUtils.hasTowny();
+        return super.hasPermission(player) && DependencyUtils.hasTowny();
     }
 
     @Override
-    public double getMultiplier(Player player)
+    public double getGain(Player player)
     {
-        double multiplier = 1.0;
-
-        String townName = TownyUniverse.getTownName(player.getLocation());
-        if (townName != null && getMultipliers().containsKey(townName)) {
-            multiplier = getMultipliers().get(townName);
-            LoggerUtil.getInstance().debug(this.getClass(), "Towny multiplier: " + multiplier);
-        }
-
-        return multiplier;
+        return getMultiplier(TownyUniverse.getTownName(player.getLocation()));
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

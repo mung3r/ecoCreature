@@ -28,27 +28,24 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class HeroesGain extends AbstractPlayerGain<String>
 {
     public HeroesGain(Map<String, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.heroes");
     }
 
     @Override
     public boolean hasPermission(Player player)
     {
-        return DependencyUtils.hasPermission(player, "gain.heroes") && DependencyUtils.hasHeroes();
+        return super.hasPermission(player) && DependencyUtils.hasHeroes();
     }
 
     @Override
-    public double getMultiplier(Player player)
+    public double getGain(Player player)
     {
-        double multiplier = DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty() ? getMultipliers().get(AMOUNT_KEY) : NO_GAIN;
-        LoggerUtil.getInstance().debug(this.getClass(), "Heroes multiplier: " + multiplier);
-        return multiplier;
+        return DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty() ? getMultiplier(AMOUNT_KEY) : NO_GAIN;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

@@ -111,12 +111,17 @@ public final class DependencyUtils
 
     public static boolean hasPermission(Player player, String perm)
     {
-        if (hasPermission()) {
-            return permission.has(player.getWorld(), player.getName(), "ecoCreature." + perm) || permission.has(player.getWorld(), player.getName(), "ecocreature." + perm.toLowerCase());
+        String mixedCasePerm = "ecoCreature." + perm;
+
+        boolean isAllowed = hasPermission() ? permission.has(player.getWorld(), player.getName(), mixedCasePerm)
+                || permission.has(player.getWorld(), player.getName(), mixedCasePerm.toLowerCase()) : player.hasPermission(mixedCasePerm)
+                || player.hasPermission(mixedCasePerm.toLowerCase());
+
+        if (!isAllowed) {
+            LoggerUtil.getInstance().debug(player.getName() + " denied permission for " + mixedCasePerm.toLowerCase());
         }
-        else {
-            return player.hasPermission("ecoCreature." + perm) || player.hasPermission("ecocreature." + perm.toLowerCase());
-        }
+
+        return isAllowed;
     }
 
     public static boolean hasPermission()

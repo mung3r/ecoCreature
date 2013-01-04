@@ -30,7 +30,6 @@ import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
 import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.settings.types.StreakRewardType;
 
@@ -58,31 +57,12 @@ public class StreakRewardSettings extends AbstractRewardSettings<StreakRewardTyp
 
     private boolean hasRewardSource(DeathStreakEvent event)
     {
-        if (DependencyUtils.hasPermission(event.getPlayer(), "reward.deathstreak")) {
-            return hasRewardSource(StreakRewardType.DEATH_STREAK);
-        }
-        else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + StreakRewardType.DEATH_STREAK);
-        }
-
-        return false;
+        return hasRewardSource(StreakRewardType.DEATH_STREAK) && getRewardSource(StreakRewardType.DEATH_STREAK).hasPermission(event.getPlayer());
     }
 
     private boolean hasRewardSource(KillStreakEvent event)
     {
-        if (DependencyUtils.hasPermission(event.getPlayer(), "reward.killstreak")) {
-            return hasRewardSource(StreakRewardType.KILL_STREAK);
-        }
-        else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getPlayer().getName() + " due to lack of permission for " + StreakRewardType.KILL_STREAK);
-        }
-
-        return false;
-    }
-
-    private boolean hasRewardSource(StreakRewardType type)
-    {
-        return type != null && getSources().containsKey(type) && !getSources().get(type).isEmpty();
+        return hasRewardSource(StreakRewardType.KILL_STREAK) && getRewardSource(StreakRewardType.KILL_STREAK).hasPermission(event.getPlayer());
     }
 
     @Override
@@ -96,20 +76,6 @@ public class StreakRewardSettings extends AbstractRewardSettings<StreakRewardTyp
         }
 
         return null;
-    }
-
-    private AbstractRewardSource getRewardSource(StreakRewardType type)
-    {
-        AbstractRewardSource source = null;
-
-        if (hasRewardSource(type)) {
-            source = getSources().get(type).get(nextInt(getSources().get(type).size()));
-        }
-        else {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward defined for custom type: " + type.name());
-        }
-
-        return source;
     }
 
     public static AbstractRewardSettings<StreakRewardType> parseConfig(ConfigurationSection config)

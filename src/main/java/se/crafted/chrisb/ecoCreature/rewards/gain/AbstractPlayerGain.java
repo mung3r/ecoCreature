@@ -26,28 +26,43 @@ import java.util.Map;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
+
 public abstract class AbstractPlayerGain<T> implements PlayerGain
 {
     protected static final String AMOUNT_KEY = "Amount";
     protected static final double NO_GAIN = 1.0;
 
     private final Map<T, Double> multipliers;
+    private final String permission;
 
-    public AbstractPlayerGain(Map<T, Double> multipliers)
+    public AbstractPlayerGain(Map<T, Double> multipliers, String permission)
     {
         this.multipliers = multipliers;
+        this.permission = permission;
     }
 
-    public Map<T, Double> getMultipliers()
+    @Override
+    public boolean hasPermission(Player player)
+    {
+        return DependencyUtils.hasPermission(player, permission);
+    }
+
+    @Override
+    public abstract double getGain(Player player);
+
+    protected double getMultiplier(T type)
+    {
+        double multiplier = type != null && getMultipliers().containsKey(type) ? getMultipliers().get(type) : NO_GAIN;
+        LoggerUtil.getInstance().debug("Multiplier: " + multiplier);
+        return multiplier;
+    }
+
+    protected Map<T, Double> getMultipliers()
     {
         return multipliers;
     }
-
-    @Override
-    public abstract double getMultiplier(Player player);
-
-    @Override
-    public abstract boolean hasPermission(Player player);
 
     protected static Map<String, Double> parseMultipliers(ConfigurationSection config)
     {

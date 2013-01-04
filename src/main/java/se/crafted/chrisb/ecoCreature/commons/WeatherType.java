@@ -19,23 +19,25 @@
  */
 package se.crafted.chrisb.ecoCreature.commons;
 
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+
 public enum WeatherType
 {
     STORMY, SUNNY;
 
-    public static WeatherType fromBoolean(boolean hasStorm)
+    public static WeatherType fromEntity(Entity entity)
     {
-        return hasStorm ? STORMY : SUNNY;
+        return fromWorld(entity.getWorld());
     }
 
-    public static WeatherType fromName(String name)
+    public static WeatherType fromWorld(World world)
     {
-        for (WeatherType weather : WeatherType.values()) {
-            if (weather.toString().equalsIgnoreCase(name)) {
-                return weather;
-            }
-        }
+        return fromBoolean(world.hasStorm());
+    }
 
-        return null;
+    private static WeatherType fromBoolean(boolean hasStorm)
+    {
+        return hasStorm ? STORMY : SUNNY;
     }
 }

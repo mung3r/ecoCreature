@@ -29,30 +29,19 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 
 public class WeaponGain extends AbstractPlayerGain<Material>
 {
     public WeaponGain(Map<Material, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.weapon");
     }
 
     @Override
-    public boolean hasPermission(Player player)
+    public double getGain(Player player)
     {
-        return DependencyUtils.hasPermission(player, "gain.weapon");
-    }
-
-    @Override
-    public double getMultiplier(Player player)
-    {
-        Material material = EntityUtils.getItemTypeInHand(player);
-        double multiplier = getMultipliers().containsKey(material) ? getMultipliers().get(material) : NO_GAIN;
-        LoggerUtil.getInstance().debug(this.getClass(), "Weapon multiplier: " + multiplier);
-        return multiplier;
+        return getMultiplier(EntityUtils.getItemTypeInHand(player));
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

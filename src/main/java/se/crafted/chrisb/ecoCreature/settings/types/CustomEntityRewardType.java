@@ -93,7 +93,7 @@ public enum CustomEntityRewardType
         }
 
         if (entityType == INVALID) {
-            LoggerUtil.getInstance().debug(CustomEntityRewardType.class, "No match for entity type: " + entity.getType().getName());
+            LoggerUtil.getInstance().debug("No match for type: " + entity.getType().getName());
         }
 
         return entityType;

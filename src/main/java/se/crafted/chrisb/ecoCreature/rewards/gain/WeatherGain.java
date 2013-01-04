@@ -28,7 +28,6 @@ import java.util.Set;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.WeatherType;
 
@@ -36,22 +35,13 @@ public class WeatherGain extends AbstractPlayerGain<WeatherType>
 {
     public WeatherGain(Map<WeatherType, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.weather");
     }
 
     @Override
-    public boolean hasPermission(Player player)
+    public double getGain(Player player)
     {
-        return DependencyUtils.hasPermission(player, "gain.weather");
-    }
-
-    @Override
-    public double getMultiplier(Player player)
-    {
-        WeatherType weather = WeatherType.fromBoolean(player.getWorld().hasStorm());
-        double multiplier = getMultipliers().containsKey(weather) ? getMultipliers().get(weather) : NO_GAIN;
-        LoggerUtil.getInstance().debug(this.getClass(), "Weather multiplier: " + multiplier);
-        return multiplier;
+        return getMultiplier(WeatherType.fromEntity(player));
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)
@@ -65,7 +55,7 @@ public class WeatherGain extends AbstractPlayerGain<WeatherType>
                     multipliers.put(WeatherType.valueOf(weather.toUpperCase()),
                             Double.valueOf(config.getConfigurationSection(weather).getDouble(AMOUNT_KEY, 1.0D)));
                 }
-                catch (Exception e) {
+                catch (IllegalArgumentException e) {
                     LoggerUtil.getInstance().warning("Skipping unknown weather name: " + weather);
                 }
             }

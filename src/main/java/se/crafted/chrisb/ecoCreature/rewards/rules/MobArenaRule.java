@@ -49,7 +49,7 @@ public class MobArenaRule extends AbstractRule
         boolean ruleBroken = !mobArenaRewards && DependencyUtils.hasMobArena() && DependencyUtils.getMobArenaHandler().isPlayerInArena(event.getKiller());
 
         if (ruleBroken) {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " in Mob Arena.");
+            LoggerUtil.getInstance().debug("No reward for " + event.getKiller().getName() + " in Mob Arena.");
         }
 
         return ruleBroken;

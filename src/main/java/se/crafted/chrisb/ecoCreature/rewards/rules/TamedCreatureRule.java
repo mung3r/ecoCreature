@@ -48,7 +48,7 @@ public class TamedCreatureRule extends AbstractRule
         boolean ruleBroken = !wolverineMode && event.isTamedCreatureKill();
 
         if (ruleBroken) {
-            LoggerUtil.getInstance().debug(this.getClass(), "No reward for " + event.getKiller().getName() + " using tamed creatures.");
+            LoggerUtil.getInstance().debug("No reward for " + event.getKiller().getName() + " using tamed creatures.");
         }
 
         return ruleBroken;

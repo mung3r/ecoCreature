@@ -27,10 +27,10 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import se.crafted.chrisb.ecoCreature.PluginConfig;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.commons.PlayerSkullUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
@@ -78,7 +78,7 @@ public abstract class AbstractEventHandler implements RewardEventCreator
 
                 for (ItemStack itemStack : reward.getItemDrops()) {
                     if (itemStack.getType() == Material.SKULL_ITEM) {
-                        playerKilledEvent.getDrops().add(PlayerSkullUtil.createPlayerSkull(playerKilledEvent.getVictim().getName()));
+                        playerKilledEvent.getDrops().add(createSkullItem(playerKilledEvent.getVictim().getName()));
                     }
                     else {
                         itemDrops.add(itemStack);
@@ -88,6 +88,15 @@ public abstract class AbstractEventHandler implements RewardEventCreator
                 reward.setItemDrops(itemDrops);
             }
         }
+    }
+
+    private static ItemStack createSkullItem(String playerName)
+    {
+        ItemStack skullItem = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
+        skullMeta.setOwner(playerName);
+        skullItem.setItemMeta(skullMeta);
+        return skullItem;
     }
 
     protected static void addBooksToEvent(Reward reward, Event event)
