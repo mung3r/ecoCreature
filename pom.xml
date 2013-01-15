@@ -14,7 +14,7 @@
   </organization>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <bukkit.version>1.4.6-R0.1-SNAPSHOT</bukkit.version>
+    <bukkit.version>1.4.6-R0.3-SNAPSHOT</bukkit.version>
     <currentYear>2012</currentYear>
   </properties>
   <issueManagement>
