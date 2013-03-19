@@ -36,6 +36,7 @@ import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
+import se.crafted.chrisb.ecoCreature.rewards.rules.BattleArenaRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.CreativeModeRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.MobArenaRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.MurderedPetRule;
@@ -169,6 +170,7 @@ public abstract class AbstractRewardSettings<T>
 
         rules.addAll(CreativeModeRule.parseConfig(config));
         rules.addAll(MobArenaRule.parseConfig(config));
+        rules.addAll(BattleArenaRule.parseConfig(config));
         rules.addAll(MurderedPetRule.parseConfig(config));
         rules.addAll(ProjectileRule.parseConfig(config));
         rules.addAll(SpawnerDistanceRule.parseConfig(config));
