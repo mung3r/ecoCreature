@@ -19,6 +19,7 @@
  */
 package se.crafted.chrisb.ecoCreature.commons;
 
+import mc.alk.arena.BattleArena;
 import net.jzx7.regiosapi.RegiosAPI;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -48,6 +49,7 @@ public final class DependencyUtils
     private static RegiosAPI regiosAPI;
     private static Towny townyPlugin;
     private static Plugin factionsPlugin;
+    private static BattleArena battleArenaPlugin;
 
     private static Permission permission;
     private static Economy economy;
@@ -72,6 +74,7 @@ public final class DependencyUtils
         townyPlugin = getPlugin("Towny", "com.palmergames.bukkit.towny.Towny");
         factionsPlugin = getPlugin("Factions", "com.massivecraft.factions.P");
         mcMMOPlugin = getPlugin("mcMMO", "com.gmail.nossr50.mcMMO");
+        battleArenaPlugin = getPlugin("BattleArena", "mc.alk.arena.BattleArena");
 
         Plugin regiosPlugin = getPlugin("Regios", "net.jzx7.regios.RegiosPlugin");
         if (regiosPlugin instanceof RegiosAPI) {
@@ -152,6 +155,11 @@ public final class DependencyUtils
     public static boolean hasMobArena()
     {
         return mobArenaHandler != null;
+    }
+
+    public static boolean hasBattleArena()
+    {
+        return battleArenaPlugin != null;
     }
 
     public static MobArenaHandler getMobArenaHandler()
