@@ -15,6 +15,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <bukkit.version>1.4.6-R0.3-SNAPSHOT</bukkit.version>
+    <vault.version>1.2.26-SNAPSHOT</vault.version>
     <currentYear>2012</currentYear>
   </properties>
   <issueManagement>
@@ -72,7 +73,7 @@
     <dependency>
       <groupId>net.milkbowl.vault</groupId>
       <artifactId>Vault</artifactId>
-      <version>1.2.21-SNAPSHOT</version>
+      <version>${vault.version}</version>
     </dependency>
     <dependency>
       <groupId>org.simiancage.deathtpplus</groupId>
