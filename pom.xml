@@ -15,6 +15,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <bukkit.version>1.4.6-R0.3-SNAPSHOT</bukkit.version>
+    <vault.version>1.2.26-SNAPSHOT</vault.version>
     <currentYear>2012</currentYear>
   </properties>
   <issueManagement>
@@ -72,7 +73,7 @@
     <dependency>
       <groupId>net.milkbowl.vault</groupId>
       <artifactId>Vault</artifactId>
-      <version>1.2.21-SNAPSHOT</version>
+      <version>${vault.version}</version>
     </dependency>
     <dependency>
       <groupId>org.simiancage.deathtpplus</groupId>
@@ -133,6 +134,13 @@
       <scope>system</scope>
       <systemPath>${project.basedir}/lib/Factions.jar</systemPath>
     </dependency>
+    <dependency>
+      <groupId>mc.alk.arena</groupId>
+      <artifactId>BattleArena</artifactId>
+      <version>3.8.0.7</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/BattleArena.jar</systemPath>
+    </dependency>
   </dependencies>
   <build>
     <defaultGoal>clean install</defaultGoal>
@@ -181,8 +189,7 @@
               </includes>
               <excludes>
                 <exclude>src/main/java/**/CommandHandler.java</exclude>
-                <exclude>src/main/java/org/mcstats/**</exclude>
-                <exclude>src/main/java/tux2/**</exclude>
+                <exclude>src/main/java/**/mcstats/Metrics.java</exclude>
               </excludes>
             </configuration>
             <phase>clean</phase>

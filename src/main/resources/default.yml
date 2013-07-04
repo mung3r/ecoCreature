@@ -76,9 +76,13 @@ System:
     # Set this to true to include fire and fire_tick.
     NoFarmFire: false
     #
-    # MobArena: allow rewards when players are in the arena
+    # MobArenaRewards: allow rewards when players are in the arena
     # Default: false
     MobArenaRewards: false
+    #
+    # BattleArenaRewards: allow rewards when players are in the arena
+    # Default: false
+    BattleArenaRewards: false
     #
     # CreativeModeRewards: allow rewards in creative mode
     # Default: false

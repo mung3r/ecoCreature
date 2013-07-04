@@ -48,7 +48,7 @@ public class UpdateTask implements Runnable
         pluginVersion = plugin.getDescription().getVersion().split("-")[0];
         latestVersion = pluginVersion;
 
-        BukkitTask task = Bukkit.getScheduler().runTaskTimer(plugin, this, CHECK_DELAY, CHECK_PERIOD);
+        BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this, CHECK_DELAY, CHECK_PERIOD);
         if (task.getTaskId() < 0) {
             LoggerUtil.getInstance().warning("Failed to schedule UpdateTask task.");
         }

@@ -24,11 +24,11 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.bukkit.plugin.Plugin;
-import org.mcstats.Metrics;
-import org.mcstats.Metrics.Graph;
-import org.mcstats.Metrics.Plotter;
 
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
+import se.crafted.chrisb.ecoCreature.mcstats.Metrics;
+import se.crafted.chrisb.ecoCreature.mcstats.Metrics.Graph;
+import se.crafted.chrisb.ecoCreature.mcstats.Metrics.Plotter;
 
 public class RewardMetrics
 {
