@@ -9,12 +9,12 @@
   <url>http://dev.bukkit.org/server-mods/ecocreature/</url>
   <inceptionYear>2011</inceptionYear>
   <organization>
-    <name>Herocraft</name>
-    <url>http://github.com/herocraft</url>
+    <name>R. Ramos</name>
+    <url>http://github.com/mung3r</url>
   </organization>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <bukkit.version>1.4.6-R0.3-SNAPSHOT</bukkit.version>
+    <bukkit.version>1.6.1-R0.1-SNAPSHOT</bukkit.version>
     <vault.version>1.2.26-SNAPSHOT</vault.version>
     <currentYear>2012</currentYear>
   </properties>
@@ -24,12 +24,12 @@
   </issueManagement>
   <ciManagement>
     <system>jenkins</system>
-    <url>http://ci.herocraftonline.com/job/ecoCreature/</url>
+    <url>http://ci.bighatchet.com/job/ecoCreature/</url>
   </ciManagement>
   <scm>
-    <connection>scm:git:git://github.com:herocraft/ecoCreature.git</connection>
-    <developerConnection>scm:git:git@github.com:herocraft/ecoCreature.git</developerConnection>
-    <url>https://github.com/herocraft/ecoCreature</url>
+    <connection>scm:git:git://github.com:mung3r/ecoCreature.git</connection>
+    <developerConnection>scm:git:git@github.com:mung3r/ecoCreature.git</developerConnection>
+    <url>https://github.com/mung3r/ecoCreature</url>
   </scm>
   <repositories>
     <repository>
@@ -42,7 +42,7 @@
     </repository>
     <repository>
       <id>deathtpplus-repo</id>
-      <url>http://ci.herocraftonline.com/plugin/repository/project/HeroicDeath2/LastSuccessful/repository/</url>
+      <url>http://ci.bighatchet.com/plugin/repository/project/DeathTpPlus/LastSuccessful/repository/</url>
     </repository>
     <repository>
       <id>sk89q-mvn2</id>
@@ -77,8 +77,8 @@
     </dependency>
     <dependency>
       <groupId>org.simiancage.deathtpplus</groupId>
-      <artifactId>HeroicDeath2</artifactId>
-      <version>1.95-SNAPSHOT</version>
+      <artifactId>DeathTpPlus</artifactId>
+      <version>4.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.sk89q</groupId>
