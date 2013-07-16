@@ -19,6 +19,7 @@
  */
 package se.crafted.chrisb.ecoCreature.events.listeners;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -78,40 +79,58 @@ public class RewardEventListener implements Listener
 
         double amount = calculateAmount(reward);
 
+        if (Math.abs(amount) > 0.0) {
+
+            for (String member : createParty(player, reward)) {
+                registerAmount(member, amount);
+
+                Message message = member.equals(player) ? reward.getMessage() : getPartyMessage(amount);
+                reward.addParameter(MessageToken.PLAYER, member).addParameter(MessageToken.AMOUNT, DependencyUtils.getEconomy().format(Math.abs(amount)));
+
+                MessageHandler handler = new MessageHandler(message, reward.getParameters());
+                handler.send(member);
+            }
+        }
+    }
+
+    private Set<String> createParty(String player, Reward reward)
+    {
         Set<String> party = new HashSet<String>();
         party.add(player);
         party.addAll(reward.getParty());
-
-        for (String member : party) {
-            registerAmount(member, amount);
-
-            Message message = member.equals(player) ? reward.getMessage() : getPartyMessage(amount);
-            reward.addParameter(MessageToken.PLAYER, member)
-                .addParameter(MessageToken.AMOUNT, DependencyUtils.getEconomy().format(Math.abs(amount)));
-
-            MessageHandler handler = new MessageHandler(message, reward.getParameters());
-            handler.send(member);
-        }
+        return party;
     }
 
     private double calculateAmount(Reward reward)
     {
         LoggerUtil.getInstance().debug("Initial amount: " + reward.getCoin());
-        LoggerUtil.getInstance().debug("Combined gain: " + reward.getGain());
+        LoggerUtil.getInstance().debug("Gain: " + reward.getGain());
         double amount = reward.getCoin() * reward.getGain();
-        LoggerUtil.getInstance().debug("Final amount: " + amount);
+        LoggerUtil.getInstance().debug("Initial amount * gain: " + amount);
 
         if (reward.getParty().size() > 1) {
+            LoggerUtil.getInstance().debug("Party size: " + reward.getParty().size());
             amount /= reward.getParty().size();
             LoggerUtil.getInstance().debug("Party amount: " + amount);
         }
 
         if (reward.isIntegerCurrency()) {
-            amount = Math.round(amount);
-            LoggerUtil.getInstance().debug("Rounded amount: " + amount);
+            amount = round(amount, 0, BigDecimal.ROUND_HALF_UP);
+            LoggerUtil.getInstance().debug("Rounded integer amount: " + amount);
+        }
+        else {
+            amount = round(amount, 2, BigDecimal.ROUND_HALF_UP);
+            LoggerUtil.getInstance().debug("Rounded decimal amount: " + amount);
         }
 
         return amount;
+    }
+
+    public static double round(double unrounded, int precision, int roundingMode)
+    {
+        BigDecimal bd = new BigDecimal(unrounded);
+        BigDecimal rounded = bd.setScale(precision, roundingMode);
+        return rounded.doubleValue();
     }
 
     private void registerAmount(String member, double amount)

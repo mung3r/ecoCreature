@@ -14,7 +14,8 @@
   </organization>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <bukkit.version>1.4.6-R0.3-SNAPSHOT</bukkit.version>
+    <bukkit.version>1.5.2-R1.0</bukkit.version>
+    <vault.version>1.2.26-SNAPSHOT</vault.version>
     <currentYear>2012</currentYear>
   </properties>
   <issueManagement>
@@ -41,7 +42,7 @@
     </repository>
     <repository>
       <id>deathtpplus-repo</id>
-      <url>http://ci.herocraftonline.com/plugin/repository/project/HeroicDeath2/LastSuccessful/repository/</url>
+      <url>http://ci.bighatchet.com/plugin/repository/project/DeathTpPlus/LastSuccessful/repository/</url>
     </repository>
     <repository>
       <id>sk89q-mvn2</id>
@@ -72,12 +73,12 @@
     <dependency>
       <groupId>net.milkbowl.vault</groupId>
       <artifactId>Vault</artifactId>
-      <version>1.2.21-SNAPSHOT</version>
+      <version>${vault.version}</version>
     </dependency>
     <dependency>
       <groupId>org.simiancage.deathtpplus</groupId>
-      <artifactId>HeroicDeath2</artifactId>
-      <version>1.95-SNAPSHOT</version>
+      <artifactId>DeathTpPlus</artifactId>
+      <version>4.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.sk89q</groupId>
