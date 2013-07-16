@@ -1,11 +1,11 @@
-name: ecoCreature
+name: ${project.name}
 main: se.crafted.chrisb.ecoCreature.ecoCreature
-version: 0.2.2-b${BUILD_NUMBER}
+version: ${project.version}-b${BUILD_NUMBER}
 authors: [chrisb, mung3r]
-website: http://dev.bukkit.org/server-mods/ecocreature
+website: ${project.url}
 depend: [Vault]
 softdepend: [Heroes,mcMMO,WorldGuard,Residence,Regios,DeathTpPlus,MobArena,Factions,Towny]
-description: Coins and drops for PvM
+description: ${project.description}
 
 commands:
   ecoc:
