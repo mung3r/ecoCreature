@@ -1,6 +1,6 @@
 name: ${project.name}
 main: se.crafted.chrisb.ecoCreature.ecoCreature
-version: 0.2.2-b${BUILD_NUMBER}
+version: ${project.version}-b${BUILD_NUMBER}
 authors: [chrisb, mung3r]
 website: ${project.url}
 depend: [Vault]
