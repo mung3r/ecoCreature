@@ -42,7 +42,7 @@
     </repository>
     <repository>
       <id>deathtpplus-repo</id>
-      <url>http://ci.bighatchet.com/plugin/repository/project/DeathTpPlus/LastSuccessful/repository/</url>
+      <url>http://ci.herocraftonline.com/plugin/repository/project/HeroicDeath2/LastSuccessful/repository/</url>
     </repository>
     <repository>
       <id>sk89q-mvn2</id>
