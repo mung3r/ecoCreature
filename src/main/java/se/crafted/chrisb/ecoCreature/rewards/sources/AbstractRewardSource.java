@@ -44,6 +44,7 @@ import se.crafted.chrisb.ecoCreature.rewards.models.EntityDrop;
 import se.crafted.chrisb.ecoCreature.rewards.models.EntityReward;
 import se.crafted.chrisb.ecoCreature.rewards.models.ItemDrop;
 import se.crafted.chrisb.ecoCreature.rewards.models.ItemReward;
+import se.crafted.chrisb.ecoCreature.rewards.models.LoreDrop;
 
 public abstract class AbstractRewardSource implements CoinReward, ItemReward, EntityReward
 {
@@ -77,6 +78,7 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         itemDrops = new ArrayList<AbstractItemDrop>();
         itemDrops.addAll(ItemDrop.parseConfig(config));
         itemDrops.addAll(BookDrop.parseConfig(config));
+        itemDrops.addAll(LoreDrop.parseConfig(config));
         entityDrops = EntityDrop.parseConfig(config);
         coin = CoinDrop.parseConfig(config);
 
