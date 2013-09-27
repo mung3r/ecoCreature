@@ -31,6 +31,8 @@ import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
+import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
+
 public class BookDrop extends ItemDrop
 {
     public BookDrop(Material material)
@@ -102,9 +104,9 @@ public class BookDrop extends ItemDrop
 
                     if (material == Material.WRITTEN_BOOK) {
                         BookDrop drop = new BookDrop(material);
-                        drop.setTitle(itemConfig.getString("title"));
-                        drop.setAuthor(itemConfig.getString("author"));
-                        drop.setPages(itemConfig.getStringList("pages"));
+                        drop.setTitle(DefaultMessage.convertMessage(itemConfig.getString("title")));
+                        drop.setAuthor(DefaultMessage.convertMessage(itemConfig.getString("author")));
+                        drop.setPages(DefaultMessage.convertMessages(itemConfig.getStringList("pages")));
                         populateItemDrop(drop, itemConfig.getString("item"));
 
                         drops.add(drop);

@@ -31,6 +31,8 @@ import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
+
 public class LoreDrop extends ItemDrop
 {
     public LoreDrop(Material material)
@@ -90,8 +92,8 @@ public class LoreDrop extends ItemDrop
 
                     if (material != Material.WRITTEN_BOOK) {
                         LoreDrop drop = new LoreDrop(material);
-                        drop.setDisplayName(itemConfig.getString("displayname"));
-                        drop.setLore(itemConfig.getStringList("lore"));
+                        drop.setDisplayName(DefaultMessage.convertMessage(itemConfig.getString("displayname")));
+                        drop.setLore(DefaultMessage.convertMessages(itemConfig.getStringList("lore")));
                         populateItemDrop(drop, itemConfig.getString("item"));
 
                         drops.add(drop);
