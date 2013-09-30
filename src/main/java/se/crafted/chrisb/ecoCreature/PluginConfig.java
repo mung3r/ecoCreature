@@ -78,6 +78,7 @@ public class PluginConfig
     private final ecoCreature plugin;
     private final File dataWorldsFolder;
     private boolean initialized;
+    private boolean checkForUpdates;
 
     private Map<String, FileConfiguration> fileConfigMap;
     private Map<String, WorldSettings> worldSettingsMap;
@@ -93,6 +94,11 @@ public class PluginConfig
     public boolean isInitialized()
     {
         return initialized;
+    }
+
+    public boolean isCheckForUpdates()
+    {
+        return checkForUpdates;
     }
 
     public WorldSettings getWorldSettings(World world)
@@ -111,6 +117,7 @@ public class PluginConfig
         try {
             fileConfig = getDefaultConfig();
             LoggerUtil.getInstance().setDebug(fileConfig.getBoolean("System.Debug", LoggerUtil.getInstance().isDebug()));
+            checkForUpdates = fileConfig.getBoolean("System.CheckForUpdates", true);
 
             WorldSettings defaultSettings = loadWorldSettings(new WorldSettings(plugin), fileConfig);
             worldSettingsMap = new HashMap<String, WorldSettings>();

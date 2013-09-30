@@ -1,4 +1,9 @@
 System:
+  #
+  # Periodically check for new version
+  # Default: true
+  CheckForUpdates: true
+  
   Economy:
     #
     # Round reward amounts to the nearest integer
@@ -605,8 +610,9 @@ RewardTable:
     Sets:
     - PoorZombie
     - BookZombie
+    - LoreZombie
     - RichZombie
-    - ZombieApocalypse
+    #- ZombieApocalypse
   ZombieVillager:
     Coin_Minimum: 1.00
     Coin_Maximum: 3.50
@@ -651,6 +657,12 @@ RewardSets:
       - 'Day 1: No people to be found today. Very hungry.'
       - 'Day 2: Another day with out brains. Starving.'
       - 'Day 3: Just saw someone I can feast on! Will write later how that goes.'
+  LoreZombie:
+    Drops:
+    - item: diamond sword:1:75
+      displayname: Cursed Sword
+      lore:
+      - 'Forged by the undead'
   RichZombie:
     Drops:
     - 'rotten flesh:2:75'

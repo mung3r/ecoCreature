@@ -84,10 +84,7 @@ public abstract class AbstractRewardSettings<T>
     protected AbstractRewardSource getRewardSource(T type)
     {
         AbstractRewardSource source = hasRewardSource(type) ? getSources().get(type).get(nextInt(getSources().get(type).size())) : null;
-
-        if (source == null) {
-            LoggerUtil.getInstance().debug("No reward defined for type: " + type);
-        }
+        LoggerUtil.getInstance().debugTrue("No reward defined for type: " + type, source == null);
 
         return source;
     }

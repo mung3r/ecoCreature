@@ -19,6 +19,8 @@
  */
 package se.crafted.chrisb.ecoCreature.messages;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -116,12 +118,22 @@ public class DefaultMessage implements Message
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
-    private static String convertMessage(String message)
+    public static String convertMessage(String message)
     {
         if (message != null) {
             return message.replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
         }
 
         return null;
+    }
+
+    public static List<String> convertMessages(List<String> messages) {
+        List<String> convertedMessages = new ArrayList<String>();
+
+        for (String message : messages) {
+            convertedMessages.add(convertMessage(message));
+        }
+
+        return convertedMessages;
     }
 }

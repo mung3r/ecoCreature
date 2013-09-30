@@ -29,49 +29,38 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 
-public class BookDrop extends ItemDrop
+public class LoreDrop extends ItemDrop
 {
-    public BookDrop(Material material)
+    public LoreDrop(Material material)
     {
         super(material);
     }
 
-    private String title;
-    private String author;
-    private List<String> pages;
+    private String displayName;
+    private List<String> lore;
 
     public String getTitle()
     {
-        return title;
+        return displayName;
     }
 
-    public void setTitle(String title)
+    public void setDisplayName(String displayName)
     {
-        this.title = title;
+        this.displayName = displayName;
     }
 
-    public String getAuthor()
+    public List<String> getLore()
     {
-        return author;
+        return lore;
     }
 
-    public void setAuthor(String author)
+    public void setLore(List<String> lore)
     {
-        this.author = author;
-    }
-
-    public List<String> getPages()
-    {
-        return pages;
-    }
-
-    public void setPages(List<String> pages)
-    {
-        this.pages = pages;
+        this.lore = lore;
     }
 
     @Override
@@ -79,12 +68,11 @@ public class BookDrop extends ItemDrop
     {
         ItemStack itemStack = super.getOutcome(isFixedDrops);
 
-        if (itemStack != null && itemStack.getItemMeta() instanceof BookMeta) {
-            BookMeta bookMeta = (BookMeta) itemStack.getItemMeta();
-            bookMeta.setTitle(title);
-            bookMeta.setAuthor(author);
-            bookMeta.setPages(pages);
-            itemStack.setItemMeta(bookMeta);
+        if (itemStack != null && itemStack.getItemMeta() instanceof ItemMeta) {
+            ItemMeta itemMeta = (ItemMeta) itemStack.getItemMeta();
+            itemMeta.setDisplayName(displayName);
+            itemMeta.setLore(lore);
+            itemStack.setItemMeta(itemMeta);
         }
 
         return itemStack;
@@ -102,11 +90,10 @@ public class BookDrop extends ItemDrop
                     ConfigurationSection itemConfig = createItemConfig(obj);
                     Material material = parseMaterial(itemConfig.getString("item"));
 
-                    if (material == Material.WRITTEN_BOOK) {
-                        BookDrop drop = new BookDrop(material);
-                        drop.setTitle(DefaultMessage.convertMessage(itemConfig.getString("title")));
-                        drop.setAuthor(DefaultMessage.convertMessage(itemConfig.getString("author")));
-                        drop.setPages(DefaultMessage.convertMessages(itemConfig.getStringList("pages")));
+                    if (material != Material.WRITTEN_BOOK) {
+                        LoreDrop drop = new LoreDrop(material);
+                        drop.setDisplayName(DefaultMessage.convertMessage(itemConfig.getString("displayname")));
+                        drop.setLore(DefaultMessage.convertMessages(itemConfig.getStringList("lore")));
                         populateItemDrop(drop, itemConfig.getString("item"));
 
                         drops.add(drop);

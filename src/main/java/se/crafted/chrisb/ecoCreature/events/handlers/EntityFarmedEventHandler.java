@@ -38,7 +38,7 @@ public class EntityFarmedEventHandler extends AbstractEventHandler
     }
 
     @Override
-    public boolean canCreateRewardEvents(Event event)
+    public boolean isRewardSource(Event event)
     {
         return event instanceof EntityFarmedEvent;
     }

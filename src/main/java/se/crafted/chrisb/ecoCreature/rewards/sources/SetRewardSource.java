@@ -22,6 +22,7 @@ package se.crafted.chrisb.ecoCreature.rewards.sources;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
@@ -47,6 +48,9 @@ public class SetRewardSource extends AbstractRewardSource
         }
         else if (event instanceof PlayerDeathEvent) {
             location = ((PlayerDeathEvent) event).getEntity().getLocation();
+        }
+        else if (event instanceof BlockBreakEvent) {
+            location = ((BlockBreakEvent) event).getBlock().getLocation();
         }
 
         return location;

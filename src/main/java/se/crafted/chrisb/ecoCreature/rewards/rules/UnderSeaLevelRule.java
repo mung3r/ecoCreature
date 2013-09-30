@@ -50,10 +50,7 @@ public class UnderSeaLevelRule extends AbstractRule
     public boolean isBroken(EntityKilledEvent event)
     {
         boolean ruleBroken = !huntUnderSeaLevel && EntityUtils.isUnderSeaLevel(event.getKiller());
-
-        if (ruleBroken) {
-            LoggerUtil.getInstance().debug("No reward for " + event.getKiller().getName() + " killing under sea level.");
-        }
+        LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " killing under sea level.", ruleBroken);
 
         return ruleBroken;
     }

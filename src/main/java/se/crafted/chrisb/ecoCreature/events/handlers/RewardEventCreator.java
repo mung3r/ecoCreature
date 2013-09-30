@@ -29,7 +29,7 @@ import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
 public interface RewardEventCreator
 {
-    boolean canCreateRewardEvents(Event event);
+    boolean isRewardSource(Event event);
 
     Set<RewardEvent> createRewardEvents(Event event);
 

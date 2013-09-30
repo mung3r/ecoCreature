@@ -113,9 +113,7 @@ public class ItemDrop extends AbstractItemDrop
         String[] itemSubParts = itemParts[0].split("\\.");
 
         Material material = Material.matchMaterial(itemSubParts[0]);
-        if (material == null) {
-            LoggerUtil.getInstance().debug("No match for type: " + itemParts[0]);
-        }
+        LoggerUtil.getInstance().debugTrue("No match for type: " + itemParts[0], material == null);
 
         return material;
     }

@@ -69,7 +69,9 @@ public class ecoCreature extends JavaPlugin
             addCommands();
             registerEvents();
 
-            new UpdateTask(this);
+            if (pluginConfig.isCheckForUpdates()) {
+                new UpdateTask(this);
+            }
 
             LoggerUtil.getInstance().info(getDescription().getVersion() + " enabled.");
         }

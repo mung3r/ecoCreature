@@ -48,7 +48,7 @@ public class PluginEventHandler
         Set<RewardEvent> events = Collections.emptySet();
 
         for (RewardEventCreator handler : handlers) {
-            if (handler.canCreateRewardEvents(event)) {
+            if (handler.isRewardSource(event)) {
                 events = new HashSet<RewardEvent>();
                 events.addAll(handler.createRewardEvents(event));
                 if (!events.isEmpty()) {

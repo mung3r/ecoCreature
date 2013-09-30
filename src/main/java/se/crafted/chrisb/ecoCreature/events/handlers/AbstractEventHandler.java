@@ -47,7 +47,7 @@ public abstract class AbstractEventHandler implements RewardEventCreator
     }
 
     @Override
-    public abstract boolean canCreateRewardEvents(Event event);
+    public abstract boolean isRewardSource(Event event);
 
     @Override
     public abstract Set<RewardEvent> createRewardEvents(Event event);
