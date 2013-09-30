@@ -163,7 +163,7 @@ public class ItemDrop extends AbstractItemDrop
         String[] itemParts = dropParts[0].split(",");
         String[] itemSubParts = itemParts[0].split("\\.");
 
-        return itemSubParts.length > 1 ? Byte.parseByte(itemSubParts[1]) : null;
+        return itemSubParts.length > 1 && !itemSubParts[1].isEmpty() ? Byte.parseByte(itemSubParts[1]) : null;
     }
 
     private static Short parseDurability(String dropString)
@@ -172,7 +172,7 @@ public class ItemDrop extends AbstractItemDrop
         String[] itemParts = dropParts[0].split(",");
         String[] itemSubParts = itemParts[0].split("\\.");
 
-        return itemSubParts.length > 2 ? Short.parseShort(itemSubParts[2]) : null;
+        return itemSubParts.length > 2 && !itemSubParts[2].isEmpty() ? Short.parseShort(itemSubParts[2]) : null;
     }
 
     private static NumberRange parseRange(String dropString)
