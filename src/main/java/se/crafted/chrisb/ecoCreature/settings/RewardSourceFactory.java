@@ -75,7 +75,9 @@ public final class RewardSourceFactory
             source = McMMORewardSource.createRewardSource(name, config);
         }
 
-        LoggerUtil.getInstance().debugTrue(name + " mapped to " + source.getClass().getSimpleName(), source != null);
+        if (source != null) {
+            LoggerUtil.getInstance().debug(name + " mapped to " + source.getClass().getSimpleName());
+        }
         return source;
     }
 
