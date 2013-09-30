@@ -49,10 +49,7 @@ public class ProjectileRule extends AbstractRule
     public boolean isBroken(EntityKilledEvent event)
     {
         boolean ruleBroken = !bowRewards && event.isProjectileKill();
-
-        if (ruleBroken) {
-            LoggerUtil.getInstance().debug("No reward for " + event.getKiller().getName() + " using projectiles.");
-        }
+        LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " using projectiles.", ruleBroken);
 
         return ruleBroken;
     }

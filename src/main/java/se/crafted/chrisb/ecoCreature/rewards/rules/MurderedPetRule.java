@@ -35,10 +35,7 @@ public class MurderedPetRule extends AbstractRule
     public boolean isBroken(EntityKilledEvent event)
     {
         boolean ruleBroken = EntityUtils.isOwner(event.getKiller(), event.getEntity());
-
-        if (ruleBroken) {
-            LoggerUtil.getInstance().debug("No reward for " + event.getKiller().getName() + " murdering pets.");
-        }
+        LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " murdering pets.", ruleBroken);
 
         return ruleBroken;
     }

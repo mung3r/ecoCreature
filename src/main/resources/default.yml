@@ -1,4 +1,9 @@
 System:
+  #
+  # Periodically check for new version
+  # Default: true
+  CheckForUpdates: true
+  
   Economy:
     #
     # Round reward amounts to the nearest integer
