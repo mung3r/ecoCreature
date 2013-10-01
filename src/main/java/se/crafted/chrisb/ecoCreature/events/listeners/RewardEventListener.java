@@ -32,6 +32,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
@@ -168,17 +169,20 @@ public class RewardEventListener implements Listener
         reward.addParameter(MessageToken.PLAYER, player);
 
         for (ItemStack stack : reward.getItemDrops()) {
-            if (stack.getItemMeta().hasDisplayName()) {
-                stack.getItemMeta().setDisplayName(getAssembledMessage(stack.getItemMeta().getDisplayName(), reward));
+            ItemMeta itemMeta = stack.getItemMeta();
+            if (itemMeta.hasDisplayName()) {
+                String displayName = getAssembledMessage(itemMeta.getDisplayName(), reward);
+                itemMeta.setDisplayName(displayName);
             }
 
-            if (stack.getItemMeta().hasLore()) {
+            if (itemMeta.hasLore()) {
                 List<String> lore = new ArrayList<String>();
-                for (String loreLine : stack.getItemMeta().getLore()) {
+                for (String loreLine : itemMeta.getLore()) {
                     lore.add(getAssembledMessage(loreLine, reward));
                 }
-                stack.getItemMeta().setLore(lore);
+                itemMeta.setLore(lore);
             }
+            stack.setItemMeta(itemMeta);
 
             reward.getWorld().dropItemNaturally(reward.getLocation(), stack);
         }

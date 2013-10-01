@@ -68,8 +68,8 @@ public class LoreDrop extends ItemDrop
     {
         ItemStack itemStack = super.getOutcome(isFixedDrops);
 
-        if (itemStack != null && itemStack.getItemMeta() instanceof ItemMeta) {
-            ItemMeta itemMeta = (ItemMeta) itemStack.getItemMeta();
+        if (itemStack != null) {
+            ItemMeta itemMeta = itemStack.getItemMeta();
             itemMeta.setDisplayName(displayName);
             itemMeta.setLore(lore);
             itemStack.setItemMeta(itemMeta);

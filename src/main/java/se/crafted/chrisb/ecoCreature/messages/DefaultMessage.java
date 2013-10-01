@@ -85,8 +85,8 @@ public class DefaultMessage implements Message
                 else if (entry.getKey() == MessageToken.ITEM) {
                     assembledMessage = assembledMessage.replaceAll(entry.getKey().toString(), toCamelCase(entry.getValue()));
                 }
-                else if (entry.getKey() == MessageToken.PLAYER && DependencyUtils.hasHeroes()) {
-                    Player player = Bukkit.getPlayer(entry.getValue());
+                else if (entry.getKey() == MessageToken.CLASS && DependencyUtils.hasHeroes()) {
+                    Player player = Bukkit.getPlayer(parameters.get(MessageToken.PLAYER));
                     if (player != null) {
                         assembledMessage = assembledMessage.replaceAll(MessageToken.CLASS.toString(),
                                 DependencyUtils.getHeroes().getCharacterManager().getHero(player).getHeroClass().getName());
