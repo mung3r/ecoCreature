@@ -77,6 +77,13 @@ public class DefaultMessage implements Message
     {
         String assembledMessage = template;
 
+        if (DependencyUtils.hasHeroes() && parameters.containsKey(MessageToken.PLAYER)) {
+            Player player = Bukkit.getPlayer(parameters.get(MessageToken.PLAYER));
+            if (player != null) {
+                parameters.put(MessageToken.CLASS, DependencyUtils.getHeroes().getCharacterManager().getHero(player).getHeroClass().getName());
+            }
+        }
+
         if (assembledMessage != null && assembledMessage.length() > 0) {
             for (Entry<MessageToken, String> entry : parameters.entrySet()) {
                 if (entry.getKey() == MessageToken.AMOUNT) {
@@ -84,13 +91,6 @@ public class DefaultMessage implements Message
                 }
                 else if (entry.getKey() == MessageToken.ITEM) {
                     assembledMessage = assembledMessage.replaceAll(entry.getKey().toString(), toCamelCase(entry.getValue()));
-                }
-                else if (entry.getKey() == MessageToken.CLASS && DependencyUtils.hasHeroes()) {
-                    Player player = Bukkit.getPlayer(parameters.get(MessageToken.PLAYER));
-                    if (player != null) {
-                        assembledMessage = assembledMessage.replaceAll(MessageToken.CLASS.toString(),
-                                DependencyUtils.getHeroes().getCharacterManager().getHero(player).getHeroClass().getName());
-                    }
                 }
                 else {
                     assembledMessage = assembledMessage.replaceAll(entry.getKey().toString(), entry.getValue());
