@@ -24,6 +24,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
+import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+
 public class DefaultMessage implements Message
 {
     private static final String DEFAULT_TEMPLATE = "";
@@ -79,6 +84,13 @@ public class DefaultMessage implements Message
                 }
                 else if (entry.getKey() == MessageToken.ITEM) {
                     assembledMessage = assembledMessage.replaceAll(entry.getKey().toString(), toCamelCase(entry.getValue()));
+                }
+                else if (entry.getKey() == MessageToken.PLAYER && DependencyUtils.hasHeroes()) {
+                    Player player = Bukkit.getPlayer(entry.getValue());
+                    if (player != null) {
+                        assembledMessage = assembledMessage.replaceAll(MessageToken.CLASS.toString(),
+                                DependencyUtils.getHeroes().getCharacterManager().getHero(player).getHeroClass().getName());
+                    }
                 }
                 else {
                     assembledMessage = assembledMessage.replaceAll(entry.getKey().toString(), entry.getValue());

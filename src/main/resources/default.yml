@@ -341,6 +341,7 @@ Gain:
 # Color codes & replacement tokens:
 #   &[0-9,a-f,k,l,m,n,o,r] - color codes
 #   <plr> - display player name in a message
+#   <cls> - display heroes class in a message
 #   <crt> - display creature name in a message
 #   <amt> - display amount in a message
 #   <itm> - display item used to kill in a message

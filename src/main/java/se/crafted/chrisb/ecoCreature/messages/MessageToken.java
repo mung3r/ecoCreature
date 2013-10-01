@@ -21,6 +21,7 @@ package se.crafted.chrisb.ecoCreature.messages;
 
 public enum MessageToken {
     PLAYER("<plr>"),
+    CLASS("<cls>"),
     AMOUNT("<amt>"),
     ITEM("<itm>"),
     CREATURE("<crt>");

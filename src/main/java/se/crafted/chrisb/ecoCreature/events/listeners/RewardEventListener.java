@@ -20,7 +20,9 @@
 package se.crafted.chrisb.ecoCreature.events.listeners;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.bukkit.entity.Entity;
@@ -62,7 +64,7 @@ public class RewardEventListener implements Listener
 
             if (player != null) { // TODO: fix this upstream for citizens2
                 dropCoin(player.getName(), reward);
-                dropItems(reward);
+                dropItems(player.getName(), reward);
                 dropEntities(reward);
 
                 plugin.getMetrics().addCount(reward.getName());
@@ -161,11 +163,31 @@ public class RewardEventListener implements Listener
         return message;
     }
 
-    private void dropItems(Reward reward)
+    private void dropItems(String player, Reward reward)
     {
+        reward.addParameter(MessageToken.PLAYER, player);
+
         for (ItemStack stack : reward.getItemDrops()) {
+            if (stack.getItemMeta().hasDisplayName()) {
+                stack.getItemMeta().setDisplayName(getAssembledMessage(stack.getItemMeta().getDisplayName(), reward));
+            }
+
+            if (stack.getItemMeta().hasLore()) {
+                List<String> lore = new ArrayList<String>();
+                for (String loreLine : stack.getItemMeta().getLore()) {
+                    lore.add(getAssembledMessage(loreLine, reward));
+                }
+                stack.getItemMeta().setLore(lore);
+            }
+
             reward.getWorld().dropItemNaturally(reward.getLocation(), stack);
         }
+    }
+
+    private String getAssembledMessage(String template, Reward reward)
+    {
+        Message message = new DefaultMessage(template);
+        return message.getAssembledMessage(reward.getParameters());
     }
 
     private void dropEntities(Reward reward)
