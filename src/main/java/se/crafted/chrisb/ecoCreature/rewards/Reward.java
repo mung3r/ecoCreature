@@ -37,6 +37,9 @@ import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 
 public class Reward
 {
+    private static final double IDENTITY = 1.0;
+    private static final double ZERO = 0.0;
+
     private Location location;
     private String worldName;
     private double gain;
@@ -54,12 +57,12 @@ public class Reward
     {
         this.location = location;
         worldName = location.getWorld().getName();
-        gain = 1.0;
+        gain = IDENTITY;
         party = Collections.emptySet();
         integerCurrency = false;
 
         name = "Unknown";
-        coin = 0.0;
+        coin = ZERO;
         itemDrops = Collections.emptyList();
         entityDrops = Collections.emptyList();
         message = new DefaultMessage();
