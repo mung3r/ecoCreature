@@ -27,6 +27,8 @@ import java.util.Map.Entry;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import com.herocraftonline.heroes.characters.Hero;
+
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 
 public class DefaultMessage implements Message
@@ -80,7 +82,9 @@ public class DefaultMessage implements Message
         if (DependencyUtils.hasHeroes() && parameters.containsKey(MessageToken.PLAYER)) {
             Player player = Bukkit.getPlayer(parameters.get(MessageToken.PLAYER));
             if (player != null) {
-                parameters.put(MessageToken.CLASS, DependencyUtils.getHeroes().getCharacterManager().getHero(player).getHeroClass().getName());
+                Hero hero = DependencyUtils.getHeroes().getCharacterManager().getHero(player);
+                parameters.put(MessageToken.CLASS, hero.getLevel() == hero.getSecondClass().getMaxLevel() ?
+                        hero.getSecondClass().getName() : hero.getHeroClass().getName());
             }
         }
 
