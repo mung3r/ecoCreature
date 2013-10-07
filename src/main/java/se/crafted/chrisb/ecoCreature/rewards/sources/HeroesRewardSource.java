@@ -27,6 +27,8 @@ import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
+import se.crafted.chrisb.ecoCreature.messages.MessageToken;
+import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.settings.types.HeroesRewardType;
 
 public class HeroesRewardSource extends AbstractRewardSource
@@ -46,6 +48,19 @@ public class HeroesRewardSource extends AbstractRewardSource
         else {
             throw new IllegalArgumentException("Unrecognized event");
         }
+    }
+
+    @Override
+    public Reward createReward(Event event)
+    {
+        Reward reward = super.createReward(event);
+
+        if (event instanceof HeroChangeLevelEvent) {
+            HeroChangeLevelEvent changeLevelEvent = (HeroChangeLevelEvent) event;
+            reward.addParameter(MessageToken.CLASS, changeLevelEvent.getHeroClass().getName());
+        }
+
+        return reward;
     }
 
     public static AbstractRewardSource createRewardSource(String name, ConfigurationSection config)
