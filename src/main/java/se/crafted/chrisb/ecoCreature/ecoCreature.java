@@ -33,7 +33,7 @@ import se.crafted.chrisb.ecoCreature.commons.UpdateTask;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.handlers.BlockEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.DeathStreakEventHandler;
-import se.crafted.chrisb.ecoCreature.events.handlers.EntityDeathEventHandler;
+import se.crafted.chrisb.ecoCreature.events.handlers.EntityKilledEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.PluginEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.EntityFarmedEventHandler;
 import se.crafted.chrisb.ecoCreature.events.handlers.HeroesEventHandler;
@@ -131,7 +131,7 @@ public class ecoCreature extends JavaPlugin
         eventHandler.add(new BlockEventHandler(this));
         eventHandler.add(new PlayerKilledEventHandler(this));
         eventHandler.add(new PlayerDeathEventHandler(this));
-        eventHandler.add(new EntityDeathEventHandler(this));
+        eventHandler.add(new EntityKilledEventHandler(this));
         eventHandler.add(new EntityFarmedEventHandler(this));
 
         Bukkit.getPluginManager().registerEvents(new BlockEventListener(eventHandler), this);
