@@ -220,8 +220,8 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
     {
         name = source.getName();
 
-        itemDrops = source.hasItemDrops() ? source.getItemDrops() : itemDrops;
-        entityDrops = source.hasEntityDrops() ? source.getEntityDrops() : entityDrops;
+        itemDrops.addAll(source.getItemDrops());
+        entityDrops.addAll(source.getEntityDrops());
         coin = source.hasCoin() ? source.getCoin() : coin;
 
         noCoinRewardMessage = source.getNoCoinRewardMessage() != null ? source.getNoCoinRewardMessage() : noCoinRewardMessage;
