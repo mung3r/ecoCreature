@@ -117,7 +117,7 @@ public abstract class AbstractItemDrop
                         itemStack.setDurability(durability);
                     }
                 }
-                itemStack.addEnchantments(ItemEnchantment.getOutcome(enchantments));
+                itemStack.addUnsafeEnchantments(ItemEnchantment.getOutcome(enchantments));
                 if (itemStack.getAmount() > 0) {
                     return itemStack;
                 }
