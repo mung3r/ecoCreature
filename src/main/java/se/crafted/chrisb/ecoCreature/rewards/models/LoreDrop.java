@@ -25,6 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
@@ -90,7 +91,8 @@ public class LoreDrop extends ItemDrop
                     ConfigurationSection itemConfig = createItemConfig(obj);
                     Material material = parseMaterial(itemConfig.getString("item"));
 
-                    if (material != Material.WRITTEN_BOOK) {
+                    if (material != Material.WRITTEN_BOOK
+                            && !(StringUtils.isEmpty(itemConfig.getString("displayname")) || itemConfig.getStringList("lore").isEmpty())) {
                         LoreDrop drop = new LoreDrop(material);
                         drop.setDisplayName(DefaultMessage.convertMessage(itemConfig.getString("displayname")));
                         drop.setLore(DefaultMessage.convertMessages(itemConfig.getStringList("lore")));
