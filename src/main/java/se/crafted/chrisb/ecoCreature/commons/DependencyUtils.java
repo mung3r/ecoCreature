@@ -120,9 +120,7 @@ public final class DependencyUtils
                 || permission.has(player.getWorld(), player.getName(), mixedCasePerm.toLowerCase()) : player.hasPermission(mixedCasePerm)
                 || player.hasPermission(mixedCasePerm.toLowerCase());
 
-        if (!isAllowed) {
-            LoggerUtil.getInstance().debug(player.getName() + " denied permission for " + mixedCasePerm.toLowerCase());
-        }
+        LoggerUtil.getInstance().debugTrue(player.getName() + " denied permission for " + mixedCasePerm.toLowerCase(), !isAllowed);
 
         return isAllowed;
     }

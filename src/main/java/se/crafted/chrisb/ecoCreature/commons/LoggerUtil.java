@@ -77,6 +77,12 @@ public final class LoggerUtil
         logger.severe(format(msg));
     }
 
+    public void debugTrue(String msg, boolean condition) {
+        if (condition) {
+            debug(msg);
+        }
+    }
+
     public void debug(String msg)
     {
         if (debug) {

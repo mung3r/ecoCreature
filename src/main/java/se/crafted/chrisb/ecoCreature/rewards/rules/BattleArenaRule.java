@@ -49,10 +49,7 @@ public class BattleArenaRule extends AbstractRule
     public boolean isBroken(EntityKilledEvent event)
     {
         boolean ruleBroken = !battleArenaRewards && DependencyUtils.hasBattleArena() && BattleArena.inArena(event.getKiller());
-
-        if (ruleBroken) {
-            LoggerUtil.getInstance().debug("No reward for " + event.getKiller().getName() + " in BattleArena.");
-        }
+        LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " in BattleArena.", ruleBroken);
 
         return ruleBroken;
     }

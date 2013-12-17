@@ -107,17 +107,17 @@ public abstract class AbstractItemDrop
 
             if (dropAmount > 0) {
                 ItemStack itemStack;
-                if (data == null) {
+                if (data == null && durability == null) {
                     itemStack = new ItemStack(material, dropAmount);
                 }
                 else {
-                    MaterialData materialData = new MaterialData(material, data);
+                    MaterialData materialData = data == null ? new MaterialData(material) : new MaterialData(material, data);
                     itemStack = materialData.toItemStack(dropAmount);
                     if (durability != null) {
                         itemStack.setDurability(durability);
                     }
                 }
-                itemStack.addEnchantments(ItemEnchantment.getOutcome(enchantments));
+                itemStack.addUnsafeEnchantments(ItemEnchantment.getOutcome(enchantments));
                 if (itemStack.getAmount() > 0) {
                     return itemStack;
                 }

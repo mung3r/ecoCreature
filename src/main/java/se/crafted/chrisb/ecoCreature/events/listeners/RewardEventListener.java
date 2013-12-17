@@ -20,7 +20,9 @@
 package se.crafted.chrisb.ecoCreature.events.listeners;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.bukkit.entity.Entity;
@@ -30,6 +32,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
@@ -62,7 +65,7 @@ public class RewardEventListener implements Listener
 
             if (player != null) { // TODO: fix this upstream for citizens2
                 dropCoin(player.getName(), reward);
-                dropItems(reward);
+                dropItems(player.getName(), reward);
                 dropEntities(reward);
 
                 plugin.getMetrics().addCount(reward.getName());
@@ -161,11 +164,34 @@ public class RewardEventListener implements Listener
         return message;
     }
 
-    private void dropItems(Reward reward)
+    private void dropItems(String player, Reward reward)
     {
+        reward.addParameter(MessageToken.PLAYER, player);
+
         for (ItemStack stack : reward.getItemDrops()) {
+            ItemMeta itemMeta = stack.getItemMeta();
+            if (itemMeta.hasDisplayName()) {
+                String displayName = getAssembledMessage(itemMeta.getDisplayName(), reward);
+                itemMeta.setDisplayName(displayName);
+            }
+
+            if (itemMeta.hasLore()) {
+                List<String> lore = new ArrayList<String>();
+                for (String loreLine : itemMeta.getLore()) {
+                    lore.add(getAssembledMessage(loreLine, reward));
+                }
+                itemMeta.setLore(lore);
+            }
+            stack.setItemMeta(itemMeta);
+
             reward.getWorld().dropItemNaturally(reward.getLocation(), stack);
         }
+    }
+
+    private String getAssembledMessage(String template, Reward reward)
+    {
+        Message message = new DefaultMessage(template);
+        return message.getAssembledMessage(reward.getParameters());
     }
 
     private void dropEntities(Reward reward)

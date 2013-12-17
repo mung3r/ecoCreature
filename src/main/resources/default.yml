@@ -1,4 +1,9 @@
 System:
+  #
+  # Periodically check for new version
+  # Default: true
+  CheckForUpdates: true
+  
   Economy:
     #
     # Round reward amounts to the nearest integer
@@ -336,6 +341,7 @@ Gain:
 # Color codes & replacement tokens:
 #   &[0-9,a-f,k,l,m,n,o,r] - color codes
 #   <plr> - display player name in a message
+#   <cls> - display heroes class in a message
 #   <crt> - display creature name in a message
 #   <amt> - display amount in a message
 #   <itm> - display item used to kill in a message
@@ -605,8 +611,9 @@ RewardTable:
     Sets:
     - PoorZombie
     - BookZombie
+    - LoreZombie
     - RichZombie
-    - ZombieApocalypse
+    #- ZombieApocalypse
   ZombieVillager:
     Coin_Minimum: 1.00
     Coin_Maximum: 3.50
@@ -651,6 +658,12 @@ RewardSets:
       - 'Day 1: No people to be found today. Very hungry.'
       - 'Day 2: Another day with out brains. Starving.'
       - 'Day 3: Just saw someone I can feast on! Will write later how that goes.'
+  LoreZombie:
+    Drops:
+    - item: diamond sword:1:75
+      displayname: Cursed Sword
+      lore:
+      - 'Forged by the undead'
   RichZombie:
     Drops:
     - 'rotten flesh:2:75'

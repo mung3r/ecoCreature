@@ -60,10 +60,7 @@ public class SpawnerMobRule extends AbstractRule
     {
         SpawnerMobTracking tracking = event.getSpawnerMobTracking();
         boolean ruleBroken = !canCampSpawner && campByEntity && tracking.isSpawnerMob(event.getEntity());
-
-        if (ruleBroken) {
-            LoggerUtil.getInstance().debug("No reward for " + event.getKiller().getName() + " spawner camping.");
-        }
+        LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " spawner camping.", ruleBroken);
 
         return ruleBroken;
     }

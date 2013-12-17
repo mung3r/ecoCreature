@@ -83,7 +83,7 @@ public class MaterialRewardSettings extends AbstractRewardSettings<Material>
                         sources.put(type, new ArrayList<AbstractRewardSource>());
                     }
 
-                    sources.get(type).add(mergeSets(source, rewardTable, config.getConfigurationSection("RewardSets")));
+                    sources.get(type).add(mergeSets(source, rewardTable.getConfigurationSection(typeName), config.getConfigurationSection("RewardSets")));
                 }
             }
         }

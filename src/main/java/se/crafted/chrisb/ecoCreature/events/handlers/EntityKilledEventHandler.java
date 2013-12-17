@@ -34,15 +34,15 @@ import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
-public class EntityDeathEventHandler extends AbstractEventHandler
+public class EntityKilledEventHandler extends AbstractEventHandler
 {
-    public EntityDeathEventHandler(ecoCreature plugin)
+    public EntityKilledEventHandler(ecoCreature plugin)
     {
         super(plugin);
     }
 
     @Override
-    public boolean canCreateRewardEvents(Event event)
+    public boolean isRewardSource(Event event)
     {
         return event instanceof EntityKilledEvent;
     }
