@@ -14,9 +14,9 @@
   </organization>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <bukkit.version>1.6.2-R0.1-SNAPSHOT</bukkit.version>
-    <vault.version>1.2.26-SNAPSHOT</vault.version>
-    <currentYear>2012</currentYear>
+    <bukkit.version>1.7.2-R0.1-SNAPSHOT</bukkit.version>
+    <vault.version>1.2.27</vault.version>
+    <currentYear>2013</currentYear>
   </properties>
   <issueManagement>
     <system>GitHub</system>
