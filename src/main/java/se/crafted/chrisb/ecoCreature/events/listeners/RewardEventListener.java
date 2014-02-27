@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.entity.Entity;
@@ -64,8 +65,8 @@ public class RewardEventListener implements Listener
             Player player = event.getPlayer();
 
             if (player != null) { // TODO: fix this upstream for citizens2
-                dropCoin(player.getName(), reward);
-                dropItems(player.getName(), reward);
+                dropCoin(player, reward);
+                dropItems(player, reward);
                 dropEntities(reward);
 
                 plugin.getMetrics().addCount(reward.getName());
@@ -74,7 +75,7 @@ public class RewardEventListener implements Listener
         }
     }
 
-    private void dropCoin(String player, Reward reward)
+    private void dropCoin(Player player, Reward reward)
     {
         if (!DependencyUtils.hasEconomy()) {
             return;
@@ -84,10 +85,10 @@ public class RewardEventListener implements Listener
 
         if (Math.abs(amount) > 0.0) {
 
-            for (String member : createParty(player, reward)) {
+            for (String member : createParty(player.getName(), reward)) {
                 registerAmount(member, amount);
 
-                Message message = member.equals(player) ? reward.getMessage() : getPartyMessage(amount);
+                Message message = member.equals(player.getName()) ? reward.getMessage() : getPartyMessage(amount);
                 reward.addParameter(MessageToken.PLAYER, member).addParameter(MessageToken.AMOUNT, DependencyUtils.getEconomy().format(Math.abs(amount)));
 
                 MessageHandler handler = new MessageHandler(message, reward.getParameters());
@@ -164,9 +165,9 @@ public class RewardEventListener implements Listener
         return message;
     }
 
-    private void dropItems(String player, Reward reward)
+    private void dropItems(Player player, Reward reward)
     {
-        reward.addParameter(MessageToken.PLAYER, player);
+        reward.addParameter(MessageToken.PLAYER, player.getName());
 
         for (ItemStack stack : reward.getItemDrops()) {
             ItemMeta itemMeta = stack.getItemMeta();
@@ -184,7 +185,14 @@ public class RewardEventListener implements Listener
             }
             stack.setItemMeta(itemMeta);
 
-            reward.getWorld().dropItemNaturally(reward.getLocation(), stack);
+            if (itemMeta.hasDisplayName() || itemMeta.hasLore()) {
+                Map<Integer, ItemStack> leftOver = player.getInventory().addItem(stack);
+                for (Map.Entry<Integer, ItemStack> entry : leftOver.entrySet()) {
+                    reward.getWorld().dropItemNaturally(reward.getLocation(), entry.getValue());
+                }
+            } else {
+                reward.getWorld().dropItemNaturally(reward.getLocation(), stack);
+            }
         }
     }
 
