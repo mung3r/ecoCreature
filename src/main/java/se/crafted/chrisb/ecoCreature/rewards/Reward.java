@@ -45,6 +45,7 @@ public class Reward
     private double gain;
     private Set<String> party;
     private boolean integerCurrency;
+    private boolean addToInventory;
 
     private String name;
     private double coin;
@@ -117,6 +118,16 @@ public class Reward
     public void setIntegerCurrency(boolean integerCurrency)
     {
         this.integerCurrency = integerCurrency;
+    }
+
+    public boolean isAddToInventory()
+    {
+        return addToInventory;
+    }
+
+    public void setAddToInventory(boolean addToInventory)
+    {
+        this.addToInventory = addToInventory;
     }
 
     public String getName()
