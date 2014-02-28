@@ -63,7 +63,7 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
 
     private boolean fixedDrops;
     private boolean integerCurrency;
-    private boolean addToInventory;
+    private boolean addItemsToInventory;
 
     public AbstractRewardSource()
     {
@@ -87,7 +87,7 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         coinPenaltyMessage = new CoinMessageDecorator(new DefaultMessage(config.getString("Penalty_Message", COIN_PENALTY_MESSAGE)));
         noCoinRewardMessage = new NoCoinMessageDecorator(new DefaultMessage(config.getString("NoReward_Message", NO_COIN_REWARD_MESSAGE)));
 
-        addToInventory = config.getBoolean("AddToInventory", false);
+        addItemsToInventory = config.getBoolean("AddItemsToInventory", false);
     }
 
     public String getName()
@@ -220,15 +220,15 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
     }
 
     @Override
-    public Boolean isAddToInventory()
+    public Boolean isAddItemsToInventory()
     {
-        return addToInventory;
+        return addItemsToInventory;
     }
 
     @Override
-    public void setAddToInventory(Boolean addToInventory)
+    public void setAddItemsToInventory(Boolean addItemsToInventory)
     {
-        this.addToInventory = addToInventory;
+        this.addItemsToInventory = addItemsToInventory;
     }
 
     public void merge(AbstractRewardSource source)
@@ -267,7 +267,7 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         }
 
         reward.setIntegerCurrency(integerCurrency);
-        reward.setAddToInventory(addToInventory);
+        reward.setAddItemsToInventory(addItemsToInventory);
 
         return reward;
     }

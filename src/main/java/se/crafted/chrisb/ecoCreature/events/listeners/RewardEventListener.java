@@ -185,7 +185,7 @@ public class RewardEventListener implements Listener
             }
             stack.setItemMeta(itemMeta);
 
-            if (reward.isAddToInventory()) {
+            if (reward.isAddItemsToInventory()) {
                 Map<Integer, ItemStack> leftOver = player.getInventory().addItem(stack);
                 for (Map.Entry<Integer, ItemStack> entry : leftOver.entrySet()) {
                     reward.getWorld().dropItemNaturally(reward.getLocation(), entry.getValue());

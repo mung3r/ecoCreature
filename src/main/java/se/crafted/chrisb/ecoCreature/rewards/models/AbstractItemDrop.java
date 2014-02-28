@@ -36,7 +36,7 @@ public abstract class AbstractItemDrop
     private NumberRange range;
     private double percentage;
     private Set<ItemEnchantment> enchantments;
-    private boolean addToInventory;
+    private boolean addItemsToInventory;
     private final Random random = new Random();
 
     public AbstractItemDrop(Material material)
@@ -100,14 +100,14 @@ public abstract class AbstractItemDrop
         this.enchantments = enchantments;
     }
 
-    public boolean isAddToInventory()
+    public boolean isAddItemsToInventory()
     {
-        return addToInventory;
+        return addItemsToInventory;
     }
 
-    public void setAddToInventory(boolean addToInventory)
+    public void setAddItemsToInventory(boolean addItemsToInventory)
     {
-        this.addToInventory = addToInventory;
+        this.addItemsToInventory = addItemsToInventory;
     }
 
     public ItemStack getOutcome(boolean isFixedDrops)
