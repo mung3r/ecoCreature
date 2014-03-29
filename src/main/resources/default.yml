@@ -212,6 +212,8 @@ Gain:
   #
   # Multiply reward amount based on Towny region
   Towny:
+    InTown:
+      Amount: 0.1
     MyTownName1:
       Amount: 0.125
     MyTownName2:
