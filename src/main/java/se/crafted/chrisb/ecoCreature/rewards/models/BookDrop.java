@@ -102,7 +102,7 @@ public class BookDrop extends ItemDrop
                     ConfigurationSection itemConfig = createItemConfig(obj);
                     Material material = parseMaterial(itemConfig.getString("item"));
 
-                    if (material == Material.WRITTEN_BOOK) {
+                    if (material != null && material == Material.WRITTEN_BOOK) {
                         BookDrop drop = new BookDrop(material);
                         drop.setTitle(DefaultMessage.convertMessage(itemConfig.getString("title")));
                         drop.setAuthor(DefaultMessage.convertMessage(itemConfig.getString("author")));
