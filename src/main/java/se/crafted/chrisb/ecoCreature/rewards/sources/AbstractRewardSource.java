@@ -45,8 +45,10 @@ import se.crafted.chrisb.ecoCreature.rewards.models.EntityReward;
 import se.crafted.chrisb.ecoCreature.rewards.models.ItemDrop;
 import se.crafted.chrisb.ecoCreature.rewards.models.ItemReward;
 import se.crafted.chrisb.ecoCreature.rewards.models.LoreDrop;
+import se.crafted.chrisb.ecoCreature.rewards.models.JockeyDrop;
+import se.crafted.chrisb.ecoCreature.rewards.models.JockeyReward;
 
-public abstract class AbstractRewardSource implements CoinReward, ItemReward, EntityReward
+public abstract class AbstractRewardSource implements CoinReward, ItemReward, EntityReward, JockeyReward
 {
     private static final String NO_COIN_REWARD_MESSAGE = "&7You slayed a &5<crt>&7 using a &3<itm>&7.";
     private static final String COIN_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.";
@@ -56,6 +58,7 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
     private CoinDrop coin;
     private List<AbstractItemDrop> itemDrops;
     private List<EntityDrop> entityDrops;
+    private List<JockeyDrop> jockeyDrops;
 
     private Message noCoinRewardMessage;
     private Message coinRewardMessage;
@@ -81,6 +84,13 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         itemDrops.addAll(BookDrop.parseConfig(config));
         itemDrops.addAll(LoreDrop.parseConfig(config));
         entityDrops = EntityDrop.parseConfig(config);
+        // TODO: hackey - need to fix
+        jockeyDrops = new ArrayList<JockeyDrop>();
+        for (EntityDrop drop : JockeyDrop.parseConfig(config)) {
+            if (drop instanceof JockeyDrop) {
+                jockeyDrops.add((JockeyDrop) drop);
+            }
+        }
         coin = CoinDrop.parseConfig(config);
 
         coinRewardMessage = new CoinMessageDecorator(new DefaultMessage(config.getString("Reward_Message", COIN_REWARD_MESSAGE)));
@@ -157,6 +167,24 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
     public void setEntityDrops(List<EntityDrop> entityDrops)
     {
         this.entityDrops = entityDrops;
+    }
+
+    @Override
+    public boolean hasJockeyDrops()
+    {
+        return jockeyDrops != null && !jockeyDrops.isEmpty();
+    }
+
+    @Override
+    public List<JockeyDrop> getJockeyDrops()
+    {
+        return jockeyDrops;
+    }
+
+    @Override
+    public void setJockeyDrops(List<JockeyDrop> jockeyDrops)
+    {
+        this.jockeyDrops = jockeyDrops;
     }
 
     @Override
@@ -237,6 +265,7 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
 
         itemDrops.addAll(source.getItemDrops());
         entityDrops.addAll(source.getEntityDrops());
+        jockeyDrops.addAll(source.getJockeyDrops());
         coin = source.hasCoin() ? source.getCoin() : coin;
 
         noCoinRewardMessage = source.getNoCoinRewardMessage() != null ? source.getNoCoinRewardMessage() : noCoinRewardMessage;
@@ -251,6 +280,7 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         reward.setName(name);
         reward.setItemDrops(getItemDropOutcomes());
         reward.setEntityDrops(getEntityDropOutcomes());
+        reward.setJockeyDrops(getJockeyDropOutcomes());
 
         if (hasCoin()) {
             reward.setCoin(coin.getOutcome());
@@ -301,6 +331,24 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
 
             for (EntityDrop drop : entityDrops) {
                 types.addAll(drop.getOutcome());
+            }
+        }
+
+        return types;
+    }
+
+    private List<EntityType> getJockeyDropOutcomes()
+    {
+        List<EntityType> types = Collections.emptyList();
+
+        if (jockeyDrops != null) {
+            types = new ArrayList<EntityType>();
+
+            for (EntityDrop drop : jockeyDrops) {
+                if (drop instanceof JockeyDrop) {
+                    JockeyDrop jockeyDrop = (JockeyDrop) drop;
+                    types.addAll(jockeyDrop.getOutcome());
+                }
             }
         }
 

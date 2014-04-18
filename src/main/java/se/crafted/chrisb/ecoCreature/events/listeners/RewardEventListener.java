@@ -22,6 +22,7 @@ package se.crafted.chrisb.ecoCreature.events.listeners;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -68,6 +69,7 @@ public class RewardEventListener implements Listener
                 dropCoin(player, reward);
                 dropItems(player, reward);
                 dropEntities(reward);
+                dropJockeys(reward);
 
                 plugin.getMetrics().addCount(reward.getName());
                 LoggerUtil.getInstance().debug("Added metrics count for " + reward.getName());
@@ -209,6 +211,18 @@ public class RewardEventListener implements Listener
             if (entity instanceof ExperienceOrb) {
                 ((ExperienceOrb) entity).setExperience(1);
             }
+        }
+    }
+
+    private void dropJockeys(Reward reward)
+    {
+        Iterator<EntityType> typeIterator = reward.getJockeyDrops().iterator();
+        while (typeIterator.hasNext()) {
+            EntityType vehicleType = typeIterator.next();
+            Entity vehicle = reward.getWorld().spawn(reward.getLocation(), vehicleType.getEntityClass());
+            EntityType passengerType = typeIterator.next();
+            Entity passenger = reward.getWorld().spawn(reward.getLocation(), passengerType.getEntityClass());
+            vehicle.setPassenger(passenger);
         }
     }
 }

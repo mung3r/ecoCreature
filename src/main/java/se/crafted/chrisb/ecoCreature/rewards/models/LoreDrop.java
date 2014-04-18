@@ -90,7 +90,7 @@ public class LoreDrop extends ItemDrop
                     ConfigurationSection itemConfig = createItemConfig(obj);
                     Material material = parseMaterial(itemConfig.getString("item"));
 
-                    if (material != Material.WRITTEN_BOOK) {
+                    if (material != null && material != Material.WRITTEN_BOOK) {
                         LoreDrop drop = new LoreDrop(material);
                         drop.setDisplayName(DefaultMessage.convertMessage(itemConfig.getString("displayname")));
                         drop.setLore(DefaultMessage.convertMessages(itemConfig.getStringList("lore")));

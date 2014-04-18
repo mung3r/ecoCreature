@@ -108,12 +108,16 @@ public class ItemDrop extends AbstractItemDrop
 
     protected static Material parseMaterial(String dropString)
     {
-        String[] dropParts = dropString.split(":");
-        String[] itemParts = dropParts[0].split(",");
-        String[] itemSubParts = itemParts[0].split("\\.");
-
-        Material material = Material.matchMaterial(itemSubParts[0]);
-        LoggerUtil.getInstance().debugTrue("No match for type: " + itemParts[0], material == null);
+        Material material = null;
+        
+        if (dropString != null) {
+            String[] dropParts = dropString.split(":");
+            String[] itemParts = dropParts[0].split(",");
+            String[] itemSubParts = itemParts[0].split("\\.");
+    
+            material = Material.matchMaterial(itemSubParts[0]);
+            LoggerUtil.getInstance().debugTrue("No match for type: " + itemParts[0], material == null);
+        }
 
         return material;
     }
