@@ -25,10 +25,10 @@ import java.util.Map;
 
 public enum CustomRewardType
 {
-    DEATH_PENALTY("DeathPenalty"),
-    LEGACY_PVP("LegacyPVP"),
-    SET("Set"),
-    INVALID("__Invalid__");
+    DEATH_PENALTY("DeathPenalty", true),
+    LEGACY_PVP("LegacyPVP", true),
+    SET("Set", true),
+    INVALID("__Invalid__", false);
 
     private static final Map<String, CustomRewardType> NAME_MAP = new HashMap<String, CustomRewardType>();
 
@@ -38,13 +38,18 @@ public enum CustomRewardType
         }
     }
 
-    private String name;
+    private final String name;
+    private final boolean valid;
 
-    CustomRewardType(String name)
+    CustomRewardType(String name, boolean valid)
     {
-        if (name != null) {
-            this.name = name.toLowerCase();
-        }
+        this.name = name.toLowerCase();
+        this.valid = valid;
+    }
+
+    public boolean isValid()
+    {
+        return valid;
     }
 
     public static CustomRewardType fromName(String name)

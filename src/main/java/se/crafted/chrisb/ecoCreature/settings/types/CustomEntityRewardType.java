@@ -36,12 +36,12 @@ import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public enum CustomEntityRewardType
 {
-    ANGRY_WOLF("AngryWolf"),
-    PLAYER("Player"),
-    POWERED_CREEPER("PoweredCreeper"),
-    WITHER_SKELETON("WitherSkeleton"),
-    ZOMBIE_VILLAGER("ZombieVillager"),
-    INVALID("__Invalid__");
+    ANGRY_WOLF("AngryWolf", true),
+    PLAYER("Player", true),
+    POWERED_CREEPER("PoweredCreeper", true),
+    WITHER_SKELETON("WitherSkeleton", true),
+    ZOMBIE_VILLAGER("ZombieVillager", true),
+    INVALID("__Invalid__", false);
 
     private static final Map<String, CustomEntityRewardType> NAME_MAP = new HashMap<String, CustomEntityRewardType>();
 
@@ -51,13 +51,18 @@ public enum CustomEntityRewardType
         }
     }
 
-    private String name;
+    private final String name;
+    private final boolean valid;
 
-    CustomEntityRewardType(String name)
+    CustomEntityRewardType(String name, boolean valid)
     {
-        if (name != null) {
-            this.name = name.toLowerCase();
-        }
+        this.name = name.toLowerCase();
+        this.valid = valid;
+    }
+
+    public boolean isValid()
+    {
+        return valid;
     }
 
     public static CustomEntityRewardType fromName(String name)

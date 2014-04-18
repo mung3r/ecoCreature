@@ -26,9 +26,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 public class MaterialRewardSource extends AbstractRewardSource
 {
-    public MaterialRewardSource(ConfigurationSection config)
+    public MaterialRewardSource(String section, ConfigurationSection config)
     {
-        super(config);
+        super(section, config);
     }
 
     @Override

@@ -29,7 +29,5 @@ public interface Message
 
     String getTemplate();
 
-    void setTemplate(String template);
-
     String getAssembledMessage(Map<MessageToken, String> parameters);
 }

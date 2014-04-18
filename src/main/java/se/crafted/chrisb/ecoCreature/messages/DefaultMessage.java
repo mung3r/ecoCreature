@@ -26,16 +26,13 @@ import java.util.Map.Entry;
 
 public class DefaultMessage implements Message
 {
-    private static final String DEFAULT_TEMPLATE = "";
+    private static final String NO_MESSAGE_TEMPLATE = "";
+
+    public static final DefaultMessage NO_MESSAGE = new DefaultMessage(NO_MESSAGE_TEMPLATE);
 
     private boolean messageOutputEnabled;
 
-    private String template;
-
-    public DefaultMessage()
-    {
-        this(DEFAULT_TEMPLATE);
-    }
+    private final String template;
 
     public DefaultMessage(String template)
     {
@@ -59,12 +56,6 @@ public class DefaultMessage implements Message
     public String getTemplate()
     {
         return template;
-    }
-
-    @Override
-    public void setTemplate(String template)
-    {
-        this.template = template;
     }
 
     @Override

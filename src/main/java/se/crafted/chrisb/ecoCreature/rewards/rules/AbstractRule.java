@@ -26,12 +26,13 @@ import se.crafted.chrisb.ecoCreature.messages.Message;
 public abstract class AbstractRule implements Rule
 {
     private boolean clearDrops;
+    private boolean clearExpOrbs;
     private Message message;
 
     public AbstractRule()
     {
         clearDrops = false;
-        message = new DefaultMessage();
+        message = DefaultMessage.NO_MESSAGE;
     }
 
     @Override
@@ -59,5 +60,17 @@ public abstract class AbstractRule implements Rule
     public void setClearDrops(boolean clearDrops)
     {
         this.clearDrops = clearDrops;
+    }
+
+    @Override
+    public boolean isClearExpOrbs()
+    {
+        return clearExpOrbs;
+    }
+
+    @Override
+    public void setClearExpOrbs(boolean clearExpOrbs)
+    {
+        this.clearExpOrbs = clearExpOrbs;
     }
 }

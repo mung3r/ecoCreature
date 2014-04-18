@@ -20,6 +20,10 @@ System:
     # Default: true
     ClearCampDrops: true
     #
+    # Clear experience orbs from mobs killed near spawners
+    # Default: true
+    ClearCampExpOrbs: true
+    #
     # Determine camping by tracking mobs, spawned by mob spawners, ignoring distance
     # Default: false
     CampingByEntity: true
@@ -110,6 +114,15 @@ System:
     # Message players for camping spawners
     # Default: false
     Spawner: false
+    #
+    # Default message for no reward
+    NoReward_Message: '&7You slayed a &5<crt>&7 using a &3<itm>&7.'
+    #
+    # Default message for reward
+    Reward_Message: '&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.'
+    #
+    # Default message for penalty
+    Penalty_Message: '&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.'
     #
     # Custom message for no camping mob spawners
     NoCampMessage: '&7You find no rewards camping monster spawners.'

@@ -72,32 +72,33 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
     {
     }
 
-    public AbstractRewardSource(ConfigurationSection config)
+    public AbstractRewardSource(String section, ConfigurationSection config)
     {
         if (config == null) {
             throw new IllegalArgumentException("Config cannot be null");
         }
-        name = config.getName();
+        ConfigurationSection rewardConfig = config.getConfigurationSection(section);
+        name = rewardConfig.getName();
 
         itemDrops = new ArrayList<AbstractItemDrop>();
-        itemDrops.addAll(ItemDrop.parseConfig(config));
-        itemDrops.addAll(BookDrop.parseConfig(config));
-        itemDrops.addAll(LoreDrop.parseConfig(config));
-        entityDrops = EntityDrop.parseConfig(config);
-        // TODO: hackey - need to fix
+        itemDrops.addAll(ItemDrop.parseConfig(rewardConfig));
+        itemDrops.addAll(BookDrop.parseConfig(rewardConfig));
+        itemDrops.addAll(LoreDrop.parseConfig(rewardConfig));
+        entityDrops = EntityDrop.parseConfig(rewardConfig);
+        // TODO: hack - need to fix
         jockeyDrops = new ArrayList<JockeyDrop>();
-        for (EntityDrop drop : JockeyDrop.parseConfig(config)) {
+        for (EntityDrop drop : JockeyDrop.parseConfig(rewardConfig)) {
             if (drop instanceof JockeyDrop) {
                 jockeyDrops.add((JockeyDrop) drop);
             }
         }
-        coin = CoinDrop.parseConfig(config);
+        coin = CoinDrop.parseConfig(rewardConfig);
 
-        coinRewardMessage = new CoinMessageDecorator(new DefaultMessage(config.getString("Reward_Message", COIN_REWARD_MESSAGE)));
-        coinPenaltyMessage = new CoinMessageDecorator(new DefaultMessage(config.getString("Penalty_Message", COIN_PENALTY_MESSAGE)));
-        noCoinRewardMessage = new NoCoinMessageDecorator(new DefaultMessage(config.getString("NoReward_Message", NO_COIN_REWARD_MESSAGE)));
+        coinRewardMessage = new CoinMessageDecorator(new DefaultMessage(rewardConfig.getString("Reward_Message", config.getString("Messages.Reward_Message", COIN_REWARD_MESSAGE))));
+        coinPenaltyMessage = new CoinMessageDecorator(new DefaultMessage(rewardConfig.getString("Penalty_Message", config.getString("Messages.Penalty_Message", COIN_PENALTY_MESSAGE))));
+        noCoinRewardMessage = new NoCoinMessageDecorator(new DefaultMessage(rewardConfig.getString("NoReward_Message", config.getString("Messages.NoReward_Message", NO_COIN_REWARD_MESSAGE))));
 
-        addItemsToInventory = config.getBoolean("AddItemsToInventory", false);
+        addItemsToInventory = rewardConfig.getBoolean("AddItemsToInventory", false);
     }
 
     public String getName()

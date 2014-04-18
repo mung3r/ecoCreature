@@ -23,7 +23,7 @@ import java.util.Map;
 
 abstract class AbstractMessageDecorator implements Message
 {
-    private Message decoratedMessage;
+    private final Message decoratedMessage;
 
     public AbstractMessageDecorator(Message decoratedMessage)
     {
@@ -46,12 +46,6 @@ abstract class AbstractMessageDecorator implements Message
     public String getTemplate()
     {
         return decoratedMessage.getTemplate();
-    }
-
-    @Override
-    public void setTemplate(String template)
-    {
-        decoratedMessage.setTemplate(template);
     }
 
     @Override

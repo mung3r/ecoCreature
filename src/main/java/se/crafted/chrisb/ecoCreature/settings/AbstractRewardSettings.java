@@ -47,7 +47,6 @@ import se.crafted.chrisb.ecoCreature.rewards.rules.SpawnerMobRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.TamedCreatureRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.UnderSeaLevelRule;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
-import se.crafted.chrisb.ecoCreature.settings.types.CustomRewardType;
 
 public abstract class AbstractRewardSettings<T>
 {
@@ -95,6 +94,8 @@ public abstract class AbstractRewardSettings<T>
             if (rule.isBroken(event)) {
                 if (rule.isClearDrops()) {
                     event.getDrops().clear();
+                }
+                if (rule.isClearDrops() || rule.isClearExpOrbs()) {
                     event.setDroppedExp(0);
                 }
 
@@ -114,15 +115,17 @@ public abstract class AbstractRewardSettings<T>
         return random.nextInt(n);
     }
 
-    protected static AbstractRewardSource mergeSets(AbstractRewardSource source, ConfigurationSection rewardConfig, ConfigurationSection rewardSets)
+    protected static AbstractRewardSource mergeSets(AbstractRewardSource source, String rewardSection, ConfigurationSection config)
     {
         AbstractRewardSource newSource = source;
+        ConfigurationSection rewardConfig = config.getConfigurationSection(rewardSection);
+        ConfigurationSection rewardSets = config.getConfigurationSection("RewardSets");
         List<String> sets = rewardConfig.getStringList("Sets");
 
         if (!sets.isEmpty() && rewardSets != null) {
             for (String setName : sets) {
                 if (rewardSets.getConfigurationSection(setName) != null) {
-                    AbstractRewardSource setSource = RewardSourceFactory.createSource(CustomRewardType.SET.toString(), rewardSets.getConfigurationSection(setName));
+                    AbstractRewardSource setSource = RewardSourceFactory.createSetSource(setName, rewardSets);
                     setSource.merge(newSource);
                     newSource = setSource;
                 }

@@ -27,8 +27,8 @@ import org.bukkit.Material;
 
 public enum CustomMaterialRewardType
 {
-    LEGACY_SPAWNER("Spawner"),
-    INVALID("__Invalid__");
+    LEGACY_SPAWNER("Spawner", true),
+    INVALID("__Invalid__", false);
 
     private static final Map<String, CustomMaterialRewardType> NAME_MAP = new HashMap<String, CustomMaterialRewardType>();
 
@@ -38,13 +38,18 @@ public enum CustomMaterialRewardType
         }
     }
 
-    private String name;
+    private final String name;
+    private final boolean valid;
 
-    CustomMaterialRewardType(String name)
+    CustomMaterialRewardType(String name, boolean isValid)
     {
-        if (name != null) {
-            this.name = name.toLowerCase();
-        }
+        this.name = name.toLowerCase();
+        this.valid = isValid;
+    }
+
+    public boolean isValid()
+    {
+        return valid;
     }
 
     public static CustomMaterialRewardType fromName(String name)

@@ -73,6 +73,7 @@ public class SpawnerMobRule extends AbstractRule
             SpawnerMobRule rule = new SpawnerMobRule();
             rule.setCanCampSpawner(config.getBoolean("System.Hunting.AllowCamping", false));
             rule.setClearDrops(config.getBoolean("System.Hunting.ClearCampDrops", true));
+            rule.setClearExpOrbs(config.getBoolean("System.Hunting.ClearCampExpOrbs", true));
             rule.setCampByEntity(config.getBoolean("System.Hunting.CampingByEntity", false));
             rule.setMessage(getNoCampMessage(config));
             rules = new HashSet<Rule>();

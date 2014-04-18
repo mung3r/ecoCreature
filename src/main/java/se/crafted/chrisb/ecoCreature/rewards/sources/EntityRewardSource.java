@@ -28,9 +28,9 @@ import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 
 public class EntityRewardSource extends AbstractRewardSource
 {
-    public EntityRewardSource(ConfigurationSection config)
+    public EntityRewardSource(String section, ConfigurationSection config)
     {
-        super(config);
+        super(section, config);
     }
 
     @Override

@@ -30,6 +30,10 @@ public interface Rule
 
     void setClearDrops(boolean clearDrops);
 
+    boolean isClearExpOrbs();
+
+    void setClearExpOrbs(boolean clearExpOrbs);
+
     Message getMessage();
 
     void setMessage(Message message);

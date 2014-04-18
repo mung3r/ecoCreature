@@ -68,7 +68,7 @@ public class Reward
         itemDrops = Collections.emptyList();
         entityDrops = Collections.emptyList();
         jockeyDrops = Collections.emptyList();
-        message = new DefaultMessage();
+        message = DefaultMessage.NO_MESSAGE;
         parameters = new HashMap<MessageToken, String>();
     }
 

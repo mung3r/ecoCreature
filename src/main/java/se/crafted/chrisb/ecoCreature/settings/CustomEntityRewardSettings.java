@@ -91,14 +91,14 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings<CustomEnt
             for (String typeName : rewardTable.getKeys(false)) {
                 CustomEntityRewardType type = CustomEntityRewardType.fromName(typeName);
 
-                if (type != CustomEntityRewardType.INVALID) {
-                    AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(typeName, rewardTable.getConfigurationSection(typeName)), config);
+                if (type.isValid()) {
+                    AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource("RewardTable." + typeName, config), config);
 
                     if (!sources.containsKey(type)) {
                         sources.put(type, new ArrayList<AbstractRewardSource>());
                     }
 
-                    sources.get(type).add(mergeSets(source, rewardTable, config.getConfigurationSection("RewardSets")));
+                    sources.get(type).add(mergeSets(source, "RewardTable." + typeName, config));
                 }
             }
         }

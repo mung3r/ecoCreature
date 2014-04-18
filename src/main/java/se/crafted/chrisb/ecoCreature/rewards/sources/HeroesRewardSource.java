@@ -29,14 +29,15 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
+import se.crafted.chrisb.ecoCreature.settings.RewardSourceFactory;
 import se.crafted.chrisb.ecoCreature.settings.types.HeroesRewardType;
 
 public class HeroesRewardSource extends AbstractRewardSource
 {
-    public HeroesRewardSource(ConfigurationSection config)
+    public HeroesRewardSource(String section, ConfigurationSection config)
     {
-        super(config);
-        setNoCoinRewardMessage(new DefaultMessage());
+        super(section, config);
+        setNoCoinRewardMessage(DefaultMessage.NO_MESSAGE);
     }
 
     @Override
@@ -63,17 +64,17 @@ public class HeroesRewardSource extends AbstractRewardSource
         return reward;
     }
 
-    public static AbstractRewardSource createRewardSource(String name, ConfigurationSection config)
+    public static AbstractRewardSource createRewardSource(String section, ConfigurationSection config)
     {
         AbstractRewardSource source = null;
 
-        switch (HeroesRewardType.fromName(name)) {
+        switch (HeroesRewardType.fromName(RewardSourceFactory.parseRewardName(section))) {
             case HERO_LEVELED:
             case HERO_MASTERED:
-                source = new HeroesRewardSource(config);
+                source = new HeroesRewardSource(section, config);
                 break;
             default:
-                throw new IllegalArgumentException("Unsupported type: " + name);
+                throw new IllegalArgumentException("Unsupported type: " + section);
         }
         return source;
     }
