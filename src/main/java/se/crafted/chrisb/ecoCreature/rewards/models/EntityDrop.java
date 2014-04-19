@@ -154,12 +154,11 @@ public class EntityDrop
 
     private static List<EntityDrop> parseDrops(List<String> dropsList)
     {
-        List<EntityDrop> drops = Collections.emptyList();
+        List<EntityDrop> drops = new ArrayList<EntityDrop>();
 
         for (String dropString : dropsList) {
             EntityDrop drop = createEntityDrop(dropString);
             if (drop != null) {
-                drops = new ArrayList<EntityDrop>();
                 drops.add(drop);
             }
         }
