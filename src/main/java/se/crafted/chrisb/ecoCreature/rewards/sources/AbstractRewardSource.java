@@ -94,9 +94,9 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         }
         coin = CoinDrop.parseConfig(rewardConfig);
 
-        coinRewardMessage = new CoinMessageDecorator(new DefaultMessage(rewardConfig.getString("Reward_Message", config.getString("Messages.Reward_Message", COIN_REWARD_MESSAGE))));
-        coinPenaltyMessage = new CoinMessageDecorator(new DefaultMessage(rewardConfig.getString("Penalty_Message", config.getString("Messages.Penalty_Message", COIN_PENALTY_MESSAGE))));
-        noCoinRewardMessage = new NoCoinMessageDecorator(new DefaultMessage(rewardConfig.getString("NoReward_Message", config.getString("Messages.NoReward_Message", NO_COIN_REWARD_MESSAGE))));
+        coinRewardMessage = new CoinMessageDecorator(new DefaultMessage(rewardConfig.getString("Reward_Message", config.getString("System.Messages.Reward_Message", COIN_REWARD_MESSAGE))));
+        coinPenaltyMessage = new CoinMessageDecorator(new DefaultMessage(rewardConfig.getString("Penalty_Message", config.getString("System.Messages.Penalty_Message", COIN_PENALTY_MESSAGE))));
+        noCoinRewardMessage = new NoCoinMessageDecorator(new DefaultMessage(rewardConfig.getString("NoReward_Message", config.getString("System.Messages.NoReward_Message", NO_COIN_REWARD_MESSAGE))));
 
         addItemsToInventory = rewardConfig.getBoolean("AddItemsToInventory", false);
     }
