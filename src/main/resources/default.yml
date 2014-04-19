@@ -691,4 +691,4 @@ RewardSets:
   ChickenJockey:
     Drops:
     - passenger: zombie:1-1:100
-       vehicle: chicken
+      vehicle: chicken
