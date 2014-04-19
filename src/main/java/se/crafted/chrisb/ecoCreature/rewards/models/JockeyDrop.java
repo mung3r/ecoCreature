@@ -55,7 +55,7 @@ public class JockeyDrop extends EntityDrop
 
     public static List<EntityDrop> parseConfig(ConfigurationSection config)
     {
-        List<EntityDrop> drops = Collections.emptyList();
+        List<EntityDrop> drops = new ArrayList<EntityDrop>();
 
         if (config != null && config.getList("Drops") != null) {
             
@@ -66,7 +66,6 @@ public class JockeyDrop extends EntityDrop
                     String vehicleString = memoryConfig.getString("vehicle");
                     JockeyDrop drop = createJockeyDrop(passengerString, vehicleString);
                     if (drop != null) {
-                        drops = new ArrayList<EntityDrop>();
                         drops.add(drop);
                     }
                 }
