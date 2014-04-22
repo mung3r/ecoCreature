@@ -46,33 +46,39 @@ public final class RewardSourceFactory
     {
     }
 
-    public static AbstractRewardSource createSource(String name, ConfigurationSection config)
+    public static AbstractRewardSource createSetSource(String section, ConfigurationSection config)
+    {
+        return new SetRewardSource(section, config);
+    }
+
+    public static AbstractRewardSource createSource(String section, ConfigurationSection config)
     {
         AbstractRewardSource source = null;
-
-        if (CustomMaterialRewardType.fromName(name) != CustomMaterialRewardType.INVALID) {
-            source = createCustomMaterialSource(name, config);
+        String name = parseRewardName(section);
+        
+        if (CustomMaterialRewardType.fromName(name).isValid()) {
+            source = createCustomMaterialSource(section, config);
         }
         else if (Material.matchMaterial(name) != null) {
-            source = new MaterialRewardSource(config);
+            source = new MaterialRewardSource(section, config);
         }
-        else if (CustomEntityRewardType.fromName(name) != CustomEntityRewardType.INVALID) {
-            source = createCustomEntitySource(name, config);
+        else if (CustomEntityRewardType.fromName(name).isValid()) {
+            source = createCustomEntitySource(section, config);
         }
         else if (EntityType.fromName(name) != null) {
-            source = new EntityRewardSource(config);
+            source = new EntityRewardSource(section, config);
         }
-        else if (CustomRewardType.fromName(name) != CustomRewardType.INVALID) {
-            source = createCustomSource(name, config);
+        else if (CustomRewardType.fromName(name).isValid()) {
+            source = createCustomSource(section, config);
         }
-        else if (StreakRewardType.fromName(name) != StreakRewardType.INVALID) {
-            source = StreakRewardSource.createRewardSource(name, config);
+        else if (StreakRewardType.fromName(name).isValid()) {
+            source = StreakRewardSource.createRewardSource(section, config);
         }
-        else if (HeroesRewardType.fromName(name) != HeroesRewardType.INVALID) {
-            source = HeroesRewardSource.createRewardSource(name, config);
+        else if (HeroesRewardType.fromName(name).isValid()) {
+            source = HeroesRewardSource.createRewardSource(section, config);
         }
-        else if (McMMORewardType.fromName(name) != McMMORewardType.INVALID) {
-            source = McMMORewardSource.createRewardSource(name, config);
+        else if (McMMORewardType.fromName(name).isValid()) {
+            source = McMMORewardSource.createRewardSource(section, config);
         }
 
         if (source != null) {
@@ -81,55 +87,62 @@ public final class RewardSourceFactory
         return source;
     }
 
-    private static AbstractRewardSource createCustomMaterialSource(String name, ConfigurationSection config)
+    private static AbstractRewardSource createCustomMaterialSource(String section, ConfigurationSection config)
     {
         AbstractRewardSource source = null;
 
-        switch (CustomMaterialRewardType.fromName(name)) {
+        switch (CustomMaterialRewardType.fromName(parseRewardName(section))) {
             case LEGACY_SPAWNER:
-                source = new MaterialRewardSource(config);
+                source = new MaterialRewardSource(section, config);
                 break;
             default:
-                throw new IllegalArgumentException("Unsupported type: " + name);
+                throw new IllegalArgumentException("Unsupported type: " + section);
         }
         return source;
     }
 
-    private static AbstractRewardSource createCustomEntitySource(String name, ConfigurationSection config)
+    private static AbstractRewardSource createCustomEntitySource(String section, ConfigurationSection config)
     {
         AbstractRewardSource source = null;
 
-        switch (CustomEntityRewardType.fromName(name)) {
+        switch (CustomEntityRewardType.fromName(parseRewardName(section))) {
             case ANGRY_WOLF:
             case PLAYER:
             case POWERED_CREEPER:
             case WITHER_SKELETON:
             case ZOMBIE_VILLAGER:
-                source = new EntityRewardSource(config);
+                source = new EntityRewardSource(section, config);
                 break;
             default:
-                throw new IllegalArgumentException("Unsupported type: " + name);
+                throw new IllegalArgumentException("Unsupported type: " + section);
         }
         return source;
     }
 
-    private static AbstractRewardSource createCustomSource(String name, ConfigurationSection config)
+    private static AbstractRewardSource createCustomSource(String section, ConfigurationSection config)
     {
         AbstractRewardSource source = null;
 
-        switch (CustomRewardType.fromName(name)) {
+        switch (CustomRewardType.fromName(parseRewardName(section))) {
             case DEATH_PENALTY:
-                source = new DeathPenaltySource(config);
+                source = new DeathPenaltySource(config.getConfigurationSection(section));
                 break;
             case LEGACY_PVP:
-                source = new PVPRewardSource(config);
-                break;
-            case SET:
-                source = new SetRewardSource(config);
+                source = new PVPRewardSource(config.getConfigurationSection(section));
                 break;
             default:
-                throw new IllegalArgumentException("Unsupported type: " + name);
+                throw new IllegalArgumentException("Unsupported type: " + section);
         }
         return source;
+    }
+
+    public static String parseRewardName(String section)
+    {
+        String name = null;
+
+        if (section != null && section.lastIndexOf(".") > -1) {
+            name = section.substring(section.lastIndexOf(".") + 1);
+        }
+        return name;
     }
 }

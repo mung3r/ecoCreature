@@ -25,8 +25,8 @@ import java.util.Map;
 
 public enum McMMORewardType
 {
-    MCMMO_LEVELED("mcMMOLeveled"),
-    INVALID("__Invalid__");
+    MCMMO_LEVELED("mcMMOLeveled", true),
+    INVALID("__Invalid__", false);
 
     private static final Map<String, McMMORewardType> NAME_MAP = new HashMap<String, McMMORewardType>();
 
@@ -36,13 +36,18 @@ public enum McMMORewardType
         }
     }
 
-    private String name;
+    private final String name;
+    private final boolean valid;
 
-    McMMORewardType(String name)
+    McMMORewardType(String name, boolean valid)
     {
-        if (name != null) {
-            this.name = name.toLowerCase();
-        }
+        this.name = name.toLowerCase();
+        this.valid = valid;
+    }
+
+    public boolean isValid()
+    {
+        return valid;
     }
 
     public static McMMORewardType fromName(String name)

@@ -85,6 +85,7 @@ public class SpawnerDistanceRule extends AbstractRule
             SpawnerDistanceRule rule = new SpawnerDistanceRule();
             rule.setCanCampSpawner(config.getBoolean("System.Hunting.AllowCamping", false));
             rule.setClearDrops(config.getBoolean("System.Hunting.ClearCampDrops", true));
+            rule.setClearExpOrbs(config.getBoolean("System.Hunting.ClearCampExpOrbs", true));
             rule.setCampByDistance(config.getBoolean("System.Hunting.CampingByDistance", true));
             rule.setCampRadius(config.getInt("System.Hunting.CampRadius", CAMP_RADIUS));
             rule.setMessage(new DefaultMessage(config.getString("System.Messages.NoCampMessage", NO_CAMP_MESSAGE)));

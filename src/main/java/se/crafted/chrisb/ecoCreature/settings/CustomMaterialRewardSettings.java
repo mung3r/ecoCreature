@@ -75,14 +75,14 @@ public class CustomMaterialRewardSettings extends AbstractRewardSettings<CustomM
             for (String typeName : rewardTable.getKeys(false)) {
                 CustomMaterialRewardType type = CustomMaterialRewardType.fromName(typeName);
 
-                if (type != CustomMaterialRewardType.INVALID) {
-                    AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(typeName, rewardTable.getConfigurationSection(typeName)), config);
+                if (type.isValid()) {
+                    AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource("RewardTable." + typeName, config), config);
 
                     if (!sources.containsKey(type)) {
                         sources.put(type, new ArrayList<AbstractRewardSource>());
                     }
 
-                    sources.get(type).add(mergeSets(source, rewardTable, config.getConfigurationSection("RewardSets")));
+                    sources.get(type).add(mergeSets(source, "RewardTable." + typeName, config));
                 }
             }
         }

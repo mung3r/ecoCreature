@@ -17,24 +17,16 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.rewards.rules;
+package se.crafted.chrisb.ecoCreature.rewards.models;
 
-import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
-import se.crafted.chrisb.ecoCreature.messages.Message;
+import java.util.List;
 
-public interface Rule
+
+public interface JockeyReward
 {
-    boolean isBroken(EntityKilledEvent event);
+    boolean hasJockeyDrops();
 
-    boolean isClearDrops();
+    List<JockeyDrop> getJockeyDrops();
 
-    void setClearDrops(boolean clearDrops);
-
-    boolean isClearExpOrbs();
-
-    void setClearExpOrbs(boolean clearExpOrbs);
-
-    Message getMessage();
-
-    void setMessage(Message message);
+    void setJockeyDrops(List<JockeyDrop> jockeyDrops);
 }

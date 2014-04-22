@@ -33,4 +33,8 @@ public interface ItemReward
     Boolean isFixedDrops();
 
     void setFixedDrops(Boolean fixedDrops);
+
+    Boolean isAddItemsToInventory();
+
+    void setAddItemsToInventory(Boolean fixedDrops);
 }

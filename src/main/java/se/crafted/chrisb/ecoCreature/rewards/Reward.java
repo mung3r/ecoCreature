@@ -45,11 +45,13 @@ public class Reward
     private double gain;
     private Set<String> party;
     private boolean integerCurrency;
+    private boolean addItemsToInventory;
 
     private String name;
     private double coin;
     private List<ItemStack> itemDrops;
     private List<EntityType> entityDrops;
+    private List<EntityType> jockeyDrops;
     private Message message;
     private Map<MessageToken, String> parameters;
 
@@ -65,7 +67,8 @@ public class Reward
         coin = ZERO;
         itemDrops = Collections.emptyList();
         entityDrops = Collections.emptyList();
-        message = new DefaultMessage();
+        jockeyDrops = Collections.emptyList();
+        message = DefaultMessage.NO_MESSAGE;
         parameters = new HashMap<MessageToken, String>();
     }
 
@@ -119,6 +122,16 @@ public class Reward
         this.integerCurrency = integerCurrency;
     }
 
+    public boolean isAddItemsToInventory()
+    {
+        return addItemsToInventory;
+    }
+
+    public void setAddItemsToInventory(boolean addItemsToInventory)
+    {
+        this.addItemsToInventory = addItemsToInventory;
+    }
+
     public String getName()
     {
         return name;
@@ -141,7 +154,7 @@ public class Reward
 
     public boolean hasDrops()
     {
-        return !itemDrops.isEmpty() || !entityDrops.isEmpty();
+        return !itemDrops.isEmpty() || !entityDrops.isEmpty() || !jockeyDrops.isEmpty();
     }
 
     public List<ItemStack> getItemDrops()
@@ -162,6 +175,16 @@ public class Reward
     public void setEntityDrops(List<EntityType> entityDrops)
     {
         this.entityDrops = entityDrops;
+    }
+
+    public List<EntityType> getJockeyDrops()
+    {
+        return jockeyDrops;
+    }
+
+    public void setJockeyDrops(List<EntityType> jobkeyDrops)
+    {
+        this.jockeyDrops = jobkeyDrops;
     }
 
     public Message getMessage()

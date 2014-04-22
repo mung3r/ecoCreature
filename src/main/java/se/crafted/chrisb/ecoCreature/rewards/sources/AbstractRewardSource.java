@@ -45,8 +45,10 @@ import se.crafted.chrisb.ecoCreature.rewards.models.EntityReward;
 import se.crafted.chrisb.ecoCreature.rewards.models.ItemDrop;
 import se.crafted.chrisb.ecoCreature.rewards.models.ItemReward;
 import se.crafted.chrisb.ecoCreature.rewards.models.LoreDrop;
+import se.crafted.chrisb.ecoCreature.rewards.models.JockeyDrop;
+import se.crafted.chrisb.ecoCreature.rewards.models.JockeyReward;
 
-public abstract class AbstractRewardSource implements CoinReward, ItemReward, EntityReward
+public abstract class AbstractRewardSource implements CoinReward, ItemReward, EntityReward, JockeyReward
 {
     private static final String NO_COIN_REWARD_MESSAGE = "&7You slayed a &5<crt>&7 using a &3<itm>&7.";
     private static final String COIN_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.";
@@ -56,6 +58,7 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
     private CoinDrop coin;
     private List<AbstractItemDrop> itemDrops;
     private List<EntityDrop> entityDrops;
+    private List<JockeyDrop> jockeyDrops;
 
     private Message noCoinRewardMessage;
     private Message coinRewardMessage;
@@ -63,28 +66,39 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
 
     private boolean fixedDrops;
     private boolean integerCurrency;
+    private boolean addItemsToInventory;
 
     public AbstractRewardSource()
     {
     }
 
-    public AbstractRewardSource(ConfigurationSection config)
+    public AbstractRewardSource(String section, ConfigurationSection config)
     {
         if (config == null) {
             throw new IllegalArgumentException("Config cannot be null");
         }
-        name = config.getName();
+        ConfigurationSection rewardConfig = config.getConfigurationSection(section);
+        name = rewardConfig.getName();
 
         itemDrops = new ArrayList<AbstractItemDrop>();
-        itemDrops.addAll(ItemDrop.parseConfig(config));
-        itemDrops.addAll(BookDrop.parseConfig(config));
-        itemDrops.addAll(LoreDrop.parseConfig(config));
-        entityDrops = EntityDrop.parseConfig(config);
-        coin = CoinDrop.parseConfig(config);
+        itemDrops.addAll(ItemDrop.parseConfig(rewardConfig));
+        itemDrops.addAll(BookDrop.parseConfig(rewardConfig));
+        itemDrops.addAll(LoreDrop.parseConfig(rewardConfig));
+        entityDrops = EntityDrop.parseConfig(rewardConfig);
+        // TODO: hack - need to fix
+        jockeyDrops = new ArrayList<JockeyDrop>();
+        for (EntityDrop drop : JockeyDrop.parseConfig(rewardConfig)) {
+            if (drop instanceof JockeyDrop) {
+                jockeyDrops.add((JockeyDrop) drop);
+            }
+        }
+        coin = CoinDrop.parseConfig(rewardConfig);
 
-        coinRewardMessage = new CoinMessageDecorator(new DefaultMessage(config.getString("Reward_Message", COIN_REWARD_MESSAGE)));
-        coinPenaltyMessage = new CoinMessageDecorator(new DefaultMessage(config.getString("Penalty_Message", COIN_PENALTY_MESSAGE)));
-        noCoinRewardMessage = new NoCoinMessageDecorator(new DefaultMessage(config.getString("NoReward_Message", NO_COIN_REWARD_MESSAGE)));
+        coinRewardMessage = new CoinMessageDecorator(new DefaultMessage(rewardConfig.getString("Reward_Message", config.getString("System.Messages.Reward_Message", COIN_REWARD_MESSAGE))));
+        coinPenaltyMessage = new CoinMessageDecorator(new DefaultMessage(rewardConfig.getString("Penalty_Message", config.getString("System.Messages.Penalty_Message", COIN_PENALTY_MESSAGE))));
+        noCoinRewardMessage = new NoCoinMessageDecorator(new DefaultMessage(rewardConfig.getString("NoReward_Message", config.getString("System.Messages.NoReward_Message", NO_COIN_REWARD_MESSAGE))));
+
+        addItemsToInventory = rewardConfig.getBoolean("AddItemsToInventory", false);
     }
 
     public String getName()
@@ -157,6 +171,24 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
     }
 
     @Override
+    public boolean hasJockeyDrops()
+    {
+        return jockeyDrops != null && !jockeyDrops.isEmpty();
+    }
+
+    @Override
+    public List<JockeyDrop> getJockeyDrops()
+    {
+        return jockeyDrops;
+    }
+
+    @Override
+    public void setJockeyDrops(List<JockeyDrop> jockeyDrops)
+    {
+        this.jockeyDrops = jockeyDrops;
+    }
+
+    @Override
     public Message getNoCoinRewardMessage()
     {
         return noCoinRewardMessage;
@@ -216,12 +248,25 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         this.integerCurrency = integerCurrency;
     }
 
+    @Override
+    public Boolean isAddItemsToInventory()
+    {
+        return addItemsToInventory;
+    }
+
+    @Override
+    public void setAddItemsToInventory(Boolean addItemsToInventory)
+    {
+        this.addItemsToInventory = addItemsToInventory;
+    }
+
     public void merge(AbstractRewardSource source)
     {
         name = source.getName();
 
         itemDrops.addAll(source.getItemDrops());
         entityDrops.addAll(source.getEntityDrops());
+        jockeyDrops.addAll(source.getJockeyDrops());
         coin = source.hasCoin() ? source.getCoin() : coin;
 
         noCoinRewardMessage = source.getNoCoinRewardMessage() != null ? source.getNoCoinRewardMessage() : noCoinRewardMessage;
@@ -236,6 +281,7 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         reward.setName(name);
         reward.setItemDrops(getItemDropOutcomes());
         reward.setEntityDrops(getEntityDropOutcomes());
+        reward.setJockeyDrops(getJockeyDropOutcomes());
 
         if (hasCoin()) {
             reward.setCoin(coin.getOutcome());
@@ -252,6 +298,7 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         }
 
         reward.setIntegerCurrency(integerCurrency);
+        reward.setAddItemsToInventory(addItemsToInventory);
 
         return reward;
     }
@@ -285,6 +332,24 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
 
             for (EntityDrop drop : entityDrops) {
                 types.addAll(drop.getOutcome());
+            }
+        }
+
+        return types;
+    }
+
+    private List<EntityType> getJockeyDropOutcomes()
+    {
+        List<EntityType> types = Collections.emptyList();
+
+        if (jockeyDrops != null) {
+            types = new ArrayList<EntityType>();
+
+            for (EntityDrop drop : jockeyDrops) {
+                if (drop instanceof JockeyDrop) {
+                    JockeyDrop jockeyDrop = (JockeyDrop) drop;
+                    types.addAll(jockeyDrop.getOutcome());
+                }
             }
         }
 

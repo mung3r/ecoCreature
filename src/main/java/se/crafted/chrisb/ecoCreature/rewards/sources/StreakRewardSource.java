@@ -26,13 +26,14 @@ import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
 import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.settings.RewardSourceFactory;
 import se.crafted.chrisb.ecoCreature.settings.types.StreakRewardType;
 
 public class StreakRewardSource extends AbstractRewardSource
 {
-    public StreakRewardSource(ConfigurationSection config)
+    public StreakRewardSource(String section, ConfigurationSection config)
     {
-        super(config);
+        super(section, config);
     }
 
     @Override
@@ -49,17 +50,17 @@ public class StreakRewardSource extends AbstractRewardSource
         }
     }
 
-    public static AbstractRewardSource createRewardSource(String name, ConfigurationSection config)
+    public static AbstractRewardSource createRewardSource(String section, ConfigurationSection config)
     {
         AbstractRewardSource source = null;
 
-        switch (StreakRewardType.fromName(name)) {
+        switch (StreakRewardType.fromName(RewardSourceFactory.parseRewardName(section))) {
             case DEATH_STREAK:
             case KILL_STREAK:
-                source = new StreakRewardSource(config);
+                source = new StreakRewardSource(section, config);
                 break;
             default:
-                throw new IllegalArgumentException("Unsupported type: " + name);
+                throw new IllegalArgumentException("Unsupported type: " + section);
         }
         return source;
     }

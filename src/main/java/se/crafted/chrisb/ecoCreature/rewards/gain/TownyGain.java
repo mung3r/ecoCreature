@@ -24,15 +24,19 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
 public class TownyGain extends AbstractPlayerGain<String>
 {
+    private static final String IN_TOWN = "InTown";
+
     public TownyGain(Map<String, Double> multipliers)
     {
         super(multipliers, "gain.towny");
@@ -48,6 +52,23 @@ public class TownyGain extends AbstractPlayerGain<String>
     public double getGain(Player player)
     {
         return getMultiplier(TownyUniverse.getTownName(player.getLocation()));
+    }
+
+    @Override
+    protected double getMultiplier(String townName)
+    {
+        double multiplier = NO_GAIN;
+
+        if (StringUtils.isNotEmpty(townName)) {
+            if (getMultipliers().containsKey(townName)) {
+                multiplier = getMultipliers().get(townName);
+            } else if (getMultipliers().containsKey(IN_TOWN)) {
+                multiplier = getMultipliers().get(IN_TOWN);
+            }
+        }
+
+        LoggerUtil.getInstance().debug("Multiplier: " + multiplier);
+        return multiplier;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

@@ -77,13 +77,13 @@ public class MaterialRewardSettings extends AbstractRewardSettings<Material>
                 Material type = Material.matchMaterial(typeName);
 
                 if (type != null) {
-                    AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource(typeName, rewardTable.getConfigurationSection(typeName)), config);
+                    AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource("RewardTable." + typeName, config), config);
 
                     if (!sources.containsKey(type)) {
                         sources.put(type, new ArrayList<AbstractRewardSource>());
                     }
 
-                    sources.get(type).add(mergeSets(source, rewardTable.getConfigurationSection(typeName), config.getConfigurationSection("RewardSets")));
+                    sources.get(type).add(mergeSets(source, "RewardTable." + typeName, config));
                 }
             }
         }

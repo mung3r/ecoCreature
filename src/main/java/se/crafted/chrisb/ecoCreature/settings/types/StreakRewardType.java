@@ -25,9 +25,9 @@ import java.util.Map;
 
 public enum StreakRewardType
 {
-    DEATH_STREAK("DeathStreak"),
-    KILL_STREAK("KillStreak"),
-    INVALID("__Invalid__");
+    DEATH_STREAK("DeathStreak", true),
+    KILL_STREAK("KillStreak", true),
+    INVALID("__Invalid__", false);
 
     private static final Map<String, StreakRewardType> NAME_MAP = new HashMap<String, StreakRewardType>();
 
@@ -37,13 +37,18 @@ public enum StreakRewardType
         }
     }
 
-    private String name;
+    private final String name;
+    private final boolean valid;
 
-    StreakRewardType(String name)
+    StreakRewardType(String name, boolean valid)
     {
-        if (name != null) {
-            this.name = name.toLowerCase();
-        }
+        this.name = name.toLowerCase();
+        this.valid = valid;
+    }
+
+    public boolean isValid()
+    {
+        return valid;
     }
 
     public static StreakRewardType fromName(String name)

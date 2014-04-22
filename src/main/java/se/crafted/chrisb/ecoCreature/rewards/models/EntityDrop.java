@@ -154,15 +154,11 @@ public class EntityDrop
 
     private static List<EntityDrop> parseDrops(List<String> dropsList)
     {
-        List<EntityDrop> drops = Collections.emptyList();
+        List<EntityDrop> drops = new ArrayList<EntityDrop>();
 
         for (String dropString : dropsList) {
-            EntityType type = parseType(dropString);
-            if (type != null && !isAmbiguous(type)) {
-                EntityDrop drop = new EntityDrop(type);
-                drop.setRange(parseRange(dropString));
-                drop.setPercentage(parsePercentage(dropString));
-                drops = new ArrayList<EntityDrop>();
+            EntityDrop drop = createEntityDrop(dropString);
+            if (drop != null) {
                 drops.add(drop);
             }
         }
@@ -170,24 +166,42 @@ public class EntityDrop
         return drops;
     }
 
-    private static boolean isAmbiguous(EntityType type)
+    private static EntityDrop createEntityDrop(String dropString)
+    {
+        EntityDrop drop = null;
+
+        EntityType type = parseType(dropString);
+        if (type != null && !isAmbiguous(type)) {
+            drop = new EntityDrop(type);
+            drop.setRange(parseRange(dropString));
+            drop.setPercentage(parsePercentage(dropString));
+        }
+
+        return drop;
+    }
+
+    protected static boolean isAmbiguous(EntityType type)
     {
         return Material.matchMaterial(type.getName()) != null;
     }
 
-    private static EntityType parseType(String dropString)
+    protected static EntityType parseType(String dropString)
     {
-        String[] dropParts = dropString.split(":");
-        String[] itemParts = dropParts[0].split(",");
-        String[] itemSubParts = itemParts[0].split("\\.");
-
-        EntityType type = EntityType.fromName(itemSubParts[0]);
-        LoggerUtil.getInstance().debugTrue("No match for type: " + itemParts[0], type == null);
+        EntityType type = null;
+        
+        if (dropString != null) {
+            String[] dropParts = dropString.split(":");
+            String[] itemParts = dropParts[0].split(",");
+            String[] itemSubParts = itemParts[0].split("\\.");
+    
+            type = EntityType.fromName(itemSubParts[0]);
+            LoggerUtil.getInstance().debugTrue("No match for type: " + itemParts[0], type == null);
+        }
 
         return type;
     }
 
-    private static NumberRange parseRange(String dropString)
+    protected static NumberRange parseRange(String dropString)
     {
         String[] dropParts = dropString.split(":");
         String[] amountRange = dropParts[1].split("-");
@@ -206,7 +220,7 @@ public class EntityDrop
         return new NumberRange(min, max);
     }
 
-    private static double parsePercentage(String dropString)
+    protected static double parsePercentage(String dropString)
     {
         String[] dropParts = dropString.split(":");
 

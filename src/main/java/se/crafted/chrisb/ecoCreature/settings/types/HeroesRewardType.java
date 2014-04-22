@@ -25,9 +25,9 @@ import java.util.Map;
 
 public enum HeroesRewardType
 {
-    HERO_LEVELED("HeroLeveled"),
-    HERO_MASTERED("HeroMastered"),
-    INVALID("__Invalid__");
+    HERO_LEVELED("HeroLeveled", true),
+    HERO_MASTERED("HeroMastered", true),
+    INVALID("__Invalid__", false);
 
     private static final Map<String, HeroesRewardType> NAME_MAP = new HashMap<String, HeroesRewardType>();
 
@@ -37,13 +37,18 @@ public enum HeroesRewardType
         }
     }
 
-    private String name;
+    private final String name;
+    private final boolean valid;
 
-    HeroesRewardType(String name)
+    HeroesRewardType(String name, boolean valid)
     {
-        if (name != null) {
-            this.name = name.toLowerCase();
-        }
+        this.name = name.toLowerCase();
+        this.valid = valid;
+    }
+
+    public boolean isValid()
+    {
+        return valid;
     }
 
     public static HeroesRewardType fromName(String name)

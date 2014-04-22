@@ -27,14 +27,15 @@ import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
+import se.crafted.chrisb.ecoCreature.settings.RewardSourceFactory;
 import se.crafted.chrisb.ecoCreature.settings.types.McMMORewardType;
 
 public class McMMORewardSource extends AbstractRewardSource
 {
-    public McMMORewardSource(ConfigurationSection config)
+    public McMMORewardSource(String section, ConfigurationSection config)
     {
-        super(config);
-        setNoCoinRewardMessage(new DefaultMessage());
+        super(section, config);
+        setNoCoinRewardMessage(DefaultMessage.NO_MESSAGE);
     }
 
     @Override
@@ -48,16 +49,16 @@ public class McMMORewardSource extends AbstractRewardSource
         }
     }
 
-    public static AbstractRewardSource createRewardSource(String name, ConfigurationSection config)
+    public static AbstractRewardSource createRewardSource(String section, ConfigurationSection config)
     {
         AbstractRewardSource source = null;
 
-        switch (McMMORewardType.fromName(name)) {
+        switch (McMMORewardType.fromName(RewardSourceFactory.parseRewardName(section))) {
             case MCMMO_LEVELED:
-                source = new McMMORewardSource(config);
+                source = new McMMORewardSource(section, config);
                 break;
             default:
-                throw new IllegalArgumentException("Unsupported type: " + name);
+                throw new IllegalArgumentException("Unsupported type: " + section);
         }
         return source;
     }
