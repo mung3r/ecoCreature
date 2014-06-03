@@ -45,6 +45,7 @@ import se.crafted.chrisb.ecoCreature.rewards.rules.Rule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.SpawnerDistanceRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.SpawnerMobRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.TamedCreatureRule;
+import se.crafted.chrisb.ecoCreature.rewards.rules.TownyRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.UnderSeaLevelRule;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 
@@ -177,6 +178,7 @@ public abstract class AbstractRewardSettings<T>
         rules.addAll(SpawnerMobRule.parseConfig(config));
         rules.addAll(TamedCreatureRule.parseConfig(config));
         rules.addAll(UnderSeaLevelRule.parseConfig(config));
+        rules.addAll(TownyRule.parseConfig(config));
 
         return rules;
     }

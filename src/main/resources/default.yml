@@ -227,8 +227,10 @@ Gain:
   Towny:
     InTown:
       Amount: 0.1
+      ClearExpOrbs: true
     MyTownName1:
       Amount: 0.125
+      ClearExpOrbs: false
     MyTownName2:
       Amount: 0.5
   #
