@@ -38,6 +38,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.gain.BiomeGain;
+import se.crafted.chrisb.ecoCreature.rewards.gain.CronGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.EnvironmentGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.FactionsGain;
 import se.crafted.chrisb.ecoCreature.rewards.gain.PlayerGain;
@@ -184,6 +185,7 @@ public class PluginConfig
         gainMultipliers.addAll(MobArenaGain.parseConfig(config.getConfigurationSection("Gain.MobArena")));
         gainMultipliers.addAll(HeroesGain.parseConfig(config.getConfigurationSection("Gain.Heroes")));
         gainMultipliers.addAll(McMMOGain.parseConfig(config.getConfigurationSection("Gain.mcMMO")));
+        gainMultipliers.addAll(CronGain.parseConfig(config.getConfigurationSection("Gain.Cron")));
 
         return gainMultipliers;
     }

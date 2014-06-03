@@ -164,6 +164,13 @@ Gain:
     Dawn:
       Amount: 1.125
   #
+  # Multiply reward amount based on quartz cron expression (see http://tiny.cc/np8vgx)
+  Cron:
+    '* * 17 * * ?': # Every day at 5pm for an hour. Happy Hour!
+      Amount: 1.1
+    '* * * 1 1 ?': # All day on January 1st. New Year's Day!
+      Amount: 1.5
+  #
   # Multiply reward amount based on environment type
   Environment:
     Normal:
