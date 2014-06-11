@@ -20,8 +20,8 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -40,13 +40,13 @@ public class MurderedPetRule extends AbstractRule
         return ruleBroken;
     }
 
-    public static Set<Rule> parseConfig(ConfigurationSection config)
+    public static Map<Class<? extends AbstractRule>, Rule> parseConfig(ConfigurationSection system)
     {
-        Set<Rule> rules = Collections.emptySet();
+        Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
-        if (config != null) {
-            rules = new HashSet<Rule>();
-            rules.add(new MurderedPetRule());
+        if (system != null) {
+            rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+            rules.put(MurderedPetRule.class, new MurderedPetRule());
         }
 
         return rules;

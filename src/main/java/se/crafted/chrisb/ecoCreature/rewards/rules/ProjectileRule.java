@@ -20,8 +20,8 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -54,16 +54,16 @@ public class ProjectileRule extends AbstractRule
         return ruleBroken;
     }
 
-    public static Set<Rule> parseConfig(ConfigurationSection config)
+    public static Map<Class<? extends AbstractRule>, Rule> parseConfig(ConfigurationSection system)
     {
-        Set<Rule> rules = Collections.emptySet();
+        Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
-        if (config != null) {
+        if (system != null) {
             ProjectileRule rule = new ProjectileRule();
-            rule.setBowRewards(config.getBoolean("System.Hunting.BowRewards", true));
-            rule.setMessage(new DefaultMessage(config.getString("System.Messages.NoBowMessage", NO_BOW_REWARD_MESSAGE)));
-            rules = new HashSet<Rule>();
-            rules.add(rule);
+            rule.setBowRewards(system.getBoolean("Hunting.BowRewards", true));
+            rule.setMessage(new DefaultMessage(system.getString("Messages.NoBowMessage", NO_BOW_REWARD_MESSAGE)));
+            rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+            rules.put(ProjectileRule.class, rule);
         }
 
         return rules;

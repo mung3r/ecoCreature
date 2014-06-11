@@ -96,6 +96,10 @@ System:
     # CreativeModeRewards: allow rewards in creative mode
     # Default: false
     CreativeModeRewards: false
+    #
+    # ClearDropsOnHeroClass: clear drops for list of Hero classes
+    # Default: empty
+    ClearDropsOnHeroClass: []
     
   Messages:
     #
@@ -382,6 +386,9 @@ RewardTable:
     Coin_Percent: 50.0
     Drops:
     - 'blaze rod:1:75'
+    Hunting:
+       # Allow blaze rods
+      ClearCampDrops: false
   CaveSpider:
     Drops:
     - 'string:2:75'

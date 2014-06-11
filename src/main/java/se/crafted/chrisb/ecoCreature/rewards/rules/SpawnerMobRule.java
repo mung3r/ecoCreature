@@ -20,8 +20,8 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -65,19 +65,19 @@ public class SpawnerMobRule extends AbstractRule
         return ruleBroken;
     }
 
-    public static Set<Rule> parseConfig(ConfigurationSection config)
+    public static Map<Class<? extends AbstractRule>, Rule> parseConfig(ConfigurationSection system)
     {
-        Set<Rule> rules = Collections.emptySet();
+        Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
-        if (config != null) {
+        if (system != null) {
             SpawnerMobRule rule = new SpawnerMobRule();
-            rule.setCanCampSpawner(config.getBoolean("System.Hunting.AllowCamping", false));
-            rule.setClearDrops(config.getBoolean("System.Hunting.ClearCampDrops", true));
-            rule.setClearExpOrbs(config.getBoolean("System.Hunting.ClearCampExpOrbs", true));
-            rule.setCampByEntity(config.getBoolean("System.Hunting.CampingByEntity", false));
-            rule.setMessage(getNoCampMessage(config));
-            rules = new HashSet<Rule>();
-            rules.add(rule);
+            rule.setCanCampSpawner(system.getBoolean("Hunting.AllowCamping", false));
+            rule.setClearDrops(system.getBoolean("Hunting.ClearCampDrops", true));
+            rule.setClearExpOrbs(system.getBoolean("Hunting.ClearCampExpOrbs", true));
+            rule.setCampByEntity(system.getBoolean("Hunting.CampingByEntity", false));
+            rule.setMessage(getNoCampMessage(system));
+            rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+            rules.put(SpawnerMobRule.class, rule);
         }
 
         return rules;
@@ -85,8 +85,8 @@ public class SpawnerMobRule extends AbstractRule
 
     private static Message getNoCampMessage(ConfigurationSection config)
     {
-        NoCampMessageDecorator message = new NoCampMessageDecorator(new DefaultMessage(config.getString("System.Messages.NoCampMessage", NO_CAMP_MESSAGE)));
-        message.setSpawnerCampMessageEnabled(config.getBoolean("System.Messages.Spawner", false));
+        NoCampMessageDecorator message = new NoCampMessageDecorator(new DefaultMessage(config.getString("Messages.NoCampMessage", NO_CAMP_MESSAGE)));
+        message.setSpawnerCampMessageEnabled(config.getBoolean("Messages.Spawner", false));
         return message;
     }
 }

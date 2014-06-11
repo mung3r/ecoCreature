@@ -22,6 +22,7 @@ package se.crafted.chrisb.ecoCreature.rewards.sources;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -47,6 +48,8 @@ import se.crafted.chrisb.ecoCreature.rewards.models.ItemReward;
 import se.crafted.chrisb.ecoCreature.rewards.models.LoreDrop;
 import se.crafted.chrisb.ecoCreature.rewards.models.JockeyDrop;
 import se.crafted.chrisb.ecoCreature.rewards.models.JockeyReward;
+import se.crafted.chrisb.ecoCreature.rewards.rules.AbstractRule;
+import se.crafted.chrisb.ecoCreature.rewards.rules.Rule;
 
 public abstract class AbstractRewardSource implements CoinReward, ItemReward, EntityReward, JockeyReward
 {
@@ -68,8 +71,11 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
     private boolean integerCurrency;
     private boolean addItemsToInventory;
 
+    private Map<Class<? extends AbstractRule>, Rule> huntingRules;
+
     public AbstractRewardSource()
     {
+        huntingRules = Collections.emptyMap();
     }
 
     public AbstractRewardSource(String section, ConfigurationSection config)
@@ -260,6 +266,16 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         this.addItemsToInventory = addItemsToInventory;
     }
 
+    public Map<Class<? extends AbstractRule>, Rule> getHuntingRules()
+    {
+        return huntingRules;
+    }
+
+    public void setHuntingRules(Map<Class<? extends AbstractRule>, Rule> huntingRules)
+    {
+        this.huntingRules = huntingRules;
+    }
+
     public void merge(AbstractRewardSource source)
     {
         name = source.getName();
@@ -272,6 +288,8 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         noCoinRewardMessage = source.getNoCoinRewardMessage() != null ? source.getNoCoinRewardMessage() : noCoinRewardMessage;
         coinRewardMessage = source.getCoinRewardMessage() != null ? source.getCoinRewardMessage() : coinRewardMessage;
         coinPenaltyMessage = source.getCoinPenaltyMessage() != null ? source.getCoinPenaltyMessage() : coinPenaltyMessage;
+
+        huntingRules.putAll(source.getHuntingRules());
     }
 
     public Reward createReward(Event event)

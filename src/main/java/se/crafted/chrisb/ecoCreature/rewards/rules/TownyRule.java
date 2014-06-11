@@ -20,8 +20,8 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -50,14 +50,14 @@ public class TownyRule extends AbstractRule
         return DependencyUtils.hasTowny() && townName.equals(TownyUniverse.getTownName(event.getKiller().getLocation())) && isClearExpOrbs();
     }
 
-    public static Set<Rule> parseConfig(ConfigurationSection config)
+    public static Map<Class<? extends AbstractRule>, Rule> parseConfig(ConfigurationSection gain)
     {
-        Set<Rule> rules = Collections.emptySet();
-        ConfigurationSection townyConfig = config.getConfigurationSection("Gain.Towny");
+        Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
+        ConfigurationSection townyConfig = gain.getConfigurationSection("Towny");
 
         if (townyConfig != null) {
-            boolean defaultClearExpOrbs = config.getBoolean("Gain.Towny.InTown.ClearExpOrbs", false);
-            rules = new HashSet<Rule>();
+            boolean defaultClearExpOrbs = gain.getBoolean("Towny.InTown.ClearExpOrbs", false);
+            rules = new HashMap<Class<? extends AbstractRule>, Rule>();
 
             for (String townName : townyConfig.getKeys(false)) {
                 if ("InTown".equals(townName)) {
@@ -70,7 +70,7 @@ public class TownyRule extends AbstractRule
                     TownyRule rule = new TownyRule();
                     rule.setTownName(townName);
                     rule.setClearExpOrbs(townConfig.getBoolean("ClearExpOrbs", defaultClearExpOrbs));
-                    rules.add(rule);
+                    rules.put(TownyRule.class, rule);
                 }
             }
         }

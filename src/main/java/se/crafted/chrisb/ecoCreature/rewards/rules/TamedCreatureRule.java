@@ -20,8 +20,8 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -51,15 +51,15 @@ public class TamedCreatureRule extends AbstractRule
         return ruleBroken;
     }
 
-    public static Set<Rule> parseConfig(ConfigurationSection config)
+    public static Map<Class<? extends AbstractRule>, Rule> parseConfig(ConfigurationSection config)
     {
-        Set<Rule> rules = Collections.emptySet();
+        Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
         if (config != null) {
             TamedCreatureRule rule = new TamedCreatureRule();
-            rule.setWolverineMode(config.getBoolean("System.Hunting.WolverineMode", true));
-            rules = new HashSet<Rule>();
-            rules.add(rule);
+            rule.setWolverineMode(config.getBoolean("Hunting.WolverineMode", true));
+            rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+            rules.put(TamedCreatureRule.class, rule);
         }
 
         return rules;

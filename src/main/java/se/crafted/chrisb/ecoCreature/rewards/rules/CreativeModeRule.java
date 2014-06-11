@@ -20,8 +20,8 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.GameMode;
 import org.bukkit.configuration.ConfigurationSection;
@@ -52,15 +52,15 @@ public class CreativeModeRule extends AbstractRule
         return ruleBroken;
     }
 
-    public static Set<Rule> parseConfig(ConfigurationSection config)
+    public static Map<Class<? extends AbstractRule>, Rule> parseConfig(ConfigurationSection system)
     {
-        Set<Rule> rules = Collections.emptySet();
+        Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
-        if (config != null) {
+        if (system != null) {
             CreativeModeRule rule = new CreativeModeRule();
-            rule.setCreativeModeRewards(config.getBoolean("System.Hunting.CreativeModeRewards", false));
-            rules = new HashSet<Rule>();
-            rules.add(rule);
+            rule.setCreativeModeRewards(system.getBoolean("Hunting.CreativeModeRewards", false));
+            rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+            rules.put(CreativeModeRule.class, rule);
         }
 
         return rules;

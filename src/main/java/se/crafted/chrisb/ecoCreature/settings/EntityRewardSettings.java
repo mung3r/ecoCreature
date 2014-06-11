@@ -48,7 +48,8 @@ public class EntityRewardSettings extends AbstractRewardSettings<EntityType>
     private boolean hasRewardSource(EntityKilledEvent event)
     {
         LivingEntity entity = event.getEntity();
-        return hasRewardSource(entity.getType()) && getRewardSource(entity.getType()).hasPermission(event.getKiller()) && !isRuleBroken(event);
+        return hasRewardSource(entity.getType()) && getRewardSource(entity.getType()).hasPermission(event.getKiller())
+                && !isRuleBroken(event, getRewardSource(entity.getType()).getHuntingRules().values());
     }
 
     @Override
@@ -72,6 +73,9 @@ public class EntityRewardSettings extends AbstractRewardSettings<EntityType>
 
                 if (type != null) {
                     AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource("RewardTable." + typeName, config), config);
+                    source.setHuntingRules(loadHuntingRules(config.getConfigurationSection("System")));
+                    source.getHuntingRules().putAll(loadHuntingRules(config.getConfigurationSection("RewardTable." + typeName)));
+                    source.getHuntingRules().putAll(loadGainRules(config.getConfigurationSection("Gain")));
 
                     if (!sources.containsKey(type)) {
                         sources.put(type, new ArrayList<AbstractRewardSource>());
@@ -83,7 +87,6 @@ public class EntityRewardSettings extends AbstractRewardSettings<EntityType>
         }
 
         EntityRewardSettings settings = new EntityRewardSettings(sources);
-        settings.setHuntingRules(loadHuntingRules(config));
         return settings;
     }
 }

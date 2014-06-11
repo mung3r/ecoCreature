@@ -61,7 +61,8 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings<CustomEnt
     private boolean hasRewardSource(EntityKilledEvent event)
     {
         CustomEntityRewardType type = CustomEntityRewardType.fromEntity(event.getEntity());
-        return hasRewardSource(type) && getRewardSource(type).hasPermission(event.getKiller()) && !isRuleBroken(event);
+        return hasRewardSource(type) && getRewardSource(type).hasPermission(event.getKiller())
+                && !isRuleBroken(event, getRewardSource(type).getHuntingRules().values());
     }
 
     @Override
@@ -93,6 +94,9 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings<CustomEnt
 
                 if (type.isValid()) {
                     AbstractRewardSource source = configureRewardSource(RewardSourceFactory.createSource("RewardTable." + typeName, config), config);
+                    source.setHuntingRules(loadHuntingRules(config.getConfigurationSection("System")));
+                    source.getHuntingRules().putAll(loadHuntingRules(config.getConfigurationSection("RewardTable." + typeName)));
+                    source.getHuntingRules().putAll(loadGainRules(config.getConfigurationSection("Gain")));
 
                     if (!sources.containsKey(type)) {
                         sources.put(type, new ArrayList<AbstractRewardSource>());
@@ -104,7 +108,6 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings<CustomEnt
         }
 
         CustomEntityRewardSettings settings = new CustomEntityRewardSettings(sources);
-        settings.setHuntingRules(loadHuntingRules(config));
         return settings;
     }
 }

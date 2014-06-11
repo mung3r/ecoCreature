@@ -19,12 +19,12 @@
  */
 package se.crafted.chrisb.ecoCreature.settings;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
@@ -36,8 +36,10 @@ import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
+import se.crafted.chrisb.ecoCreature.rewards.rules.AbstractRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.BattleArenaRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.CreativeModeRule;
+import se.crafted.chrisb.ecoCreature.rewards.rules.HeroClassNoDropRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.MobArenaRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.MurderedPetRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.ProjectileRule;
@@ -52,24 +54,17 @@ import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 public abstract class AbstractRewardSettings<T>
 {
     private Map<T, List<AbstractRewardSource>> sources;
-    private Set<Rule> huntingRules;
 
     private static Random random = new Random();
 
     public AbstractRewardSettings(Map<T, List<AbstractRewardSource>> sources)
     {
         this.sources = sources;
-        huntingRules = Collections.emptySet();
     }
 
     public Map<T, List<AbstractRewardSource>> getSources()
     {
         return sources;
-    }
-
-    public void setHuntingRules(Set<Rule> huntingRules)
-    {
-        this.huntingRules = huntingRules;
     }
 
     public abstract boolean hasRewardSource(Event event);
@@ -89,9 +84,9 @@ public abstract class AbstractRewardSettings<T>
         return source;
     }
 
-    protected boolean isRuleBroken(EntityKilledEvent event)
+    protected boolean isRuleBroken(EntityKilledEvent event, Collection<Rule> rules)
     {
-        for (Rule rule : huntingRules) {
+        for (Rule rule : rules) {
             if (rule.isBroken(event)) {
                 if (rule.isClearDrops()) {
                     event.getDrops().clear();
@@ -127,6 +122,7 @@ public abstract class AbstractRewardSettings<T>
             for (String setName : sets) {
                 if (rewardSets.getConfigurationSection(setName) != null) {
                     AbstractRewardSource setSource = RewardSourceFactory.createSetSource(setName, rewardSets);
+                    setSource.setHuntingRules(loadHuntingRules(rewardSets.getConfigurationSection(setName)));
                     setSource.merge(newSource);
                     newSource = setSource;
                 }
@@ -165,20 +161,29 @@ public abstract class AbstractRewardSettings<T>
         return message;
     }
 
-    protected static Set<Rule> loadHuntingRules(ConfigurationSection config)
+    protected static Map<Class<? extends AbstractRule>, Rule> loadHuntingRules(ConfigurationSection config)
     {
-        Set<Rule> rules = new HashSet<Rule>();
+        Map<Class<? extends AbstractRule>, Rule> rules = new HashMap<Class<? extends AbstractRule>, Rule>();
 
-        rules.addAll(CreativeModeRule.parseConfig(config));
-        rules.addAll(MobArenaRule.parseConfig(config));
-        rules.addAll(BattleArenaRule.parseConfig(config));
-        rules.addAll(MurderedPetRule.parseConfig(config));
-        rules.addAll(ProjectileRule.parseConfig(config));
-        rules.addAll(SpawnerDistanceRule.parseConfig(config));
-        rules.addAll(SpawnerMobRule.parseConfig(config));
-        rules.addAll(TamedCreatureRule.parseConfig(config));
-        rules.addAll(UnderSeaLevelRule.parseConfig(config));
-        rules.addAll(TownyRule.parseConfig(config));
+        rules.putAll(CreativeModeRule.parseConfig(config));
+        rules.putAll(MobArenaRule.parseConfig(config));
+        rules.putAll(BattleArenaRule.parseConfig(config));
+        rules.putAll(MurderedPetRule.parseConfig(config));
+        rules.putAll(ProjectileRule.parseConfig(config));
+        rules.putAll(SpawnerDistanceRule.parseConfig(config));
+        rules.putAll(SpawnerMobRule.parseConfig(config));
+        rules.putAll(TamedCreatureRule.parseConfig(config));
+        rules.putAll(UnderSeaLevelRule.parseConfig(config));
+        rules.putAll(HeroClassNoDropRule.parseConfig(config));
+
+        return rules;
+    }
+
+    protected static Map<Class<? extends AbstractRule>, Rule> loadGainRules(ConfigurationSection config)
+    {
+        Map<Class<? extends AbstractRule>, Rule> rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+
+        rules.putAll(TownyRule.parseConfig(config));
 
         return rules;
     }

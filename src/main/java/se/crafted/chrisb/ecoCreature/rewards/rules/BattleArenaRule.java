@@ -20,8 +20,8 @@
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import mc.alk.arena.BattleArena;
 
@@ -54,15 +54,15 @@ public class BattleArenaRule extends AbstractRule
         return ruleBroken;
     }
 
-    public static Set<Rule> parseConfig(ConfigurationSection config)
+    public static Map<Class<? extends AbstractRule>, Rule> parseConfig(ConfigurationSection system)
     {
-        Set<Rule> rules = Collections.emptySet();
+        Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
-        if (config != null) {
+        if (system != null) {
             BattleArenaRule rule = new BattleArenaRule();
-            rule.setBattleArenaRewards(config.getBoolean("System.Hunting.BattleArenaRewards"));
-            rules = new HashSet<Rule>();
-            rules.add(rule);
+            rule.setBattleArenaRewards(system.getBoolean("Hunting.BattleArenaRewards"));
+            rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+            rules.put(BattleArenaRule.class, rule);
         }
 
         return rules;
