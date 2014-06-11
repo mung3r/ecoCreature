@@ -27,10 +27,10 @@ import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 
+import com.massivecraft.factions.Rel;
+
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
-
-import com.massivecraft.factions.struct.Rel;
 
 public class FactionsGain extends AbstractFactionsGain<Rel>
 {

@@ -23,10 +23,14 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import com.massivecraft.factions.Rel;
+import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.factions.util.RelationUtil;
+import com.massivecraft.mcore.ps.PS;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
+import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 
 public abstract class AbstractFactionsGain<T> extends AbstractPlayerGain<T>
 {
@@ -44,8 +48,10 @@ public abstract class AbstractFactionsGain<T> extends AbstractPlayerGain<T>
     @Override
     public double getGain(Player player)
     {
-        FPlayer fPlayer = FPlayers.i.get(player);
-        return fPlayer != null && getMultipliers().containsKey(fPlayer.getRelationToLocation()) ?
-                getMultipliers().get(fPlayer.getRelationToLocation()) : NO_GAIN;
+        UPlayer uPlayer = UPlayer.get(player);
+        Faction faction = BoardColls.get().getFactionAt(PS.valueOf(player.getLocation()));
+        Rel rel = RelationUtil.getRelationOfThatToMe(faction, uPlayer);
+        return uPlayer != null && getMultipliers().containsKey(rel) ?
+                getMultipliers().get(rel) : NO_GAIN;
     }
 }
