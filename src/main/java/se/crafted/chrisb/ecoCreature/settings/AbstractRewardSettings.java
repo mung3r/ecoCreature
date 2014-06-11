@@ -93,6 +93,7 @@ public abstract class AbstractRewardSettings<T>
                 MessageHandler message = new MessageHandler(rule.getMessage(), parameters);
                 message.send(rule.getKiller(event));
 
+                LoggerUtil.getInstance().debug("Rule " + rule.getClass().getName() + " broken");
                 return true;
             }
         }

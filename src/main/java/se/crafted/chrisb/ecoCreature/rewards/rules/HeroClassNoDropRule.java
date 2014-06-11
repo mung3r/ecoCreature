@@ -51,7 +51,7 @@ public class HeroClassNoDropRule extends AbstractPlayerRule
             for (String className : classNames) {
                 if (DependencyUtils.getHeroes().getCharacterManager().getHero(event.getVictim()).getHeroClass().getName().equals(className)) {
                     ruleBroken = true;
-                    LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " of hero class " + className, ruleBroken);
+                    LoggerUtil.getInstance().debug("No reward for " + event.getKiller().getName() + " of hero class " + className);
                     break;
                 }
             }
