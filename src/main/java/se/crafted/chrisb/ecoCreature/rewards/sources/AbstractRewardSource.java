@@ -80,6 +80,8 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
 
     public AbstractRewardSource(String section, ConfigurationSection config)
     {
+        this();
+
         if (config == null) {
             throw new IllegalArgumentException("Config cannot be null");
         }
