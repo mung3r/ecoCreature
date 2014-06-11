@@ -31,7 +31,7 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
-public class BattleArenaRule extends AbstractRule
+public class BattleArenaRule extends AbstractEntityRule
 {
     private boolean battleArenaRewards;
 
@@ -46,7 +46,7 @@ public class BattleArenaRule extends AbstractRule
     }
 
     @Override
-    public boolean isBroken(EntityKilledEvent event)
+    protected boolean isBroken(EntityKilledEvent event)
     {
         boolean ruleBroken = !battleArenaRewards && DependencyUtils.hasBattleArena() && BattleArena.inArena(event.getKiller());
         LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " in BattleArena.", ruleBroken);

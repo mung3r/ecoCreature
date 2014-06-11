@@ -30,7 +30,7 @@ import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 
-public class UnderSeaLevelRule extends AbstractRule
+public class UnderSeaLevelRule extends AbstractEntityRule
 {
     private static final String NO_UNDER_SEA_LEVEL_MESSAGE = "&7You find no rewards on this creature.";
 
@@ -47,7 +47,7 @@ public class UnderSeaLevelRule extends AbstractRule
     }
 
     @Override
-    public boolean isBroken(EntityKilledEvent event)
+    protected boolean isBroken(EntityKilledEvent event)
     {
         boolean ruleBroken = !huntUnderSeaLevel && EntityUtils.isUnderSeaLevel(event.getKiller());
         LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " killing under sea level.", ruleBroken);

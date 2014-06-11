@@ -19,12 +19,18 @@
  */
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
-import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+
 import se.crafted.chrisb.ecoCreature.messages.Message;
 
 public interface Rule
 {
-    boolean isBroken(EntityKilledEvent event);
+    boolean isBroken(Event event);
+
+    void handleDrops(Event event);
+
+    Player getKiller(Event event);
 
     boolean isClearDrops();
 

@@ -29,7 +29,7 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
-public class MobArenaRule extends AbstractRule
+public class MobArenaRule extends AbstractEntityRule
 {
     private boolean mobArenaRewards;
 
@@ -44,7 +44,7 @@ public class MobArenaRule extends AbstractRule
     }
 
     @Override
-    public boolean isBroken(EntityKilledEvent event)
+    protected boolean isBroken(EntityKilledEvent event)
     {
         boolean ruleBroken = !mobArenaRewards && DependencyUtils.hasMobArena() && DependencyUtils.getMobArenaHandler().isPlayerInArena(event.getKiller());
         LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " in Mob Arena.", ruleBroken);

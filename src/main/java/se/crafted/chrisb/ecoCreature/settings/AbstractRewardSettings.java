@@ -30,7 +30,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
-import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.CoinMessageDecorator;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
@@ -84,20 +83,15 @@ public abstract class AbstractRewardSettings<T>
         return source;
     }
 
-    protected boolean isRuleBroken(EntityKilledEvent event, Collection<Rule> rules)
+    protected boolean isRuleBroken(Event event, Collection<Rule> rules)
     {
         for (Rule rule : rules) {
             if (rule.isBroken(event)) {
-                if (rule.isClearDrops()) {
-                    event.getDrops().clear();
-                }
-                if (rule.isClearDrops() || rule.isClearExpOrbs()) {
-                    event.setDroppedExp(0);
-                }
+                rule.handleDrops(event);
 
                 Map<MessageToken, String> parameters = Collections.emptyMap();
                 MessageHandler message = new MessageHandler(rule.getMessage(), parameters);
-                message.send(event.getKiller());
+                message.send(rule.getKiller(event));
 
                 return true;
             }

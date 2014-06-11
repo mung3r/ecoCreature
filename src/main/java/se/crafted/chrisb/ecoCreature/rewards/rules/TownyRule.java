@@ -30,7 +30,7 @@ import com.palmergames.bukkit.towny.object.TownyUniverse;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
-public class TownyRule extends AbstractRule
+public class TownyRule extends AbstractEntityRule
 {
     private String townName;
 
@@ -45,7 +45,7 @@ public class TownyRule extends AbstractRule
     }
 
     @Override
-    public boolean isBroken(EntityKilledEvent event)
+    protected boolean isBroken(EntityKilledEvent event)
     {
         return DependencyUtils.hasTowny() && townName.equals(TownyUniverse.getTownName(event.getKiller().getLocation())) && isClearExpOrbs();
     }

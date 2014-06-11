@@ -29,9 +29,9 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
-import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
+import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 
-public class HeroClassNoDropRule extends AbstractRule
+public class HeroClassNoDropRule extends AbstractPlayerRule
 {
     private List<String> classNames;
 
@@ -43,13 +43,13 @@ public class HeroClassNoDropRule extends AbstractRule
     }
 
     @Override
-    public boolean isBroken(EntityKilledEvent event)
+    protected boolean isBroken(PlayerKilledEvent event)
     {
         boolean ruleBroken = false;
 
         if (DependencyUtils.hasHeroes()) {
             for (String className : classNames) {
-                if (DependencyUtils.getHeroes().getCharacterManager().getHero(event.getKiller()).getHeroClass().getName().equals(className)) {
+                if (DependencyUtils.getHeroes().getCharacterManager().getHero(event.getVictim()).getHeroClass().getName().equals(className)) {
                     ruleBroken = true;
                     LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " of hero class " + className, ruleBroken);
                     break;

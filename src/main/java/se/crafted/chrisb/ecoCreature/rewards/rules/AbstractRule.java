@@ -19,7 +19,8 @@
  */
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
-import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
+import org.bukkit.event.Event;
+
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 
@@ -48,7 +49,7 @@ public abstract class AbstractRule implements Rule
     }
 
     @Override
-    public abstract boolean isBroken(EntityKilledEvent event);
+    public abstract void handleDrops(Event event);
 
     @Override
     public boolean isClearDrops()

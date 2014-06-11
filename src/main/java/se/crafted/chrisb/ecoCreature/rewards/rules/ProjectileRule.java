@@ -29,7 +29,7 @@ import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 
-public class ProjectileRule extends AbstractRule
+public class ProjectileRule extends AbstractEntityRule
 {
     private static final String NO_BOW_REWARD_MESSAGE = "&7You find no rewards on this creature.";
 
@@ -46,7 +46,7 @@ public class ProjectileRule extends AbstractRule
     }
 
     @Override
-    public boolean isBroken(EntityKilledEvent event)
+    protected boolean isBroken(EntityKilledEvent event)
     {
         boolean ruleBroken = !bowRewards && event.isProjectileKill();
         LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " using projectiles.", ruleBroken);

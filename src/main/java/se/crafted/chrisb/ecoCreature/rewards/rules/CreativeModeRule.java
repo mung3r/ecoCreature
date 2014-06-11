@@ -29,7 +29,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
-public class CreativeModeRule extends AbstractRule
+public class CreativeModeRule extends AbstractEntityRule
 {
     private boolean creativeModeRewards;
 
@@ -44,7 +44,7 @@ public class CreativeModeRule extends AbstractRule
     }
 
     @Override
-    public boolean isBroken(EntityKilledEvent event)
+    protected boolean isBroken(EntityKilledEvent event)
     {
         boolean ruleBroken = !creativeModeRewards && event.getKiller().getGameMode() == GameMode.CREATIVE;
         LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " in creative mode.", ruleBroken);

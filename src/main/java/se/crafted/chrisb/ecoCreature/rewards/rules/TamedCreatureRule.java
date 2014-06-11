@@ -28,7 +28,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
-public class TamedCreatureRule extends AbstractRule
+public class TamedCreatureRule extends AbstractEntityRule
 {
     private boolean wolverineMode;
 
@@ -43,7 +43,7 @@ public class TamedCreatureRule extends AbstractRule
     }
 
     @Override
-    public boolean isBroken(EntityKilledEvent event)
+    protected boolean isBroken(EntityKilledEvent event)
     {
         boolean ruleBroken = !wolverineMode && event.isTamedCreatureKill();
         LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " using tamed creatures.", ruleBroken);

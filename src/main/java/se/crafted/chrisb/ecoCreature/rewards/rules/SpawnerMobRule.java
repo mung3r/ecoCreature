@@ -32,7 +32,7 @@ import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.NoCampMessageDecorator;
 import se.crafted.chrisb.ecoCreature.settings.SpawnerMobTracking;
 
-public class SpawnerMobRule extends AbstractRule
+public class SpawnerMobRule extends AbstractEntityRule
 {
     private static final String NO_CAMP_MESSAGE = "&7You find no rewards camping monster spawners.";
 
@@ -56,7 +56,7 @@ public class SpawnerMobRule extends AbstractRule
     }
 
     @Override
-    public boolean isBroken(EntityKilledEvent event)
+    protected boolean isBroken(EntityKilledEvent event)
     {
         SpawnerMobTracking tracking = event.getSpawnerMobTracking();
         boolean ruleBroken = !canCampSpawner && campByEntity && tracking.isSpawnerMob(event.getEntity());

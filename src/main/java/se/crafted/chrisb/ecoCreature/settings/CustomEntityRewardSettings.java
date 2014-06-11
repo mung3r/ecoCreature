@@ -55,7 +55,8 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings<CustomEnt
 
     private boolean hasRewardSource(PlayerKilledEvent event)
     {
-        return hasRewardSource(CustomEntityRewardType.PLAYER) && getRewardSource(CustomEntityRewardType.PLAYER).hasPermission(event.getKiller());
+        return hasRewardSource(CustomEntityRewardType.PLAYER) && getRewardSource(CustomEntityRewardType.PLAYER).hasPermission(event.getKiller())
+                && !isRuleBroken(event, getRewardSource(CustomEntityRewardType.PLAYER).getHuntingRules().values());
     }
 
     private boolean hasRewardSource(EntityKilledEvent event)

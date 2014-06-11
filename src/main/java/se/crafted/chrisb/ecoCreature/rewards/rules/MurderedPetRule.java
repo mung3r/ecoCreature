@@ -29,10 +29,10 @@ import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
-public class MurderedPetRule extends AbstractRule
+public class MurderedPetRule extends AbstractEntityRule
 {
     @Override
-    public boolean isBroken(EntityKilledEvent event)
+    protected boolean isBroken(EntityKilledEvent event)
     {
         boolean ruleBroken = EntityUtils.isOwner(event.getKiller(), event.getEntity());
         LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " murdering pets.", ruleBroken);
