@@ -26,24 +26,46 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.Rel;
+import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.factions.util.RelationUtil;
+import com.massivecraft.mcore.ps.PS;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-public class FactionsGain extends AbstractFactionsGain<Rel>
+public class FactionsGain extends AbstractPlayerGain<Rel>
 {
     public FactionsGain(Map<Rel, Double> multipliers)
     {
-        super(multipliers);
+        super(multipliers, "gain.factions");
+    }
+
+    @Override
+    public boolean hasPermission(Player player)
+    {
+        return super.hasPermission(player) && DependencyUtils.hasFactions();
+    }
+
+    @Override
+    public double getGain(Player player)
+    {
+        UPlayer uPlayer = UPlayer.get(player);
+        Faction faction = BoardColls.get().getFactionAt(PS.valueOf(player.getLocation()));
+        Rel rel = RelationUtil.getRelationOfThatToMe(faction, uPlayer);
+        return uPlayer != null && getMultipliers().containsKey(rel) ?
+                getMultipliers().get(rel) : NO_GAIN;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)
     {
         Set<PlayerGain> gain = Collections.emptySet();
 
-        if (config != null && DependencyUtils.hasFactionsBeta()) {
+        if (config != null && DependencyUtils.hasFactions()) {
             Map<Rel, Double> multipliers = new HashMap<Rel, Double>();
             for (String relation : config.getKeys(false)) {
                 try {
