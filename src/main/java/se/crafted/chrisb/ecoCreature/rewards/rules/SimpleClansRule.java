@@ -29,6 +29,7 @@ import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 
 public class SimpleClansRule extends AbstractPlayerRule
@@ -50,11 +51,11 @@ public class SimpleClansRule extends AbstractPlayerRule
     {
         boolean ruleBroken = false;
 
-        if (DependencyUtils.hasSimpleClans())
-        {
+        if (DependencyUtils.hasSimpleClans()) {
             ClanManager clanManager = SimpleClans.getInstance().getClanManager();
             ClanPlayer killer = clanManager.getClanPlayer(event.getKiller());
             ruleBroken = killer != null && !killer.isRival(event.getVictim());
+            LoggerUtil.getInstance().debug(event.getVictim().getName() + " is a clan rival of " + event.getKiller().getName() + ": " + ruleBroken);
         }
 
         return ruleBroken;
