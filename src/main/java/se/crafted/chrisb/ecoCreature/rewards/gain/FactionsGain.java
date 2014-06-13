@@ -38,9 +38,9 @@ import com.massivecraft.mcore.ps.PS;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
-public class FactionsGain extends AbstractPlayerGain<Rel>
+public class FactionsGain extends AbstractPlayerGain<String>
 {
-    public FactionsGain(Map<Rel, Double> multipliers)
+    public FactionsGain(Map<String, Double> multipliers)
     {
         super(multipliers, "gain.factions");
     }
@@ -57,8 +57,8 @@ public class FactionsGain extends AbstractPlayerGain<Rel>
         UPlayer uPlayer = UPlayer.get(player);
         Faction faction = BoardColls.get().getFactionAt(PS.valueOf(player.getLocation()));
         Rel rel = RelationUtil.getRelationOfThatToMe(faction, uPlayer);
-        return uPlayer != null && getMultipliers().containsKey(rel) ?
-                getMultipliers().get(rel) : NO_GAIN;
+        return uPlayer != null && getMultipliers().containsKey(rel.toString()) ?
+                getMultipliers().get(rel.toString()) : NO_GAIN;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)
@@ -66,10 +66,10 @@ public class FactionsGain extends AbstractPlayerGain<Rel>
         Set<PlayerGain> gain = Collections.emptySet();
 
         if (config != null && DependencyUtils.hasFactions()) {
-            Map<Rel, Double> multipliers = new HashMap<Rel, Double>();
+            Map<String, Double> multipliers = new HashMap<String, Double>();
             for (String relation : config.getKeys(false)) {
                 try {
-                    multipliers.put(Rel.valueOf(relation), Double.valueOf(config.getConfigurationSection(relation).getDouble(AMOUNT_KEY, NO_GAIN)));
+                    multipliers.put(relation, Double.valueOf(config.getConfigurationSection(relation).getDouble(AMOUNT_KEY, NO_GAIN)));
                 }
                 catch (IllegalArgumentException e) {
                     LoggerUtil.getInstance().warning("Unrecognized Factions relation: " + relation);
