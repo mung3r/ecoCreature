@@ -27,6 +27,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 
@@ -51,7 +52,8 @@ public class SimpleClansRule extends AbstractPlayerRule
 
         if (DependencyUtils.hasSimpleClans())
         {
-            ClanPlayer killer = SimpleClans.getInstance().getClanManager().getClanPlayer(event.getKiller());
+            ClanManager clanManager = SimpleClans.getInstance().getClanManager();
+            ClanPlayer killer = clanManager.getClanPlayer(event.getKiller());
             ruleBroken = killer != null && !killer.isRival(event.getVictim());
         }
 
