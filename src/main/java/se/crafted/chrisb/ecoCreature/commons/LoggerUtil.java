@@ -87,7 +87,7 @@ public final class LoggerUtil
     {
         if (debug) {
             @SuppressWarnings("restriction")
-            Class<?> aClass = sun.reflect.Reflection.getCallerClass();
+            Class<?> aClass = sun.reflect.Reflection.getCallerClass(2);
 
             logger.info(format(aClass.getSimpleName() + ": " + msg));
         }
