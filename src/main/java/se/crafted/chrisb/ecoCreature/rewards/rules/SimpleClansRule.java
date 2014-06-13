@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 
+import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 
@@ -27,7 +30,17 @@ public class SimpleClansRule extends AbstractPlayerRule
     @Override
     protected boolean isBroken(PlayerKilledEvent event)
     {
-        return DependencyUtils.hasSimpleClans() && !SimpleClans.getInstance().getClanManager().getClanPlayer(event.getVictim()).isRival(event.getKiller());
+        boolean ruleBroken = false;
+
+        if (DependencyUtils.hasSimpleClans())
+        {
+            ClanManager clanManager = SimpleClans.getInstance().getClanManager();
+            Player killer = event.getKiller();
+            ClanPlayer victim = clanManager.getClanPlayer(event.getVictim());
+            ruleBroken = !victim.isRival(killer);
+        }
+
+        return ruleBroken;
     }
 
     public static Map<Class<? extends AbstractRule>, Rule> parseConfig(ConfigurationSection system)
