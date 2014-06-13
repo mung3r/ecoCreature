@@ -74,7 +74,7 @@ public final class DependencyUtils
         worldGuardPlugin = getPlugin("WorldGuard", "com.sk89q.worldguard.bukkit.WorldGuardPlugin");
         residencePlugin = getPlugin("Residence", "com.bekvon.bukkit.residence.Residence");
         townyPlugin = getPlugin("Towny", "com.palmergames.bukkit.towny.Towny");
-        factionsPlugin = getPlugin("Factions", "com.massivecraft.factions.P");
+        factionsPlugin = getPlugin("Factions", "com.massivecraft.factions.Factions");
         mcMMOPlugin = getPlugin("mcMMO", "com.gmail.nossr50.mcMMO");
         battleArenaPlugin = getPlugin("BattleArena", "mc.alk.arena.BattleArena");
         simpleClansPlugin = getPlugin("SimpleClans", "net.sacredlabyrinth.phaed.simpleclans.SimpleClans");
