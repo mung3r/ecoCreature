@@ -4,7 +4,7 @@ version: ${project.version}-b${BUILD_NUMBER}
 authors: [chrisb, mung3r]
 website: ${project.url}
 depend: [Vault]
-softdepend: [Heroes,mcMMO,WorldGuard,Residence,Regios,DeathTpPlus,MobArena,Factions,Towny]
+softdepend: [Heroes,mcMMO,WorldGuard,Residence,Regios,DeathTpPlus,MobArena,Factions,Towny,BattleArena,SimpleClans]
 description: ${project.description}
 
 commands:
