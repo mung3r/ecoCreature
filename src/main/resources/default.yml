@@ -97,9 +97,16 @@ System:
     # Default: false
     CreativeModeRewards: false
     #
-    # ClearDropsOnHeroClass: clear drops for list of Hero classes
-    # Default: empty
-    ClearDropsOnHeroClass: []
+    # Heroes
+    Heroes:
+      #
+      # ClearDropsOnClass: clear drops for list of Hero classes
+      # Default: empty
+      ClearClassDrops: []
+    #
+    # SimpleClans
+    SimpleClans:
+      ClearNonRivalDrops: true
     
   Messages:
     #
@@ -544,6 +551,11 @@ RewardTable:
     # Adding a skull item to Player drops the victim's head
     Drops:
     - 'skull item:1-1:100'
+    Hunting:
+      Heroes:
+        ClearClassDropsList: ['LOSTSOUL']
+      SimpleClans:
+        ClearNonRivalDrops: true
   Sheep:
     Drops:
     - 'wool:1-1:75'

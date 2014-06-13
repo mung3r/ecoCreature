@@ -23,6 +23,7 @@ import mc.alk.arena.BattleArena;
 import net.jzx7.regiosapi.RegiosAPI;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -50,6 +51,7 @@ public final class DependencyUtils
     private static Towny townyPlugin;
     private static Plugin factionsPlugin;
     private static BattleArena battleArenaPlugin;
+    private static SimpleClans simpleClansPlugin;
 
     private static Permission permission;
     private static Economy economy;
@@ -75,6 +77,7 @@ public final class DependencyUtils
         factionsPlugin = getPlugin("Factions", "com.massivecraft.factions.P");
         mcMMOPlugin = getPlugin("mcMMO", "com.gmail.nossr50.mcMMO");
         battleArenaPlugin = getPlugin("BattleArena", "mc.alk.arena.BattleArena");
+        simpleClansPlugin = getPlugin("SimpleClans", "net.sacredlabyrinth.phaed.simpleclans.SimpleClans");
 
         Plugin regiosPlugin = getPlugin("Regios", "net.jzx7.regios.RegiosPlugin");
         if (regiosPlugin instanceof RegiosAPI) {
@@ -116,8 +119,8 @@ public final class DependencyUtils
     {
         String mixedCasePerm = "ecoCreature." + perm;
 
-        boolean isAllowed = hasPermission() ? permission.has(player.getWorld(), player.getName(), mixedCasePerm)
-                || permission.has(player.getWorld(), player.getName(), mixedCasePerm.toLowerCase()) : player.hasPermission(mixedCasePerm)
+        boolean isAllowed = hasPermission() ? permission.has(player, mixedCasePerm)
+                || permission.has(player, mixedCasePerm.toLowerCase()) : player.hasPermission(mixedCasePerm)
                 || player.hasPermission(mixedCasePerm.toLowerCase());
 
         LoggerUtil.getInstance().debugTrue(player.getName() + " denied permission for " + mixedCasePerm.toLowerCase(), !isAllowed);
@@ -158,6 +161,11 @@ public final class DependencyUtils
     public static boolean hasBattleArena()
     {
         return battleArenaPlugin != null;
+    }
+
+    public static boolean hasSimpleClans()
+    {
+        return simpleClansPlugin != null;
     }
 
     public static MobArenaHandler getMobArenaHandler()

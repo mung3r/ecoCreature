@@ -31,11 +31,11 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 
-public class HeroClassNoDropRule extends AbstractPlayerRule
+public class HeroesRule extends AbstractPlayerRule
 {
     private List<String> classNames;
 
-    public HeroClassNoDropRule()
+    public HeroesRule()
     {
         classNames = new ArrayList<String>();
         setClearDrops(true);
@@ -68,11 +68,11 @@ public class HeroClassNoDropRule extends AbstractPlayerRule
     public static Map<Class<? extends AbstractRule>, Rule> parseConfig(ConfigurationSection system)
     {
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
-        List<String> classNames = system.getStringList("Hunting.ClearDropsOnHeroClass");
-        HeroClassNoDropRule rule = new HeroClassNoDropRule();
+        List<String> classNames = system.getStringList("Hunting.Heroes.ClearClassDropsList");
+        HeroesRule rule = new HeroesRule();
         rule.setClassNames(classNames);
         rules = new HashMap<Class<? extends AbstractRule>, Rule>();
-        rules.put(HeroClassNoDropRule.class, rule);
+        rules.put(HeroesRule.class, rule);
         return rules;
     }
 }

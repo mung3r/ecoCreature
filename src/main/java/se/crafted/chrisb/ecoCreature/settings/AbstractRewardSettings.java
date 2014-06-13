@@ -38,11 +38,12 @@ import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
 import se.crafted.chrisb.ecoCreature.rewards.rules.AbstractRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.BattleArenaRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.CreativeModeRule;
-import se.crafted.chrisb.ecoCreature.rewards.rules.HeroClassNoDropRule;
+import se.crafted.chrisb.ecoCreature.rewards.rules.HeroesRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.MobArenaRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.MurderedPetRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.ProjectileRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.Rule;
+import se.crafted.chrisb.ecoCreature.rewards.rules.SimpleClansRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.SpawnerDistanceRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.SpawnerMobRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.TamedCreatureRule;
@@ -169,7 +170,8 @@ public abstract class AbstractRewardSettings<T>
         rules.putAll(SpawnerMobRule.parseConfig(config));
         rules.putAll(TamedCreatureRule.parseConfig(config));
         rules.putAll(UnderSeaLevelRule.parseConfig(config));
-        rules.putAll(HeroClassNoDropRule.parseConfig(config));
+        rules.putAll(HeroesRule.parseConfig(config));
+        rules.putAll(SimpleClansRule.parseConfig(config));
 
         return rules;
     }
