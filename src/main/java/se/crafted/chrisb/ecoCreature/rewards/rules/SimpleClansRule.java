@@ -17,8 +17,8 @@ public class SimpleClansRule extends AbstractPlayerRule
 {
     public SimpleClansRule()
     {
-        setClearDrops(true);
-        setClearExpOrbs(true);
+        setClearDrops(false);
+        setClearExpOrbs(false);
     }
 
     public void setClearNonRivalDrops(boolean clearNonRivalDrops)
