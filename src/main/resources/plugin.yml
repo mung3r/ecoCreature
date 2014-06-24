@@ -26,6 +26,7 @@ permissions:
       ecocreature.gain.time: true
       ecocreature.gain.environment: true
       ecocreature.gain.biome: true
+      ecocreature.gain.cron: true
       ecocreature.gain.weather: true
       ecocreature.gain.weapon: true
       ecocreature.gain.heroes: true
@@ -55,6 +56,7 @@ permissions:
       ecocreature.reward.giant: true
       ecocreature.reward.heroleveled: true
       ecocreature.reward.heromastered: true
+      ecocreature.reward.horse: true
       ecocreature.reward.killstreak: true
       ecocreature.reward.magmacube: true
       ecocreature.reward.mcmmoleveled: true
@@ -98,6 +100,9 @@ permissions:
     default: op
   ecocreature.gain.biome:
     description: Enables gain multiplier based on biome
+    default: op
+  ecocreature.gain.cron:
+    description: Enables gain multiplier based on cron
     default: op
   ecocreature.gain.weather:
     description: Enables gain multiplier based on weather
@@ -176,6 +181,9 @@ permissions:
     default: op
   ecocreature.reward.heromastered:
     description: Enables rewards for mastering a class in Heroes
+    default: op
+  ecocreature.reward.horse:
+    description: Enables rewards for horses
     default: op
   ecocreature.reward.killstreak:
     description: Enables rewards for kill streaks via DeathTpPlus

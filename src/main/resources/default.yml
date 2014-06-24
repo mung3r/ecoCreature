@@ -484,6 +484,10 @@ RewardTable:
     Coin_Maximum: 10.0
     Coin_Percent: 25.0
     Reward_Message: '&7You earned &6<amt>&7 by leveling!'
+  Horse:
+    Coin_Minimum: 0.10
+    Coin_Maximum: 2.50
+    Coin_Percent: 1.0
   #
   # DeathTpPlus plugin is required to use this reward.
   # The reward amount is multiplied by the number of kills in the streak.
