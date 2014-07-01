@@ -156,6 +156,7 @@ public class PluginConfig
 
     private static WorldSettings loadWorldSettings(WorldSettings settings, FileConfiguration config)
     {
+        settings.setClearEnchantedDrops(config.getBoolean("System.Hunting.ClearEnchantedDrops", false));
         settings.setClearOnNoDrops(config.getBoolean("System.Hunting.ClearDefaultDrops", true));
         settings.setOverrideDrops(config.getBoolean("System.Hunting.OverrideDrops", true));
         settings.setNoFarm(config.getBoolean("System.Hunting.NoFarm", false));

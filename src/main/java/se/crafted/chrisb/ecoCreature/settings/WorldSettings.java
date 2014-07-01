@@ -41,6 +41,7 @@ public class WorldSettings implements SpawnerMobTracking
     public static final String SPAWNERMOB_TAG_MDID = "ecoCreature.spawnerMob";
     public static final String SPAWNERLOC_TAG_MDID = "ecoCreature.spawnerLoc";
 
+    private boolean clearEnchantedDrops;
     private boolean clearOnNoDrops;
     private boolean overrideDrops;
     private boolean noFarm;
@@ -52,7 +53,6 @@ public class WorldSettings implements SpawnerMobTracking
     private Set<Party> parties;
 
     private final FixedMetadataValue spawnerMobTag;
-
     public WorldSettings(ecoCreature plugin)
     {
         this.plugin = plugin;
@@ -61,6 +61,16 @@ public class WorldSettings implements SpawnerMobTracking
         parties = Collections.emptySet();
 
         spawnerMobTag = new FixedMetadataValue(plugin, true);
+    }
+
+    public boolean isClearEnchantedDrops()
+    {
+        return clearEnchantedDrops;
+    }
+
+    public void setClearEnchantedDrops(boolean clearEnchantedDrops)
+    {
+        this.clearEnchantedDrops = clearEnchantedDrops;
     }
 
     public boolean isClearOnNoDrops()

@@ -26,8 +26,13 @@ import java.util.Set;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
@@ -77,6 +82,19 @@ public class EntityKilledEventHandler extends AbstractEventHandler
 
             if ((settings.isOverrideDrops() && reward.hasDrops()) || (settings.isClearOnNoDrops() && !reward.hasDrops())) {
                 event.getDrops().clear();
+            }
+
+            if ((settings.isClearEnchantedDrops())) {
+                Iterables.removeIf(event.getDrops(), new Predicate<ItemStack>() {
+
+                    @Override
+                    public boolean apply(ItemStack stack)
+                    {
+                        boolean notEmpty = !stack.getEnchantments().isEmpty();
+                        LoggerUtil.getInstance().debugTrue("Cleared enchanted item: " + stack.getType(), notEmpty);
+                        return notEmpty;
+                    }
+                });
             }
 
             if (reward.getEntityDrops().contains(EntityType.EXPERIENCE_ORB)) {

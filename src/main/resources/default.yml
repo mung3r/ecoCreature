@@ -41,6 +41,9 @@ System:
     # Default: false
     ClearDefaultDrops: false
     #
+    # Clear natural enchanted drops
+    ClearEnchantedDrops: false
+    #
     # Replace instead of stack rewards drops/items
     # Default: true
     OverrideDrops: true
