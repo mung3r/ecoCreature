@@ -395,34 +395,35 @@ RewardTable:
     Coin_Maximum: 3.50
     Coin_Percent: 50.0
     Drops:
-    - 'blaze rod:1:75'
+    - 'blaze rod:1:100'
+    - 'glowstone dust:2:100'
     Hunting:
        # Allow blaze rods
       ClearCampDrops: false
   CaveSpider:
     Drops:
-    - 'string:2:75'
-    - 'spider eye:1:75'
+    - 'string:2:100'
+    - 'spider eye:1:100'
     Coin_Minimum: 0.50
     Coin_Maximum: 1.50
     Coin_Percent: 50.0
   Chicken:
     Drops:
-    - 'feather:2:75'
-    - 'raw chicken:1-1:75'
+    - 'feather:2:100'
+    - 'raw chicken:1-1:100'
     Coin_Minimum: 0.10
     Coin_Maximum: 2.00
     Coin_Percent: 1.0
   Cow:
     Drops:
-    - 'leather:2:75'
-    - 'raw beef:1-3:75'
+    - 'leather:2:100'
+    - 'raw beef:1-3:100'
     Coin_Minimum: 0.10
     Coin_Maximum: 2.50
     Coin_Percent: 1.0
   Creeper:
     Drops:
-    - 'sulphur:2:75'
+    - 'sulphur:2:100'
     Coin_Minimum: 5.50
     Coin_Maximum: 10.50
     Coin_Percent: 50.0
@@ -434,7 +435,7 @@ RewardTable:
   #  - 'iron_ingot:1:1'
   PoweredCreeper:
     Drops:
-    - 'sulphur:2:75'
+    - 'sulphur:2:100'
     Coin_Minimum: 10.50
     Coin_Maximum: 15.50
     Coin_Percent: 50.0
@@ -456,14 +457,14 @@ RewardTable:
     - 'dragon egg:1-1:100'
   Enderman:
     Drops:
-    - 'ender pearl:1:75'
+    - 'ender pearl:1:100'
     Coin_Minimum: 1.00
     Coin_Maximum: 3.50
     Coin_Percent: 50.0
   Ghast:
     Drops:
-    - 'sulphur:2:75'
-    - 'ghast tear:1:75'
+    - 'sulphur:2:100'
+    - 'ghast tear:1:100'
     Coin_Minimum: 3.50
     Coin_Maximum: 3.50
     Coin_Percent: 50.0
@@ -488,6 +489,8 @@ RewardTable:
     Coin_Percent: 25.0
     Reward_Message: '&7You earned &6<amt>&7 by leveling!'
   Horse:
+    Drops:
+    - 'leather:0-1:100'
     Coin_Minimum: 0.10
     Coin_Maximum: 2.50
     Coin_Percent: 1.0
@@ -508,7 +511,7 @@ RewardTable:
     Coin_Maximum: 2.00
     Coin_Percent: 50.0
     Drops:
-    - 'magma cream:1:75'
+    - 'magma cream:1:100'
   #
   # mcMMO plugin is required to use this reward
   mcMMOLeveled:
@@ -522,8 +525,8 @@ RewardTable:
     Coin_Percent: 50.0
   MushroomCow:
     Drops:
-    - 'leather:2:75'
-    - 'raw beef:1-3:75'
+    - 'leather:2:100'
+    - 'raw beef:1-3:100'
     Coin_Minimum: 0.10
     Coin_Maximum: 2.50
     Coin_Percent: 1.0
@@ -533,14 +536,14 @@ RewardTable:
     Coin_Percent: 1.0
   Pig:
     Drops:
-    - 'pork:1-3:75'
+    - 'pork:1-3:100'
     Coin_Minimum: 0.10
     Coin_Maximum: 2.50
     Coin_Percent: 1.0
   PigZombie:
     Drops:
-    - 'rotten flesh:1:75'
-    - 'gold nugget:1:75'
+    - 'rotten flesh:1:100'
+    - 'gold nugget:1:100'
     Coin_Minimum: 1.00
     Coin_Maximum: 3.50
     Coin_Percent: 50.0
@@ -565,7 +568,7 @@ RewardTable:
         ClearNonRivalDrops: true
   Sheep:
     Drops:
-    - 'wool:1-1:75'
+    - 'wool:1-1:100'
     Coin_Minimum: 0.10
     Coin_Maximum: 2.50
     Coin_Percent: 1.0
@@ -575,14 +578,14 @@ RewardTable:
     Coin_Percent: 50.0
   Skeleton:
     Drops:
-    - 'bone:2:75'
-    - 'arrow:2:75'
+    - 'bone:2:100'
+    - 'arrow:2:100'
     Coin_Minimum: 1.00
     Coin_Maximum: 3.00
     Coin_Percent: 50.0
   Slime:
     Drops:
-    - 'slime ball:2:75'
+    - 'slime ball:2:100'
     Coin_Minimum: 0.00
     Coin_Maximum: 2.00
     Coin_Percent: 50.0
@@ -591,7 +594,7 @@ RewardTable:
     Coin_Maximum: 2.00
     Coin_Percent: 100.0
     Drops:
-    - 'snow ball:15:75'
+    - 'snow ball:15:100'
   Spawner:
     Coin_Minimum: 0.10
     Coin_Maximum: 15.00
@@ -601,14 +604,14 @@ RewardTable:
     Penalty_Message: '&7You are penalized &6<amt>&7 for destroying a &5<crt>&7.'
   Spider:
     Drops:
-    - 'string:2:75'
-    - 'spider eye:1:75'
+    - 'string:2:100'
+    - 'spider eye:1:100'
     Coin_Minimum: 0.50
     Coin_Maximum: 1.50
     Coin_Percent: 50.0
   Squid:
     Drops:
-    - 'ink sack:1-3:75'
+    - 'ink sack:1-3:100'
     Coin_Minimum: 0.10
     Coin_Maximum: 2.50
     Coin_Percent: 1.0
@@ -617,14 +620,13 @@ RewardTable:
     Coin_Maximum: 3.50
     Coin_Percent: 50.0
     Drops:
-    - 'glass bottle:6:0.125'
-    - 'glowstone dust:6:0.125'
-    - 'sulphur:6:0.125'
-    - 'redstone:6:0.125'
-    - 'spider eye:6:0.125'
-    - 'stick:6:0.125'
-    - 'sugar:6:0.125'
-    - 'potion.0:6:0.125'
+    - 'glass bottle:6:100'
+    - 'glowstone dust:6:100'
+    - 'sulphur:6:100'
+    - 'redstone:6:100'
+    - 'spider eye:6:100'
+    - 'stick:6:100'
+    - 'sugar:6:100'
   WitherBoss:
     Coin_Minimum: 5.00
     Coin_Maximum: 10.50
@@ -636,8 +638,8 @@ RewardTable:
     Coin_Maximum: 3.00
     Coin_Percent: 50.0
     Drops:
-    - 'coal:1:75'
-    - 'bone:2:75'
+    - 'coal:1:100'
+    - 'bone:2:100'
   Wolf:
     Coin_Minimum: 1.00
     Coin_Maximum: 2.00
@@ -652,8 +654,8 @@ RewardTable:
     Coin_Percent: 1.0
   VillagerGolem:
     Drops:
-    - 'iron ingot:3-5:75'
-    - 'red rose:2:75'
+    - 'iron ingot:3-5:100'
+    - 'red rose:2:100'
     Coin_Minimum: 1.00
     Coin_Maximum: 3.50
     Coin_Percent: 1.0
@@ -669,7 +671,7 @@ RewardTable:
     Coin_Maximum: 3.50
     Coin_Percent: 50.0
     Drops:
-    - 'rotten flesh:2:75'
+    - 'rotten flesh:2:100'
 
 ############################################################################
 # Drop set examples
@@ -697,10 +699,10 @@ RewardTable:
 RewardSets:
   PoorZombie:
     Drops:
-    - 'rotten flesh:2:75'
+    - 'rotten flesh:2:100'
   BookZombie:
     Drops:
-    - 'rotten flesh:2:75'
+    - 'rotten flesh:2:100'
     - item: 'written book:1-1:100'
       title: Journal of a Zombie
       author: Decaying-EarNibbler
@@ -710,13 +712,13 @@ RewardSets:
       - 'Day 3: Just saw someone I can feast on! Will write later how that goes.'
   LoreZombie:
     Drops:
-    - item: diamond sword:1:75
+    - item: diamond sword:1-1:100
       displayname: Cursed Sword
       lore:
       - 'Forged by the undead'
   RichZombie:
     Drops:
-    - 'rotten flesh:2:75'
+    - 'rotten flesh:2:100'
     Coin_Minimum: 1.00
     Coin_Maximum: 3.50
     Coin_Percent: 50.0
