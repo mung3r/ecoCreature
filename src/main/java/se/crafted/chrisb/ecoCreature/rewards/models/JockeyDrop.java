@@ -90,13 +90,13 @@ public class JockeyDrop extends EntityDrop
         JockeyDrop drop = null;
 
         EntityType vehicleType = parseType(vehicleString);
-        if (vehicleType != null && !isAmbiguous(vehicleType)) {
+        if (vehicleType != null && isNotAmbiguous(vehicleType)) {
             drop = new JockeyDrop(vehicleType);
             drop.setRange(parseRange(passengerString));
             drop.setPercentage(parsePercentage(passengerString));
             
             EntityType passengerType = parseType(passengerString);
-            if (passengerType != null && !isAmbiguous(passengerType)) {
+            if (passengerType != null && isNotAmbiguous(passengerType)) {
                 drop.setPassenger(passengerType);
             }
         }

@@ -171,7 +171,7 @@ public class EntityDrop
         EntityDrop drop = null;
 
         EntityType type = parseType(dropString);
-        if (type != null && !isAmbiguous(type)) {
+        if (type != null && isNotAmbiguous(type)) {
             drop = new EntityDrop(type);
             drop.setRange(parseRange(dropString));
             drop.setPercentage(parsePercentage(dropString));
@@ -180,9 +180,9 @@ public class EntityDrop
         return drop;
     }
 
-    protected static boolean isAmbiguous(EntityType type)
+    protected static boolean isNotAmbiguous(EntityType type)
     {
-        return Material.matchMaterial(type.getName()) != null;
+        return Material.matchMaterial(type.getName()) == null;
     }
 
     protected static EntityType parseType(String dropString)

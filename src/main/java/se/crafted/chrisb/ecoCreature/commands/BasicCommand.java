@@ -101,8 +101,8 @@ public abstract class BasicCommand implements Command {
     }
 
     @Override
-    public boolean isInProgress(CommandSender executor) {
-        return false;
+    public boolean isNotInProgress(CommandSender executor) {
+        return true;
     }
 
     @Override

@@ -53,7 +53,7 @@ public class WeatherGain extends AbstractPlayerGain<WeatherType>
             for (String weather : config.getKeys(false)) {
                 try {
                     multipliers.put(WeatherType.valueOf(weather.toUpperCase()),
-                            Double.valueOf(config.getConfigurationSection(weather).getDouble(AMOUNT_KEY, 1.0D)));
+                            config.getConfigurationSection(weather).getDouble(AMOUNT_KEY, 1.0D));
                 }
                 catch (IllegalArgumentException e) {
                     LoggerUtil.getInstance().warning("Skipping unknown weather name: " + weather);

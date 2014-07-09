@@ -49,7 +49,7 @@ public class EntityRewardSettings extends AbstractRewardSettings<EntityType>
     {
         LivingEntity entity = event.getEntity();
         return hasRewardSource(entity.getType()) && getRewardSource(entity.getType()).hasPermission(event.getKiller())
-                && !isRuleBroken(event, getRewardSource(entity.getType()).getHuntingRules().values());
+                && isNotRuleBroken(event, getRewardSource(entity.getType()).getHuntingRules().values());
     }
 
     @Override
@@ -86,7 +86,6 @@ public class EntityRewardSettings extends AbstractRewardSettings<EntityType>
             }
         }
 
-        EntityRewardSettings settings = new EntityRewardSettings(sources);
-        return settings;
+        return new EntityRewardSettings(sources);
     }
 }

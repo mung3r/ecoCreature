@@ -31,6 +31,9 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.gain.PlayerGain;
@@ -128,29 +131,30 @@ public class WorldSettings implements SpawnerMobTracking
         this.rewardSettings = rewardSettings;
     }
 
-    public boolean hasReward(Event event)
+    public boolean hasReward(final Event event)
     {
-        boolean hasReward = false;
+        return Iterables.any(rewardSettings, new Predicate<AbstractRewardSettings<?>>() {
 
-        for (AbstractRewardSettings<?> settings : this.rewardSettings) {
-            if (settings.hasRewardSource(event)) {
-                hasReward = true;
-                break;
+            @Override
+            public boolean apply(AbstractRewardSettings<?> settings)
+            {
+                return settings.hasRewardSource(event);
             }
-        }
-
-        return hasReward;
+        });
     }
 
-    public Reward createReward(Event event)
+    public Reward createReward(final Event event)
     {
-        for (AbstractRewardSettings<?> settings : this.rewardSettings) {
-            if (settings.hasRewardSource(event)) {
-                return settings.getRewardSource(event).createReward(event);
-            }
-        }
+        AbstractRewardSettings<?> settings = Iterables.find(rewardSettings, new Predicate<AbstractRewardSettings<?>>() {
 
-        return null;
+            @Override
+            public boolean apply(AbstractRewardSettings<?> settings)
+            {
+                return settings.hasRewardSource(event);
+            }
+        }, null);
+
+        return settings != null ? settings.getRewardSource(event).createReward(event) : null;
     }
 
     public double getGainMultiplier(Player player)

@@ -127,9 +127,9 @@ public final class EventUtils
         return event != null && event.getEntity().getKiller() != null;
     }
 
-    public static boolean isSuicide(PlayerDeathEvent event)
+    public static boolean isNotSuicide(PlayerDeathEvent event)
     {
-        return event != null && event.getEntity().getLastDamageCause() == null;
+        return event == null || event.getEntity().getLastDamageCause() != null;
     }
 
     public static boolean isProjectileKill(EntityDeathEvent event)

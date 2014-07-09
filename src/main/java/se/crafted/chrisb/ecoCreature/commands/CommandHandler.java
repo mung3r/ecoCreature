@@ -70,7 +70,7 @@ public class CommandHandler
                 if (cmd.isIdentifier(sender, identifier)) {
                     String[] realArgs = Arrays.copyOfRange(arguments, argsIncluded, arguments.length);
 
-                    if (!cmd.isInProgress(sender)) {
+                    if (cmd.isNotInProgress(sender)) {
                         if (realArgs.length < cmd.getMinArguments() || realArgs.length > cmd.getMaxArguments()) {
                             displayCommandHelp(cmd, sender);
                             return true;

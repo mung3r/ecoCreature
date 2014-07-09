@@ -71,7 +71,7 @@ public abstract class AbstractPlayerGain<T> implements PlayerGain
         if (config != null) {
             multipliers = new HashMap<String, Double>();
             for (String key : config.getKeys(false)) {
-                multipliers.put(key, Double.valueOf(config.getConfigurationSection(key).getDouble(AMOUNT_KEY, NO_GAIN)));
+                multipliers.put(key, config.getConfigurationSection(key).getDouble(AMOUNT_KEY, NO_GAIN));
             }
         }
 

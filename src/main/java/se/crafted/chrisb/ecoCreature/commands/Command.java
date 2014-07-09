@@ -47,7 +47,7 @@ public interface Command {
 
     boolean isIdentifier(CommandSender executor, String input);
 
-    boolean isInProgress(CommandSender executor);
+    boolean isNotInProgress(CommandSender executor);
 
     boolean isInteractive();
 

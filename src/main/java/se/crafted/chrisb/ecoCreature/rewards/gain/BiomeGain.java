@@ -57,7 +57,7 @@ public class BiomeGain extends AbstractPlayerGain<Biome>
             Map<Biome, Double> multipliers = new HashMap<Biome, Double>();
             for (String biome : config.getKeys(false)) {
                 try {
-                    multipliers.put(Biome.valueOf(biome.toUpperCase()), Double.valueOf(config.getConfigurationSection(biome).getDouble(AMOUNT_KEY, NO_GAIN)));
+                    multipliers.put(Biome.valueOf(biome.toUpperCase()), config.getConfigurationSection(biome).getDouble(AMOUNT_KEY, NO_GAIN));
                 }
                 catch (IllegalArgumentException e) {
                     LoggerUtil.getInstance().warning("Skipping unknown biome name: " + biome);

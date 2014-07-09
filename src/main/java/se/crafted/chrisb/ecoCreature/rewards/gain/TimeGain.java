@@ -53,7 +53,7 @@ public class TimeGain extends AbstractPlayerGain<TimePeriod>
             for (String period : config.getKeys(false)) {
                 try {
                     multipliers.put(TimePeriod.valueOf(period.toUpperCase()),
-                            Double.valueOf(config.getConfigurationSection(period).getDouble(AMOUNT_KEY, NO_GAIN)));
+                            config.getConfigurationSection(period).getDouble(AMOUNT_KEY, NO_GAIN));
                 }
                 catch (IllegalArgumentException e) {
                     LoggerUtil.getInstance().warning("Skipping unknown time period name: " + period);

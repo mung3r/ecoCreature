@@ -84,7 +84,7 @@ public abstract class AbstractRewardSettings<T>
         return source;
     }
 
-    protected boolean isRuleBroken(Event event, Collection<Rule> rules)
+    protected boolean isNotRuleBroken(Event event, Collection<Rule> rules)
     {
         for (Rule rule : rules) {
             if (rule.isBroken(event)) {
@@ -95,11 +95,11 @@ public abstract class AbstractRewardSettings<T>
                 message.send(rule.getKiller(event));
 
                 LoggerUtil.getInstance().debug("Rule " + rule.getClass().getSimpleName() + " broken");
-                return true;
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     protected static int nextInt(int n)

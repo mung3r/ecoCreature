@@ -56,14 +56,14 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings<CustomEnt
     private boolean hasRewardSource(PlayerKilledEvent event)
     {
         return hasRewardSource(CustomEntityRewardType.PLAYER) && getRewardSource(CustomEntityRewardType.PLAYER).hasPermission(event.getKiller())
-                && !isRuleBroken(event, getRewardSource(CustomEntityRewardType.PLAYER).getHuntingRules().values());
+                && isNotRuleBroken(event, getRewardSource(CustomEntityRewardType.PLAYER).getHuntingRules().values());
     }
 
     private boolean hasRewardSource(EntityKilledEvent event)
     {
         CustomEntityRewardType type = CustomEntityRewardType.fromEntity(event.getEntity());
         return hasRewardSource(type) && getRewardSource(type).hasPermission(event.getKiller())
-                && !isRuleBroken(event, getRewardSource(type).getHuntingRules().values());
+                && isNotRuleBroken(event, getRewardSource(type).getHuntingRules().values());
     }
 
     @Override
@@ -108,7 +108,6 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings<CustomEnt
             }
         }
 
-        CustomEntityRewardSettings settings = new CustomEntityRewardSettings(sources);
-        return settings;
+        return new CustomEntityRewardSettings(sources);
     }
 }

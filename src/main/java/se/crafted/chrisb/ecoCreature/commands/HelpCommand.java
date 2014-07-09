@@ -49,7 +49,7 @@ public class HelpCommand extends BasicCommand
             try {
                 page = Integer.parseInt(args[0]) - 1;
             }
-            catch (NumberFormatException e) {
+            catch (NumberFormatException ignored) {
             }
         }
 

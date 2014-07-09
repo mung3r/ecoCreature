@@ -67,11 +67,10 @@ public class HeroesRule extends AbstractPlayerRule
 
     public static Map<Class<? extends AbstractRule>, Rule> parseConfig(ConfigurationSection system)
     {
-        Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
         List<String> classNames = system.getStringList("Hunting.Heroes.ClearClassDropsList");
         HeroesRule rule = new HeroesRule();
         rule.setClassNames(classNames);
-        rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+        Map<Class<? extends AbstractRule>, Rule> rules = new HashMap<Class<? extends AbstractRule>, Rule>();
         rules.put(HeroesRule.class, rule);
         return rules;
     }

@@ -97,7 +97,7 @@ public class ecoCreature extends JavaPlugin
     {
         super.reloadConfig();
         pluginConfig = new PluginConfig(this);
-    };
+    }
 
     public RewardMetrics getMetrics()
     {

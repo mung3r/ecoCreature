@@ -50,7 +50,7 @@ public class PlayerDeathEventListener implements Listener
         if (EventUtils.isPVPDeath(event)) {
             events = handler.createRewardEvents(PlayerKilledEvent.createEvent(event));
         }
-        else if (!EventUtils.isSuicide(event)) {
+        else if (EventUtils.isNotSuicide(event)) {
             events = handler.createRewardEvents(event);
         }
 

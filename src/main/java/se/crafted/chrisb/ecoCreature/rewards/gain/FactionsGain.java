@@ -69,7 +69,7 @@ public class FactionsGain extends AbstractPlayerGain<Rel>
             Map<Rel, Double> multipliers = new HashMap<Rel, Double>();
             for (String relation : config.getKeys(false)) {
                 try {
-                    multipliers.put(Rel.valueOf(relation), Double.valueOf(config.getConfigurationSection(relation).getDouble(AMOUNT_KEY, NO_GAIN)));
+                    multipliers.put(Rel.valueOf(relation), config.getConfigurationSection(relation).getDouble(AMOUNT_KEY, NO_GAIN));
                 }
                 catch (IllegalArgumentException e) {
                     LoggerUtil.getInstance().warning("Unrecognized Factions relation: " + relation);

@@ -63,10 +63,9 @@ public class SimpleClansRule extends AbstractPlayerRule
 
     public static Map<Class<? extends AbstractRule>, Rule> parseConfig(ConfigurationSection system)
     {
-        Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
         SimpleClansRule rule = new SimpleClansRule();
         rule.setClearNonRivalDrops(system.getBoolean("Hunting.SimpleClans.ClearNonRivalDrops", false));
-        rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+        Map<Class<? extends AbstractRule>, Rule> rules = new HashMap<Class<? extends AbstractRule>, Rule>();
         rules.put(SimpleClansRule.class, rule);
         return rules;
     }

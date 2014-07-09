@@ -66,7 +66,7 @@ public class ItemEnchantment
         for (ItemEnchantment enchantment : enchantments) {
             int level = enchantment.getLevel();
             if (level > 0) {
-                enchantmentMap.put(enchantment.getEnchantment(), Integer.valueOf(level));
+                enchantmentMap.put(enchantment.getEnchantment(), level);
             }
         }
 
