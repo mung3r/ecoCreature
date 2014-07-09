@@ -19,7 +19,6 @@
  */
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
