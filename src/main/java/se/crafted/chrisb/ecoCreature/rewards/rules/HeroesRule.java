@@ -19,10 +19,7 @@
  */
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -66,11 +63,16 @@ public class HeroesRule extends AbstractPlayerRule
 
     public static Map<Class<? extends AbstractRule>, Rule> parseConfig(ConfigurationSection system)
     {
-        List<String> classNames = system.getStringList("Hunting.Heroes.ClearClassDropsList");
-        HeroesRule rule = new HeroesRule();
-        rule.setClassNames(classNames);
-        Map<Class<? extends AbstractRule>, Rule> rules = new HashMap<Class<? extends AbstractRule>, Rule>();
-        rules.put(HeroesRule.class, rule);
+        Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
+
+        if (system != null && system.getConfigurationSection("Hunting") != null) {
+            List<String> classNames = system.getStringList("Hunting.Heroes.ClearClassDropsList");
+            HeroesRule rule = new HeroesRule();
+            rule.setClassNames(classNames);
+            rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+            rules.put(HeroesRule.class, rule);
+        }
+
         return rules;
     }
 }

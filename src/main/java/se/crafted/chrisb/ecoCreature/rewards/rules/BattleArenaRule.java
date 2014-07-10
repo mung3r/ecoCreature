@@ -58,7 +58,7 @@ public class BattleArenaRule extends AbstractEntityRule
     {
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
-        if (system != null) {
+        if (system != null && system.getConfigurationSection("Hunting") != null) {
             BattleArenaRule rule = new BattleArenaRule();
             rule.setBattleArenaRewards(system.getBoolean("Hunting.BattleArenaRewards"));
             rules = new HashMap<Class<? extends AbstractRule>, Rule>();

@@ -51,13 +51,13 @@ public class TamedCreatureRule extends AbstractEntityRule
         return ruleBroken;
     }
 
-    public static Map<Class<? extends AbstractRule>, Rule> parseConfig(ConfigurationSection config)
+    public static Map<Class<? extends AbstractRule>, Rule> parseConfig(ConfigurationSection system)
     {
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
-        if (config != null) {
+        if (system != null && system.getConfigurationSection("Hunting") != null) {
             TamedCreatureRule rule = new TamedCreatureRule();
-            rule.setWolverineMode(config.getBoolean("Hunting.WolverineMode", true));
+            rule.setWolverineMode(system.getBoolean("Hunting.WolverineMode", true));
             rules = new HashMap<Class<? extends AbstractRule>, Rule>();
             rules.put(TamedCreatureRule.class, rule);
         }

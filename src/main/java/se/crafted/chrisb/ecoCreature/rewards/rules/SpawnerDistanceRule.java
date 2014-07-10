@@ -29,6 +29,8 @@ import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
+import se.crafted.chrisb.ecoCreature.messages.Message;
+import se.crafted.chrisb.ecoCreature.messages.NoCampMessageDecorator;
 import se.crafted.chrisb.ecoCreature.settings.SpawnerMobTracking;
 
 public class SpawnerDistanceRule extends AbstractEntityRule
@@ -81,18 +83,25 @@ public class SpawnerDistanceRule extends AbstractEntityRule
     {
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
-        if (system != null) {
+        if (system != null && system.getConfigurationSection("Hunting") != null) {
             SpawnerDistanceRule rule = new SpawnerDistanceRule();
             rule.setCanCampSpawner(system.getBoolean("Hunting.AllowCamping", false));
             rule.setClearDrops(system.getBoolean("Hunting.ClearCampDrops", true));
             rule.setClearExpOrbs(system.getBoolean("Hunting.ClearCampExpOrbs", true));
             rule.setCampByDistance(system.getBoolean("Hunting.CampingByDistance", true));
             rule.setCampRadius(system.getInt("Hunting.CampRadius", CAMP_RADIUS));
-            rule.setMessage(new DefaultMessage(system.getString("Messages.NoCampMessage", NO_CAMP_MESSAGE)));
+            rule.setMessage(getNoCampMessage(system));
             rules = new HashMap<Class<? extends AbstractRule>, Rule>();
             rules.put(SpawnerDistanceRule.class, rule);
         }
 
         return rules;
+    }
+
+    private static Message getNoCampMessage(ConfigurationSection config)
+    {
+        NoCampMessageDecorator message = new NoCampMessageDecorator(new DefaultMessage(config.getString("Messages.NoCampMessage", NO_CAMP_MESSAGE)));
+        message.setSpawnerCampMessageEnabled(config.getBoolean("Messages.Spawner", false));
+        return message;
     }
 }

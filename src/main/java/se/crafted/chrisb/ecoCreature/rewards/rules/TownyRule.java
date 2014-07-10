@@ -32,22 +32,38 @@ import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
 public class TownyRule extends AbstractEntityRule
 {
-    private String townName;
+    private static final String IN_TOWN = "InTown";
+
+    private Map<String, Boolean> townMap;
 
     public TownyRule()
     {
-        setClearExpOrbs(false);
+        townMap = new HashMap<String, Boolean>();
+        setClearExpOrbs(true);
     }
 
-    public void setTownName(String townName)
+    public void addTown(String townName, Boolean clearExpOrbs)
     {
-        this.townName = townName;
+        townMap.put(townName, clearExpOrbs);
     }
 
     @Override
     protected boolean isBroken(EntityKilledEvent event)
     {
-        return DependencyUtils.hasTowny() && townName.equals(TownyUniverse.getTownName(event.getKiller().getLocation())) && isClearExpOrbs();
+        boolean inTown = false;
+
+        if (DependencyUtils.hasTowny()) {
+            String townName = TownyUniverse.getTownName(event.getKiller().getLocation());
+
+            if (townMap.containsKey(townName)) {
+                inTown = townMap.get(townName);
+            }
+            else if (townName != null && townMap.containsKey(IN_TOWN)) {
+                inTown = townMap.get(IN_TOWN);
+            }
+        }
+
+        return inTown && isClearExpOrbs();
     }
 
     public static Map<Class<? extends AbstractRule>, Rule> parseConfig(ConfigurationSection gain)
@@ -56,23 +72,18 @@ public class TownyRule extends AbstractEntityRule
         ConfigurationSection townyConfig = gain.getConfigurationSection("Towny");
 
         if (townyConfig != null) {
-            boolean defaultClearExpOrbs = gain.getBoolean("Towny.InTown.ClearExpOrbs", false);
-            rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+            TownyRule rule = new TownyRule();
 
             for (String townName : townyConfig.getKeys(false)) {
-                if ("InTown".equals(townName)) {
-                    continue;
-                }
-
                 ConfigurationSection townConfig = townyConfig.getConfigurationSection(townName);
 
                 if (townConfig != null) {
-                    TownyRule rule = new TownyRule();
-                    rule.setTownName(townName);
-                    rule.setClearExpOrbs(townConfig.getBoolean("ClearExpOrbs", defaultClearExpOrbs));
-                    rules.put(TownyRule.class, rule);
+                    rule.addTown(townName, townConfig.getBoolean("ClearExpOrbs", false));
                 }
             }
+
+            rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+            rules.put(TownyRule.class, rule);
         }
 
         return rules;

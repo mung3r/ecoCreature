@@ -56,7 +56,7 @@ public class CreativeModeRule extends AbstractEntityRule
     {
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
-        if (system != null) {
+        if (system != null && system.getConfigurationSection("Hunting") != null) {
             CreativeModeRule rule = new CreativeModeRule();
             rule.setCreativeModeRewards(system.getBoolean("Hunting.CreativeModeRewards", false));
             rules = new HashMap<Class<? extends AbstractRule>, Rule>();
