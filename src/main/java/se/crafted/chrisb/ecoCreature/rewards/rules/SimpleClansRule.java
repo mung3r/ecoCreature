@@ -65,7 +65,7 @@ public class SimpleClansRule extends AbstractPlayerRule
     {
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
-        if (system != null && system.getConfigurationSection("Hunting") != null) {
+        if (system != null && system.isConfigurationSection("Hunting")) {
             SimpleClansRule rule = new SimpleClansRule();
             rule.setClearNonRivalDrops(system.getBoolean("Hunting.SimpleClans.ClearNonRivalDrops", false));
             rules = new HashMap<Class<? extends AbstractRule>, Rule>();

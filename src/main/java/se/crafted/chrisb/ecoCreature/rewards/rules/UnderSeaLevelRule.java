@@ -59,7 +59,7 @@ public class UnderSeaLevelRule extends AbstractEntityRule
     {
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
-        if (system != null && system.getConfigurationSection("Hunting") != null) {
+        if (system != null && system.isConfigurationSection("Hunting")) {
             UnderSeaLevelRule rule = new UnderSeaLevelRule();
             rule.setHuntUnderSeaLevel(system.getBoolean("Hunting.AllowUnderSeaLVL", true));
             rule.setMessage(new DefaultMessage(system.getString("Messages.NoUnderSeaLevel", NO_UNDER_SEA_LEVEL_MESSAGE)));

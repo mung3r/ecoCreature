@@ -65,7 +65,7 @@ public class HeroesRule extends AbstractPlayerRule
     {
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
-        if (system != null && system.getConfigurationSection("Hunting") != null) {
+        if (system != null && system.isConfigurationSection("Hunting")) {
             List<String> classNames = system.getStringList("Hunting.Heroes.ClearClassDropsList");
             HeroesRule rule = new HeroesRule();
             rule.setClassNames(classNames);

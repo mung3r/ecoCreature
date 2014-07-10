@@ -69,7 +69,7 @@ public class SpawnerMobRule extends AbstractEntityRule
     {
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
-        if (system != null && system.getConfigurationSection("Hunting") != null) {
+        if (system != null && system.isConfigurationSection("Hunting")) {
             SpawnerMobRule rule = new SpawnerMobRule();
             rule.setCanCampSpawner(system.getBoolean("Hunting.AllowCamping", false));
             rule.setClearDrops(system.getBoolean("Hunting.ClearCampDrops", true));

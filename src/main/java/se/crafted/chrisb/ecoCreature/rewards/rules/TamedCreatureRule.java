@@ -55,7 +55,7 @@ public class TamedCreatureRule extends AbstractEntityRule
     {
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
-        if (system != null && system.getConfigurationSection("Hunting") != null) {
+        if (system != null && system.isConfigurationSection("Hunting")) {
             TamedCreatureRule rule = new TamedCreatureRule();
             rule.setWolverineMode(system.getBoolean("Hunting.WolverineMode", true));
             rules = new HashMap<Class<? extends AbstractRule>, Rule>();
