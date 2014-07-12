@@ -278,22 +278,6 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         this.huntingRules = huntingRules;
     }
 
-    public void merge(AbstractRewardSource source)
-    {
-        name = source.getName();
-
-        itemDrops.addAll(source.getItemDrops());
-        entityDrops.addAll(source.getEntityDrops());
-        jockeyDrops.addAll(source.getJockeyDrops());
-        coin = source.hasCoin() ? source.getCoin() : coin;
-
-        noCoinRewardMessage = source.getNoCoinRewardMessage() != null ? source.getNoCoinRewardMessage() : noCoinRewardMessage;
-        coinRewardMessage = source.getCoinRewardMessage() != null ? source.getCoinRewardMessage() : coinRewardMessage;
-        coinPenaltyMessage = source.getCoinPenaltyMessage() != null ? source.getCoinPenaltyMessage() : coinPenaltyMessage;
-
-        huntingRules.putAll(source.getHuntingRules());
-    }
-
     public Reward createReward(Event event)
     {
         Reward reward = new Reward(getLocation(event));
