@@ -66,9 +66,7 @@ public class HeroesEventHandler extends AbstractEventHandler
         Player player = event.getHero().getPlayer();
         WorldSettings settings = getSettings(player.getWorld());
 
-        if (settings.hasReward(event)) {
-            Reward reward = settings.createReward(event);
-
+        for (Reward reward : settings.createReward(event)) {
             events = new HashSet<RewardEvent>();
             events.add(new RewardEvent(player, reward));
         }

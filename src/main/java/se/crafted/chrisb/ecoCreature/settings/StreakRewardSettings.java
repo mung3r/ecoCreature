@@ -29,6 +29,9 @@ import org.bukkit.event.Event;
 import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
 import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.settings.types.StreakRewardType;
@@ -55,18 +58,34 @@ public class StreakRewardSettings extends AbstractRewardSettings<StreakRewardTyp
         return false;
     }
 
-    private boolean hasRewardSource(DeathStreakEvent event)
+    private boolean hasRewardSource(final DeathStreakEvent event)
     {
-        return hasRewardSource(StreakRewardType.DEATH_STREAK) && getRewardSource(StreakRewardType.DEATH_STREAK).hasPermission(event.getPlayer());
+        return hasRewardSource(StreakRewardType.DEATH_STREAK)
+                && Iterables.any(getRewardSource(StreakRewardType.DEATH_STREAK), new Predicate<AbstractRewardSource>() {
+
+                    @Override
+                    public boolean apply(AbstractRewardSource source)
+                    {
+                        return source.hasPermission(event.getPlayer());
+                    }
+                });
     }
 
-    private boolean hasRewardSource(KillStreakEvent event)
+    private boolean hasRewardSource(final KillStreakEvent event)
     {
-        return hasRewardSource(StreakRewardType.KILL_STREAK) && getRewardSource(StreakRewardType.KILL_STREAK).hasPermission(event.getPlayer());
+        return hasRewardSource(StreakRewardType.KILL_STREAK)
+                && Iterables.any(getRewardSource(StreakRewardType.KILL_STREAK), new Predicate<AbstractRewardSource>() {
+        
+                    @Override
+                    public boolean apply(AbstractRewardSource source)
+                    {
+                        return source.hasPermission(event.getPlayer());
+                    }
+                });
     }
 
     @Override
-    public AbstractRewardSource getRewardSource(Event event)
+    public List<AbstractRewardSource> getRewardSource(Event event)
     {
         if (DependencyUtils.hasDeathTpPlus() && event instanceof DeathStreakEvent) {
             return getRewardSource(StreakRewardType.DEATH_STREAK);
@@ -94,7 +113,8 @@ public class StreakRewardSettings extends AbstractRewardSettings<StreakRewardTyp
                         sources.put(type, new ArrayList<AbstractRewardSource>());
                     }
 
-                    sources.get(type).add(mergeSets(source, "RewardTable." + typeName, config));
+                    sources.get(type).add(source);
+                    sources.get(type).addAll(getSets("RewardTable." + typeName, config));
                 }
             }
         }

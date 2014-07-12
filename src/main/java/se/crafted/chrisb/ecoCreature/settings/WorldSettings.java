@@ -31,13 +31,16 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.gain.PlayerGain;
 import se.crafted.chrisb.ecoCreature.rewards.parties.Party;
+import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 
 public class WorldSettings implements SpawnerMobTracking
 {
@@ -143,7 +146,7 @@ public class WorldSettings implements SpawnerMobTracking
         });
     }
 
-    public Reward createReward(final Event event)
+    public List<Reward> createReward(final Event event)
     {
         AbstractRewardSettings<?> settings = Iterables.find(rewardSettings, new Predicate<AbstractRewardSettings<?>>() {
 
@@ -154,7 +157,18 @@ public class WorldSettings implements SpawnerMobTracking
             }
         }, null);
 
-        return settings != null ? settings.getRewardSource(event).createReward(event) : null;
+        if (settings != null) {
+            return Lists.transform(settings.getRewardSource(event), new Function<AbstractRewardSource, Reward>() {
+
+                @Override
+                public Reward apply(AbstractRewardSource source)
+                {
+                    return source.createReward(event);
+                }
+            });
+        }
+
+        return Collections.emptyList();
     }
 
     public double getGainMultiplier(Player player)

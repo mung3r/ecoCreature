@@ -29,6 +29,9 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 
@@ -45,15 +48,23 @@ public class EntityRewardSettings extends AbstractRewardSettings<EntityType>
         return event instanceof EntityKilledEvent && hasRewardSource((EntityKilledEvent) event);
     }
 
-    private boolean hasRewardSource(EntityKilledEvent event)
+    private boolean hasRewardSource(final EntityKilledEvent event)
     {
         LivingEntity entity = event.getEntity();
-        return hasRewardSource(entity.getType()) && getRewardSource(entity.getType()).hasPermission(event.getKiller())
-                && isNotRuleBroken(event, getRewardSource(entity.getType()).getHuntingRules().values());
+
+        return hasRewardSource(entity.getType())
+                && Iterables.any(getRewardSource(entity.getType()), new Predicate<AbstractRewardSource>() {
+
+                    @Override
+                    public boolean apply(AbstractRewardSource source)
+                    {
+                        return source.hasPermission(event.getKiller()) && isNotRuleBroken(event, source.getHuntingRules().values());
+                    }
+                });
     }
 
     @Override
-    public AbstractRewardSource getRewardSource(Event event)
+    public List<AbstractRewardSource> getRewardSource(Event event)
     {
         if (event instanceof EntityKilledEvent) {
             return getRewardSource(((EntityKilledEvent) event).getEntity().getType());
@@ -81,7 +92,8 @@ public class EntityRewardSettings extends AbstractRewardSettings<EntityType>
                         sources.put(type, new ArrayList<AbstractRewardSource>());
                     }
 
-                    sources.get(type).add(mergeSets(source, "RewardTable." + typeName, config));
+                    sources.get(type).add(source);
+                    sources.get(type).addAll(getSets("RewardTable." + typeName, config));
                 }
             }
         }

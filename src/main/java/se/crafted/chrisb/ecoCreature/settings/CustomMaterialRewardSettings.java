@@ -29,6 +29,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.settings.types.CustomMaterialRewardType;
 
@@ -45,14 +48,23 @@ public class CustomMaterialRewardSettings extends AbstractRewardSettings<CustomM
         return event instanceof BlockBreakEvent && hasRewardSource((BlockBreakEvent) event);
     }
 
-    private boolean hasRewardSource(BlockBreakEvent event)
+    private boolean hasRewardSource(final BlockBreakEvent event)
     {
         CustomMaterialRewardType type = CustomMaterialRewardType.fromMaterial(event.getBlock().getType());
-        return hasRewardSource(type) && getRewardSource(type).hasPermission(event.getPlayer());
+
+        return hasRewardSource(type)
+                && Iterables.any(getRewardSource(type), new Predicate<AbstractRewardSource>() {
+
+                    @Override
+                    public boolean apply(AbstractRewardSource source)
+                    {
+                        return source.hasPermission(event.getPlayer());
+                    }
+                });
     }
 
     @Override
-    public AbstractRewardSource getRewardSource(Event event)
+    public List<AbstractRewardSource> getRewardSource(Event event)
     {
         if (event instanceof BlockBreakEvent) {
             return getRewardSource(((BlockBreakEvent) event).getBlock());
@@ -61,7 +73,7 @@ public class CustomMaterialRewardSettings extends AbstractRewardSettings<CustomM
         return null;
     }
 
-    private AbstractRewardSource getRewardSource(Block block)
+    private List<AbstractRewardSource> getRewardSource(Block block)
     {
         return getRewardSource(CustomMaterialRewardType.fromMaterial(block.getType()));
     }
@@ -82,7 +94,8 @@ public class CustomMaterialRewardSettings extends AbstractRewardSettings<CustomM
                         sources.put(type, new ArrayList<AbstractRewardSource>());
                     }
 
-                    sources.get(type).add(mergeSets(source, "RewardTable." + typeName, config));
+                    sources.get(type).add(source);
+                    sources.get(type).addAll(getSets("RewardTable." + typeName, config));
                 }
             }
         }

@@ -28,6 +28,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
@@ -53,21 +56,36 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings<CustomEnt
         return false;
     }
 
-    private boolean hasRewardSource(PlayerKilledEvent event)
+    private boolean hasRewardSource(final PlayerKilledEvent event)
     {
-        return hasRewardSource(CustomEntityRewardType.PLAYER) && getRewardSource(CustomEntityRewardType.PLAYER).hasPermission(event.getKiller())
-                && isNotRuleBroken(event, getRewardSource(CustomEntityRewardType.PLAYER).getHuntingRules().values());
+        return hasRewardSource(CustomEntityRewardType.PLAYER) 
+                && Iterables.any(getRewardSource(CustomEntityRewardType.PLAYER), new Predicate<AbstractRewardSource>() {
+
+                    @Override
+                    public boolean apply(AbstractRewardSource source)
+                    {
+                        return source.hasPermission(event.getKiller()) && isNotRuleBroken(event, source.getHuntingRules().values());
+                    }
+                });
     }
 
-    private boolean hasRewardSource(EntityKilledEvent event)
+    private boolean hasRewardSource(final EntityKilledEvent event)
     {
         CustomEntityRewardType type = CustomEntityRewardType.fromEntity(event.getEntity());
-        return hasRewardSource(type) && getRewardSource(type).hasPermission(event.getKiller())
-                && isNotRuleBroken(event, getRewardSource(type).getHuntingRules().values());
+
+        return hasRewardSource(type)
+                && Iterables.any(getRewardSource(type), new Predicate<AbstractRewardSource>() {
+
+                    @Override
+                    public boolean apply(AbstractRewardSource source)
+                    {
+                        return source.hasPermission(event.getKiller()) && isNotRuleBroken(event, source.getHuntingRules().values());
+                    }
+                });
     }
 
     @Override
-    public AbstractRewardSource getRewardSource(Event event)
+    public List<AbstractRewardSource> getRewardSource(Event event)
     {
         if (event instanceof PlayerKilledEvent) {
             return getRewardSource(((PlayerKilledEvent) event).getEntity());
@@ -79,7 +97,7 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings<CustomEnt
         return null;
     }
 
-    private AbstractRewardSource getRewardSource(Entity entity)
+    private List<AbstractRewardSource> getRewardSource(Entity entity)
     {
         return getRewardSource(CustomEntityRewardType.fromEntity(entity));
     }
@@ -103,7 +121,8 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings<CustomEnt
                         sources.put(type, new ArrayList<AbstractRewardSource>());
                     }
 
-                    sources.get(type).add(mergeSets(source, "RewardTable." + typeName, config));
+                    sources.get(type).add(source);
+                    sources.get(type).addAll(getSets("RewardTable." + typeName, config));
                 }
             }
         }

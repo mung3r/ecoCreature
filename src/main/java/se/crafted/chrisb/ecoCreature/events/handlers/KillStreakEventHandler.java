@@ -66,8 +66,7 @@ public class KillStreakEventHandler extends AbstractEventHandler
         int kills = event.getKills();
         WorldSettings settings = getSettings(player.getWorld());
 
-        if (settings.hasReward(event)) {
-            Reward reward = settings.createReward(event);
+        for (Reward reward : settings.createReward(event)) {
             reward.setGain(kills);
 
             events = new HashSet<RewardEvent>();

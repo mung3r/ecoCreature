@@ -28,6 +28,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
@@ -50,20 +52,36 @@ public class HeroesRewardSettings extends AbstractRewardSettings<HeroesRewardTyp
 
     private boolean hasRewardSource(HeroChangeLevelEvent event)
     {
-        Player player = event.getHero().getPlayer();
+        final Player player = event.getHero().getPlayer();
 
         if (event.isMastering()) {
-            return hasRewardSource(HeroesRewardType.HERO_MASTERED) && getRewardSource(HeroesRewardType.HERO_MASTERED).hasPermission(player);
+            return hasRewardSource(HeroesRewardType.HERO_MASTERED)
+                    && Iterables.any(getRewardSource(HeroesRewardType.HERO_MASTERED), new Predicate<AbstractRewardSource>() {
+
+                        @Override
+                        public boolean apply(AbstractRewardSource source)
+                        {
+                            return source.hasPermission(player);
+                        }
+                    });
         }
         else if (event.getTo() > event.getFrom()) {
-            return hasRewardSource(HeroesRewardType.HERO_LEVELED) && getRewardSource(HeroesRewardType.HERO_LEVELED).hasPermission(player);            
+            return hasRewardSource(HeroesRewardType.HERO_LEVELED)
+                    && Iterables.any(getRewardSource(HeroesRewardType.HERO_LEVELED), new Predicate<AbstractRewardSource>() {
+
+                        @Override
+                        public boolean apply(AbstractRewardSource source)
+                        {
+                            return source.hasPermission(player);
+                        }
+                    });            
         }
 
         return false;
     }
 
     @Override
-    public AbstractRewardSource getRewardSource(Event event)
+    public List<AbstractRewardSource> getRewardSource(Event event)
     {
         if (DependencyUtils.hasHeroes() && event instanceof HeroChangeLevelEvent) {
             HeroChangeLevelEvent changeLevelEvent = (HeroChangeLevelEvent) event;
@@ -95,7 +113,8 @@ public class HeroesRewardSettings extends AbstractRewardSettings<HeroesRewardTyp
                         sources.put(type, new ArrayList<AbstractRewardSource>());
                     }
 
-                    sources.get(type).add(mergeSets(source, "RewardTable." + typeName, config));
+                    sources.get(type).add(source);
+                    sources.get(type).addAll(getSets("RewardTable." + typeName, config));
                 }
             }
         }

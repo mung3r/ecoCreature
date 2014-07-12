@@ -28,6 +28,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.rewards.sources.DeathPenaltySource;
@@ -55,20 +58,34 @@ public class CustomRewardSettings extends AbstractRewardSettings<CustomRewardTyp
         return false;
     }
 
-    private boolean hasRewardSource(PlayerKilledEvent event)
+    private boolean hasRewardSource(final PlayerKilledEvent event)
     {
         return DependencyUtils.hasEconomy() && getRewardSource(CustomRewardType.LEGACY_PVP) instanceof PVPRewardSource
-                && getRewardSource(CustomRewardType.LEGACY_PVP).hasPermission(event.getKiller());
+                && Iterables.any(getRewardSource(CustomRewardType.LEGACY_PVP), new Predicate<AbstractRewardSource>() {
+
+                    @Override
+                    public boolean apply(AbstractRewardSource source)
+                    {
+                        return source instanceof PVPRewardSource && source.hasPermission(event.getKiller());
+                    }
+                });
     }
 
-    private boolean hasRewardSource(PlayerDeathEvent event)
+    private boolean hasRewardSource(final PlayerDeathEvent event)
     {
         return getRewardSource(CustomRewardType.DEATH_PENALTY) instanceof DeathPenaltySource
-                && getRewardSource(CustomRewardType.DEATH_PENALTY).hasPermission(event.getEntity());
+                && Iterables.any(getRewardSource(CustomRewardType.DEATH_PENALTY), new Predicate<AbstractRewardSource>() {
+
+                    @Override
+                    public boolean apply(AbstractRewardSource source)
+                    {
+                        return source instanceof DeathPenaltySource && source.hasPermission(event.getEntity());
+                    }
+                });
     }
 
     @Override
-    public AbstractRewardSource getRewardSource(Event event)
+    public List<AbstractRewardSource> getRewardSource(Event event)
     {
         if (event instanceof PlayerKilledEvent) {
             return getRewardSource(CustomRewardType.LEGACY_PVP);
@@ -96,7 +113,8 @@ public class CustomRewardSettings extends AbstractRewardSettings<CustomRewardTyp
                         sources.put(type, new ArrayList<AbstractRewardSource>());
                     }
 
-                    sources.get(type).add(mergeSets(source, "RewardTable." + typeName, config));
+                    sources.get(type).add(source);
+                    sources.get(type).addAll(getSets("RewardTable." + typeName, config));
                 }
             }
 

@@ -66,8 +66,7 @@ public class DeathStreakEventHandler extends AbstractEventHandler
         int deaths = event.getDeaths();
         WorldSettings settings = getSettings(player.getWorld());
 
-        if (settings.hasReward(event)) {
-            Reward reward = settings.createReward(event);
+        for (Reward reward : settings.createReward(event)) {
             reward.setGain(deaths);
 
             events = new HashSet<RewardEvent>();

@@ -30,6 +30,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 
 public class MaterialRewardSettings extends AbstractRewardSettings<Material>
@@ -45,7 +48,7 @@ public class MaterialRewardSettings extends AbstractRewardSettings<Material>
         return event instanceof BlockBreakEvent && hasRewardSource((BlockBreakEvent) event);
     }
 
-    private boolean hasRewardSource(BlockBreakEvent event)
+    private boolean hasRewardSource(final BlockBreakEvent event)
     {
         Block block = event.getBlock();
 
@@ -54,11 +57,19 @@ public class MaterialRewardSettings extends AbstractRewardSettings<Material>
             return false;
         }
 
-        return hasRewardSource(block.getType()) && getRewardSource(block.getType()).hasPermission(event.getPlayer());
+        return hasRewardSource(block.getType())
+                && Iterables.any(getRewardSource(block.getType()), new Predicate<AbstractRewardSource>() {
+
+                    @Override
+                    public boolean apply(AbstractRewardSource source)
+                    {
+                        return source.hasPermission(event.getPlayer());
+                    }
+                });
     }
 
     @Override
-    public AbstractRewardSource getRewardSource(Event event)
+    public List<AbstractRewardSource> getRewardSource(Event event)
     {
         if (event instanceof BlockBreakEvent) {
             return getRewardSource(((BlockBreakEvent) event).getBlock().getType());
@@ -83,7 +94,8 @@ public class MaterialRewardSettings extends AbstractRewardSettings<Material>
                         sources.put(type, new ArrayList<AbstractRewardSource>());
                     }
 
-                    sources.get(type).add(mergeSets(source, "RewardTable." + typeName, config));
+                    sources.get(type).add(source);
+                    sources.get(type).addAll(getSets("RewardTable." + typeName, config));
                 }
             }
         }

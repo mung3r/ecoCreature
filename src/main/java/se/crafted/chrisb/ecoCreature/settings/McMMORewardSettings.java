@@ -28,6 +28,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 
 import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
@@ -47,13 +49,21 @@ public class McMMORewardSettings extends AbstractRewardSettings<McMMORewardType>
         		hasRewardSource((McMMOPlayerLevelUpEvent) event);
     }
 
-    private boolean hasRewardSource(McMMOPlayerLevelUpEvent event)
+    private boolean hasRewardSource(final McMMOPlayerLevelUpEvent event)
     {
-        return hasRewardSource(McMMORewardType.MCMMO_LEVELED) && getRewardSource(McMMORewardType.MCMMO_LEVELED).hasPermission(event.getPlayer());
+        return hasRewardSource(McMMORewardType.MCMMO_LEVELED)
+                && Iterables.any(getRewardSource(McMMORewardType.MCMMO_LEVELED), new Predicate<AbstractRewardSource>() {
+
+                    @Override
+                    public boolean apply(AbstractRewardSource source)
+                    {
+                        return source.hasPermission(event.getPlayer());
+                    }
+                });
     }
 
     @Override
-    public AbstractRewardSource getRewardSource(Event event)
+    public List<AbstractRewardSource> getRewardSource(Event event)
     {
         if (event instanceof McMMOPlayerLevelUpEvent) {
             return getRewardSource(McMMORewardType.MCMMO_LEVELED);
@@ -78,7 +88,8 @@ public class McMMORewardSettings extends AbstractRewardSettings<McMMORewardType>
                         sources.put(type, new ArrayList<AbstractRewardSource>());
                     }
 
-                    sources.get(type).add(mergeSets(source, "RewardTable." + typeName, config));
+                    sources.get(type).add(source);
+                    sources.get(type).addAll(getSets("RewardTable." + typeName, config));
                 }
             }
         }

@@ -73,8 +73,7 @@ public class EntityKilledEventHandler extends AbstractEventHandler
         WorldSettings settings = getSettings(killer.getWorld());
         event.setSpawnerMobTracking(settings);
 
-        if (settings.hasReward(event)) {
-            Reward reward = settings.createReward(event);
+        for (Reward reward : settings.createReward(event)) {
             reward.setGain(settings.getGainMultiplier(killer));
             reward.setParty(settings.getPartyMembers(killer));
             reward.addParameter(MessageToken.CREATURE, reward.getName())

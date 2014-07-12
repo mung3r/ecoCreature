@@ -19,12 +19,12 @@
  */
 package se.crafted.chrisb.ecoCreature.settings;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
@@ -55,8 +55,6 @@ public abstract class AbstractRewardSettings<T>
 {
     private Map<T, List<AbstractRewardSource>> sources;
 
-    private static Random random = new Random();
-
     public AbstractRewardSettings(Map<T, List<AbstractRewardSource>> sources)
     {
         this.sources = sources;
@@ -69,16 +67,16 @@ public abstract class AbstractRewardSettings<T>
 
     public abstract boolean hasRewardSource(Event event);
 
-    public abstract AbstractRewardSource getRewardSource(Event event);
+    public abstract List<AbstractRewardSource> getRewardSource(Event event);
 
     protected boolean hasRewardSource(T type)
     {
         return type != null && getSources().containsKey(type) && !getSources().get(type).isEmpty();
     }
 
-    protected AbstractRewardSource getRewardSource(T type)
-    {
-        AbstractRewardSource source = hasRewardSource(type) ? getSources().get(type).get(nextInt(getSources().get(type).size())) : null;
+    protected List<AbstractRewardSource> getRewardSource(T type)
+    {        
+        List<AbstractRewardSource> source = hasRewardSource(type) ? getSources().get(type) : null;
         LoggerUtil.getInstance().debugTrue("No reward defined for type: " + type, source == null);
 
         return source;
@@ -102,14 +100,9 @@ public abstract class AbstractRewardSettings<T>
         return true;
     }
 
-    protected static int nextInt(int n)
+    protected static List<AbstractRewardSource> getSets(String rewardSection, ConfigurationSection config)
     {
-        return random.nextInt(n);
-    }
-
-    protected static AbstractRewardSource mergeSets(AbstractRewardSource source, String rewardSection, ConfigurationSection config)
-    {
-        AbstractRewardSource newSource = source;
+        List<AbstractRewardSource> sources = new ArrayList<AbstractRewardSource>();
         ConfigurationSection rewardConfig = config.getConfigurationSection(rewardSection);
         ConfigurationSection rewardSets = config.getConfigurationSection("RewardSets");
         List<String> sets = rewardConfig.getStringList("Sets");
@@ -119,13 +112,12 @@ public abstract class AbstractRewardSettings<T>
                 if (rewardSets.getConfigurationSection(setName) != null) {
                     AbstractRewardSource setSource = RewardSourceFactory.createSetSource(setName, rewardSets);
                     setSource.setHuntingRules(loadHuntingRules(rewardSets.getConfigurationSection(setName)));
-                    setSource.merge(newSource);
-                    newSource = setSource;
+                    sources.add(setSource);
                 }
             }
         }
 
-        return newSource;
+        return sources;
     }
 
     protected static AbstractRewardSource configureRewardSource(AbstractRewardSource source, ConfigurationSection config)
