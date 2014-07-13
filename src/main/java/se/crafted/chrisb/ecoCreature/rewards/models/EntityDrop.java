@@ -21,8 +21,8 @@ package se.crafted.chrisb.ecoCreature.rewards.models;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.lang.math.NumberRange;
@@ -70,9 +70,9 @@ public class EntityDrop
         this.percentage = percentage;
     }
 
-    public List<EntityType> getOutcome()
+    public Collection<EntityType> getOutcome()
     {
-        List<EntityType> types = new ArrayList<EntityType>();
+        Collection<EntityType> types = new ArrayList<EntityType>();
 
         for (int i = 0; i < nextAmount(); i++) {
             types.add(type);
@@ -103,15 +103,15 @@ public class EntityDrop
         return amount;
     }
 
-    public static List<EntityDrop> parseConfig(ConfigurationSection config)
+    public static Collection<EntityDrop> parseConfig(ConfigurationSection config)
     {
-        List<EntityDrop> drops = Collections.emptyList();
+        Collection<EntityDrop> drops = Collections.emptyList();
 
         if (config != null) {
             drops = new ArrayList<EntityDrop>();
 
             if (config.getList("Drops") != null) {
-                List<String> dropsList = config.getStringList("Drops");
+                Collection<String> dropsList = config.getStringList("Drops");
                 drops.addAll(EntityDrop.parseDrops(dropsList));
             }
             else {
@@ -141,9 +141,9 @@ public class EntityDrop
         return exp;
     }
 
-    private static List<EntityDrop> parseDrops(String dropsString)
+    private static Collection<EntityDrop> parseDrops(String dropsString)
     {
-        List<EntityDrop> drops = Collections.emptyList();
+        Collection<EntityDrop> drops = Collections.emptyList();
 
         if (dropsString != null && !dropsString.isEmpty()) {
             drops = parseDrops(Arrays.asList(dropsString.split(";")));
@@ -152,9 +152,9 @@ public class EntityDrop
         return drops;
     }
 
-    private static List<EntityDrop> parseDrops(List<String> dropsList)
+    private static Collection<EntityDrop> parseDrops(Collection<String> dropsList)
     {
-        List<EntityDrop> drops = new ArrayList<EntityDrop>();
+        Collection<EntityDrop> drops = new ArrayList<EntityDrop>();
 
         for (String dropString : dropsList) {
             EntityDrop drop = createEntityDrop(dropString);
@@ -195,7 +195,7 @@ public class EntityDrop
             String[] itemSubParts = itemParts[0].split("\\.");
     
             type = EntityType.fromName(itemSubParts[0]);
-            LoggerUtil.getInstance().debugTrue("No match for type: " + itemParts[0], type == null);
+            //LoggerUtil.getInstance().debugTrue("No match for type: " + itemParts[0], type == null);
         }
 
         return type;

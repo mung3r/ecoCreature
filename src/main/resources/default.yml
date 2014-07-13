@@ -1,3 +1,6 @@
+############################################################################
+# Sample configuration
+############################################################################
 System:
   #
   # Periodically check for new version
@@ -702,8 +705,7 @@ RewardSets:
     - 'rotten flesh:2:100'
   BookZombie:
     Drops:
-    - 'rotten flesh:2:100'
-    - item: 'written book:1-1:100'
+    - item: 'written book:1-1:25'
       title: Journal of a Zombie
       author: Decaying-EarNibbler
       pages:
@@ -712,16 +714,14 @@ RewardSets:
       - 'Day 3: Just saw someone I can feast on! Will write later how that goes.'
   LoreZombie:
     Drops:
-    - item: diamond sword:1-1:100
+    - item: diamond sword:1-1:25
       displayname: Cursed Sword
       lore:
       - 'Forged by the undead'
   RichZombie:
-    Drops:
-    - 'rotten flesh:2:100'
     Coin_Minimum: 1.00
     Coin_Maximum: 3.50
-    Coin_Percent: 50.0
+    Coin_Percent: 25.0
   ZombieApocalypse:
     Drops:
     - 'zombie:2:50'

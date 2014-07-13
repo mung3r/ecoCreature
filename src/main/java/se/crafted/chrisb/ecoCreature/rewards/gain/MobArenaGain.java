@@ -28,6 +28,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class MobArenaGain extends AbstractPlayerGain<String>
 {
@@ -45,7 +46,9 @@ public class MobArenaGain extends AbstractPlayerGain<String>
     @Override
     public double getGain(Player player)
     {
-        return DependencyUtils.getMobArenaHandler().isPlayerInArena(player) ? getMultiplier(AMOUNT_KEY) : NO_GAIN;
+        double multiplier = DependencyUtils.getMobArenaHandler().isPlayerInArena(player) ? getMultiplier(AMOUNT_KEY) : NO_GAIN;
+        LoggerUtil.getInstance().debug("Gain: " + multiplier);
+        return multiplier;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

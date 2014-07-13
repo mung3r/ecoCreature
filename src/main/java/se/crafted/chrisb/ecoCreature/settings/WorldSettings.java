@@ -20,6 +20,7 @@
 package se.crafted.chrisb.ecoCreature.settings;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -33,10 +34,11 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.gain.PlayerGain;
 import se.crafted.chrisb.ecoCreature.rewards.parties.Party;
@@ -146,26 +148,19 @@ public class WorldSettings implements SpawnerMobTracking
         });
     }
 
-    public List<Reward> createReward(final Event event)
+    public Collection<Reward> createRewards(final Event event)
     {
-        AbstractRewardSettings<?> settings = Iterables.find(rewardSettings, new Predicate<AbstractRewardSettings<?>>() {
+        for (AbstractRewardSettings<?> settings : rewardSettings) {
+            if (settings.hasRewardSource(event)) {
+                return Collections2.transform(settings.getRewardSource(event), new Function<AbstractRewardSource, Reward>() {
 
-            @Override
-            public boolean apply(AbstractRewardSettings<?> settings)
-            {
-                return settings.hasRewardSource(event);
+                    @Override
+                    public Reward apply(AbstractRewardSource source)
+                    {
+                        return source.createReward(event);
+                    }
+                });
             }
-        }, null);
-
-        if (settings != null) {
-            return Lists.transform(settings.getRewardSource(event), new Function<AbstractRewardSource, Reward>() {
-
-                @Override
-                public Reward apply(AbstractRewardSource source)
-                {
-                    return source.createReward(event);
-                }
-            });
         }
 
         return Collections.emptyList();
@@ -174,6 +169,7 @@ public class WorldSettings implements SpawnerMobTracking
     public double getGainMultiplier(Player player)
     {
         double multiplier = 1.0;
+        LoggerUtil.getInstance().debug("===== START: gain calculation for " + player.getName());
 
         for (PlayerGain gain : gainMultipliers) {
             if (gain.hasPermission(player)) {
@@ -181,6 +177,7 @@ public class WorldSettings implements SpawnerMobTracking
             }
         }
 
+        LoggerUtil.getInstance().debug("===== END: gain is " + multiplier);
         return multiplier;
     }
 

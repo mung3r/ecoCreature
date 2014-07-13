@@ -30,6 +30,7 @@ import org.bukkit.entity.Player;
 import com.gmail.nossr50.api.PartyAPI;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class McMMOGain extends AbstractPlayerGain<String>
 {
@@ -47,7 +48,9 @@ public class McMMOGain extends AbstractPlayerGain<String>
     @Override
     public double getGain(Player player)
     {
-        return PartyAPI.inParty(player) ? getMultiplier(AMOUNT_KEY) : NO_GAIN;
+        double multiplier = PartyAPI.inParty(player) ? getMultiplier(AMOUNT_KEY) : NO_GAIN;
+        LoggerUtil.getInstance().debug("Gain: " + multiplier);
+        return multiplier;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

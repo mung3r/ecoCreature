@@ -58,6 +58,7 @@ public class GroupGain extends AbstractPlayerGain<String>
             }
         }
 
+        LoggerUtil.getInstance().debug("Gain: " + multiplier);
         return multiplier;
     }
 

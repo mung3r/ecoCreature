@@ -41,7 +41,9 @@ public class BiomeGain extends AbstractPlayerGain<Biome>
     @Override
     public double getGain(Player player)
     {
-        return getMultiplier(getBiome(player));
+        double multiplier = getMultiplier(getBiome(player));
+        LoggerUtil.getInstance().debug("Gain: " + multiplier);
+        return multiplier;
     }
 
     private static Biome getBiome(Player player)

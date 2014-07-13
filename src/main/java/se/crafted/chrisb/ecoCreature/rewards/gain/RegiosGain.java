@@ -30,6 +30,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class RegiosGain extends AbstractPlayerGain<String>
 {
@@ -48,7 +49,9 @@ public class RegiosGain extends AbstractPlayerGain<String>
     public double getGain(Player player)
     {
         Region region = DependencyUtils.getRegiosAPI().getRegion(player.getLocation());
-        return region != null ? getMultiplier(region.getName()) : NO_GAIN;
+        double multiplier = region != null ? getMultiplier(region.getName()) : NO_GAIN;
+        LoggerUtil.getInstance().debug("Gain: " + multiplier);
+        return multiplier;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

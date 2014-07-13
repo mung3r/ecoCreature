@@ -20,8 +20,8 @@
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.Collection;
+import java.util.Collections;
 
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -39,6 +39,8 @@ import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
 public abstract class AbstractEventHandler implements RewardEventCreator
 {
+    protected static final Collection<RewardEvent> EMPTY_COLLECTION = Collections.emptyList();
+
     private final ecoCreature plugin;
 
     public AbstractEventHandler(ecoCreature plugin)
@@ -50,7 +52,7 @@ public abstract class AbstractEventHandler implements RewardEventCreator
     public abstract boolean isRewardSource(Event event);
 
     @Override
-    public abstract Set<RewardEvent> createRewardEvents(Event event);
+    public abstract Collection<RewardEvent> createRewardEvents(Event event);
 
     @Override
     public WorldSettings getSettings(World world)
@@ -74,7 +76,7 @@ public abstract class AbstractEventHandler implements RewardEventCreator
             PlayerKilledEvent playerKilledEvent = (PlayerKilledEvent) event;
 
             if (reward != null && !reward.getItemDrops().isEmpty()) {
-                List<ItemStack> itemDrops = new ArrayList<ItemStack>();
+                Collection<ItemStack> itemDrops = new ArrayList<ItemStack>();
 
                 for (ItemStack itemStack : reward.getItemDrops()) {
                     if (itemStack.getType() == Material.SKULL_ITEM) {
@@ -105,7 +107,7 @@ public abstract class AbstractEventHandler implements RewardEventCreator
             EntityKilledEvent entityKilledEvent = (EntityKilledEvent) event;
 
             if (reward != null && !reward.getItemDrops().isEmpty()) {
-                List<ItemStack> itemDrops = new ArrayList<ItemStack>();
+                Collection<ItemStack> itemDrops = new ArrayList<ItemStack>();
 
                 for (ItemStack itemStack : reward.getItemDrops()) {
                     if (itemStack.getType() == Material.WRITTEN_BOOK) {

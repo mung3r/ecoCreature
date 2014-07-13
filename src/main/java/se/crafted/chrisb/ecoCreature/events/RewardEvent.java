@@ -19,6 +19,8 @@
  */
 package se.crafted.chrisb.ecoCreature.events;
 
+import java.util.Collection;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -32,19 +34,19 @@ public class RewardEvent extends Event implements Cancellable
     private static final HandlerList handlers = new HandlerList();
 
     private String player;
-    private Reward reward;
+    private Collection<Reward> rewards;
 
     private boolean isCancelled;
 
-    public RewardEvent(Player player, Reward reward)
+    public RewardEvent(Player player, Collection<Reward> reward)
     {
         this(player.getName(), reward);
     }
 
-    public RewardEvent(String player, Reward reward)
+    public RewardEvent(String player, Collection<Reward> rewards)
     {
         this.player = player;
-        this.reward = reward;
+        this.rewards = rewards;
     }
 
     public Player getPlayer()
@@ -57,14 +59,19 @@ public class RewardEvent extends Event implements Cancellable
         this.player = player;
     }
 
-    public Reward getReward()
+    public Collection<Reward> getRewards()
     {
-        return reward;
+        return rewards;
     }
 
-    public void setReward(Reward reward)
+    public void setRewards(Collection<Reward> reward)
     {
-        this.reward = reward;
+        this.rewards = reward;
+    }
+
+    public boolean isEmpty()
+    {
+        return rewards.isEmpty();
     }
 
     @Override

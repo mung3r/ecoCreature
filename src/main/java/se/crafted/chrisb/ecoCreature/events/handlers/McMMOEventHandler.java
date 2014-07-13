@@ -19,9 +19,9 @@
  */
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
+
+import net.minecraft.util.com.google.common.collect.Lists;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -30,7 +30,6 @@ import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
 public class McMMOEventHandler extends AbstractEventHandler
@@ -47,30 +46,16 @@ public class McMMOEventHandler extends AbstractEventHandler
     }
 
     @Override
-    public Set<RewardEvent> createRewardEvents(Event event)
+    public Collection<RewardEvent> createRewardEvents(Event event)
     {
-        Set<RewardEvent> events = Collections.emptySet();
-
-        if (event instanceof McMMOPlayerLevelUpEvent) {
-            events = new HashSet<RewardEvent>();
-            events.addAll(createRewardEvents((McMMOPlayerLevelUpEvent) event));
-        }
-
-        return events;
+        return event instanceof McMMOPlayerLevelUpEvent ? createRewardEvents((McMMOPlayerLevelUpEvent) event) : EMPTY_COLLECTION;
     }
 
-    private Set<RewardEvent> createRewardEvents(McMMOPlayerLevelUpEvent event)
+    private Collection<RewardEvent> createRewardEvents(McMMOPlayerLevelUpEvent event)
     {
-        Set<RewardEvent> events = Collections.emptySet();
-
         Player player = event.getPlayer();
         WorldSettings settings = getSettings(player.getWorld());
 
-        for (Reward reward : settings.createReward(event)) {
-            events = new HashSet<RewardEvent>();
-            events.add(new RewardEvent(player, reward));
-        }
-
-        return events;
+        return Lists.newArrayList(new RewardEvent(player, settings.createRewards(event)));
     }
 }

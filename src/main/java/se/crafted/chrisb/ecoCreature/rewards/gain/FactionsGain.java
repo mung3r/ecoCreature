@@ -57,8 +57,10 @@ public class FactionsGain extends AbstractPlayerGain<Rel>
         UPlayer uPlayer = UPlayer.get(player);
         Faction faction = BoardColls.get().getFactionAt(PS.valueOf(player.getLocation()));
         Rel rel = RelationUtil.getRelationOfThatToMe(faction, uPlayer);
-        return uPlayer != null && getMultipliers().containsKey(rel) ?
+        double multiplier = uPlayer != null && getMultipliers().containsKey(rel) ?
                 getMultipliers().get(rel) : NO_GAIN;
+        LoggerUtil.getInstance().debug("Gain: " + multiplier);
+        return multiplier;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

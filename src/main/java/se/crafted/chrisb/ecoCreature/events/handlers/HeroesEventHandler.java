@@ -19,9 +19,9 @@
  */
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
+
+import net.minecraft.util.com.google.common.collect.Lists;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -30,7 +30,6 @@ import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
 public class HeroesEventHandler extends AbstractEventHandler
@@ -47,30 +46,16 @@ public class HeroesEventHandler extends AbstractEventHandler
     }
 
     @Override
-    public Set<RewardEvent> createRewardEvents(Event event)
+    public Collection<RewardEvent> createRewardEvents(Event event)
     {
-        Set<RewardEvent> events = Collections.emptySet();
-
-        if (event instanceof HeroChangeLevelEvent) {
-            events = new HashSet<RewardEvent>();
-            events.addAll(createRewardEvents((HeroChangeLevelEvent) event));
-        }
-
-        return events;
+        return event instanceof HeroChangeLevelEvent ? createRewardEvents((HeroChangeLevelEvent) event) : EMPTY_COLLECTION;
     }
 
-    private Set<RewardEvent> createRewardEvents(HeroChangeLevelEvent event)
+    private Collection<RewardEvent> createRewardEvents(HeroChangeLevelEvent event)
     {
-        Set<RewardEvent> events = Collections.emptySet();
-
         Player player = event.getHero().getPlayer();
         WorldSettings settings = getSettings(player.getWorld());
 
-        for (Reward reward : settings.createReward(event)) {
-            events = new HashSet<RewardEvent>();
-            events.add(new RewardEvent(player, reward));
-        }
-
-        return events;
+        return Lists.newArrayList(new RewardEvent(player, settings.createRewards(event)));
     }
 }

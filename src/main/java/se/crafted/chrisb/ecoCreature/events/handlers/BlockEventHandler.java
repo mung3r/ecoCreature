@@ -19,13 +19,15 @@
  */
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
@@ -48,34 +50,28 @@ public class BlockEventHandler extends AbstractEventHandler
     }
 
     @Override
-    public Set<RewardEvent> createRewardEvents(Event event)
+    public Collection<RewardEvent> createRewardEvents(Event event)
     {
-        Set<RewardEvent> events = Collections.emptySet();
-
-        if (event instanceof BlockBreakEvent) {
-            events = new HashSet<RewardEvent>();
-            events.addAll(createRewardEvents((BlockBreakEvent) event));
-        }
-
-        return events;
+        return event instanceof BlockBreakEvent ? createRewardEvents((BlockBreakEvent) event) : EMPTY_COLLECTION;
     }
 
-    private Set<RewardEvent> createRewardEvents(BlockBreakEvent event)
+    private Collection<RewardEvent> createRewardEvents(BlockBreakEvent event)
     {
-        Set<RewardEvent> events = Collections.emptySet();
+        final Player player = event.getPlayer();
+        final WorldSettings settings = getSettings(player.getWorld());
 
-        Player player = event.getPlayer();
-        WorldSettings settings = getSettings(player.getWorld());
+        Collection<Reward> rewards = Collections2.transform(settings.createRewards(event), new Function<Reward, Reward>() {
 
-        for (Reward reward : settings.createReward(event)) {
-            reward.setGain(settings.getGainMultiplier(player));
-            reward.addParameter(MessageToken.ITEM, EntityUtils.getItemNameInHand(player))
-                .addParameter(MessageToken.CREATURE, reward.getName());
+            @Override
+            public Reward apply(Reward reward)
+            {
+                reward.setGain(settings.getGainMultiplier(player));
+                reward.addParameter(MessageToken.ITEM, EntityUtils.getItemNameInHand(player))
+                    .addParameter(MessageToken.CREATURE, reward.getName());
+                return reward;
+            }
+        });
 
-            events = new HashSet<RewardEvent>();
-            events.add(new RewardEvent(player, reward));
-        }
-
-        return events;
+        return Lists.newArrayList(new RewardEvent(player, rewards));
     }
 }

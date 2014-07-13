@@ -19,8 +19,7 @@
  */
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
-import java.util.Collections;
-import java.util.Set;
+import java.util.Collection;
 
 import org.bukkit.event.Event;
 
@@ -44,13 +43,13 @@ public class EntityFarmedEventHandler extends AbstractEventHandler
     }
 
     @Override
-    public Set<RewardEvent> createRewardEvents(Event event)
+    public Collection<RewardEvent> createRewardEvents(Event event)
     {
         if (event instanceof EntityFarmedEvent) {
             handleNoFarm((EntityFarmedEvent) event);
         }
 
-        return Collections.emptySet();
+        return EMPTY_COLLECTION;
     }
 
     private void handleNoFarm(EntityFarmedEvent event)

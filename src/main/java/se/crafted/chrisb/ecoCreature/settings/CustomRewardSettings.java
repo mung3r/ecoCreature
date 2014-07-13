@@ -20,8 +20,8 @@
 package se.crafted.chrisb.ecoCreature.settings;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -40,7 +40,7 @@ import se.crafted.chrisb.ecoCreature.settings.types.CustomRewardType;
 
 public class CustomRewardSettings extends AbstractRewardSettings<CustomRewardType>
 {
-    public CustomRewardSettings(Map<CustomRewardType, List<AbstractRewardSource>> sources)
+    public CustomRewardSettings(Map<CustomRewardType, Collection<AbstractRewardSource>> sources)
     {
         super(sources);
     }
@@ -85,7 +85,7 @@ public class CustomRewardSettings extends AbstractRewardSettings<CustomRewardTyp
     }
 
     @Override
-    public List<AbstractRewardSource> getRewardSource(Event event)
+    public Collection<AbstractRewardSource> getRewardSource(Event event)
     {
         if (event instanceof PlayerKilledEvent) {
             return getRewardSource(CustomRewardType.LEGACY_PVP);
@@ -99,7 +99,7 @@ public class CustomRewardSettings extends AbstractRewardSettings<CustomRewardTyp
 
     public static AbstractRewardSettings<CustomRewardType> parseConfig(ConfigurationSection config)
     {
-        Map<CustomRewardType, List<AbstractRewardSource>> sources = new HashMap<CustomRewardType, List<AbstractRewardSource>>();
+        Map<CustomRewardType, Collection<AbstractRewardSource>> sources = new HashMap<CustomRewardType, Collection<AbstractRewardSource>>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {

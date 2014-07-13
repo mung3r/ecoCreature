@@ -20,6 +20,7 @@
 package se.crafted.chrisb.ecoCreature.rewards.models;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -78,9 +79,9 @@ public class LoreDrop extends ItemDrop
         return itemStack;
     }
 
-    public static List<AbstractItemDrop> parseConfig(ConfigurationSection config)
+    public static Collection<AbstractItemDrop> parseConfig(ConfigurationSection config)
     {
-        List<AbstractItemDrop> drops = Collections.emptyList();
+        Collection<AbstractItemDrop> drops = Collections.emptyList();
 
         if (config != null && config.getList("Drops") != null) {
             drops = new ArrayList<AbstractItemDrop>();

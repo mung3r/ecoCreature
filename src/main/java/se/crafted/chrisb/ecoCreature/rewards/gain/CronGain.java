@@ -51,7 +51,8 @@ public class CronGain extends AbstractPlayerGain<String>
                 multiplier *= entry.getValue();
             }
         }
-        
+
+        LoggerUtil.getInstance().debug("Gain: " + multiplier);
         return multiplier;
     }
 

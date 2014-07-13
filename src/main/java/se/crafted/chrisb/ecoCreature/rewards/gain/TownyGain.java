@@ -51,7 +51,9 @@ public class TownyGain extends AbstractPlayerGain<String>
     @Override
     public double getGain(Player player)
     {
-        return getMultiplier(TownyUniverse.getTownName(player.getLocation()));
+        double multiplier = getMultiplier(TownyUniverse.getTownName(player.getLocation()));
+        LoggerUtil.getInstance().debug("Gain: " + multiplier);
+        return multiplier;
     }
 
     @Override
@@ -67,7 +69,6 @@ public class TownyGain extends AbstractPlayerGain<String>
             }
         }
 
-        LoggerUtil.getInstance().debug("Multiplier: " + multiplier);
         return multiplier;
     }
 

@@ -19,14 +19,14 @@
  */
 package se.crafted.chrisb.ecoCreature.rewards.models;
 
-import java.util.List;
+import java.util.Collection;
 
 
 public interface EntityReward
 {
     boolean hasEntityDrops();
 
-    List<EntityDrop> getEntityDrops();
+    Collection<EntityDrop> getEntityDrops();
 
-    void setEntityDrops(List<EntityDrop> entityDrops);
+    void setEntityDrops(Collection<EntityDrop> entityDrops);
 }

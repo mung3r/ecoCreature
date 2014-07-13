@@ -20,15 +20,17 @@
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.Collection;
+
+import net.minecraft.util.com.google.common.collect.Lists;
 
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.PlayerDeathEvent;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
@@ -51,63 +53,60 @@ public class PlayerKilledEventHandler extends AbstractEventHandler
     }
 
     @Override
-    public Set<RewardEvent> createRewardEvents(Event event)
+    public Collection<RewardEvent> createRewardEvents(Event event)
     {
-        Set<RewardEvent> events = Collections.emptySet();
-
-        if (event instanceof PlayerKilledEvent) {
-            events = new HashSet<RewardEvent>();
-            events.addAll(createRewardEvents((PlayerKilledEvent) event));
-        }
-
-        return events;
+        return event instanceof PlayerKilledEvent ? createRewardEvents((PlayerKilledEvent) event) : EMPTY_COLLECTION;
     }
 
-    private Set<RewardEvent> createRewardEvents(PlayerKilledEvent event)
+    private Collection<RewardEvent> createRewardEvents(PlayerKilledEvent event)
     {
-        Set<RewardEvent> events = Collections.emptySet();
-
         Player killer = event.getKiller();
         Player victim = event.getVictim();
         WorldSettings settings = getSettings(killer.getWorld());
+        Collection<Reward> rewards = new ArrayList<Reward>();
+        Collection<Reward> penalties = new ArrayList<Reward>();
 
         for (Reward killerReward : createWinnerReward(event)) {
-            events = new HashSet<RewardEvent>();
-            events.add(new RewardEvent(killer, killerReward));
+            rewards.add(killerReward);
 
             PlayerDeathEvent deathEvent = new PlayerDeathEvent(event.getEntity(), event.getDrops(), event.getDroppedExp(), event.getNewExp(),
                     event.getNewTotalExp(), event.getNewLevel(), event.getDeathMessage());
-            for (Reward penalty : settings.createReward(deathEvent)) {
+            for (Reward penalty : settings.createRewards(deathEvent)) {
                 penalty.setCoin(killerReward.getCoin());
                 penalty.setGain(-killerReward.getGain());
 
-                events.add(new RewardEvent(victim, penalty));
+                penalties.add(penalty);
             }
         }
 
-        return events;
+        return Lists.newArrayList(new RewardEvent(killer, rewards), new RewardEvent(victim, penalties));
     }
 
-    private List<Reward> createWinnerReward(PlayerKilledEvent event)
+    private Collection<Reward> createWinnerReward(final PlayerKilledEvent event)
     {
-        List<Reward> rewards = new ArrayList<Reward>();
+        final WorldSettings settings = getSettings(event.getEntity().getWorld());
 
-        for (Reward reward : getSettings(event.getEntity().getWorld()).createReward(event)) {
-            reward.addParameter(MessageToken.CREATURE, event.getVictim().getName());
-    
-            /*if ((settings.isOverrideDrops() && reward.hasDrops()) || (settings.isClearOnNoDrops() && !reward.hasDrops())) {
-                event.getDrops().clear();
-            }*/
-    
-            if (reward.getEntityDrops().contains(EntityType.EXPERIENCE_ORB)) {
-                event.setDroppedExp(0);
+        Collection<Reward> rewards = Collections2.transform(settings.createRewards(event), new Function<Reward, Reward>() {
+
+            @Override
+            public Reward apply(Reward reward)
+            {
+                reward.addParameter(MessageToken.CREATURE, event.getVictim().getName());
+                
+                /*if ((settings.isOverrideDrops() && reward.hasDrops()) || (settings.isClearOnNoDrops() && !reward.hasDrops())) {
+                    event.getDrops().clear();
+                }*/
+        
+                if (reward.getEntityDrops().contains(EntityType.EXPERIENCE_ORB)) {
+                    event.setDroppedExp(0);
+                }
+        
+                //addPlayerSkullToEvent(reward, event);
+                addBooksToEvent(reward, event);
+
+                return reward;
             }
-    
-            //addPlayerSkullToEvent(reward, event);
-            addBooksToEvent(reward, event);
-            
-            rewards.add(reward);
-        }
+        });
 
         return rewards;
     }

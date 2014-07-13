@@ -19,9 +19,9 @@
  */
 package se.crafted.chrisb.ecoCreature.rewards;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -49,9 +49,9 @@ public class Reward
 
     private String name;
     private double coin;
-    private List<ItemStack> itemDrops;
-    private List<EntityType> entityDrops;
-    private List<EntityType> jockeyDrops;
+    private Collection<ItemStack> itemDrops;
+    private Collection<EntityType> entityDrops;
+    private Collection<EntityType> jockeyDrops;
     private Message message;
     private Map<MessageToken, String> parameters;
 
@@ -157,32 +157,32 @@ public class Reward
         return !itemDrops.isEmpty() || !entityDrops.isEmpty() || !jockeyDrops.isEmpty();
     }
 
-    public List<ItemStack> getItemDrops()
+    public Collection<ItemStack> getItemDrops()
     {
         return itemDrops;
     }
 
-    public void setItemDrops(List<ItemStack> itemDrops)
+    public void setItemDrops(Collection<ItemStack> collection)
     {
-        this.itemDrops = itemDrops;
+        this.itemDrops = collection;
     }
 
-    public List<EntityType> getEntityDrops()
+    public Collection<EntityType> getEntityDrops()
     {
         return entityDrops;
     }
 
-    public void setEntityDrops(List<EntityType> entityDrops)
+    public void setEntityDrops(Collection<EntityType> entityDrops)
     {
         this.entityDrops = entityDrops;
     }
 
-    public List<EntityType> getJockeyDrops()
+    public Collection<EntityType> getJockeyDrops()
     {
         return jockeyDrops;
     }
 
-    public void setJockeyDrops(List<EntityType> jobkeyDrops)
+    public void setJockeyDrops(Collection<EntityType> jobkeyDrops)
     {
         this.jockeyDrops = jobkeyDrops;
     }

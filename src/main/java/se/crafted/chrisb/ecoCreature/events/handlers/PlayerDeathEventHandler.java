@@ -19,9 +19,9 @@
  */
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
+
+import net.minecraft.util.com.google.common.collect.Lists;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -29,7 +29,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
 
 public class PlayerDeathEventHandler extends AbstractEventHandler
@@ -46,30 +45,16 @@ public class PlayerDeathEventHandler extends AbstractEventHandler
     }
 
     @Override
-    public Set<RewardEvent> createRewardEvents(Event event)
+    public Collection<RewardEvent> createRewardEvents(Event event)
     {
-        Set<RewardEvent> events = Collections.emptySet();
-
-        if (event instanceof PlayerDeathEvent) {
-            events = new HashSet<RewardEvent>();
-            events.addAll(createRewardEvents((PlayerDeathEvent) event));
-        }
-
-        return events;
+        return event instanceof PlayerDeathEvent ? createRewardEvents((PlayerDeathEvent) event) : EMPTY_COLLECTION;
     }
 
-    private Set<RewardEvent> createRewardEvents(PlayerDeathEvent event)
+    private Collection<RewardEvent> createRewardEvents(PlayerDeathEvent event)
     {
-        Set<RewardEvent> events = Collections.emptySet();
-
         Player player = event.getEntity();
         WorldSettings settings = getSettings(player.getWorld());
 
-        for (Reward reward : settings.createReward(event)) {
-            events = new HashSet<RewardEvent>();
-            events.add(new RewardEvent(player, reward));
-        }
-
-        return events;
+        return Lists.newArrayList(new RewardEvent(player, settings.createRewards(event)));
     }
 }

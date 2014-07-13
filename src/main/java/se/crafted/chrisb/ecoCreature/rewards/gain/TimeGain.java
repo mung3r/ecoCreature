@@ -41,7 +41,9 @@ public class TimeGain extends AbstractPlayerGain<TimePeriod>
     @Override
     public double getGain(Player player)
     {
-        return getMultiplier(TimePeriod.fromEntity(player));
+        double multiplier = getMultiplier(TimePeriod.fromEntity(player));
+        LoggerUtil.getInstance().debug("Gain: " + multiplier);
+        return multiplier;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

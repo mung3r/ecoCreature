@@ -97,7 +97,7 @@ public enum CustomEntityRewardType
             entityType = CustomEntityRewardType.fromName(entity.getType().getName());
         }
 
-        LoggerUtil.getInstance().debugTrue("No match for type: " + entity.getType().getName(), entityType.equals(INVALID));
+        //LoggerUtil.getInstance().debugTrue("No match for type: " + entity.getType().getName(), entityType.equals(INVALID));
 
         return entityType;
     }

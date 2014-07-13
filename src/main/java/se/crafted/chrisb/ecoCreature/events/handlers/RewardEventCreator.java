@@ -19,7 +19,7 @@
  */
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
-import java.util.Set;
+import java.util.Collection;
 
 import org.bukkit.World;
 import org.bukkit.event.Event;
@@ -31,7 +31,7 @@ public interface RewardEventCreator
 {
     boolean isRewardSource(Event event);
 
-    Set<RewardEvent> createRewardEvents(Event event);
+    Collection<RewardEvent> createRewardEvents(Event event);
 
     WorldSettings getSettings(World world);
 }

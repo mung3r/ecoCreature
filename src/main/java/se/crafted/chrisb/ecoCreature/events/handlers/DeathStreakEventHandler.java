@@ -19,13 +19,15 @@
  */
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
@@ -46,33 +48,27 @@ public class DeathStreakEventHandler extends AbstractEventHandler
     }
 
     @Override
-    public Set<RewardEvent> createRewardEvents(Event event)
+    public Collection<RewardEvent> createRewardEvents(Event event)
     {
-        Set<RewardEvent> events = Collections.emptySet();
-
-        if (event instanceof DeathStreakEvent) {
-            events = new HashSet<RewardEvent>();
-            events.addAll(createRewardEvents((DeathStreakEvent) event));
-        }
-
-        return events;
+        return event instanceof DeathStreakEvent ? createRewardEvents((DeathStreakEvent) event) : EMPTY_COLLECTION;
     }
 
-    private Set<RewardEvent> createRewardEvents(DeathStreakEvent event)
+    private Collection<RewardEvent> createRewardEvents(DeathStreakEvent event)
     {
-        Set<RewardEvent> events = Collections.emptySet();
-
         Player player = event.getPlayer();
-        int deaths = event.getDeaths();
+        final int deaths = event.getDeaths();
         WorldSettings settings = getSettings(player.getWorld());
 
-        for (Reward reward : settings.createReward(event)) {
-            reward.setGain(deaths);
+        Collection<Reward> rewards = Collections2.transform(settings.createRewards(event), new Function<Reward, Reward>() {
 
-            events = new HashSet<RewardEvent>();
-            events.add(new RewardEvent(player, reward));
-        }
+            @Override
+            public Reward apply(Reward reward)
+            {
+                reward.setGain(deaths);
+                return reward;
+            }
+        });
 
-        return events;
+        return Lists.newArrayList(new RewardEvent(player, rewards));
     }
 }

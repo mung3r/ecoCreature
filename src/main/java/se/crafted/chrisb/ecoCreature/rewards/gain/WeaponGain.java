@@ -30,6 +30,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class WeaponGain extends AbstractPlayerGain<Material>
 {
@@ -41,7 +42,9 @@ public class WeaponGain extends AbstractPlayerGain<Material>
     @Override
     public double getGain(Player player)
     {
-        return getMultiplier(EntityUtils.getItemTypeInHand(player));
+        double multiplier = getMultiplier(EntityUtils.getItemTypeInHand(player));
+        LoggerUtil.getInstance().debug("Gain: " + multiplier);
+        return multiplier;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

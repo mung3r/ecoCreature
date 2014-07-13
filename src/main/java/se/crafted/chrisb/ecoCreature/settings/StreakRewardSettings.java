@@ -20,8 +20,8 @@
 package se.crafted.chrisb.ecoCreature.settings;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -38,7 +38,7 @@ import se.crafted.chrisb.ecoCreature.settings.types.StreakRewardType;
 
 public class StreakRewardSettings extends AbstractRewardSettings<StreakRewardType>
 {
-    public StreakRewardSettings(Map<StreakRewardType, List<AbstractRewardSource>> sources)
+    public StreakRewardSettings(Map<StreakRewardType, Collection<AbstractRewardSource>> sources)
     {
         super(sources);
     }
@@ -85,7 +85,7 @@ public class StreakRewardSettings extends AbstractRewardSettings<StreakRewardTyp
     }
 
     @Override
-    public List<AbstractRewardSource> getRewardSource(Event event)
+    public Collection<AbstractRewardSource> getRewardSource(Event event)
     {
         if (DependencyUtils.hasDeathTpPlus() && event instanceof DeathStreakEvent) {
             return getRewardSource(StreakRewardType.DEATH_STREAK);
@@ -99,7 +99,7 @@ public class StreakRewardSettings extends AbstractRewardSettings<StreakRewardTyp
 
     public static AbstractRewardSettings<StreakRewardType> parseConfig(ConfigurationSection config)
     {
-        Map<StreakRewardType, List<AbstractRewardSource>> sources = new HashMap<StreakRewardType, List<AbstractRewardSource>>();
+        Map<StreakRewardType, Collection<AbstractRewardSource>> sources = new HashMap<StreakRewardType, Collection<AbstractRewardSource>>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {

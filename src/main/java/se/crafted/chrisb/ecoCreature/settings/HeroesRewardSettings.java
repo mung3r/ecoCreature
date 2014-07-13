@@ -20,8 +20,8 @@
 package se.crafted.chrisb.ecoCreature.settings;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -38,7 +38,7 @@ import se.crafted.chrisb.ecoCreature.settings.types.HeroesRewardType;
 
 public class HeroesRewardSettings extends AbstractRewardSettings<HeroesRewardType>
 {
-    public HeroesRewardSettings(Map<HeroesRewardType, List<AbstractRewardSource>> sources)
+    public HeroesRewardSettings(Map<HeroesRewardType, Collection<AbstractRewardSource>> sources)
     {
         super(sources);
     }
@@ -81,7 +81,7 @@ public class HeroesRewardSettings extends AbstractRewardSettings<HeroesRewardTyp
     }
 
     @Override
-    public List<AbstractRewardSource> getRewardSource(Event event)
+    public Collection<AbstractRewardSource> getRewardSource(Event event)
     {
         if (DependencyUtils.hasHeroes() && event instanceof HeroChangeLevelEvent) {
             HeroChangeLevelEvent changeLevelEvent = (HeroChangeLevelEvent) event;
@@ -99,7 +99,7 @@ public class HeroesRewardSettings extends AbstractRewardSettings<HeroesRewardTyp
 
     public static AbstractRewardSettings<HeroesRewardType> parseConfig(ConfigurationSection config)
     {
-        Map<HeroesRewardType, List<AbstractRewardSource>> sources = new HashMap<HeroesRewardType, List<AbstractRewardSource>>();
+        Map<HeroesRewardType, Collection<AbstractRewardSource>> sources = new HashMap<HeroesRewardType, Collection<AbstractRewardSource>>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {

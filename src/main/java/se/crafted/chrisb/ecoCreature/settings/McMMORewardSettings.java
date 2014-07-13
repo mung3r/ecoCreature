@@ -20,8 +20,8 @@
 package se.crafted.chrisb.ecoCreature.settings;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -37,7 +37,7 @@ import se.crafted.chrisb.ecoCreature.settings.types.McMMORewardType;
 
 public class McMMORewardSettings extends AbstractRewardSettings<McMMORewardType>
 {
-    public McMMORewardSettings(Map<McMMORewardType, List<AbstractRewardSource>> sources)
+    public McMMORewardSettings(Map<McMMORewardType, Collection<AbstractRewardSource>> sources)
     {
         super(sources);
     }
@@ -63,7 +63,7 @@ public class McMMORewardSettings extends AbstractRewardSettings<McMMORewardType>
     }
 
     @Override
-    public List<AbstractRewardSource> getRewardSource(Event event)
+    public Collection<AbstractRewardSource> getRewardSource(Event event)
     {
         if (event instanceof McMMOPlayerLevelUpEvent) {
             return getRewardSource(McMMORewardType.MCMMO_LEVELED);
@@ -74,7 +74,7 @@ public class McMMORewardSettings extends AbstractRewardSettings<McMMORewardType>
 
     public static AbstractRewardSettings<McMMORewardType> parseConfig(ConfigurationSection config)
     {
-        Map<McMMORewardType, List<AbstractRewardSource>> sources = new HashMap<McMMORewardType, List<AbstractRewardSource>>();
+        Map<McMMORewardType, Collection<AbstractRewardSource>> sources = new HashMap<McMMORewardType, Collection<AbstractRewardSource>>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {

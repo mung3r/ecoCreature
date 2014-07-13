@@ -37,7 +37,7 @@ public class WeatherGainTest
             type = WeatherType.valueOf("foo");
         }
         catch (IllegalArgumentException e) {
-            Assert.fail();
+            Assert.assertNull(type);
         }
 
         type = WeatherType.valueOf("SUNNY");

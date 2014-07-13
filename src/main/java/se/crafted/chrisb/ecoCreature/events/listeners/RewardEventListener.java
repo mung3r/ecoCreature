@@ -21,6 +21,7 @@ package se.crafted.chrisb.ecoCreature.events.listeners;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -62,17 +63,19 @@ public class RewardEventListener implements Listener
     public void onRewardEvent(RewardEvent event)
     {
         if (!event.isCancelled()) {
-            Reward reward = event.getReward();
+            Collection<Reward> rewards = event.getRewards();
             Player player = event.getPlayer();
 
-            if (player != null) { // TODO: fix this upstream for citizens2
-                dropCoin(player, reward);
-                dropItems(player, reward);
-                dropEntities(reward);
-                dropJockeys(reward);
-
-                plugin.getMetrics().addCount(reward.getName());
-                LoggerUtil.getInstance().debug("Added metrics count for " + reward.getName());
+            for (Reward reward : rewards) {
+                if (player != null) { // TODO: fix this upstream for citizens2
+                    dropCoin(player, reward);
+                    dropItems(player, reward);
+                    dropEntities(reward);
+                    dropJockeys(reward);
+    
+                    plugin.getMetrics().addCount(reward.getName());
+                    LoggerUtil.getInstance().debug("Added metrics count for " + reward.getName());
+                }
             }
         }
     }
@@ -109,6 +112,7 @@ public class RewardEventListener implements Listener
 
     private double calculateAmount(Reward reward)
     {
+        LoggerUtil.getInstance().debug("===== START: coin calculation for " + reward.getName());
         LoggerUtil.getInstance().debug("Initial amount: " + reward.getCoin());
         LoggerUtil.getInstance().debug("Gain: " + reward.getGain());
         double amount = reward.getCoin() * reward.getGain();
@@ -128,7 +132,7 @@ public class RewardEventListener implements Listener
             amount = round(amount, 2, BigDecimal.ROUND_HALF_UP);
             LoggerUtil.getInstance().debug("Rounded decimal amount: " + amount);
         }
-
+        LoggerUtil.getInstance().debug("===== END: amount is " + amount);
         return amount;
     }
 

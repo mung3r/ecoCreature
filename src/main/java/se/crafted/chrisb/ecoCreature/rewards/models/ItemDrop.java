@@ -21,9 +21,9 @@ package se.crafted.chrisb.ecoCreature.rewards.models;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.math.NumberRange;
@@ -40,13 +40,13 @@ public class ItemDrop extends AbstractItemDrop
         super(material);
     }
 
-    public static List<AbstractItemDrop> parseConfig(ConfigurationSection config)
+    public static Collection<AbstractItemDrop> parseConfig(ConfigurationSection config)
     {
-        List<AbstractItemDrop> drops = Collections.emptyList();
+        Collection<AbstractItemDrop> drops = Collections.emptyList();
 
         if (config != null) {
             if (config.getList("Drops") != null) {
-                List<String> dropsList = config.getStringList("Drops");
+                Collection<String> dropsList = config.getStringList("Drops");
                 drops = parseDrops(dropsList);
             }
             else {
@@ -57,9 +57,9 @@ public class ItemDrop extends AbstractItemDrop
         return drops;
     }
 
-    private static List<AbstractItemDrop> parseDrops(String dropsString)
+    private static Collection<AbstractItemDrop> parseDrops(String dropsString)
     {
-        List<AbstractItemDrop> drops = Collections.emptyList();
+        Collection<AbstractItemDrop> drops = Collections.emptyList();
 
         if (dropsString != null && !dropsString.isEmpty()) {
             drops = parseDrops(Arrays.asList(dropsString.split(";")));
@@ -68,9 +68,9 @@ public class ItemDrop extends AbstractItemDrop
         return drops;
     }
 
-    private static List<AbstractItemDrop> parseDrops(List<String> dropsList)
+    private static Collection<AbstractItemDrop> parseDrops(Collection<String> dropsList)
     {
-        List<AbstractItemDrop> drops = Collections.emptyList();
+        Collection<AbstractItemDrop> drops = Collections.emptyList();
 
         if (dropsList != null && !dropsList.isEmpty()) {
             drops = new ArrayList<AbstractItemDrop>();
@@ -83,9 +83,9 @@ public class ItemDrop extends AbstractItemDrop
         return drops;
     }
 
-    protected static List<AbstractItemDrop> parseItem(String dropString)
+    protected static Collection<AbstractItemDrop> parseItem(String dropString)
     {
-        List<AbstractItemDrop> drops = Collections.emptyList();
+        Collection<AbstractItemDrop> drops = Collections.emptyList();
 
         if (parseMaterial(dropString) != null) {
             drops = new ArrayList<AbstractItemDrop>();
@@ -116,7 +116,7 @@ public class ItemDrop extends AbstractItemDrop
             String[] itemSubParts = itemParts[0].split("\\.");
     
             material = Material.matchMaterial(itemSubParts[0]);
-            LoggerUtil.getInstance().debugTrue("No match for type: " + itemParts[0], material == null);
+            //LoggerUtil.getInstance().debugTrue("No match for type: " + itemParts[0], material == null);
         }
 
         return material;

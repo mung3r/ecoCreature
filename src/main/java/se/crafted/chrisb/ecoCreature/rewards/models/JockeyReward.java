@@ -19,14 +19,14 @@
  */
 package se.crafted.chrisb.ecoCreature.rewards.models;
 
-import java.util.List;
+import java.util.Collection;
 
 
 public interface JockeyReward
 {
     boolean hasJockeyDrops();
 
-    List<JockeyDrop> getJockeyDrops();
+    Collection<JockeyDrop> getJockeyDrops();
 
-    void setJockeyDrops(List<JockeyDrop> jockeyDrops);
+    void setJockeyDrops(Collection<JockeyDrop> jockeyDrops);
 }

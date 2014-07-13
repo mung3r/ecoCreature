@@ -32,6 +32,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class RegionGain extends AbstractPlayerGain<String>
 {
@@ -59,6 +60,7 @@ public class RegionGain extends AbstractPlayerGain<String>
             }
         }
 
+        LoggerUtil.getInstance().debug("Gain: " + multiplier);
         return multiplier;
     }
 

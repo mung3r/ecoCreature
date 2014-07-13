@@ -19,11 +19,10 @@
  */
 package se.crafted.chrisb.ecoCreature.settings;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -53,30 +52,30 @@ import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 
 public abstract class AbstractRewardSettings<T>
 {
-    private Map<T, List<AbstractRewardSource>> sources;
+    private Map<T, Collection<AbstractRewardSource>> sources;
 
-    public AbstractRewardSettings(Map<T, List<AbstractRewardSource>> sources)
+    public AbstractRewardSettings(Map<T, Collection<AbstractRewardSource>> sources)
     {
         this.sources = sources;
     }
 
-    public Map<T, List<AbstractRewardSource>> getSources()
+    public Map<T, Collection<AbstractRewardSource>> getSources()
     {
         return sources;
     }
 
     public abstract boolean hasRewardSource(Event event);
 
-    public abstract List<AbstractRewardSource> getRewardSource(Event event);
+    public abstract Collection<AbstractRewardSource> getRewardSource(Event event);
 
     protected boolean hasRewardSource(T type)
     {
         return type != null && getSources().containsKey(type) && !getSources().get(type).isEmpty();
     }
 
-    protected List<AbstractRewardSource> getRewardSource(T type)
+    protected Collection<AbstractRewardSource> getRewardSource(T type)
     {        
-        List<AbstractRewardSource> source = hasRewardSource(type) ? getSources().get(type) : null;
+        Collection<AbstractRewardSource> source = hasRewardSource(type) ? getSources().get(type) : null;
         LoggerUtil.getInstance().debugTrue("No reward defined for type: " + type, source == null);
 
         return source;
@@ -100,12 +99,12 @@ public abstract class AbstractRewardSettings<T>
         return true;
     }
 
-    protected static List<AbstractRewardSource> getSets(String rewardSection, ConfigurationSection config)
+    protected static Collection<AbstractRewardSource> getSets(String rewardSection, ConfigurationSection config)
     {
-        List<AbstractRewardSource> sources = new ArrayList<AbstractRewardSource>();
+        Collection<AbstractRewardSource> sources = new HashSet<AbstractRewardSource>();
         ConfigurationSection rewardConfig = config.getConfigurationSection(rewardSection);
         ConfigurationSection rewardSets = config.getConfigurationSection("RewardSets");
-        List<String> sets = rewardConfig.getStringList("Sets");
+        Collection<String> sets = rewardConfig.getStringList("Sets");
 
         if (!sets.isEmpty() && rewardSets != null) {
             for (String setName : sets) {

@@ -240,7 +240,7 @@ public final class DependencyUtils
             }
         }
         catch (ClassNotFoundException e) {
-            LoggerUtil.getInstance().info("Did not find plugin: " + pluginName);
+            LoggerUtil.getInstance().debug("Did not find plugin: " + pluginName);
         }
         return null;
     }

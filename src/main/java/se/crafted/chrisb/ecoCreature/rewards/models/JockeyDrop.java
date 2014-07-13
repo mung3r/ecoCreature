@@ -20,8 +20,8 @@
 package se.crafted.chrisb.ecoCreature.rewards.models;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -52,9 +52,9 @@ public class JockeyDrop extends EntityDrop
         return getType();
     }
 
-    public static List<EntityDrop> parseConfig(ConfigurationSection config)
+    public static Collection<EntityDrop> parseConfig(ConfigurationSection config)
     {
-        List<EntityDrop> drops = new ArrayList<EntityDrop>();
+        Collection<EntityDrop> drops = new ArrayList<EntityDrop>();
 
         if (config != null && config.getList("Drops") != null) {
             
@@ -75,9 +75,9 @@ public class JockeyDrop extends EntityDrop
     }
 
     @Override
-    public List<EntityType> getOutcome()
+    public Collection<EntityType> getOutcome()
     {
-        List<EntityType> types = new ArrayList<EntityType>();
+        Collection<EntityType> types = new ArrayList<EntityType>();
         for (EntityType vehicle : super.getOutcome()) {
             types.add(vehicle);
             types.add(passenger);

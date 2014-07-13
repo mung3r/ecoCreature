@@ -19,9 +19,9 @@
  */
 package se.crafted.chrisb.ecoCreature.rewards.parties;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -40,7 +40,7 @@ public class McMMOParty extends AbstractParty
         Set<String> party = Collections.emptySet();
 
         if (DependencyUtils.hasMcMMO() && PartyAPI.inParty(player)) {
-            List<Player> members = PartyAPI.getOnlineMembers(player);
+            Collection<Player> members = PartyAPI.getOnlineMembers(player);
             if (members != null) {
                 party = new HashSet<String>();
 
@@ -54,9 +54,9 @@ public class McMMOParty extends AbstractParty
         return party;
     }
 
-    public static Set<Party> parseConfig(ConfigurationSection config)
+    public static Collection<Party> parseConfig(ConfigurationSection config)
     {
-        Set<Party> parties = Collections.emptySet();
+        Collection<Party> parties = Collections.emptySet();
 
         if (config != null) {
             McMMOParty party = new McMMOParty();

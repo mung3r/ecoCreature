@@ -27,7 +27,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public abstract class AbstractPlayerGain<T> implements PlayerGain
 {
@@ -54,9 +53,7 @@ public abstract class AbstractPlayerGain<T> implements PlayerGain
 
     protected double getMultiplier(T type)
     {
-        double multiplier = type != null && getMultipliers().containsKey(type) ? getMultipliers().get(type) : NO_GAIN;
-        LoggerUtil.getInstance().debug("Multiplier: " + multiplier);
-        return multiplier;
+        return type != null && getMultipliers().containsKey(type) ? getMultipliers().get(type) : NO_GAIN;
     }
 
     protected Map<T, Double> getMultipliers()

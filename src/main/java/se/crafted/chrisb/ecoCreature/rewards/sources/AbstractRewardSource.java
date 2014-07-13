@@ -20,8 +20,8 @@
 package se.crafted.chrisb.ecoCreature.rewards.sources;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Location;
@@ -59,9 +59,9 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
 
     private String name;
     private CoinDrop coin;
-    private List<AbstractItemDrop> itemDrops;
-    private List<EntityDrop> entityDrops;
-    private List<JockeyDrop> jockeyDrops;
+    private Collection<AbstractItemDrop> itemDrops;
+    private Collection<EntityDrop> entityDrops;
+    private Collection<JockeyDrop> jockeyDrops;
 
     private Message noCoinRewardMessage;
     private Message coinRewardMessage;
@@ -149,13 +149,13 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
     }
 
     @Override
-    public List<AbstractItemDrop> getItemDrops()
+    public Collection<AbstractItemDrop> getItemDrops()
     {
         return itemDrops;
     }
 
     @Override
-    public void setItemDrops(List<AbstractItemDrop> drops)
+    public void setItemDrops(Collection<AbstractItemDrop> drops)
     {
         this.itemDrops = drops;
     }
@@ -167,13 +167,13 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
     }
 
     @Override
-    public List<EntityDrop> getEntityDrops()
+    public Collection<EntityDrop> getEntityDrops()
     {
         return entityDrops;
     }
 
     @Override
-    public void setEntityDrops(List<EntityDrop> entityDrops)
+    public void setEntityDrops(Collection<EntityDrop> entityDrops)
     {
         this.entityDrops = entityDrops;
     }
@@ -185,13 +185,13 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
     }
 
     @Override
-    public List<JockeyDrop> getJockeyDrops()
+    public Collection<JockeyDrop> getJockeyDrops()
     {
         return jockeyDrops;
     }
 
     @Override
-    public void setJockeyDrops(List<JockeyDrop> jockeyDrops)
+    public void setJockeyDrops(Collection<JockeyDrop> jockeyDrops)
     {
         this.jockeyDrops = jockeyDrops;
     }
@@ -309,9 +309,9 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
 
     protected abstract Location getLocation(Event event);
 
-    private List<ItemStack> getItemDropOutcomes()
+    private Collection<ItemStack> getItemDropOutcomes()
     {
-        List<ItemStack> stacks = Collections.emptyList();
+        Collection<ItemStack> stacks = Collections.emptyList();
 
         if (itemDrops != null) {
             stacks = new ArrayList<ItemStack>();
@@ -327,9 +327,9 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         return stacks;
     }
 
-    private List<EntityType> getEntityDropOutcomes()
+    private Collection<EntityType> getEntityDropOutcomes()
     {
-        List<EntityType> types = Collections.emptyList();
+        Collection<EntityType> types = Collections.emptyList();
 
         if (entityDrops != null) {
             types = new ArrayList<EntityType>();
@@ -342,9 +342,9 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         return types;
     }
 
-    private List<EntityType> getJockeyDropOutcomes()
+    private Collection<EntityType> getJockeyDropOutcomes()
     {
-        List<EntityType> types = Collections.emptyList();
+        Collection<EntityType> types = Collections.emptyList();
 
         if (jockeyDrops != null) {
             types = new ArrayList<EntityType>();

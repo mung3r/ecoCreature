@@ -41,7 +41,9 @@ public class WeatherGain extends AbstractPlayerGain<WeatherType>
     @Override
     public double getGain(Player player)
     {
-        return getMultiplier(WeatherType.fromEntity(player));
+        double multiplier = getMultiplier(WeatherType.fromEntity(player));
+        LoggerUtil.getInstance().debug("Gain: " + multiplier);
+        return multiplier;
     }
 
     public static Set<PlayerGain> parseConfig(ConfigurationSection config)

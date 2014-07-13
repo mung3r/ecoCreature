@@ -19,16 +19,16 @@
  */
 package se.crafted.chrisb.ecoCreature.rewards.models;
 
-import java.util.List;
+import java.util.Collection;
 
 
 public interface ItemReward
 {
     boolean hasItemDrops();
 
-    List<AbstractItemDrop> getItemDrops();
+    Collection<AbstractItemDrop> getItemDrops();
 
-    void setItemDrops(List<AbstractItemDrop> itemDrops);
+    void setItemDrops(Collection<AbstractItemDrop> itemDrops);
 
     Boolean isFixedDrops();
 
