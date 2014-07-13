@@ -30,8 +30,6 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
 
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
-
 public class EntityDrop
 {
     private static Random random = new Random();

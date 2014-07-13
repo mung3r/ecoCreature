@@ -31,8 +31,6 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
-
 public class ItemDrop extends AbstractItemDrop
 {
     public ItemDrop(Material material)
