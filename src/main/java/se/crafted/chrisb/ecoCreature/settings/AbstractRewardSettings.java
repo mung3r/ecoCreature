@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 
@@ -108,15 +109,49 @@ public abstract class AbstractRewardSettings<T>
 
         if (!sets.isEmpty() && rewardSets != null) {
             for (String setName : sets) {
-                if (rewardSets.getConfigurationSection(setName) != null) {
-                    AbstractRewardSource setSource = RewardSourceFactory.createSetSource(setName, rewardSets);
-                    setSource.setHuntingRules(loadHuntingRules(rewardSets.getConfigurationSection(setName)));
+                String name = setName.split(":")[0];
+                if (rewardSets.getConfigurationSection(name) != null) {
+                    AbstractRewardSource setSource = RewardSourceFactory.createSetSource(name, rewardSets);
+                    setSource.setHuntingRules(loadHuntingRules(rewardSets.getConfigurationSection(name)));
+                    setSource.setRange(parseRange(setName, new NumberRange(1, 1)));
+                    setSource.setPercentage(parsePercentage(setName, 100));
                     sources.add(setSource);
                 }
             }
         }
 
         return sources;
+    }
+
+    protected static NumberRange parseRange(String dropString, NumberRange defaultRange)
+    {
+        NumberRange range = defaultRange;
+
+        String[] dropParts = dropString.split(":");
+
+        if (dropParts.length > 1) {
+            String[] rangeParts = dropParts[1].split("-");
+
+            if (rangeParts.length == 2) {
+                range = new NumberRange(Integer.parseInt(rangeParts[0]), Integer.parseInt(rangeParts[1]));
+            }
+            else {
+                range = new NumberRange(0, Integer.parseInt(dropParts[1]));
+            }
+        }
+
+        return range;
+    }
+
+    protected static double parsePercentage(String dropString, double defaultPercentage)
+    {
+        String[] dropParts = dropString.split(":");
+
+        if (dropParts.length > 2) {
+            return Double.parseDouble(dropParts[2]);
+        }
+
+        return defaultPercentage;
     }
 
     protected static AbstractRewardSource configureRewardSource(AbstractRewardSource source, ConfigurationSection config)

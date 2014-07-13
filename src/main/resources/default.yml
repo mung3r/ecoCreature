@@ -664,11 +664,11 @@ RewardTable:
     Coin_Percent: 1.0
   Zombie:
     Sets:
-    - PoorZombie
-    - BookZombie
-    - LoreZombie
-    - RichZombie
-    #- ZombieApocalypse
+    - PoorZombie # defaults to 1-1:100
+    - BookZombie:1-1:25
+    - LoreZombie:1-1:25
+    - RichZombie:1-1:25
+    - ZombieApocalypse:1-1:25
   ZombieVillager:
     Coin_Minimum: 1.00
     Coin_Maximum: 3.50

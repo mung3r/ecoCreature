@@ -193,7 +193,6 @@ public class EntityDrop
             String[] itemSubParts = itemParts[0].split("\\.");
     
             type = EntityType.fromName(itemSubParts[0]);
-            //LoggerUtil.getInstance().debugTrue("No match for type: " + itemParts[0], type == null);
         }
 
         return type;

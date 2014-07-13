@@ -114,7 +114,6 @@ public class ItemDrop extends AbstractItemDrop
             String[] itemSubParts = itemParts[0].split("\\.");
     
             material = Material.matchMaterial(itemSubParts[0]);
-            //LoggerUtil.getInstance().debugTrue("No match for type: " + itemParts[0], material == null);
         }
 
         return material;
@@ -177,7 +176,7 @@ public class ItemDrop extends AbstractItemDrop
         return itemSubParts.length > 2 && !itemSubParts[2].isEmpty() ? Short.parseShort(itemSubParts[2]) : null;
     }
 
-    private static NumberRange parseRange(String dropString)
+    protected static NumberRange parseRange(String dropString)
     {
         String[] dropParts = dropString.split(":");
         String[] amountRange = dropParts[1].split("-");
@@ -196,7 +195,7 @@ public class ItemDrop extends AbstractItemDrop
         return new NumberRange(min, max);
     }
 
-    private static double parsePercentage(String dropString)
+    protected static double parsePercentage(String dropString)
     {
         String[] dropParts = dropString.split(":");
 

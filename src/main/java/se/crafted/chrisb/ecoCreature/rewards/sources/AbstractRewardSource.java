@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
@@ -58,6 +59,9 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
     private static final String COIN_PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.";
 
     private String name;
+    private NumberRange range;
+    private double percentage;
+
     private CoinDrop coin;
     private Collection<AbstractItemDrop> itemDrops;
     private Collection<EntityDrop> entityDrops;
@@ -75,6 +79,8 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
 
     public AbstractRewardSource()
     {
+        range = new NumberRange(1, 1);
+        percentage = 100;
         huntingRules = Collections.emptyMap();
     }
 
@@ -117,6 +123,26 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    public NumberRange getRange()
+    {
+        return range;
+    }
+
+    public void setRange(NumberRange range)
+    {
+        this.range = range;
+    }
+
+    public double getPercentage()
+    {
+        return percentage;
+    }
+
+    public void setPercentage(double percentage)
+    {
+        this.percentage = percentage;
     }
 
     public boolean hasPermission(Player player)
