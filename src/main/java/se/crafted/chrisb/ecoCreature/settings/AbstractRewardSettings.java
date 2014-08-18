@@ -75,11 +75,11 @@ public abstract class AbstractRewardSettings<T>
     }
 
     protected Collection<AbstractRewardSource> getRewardSource(T type)
-    {        
-        Collection<AbstractRewardSource> source = hasRewardSource(type) ? getSources().get(type) : null;
-        LoggerUtil.getInstance().debugTrue("No reward defined for type: " + type, source == null);
+    {
+        Collection<AbstractRewardSource> emptySource = Collections.emptySet();
+        LoggerUtil.getInstance().debugTrue("No reward defined for type: " + type, !hasRewardSource(type));
 
-        return source;
+        return hasRewardSource(type) ? sources.get(type) : emptySource;
     }
 
     protected boolean isNotRuleBroken(Event event, Collection<Rule> rules)
