@@ -32,6 +32,8 @@ import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
+
 public enum CustomEntityRewardType
 {
     ANGRY_WOLF("AngryWolf", true),

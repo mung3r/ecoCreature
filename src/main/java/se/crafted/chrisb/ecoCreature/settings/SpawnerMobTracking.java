@@ -24,7 +24,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 
 public interface SpawnerMobTracking
 {
-    void addSpawnerMob(CreatureSpawnEvent event);
+    void tagSpawnerMob(CreatureSpawnEvent event);
 
     boolean isSpawnerMob(LivingEntity entity);
 }

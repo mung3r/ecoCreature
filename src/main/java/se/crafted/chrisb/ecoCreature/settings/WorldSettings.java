@@ -32,17 +32,15 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Iterables;
-
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.gain.PlayerGain;
 import se.crafted.chrisb.ecoCreature.rewards.parties.Party;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 
 public class WorldSettings implements SpawnerMobTracking
 {
@@ -61,6 +59,7 @@ public class WorldSettings implements SpawnerMobTracking
     private Set<Party> parties;
 
     private final FixedMetadataValue spawnerMobTag;
+
     public WorldSettings(ecoCreature plugin)
     {
         this.plugin = plugin;
@@ -136,34 +135,19 @@ public class WorldSettings implements SpawnerMobTracking
         this.rewardSettings = rewardSettings;
     }
 
-    public boolean hasReward(final Event event)
-    {
-        return Iterables.any(rewardSettings, new Predicate<AbstractRewardSettings<?>>() {
-
-            @Override
-            public boolean apply(AbstractRewardSettings<?> settings)
-            {
-                return settings.hasRewardSource(event);
-            }
-        });
-    }
-
     public Collection<Reward> createRewards(final Event event)
     {
+        Collection<Reward> rewards = new HashSet<Reward>();
+
         for (AbstractRewardSettings<?> settings : rewardSettings) {
             if (settings.hasRewardSource(event)) {
-                return Collections2.transform(settings.getRewardSource(event), new Function<AbstractRewardSource, Reward>() {
-
-                    @Override
-                    public Reward apply(AbstractRewardSource source)
-                    {
-                        return source.createReward(event);
-                    }
-                });
+                for (AbstractRewardSource source : settings.getRewardSource(event)) {
+                    rewards.addAll(source.createRewards(event));
+                }
             }
         }
 
-        return Collections.emptyList();
+        return rewards;
     }
 
     public double getGainMultiplier(Player player)
@@ -195,7 +179,7 @@ public class WorldSettings implements SpawnerMobTracking
     }
 
     @Override
-    public void addSpawnerMob(CreatureSpawnEvent event)
+    public void tagSpawnerMob(CreatureSpawnEvent event)
     {
         event.getEntity().setMetadata(SPAWNERMOB_TAG_MDID, spawnerMobTag);
         event.getEntity().setMetadata(SPAWNERLOC_TAG_MDID, new FixedMetadataValue(plugin, event.getLocation()));

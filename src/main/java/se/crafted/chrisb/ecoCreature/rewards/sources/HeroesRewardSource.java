@@ -52,7 +52,7 @@ public class HeroesRewardSource extends AbstractRewardSource
     }
 
     @Override
-    public Reward createReward(Event event)
+    protected Reward createReward(Event event)
     {
         Reward reward = super.createReward(event);
 
