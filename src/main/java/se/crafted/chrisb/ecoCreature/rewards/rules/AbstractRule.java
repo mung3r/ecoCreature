@@ -33,6 +33,7 @@ public abstract class AbstractRule implements Rule
     public AbstractRule()
     {
         clearDrops = false;
+        clearExpOrbs = false;
         message = DefaultMessage.NO_MESSAGE;
     }
 

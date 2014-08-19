@@ -39,9 +39,6 @@ import se.crafted.chrisb.ecoCreature.rewards.gain.PlayerGain;
 import se.crafted.chrisb.ecoCreature.rewards.parties.Party;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-
 public class WorldSettings implements SpawnerMobTracking
 {
     public static final String SPAWNERMOB_TAG_MDID = "ecoCreature.spawnerMob";

@@ -310,8 +310,9 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
     public Collection<Reward> createRewards(Event event)
     {
         Collection<Reward> rewards = new HashSet<Reward>();
+        int amount = nextAmount();
 
-        for (int i = 0; i < nextAmount(); i++) {
+        for (int i = 0; i < amount; i++) {
             rewards.add(createReward(event));
         }
 

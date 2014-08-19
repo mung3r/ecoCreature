@@ -71,8 +71,9 @@ public class EntityDrop
     public Collection<EntityType> getOutcome()
     {
         Collection<EntityType> types = new ArrayList<EntityType>();
+        int amount = nextAmount();
 
-        for (int i = 0; i < nextAmount(); i++) {
+        for (int i = 0; i < amount; i++) {
             types.add(type);
         }
 
@@ -186,12 +187,12 @@ public class EntityDrop
     protected static EntityType parseType(String dropString)
     {
         EntityType type = null;
-        
+
         if (dropString != null) {
             String[] dropParts = dropString.split(":");
             String[] itemParts = dropParts[0].split(",");
             String[] itemSubParts = itemParts[0].split("\\.");
-    
+
             type = EntityType.fromName(itemSubParts[0]);
         }
 
