@@ -137,10 +137,8 @@ public class WorldSettings implements SpawnerMobTracking
         Collection<Reward> rewards = new HashSet<Reward>();
 
         for (AbstractRewardSettings<?> settings : rewardSettings) {
-            if (settings.hasRewardSource(event)) {
-                for (AbstractRewardSource source : settings.getRewardSource(event)) {
-                    rewards.addAll(source.createRewards(event));
-                }
+            for (AbstractRewardSource source : settings.getRewardSource(event)) {
+                rewards.addAll(source.createRewards(event));
             }
         }
 

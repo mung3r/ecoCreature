@@ -28,13 +28,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
-
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.settings.types.HeroesRewardType;
+
+import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 public class HeroesRewardSettings extends AbstractRewardSettings<HeroesRewardType>
 {
@@ -44,57 +42,30 @@ public class HeroesRewardSettings extends AbstractRewardSettings<HeroesRewardTyp
     }
 
     @Override
-    public boolean hasRewardSource(Event event)
+    protected boolean isValidEvent(Event event)
     {
-        return DependencyUtils.hasHeroes() && event instanceof HeroChangeLevelEvent &&
-        		hasRewardSource((HeroChangeLevelEvent) event);
-    }
-
-    private boolean hasRewardSource(HeroChangeLevelEvent event)
-    {
-        final Player player = event.getHero().getPlayer();
-
-        if (event.isMastering()) {
-            return hasRewardSource(HeroesRewardType.HERO_MASTERED)
-                    && Iterables.any(getRewardSource(HeroesRewardType.HERO_MASTERED), new Predicate<AbstractRewardSource>() {
-
-                        @Override
-                        public boolean apply(AbstractRewardSource source)
-                        {
-                            return source.hasPermission(player);
-                        }
-                    });
-        }
-        else if (event.getTo() > event.getFrom()) {
-            return hasRewardSource(HeroesRewardType.HERO_LEVELED)
-                    && Iterables.any(getRewardSource(HeroesRewardType.HERO_LEVELED), new Predicate<AbstractRewardSource>() {
-
-                        @Override
-                        public boolean apply(AbstractRewardSource source)
-                        {
-                            return source.hasPermission(player);
-                        }
-                    });            
-        }
-
-        return false;
+        return DependencyUtils.hasHeroes() && event instanceof HeroChangeLevelEvent;
     }
 
     @Override
-    public Collection<AbstractRewardSource> getRewardSource(Event event)
+    protected HeroesRewardType extractType(Event event)
     {
-        if (DependencyUtils.hasHeroes() && event instanceof HeroChangeLevelEvent) {
-            HeroChangeLevelEvent changeLevelEvent = (HeroChangeLevelEvent) event;
+        HeroesRewardType type = HeroesRewardType.INVALID;
 
-            if (changeLevelEvent.isMastering()) {
-                return getRewardSource(HeroesRewardType.HERO_MASTERED);
-            }
-            else if (changeLevelEvent.getTo() > changeLevelEvent.getFrom()){
-                return getRewardSource(HeroesRewardType.HERO_LEVELED);
-            }
+        if (((HeroChangeLevelEvent) event).isMastering()) {
+            type = HeroesRewardType.HERO_MASTERED;
+        }
+        else if (((HeroChangeLevelEvent) event).getTo() > ((HeroChangeLevelEvent) event).getFrom()) {
+            type = HeroesRewardType.HERO_LEVELED;
         }
 
-        return null;
+        return type;
+    }
+
+    @Override
+    protected Player extractPlayer(Event event)
+    {
+        return ((HeroChangeLevelEvent) event).getHero().getPlayer();
     }
 
     public static AbstractRewardSettings<HeroesRewardType> parseConfig(ConfigurationSection config)

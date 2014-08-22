@@ -27,7 +27,11 @@ import java.util.Map;
 
 import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.messages.CoinMessageDecorator;
@@ -53,38 +57,60 @@ import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 
 public abstract class AbstractRewardSettings<T>
 {
-    private Map<T, Collection<AbstractRewardSource>> sources;
+    private Map<T, Collection<AbstractRewardSource>> sources = Collections.emptyMap();
 
     public AbstractRewardSettings(Map<T, Collection<AbstractRewardSource>> sources)
     {
-        this.sources = sources;
+        if (sources != null) {
+            this.sources = sources;
+        }
     }
 
-    public Map<T, Collection<AbstractRewardSource>> getSources()
+    public Collection<AbstractRewardSource> getRewardSource(final Event event)
     {
+        Collection<AbstractRewardSource> sources = Collections.emptySet();
+
+        if (isValidEvent(event)) {
+            sources = Collections2.filter(getRewardSource(extractType(event)), new Predicate<AbstractRewardSource>() {
+
+                @Override
+                public boolean apply(AbstractRewardSource source)
+                {
+                    return source.hasPermission(extractPlayer(event)) && isNotRuleBroken(event, source);
+                }
+
+            });
+        }
+
         return sources;
     }
 
-    public abstract boolean hasRewardSource(Event event);
+    protected abstract boolean isValidEvent(Event event);
 
-    public abstract Collection<AbstractRewardSource> getRewardSource(Event event);
+    protected abstract T extractType(Event event);
 
-    protected boolean hasRewardSource(T type)
+    protected abstract Player extractPlayer(Event event);
+
+    private boolean hasRewardSource(T type)
     {
-        return type != null && getSources().containsKey(type) && !getSources().get(type).isEmpty();
+        return type != null && sources.containsKey(type) && !sources.get(type).isEmpty();
     }
 
-    protected Collection<AbstractRewardSource> getRewardSource(T type)
+    private Collection<AbstractRewardSource> getRewardSource(T type)
     {
-        Collection<AbstractRewardSource> emptySource = Collections.emptySet();
-        LoggerUtil.getInstance().debugTrue("No reward defined for type: " + type, !hasRewardSource(type));
+        Collection<AbstractRewardSource> source = Collections.emptySet();
 
-        return hasRewardSource(type) ? sources.get(type) : emptySource;
+        if (hasRewardSource(type)) {
+            source = sources.get(type);
+        }
+
+        LoggerUtil.getInstance().debugTrue("No reward defined for type: " + type, source.isEmpty());
+        return Collections.emptySet();
     }
 
-    protected boolean isNotRuleBroken(Event event, Collection<Rule> rules)
+    private boolean isNotRuleBroken(Event event, AbstractRewardSource source)
     {
-        for (Rule rule : rules) {
+        for (Rule rule : source.getHuntingRules().values()) {
             if (rule.isBroken(event)) {
                 rule.handleDrops(event);
 

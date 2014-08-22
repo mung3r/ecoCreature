@@ -25,12 +25,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
 import org.simiancage.DeathTpPlus.events.KillStreakEvent;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
@@ -44,57 +42,39 @@ public class StreakRewardSettings extends AbstractRewardSettings<StreakRewardTyp
     }
 
     @Override
-    public boolean hasRewardSource(Event event)
+    protected boolean isValidEvent(Event event)
     {
-    	if (DependencyUtils.hasDeathTpPlus()) {
-	        if (event instanceof DeathStreakEvent) {
-	            return hasRewardSource((DeathStreakEvent) event);
-	        }
-	        else if (event instanceof KillStreakEvent) {
-	            return hasRewardSource((KillStreakEvent) event);
-	        }
-    	}
-
-        return false;
-    }
-
-    private boolean hasRewardSource(final DeathStreakEvent event)
-    {
-        return hasRewardSource(StreakRewardType.DEATH_STREAK)
-                && Iterables.any(getRewardSource(StreakRewardType.DEATH_STREAK), new Predicate<AbstractRewardSource>() {
-
-                    @Override
-                    public boolean apply(AbstractRewardSource source)
-                    {
-                        return source.hasPermission(event.getPlayer());
-                    }
-                });
-    }
-
-    private boolean hasRewardSource(final KillStreakEvent event)
-    {
-        return hasRewardSource(StreakRewardType.KILL_STREAK)
-                && Iterables.any(getRewardSource(StreakRewardType.KILL_STREAK), new Predicate<AbstractRewardSource>() {
-        
-                    @Override
-                    public boolean apply(AbstractRewardSource source)
-                    {
-                        return source.hasPermission(event.getPlayer());
-                    }
-                });
+        return DependencyUtils.hasDeathTpPlus() && (event instanceof DeathStreakEvent || event instanceof KillStreakEvent);
     }
 
     @Override
-    public Collection<AbstractRewardSource> getRewardSource(Event event)
+    protected StreakRewardType extractType(Event event)
     {
-        if (DependencyUtils.hasDeathTpPlus() && event instanceof DeathStreakEvent) {
-            return getRewardSource(StreakRewardType.DEATH_STREAK);
+        StreakRewardType type = StreakRewardType.INVALID;
+
+        if (event instanceof DeathStreakEvent) {
+            type = StreakRewardType.DEATH_STREAK; 
         }
-        else if (DependencyUtils.hasDeathTpPlus() && event instanceof KillStreakEvent) {
-            return getRewardSource(StreakRewardType.KILL_STREAK);
+        else if (event instanceof KillStreakEvent) {
+            type = StreakRewardType.KILL_STREAK;
         }
 
-        return null;
+        return type;
+    }
+
+    @Override
+    protected Player extractPlayer(Event event)
+    {
+        Player player = null;
+
+        if (event instanceof DeathStreakEvent) {
+            player = ((DeathStreakEvent) event).getPlayer();
+        }
+        else if (event instanceof KillStreakEvent) {
+            player = ((KillStreakEvent) event).getPlayer();
+        }
+
+        return player;
     }
 
     public static AbstractRewardSettings<StreakRewardType> parseConfig(ConfigurationSection config)

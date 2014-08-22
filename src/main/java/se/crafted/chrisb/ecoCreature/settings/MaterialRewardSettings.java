@@ -25,13 +25,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 
@@ -43,39 +40,21 @@ public class MaterialRewardSettings extends AbstractRewardSettings<Material>
     }
 
     @Override
-    public boolean hasRewardSource(Event event)
+    protected boolean isValidEvent(Event event)
     {
-        return event instanceof BlockBreakEvent && hasRewardSource((BlockBreakEvent) event);
-    }
-
-    private boolean hasRewardSource(final BlockBreakEvent event)
-    {
-        Block block = event.getBlock();
-
-        // TODO: fix this properly for BuildCraft
-        if (block == null) {
-            return false;
-        }
-
-        return hasRewardSource(block.getType())
-                && Iterables.any(getRewardSource(block.getType()), new Predicate<AbstractRewardSource>() {
-
-                    @Override
-                    public boolean apply(AbstractRewardSource source)
-                    {
-                        return source.hasPermission(event.getPlayer());
-                    }
-                });
+        return event instanceof BlockBreakEvent && ((BlockBreakEvent) event).getBlock() != null;
     }
 
     @Override
-    public Collection<AbstractRewardSource> getRewardSource(Event event)
+    protected Material extractType(Event event)
     {
-        if (event instanceof BlockBreakEvent) {
-            return getRewardSource(((BlockBreakEvent) event).getBlock().getType());
-        }
+        return ((BlockBreakEvent) event).getBlock().getType();
+    }
 
-        return null;
+    @Override
+    protected Player extractPlayer(Event event)
+    {
+        return ((BlockBreakEvent) event).getPlayer();
     }
 
     public static AbstractRewardSettings<Material> parseConfig(ConfigurationSection config)

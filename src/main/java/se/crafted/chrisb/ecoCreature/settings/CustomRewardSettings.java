@@ -25,17 +25,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
-import se.crafted.chrisb.ecoCreature.rewards.sources.DeathPenaltySource;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
-import se.crafted.chrisb.ecoCreature.rewards.sources.PVPRewardSource;
 import se.crafted.chrisb.ecoCreature.settings.types.CustomRewardType;
 
 public class CustomRewardSettings extends AbstractRewardSettings<CustomRewardType>
@@ -46,55 +41,39 @@ public class CustomRewardSettings extends AbstractRewardSettings<CustomRewardTyp
     }
 
     @Override
-    public boolean hasRewardSource(Event event)
+    protected boolean isValidEvent(Event event)
     {
-        if (event instanceof PlayerKilledEvent) {
-            return hasRewardSource((PlayerKilledEvent) event);
-        }
-        else if (event instanceof PlayerDeathEvent) {
-            return hasRewardSource((PlayerDeathEvent) event);
-        }
-
-        return false;
-    }
-
-    private boolean hasRewardSource(final PlayerKilledEvent event)
-    {
-        return DependencyUtils.hasEconomy() && getRewardSource(CustomRewardType.LEGACY_PVP) instanceof PVPRewardSource
-                && Iterables.any(getRewardSource(CustomRewardType.LEGACY_PVP), new Predicate<AbstractRewardSource>() {
-
-                    @Override
-                    public boolean apply(AbstractRewardSource source)
-                    {
-                        return source instanceof PVPRewardSource && source.hasPermission(event.getKiller());
-                    }
-                });
-    }
-
-    private boolean hasRewardSource(final PlayerDeathEvent event)
-    {
-        return getRewardSource(CustomRewardType.DEATH_PENALTY) instanceof DeathPenaltySource
-                && Iterables.any(getRewardSource(CustomRewardType.DEATH_PENALTY), new Predicate<AbstractRewardSource>() {
-
-                    @Override
-                    public boolean apply(AbstractRewardSource source)
-                    {
-                        return source instanceof DeathPenaltySource && source.hasPermission(event.getEntity());
-                    }
-                });
+        return event instanceof PlayerKilledEvent || event instanceof PlayerDeathEvent;
     }
 
     @Override
-    public Collection<AbstractRewardSource> getRewardSource(Event event)
+    protected CustomRewardType extractType(Event event)
     {
+        CustomRewardType type = CustomRewardType.INVALID;
+
         if (event instanceof PlayerKilledEvent) {
-            return getRewardSource(CustomRewardType.LEGACY_PVP);
+            type = CustomRewardType.LEGACY_PVP;
         }
         else if (event instanceof PlayerDeathEvent) {
-            return getRewardSource(CustomRewardType.DEATH_PENALTY);
+            type = CustomRewardType.DEATH_PENALTY;
         }
 
-        return null;
+        return type;
+    }
+
+    @Override
+    protected Player extractPlayer(Event event)
+    {
+        Player player = null;
+
+        if (event instanceof PlayerKilledEvent) {
+            player = ((PlayerKilledEvent) event).getKiller();
+        }
+        else if (event instanceof PlayerDeathEvent) {
+            player = ((PlayerDeathEvent) event).getEntity();
+        }
+
+        return player;
     }
 
     public static AbstractRewardSettings<CustomRewardType> parseConfig(ConfigurationSection config)

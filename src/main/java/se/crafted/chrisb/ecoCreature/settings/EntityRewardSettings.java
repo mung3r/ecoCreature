@@ -26,11 +26,8 @@ import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
@@ -43,34 +40,21 @@ public class EntityRewardSettings extends AbstractRewardSettings<EntityType>
     }
 
     @Override
-    public boolean hasRewardSource(Event event)
+    protected boolean isValidEvent(Event event)
     {
-        return event instanceof EntityKilledEvent && hasRewardSource((EntityKilledEvent) event);
-    }
-
-    private boolean hasRewardSource(final EntityKilledEvent event)
-    {
-        LivingEntity entity = event.getEntity();
-
-        return hasRewardSource(entity.getType())
-                && Iterables.any(getRewardSource(entity.getType()), new Predicate<AbstractRewardSource>() {
-
-                    @Override
-                    public boolean apply(AbstractRewardSource source)
-                    {
-                        return source.hasPermission(event.getKiller()) && isNotRuleBroken(event, source.getHuntingRules().values());
-                    }
-                });
+        return event instanceof EntityKilledEvent;
     }
 
     @Override
-    public Collection<AbstractRewardSource> getRewardSource(Event event)
+    protected EntityType extractType(Event event)
     {
-        if (event instanceof EntityKilledEvent) {
-            return getRewardSource(((EntityKilledEvent) event).getEntity().getType());
-        }
+        return ((EntityKilledEvent) event).getEntity().getType();
+    }
 
-        return null;
+    @Override
+    protected Player extractPlayer(Event event)
+    {
+        return ((EntityKilledEvent) event).getKiller();
     }
 
     public static AbstractRewardSettings<EntityType> parseConfig(ConfigurationSection config)

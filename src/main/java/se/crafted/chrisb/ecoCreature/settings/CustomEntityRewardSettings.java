@@ -25,11 +25,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
@@ -43,63 +40,41 @@ public class CustomEntityRewardSettings extends AbstractRewardSettings<CustomEnt
         super(sources);
     }
 
+    
     @Override
-    public boolean hasRewardSource(Event event)
+    protected boolean isValidEvent(Event event)
     {
-        if (event instanceof PlayerKilledEvent) {
-            return hasRewardSource((PlayerKilledEvent) event);
-        }
-        else if (event instanceof EntityKilledEvent) {
-            return hasRewardSource((EntityKilledEvent) event);
-        }
-
-        return false;
-    }
-
-    private boolean hasRewardSource(final PlayerKilledEvent event)
-    {
-        return hasRewardSource(CustomEntityRewardType.PLAYER) 
-                && Iterables.any(getRewardSource(CustomEntityRewardType.PLAYER), new Predicate<AbstractRewardSource>() {
-
-                    @Override
-                    public boolean apply(AbstractRewardSource source)
-                    {
-                        return source.hasPermission(event.getKiller()) && isNotRuleBroken(event, source.getHuntingRules().values());
-                    }
-                });
-    }
-
-    private boolean hasRewardSource(final EntityKilledEvent event)
-    {
-        CustomEntityRewardType type = CustomEntityRewardType.fromEntity(event.getEntity());
-
-        return hasRewardSource(type)
-                && Iterables.any(getRewardSource(type), new Predicate<AbstractRewardSource>() {
-
-                    @Override
-                    public boolean apply(AbstractRewardSource source)
-                    {
-                        return source.hasPermission(event.getKiller()) && isNotRuleBroken(event, source.getHuntingRules().values());
-                    }
-                });
+        return event instanceof PlayerKilledEvent || event instanceof EntityKilledEvent;
     }
 
     @Override
-    public Collection<AbstractRewardSource> getRewardSource(Event event)
+    protected CustomEntityRewardType extractType(Event event)
     {
+        CustomEntityRewardType type = CustomEntityRewardType.INVALID;
+
         if (event instanceof PlayerKilledEvent) {
-            return getRewardSource(((PlayerKilledEvent) event).getEntity());
+            type = CustomEntityRewardType.PLAYER;
         }
         else if (event instanceof EntityKilledEvent) {
-            return getRewardSource(((EntityKilledEvent) event).getEntity());
+            type = CustomEntityRewardType.fromEntity(((EntityKilledEvent) event).getEntity());
         }
 
-        return null;
+        return type;
     }
 
-    private Collection<AbstractRewardSource> getRewardSource(Entity entity)
+    @Override
+    protected Player extractPlayer(Event event)
     {
-        return getRewardSource(CustomEntityRewardType.fromEntity(entity));
+        Player player = null;
+
+        if (event instanceof PlayerKilledEvent) {
+            player = ((PlayerKilledEvent) event).getKiller();
+        }
+        else if (event instanceof EntityKilledEvent) {
+            player = ((EntityKilledEvent) event).getKiller();
+        }
+
+        return player;
     }
 
     public static AbstractRewardSettings<CustomEntityRewardType> parseConfig(ConfigurationSection config)

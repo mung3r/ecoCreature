@@ -25,15 +25,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-
-import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 import se.crafted.chrisb.ecoCreature.settings.types.McMMORewardType;
+
+import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 
 public class McMMORewardSettings extends AbstractRewardSettings<McMMORewardType>
 {
@@ -43,33 +42,21 @@ public class McMMORewardSettings extends AbstractRewardSettings<McMMORewardType>
     }
 
     @Override
-    public boolean hasRewardSource(Event event)
+    protected boolean isValidEvent(Event event)
     {
-        return DependencyUtils.hasMcMMO() && event instanceof McMMOPlayerLevelUpEvent && 
-        		hasRewardSource((McMMOPlayerLevelUpEvent) event);
-    }
-
-    private boolean hasRewardSource(final McMMOPlayerLevelUpEvent event)
-    {
-        return hasRewardSource(McMMORewardType.MCMMO_LEVELED)
-                && Iterables.any(getRewardSource(McMMORewardType.MCMMO_LEVELED), new Predicate<AbstractRewardSource>() {
-
-                    @Override
-                    public boolean apply(AbstractRewardSource source)
-                    {
-                        return source.hasPermission(event.getPlayer());
-                    }
-                });
+        return DependencyUtils.hasMcMMO() && event instanceof McMMOPlayerLevelUpEvent;
     }
 
     @Override
-    public Collection<AbstractRewardSource> getRewardSource(Event event)
+    protected McMMORewardType extractType(Event event)
     {
-        if (event instanceof McMMOPlayerLevelUpEvent) {
-            return getRewardSource(McMMORewardType.MCMMO_LEVELED);
-        }
+        return event instanceof McMMOPlayerLevelUpEvent ? McMMORewardType.MCMMO_LEVELED : McMMORewardType.INVALID;
+    }
 
-        return null;
+    @Override
+    protected Player extractPlayer(Event event)
+    {
+        return ((McMMOPlayerLevelUpEvent) event).getPlayer();
     }
 
     public static AbstractRewardSettings<McMMORewardType> parseConfig(ConfigurationSection config)
