@@ -52,7 +52,7 @@ public class StreakRewardSource extends AbstractRewardSource
 
     public static AbstractRewardSource createRewardSource(String section, ConfigurationSection config)
     {
-        AbstractRewardSource source = null;
+        AbstractRewardSource source;
 
         switch (StreakRewardType.fromName(RewardSourceFactory.parseRewardName(section))) {
             case DEATH_STREAK:

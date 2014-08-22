@@ -51,7 +51,7 @@ public class McMMORewardSource extends AbstractRewardSource
 
     public static AbstractRewardSource createRewardSource(String section, ConfigurationSection config)
     {
-        AbstractRewardSource source = null;
+        AbstractRewardSource source;
 
         switch (McMMORewardType.fromName(RewardSourceFactory.parseRewardName(section))) {
             case MCMMO_LEVELED:

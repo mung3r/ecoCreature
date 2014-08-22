@@ -89,7 +89,7 @@ public final class RewardSourceFactory
 
     private static AbstractRewardSource createCustomMaterialSource(String section, ConfigurationSection config)
     {
-        AbstractRewardSource source = null;
+        AbstractRewardSource source;
 
         switch (CustomMaterialRewardType.fromName(parseRewardName(section))) {
             case LEGACY_SPAWNER:
@@ -103,7 +103,7 @@ public final class RewardSourceFactory
 
     private static AbstractRewardSource createCustomEntitySource(String section, ConfigurationSection config)
     {
-        AbstractRewardSource source = null;
+        AbstractRewardSource source;
 
         switch (CustomEntityRewardType.fromName(parseRewardName(section))) {
             case ANGRY_WOLF:
@@ -121,7 +121,7 @@ public final class RewardSourceFactory
 
     private static AbstractRewardSource createCustomSource(String section, ConfigurationSection config)
     {
-        AbstractRewardSource source = null;
+        AbstractRewardSource source;
 
         switch (CustomRewardType.fromName(parseRewardName(section))) {
             case DEATH_PENALTY:

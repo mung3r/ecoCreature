@@ -42,9 +42,7 @@ public class MurderedPetRule extends AbstractEntityRule
 
     public static Map<Class<? extends AbstractRule>, Rule> parseConfig(ConfigurationSection system)
     {
-        Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
-
-        rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+        Map<Class<? extends AbstractRule>, Rule> rules = new HashMap<Class<? extends AbstractRule>, Rule>();
         rules.put(MurderedPetRule.class, new MurderedPetRule());
 
         return rules;

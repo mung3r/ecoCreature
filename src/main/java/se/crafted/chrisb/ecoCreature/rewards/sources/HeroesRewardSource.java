@@ -66,7 +66,7 @@ public class HeroesRewardSource extends AbstractRewardSource
 
     public static AbstractRewardSource createRewardSource(String section, ConfigurationSection config)
     {
-        AbstractRewardSource source = null;
+        AbstractRewardSource source;
 
         switch (HeroesRewardType.fromName(RewardSourceFactory.parseRewardName(section))) {
             case HERO_LEVELED:

@@ -88,7 +88,7 @@ public class PluginConfig
     {
         this.plugin = plugin;
         dataWorldsFolder = new File(plugin.getDataFolder(), "worlds");
-        dataWorldsFolder.mkdirs();
+        boolean success = dataWorldsFolder.mkdirs();
         initialized = initConfig();
     }
 
@@ -247,14 +247,13 @@ public class PluginConfig
         FileConfiguration config = new YamlConfiguration();
 
         if (!file.exists()) {
-            file.getParentFile().mkdir();
-            file.createNewFile();
+            boolean success = file.getParentFile().mkdir() && file.createNewFile();
             InputStream inputStream = plugin.getResource(file.getName());
             FileOutputStream outputStream = new FileOutputStream(file);
 
             try {
                 byte[] buffer = new byte[BUFFER_SIZE];
-                int length = 0;
+                int length;
                 while ((length = inputStream.read(buffer)) > 0) {
                     outputStream.write(buffer, 0, length);
                 }

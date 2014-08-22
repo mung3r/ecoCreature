@@ -205,7 +205,7 @@ public class EntityDrop
         String[] amountRange = dropParts[1].split("-");
 
         int min = 0;
-        int max = 0;
+        int max;
 
         if (amountRange.length == 2) {
             min = Integer.parseInt(amountRange[0]);

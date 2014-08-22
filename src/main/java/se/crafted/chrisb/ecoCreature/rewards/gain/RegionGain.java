@@ -54,9 +54,8 @@ public class RegionGain extends AbstractPlayerGain<String>
 
         RegionManager regionManager = DependencyUtils.getRegionManager(player.getWorld());
         if (regionManager != null) {
-            Iterator<ProtectedRegion> regions = regionManager.getApplicableRegions(player.getLocation()).iterator();
-            while (regions.hasNext()) {
-                multiplier = getMultiplier(regions.next().getId());
+            for (ProtectedRegion protectedRegion : regionManager.getApplicableRegions(player.getLocation())) {
+                multiplier = getMultiplier(protectedRegion.getId());
             }
         }
 
