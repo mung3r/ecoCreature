@@ -182,9 +182,9 @@ public class Reward
         return jockeyDrops;
     }
 
-    public void setJockeyDrops(Collection<EntityType> jobkeyDrops)
+    public void setJockeyDrops(Collection<EntityType> jockeyDrops)
     {
-        this.jockeyDrops = jobkeyDrops;
+        this.jockeyDrops = jockeyDrops;
     }
 
     public Message getMessage()
