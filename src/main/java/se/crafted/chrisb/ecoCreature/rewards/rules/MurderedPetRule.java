@@ -19,14 +19,13 @@
  */
 package se.crafted.chrisb.ecoCreature.rewards.rules;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
 public class MurderedPetRule extends AbstractEntityRule
