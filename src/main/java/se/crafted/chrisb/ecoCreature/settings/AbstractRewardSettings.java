@@ -105,7 +105,7 @@ public abstract class AbstractRewardSettings<T>
         }
 
         LoggerUtil.getInstance().debugTrue("No reward defined for type: " + type, source.isEmpty());
-        return Collections.emptySet();
+        return source;
     }
 
     private boolean isNotRuleBroken(Event event, AbstractRewardSource source)
