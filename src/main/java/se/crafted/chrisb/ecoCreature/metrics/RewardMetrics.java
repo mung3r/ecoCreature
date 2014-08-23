@@ -72,6 +72,7 @@ public class RewardMetrics
             }
 
             typeCount.put(name, typeCount.get(name) + 1);
+            LoggerUtil.getInstance().debug("Added metrics count for " + name);
         }
     }
 }

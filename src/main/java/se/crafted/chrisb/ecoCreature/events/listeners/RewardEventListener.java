@@ -70,12 +70,11 @@ public class RewardEventListener implements Listener
                 if (player != null) { // TODO: fix this upstream for citizens2
                     dropCoin(player, reward);
                     dropItems(player, reward);
-                    dropEntities(reward);
-                    dropJockeys(reward);
-    
-                    plugin.getMetrics().addCount(reward.getName());
-                    LoggerUtil.getInstance().debug("Added metrics count for " + reward.getName());
                 }
+                dropEntities(reward);
+                dropJockeys(reward);
+    
+                plugin.getMetrics().addCount(reward.getName());
             }
         }
     }
