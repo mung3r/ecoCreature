@@ -96,9 +96,6 @@ public class EntityKilledEventHandler extends AbstractEventHandler
                     event.setDroppedExp(0);
                 }
 
-                addPlayerSkullToEvent(reward, event);
-                addBooksToEvent(reward, event);
-
                 return reward;
             }
         });

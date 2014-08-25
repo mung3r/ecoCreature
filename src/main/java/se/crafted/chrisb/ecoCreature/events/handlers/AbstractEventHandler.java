@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.bukkit.Material;
+import org.bukkit.SkullType;
 import org.bukkit.World;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
@@ -31,7 +32,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import se.crafted.chrisb.ecoCreature.PluginConfig;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
@@ -94,32 +94,10 @@ public abstract class AbstractEventHandler implements RewardEventCreator
 
     private static ItemStack createSkullItem(String playerName)
     {
-        ItemStack skullItem = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        ItemStack skullItem = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
         SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
         skullMeta.setOwner(playerName);
         skullItem.setItemMeta(skullMeta);
         return skullItem;
-    }
-
-    protected static void addBooksToEvent(Reward reward, Event event)
-    {
-        if (event instanceof EntityKilledEvent) {
-            EntityKilledEvent entityKilledEvent = (EntityKilledEvent) event;
-
-            if (reward != null && !reward.getItemDrops().isEmpty()) {
-                Collection<ItemStack> itemDrops = new ArrayList<ItemStack>();
-
-                for (ItemStack itemStack : reward.getItemDrops()) {
-                    if (itemStack.getType() == Material.WRITTEN_BOOK) {
-                        entityKilledEvent.getDrops().add(itemStack);
-                    }
-                    else {
-                        itemDrops.add(itemStack);
-                    }
-                }
-
-                reward.setItemDrops(itemDrops);
-            }
-        }
     }
 }

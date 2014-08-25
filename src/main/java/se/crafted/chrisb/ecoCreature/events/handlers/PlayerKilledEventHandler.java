@@ -92,17 +92,16 @@ public class PlayerKilledEventHandler extends AbstractEventHandler
             public Reward apply(Reward reward)
             {
                 reward.addParameter(MessageToken.CREATURE, event.getVictim().getName());
-                
+
                 /*if ((settings.isOverrideDrops() && reward.hasDrops()) || (settings.isClearOnNoDrops() && !reward.hasDrops())) {
                     event.getDrops().clear();
                 }*/
-        
+
                 if (reward.getEntityDrops().contains(EntityType.EXPERIENCE_ORB)) {
                     event.setDroppedExp(0);
                 }
-        
-                //addPlayerSkullToEvent(reward, event);
-                addBooksToEvent(reward, event);
+
+                addPlayerSkullToEvent(reward, event);
 
                 return reward;
             }
