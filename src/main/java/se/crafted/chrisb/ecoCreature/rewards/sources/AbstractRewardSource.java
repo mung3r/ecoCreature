@@ -43,18 +43,14 @@ import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.rewards.models.AbstractItemDrop;
 import se.crafted.chrisb.ecoCreature.rewards.models.BookDrop;
 import se.crafted.chrisb.ecoCreature.rewards.models.CoinDrop;
-import se.crafted.chrisb.ecoCreature.rewards.models.CoinReward;
 import se.crafted.chrisb.ecoCreature.rewards.models.EntityDrop;
-import se.crafted.chrisb.ecoCreature.rewards.models.EntityReward;
 import se.crafted.chrisb.ecoCreature.rewards.models.ItemDrop;
-import se.crafted.chrisb.ecoCreature.rewards.models.ItemReward;
-import se.crafted.chrisb.ecoCreature.rewards.models.LoreDrop;
 import se.crafted.chrisb.ecoCreature.rewards.models.JockeyDrop;
-import se.crafted.chrisb.ecoCreature.rewards.models.JockeyReward;
+import se.crafted.chrisb.ecoCreature.rewards.models.LoreDrop;
 import se.crafted.chrisb.ecoCreature.rewards.rules.AbstractRule;
 import se.crafted.chrisb.ecoCreature.rewards.rules.Rule;
 
-public abstract class AbstractRewardSource implements CoinReward, ItemReward, EntityReward, JockeyReward
+public abstract class AbstractRewardSource
 {
     private static final String NO_COIN_REWARD_MESSAGE = "&7You slayed a &5<crt>&7 using a &3<itm>&7.";
     private static final String COIN_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.";
@@ -153,145 +149,121 @@ public abstract class AbstractRewardSource implements CoinReward, ItemReward, En
         return DependencyUtils.hasPermission(player, "reward." + name);
     }
 
-    @Override
     public boolean hasCoin()
     {
         return coin != null;
     }
 
-    @Override
     public CoinDrop getCoin()
     {
         return coin;
     }
 
-    @Override
     public void setCoin(CoinDrop coin)
     {
         this.coin = coin;
     }
 
-    @Override
     public boolean hasItemDrops()
     {
         return itemDrops != null && !itemDrops.isEmpty();
     }
 
-    @Override
     public Collection<AbstractItemDrop> getItemDrops()
     {
         return itemDrops;
     }
 
-    @Override
     public void setItemDrops(Collection<AbstractItemDrop> drops)
     {
         this.itemDrops = drops;
     }
 
-    @Override
     public boolean hasEntityDrops()
     {
         return entityDrops != null && !entityDrops.isEmpty();
     }
 
-    @Override
     public Collection<EntityDrop> getEntityDrops()
     {
         return entityDrops;
     }
 
-    @Override
     public void setEntityDrops(Collection<EntityDrop> entityDrops)
     {
         this.entityDrops = entityDrops;
     }
 
-    @Override
     public boolean hasJockeyDrops()
     {
         return jockeyDrops != null && !jockeyDrops.isEmpty();
     }
 
-    @Override
     public Collection<JockeyDrop> getJockeyDrops()
     {
         return jockeyDrops;
     }
 
-    @Override
     public void setJockeyDrops(Collection<JockeyDrop> jockeyDrops)
     {
         this.jockeyDrops = jockeyDrops;
     }
 
-    @Override
     public Message getNoCoinRewardMessage()
     {
         return noCoinRewardMessage;
     }
 
-    @Override
     public void setNoCoinRewardMessage(Message noCoinRewardMessage)
     {
         this.noCoinRewardMessage = noCoinRewardMessage;
     }
 
-    @Override
     public Message getCoinRewardMessage()
     {
         return coinRewardMessage;
     }
 
-    @Override
     public void setCoinRewardMessage(Message coinRewardMessage)
     {
         this.coinRewardMessage = coinRewardMessage;
     }
 
-    @Override
     public Message getCoinPenaltyMessage()
     {
         return coinPenaltyMessage;
     }
 
-    @Override
     public void setCoinPenaltyMessage(Message coinPenaltyMessage)
     {
         this.coinPenaltyMessage = coinPenaltyMessage;
     }
 
-    @Override
     public Boolean isFixedDrops()
     {
         return fixedDrops;
     }
 
-    @Override
     public void setFixedDrops(Boolean fixedDrops)
     {
         this.fixedDrops = fixedDrops;
     }
 
-    @Override
     public Boolean isIntegerCurrency()
     {
         return integerCurrency;
     }
 
-    @Override
     public void setIntegerCurrency(Boolean integerCurrency)
     {
         this.integerCurrency = integerCurrency;
     }
 
-    @Override
     public Boolean isAddItemsToInventory()
     {
         return addItemsToInventory;
     }
 
-    @Override
     public void setAddItemsToInventory(Boolean addItemsToInventory)
     {
         this.addItemsToInventory = addItemsToInventory;
