@@ -19,7 +19,6 @@
  */
 package se.crafted.chrisb.ecoCreature.events.handlers;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -36,6 +35,9 @@ import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.RewardEvent;
 import se.crafted.chrisb.ecoCreature.rewards.Reward;
 import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
 public abstract class AbstractEventHandler implements RewardEventCreator
 {
@@ -75,19 +77,17 @@ public abstract class AbstractEventHandler implements RewardEventCreator
         if (event instanceof PlayerKilledEvent) {
             PlayerKilledEvent playerKilledEvent = (PlayerKilledEvent) event;
 
-            if (reward != null && !reward.getItemDrops().isEmpty()) {
-                Collection<ItemStack> itemDrops = new ArrayList<ItemStack>();
+            boolean hasSkull = Iterables.removeIf(reward.getItemDrops(), new Predicate<ItemStack>() {
 
-                for (ItemStack itemStack : reward.getItemDrops()) {
-                    if (itemStack.getType() == Material.SKULL_ITEM) {
-                        playerKilledEvent.getDrops().add(createSkullItem(playerKilledEvent.getVictim().getName()));
-                    }
-                    else {
-                        itemDrops.add(itemStack);
-                    }
+                @Override
+                public boolean apply(ItemStack itemStack)
+                {
+                    return itemStack.getType() == Material.SKULL_ITEM;
                 }
+            });
 
-                reward.setItemDrops(itemDrops);
+            if (hasSkull) {
+                playerKilledEvent.getDrops().add(createSkullItem(playerKilledEvent.getVictim().getName()));
             }
         }
     }
