@@ -22,8 +22,6 @@ package se.crafted.chrisb.ecoCreature.events.handlers;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.minecraft.util.com.google.common.collect.Lists;
-
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -31,6 +29,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;

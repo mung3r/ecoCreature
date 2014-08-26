@@ -21,11 +21,10 @@ package se.crafted.chrisb.ecoCreature.events.handlers;
 
 import java.util.Collection;
 
-import net.minecraft.util.com.google.common.collect.Lists;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
+import com.google.common.collect.Lists;
 import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
