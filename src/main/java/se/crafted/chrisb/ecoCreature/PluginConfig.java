@@ -88,7 +88,7 @@ public class PluginConfig
     {
         this.plugin = plugin;
         dataWorldsFolder = new File(plugin.getDataFolder(), "worlds");
-        initialized = dataWorldsFolder.mkdirs() && initConfig();
+        initialized = (dataWorldsFolder.exists() || dataWorldsFolder.mkdirs()) && initConfig();
     }
 
     public boolean isInitialized()
