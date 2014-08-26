@@ -22,7 +22,7 @@ package se.crafted.chrisb.ecoCreature.settings;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
-public interface SpawnerMobTracking
+public interface SpawnerMobTracker
 {
     void tagSpawnerMob(CreatureSpawnEvent event);
 

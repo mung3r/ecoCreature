@@ -39,7 +39,7 @@ import se.crafted.chrisb.ecoCreature.rewards.gain.PlayerGain;
 import se.crafted.chrisb.ecoCreature.rewards.parties.Party;
 import se.crafted.chrisb.ecoCreature.rewards.sources.AbstractRewardSource;
 
-public class WorldSettings implements SpawnerMobTracking
+public class WorldSettings implements SpawnerMobTracker
 {
     public static final String SPAWNERMOB_TAG_MDID = "ecoCreature.spawnerMob";
     public static final String SPAWNERLOC_TAG_MDID = "ecoCreature.spawnerLoc";

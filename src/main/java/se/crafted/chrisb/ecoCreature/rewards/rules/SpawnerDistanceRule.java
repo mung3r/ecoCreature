@@ -31,7 +31,7 @@ import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.NoCampMessageDecorator;
-import se.crafted.chrisb.ecoCreature.settings.SpawnerMobTracking;
+import se.crafted.chrisb.ecoCreature.settings.SpawnerMobTracker;
 
 public class SpawnerDistanceRule extends AbstractEntityRule
 {
@@ -67,7 +67,7 @@ public class SpawnerDistanceRule extends AbstractEntityRule
     @Override
     protected boolean isBroken(EntityKilledEvent event)
     {
-        SpawnerMobTracking tracking = event.getSpawnerMobTracking();
+        SpawnerMobTracker tracking = event.getSpawnerMobTracker();
         boolean ruleBroken = !canCampSpawner && campByDistance && tracking.isSpawnerMob(event.getEntity()) && isEntityKilledEventNearSpawner(event);
         LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " spawner camping.", ruleBroken);
 

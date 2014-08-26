@@ -63,7 +63,7 @@ public class EntityKilledEventHandler extends AbstractEventHandler
     {
         final Player killer = event.getKiller();
         final WorldSettings settings = getSettings(killer.getWorld());
-        event.setSpawnerMobTracking(settings);
+        event.setSpawnerMobTracker(settings);
 
         Collection<Reward> rewards = Collections2.transform(settings.createRewards(event), new Function<Reward, Reward>() {
 
