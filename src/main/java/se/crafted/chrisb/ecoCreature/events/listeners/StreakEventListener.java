@@ -27,7 +27,7 @@ import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
 import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
-import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
+import se.crafted.chrisb.ecoCreature.events.DropEventFactory;
 
 public class StreakEventListener implements Listener
 {

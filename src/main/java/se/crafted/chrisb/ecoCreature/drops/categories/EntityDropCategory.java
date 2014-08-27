@@ -29,6 +29,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
+import se.crafted.chrisb.ecoCreature.drops.DropSourceFactory;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
 

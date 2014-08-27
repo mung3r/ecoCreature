@@ -31,7 +31,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import se.crafted.chrisb.ecoCreature.commons.EventUtils;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
-import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
+import se.crafted.chrisb.ecoCreature.events.DropEventFactory;
 
 public class PlayerDeathEventListener implements Listener
 {

@@ -31,6 +31,7 @@ import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
 import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.drops.DropSourceFactory;
 import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.StreakDropType;
 

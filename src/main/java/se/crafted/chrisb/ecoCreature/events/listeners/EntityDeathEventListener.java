@@ -33,7 +33,7 @@ import se.crafted.chrisb.ecoCreature.commons.EventUtils;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.events.EntityFarmedEvent;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
-import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
+import se.crafted.chrisb.ecoCreature.events.DropEventFactory;
 
 public class EntityDeathEventListener implements Listener
 {

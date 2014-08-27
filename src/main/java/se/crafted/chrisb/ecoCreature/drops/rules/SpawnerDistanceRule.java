@@ -67,8 +67,8 @@ public class SpawnerDistanceRule extends AbstractEntityRule
     @Override
     protected boolean isBroken(EntityKilledEvent event)
     {
-        SpawnerMobTracker tracking = event.getSpawnerMobTracker();
-        boolean ruleBroken = !canCampSpawner && campByDistance && tracking.isSpawnerMob(event.getEntity()) && isEntityKilledEventNearSpawner(event);
+        SpawnerMobTracker tracker = event.getSpawnerMobTracker();
+        boolean ruleBroken = !canCampSpawner && campByDistance && tracker.isSpawnerMob(event.getEntity()) && isEntityKilledEventNearSpawner(event);
         LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " spawner camping.", ruleBroken);
 
         return ruleBroken;

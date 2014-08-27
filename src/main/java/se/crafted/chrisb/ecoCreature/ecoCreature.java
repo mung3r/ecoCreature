@@ -41,7 +41,7 @@ import se.crafted.chrisb.ecoCreature.events.listeners.SpawnEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.StreakEventListener;
 import se.crafted.chrisb.ecoCreature.events.mappers.BlockEventMapper;
 import se.crafted.chrisb.ecoCreature.events.mappers.DeathStreakEventMapper;
-import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
+import se.crafted.chrisb.ecoCreature.events.DropEventFactory;
 import se.crafted.chrisb.ecoCreature.events.mappers.EntityFarmedEventMapper;
 import se.crafted.chrisb.ecoCreature.events.mappers.EntityKilledEventMapper;
 import se.crafted.chrisb.ecoCreature.events.mappers.HeroesEventMapper;

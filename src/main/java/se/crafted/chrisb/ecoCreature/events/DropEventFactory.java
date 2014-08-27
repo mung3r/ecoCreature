@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.events.mappers;
+package se.crafted.chrisb.ecoCreature.events;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +30,7 @@ import se.crafted.chrisb.ecoCreature.events.DropEvent;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import se.crafted.chrisb.ecoCreature.events.mappers.EventMapper;
 
 public class DropEventFactory
 {

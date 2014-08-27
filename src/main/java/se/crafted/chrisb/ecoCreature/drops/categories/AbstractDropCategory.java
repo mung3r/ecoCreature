@@ -34,6 +34,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
+import se.crafted.chrisb.ecoCreature.drops.DropSourceFactory;
 import se.crafted.chrisb.ecoCreature.messages.CoinMessageDecorator;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
