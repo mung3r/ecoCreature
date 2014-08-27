@@ -60,7 +60,7 @@
     </repository>
     <repository>
       <id>SacredCoding</id>
-      <url>http://repo.sacredlabyrinth.net:8081/artifactory/releases</url>
+      <url>http://repo.sacredlabyrinth.net/artifactory/plugins-release</url>
     </repository>
     <repository>
       <id>Plugin Metrics</id>
@@ -126,7 +126,7 @@
     <dependency>
       <groupId>net.sacredlabyrinth.phaed.simpleclans</groupId>
       <artifactId>SimpleClans</artifactId>
-      <version>Legacy</version>
+      <version>2.4.4</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
