@@ -30,11 +30,11 @@ import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
 
 public class BlockEventListener implements Listener
 {
-    private final DropEventFactory handler;
+    private final DropEventFactory factory;
 
     public BlockEventListener(DropEventFactory factory)
     {
-        this.handler = factory;
+        this.factory = factory;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -44,7 +44,7 @@ public class BlockEventListener implements Listener
             return;
         }
 
-        for (DropEvent dropEvent : handler.createEvents(event)) {
+        for (DropEvent dropEvent : factory.createEvents(event)) {
             Bukkit.getPluginManager().callEvent(dropEvent);
         }
     }

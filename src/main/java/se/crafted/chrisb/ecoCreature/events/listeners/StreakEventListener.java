@@ -31,17 +31,17 @@ import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
 
 public class StreakEventListener implements Listener
 {
-    private final DropEventFactory handler;
+    private final DropEventFactory factory;
 
     public StreakEventListener(DropEventFactory factory)
     {
-        this.handler = factory;
+        this.factory = factory;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onDeathStreakEvent(DeathStreakEvent event)
     {
-        for (DropEvent dropEvent : handler.createEvents(event)) {
+        for (DropEvent dropEvent : factory.createEvents(event)) {
             Bukkit.getPluginManager().callEvent(dropEvent);
         }
     }
@@ -49,7 +49,7 @@ public class StreakEventListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onKillStreakEvent(KillStreakEvent event)
     {
-        for (DropEvent dropEvent : handler.createEvents(event)) {
+        for (DropEvent dropEvent : factory.createEvents(event)) {
             Bukkit.getPluginManager().callEvent(dropEvent);
         }
     }

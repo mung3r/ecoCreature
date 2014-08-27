@@ -35,11 +35,11 @@ import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
 
 public class PlayerDeathEventListener implements Listener
 {
-    private final DropEventFactory handler;
+    private final DropEventFactory factory;
 
     public PlayerDeathEventListener(DropEventFactory factory)
     {
-        this.handler = factory;
+        this.factory = factory;
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -48,10 +48,10 @@ public class PlayerDeathEventListener implements Listener
         Collection<DropEvent> events = Collections.emptySet();
 
         if (EventUtils.isPVPDeath(event)) {
-            events = handler.createEvents(PlayerKilledEvent.createEvent(event));
+            events = factory.createEvents(PlayerKilledEvent.createEvent(event));
         }
         else if (EventUtils.isNotSuicide(event)) {
-            events = handler.createEvents(event);
+            events = factory.createEvents(event);
         }
 
         for (DropEvent dropEvent : events) {

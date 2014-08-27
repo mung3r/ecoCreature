@@ -31,17 +31,17 @@ import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
 
 public class McMMOEventListener implements Listener
 {
-    private final DropEventFactory handler;
+    private final DropEventFactory factory;
 
     public McMMOEventListener(DropEventFactory factory)
     {
-        this.handler = factory;
+        this.factory = factory;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onMcMMOPlayerLevelUp(McMMOPlayerLevelUpEvent event)
     {
-        for (DropEvent dropEvent : handler.createEvents(event)) {
+        for (DropEvent dropEvent : factory.createEvents(event)) {
             Bukkit.getPluginManager().callEvent(dropEvent);
         }
     }

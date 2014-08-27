@@ -37,11 +37,11 @@ import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
 
 public class EntityDeathEventListener implements Listener
 {
-    private final DropEventFactory handler;
+    private final DropEventFactory factory;
 
     public EntityDeathEventListener(DropEventFactory factory)
     {
-        this.handler = factory;
+        this.factory = factory;
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -54,10 +54,10 @@ public class EntityDeathEventListener implements Listener
         Collection<DropEvent> events = Collections.emptySet();
 
         if (EventUtils.isEntityKilledEvent(event)) {
-            events = handler.createEvents(EntityKilledEvent.createEvent(event));
+            events = factory.createEvents(EntityKilledEvent.createEvent(event));
         }
         else if (EventUtils.isEntityFarmed(event) || EventUtils.isEntityFireFarmed(event)) {
-            events = handler.createEvents(EntityFarmedEvent.createEvent(event));
+            events = factory.createEvents(EntityFarmedEvent.createEvent(event));
         }
 
         for (DropEvent dropEvent : events) {
