@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,36 +39,36 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
-import se.crafted.chrisb.ecoCreature.rewards.gain.BiomeGain;
-import se.crafted.chrisb.ecoCreature.rewards.gain.CronGain;
-import se.crafted.chrisb.ecoCreature.rewards.gain.EnvironmentGain;
-import se.crafted.chrisb.ecoCreature.rewards.gain.FactionsGain;
-import se.crafted.chrisb.ecoCreature.rewards.gain.PlayerGain;
-import se.crafted.chrisb.ecoCreature.rewards.gain.GroupGain;
-import se.crafted.chrisb.ecoCreature.rewards.gain.HeroesGain;
-import se.crafted.chrisb.ecoCreature.rewards.gain.McMMOGain;
-import se.crafted.chrisb.ecoCreature.rewards.gain.MobArenaGain;
-import se.crafted.chrisb.ecoCreature.rewards.gain.RegionGain;
-import se.crafted.chrisb.ecoCreature.rewards.gain.RegiosGain;
-import se.crafted.chrisb.ecoCreature.rewards.gain.ResidenceGain;
-import se.crafted.chrisb.ecoCreature.rewards.gain.TimeGain;
-import se.crafted.chrisb.ecoCreature.rewards.gain.TownyGain;
-import se.crafted.chrisb.ecoCreature.rewards.gain.WeaponGain;
-import se.crafted.chrisb.ecoCreature.rewards.gain.WeatherGain;
-import se.crafted.chrisb.ecoCreature.rewards.parties.HeroesParty;
-import se.crafted.chrisb.ecoCreature.rewards.parties.McMMOParty;
-import se.crafted.chrisb.ecoCreature.rewards.parties.MobArenaParty;
-import se.crafted.chrisb.ecoCreature.rewards.parties.Party;
-import se.crafted.chrisb.ecoCreature.settings.AbstractRewardSettings;
-import se.crafted.chrisb.ecoCreature.settings.CustomEntityRewardSettings;
-import se.crafted.chrisb.ecoCreature.settings.CustomMaterialRewardSettings;
-import se.crafted.chrisb.ecoCreature.settings.CustomRewardSettings;
-import se.crafted.chrisb.ecoCreature.settings.StreakRewardSettings;
-import se.crafted.chrisb.ecoCreature.settings.EntityRewardSettings;
-import se.crafted.chrisb.ecoCreature.settings.HeroesRewardSettings;
-import se.crafted.chrisb.ecoCreature.settings.MaterialRewardSettings;
-import se.crafted.chrisb.ecoCreature.settings.McMMORewardSettings;
-import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
+import se.crafted.chrisb.ecoCreature.drops.categories.AbstractDropCategory;
+import se.crafted.chrisb.ecoCreature.drops.categories.CustomDropCategory;
+import se.crafted.chrisb.ecoCreature.drops.categories.CustomEntityDropCategory;
+import se.crafted.chrisb.ecoCreature.drops.categories.CustomMaterialDropCategory;
+import se.crafted.chrisb.ecoCreature.drops.categories.DropConfig;
+import se.crafted.chrisb.ecoCreature.drops.categories.EntityDropCategory;
+import se.crafted.chrisb.ecoCreature.drops.categories.HeroesDropCategory;
+import se.crafted.chrisb.ecoCreature.drops.categories.MaterialDropCategory;
+import se.crafted.chrisb.ecoCreature.drops.categories.McMMODropCategory;
+import se.crafted.chrisb.ecoCreature.drops.categories.StreakDropCategory;
+import se.crafted.chrisb.ecoCreature.drops.gain.BiomeGain;
+import se.crafted.chrisb.ecoCreature.drops.gain.CronGain;
+import se.crafted.chrisb.ecoCreature.drops.gain.EnvironmentGain;
+import se.crafted.chrisb.ecoCreature.drops.gain.FactionsGain;
+import se.crafted.chrisb.ecoCreature.drops.gain.GroupGain;
+import se.crafted.chrisb.ecoCreature.drops.gain.HeroesGain;
+import se.crafted.chrisb.ecoCreature.drops.gain.McMMOGain;
+import se.crafted.chrisb.ecoCreature.drops.gain.MobArenaGain;
+import se.crafted.chrisb.ecoCreature.drops.gain.PlayerGain;
+import se.crafted.chrisb.ecoCreature.drops.gain.RegionGain;
+import se.crafted.chrisb.ecoCreature.drops.gain.RegiosGain;
+import se.crafted.chrisb.ecoCreature.drops.gain.ResidenceGain;
+import se.crafted.chrisb.ecoCreature.drops.gain.TimeGain;
+import se.crafted.chrisb.ecoCreature.drops.gain.TownyGain;
+import se.crafted.chrisb.ecoCreature.drops.gain.WeaponGain;
+import se.crafted.chrisb.ecoCreature.drops.gain.WeatherGain;
+import se.crafted.chrisb.ecoCreature.drops.parties.HeroesParty;
+import se.crafted.chrisb.ecoCreature.drops.parties.McMMOParty;
+import se.crafted.chrisb.ecoCreature.drops.parties.MobArenaParty;
+import se.crafted.chrisb.ecoCreature.drops.parties.Party;
 
 public class PluginConfig
 {
@@ -82,7 +83,7 @@ public class PluginConfig
     private boolean initialized;
     private boolean checkForUpdates;
 
-    private Map<String, WorldSettings> worldSettingsMap;
+    private Map<String, DropConfig> worldConfigMap;
 
     public PluginConfig(ecoCreature plugin)
     {
@@ -101,13 +102,13 @@ public class PluginConfig
         return checkForUpdates;
     }
 
-    public WorldSettings getWorldSettings(World world)
+    public DropConfig getDropConfig(World world)
     {
-        WorldSettings settings = worldSettingsMap.get(world.getName());
-        if (settings == null) {
-            settings = worldSettingsMap.get(PluginConfig.DEFAULT_WORLD);
+        DropConfig dropConfig = worldConfigMap.get(world.getName());
+        if (dropConfig == null) {
+            dropConfig = worldConfigMap.get(PluginConfig.DEFAULT_WORLD);
         }
-        return settings;
+        return dropConfig;
     }
 
     private boolean initConfig()
@@ -117,9 +118,9 @@ public class PluginConfig
             LoggerUtil.getInstance().setDebug(defaultConfigFile.getBoolean("System.Debug", LoggerUtil.getInstance().isDebug()));
             checkForUpdates = defaultConfigFile.getBoolean("System.CheckForUpdates", true);
 
-            WorldSettings defaultSettings = loadWorldSettings(new WorldSettings(plugin), defaultConfigFile);
-            worldSettingsMap = new HashMap<String, WorldSettings>();
-            worldSettingsMap.put(DEFAULT_WORLD, defaultSettings);
+            DropConfig defaultDropConfig = loadDropConfig(new DropConfig(plugin), defaultConfigFile);
+            worldConfigMap = new HashMap<String, DropConfig>();
+            worldConfigMap.put(DEFAULT_WORLD, defaultDropConfig);
 
             for (World world : plugin.getServer().getWorlds()) {
 
@@ -128,10 +129,10 @@ public class PluginConfig
                 if (worldConfigFile.exists()) {
                     FileConfiguration configFile = getConfig(worldConfigFile);
                     LoggerUtil.getInstance().info("Loaded config for " + world.getName() + " world.");
-                    worldSettingsMap.put(world.getName(), loadWorldSettings(new WorldSettings(plugin), configFile));
+                    worldConfigMap.put(world.getName(), loadDropConfig(new DropConfig(plugin), configFile));
                 }
                 else {
-                    worldSettingsMap.put(world.getName(), defaultSettings);
+                    worldConfigMap.put(world.getName(), defaultDropConfig);
                 }
             }
 
@@ -147,19 +148,19 @@ public class PluginConfig
         return false;
     }
 
-    private static WorldSettings loadWorldSettings(WorldSettings settings, FileConfiguration config)
+    private static DropConfig loadDropConfig(DropConfig dropConfig, FileConfiguration config)
     {
-        settings.setClearEnchantedDrops(config.getBoolean("System.Hunting.ClearEnchantedDrops", false));
-        settings.setClearOnNoDrops(config.getBoolean("System.Hunting.ClearDefaultDrops", true));
-        settings.setOverrideDrops(config.getBoolean("System.Hunting.OverrideDrops", true));
-        settings.setNoFarm(config.getBoolean("System.Hunting.NoFarm", false));
-        settings.setNoFarmFire(config.getBoolean("System.Hunting.NoFarmFire", false));
+        dropConfig.setClearEnchantedDrops(config.getBoolean("System.Hunting.ClearEnchantedDrops", false));
+        dropConfig.setClearOnNoDrops(config.getBoolean("System.Hunting.ClearDefaultDrops", true));
+        dropConfig.setOverrideDrops(config.getBoolean("System.Hunting.OverrideDrops", true));
+        dropConfig.setNoFarm(config.getBoolean("System.Hunting.NoFarm", false));
+        dropConfig.setNoFarmFire(config.getBoolean("System.Hunting.NoFarmFire", false));
 
-        settings.setGainMultipliers(loadGainMultipliers(config));
-        settings.setParties(loadParties(config));
-        settings.setRewardSettings(loadRewardSettings(config));
+        dropConfig.setGainMultipliers(loadGainMultipliers(config));
+        dropConfig.setParties(loadParties(config));
+        dropConfig.setDropCategories(loadDropCategories(config));
 
-        return settings;
+        return dropConfig;
     }
 
     private static Set<PlayerGain> loadGainMultipliers(ConfigurationSection config)
@@ -198,20 +199,20 @@ public class PluginConfig
         return parties;
     }
 
-    private static List<AbstractRewardSettings<?>> loadRewardSettings(ConfigurationSection config)
+    private static List<AbstractDropCategory<?>> loadDropCategories(ConfigurationSection config)
     {
-        List<AbstractRewardSettings<?>> rewardSettings = new ArrayList<AbstractRewardSettings<?>>();
+        List<AbstractDropCategory<?>> dropCategory = new ArrayList<AbstractDropCategory<?>>();
 
-        rewardSettings.add(CustomMaterialRewardSettings.parseConfig(config));
-        rewardSettings.add(MaterialRewardSettings.parseConfig(config));
-        rewardSettings.add(CustomEntityRewardSettings.parseConfig(config));
-        rewardSettings.add(EntityRewardSettings.parseConfig(config));
-        rewardSettings.add(CustomRewardSettings.parseConfig(config));
-        rewardSettings.add(StreakRewardSettings.parseConfig(config));
-        rewardSettings.add(HeroesRewardSettings.parseConfig(config));
-        rewardSettings.add(McMMORewardSettings.parseConfig(config));
+        dropCategory.add(CustomMaterialDropCategory.parseConfig(config));
+        dropCategory.add(MaterialDropCategory.parseConfig(config));
+        dropCategory.add(CustomEntityDropCategory.parseConfig(config));
+        dropCategory.add(EntityDropCategory.parseConfig(config));
+        dropCategory.add(CustomDropCategory.parseConfig(config));
+        dropCategory.add(StreakDropCategory.parseConfig(config));
+        dropCategory.add(HeroesDropCategory.parseConfig(config));
+        dropCategory.add(McMMODropCategory.parseConfig(config));
 
-        return rewardSettings;
+        return dropCategory;
     }
 
     private FileConfiguration getDefaultConfig() throws IOException, InvalidConfigurationException
@@ -272,7 +273,7 @@ public class PluginConfig
         }
 
         config.load(file);
-        config.setDefaults(YamlConfiguration.loadConfiguration(plugin.getResource(DEFAULT_FILE)));
+        config.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(plugin.getResource(DEFAULT_FILE))));
         config.options().copyDefaults(true);
 
         return config;

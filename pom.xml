@@ -17,7 +17,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <bukkit.version>1.7.9-R0.2</bukkit.version>
-    <vault.version>1.3.2</vault.version>
+    <vault.version>1.4</vault.version>
     <currentYear>2014</currentYear>
   </properties>
 

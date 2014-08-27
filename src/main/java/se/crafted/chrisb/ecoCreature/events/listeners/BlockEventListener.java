@@ -25,16 +25,16 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
-import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.events.handlers.PluginEventHandler;
+import se.crafted.chrisb.ecoCreature.events.DropEvent;
+import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
 
 public class BlockEventListener implements Listener
 {
-    private final PluginEventHandler handler;
+    private final DropEventFactory handler;
 
-    public BlockEventListener(PluginEventHandler handler)
+    public BlockEventListener(DropEventFactory factory)
     {
-        this.handler = handler;
+        this.handler = factory;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -44,8 +44,8 @@ public class BlockEventListener implements Listener
             return;
         }
 
-        for (RewardEvent rewardEvent : handler.createRewardEvents(event)) {
-            Bukkit.getPluginManager().callEvent(rewardEvent);
+        for (DropEvent dropEvent : handler.createEvents(event)) {
+            Bukkit.getPluginManager().callEvent(dropEvent);
         }
     }
 }

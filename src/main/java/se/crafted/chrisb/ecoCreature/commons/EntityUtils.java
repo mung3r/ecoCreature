@@ -28,7 +28,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
 import org.bukkit.metadata.MetadataValue;
 
-import se.crafted.chrisb.ecoCreature.settings.WorldSettings;
+import se.crafted.chrisb.ecoCreature.drops.categories.DropConfig;
 
 public final class EntityUtils
 {
@@ -40,7 +40,7 @@ public final class EntityUtils
     {
         Location loc = entity.getLocation();
         int r = radius * radius;
-        List<MetadataValue> metaDataValues = entity.getMetadata(WorldSettings.SPAWNERLOC_TAG_MDID);
+        List<MetadataValue> metaDataValues = entity.getMetadata(DropConfig.SPAWNERLOC_TAG_MDID);
 
         if (!metaDataValues.isEmpty()) {
             MetadataValue metaDataValue = metaDataValues.get(0);

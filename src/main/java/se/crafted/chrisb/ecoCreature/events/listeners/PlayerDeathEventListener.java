@@ -19,8 +19,8 @@
  */
 package se.crafted.chrisb.ecoCreature.events.listeners;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -29,33 +29,33 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.EventUtils;
+import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
-import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.events.handlers.PluginEventHandler;
+import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
 
 public class PlayerDeathEventListener implements Listener
 {
-    private final PluginEventHandler handler;
+    private final DropEventFactory handler;
 
-    public PlayerDeathEventListener(PluginEventHandler handler)
+    public PlayerDeathEventListener(DropEventFactory factory)
     {
-        this.handler = handler;
+        this.handler = factory;
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onEntityDeath(PlayerDeathEvent event)
     {
-        Set<RewardEvent> events = Collections.emptySet();
+        Collection<DropEvent> events = Collections.emptySet();
 
         if (EventUtils.isPVPDeath(event)) {
-            events = handler.createRewardEvents(PlayerKilledEvent.createEvent(event));
+            events = handler.createEvents(PlayerKilledEvent.createEvent(event));
         }
         else if (EventUtils.isNotSuicide(event)) {
-            events = handler.createRewardEvents(event);
+            events = handler.createEvents(event);
         }
 
-        for (RewardEvent rewardEvent : events) {
-            Bukkit.getPluginManager().callEvent(rewardEvent);
+        for (DropEvent dropEvent : events) {
+            Bukkit.getPluginManager().callEvent(dropEvent);
         }
     }
 }

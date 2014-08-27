@@ -40,7 +40,7 @@ public class SpawnEventListener implements Listener
     public void onCreatureSpawn(CreatureSpawnEvent event)
     {
         if (!event.isCancelled() && event.getSpawnReason() == SpawnReason.SPAWNER) {
-            plugin.getPluginConfig().getWorldSettings(event.getEntity().getWorld()).tagSpawnerMob(event);
+            plugin.getPluginConfig().getDropConfig(event.getEntity().getWorld()).tagSpawnerMob(event);
         }
     }
 }

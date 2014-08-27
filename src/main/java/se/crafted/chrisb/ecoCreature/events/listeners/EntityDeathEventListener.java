@@ -19,8 +19,8 @@
  */
 package se.crafted.chrisb.ecoCreature.events.listeners;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -30,18 +30,18 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.EventUtils;
+import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.events.EntityFarmedEvent;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
-import se.crafted.chrisb.ecoCreature.events.RewardEvent;
-import se.crafted.chrisb.ecoCreature.events.handlers.PluginEventHandler;
+import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
 
 public class EntityDeathEventListener implements Listener
 {
-    private final PluginEventHandler handler;
+    private final DropEventFactory handler;
 
-    public EntityDeathEventListener(PluginEventHandler handler)
+    public EntityDeathEventListener(DropEventFactory factory)
     {
-        this.handler = handler;
+        this.handler = factory;
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -51,17 +51,17 @@ public class EntityDeathEventListener implements Listener
             return;
         }
 
-        Set<RewardEvent> events = Collections.emptySet();
+        Collection<DropEvent> events = Collections.emptySet();
 
         if (EventUtils.isEntityKilledEvent(event)) {
-            events = handler.createRewardEvents(EntityKilledEvent.createEvent(event));
+            events = handler.createEvents(EntityKilledEvent.createEvent(event));
         }
         else if (EventUtils.isEntityFarmed(event) || EventUtils.isEntityFireFarmed(event)) {
-            events = handler.createRewardEvents(EntityFarmedEvent.createEvent(event));
+            events = handler.createEvents(EntityFarmedEvent.createEvent(event));
         }
 
-        for (RewardEvent rewardEvent : events) {
-            Bukkit.getPluginManager().callEvent(rewardEvent);
+        for (DropEvent dropEvent : events) {
+            Bukkit.getPluginManager().callEvent(dropEvent);
         }
     }
 }
