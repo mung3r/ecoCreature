@@ -154,61 +154,6 @@ public abstract class AbstractDropSource
         return coin != null;
     }
 
-    public CoinDrop getCoin()
-    {
-        return coin;
-    }
-
-    public void setCoin(CoinDrop coin)
-    {
-        this.coin = coin;
-    }
-
-    public boolean hasItemDrops()
-    {
-        return itemDrops != null && !itemDrops.isEmpty();
-    }
-
-    public Collection<AbstractItemDrop> getItemDrops()
-    {
-        return itemDrops;
-    }
-
-    public void setItemDrops(Collection<AbstractItemDrop> drops)
-    {
-        this.itemDrops = drops;
-    }
-
-    public boolean hasEntityDrops()
-    {
-        return entityDrops != null && !entityDrops.isEmpty();
-    }
-
-    public Collection<EntityDrop> getEntityDrops()
-    {
-        return entityDrops;
-    }
-
-    public void setEntityDrops(Collection<EntityDrop> entityDrops)
-    {
-        this.entityDrops = entityDrops;
-    }
-
-    public boolean hasJockeyDrops()
-    {
-        return jockeyDrops != null && !jockeyDrops.isEmpty();
-    }
-
-    public Collection<JockeyDrop> getJockeyDrops()
-    {
-        return jockeyDrops;
-    }
-
-    public void setJockeyDrops(Collection<JockeyDrop> jockeyDrops)
-    {
-        this.jockeyDrops = jockeyDrops;
-    }
-
     public Message getNoCoinRewardMessage()
     {
         return noCoinRewardMessage;
