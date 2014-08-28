@@ -77,7 +77,7 @@ public abstract class AbstractEventMapper implements EventMapper
                 @Override
                 public boolean apply(ItemStack itemStack)
                 {
-                    return itemStack.getType() == Material.SKULL_ITEM;
+                    return itemStack != null && itemStack.getType() == Material.SKULL_ITEM;
                 }
             });
 
