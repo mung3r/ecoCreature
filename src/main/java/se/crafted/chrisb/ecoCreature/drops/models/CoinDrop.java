@@ -24,30 +24,15 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public class CoinDrop
 {
-    private NumberRange range;
-    private double percentage;
-    private double multiplier;
+    private final NumberRange range;
+    private final double percentage;
+    private final double multiplier;
 
     public CoinDrop(NumberRange range, double percentage, double multiplier)
     {
         this.range = range;
         this.percentage = percentage;
         this.multiplier = multiplier;
-    }
-
-    public NumberRange getRange()
-    {
-        return range;
-    }
-
-    public double getPercentage()
-    {
-        return percentage;
-    }
-
-    public double getMultiplier()
-    {
-        return multiplier;
     }
 
     public double getOutcome()

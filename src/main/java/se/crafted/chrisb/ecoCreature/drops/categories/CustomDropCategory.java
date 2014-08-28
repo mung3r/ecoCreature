@@ -87,33 +87,36 @@ public class CustomDropCategory extends AbstractDropCategory<CustomDropType>
                 CustomDropType type = CustomDropType.fromName(typeName);
 
                 if (type.isValid()) {
-                    AbstractDropSource source = configureDropSource(DropSourceFactory.createSource("RewardTable." + typeName, config), config);
+                    for (AbstractDropSource source : configureDropSource(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
 
-                    if (!sources.containsKey(type)) {
-                        sources.put(type, new ArrayList<AbstractDropSource>());
+                        if (!sources.containsKey(type)) {
+                            sources.put(type, new ArrayList<AbstractDropSource>());
+                        }
+
+                        sources.get(type).add(source);
+                        sources.get(type).addAll(getSets("RewardTable." + typeName, config));
                     }
-
-                    sources.get(type).add(source);
-                    sources.get(type).addAll(getSets("RewardTable." + typeName, config));
                 }
             }
 
             if (config.getBoolean("System.Hunting.PenalizeDeath", false)) {
-                AbstractDropSource source = configureDropSource(DropSourceFactory.createSource(CustomDropType.DEATH_PENALTY.toString(), config), config);
-                if (!sources.containsKey(CustomDropType.DEATH_PENALTY)) {
-                    sources.put(CustomDropType.DEATH_PENALTY, new ArrayList<AbstractDropSource>());
-                }
+                for (AbstractDropSource source : configureDropSource(DropSourceFactory.createSources(CustomDropType.DEATH_PENALTY.toString(), config), config)) {
+                    if (!sources.containsKey(CustomDropType.DEATH_PENALTY)) {
+                        sources.put(CustomDropType.DEATH_PENALTY, new ArrayList<AbstractDropSource>());
+                    }
 
-                sources.get(CustomDropType.DEATH_PENALTY).add(source);
+                    sources.get(CustomDropType.DEATH_PENALTY).add(source);
+                }
             }
 
             if (config.getBoolean("System.Hunting.PVPReward", false)) {
-                AbstractDropSource source = configureDropSource(DropSourceFactory.createSource(CustomDropType.LEGACY_PVP.toString(), config), config);
-                if (!sources.containsKey(CustomDropType.LEGACY_PVP)) {
-                    sources.put(CustomDropType.LEGACY_PVP, new ArrayList<AbstractDropSource>());
-                }
+                for (AbstractDropSource source : configureDropSource(DropSourceFactory.createSources(CustomDropType.LEGACY_PVP.toString(), config), config)) {
+                    if (!sources.containsKey(CustomDropType.LEGACY_PVP)) {
+                        sources.put(CustomDropType.LEGACY_PVP, new ArrayList<AbstractDropSource>());
+                    }
 
-                sources.get(CustomDropType.LEGACY_PVP).add(source);
+                    sources.get(CustomDropType.LEGACY_PVP).add(source);
+                }
             }
         }
 

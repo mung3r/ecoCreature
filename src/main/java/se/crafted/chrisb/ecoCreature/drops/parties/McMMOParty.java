@@ -19,10 +19,9 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.parties;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -35,14 +34,14 @@ import com.gmail.nossr50.api.PartyAPI;
 public class McMMOParty extends AbstractParty
 {
     @Override
-    public Set<String> getMembers(Player player)
+    public Collection<String> getMembers(Player player)
     {
-        Set<String> party = Collections.emptySet();
+        Collection<String> party = Collections.emptyList();
 
         if (DependencyUtils.hasMcMMO() && PartyAPI.inParty(player)) {
             Collection<Player> members = PartyAPI.getOnlineMembers(player);
             if (members != null) {
-                party = new HashSet<String>();
+                party = new ArrayList<String>();
 
                 for (Player member : members) {
                     party.add(member.getName());
@@ -56,12 +55,12 @@ public class McMMOParty extends AbstractParty
 
     public static Collection<Party> parseConfig(ConfigurationSection config)
     {
-        Collection<Party> parties = Collections.emptySet();
+        Collection<Party> parties = Collections.emptyList();
 
         if (config != null) {
             McMMOParty party = new McMMOParty();
             party.setShared(config.getBoolean("InParty.Share", false));
-            parties = new HashSet<Party>();
+            parties = new ArrayList<Party>();
             parties.add(party);
         }
 

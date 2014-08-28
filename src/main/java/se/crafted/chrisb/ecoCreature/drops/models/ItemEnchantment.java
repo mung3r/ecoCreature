@@ -19,10 +19,10 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.models;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.enchantments.Enchantment;
@@ -59,7 +59,7 @@ public class ItemEnchantment
         return levelRange.getMinimumInteger() + random.nextInt(Math.abs(levelRange.getMaximumInteger() - levelRange.getMinimumInteger() + 1));
     }
 
-    public static Map<Enchantment, Integer> getOutcome(Set<ItemEnchantment> enchantments)
+    public static Map<Enchantment, Integer> getOutcome(Collection<ItemEnchantment> enchantments)
     {
         Map<Enchantment, Integer> enchantmentMap = new HashMap<Enchantment, Integer>();
 

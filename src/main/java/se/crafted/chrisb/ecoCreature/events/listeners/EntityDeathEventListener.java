@@ -51,7 +51,7 @@ public class EntityDeathEventListener implements Listener
             return;
         }
 
-        Collection<DropEvent> events = Collections.emptySet();
+        Collection<DropEvent> events = Collections.emptyList();
 
         if (EventUtils.isEntityKilledEvent(event)) {
             events = factory.createEvents(EntityKilledEvent.createEvent(event));

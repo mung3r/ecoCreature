@@ -19,9 +19,9 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.parties;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -34,12 +34,12 @@ import com.herocraftonline.heroes.characters.Hero;
 public class HeroesParty extends AbstractParty
 {
     @Override
-    public Set<String> getMembers(Player player)
+    public Collection<String> getMembers(Player player)
     {
-        Set<String> party = Collections.emptySet();
+        Collection<String> party = Collections.emptyList();
 
         if (DependencyUtils.hasHeroes() && DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {
-            party = new HashSet<String>();
+            party = new ArrayList<String>();
 
             for (Hero hero : DependencyUtils.getHeroes().getCharacterManager().getHero(player).getParty().getMembers()) {
                 party.add(hero.getPlayer().getName());
@@ -50,14 +50,14 @@ public class HeroesParty extends AbstractParty
         return party;
     }
 
-    public static Set<Party> parseConfig(ConfigurationSection config)
+    public static Collection<Party> parseConfig(ConfigurationSection config)
     {
-        Set<Party> parties = Collections.emptySet();
+        Collection<Party> parties = Collections.emptyList();
 
         if (config != null) {
             HeroesParty party = new HeroesParty();
             party.setShared(config.getBoolean("InParty.Share", false));
-            parties = new HashSet<Party>();
+            parties = new ArrayList<Party>();
             parties.add(party);
         }
 

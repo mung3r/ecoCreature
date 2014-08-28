@@ -41,7 +41,6 @@ public class CustomEntityDropCategory extends AbstractDropCategory<CustomEntityD
         super(sources);
     }
 
-    
     @Override
     protected boolean isValidEvent(Event event)
     {
@@ -88,17 +87,18 @@ public class CustomEntityDropCategory extends AbstractDropCategory<CustomEntityD
                 CustomEntityDropType type = CustomEntityDropType.fromName(typeName);
 
                 if (type.isValid()) {
-                    AbstractDropSource source = configureDropSource(DropSourceFactory.createSource("RewardTable." + typeName, config), config);
-                    source.setHuntingRules(loadHuntingRules(config.getConfigurationSection("System")));
-                    source.getHuntingRules().putAll(loadHuntingRules(config.getConfigurationSection("RewardTable." + typeName)));
-                    source.getHuntingRules().putAll(loadGainRules(config.getConfigurationSection("Gain")));
+                    for (AbstractDropSource source : configureDropSource(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
+                        source.setHuntingRules(loadHuntingRules(config.getConfigurationSection("System")));
+                        source.getHuntingRules().putAll(loadHuntingRules(config.getConfigurationSection("RewardTable." + typeName)));
+                        source.getHuntingRules().putAll(loadGainRules(config.getConfigurationSection("Gain")));
 
-                    if (!sources.containsKey(type)) {
-                        sources.put(type, new ArrayList<AbstractDropSource>());
+                        if (!sources.containsKey(type)) {
+                            sources.put(type, new ArrayList<AbstractDropSource>());
+                        }
+
+                        sources.get(type).add(source);
+                        sources.get(type).addAll(getSets("RewardTable." + typeName, config));
                     }
-
-                    sources.get(type).add(source);
-                    sources.get(type).addAll(getSets("RewardTable." + typeName, config));
                 }
             }
         }

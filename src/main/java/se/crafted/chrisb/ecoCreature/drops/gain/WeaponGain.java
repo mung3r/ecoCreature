@@ -19,11 +19,11 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.gain;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -47,9 +47,9 @@ public class WeaponGain extends AbstractPlayerGain<Material>
         return multiplier;
     }
 
-    public static Set<PlayerGain> parseConfig(ConfigurationSection config)
+    public static Collection<PlayerGain> parseConfig(ConfigurationSection config)
     {
-        Set<PlayerGain> gain = Collections.emptySet();
+        Collection<PlayerGain> gain = Collections.emptyList();
 
         if (config != null) {
             Map<Material, Double> multipliers = new HashMap<Material, Double>();
@@ -57,7 +57,7 @@ public class WeaponGain extends AbstractPlayerGain<Material>
             for (String material : config.getKeys(false)) {
                 multipliers.put(Material.matchMaterial(material), config.getConfigurationSection(material).getDouble(AMOUNT_KEY, NO_GAIN));
             }
-            gain = new HashSet<PlayerGain>();
+            gain = new ArrayList<PlayerGain>();
             gain.add(new WeaponGain(multipliers));
         }
 

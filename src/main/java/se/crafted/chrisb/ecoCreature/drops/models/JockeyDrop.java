@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.EntityType;
@@ -32,24 +33,10 @@ public class JockeyDrop extends EntityDrop
 {
     private EntityType passenger;
 
-    public JockeyDrop(EntityType vehicle)
+    public JockeyDrop(EntityType passenger, EntityType vehicle, NumberRange range, double percentage)
     {
-        super(vehicle);
-    }
-
-    public void setPassenger(EntityType passenger)
-    {
+        super(vehicle, range, percentage);
         this.passenger = passenger;
-    }
-
-    public EntityType getPassenger()
-    {
-        return passenger;
-    }
-
-    public EntityType getVehicle()
-    {
-        return getType();
     }
 
     public static Collection<EntityDrop> parseConfig(ConfigurationSection config)
@@ -57,7 +44,7 @@ public class JockeyDrop extends EntityDrop
         Collection<EntityDrop> drops = new ArrayList<EntityDrop>();
 
         if (config != null && config.getList("Drops") != null) {
-            
+
             for (Object obj : config.getList("Drops")) {
                 if (obj instanceof LinkedHashMap) {
                     ConfigurationSection memoryConfig = createMemoryConfig(obj);
@@ -89,16 +76,11 @@ public class JockeyDrop extends EntityDrop
     {
         JockeyDrop drop = null;
 
+        EntityType passengerType = parseType(passengerString);
         EntityType vehicleType = parseType(vehicleString);
-        if (vehicleType != null && isNotAmbiguous(vehicleType)) {
-            drop = new JockeyDrop(vehicleType);
-            drop.setRange(parseRange(passengerString));
-            drop.setPercentage(parsePercentage(passengerString));
-            
-            EntityType passengerType = parseType(passengerString);
-            if (passengerType != null && isNotAmbiguous(passengerType)) {
-                drop.setPassenger(passengerType);
-            }
+
+        if (isNotAmbiguous(vehicleType) && isNotAmbiguous(passengerType)) {
+            drop = new JockeyDrop(passengerType, vehicleType, parseRange(passengerString), parsePercentage(passengerString));
         }
 
         return drop;

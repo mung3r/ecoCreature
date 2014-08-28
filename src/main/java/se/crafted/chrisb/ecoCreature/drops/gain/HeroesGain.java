@@ -19,10 +19,10 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.gain;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -51,12 +51,12 @@ public class HeroesGain extends AbstractPlayerGain<String>
         return multiplier;
     }
 
-    public static Set<PlayerGain> parseConfig(ConfigurationSection config)
+    public static Collection<PlayerGain> parseConfig(ConfigurationSection config)
     {
-        Set<PlayerGain> gain = Collections.emptySet();
+        Collection<PlayerGain> gain = Collections.emptyList();
 
         if (config != null) {
-            gain = new HashSet<PlayerGain>();
+            gain = new ArrayList<PlayerGain>();
             gain.add(new HeroesGain(parseMultiplier(config.getConfigurationSection("InParty"))));
         }
 

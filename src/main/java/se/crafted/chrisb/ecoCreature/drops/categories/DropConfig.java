@@ -22,9 +22,7 @@ package se.crafted.chrisb.ecoCreature.drops.categories;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -52,8 +50,8 @@ public class DropConfig implements SpawnerMobTracker
 
     private ecoCreature plugin;
     private List<AbstractDropCategory<?>> dropCategories;
-    private Set<PlayerGain> gainMultipliers;
-    private Set<Party> parties;
+    private Collection<PlayerGain> gainMultipliers;
+    private Collection<Party> parties;
 
     private final FixedMetadataValue spawnerMobTag;
 
@@ -61,8 +59,8 @@ public class DropConfig implements SpawnerMobTracker
     {
         this.plugin = plugin;
         dropCategories = new ArrayList<AbstractDropCategory<?>>();
-        gainMultipliers = Collections.emptySet();
-        parties = Collections.emptySet();
+        gainMultipliers = Collections.emptyList();
+        parties = Collections.emptyList();
 
         spawnerMobTag = new FixedMetadataValue(plugin, true);
     }
@@ -117,12 +115,12 @@ public class DropConfig implements SpawnerMobTracker
         this.noFarmFire = noFarmFire;
     }
 
-    public void setGainMultipliers(Set<PlayerGain> gainMultipliers)
+    public void setGainMultipliers(Collection<PlayerGain> gainMultipliers)
     {
         this.gainMultipliers = gainMultipliers;
     }
 
-    public void setParties(Set<Party> parties)
+    public void setParties(Collection<Party> parties)
     {
         this.parties = parties;
     }
@@ -134,7 +132,7 @@ public class DropConfig implements SpawnerMobTracker
 
     public Collection<Drop> createDrops(final Event event)
     {
-        Collection<Drop> drops = new HashSet<Drop>();
+        Collection<Drop> drops = new ArrayList<Drop>();
 
         for (AbstractDropCategory<?> category : dropCategories) {
             for (AbstractDropSource source : category.getDropSources(event)) {
@@ -160,9 +158,9 @@ public class DropConfig implements SpawnerMobTracker
         return multiplier;
     }
 
-    public Set<String> getPartyMembers(Player player)
+    public Collection<String> getPartyMembers(Player player)
     {
-        Set<String> players = new HashSet<String>();
+        Collection<String> players = new ArrayList<String>();
 
         for (Party party : parties) {
             if (party.isShared()) {

@@ -20,11 +20,11 @@
 package se.crafted.chrisb.ecoCreature.drops.gain;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -75,12 +75,12 @@ public class CronGain extends AbstractPlayerGain<String>
         return satisfied;
     }
 
-    public static Set<PlayerGain> parseConfig(ConfigurationSection config)
+    public static Collection<PlayerGain> parseConfig(ConfigurationSection config)
     {
-        Set<PlayerGain> gain = Collections.emptySet();
+        Collection<PlayerGain> gain = Collections.emptyList();
 
         if (config != null) {
-            gain = new HashSet<PlayerGain>();
+            gain = new ArrayList<PlayerGain>();
             gain.add(new GroupGain(parseMultipliers(config)));
         }
 

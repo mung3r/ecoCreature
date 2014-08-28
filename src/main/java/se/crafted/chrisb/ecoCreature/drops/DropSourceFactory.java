@@ -40,70 +40,75 @@ import se.crafted.chrisb.ecoCreature.drops.sources.PVPDropSource;
 import se.crafted.chrisb.ecoCreature.drops.sources.SetDropSource;
 import se.crafted.chrisb.ecoCreature.drops.sources.StreakDropSource;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public final class DropSourceFactory
 {
     private DropSourceFactory()
     {
     }
 
-    public static AbstractDropSource createSetSource(String section, ConfigurationSection config)
+    public static Collection<AbstractDropSource> createSetSources(String section, ConfigurationSection config)
     {
-        return new SetDropSource(section, config);
+        Collection<AbstractDropSource> sources = new ArrayList<AbstractDropSource>();
+        sources.add(new SetDropSource(section, config));
+        return sources;
     }
 
-    public static AbstractDropSource createSource(String section, ConfigurationSection config)
+    public static Collection<AbstractDropSource> createSources(String section, ConfigurationSection config)
     {
-        AbstractDropSource source = null;
+        Collection<AbstractDropSource> sources = new ArrayList<AbstractDropSource>();
         String name = parseTypeName(section);
         
         if (CustomMaterialDropType.fromName(name).isValid()) {
-            source = createCustomMaterialSource(section, config);
+            sources.addAll(createCustomMaterialSources(section, config));
         }
         else if (Material.matchMaterial(name) != null) {
-            source = new MaterialDropSource(section, config);
+            sources.add(new MaterialDropSource(section, config));
         }
         else if (CustomEntityDropType.fromName(name).isValid()) {
-            source = createCustomEntitySource(section, config);
+            sources.addAll(createCustomEntitySources(section, config));
         }
         else if (EntityType.fromName(name) != null) {
-            source = new EntityDropSource(section, config);
+            sources.add(new EntityDropSource(section, config));
         }
         else if (CustomDropType.fromName(name).isValid()) {
-            source = createCustomSource(section, config);
+            sources.addAll(createCustomSources(section, config));
         }
         else if (StreakDropType.fromName(name).isValid()) {
-            source = StreakDropSource.createDropSource(section, config);
+            sources.add(StreakDropSource.createDropSource(section, config));
         }
         else if (HeroesDropType.fromName(name).isValid()) {
-            source = HeroesDropSource.createDropSource(section, config);
+            sources.add(HeroesDropSource.createDropSource(section, config));
         }
         else if (McMMODropType.fromName(name).isValid()) {
-            source = McMMODropSource.createDropSource(section, config);
+            sources.add(McMMODropSource.createDropSource(section, config));
         }
 
-        if (source != null) {
-            LoggerUtil.getInstance().debug(name + " mapped to " + source.getClass().getSimpleName());
+        if (sources.size() == 1) {
+            LoggerUtil.getInstance().debug(name + " mapped to " + sources.iterator().next().getClass().getSimpleName());
         }
-        return source;
+        return sources;
     }
 
-    private static AbstractDropSource createCustomMaterialSource(String section, ConfigurationSection config)
+    private static Collection<AbstractDropSource> createCustomMaterialSources(String section, ConfigurationSection config)
     {
-        AbstractDropSource source;
+        Collection<AbstractDropSource> sources = new ArrayList<AbstractDropSource>();
 
         switch (CustomMaterialDropType.fromName(parseTypeName(section))) {
             case LEGACY_SPAWNER:
-                source = new MaterialDropSource(section, config);
+                sources.add(new MaterialDropSource(section, config));
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported type: " + section);
         }
-        return source;
+        return sources;
     }
 
-    private static AbstractDropSource createCustomEntitySource(String section, ConfigurationSection config)
+    private static Collection<AbstractDropSource> createCustomEntitySources(String section, ConfigurationSection config)
     {
-        AbstractDropSource source;
+        Collection<AbstractDropSource> sources = new ArrayList<AbstractDropSource>();
 
         switch (CustomEntityDropType.fromName(parseTypeName(section))) {
             case ANGRY_WOLF:
@@ -111,29 +116,29 @@ public final class DropSourceFactory
             case POWERED_CREEPER:
             case WITHER_SKELETON:
             case ZOMBIE_VILLAGER:
-                source = new EntityDropSource(section, config);
+                sources.add(new EntityDropSource(section, config));
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported type: " + section);
         }
-        return source;
+        return sources;
     }
 
-    private static AbstractDropSource createCustomSource(String section, ConfigurationSection config)
+    private static Collection<AbstractDropSource> createCustomSources(String section, ConfigurationSection config)
     {
-        AbstractDropSource source;
+        Collection<AbstractDropSource> sources = new ArrayList<AbstractDropSource>();
 
         switch (CustomDropType.fromName(parseTypeName(section))) {
             case DEATH_PENALTY:
-                source = new DeathPenaltyDropSource(config.getConfigurationSection(section));
+                sources.add(new DeathPenaltyDropSource(config.getConfigurationSection(section)));
                 break;
             case LEGACY_PVP:
-                source = new PVPDropSource(config.getConfigurationSection(section));
+                sources.add(new PVPDropSource(config.getConfigurationSection(section)));
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported type: " + section);
         }
-        return source;
+        return sources;
     }
 
     public static String parseTypeName(String section)

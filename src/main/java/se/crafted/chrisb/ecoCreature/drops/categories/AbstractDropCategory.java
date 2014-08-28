@@ -19,10 +19,10 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.categories;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import org.apache.commons.lang.math.NumberRange;
@@ -30,16 +30,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.drops.DropSourceFactory;
-import se.crafted.chrisb.ecoCreature.messages.CoinMessageDecorator;
-import se.crafted.chrisb.ecoCreature.messages.Message;
-import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
-import se.crafted.chrisb.ecoCreature.messages.MessageToken;
-import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
 import se.crafted.chrisb.ecoCreature.drops.rules.AbstractRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.BattleArenaRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.CreativeModeRule;
@@ -55,6 +47,14 @@ import se.crafted.chrisb.ecoCreature.drops.rules.TamedCreatureRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.TownyRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.UnderSeaLevelRule;
 import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
+import se.crafted.chrisb.ecoCreature.messages.CoinMessageDecorator;
+import se.crafted.chrisb.ecoCreature.messages.Message;
+import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
+import se.crafted.chrisb.ecoCreature.messages.MessageToken;
+import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 
 public abstract class AbstractDropCategory<T>
 {
@@ -69,7 +69,7 @@ public abstract class AbstractDropCategory<T>
 
     public Collection<AbstractDropSource> getDropSources(final Event event)
     {
-        Collection<AbstractDropSource> sources = Collections.emptySet();
+        Collection<AbstractDropSource> sources = Collections.emptyList();
 
         if (isValidEvent(event)) {
             sources = Collections2.filter(getDropSources(extractType(event)), new Predicate<AbstractDropSource>() {
@@ -99,7 +99,7 @@ public abstract class AbstractDropCategory<T>
 
     private Collection<AbstractDropSource> getDropSources(T type)
     {
-        Collection<AbstractDropSource> source = Collections.emptySet();
+        Collection<AbstractDropSource> source = Collections.emptyList();
 
         if (hasDropSource(type)) {
             source = sources.get(type);
@@ -129,7 +129,7 @@ public abstract class AbstractDropCategory<T>
 
     protected static Collection<AbstractDropSource> getSets(String rewardSection, ConfigurationSection config)
     {
-        Collection<AbstractDropSource> sources = new HashSet<AbstractDropSource>();
+        Collection<AbstractDropSource> sources = new ArrayList<AbstractDropSource>();
         ConfigurationSection rewardConfig = config.getConfigurationSection(rewardSection);
         ConfigurationSection rewardSets = config.getConfigurationSection("RewardSets");
         Collection<String> sets = rewardConfig.getStringList("Sets");
@@ -138,11 +138,12 @@ public abstract class AbstractDropCategory<T>
             for (String setName : sets) {
                 String name = setName.split(":")[0];
                 if (rewardSets.getConfigurationSection(name) != null) {
-                    AbstractDropSource setSource = DropSourceFactory.createSetSource(name, rewardSets);
-                    setSource.setHuntingRules(loadHuntingRules(rewardSets.getConfigurationSection(name)));
-                    setSource.setRange(parseRange(setName, new NumberRange(1, 1)));
-                    setSource.setPercentage(parsePercentage(setName, 100));
-                    sources.add(setSource);
+                    for (AbstractDropSource setSource : DropSourceFactory.createSetSources(name, rewardSets)) {
+                        setSource.setHuntingRules(loadHuntingRules(rewardSets.getConfigurationSection(name)));
+                        setSource.setRange(parseRange(setName, new NumberRange(1, 1)));
+                        setSource.setPercentage(parsePercentage(setName, 100));
+                        sources.add(setSource);
+                    }
                 }
             }
         }
@@ -181,18 +182,20 @@ public abstract class AbstractDropCategory<T>
         return defaultPercentage;
     }
 
-    protected static AbstractDropSource configureDropSource(AbstractDropSource source, ConfigurationSection config)
+    protected static Collection<AbstractDropSource> configureDropSource(Collection<AbstractDropSource> sources, ConfigurationSection config)
     {
-        if (source != null && config != null) {
-            source.setIntegerCurrency(config.getBoolean("System.Economy.IntegerCurrency", false));
-            source.setFixedDrops(config.getBoolean("System.Hunting.FixedDrops", false));
+        if (sources != null && config != null) {
+            for (AbstractDropSource source : sources) {
+                source.setIntegerCurrency(config.getBoolean("System.Economy.IntegerCurrency", false));
+                source.setFixedDrops(config.getBoolean("System.Hunting.FixedDrops", false));
 
-            source.setCoinRewardMessage(configureMessage(source.getCoinRewardMessage(), config));
-            source.setCoinPenaltyMessage(configureMessage(source.getCoinPenaltyMessage(), config));
-            source.setNoCoinRewardMessage(configureMessage(source.getNoCoinRewardMessage(), config));
+                source.setCoinRewardMessage(configureMessage(source.getCoinRewardMessage(), config));
+                source.setCoinPenaltyMessage(configureMessage(source.getCoinPenaltyMessage(), config));
+                source.setNoCoinRewardMessage(configureMessage(source.getNoCoinRewardMessage(), config));
+            }
         }
 
-        return source;
+        return sources;
     }
 
     private static Message configureMessage(Message message, ConfigurationSection config)

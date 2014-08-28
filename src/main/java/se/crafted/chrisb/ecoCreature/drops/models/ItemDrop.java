@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.Material;
@@ -119,15 +117,15 @@ public class ItemDrop extends AbstractItemDrop
         return material;
     }
 
-    private static Set<ItemEnchantment> parseEnchantments(String dropString)
+    private static Collection<ItemEnchantment> parseEnchantments(String dropString)
     {
-        Set<ItemEnchantment> enchantments = Collections.emptySet();
+        Collection<ItemEnchantment> enchantments = Collections.emptyList();
         String[] dropParts = dropString.split(":");
         String[] itemParts = dropParts[0].split(",");
 
         // check for enchantment
         if (itemParts.length > 1) {
-            enchantments = new HashSet<ItemEnchantment>();
+            enchantments = new ArrayList<ItemEnchantment>();
 
             for (int i = 1; i < itemParts.length; i++) {
                 String[] enchantParts = itemParts[i].split("\\.");

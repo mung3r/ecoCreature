@@ -38,33 +38,10 @@ public class EntityDrop
     private NumberRange range;
     private double percentage;
 
-    public EntityDrop(EntityType type)
+    public EntityDrop(EntityType type, NumberRange range, double percentage)
     {
         this.type = type;
-    }
-
-    public EntityType getType()
-    {
-        return type;
-    }
-
-    public NumberRange getRange()
-    {
-        return range;
-    }
-
-    public void setRange(NumberRange range)
-    {
         this.range = range;
-    }
-
-    public double getPercentage()
-    {
-        return percentage;
-    }
-
-    public void setPercentage(double percentage)
-    {
         this.percentage = percentage;
     }
 
@@ -132,9 +109,8 @@ public class EntityDrop
         EntityDrop exp = null;
 
         if (config != null && config.contains("ExpMin") && config.contains("ExpMax") && config.contains("ExpPercent")) {
-            exp = new EntityDrop(EntityType.EXPERIENCE_ORB);
-            exp.setRange(new NumberRange(config.getInt("ExpMin", 0), config.getInt("ExpMax", 0)));
-            exp.setPercentage(config.getDouble("ExpPercent", 0.0D));
+            exp = new EntityDrop(EntityType.EXPERIENCE_ORB, new NumberRange(config.getInt("ExpMin", 0), config.getInt("ExpMax", 0)), config.getDouble(
+                    "ExpPercent", 0.0D));
         }
 
         return exp;
@@ -170,10 +146,8 @@ public class EntityDrop
         EntityDrop drop = null;
 
         EntityType type = parseType(dropString);
-        if (type != null && isNotAmbiguous(type)) {
-            drop = new EntityDrop(type);
-            drop.setRange(parseRange(dropString));
-            drop.setPercentage(parsePercentage(dropString));
+        if (isNotAmbiguous(type)) {
+            drop = new EntityDrop(type, parseRange(dropString), parsePercentage(dropString));
         }
 
         return drop;
@@ -181,7 +155,7 @@ public class EntityDrop
 
     protected static boolean isNotAmbiguous(EntityType type)
     {
-        return Material.matchMaterial(type.getName()) == null;
+        return type != null && Material.matchMaterial(type.getName()) == null;
     }
 
     protected static EntityType parseType(String dropString)

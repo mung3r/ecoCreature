@@ -22,11 +22,9 @@ package se.crafted.chrisb.ecoCreature.events.listeners;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -40,12 +38,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
+import se.crafted.chrisb.ecoCreature.drops.Drop;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
-import se.crafted.chrisb.ecoCreature.drops.Drop;
 
 public class DropEventListener implements Listener
 {
@@ -101,9 +99,9 @@ public class DropEventListener implements Listener
         }
     }
 
-    private Set<String> createParty(String player, Drop drop)
+    private Collection<String> createParty(String player, Drop drop)
     {
-        Set<String> party = new HashSet<String>();
+        Collection<String> party = new ArrayList<String>();
         party.add(player);
         party.addAll(drop.getParty());
         return party;

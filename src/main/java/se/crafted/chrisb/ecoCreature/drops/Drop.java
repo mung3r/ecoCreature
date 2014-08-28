@@ -23,7 +23,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -43,7 +42,7 @@ public class Drop
     private Location location;
     private String worldName;
     private double gain;
-    private Set<String> party;
+    private Collection<String> party;
     private boolean integerCurrency;
     private boolean addItemsToInventory;
 
@@ -60,7 +59,7 @@ public class Drop
         this.location = location;
         worldName = location.getWorld().getName();
         gain = IDENTITY;
-        party = Collections.emptySet();
+        party = Collections.emptyList();
         integerCurrency = false;
 
         name = "Unknown";
@@ -102,12 +101,12 @@ public class Drop
         return party.size() > 0;
     }
 
-    public Set<String> getParty()
+    public Collection<String> getParty()
     {
         return party;
     }
 
-    public void setParty(Set<String> party)
+    public void setParty(Collection<String> party)
     {
         this.party = party;
     }

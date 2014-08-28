@@ -19,11 +19,11 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.gain;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -47,9 +47,9 @@ public class EnvironmentGain extends AbstractPlayerGain<Environment>
         return multiplier;
     }
 
-    public static Set<PlayerGain> parseConfig(ConfigurationSection config)
+    public static Collection<PlayerGain> parseConfig(ConfigurationSection config)
     {
-        Set<PlayerGain> gain = Collections.emptySet();
+        Collection<PlayerGain> gain = Collections.emptyList();
 
         if (config != null) {
             Map<Environment, Double> multipliers = new HashMap<World.Environment, Double>();
@@ -62,7 +62,7 @@ public class EnvironmentGain extends AbstractPlayerGain<Environment>
                     LoggerUtil.getInstance().warning("Skipping unknown environment name: " + environment);
                 }
             }
-            gain = new HashSet<PlayerGain>();
+            gain = new ArrayList<PlayerGain>();
             gain.add(new EnvironmentGain(multipliers));
         }
 

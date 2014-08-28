@@ -19,11 +19,11 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.gain;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.bukkit.block.Biome;
 import org.bukkit.configuration.ConfigurationSection;
@@ -51,9 +51,9 @@ public class BiomeGain extends AbstractPlayerGain<Biome>
         return player.getWorld().getBiome(player.getLocation().getBlockX(), player.getLocation().getBlockY());
     }
 
-    public static Set<PlayerGain> parseConfig(ConfigurationSection config)
+    public static Collection<PlayerGain> parseConfig(ConfigurationSection config)
     {
-        Set<PlayerGain> gain = Collections.emptySet();
+        Collection<PlayerGain> gain = Collections.emptyList();
 
         if (config != null) {
             Map<Biome, Double> multipliers = new HashMap<Biome, Double>();
@@ -65,7 +65,7 @@ public class BiomeGain extends AbstractPlayerGain<Biome>
                     LoggerUtil.getInstance().warning("Skipping unknown biome name: " + biome);
                 }
             }
-            gain = new HashSet<PlayerGain>();
+            gain = new ArrayList<PlayerGain>();
             gain.add(new BiomeGain(multipliers));
         }
 

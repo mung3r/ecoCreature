@@ -22,7 +22,6 @@ package se.crafted.chrisb.ecoCreature.drops.sources;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 
@@ -35,10 +34,6 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.messages.CoinMessageDecorator;
-import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
-import se.crafted.chrisb.ecoCreature.messages.Message;
-import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
 import se.crafted.chrisb.ecoCreature.drops.Drop;
 import se.crafted.chrisb.ecoCreature.drops.models.AbstractItemDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.BookDrop;
@@ -49,6 +44,10 @@ import se.crafted.chrisb.ecoCreature.drops.models.JockeyDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.LoreDrop;
 import se.crafted.chrisb.ecoCreature.drops.rules.AbstractRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.Rule;
+import se.crafted.chrisb.ecoCreature.messages.CoinMessageDecorator;
+import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
+import se.crafted.chrisb.ecoCreature.messages.Message;
+import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
 
 public abstract class AbstractDropSource
 {
@@ -226,7 +225,7 @@ public abstract class AbstractDropSource
 
     public Collection<Drop> createDrops(Event event)
     {
-        Collection<Drop> drops = new HashSet<Drop>();
+        Collection<Drop> drops = new ArrayList<Drop>();
         int amount = nextAmount();
 
         for (int i = 0; i < amount; i++) {

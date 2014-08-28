@@ -19,14 +19,17 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.gain;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+
+import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.BoardColls;
@@ -34,9 +37,6 @@ import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.util.RelationUtil;
 import com.massivecraft.mcore.ps.PS;
-
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class FactionsGain extends AbstractPlayerGain<Rel>
 {
@@ -63,9 +63,9 @@ public class FactionsGain extends AbstractPlayerGain<Rel>
         return multiplier;
     }
 
-    public static Set<PlayerGain> parseConfig(ConfigurationSection config)
+    public static Collection<PlayerGain> parseConfig(ConfigurationSection config)
     {
-        Set<PlayerGain> gain = Collections.emptySet();
+        Collection<PlayerGain> gain = Collections.emptyList();
 
         if (config != null && DependencyUtils.hasFactions()) {
             Map<Rel, Double> multipliers = new HashMap<Rel, Double>();
@@ -77,7 +77,7 @@ public class FactionsGain extends AbstractPlayerGain<Rel>
                     LoggerUtil.getInstance().warning("Unrecognized Factions relation: " + relation);
                 }
             }
-            gain = new HashSet<PlayerGain>();
+            gain = new ArrayList<PlayerGain>();
             gain.add(new FactionsGain(multipliers));
         }
 

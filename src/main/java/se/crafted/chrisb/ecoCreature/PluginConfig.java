@@ -25,11 +25,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -163,9 +162,9 @@ public class PluginConfig
         return dropConfig;
     }
 
-    private static Set<PlayerGain> loadGainMultipliers(ConfigurationSection config)
+    private static Collection<PlayerGain> loadGainMultipliers(ConfigurationSection config)
     {
-        Set<PlayerGain> gainMultipliers = new HashSet<PlayerGain>();
+        Collection<PlayerGain> gainMultipliers = new ArrayList<PlayerGain>();
 
         gainMultipliers.addAll(GroupGain.parseConfig(config.getConfigurationSection("Gain.Groups")));
         gainMultipliers.addAll(TimeGain.parseConfig(config.getConfigurationSection("Gain.Time")));
@@ -188,9 +187,9 @@ public class PluginConfig
         return gainMultipliers;
     }
 
-    private static Set<Party> loadParties(ConfigurationSection config)
+    private static Collection<Party> loadParties(ConfigurationSection config)
     {
-        Set<Party> parties = new HashSet<Party>();
+        Collection<Party> parties = new ArrayList<Party>();
 
         parties.addAll(MobArenaParty.parseConfig(config.getConfigurationSection("Gain.MobArena")));
         parties.addAll(HeroesParty.parseConfig(config.getConfigurationSection("Gain.Heroes")));

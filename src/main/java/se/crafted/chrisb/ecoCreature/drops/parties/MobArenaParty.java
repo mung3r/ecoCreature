@@ -19,9 +19,9 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.parties;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -32,12 +32,12 @@ import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 public class MobArenaParty extends AbstractParty
 {
     @Override
-    public Set<String> getMembers(Player player)
+    public Collection<String> getMembers(Player player)
     {
-        Set<String> party = Collections.emptySet();
+        Collection<String> party = Collections.emptyList();
 
         if (DependencyUtils.hasMobArena() && DependencyUtils.getMobArenaHandler().isPlayerInArena(player)) {
-            party = new HashSet<String>();
+            party = new ArrayList<String>();
 
             for (Player member : DependencyUtils.getMobArenaHandler().getArenaWithPlayer(player).getAllPlayers()) {
                 party.add(member.getName());
@@ -48,14 +48,14 @@ public class MobArenaParty extends AbstractParty
         return party;
     }
 
-    public static Set<Party> parseConfig(ConfigurationSection config)
+    public static Collection<Party> parseConfig(ConfigurationSection config)
     {
-        Set<Party> parties = Collections.emptySet();
+        Collection<Party> parties = Collections.emptyList();
 
         if (config != null) {
             MobArenaParty party = new MobArenaParty();
             party.setShared(config.getBoolean("InArena.Share", false));
-            parties = new HashSet<Party>();
+            parties = new ArrayList<Party>();
             parties.add(party);
         }
 

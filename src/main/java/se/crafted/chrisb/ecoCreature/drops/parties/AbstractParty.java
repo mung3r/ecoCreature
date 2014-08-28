@@ -19,7 +19,7 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.parties;
 
-import java.util.Set;
+import java.util.Collection;
 
 import org.bukkit.entity.Player;
 
@@ -45,5 +45,5 @@ public abstract class AbstractParty implements Party
     }
 
     @Override
-    public abstract Set<String> getMembers(Player player);
+    public abstract Collection<String> getMembers(Player player);
 }

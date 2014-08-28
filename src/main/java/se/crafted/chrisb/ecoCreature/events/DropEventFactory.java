@@ -48,7 +48,7 @@ public class DropEventFactory
 
     public Collection<DropEvent> createEvents(final Event event)
     {
-        Collection<DropEvent> emptySet = Collections.emptySet();
+        Collection<DropEvent> emptySet = Collections.emptyList();
 
         EventMapper mapper = Iterables.find(mappers, new Predicate<EventMapper>() {
             @Override
