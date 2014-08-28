@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -73,6 +74,7 @@ public class PluginConfig
 {
     private static final String DEFAULT_WORLD = "__DEFAULT_WORLD__";
 
+    private static final Charset CHARSET = Charset.forName("UTF-8");
     private static final String OLD_DEFAULT_FILE = "ecoCreature.yml";
     private static final String DEFAULT_FILE = "default.yml";
     private static final int BUFFER_SIZE = 8192;
@@ -272,7 +274,7 @@ public class PluginConfig
         }
 
         config.load(file);
-        config.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(plugin.getResource(DEFAULT_FILE))));
+        config.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(plugin.getResource(DEFAULT_FILE), CHARSET)));
         config.options().copyDefaults(true);
 
         return config;
