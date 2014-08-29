@@ -31,6 +31,8 @@ import org.bukkit.event.Event;
 import se.crafted.chrisb.ecoCreature.drops.DropSourceFactory;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
+import se.crafted.chrisb.ecoCreature.drops.rules.AbstractRule;
+import se.crafted.chrisb.ecoCreature.drops.rules.Rule;
 import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomEntityDropType;
 
@@ -87,10 +89,12 @@ public class CustomEntityDropCategory extends AbstractDropCategory<CustomEntityD
                 CustomEntityDropType type = CustomEntityDropType.fromName(typeName);
 
                 if (type.isValid()) {
-                    for (AbstractDropSource source : configureDropSource(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
-                        source.setHuntingRules(loadHuntingRules(config.getConfigurationSection("System")));
-                        source.getHuntingRules().putAll(loadHuntingRules(config.getConfigurationSection("RewardTable." + typeName)));
-                        source.getHuntingRules().putAll(loadGainRules(config.getConfigurationSection("Gain")));
+                    Map<Class<? extends AbstractRule>, Rule> huntingRules = loadHuntingRules(config.getConfigurationSection("System"));
+                    huntingRules.putAll(loadHuntingRules(config.getConfigurationSection("RewardTable." + typeName)));
+                    huntingRules.putAll(loadGainRules(config.getConfigurationSection("Gain")));
+
+                    for (AbstractDropSource source : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
+                        source.setHuntingRules(huntingRules);
 
                         if (!sources.containsKey(type)) {
                             sources.put(type, new ArrayList<AbstractDropSource>());

@@ -87,7 +87,7 @@ public class CustomDropCategory extends AbstractDropCategory<CustomDropType>
                 CustomDropType type = CustomDropType.fromName(typeName);
 
                 if (type.isValid()) {
-                    for (AbstractDropSource source : configureDropSource(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
+                    for (AbstractDropSource source : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
 
                         if (!sources.containsKey(type)) {
                             sources.put(type, new ArrayList<AbstractDropSource>());
@@ -100,7 +100,7 @@ public class CustomDropCategory extends AbstractDropCategory<CustomDropType>
             }
 
             if (config.getBoolean("System.Hunting.PenalizeDeath", false)) {
-                for (AbstractDropSource source : configureDropSource(DropSourceFactory.createSources(CustomDropType.DEATH_PENALTY.toString(), config), config)) {
+                for (AbstractDropSource source : configureDropSources(DropSourceFactory.createSources(CustomDropType.DEATH_PENALTY.toString(), config), config)) {
                     if (!sources.containsKey(CustomDropType.DEATH_PENALTY)) {
                         sources.put(CustomDropType.DEATH_PENALTY, new ArrayList<AbstractDropSource>());
                     }
@@ -110,7 +110,7 @@ public class CustomDropCategory extends AbstractDropCategory<CustomDropType>
             }
 
             if (config.getBoolean("System.Hunting.PVPReward", false)) {
-                for (AbstractDropSource source : configureDropSource(DropSourceFactory.createSources(CustomDropType.LEGACY_PVP.toString(), config), config)) {
+                for (AbstractDropSource source : configureDropSources(DropSourceFactory.createSources(CustomDropType.LEGACY_PVP.toString(), config), config)) {
                     if (!sources.containsKey(CustomDropType.LEGACY_PVP)) {
                         sources.put(CustomDropType.LEGACY_PVP, new ArrayList<AbstractDropSource>());
                     }

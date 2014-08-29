@@ -55,6 +55,7 @@ import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterables;
 
 public abstract class AbstractDropCategory<T>
 {
@@ -109,22 +110,27 @@ public abstract class AbstractDropCategory<T>
         return source;
     }
 
-    private boolean isNotRuleBroken(Event event, AbstractDropSource source)
+    private boolean isNotRuleBroken(final Event event, AbstractDropSource source)
     {
-        for (Rule rule : source.getHuntingRules().values()) {
-            if (rule.isBroken(event)) {
-                rule.handleDrops(event);
+        return !Iterables.any(source.getHuntingRules().values(), new Predicate<Rule>() {
 
-                Map<MessageToken, String> parameters = Collections.emptyMap();
-                MessageHandler message = new MessageHandler(rule.getMessage(), parameters);
-                message.send(rule.getKiller(event));
+            @Override
+            public boolean apply(Rule rule)
+            {
+                if (rule.isBroken(event)) {
+                    rule.handleDrops(event);
 
-                LoggerUtil.getInstance().debug("Rule " + rule.getClass().getSimpleName() + " broken");
+                    Map<MessageToken, String> parameters = Collections.emptyMap();
+                    MessageHandler message = new MessageHandler(rule.getMessage(), parameters);
+                    message.send(rule.getKiller(event));
+
+                    LoggerUtil.getInstance().debug("Rule " + rule.getClass().getSimpleName() + " broken");
+                    return true;
+                }
+
                 return false;
             }
-        }
-
-        return true;
+        });
     }
 
     protected static Collection<AbstractDropSource> getSets(String rewardSection, ConfigurationSection config)
@@ -137,11 +143,16 @@ public abstract class AbstractDropCategory<T>
         if (!sets.isEmpty() && rewardSets != null) {
             for (String setName : sets) {
                 String name = setName.split(":")[0];
+
                 if (rewardSets.getConfigurationSection(name) != null) {
+                    Map<Class<? extends AbstractRule>, Rule> huntingRules = loadHuntingRules(rewardSets.getConfigurationSection(name));
+                    NumberRange range = parseRange(setName, new NumberRange(1, 1));
+                    double percentage = parsePercentage(setName, 100);
+
                     for (AbstractDropSource setSource : DropSourceFactory.createSetSources(name, rewardSets)) {
-                        setSource.setHuntingRules(loadHuntingRules(rewardSets.getConfigurationSection(name)));
-                        setSource.setRange(parseRange(setName, new NumberRange(1, 1)));
-                        setSource.setPercentage(parsePercentage(setName, 100));
+                        setSource.setHuntingRules(huntingRules);
+                        setSource.setRange(range);
+                        setSource.setPercentage(percentage);
                         sources.add(setSource);
                     }
                 }
@@ -182,7 +193,7 @@ public abstract class AbstractDropCategory<T>
         return defaultPercentage;
     }
 
-    protected static Collection<AbstractDropSource> configureDropSource(Collection<AbstractDropSource> sources, ConfigurationSection config)
+    protected static Collection<AbstractDropSource> configureDropSources(Collection<AbstractDropSource> sources, ConfigurationSection config)
     {
         if (sources != null && config != null) {
             for (AbstractDropSource source : sources) {

@@ -79,7 +79,7 @@ public class HeroesDropCategory extends AbstractDropCategory<HeroesDropType>
                 HeroesDropType type = HeroesDropType.fromName(typeName);
 
                 if (type.isValid()) {
-                    for (AbstractDropSource source : configureDropSource(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
+                    for (AbstractDropSource source : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
 
                         if (!sources.containsKey(type)) {
                             sources.put(type, new ArrayList<AbstractDropSource>());

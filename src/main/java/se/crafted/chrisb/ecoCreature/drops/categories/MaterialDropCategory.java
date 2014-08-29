@@ -68,7 +68,7 @@ public class MaterialDropCategory extends AbstractDropCategory<Material>
                 Material type = Material.matchMaterial(typeName);
 
                 if (type != null) {
-                    for (AbstractDropSource source : configureDropSource(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
+                    for (AbstractDropSource source : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
 
                         if (!sources.containsKey(type)) {
                             sources.put(type, new ArrayList<AbstractDropSource>());
