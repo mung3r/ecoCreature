@@ -43,12 +43,6 @@ abstract class AbstractMessageDecorator implements Message
     }
 
     @Override
-    public String getTemplate()
-    {
-        return decoratedMessage.getTemplate();
-    }
-
-    @Override
     public String getAssembledMessage(Map<MessageToken, String> parameters)
     {
         return decoratedMessage.getAssembledMessage(parameters);

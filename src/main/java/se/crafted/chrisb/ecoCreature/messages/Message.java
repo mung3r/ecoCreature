@@ -27,7 +27,5 @@ public interface Message
 
     void setMessageOutputEnabled(boolean messageOutputEnabled);
 
-    String getTemplate();
-
     String getAssembledMessage(Map<MessageToken, String> parameters);
 }

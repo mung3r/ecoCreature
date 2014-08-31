@@ -53,12 +53,6 @@ public class DefaultMessage implements Message
     }
 
     @Override
-    public String getTemplate()
-    {
-        return template;
-    }
-
-    @Override
     public String getAssembledMessage(Map<MessageToken, String> parameters)
     {
         String assembledMessage = template;
