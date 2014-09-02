@@ -19,6 +19,7 @@
  */
 package se.crafted.chrisb.ecoCreature.settings;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
@@ -125,10 +126,10 @@ public final class RewardSourceFactory
 
         switch (CustomRewardType.fromName(parseRewardName(section))) {
             case DEATH_PENALTY:
-                source = new DeathPenaltySource(config.getConfigurationSection(section));
+                source = new DeathPenaltySource(section, config);
                 break;
             case LEGACY_PVP:
-                source = new PVPRewardSource(config.getConfigurationSection(section));
+                source = new PVPRewardSource(section, config);
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported type: " + section);
@@ -138,11 +139,6 @@ public final class RewardSourceFactory
 
     public static String parseRewardName(String section)
     {
-        String name = null;
-
-        if (section != null && section.lastIndexOf(".") > -1) {
-            name = section.substring(section.lastIndexOf(".") + 1);
-        }
-        return name;
+        return StringUtils.isNotEmpty(section) && section.lastIndexOf(".") > -1 ? section.substring(section.lastIndexOf(".") + 1) : section;
     }
 }

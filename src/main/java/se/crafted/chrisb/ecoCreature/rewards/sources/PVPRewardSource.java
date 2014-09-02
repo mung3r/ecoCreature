@@ -37,7 +37,7 @@ public class PVPRewardSource extends AbstractRewardSource
     private boolean percentReward;
     private double rewardAmount;
 
-    public PVPRewardSource(ConfigurationSection config)
+    public PVPRewardSource(String section, ConfigurationSection config)
     {
         setName(CustomRewardType.LEGACY_PVP.toString());
         percentReward = config.getBoolean("System.Hunting.PVPRewardType", true);

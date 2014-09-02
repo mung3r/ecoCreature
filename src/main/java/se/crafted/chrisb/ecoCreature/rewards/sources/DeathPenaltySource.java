@@ -37,7 +37,7 @@ public class DeathPenaltySource extends AbstractRewardSource
     private boolean percentPenalty;
     private double penaltyAmount;
 
-    public DeathPenaltySource(ConfigurationSection config)
+    public DeathPenaltySource(String section, ConfigurationSection config)
     {
         if (config == null) {
             throw new IllegalArgumentException("Config cannot be null");
