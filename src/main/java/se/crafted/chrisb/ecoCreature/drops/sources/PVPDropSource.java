@@ -37,7 +37,7 @@ public class PVPDropSource extends AbstractDropSource
     private boolean coinPercent;
     private double coinAmount;
 
-    public PVPDropSource(ConfigurationSection config)
+    public PVPDropSource(String section, ConfigurationSection config)
     {
         setName(CustomDropType.LEGACY_PVP.toString());
         coinPercent = config.getBoolean("System.Hunting.PVPRewardType", true);

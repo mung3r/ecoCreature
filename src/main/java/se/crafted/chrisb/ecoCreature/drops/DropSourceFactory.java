@@ -19,6 +19,7 @@
  */
 package se.crafted.chrisb.ecoCreature.drops;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
@@ -130,10 +131,10 @@ public final class DropSourceFactory
 
         switch (CustomDropType.fromName(parseTypeName(section))) {
             case DEATH_PENALTY:
-                sources.add(new DeathPenaltyDropSource(config.getConfigurationSection(section)));
+                sources.add(new DeathPenaltyDropSource(section, config));
                 break;
             case LEGACY_PVP:
-                sources.add(new PVPDropSource(config.getConfigurationSection(section)));
+                sources.add(new PVPDropSource(section, config));
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported type: " + section);
@@ -143,11 +144,6 @@ public final class DropSourceFactory
 
     public static String parseTypeName(String section)
     {
-        String name = null;
-
-        if (section != null && section.lastIndexOf(".") > -1) {
-            name = section.substring(section.lastIndexOf(".") + 1);
-        }
-        return name;
+        return StringUtils.isNotEmpty(section) && section.lastIndexOf(".") > -1 ? section.substring(section.lastIndexOf(".") + 1) : section;
     }
 }
