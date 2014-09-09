@@ -32,7 +32,7 @@ import com.google.common.collect.Lists;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.drops.Drop;
-import se.crafted.chrisb.ecoCreature.drops.categories.DropConfig;
+import se.crafted.chrisb.ecoCreature.drops.DropConfig;
 
 public class DeathStreakEventMapper extends AbstractEventMapper
 {

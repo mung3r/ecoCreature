@@ -27,7 +27,7 @@ import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.events.EntityFarmedEvent;
-import se.crafted.chrisb.ecoCreature.drops.categories.DropConfig;
+import se.crafted.chrisb.ecoCreature.drops.DropConfig;
 
 public class EntityFarmedEventMapper extends AbstractEventMapper
 {

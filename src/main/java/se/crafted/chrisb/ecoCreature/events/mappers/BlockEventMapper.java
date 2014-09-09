@@ -34,7 +34,7 @@ import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.drops.Drop;
-import se.crafted.chrisb.ecoCreature.drops.categories.DropConfig;
+import se.crafted.chrisb.ecoCreature.drops.DropConfig;
 
 public class BlockEventMapper extends AbstractEventMapper
 {

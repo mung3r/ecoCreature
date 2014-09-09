@@ -43,7 +43,7 @@ import se.crafted.chrisb.ecoCreature.drops.categories.AbstractDropCategory;
 import se.crafted.chrisb.ecoCreature.drops.categories.CustomDropCategory;
 import se.crafted.chrisb.ecoCreature.drops.categories.CustomEntityDropCategory;
 import se.crafted.chrisb.ecoCreature.drops.categories.CustomMaterialDropCategory;
-import se.crafted.chrisb.ecoCreature.drops.categories.DropConfig;
+import se.crafted.chrisb.ecoCreature.drops.DropConfig;
 import se.crafted.chrisb.ecoCreature.drops.categories.EntityDropCategory;
 import se.crafted.chrisb.ecoCreature.drops.categories.HeroesDropCategory;
 import se.crafted.chrisb.ecoCreature.drops.categories.MaterialDropCategory;

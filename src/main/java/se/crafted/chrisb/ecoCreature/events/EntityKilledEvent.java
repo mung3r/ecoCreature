@@ -30,7 +30,7 @@ import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 import se.crafted.chrisb.ecoCreature.commons.EventUtils;
-import se.crafted.chrisb.ecoCreature.drops.categories.SpawnerMobTracker;
+import se.crafted.chrisb.ecoCreature.drops.SpawnerMobTracker;
 
 public final class EntityKilledEvent extends Event
 {

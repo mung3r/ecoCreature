@@ -30,7 +30,7 @@ import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.NoCampMessageDecorator;
-import se.crafted.chrisb.ecoCreature.drops.categories.SpawnerMobTracker;
+import se.crafted.chrisb.ecoCreature.drops.SpawnerMobTracker;
 
 public class SpawnerMobRule extends AbstractEntityRule
 {
