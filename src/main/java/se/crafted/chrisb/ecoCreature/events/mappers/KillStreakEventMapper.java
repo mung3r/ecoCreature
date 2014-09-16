@@ -50,7 +50,7 @@ public class KillStreakEventMapper extends AbstractEventMapper
     @Override
     public Collection<DropEvent> mapEvent(Event event)
     {
-        return event instanceof KillStreakEvent ? Lists.newArrayList(createDropEvents((KillStreakEvent) event)) : EMPTY_COLLECTION;
+        return canMap(event) ? Lists.newArrayList(createDropEvents((KillStreakEvent) event)) : EMPTY_COLLECTION;
     }
 
     private Collection<DropEvent> createDropEvents(KillStreakEvent event)

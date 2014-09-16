@@ -52,7 +52,7 @@ public class BlockEventMapper extends AbstractEventMapper
     @Override
     public Collection<DropEvent> mapEvent(Event event)
     {
-        return event instanceof BlockBreakEvent ? createDropEvents((BlockBreakEvent) event) : EMPTY_COLLECTION;
+        return canMap(event) ? createDropEvents((BlockBreakEvent) event) : EMPTY_COLLECTION;
     }
 
     private Collection<DropEvent> createDropEvents(BlockBreakEvent event)

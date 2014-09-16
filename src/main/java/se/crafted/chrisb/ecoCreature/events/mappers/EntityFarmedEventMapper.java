@@ -45,7 +45,7 @@ public class EntityFarmedEventMapper extends AbstractEventMapper
     @Override
     public Collection<DropEvent> mapEvent(Event event)
     {
-        if (event instanceof EntityFarmedEvent) {
+        if (canMap(event)) {
             handleNoFarm((EntityFarmedEvent) event);
         }
 

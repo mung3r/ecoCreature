@@ -56,7 +56,7 @@ public class EntityKilledEventMapper extends AbstractEventMapper
     @Override
     public Collection<DropEvent> mapEvent(Event event)
     {
-        return event instanceof EntityKilledEvent ? createDropEvents((EntityKilledEvent) event) : EMPTY_COLLECTION;
+        return canMap(event) ? createDropEvents((EntityKilledEvent) event) : EMPTY_COLLECTION;
     }
 
     private Collection<DropEvent> createDropEvents(final EntityKilledEvent event)

@@ -47,7 +47,7 @@ public class McMMOEventMapper extends AbstractEventMapper
     @Override
     public Collection<DropEvent> mapEvent(Event event)
     {
-        return event instanceof McMMOPlayerLevelUpEvent ? createDropEvents((McMMOPlayerLevelUpEvent) event) : EMPTY_COLLECTION;
+        return canMap(event) ? createDropEvents((McMMOPlayerLevelUpEvent) event) : EMPTY_COLLECTION;
     }
 
     private Collection<DropEvent> createDropEvents(McMMOPlayerLevelUpEvent event)

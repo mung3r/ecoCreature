@@ -47,7 +47,7 @@ public class PlayerDeathEventMapper extends AbstractEventMapper
     @Override
     public Collection<DropEvent> mapEvent(Event event)
     {
-        return event instanceof PlayerDeathEvent ? createDropEvents((PlayerDeathEvent) event) : EMPTY_COLLECTION;
+        return canMap(event) ? createDropEvents((PlayerDeathEvent) event) : EMPTY_COLLECTION;
     }
 
     private Collection<DropEvent> createDropEvents(PlayerDeathEvent event)

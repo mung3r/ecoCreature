@@ -47,7 +47,7 @@ public class HeroesEventMapper extends AbstractEventMapper
     @Override
     public Collection<DropEvent> mapEvent(Event event)
     {
-        return event instanceof HeroChangeLevelEvent ? createDropEvents((HeroChangeLevelEvent) event) : EMPTY_COLLECTION;
+        return canMap(event) ? createDropEvents((HeroChangeLevelEvent) event) : EMPTY_COLLECTION;
     }
 
     private Collection<DropEvent> createDropEvents(HeroChangeLevelEvent event)

@@ -50,7 +50,7 @@ public class DeathStreakEventMapper extends AbstractEventMapper
     @Override
     public Collection<DropEvent> mapEvent(Event event)
     {
-        return event instanceof DeathStreakEvent ? createDropEvents((DeathStreakEvent) event) : EMPTY_COLLECTION;
+        return canMap(event) ? createDropEvents((DeathStreakEvent) event) : EMPTY_COLLECTION;
     }
 
     private Collection<DropEvent> createDropEvents(DeathStreakEvent event)
