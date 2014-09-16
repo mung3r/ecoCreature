@@ -436,6 +436,15 @@ RewardTable:
   #Dirt:
   #  Drops:
   #  - 'iron_ingot:1:1'
+  #
+  # Example of full grown wheat (crops)
+  #
+  #Crops:
+  #  Data: 7
+  #  Drops:
+  #  - wheat:1-1:100
+  #  - seeds:3:100
+  #
   PoweredCreeper:
     Drops:
     - 'sulphur:2:100'

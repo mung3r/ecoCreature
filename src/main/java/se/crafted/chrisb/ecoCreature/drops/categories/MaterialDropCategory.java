@@ -29,13 +29,14 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.material.MaterialData;
 
 import se.crafted.chrisb.ecoCreature.drops.DropSourceFactory;
 import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
 
-public class MaterialDropCategory extends AbstractDropCategory<Material>
+public class MaterialDropCategory extends AbstractDropCategory<MaterialData>
 {
-    public MaterialDropCategory(Map<Material, Collection<AbstractDropSource>> sources)
+    public MaterialDropCategory(Map<MaterialData, Collection<AbstractDropSource>> sources)
     {
         super(sources);
     }
@@ -47,9 +48,9 @@ public class MaterialDropCategory extends AbstractDropCategory<Material>
     }
 
     @Override
-    protected Material extractType(Event event)
+    protected MaterialData extractType(Event event)
     {
-        return ((BlockBreakEvent) event).getBlock().getType();
+        return ((BlockBreakEvent) event).getBlock().getState().getData();
     }
 
     @Override
@@ -58,9 +59,9 @@ public class MaterialDropCategory extends AbstractDropCategory<Material>
         return ((BlockBreakEvent) event).getPlayer();
     }
 
-    public static AbstractDropCategory<Material> parseConfig(ConfigurationSection config)
+    public static AbstractDropCategory<MaterialData> parseConfig(ConfigurationSection config)
     {
-        Map<Material, Collection<AbstractDropSource>> sources = new HashMap<Material, Collection<AbstractDropSource>>();
+        Map<MaterialData, Collection<AbstractDropSource>> sources = new HashMap<MaterialData, Collection<AbstractDropSource>>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {
@@ -70,17 +71,23 @@ public class MaterialDropCategory extends AbstractDropCategory<Material>
                 if (type != null) {
                     for (AbstractDropSource source : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
 
-                        if (!sources.containsKey(type)) {
-                            sources.put(type, new ArrayList<AbstractDropSource>());
+                        MaterialData materialData = new MaterialData(type, parseData(config.getConfigurationSection("RewardTable." + typeName)));
+                        if (!sources.containsKey(materialData)) {
+                            sources.put(materialData, new ArrayList<AbstractDropSource>());
                         }
 
-                        sources.get(type).add(source);
-                        sources.get(type).addAll(getSets("RewardTable." + typeName, config));
+                        sources.get(materialData).add(source);
+                        sources.get(materialData).addAll(getSets("RewardTable." + typeName, config));
                     }
                 }
             }
         }
 
         return new MaterialDropCategory(sources);
+    }
+
+    private static byte parseData(ConfigurationSection config)
+    {
+        return (byte) config.getInt("Data", 0);
     }
 }
