@@ -21,6 +21,7 @@ package se.crafted.chrisb.ecoCreature.drops.sources;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -54,5 +55,12 @@ public class SetDropSource extends AbstractDropSource
         }
 
         return location;
+    }
+
+    @Override
+    public boolean hasPermission(Player player)
+    {
+        // TODO: Always allow sets. Remove this method to enable permission based sets.
+        return true;
     }
 }
