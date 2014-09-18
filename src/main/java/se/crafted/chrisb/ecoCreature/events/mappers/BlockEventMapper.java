@@ -25,22 +25,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 
+import se.crafted.chrisb.ecoCreature.PluginConfig;
+import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
+import se.crafted.chrisb.ecoCreature.drops.Drop;
+import se.crafted.chrisb.ecoCreature.drops.DropConfig;
+import se.crafted.chrisb.ecoCreature.events.DropEvent;
+import se.crafted.chrisb.ecoCreature.messages.MessageToken;
+
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
-import se.crafted.chrisb.ecoCreature.events.DropEvent;
-import se.crafted.chrisb.ecoCreature.messages.MessageToken;
-import se.crafted.chrisb.ecoCreature.drops.Drop;
-import se.crafted.chrisb.ecoCreature.drops.DropConfig;
-
 public class BlockEventMapper extends AbstractEventMapper
 {
-    public BlockEventMapper(ecoCreature plugin)
+    public BlockEventMapper(PluginConfig pluginConfig)
     {
-        super(plugin);
+        super(pluginConfig);
     }
 
     @Override

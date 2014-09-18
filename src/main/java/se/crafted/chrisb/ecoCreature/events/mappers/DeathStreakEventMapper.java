@@ -25,20 +25,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
 
+import se.crafted.chrisb.ecoCreature.PluginConfig;
+import se.crafted.chrisb.ecoCreature.drops.Drop;
+import se.crafted.chrisb.ecoCreature.drops.DropConfig;
+import se.crafted.chrisb.ecoCreature.events.DropEvent;
+
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.events.DropEvent;
-import se.crafted.chrisb.ecoCreature.drops.Drop;
-import se.crafted.chrisb.ecoCreature.drops.DropConfig;
-
 public class DeathStreakEventMapper extends AbstractEventMapper
 {
-    public DeathStreakEventMapper(ecoCreature plugin)
+    public DeathStreakEventMapper(PluginConfig pluginConfig)
     {
-        super(plugin);
+        super(pluginConfig);
     }
 
     @Override

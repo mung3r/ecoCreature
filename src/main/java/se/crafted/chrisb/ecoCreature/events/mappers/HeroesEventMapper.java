@@ -24,18 +24,18 @@ import java.util.Collection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
+import se.crafted.chrisb.ecoCreature.PluginConfig;
+import se.crafted.chrisb.ecoCreature.drops.DropConfig;
+import se.crafted.chrisb.ecoCreature.events.DropEvent;
+
 import com.google.common.collect.Lists;
 import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.events.DropEvent;
-import se.crafted.chrisb.ecoCreature.drops.DropConfig;
-
 public class HeroesEventMapper extends AbstractEventMapper
 {
-    public HeroesEventMapper(ecoCreature plugin)
+    public HeroesEventMapper(PluginConfig pluginConfig)
     {
-        super(plugin);
+        super(pluginConfig);
     }
 
     @Override

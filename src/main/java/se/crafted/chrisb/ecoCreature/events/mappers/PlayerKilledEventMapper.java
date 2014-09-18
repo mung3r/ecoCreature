@@ -27,22 +27,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import se.crafted.chrisb.ecoCreature.PluginConfig;
+import se.crafted.chrisb.ecoCreature.drops.Drop;
+import se.crafted.chrisb.ecoCreature.drops.DropConfig;
+import se.crafted.chrisb.ecoCreature.events.DropEvent;
+import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
+import se.crafted.chrisb.ecoCreature.messages.MessageToken;
+
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.events.DropEvent;
-import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
-import se.crafted.chrisb.ecoCreature.messages.MessageToken;
-import se.crafted.chrisb.ecoCreature.drops.Drop;
-import se.crafted.chrisb.ecoCreature.drops.DropConfig;
-
 public class PlayerKilledEventMapper extends AbstractEventMapper
 {
-    public PlayerKilledEventMapper(ecoCreature plugin)
+    public PlayerKilledEventMapper(PluginConfig pluginConfig)
     {
-        super(plugin);
+        super(pluginConfig);
     }
 
     @Override

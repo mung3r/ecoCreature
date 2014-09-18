@@ -30,11 +30,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import se.crafted.chrisb.ecoCreature.PluginConfig;
-import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.events.DropEvent;
-import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.drops.Drop;
 import se.crafted.chrisb.ecoCreature.drops.DropConfig;
+import se.crafted.chrisb.ecoCreature.events.DropEvent;
+import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -43,11 +42,11 @@ public abstract class AbstractEventMapper implements EventMapper
 {
     protected static final Collection<DropEvent> EMPTY_COLLECTION = Collections.emptyList();
 
-    private final ecoCreature plugin;
+    private PluginConfig pluginConfig;
 
-    public AbstractEventMapper(ecoCreature plugin)
+    public AbstractEventMapper(PluginConfig pluginConfig)
     {
-        this.plugin = plugin;
+        this.pluginConfig = pluginConfig;
     }
 
     @Override
@@ -64,7 +63,7 @@ public abstract class AbstractEventMapper implements EventMapper
 
     protected PluginConfig getPluginConfig()
     {
-        return plugin.getPluginConfig();
+        return pluginConfig;
     }
 
     protected static void addPlayerSkullToEvent(Drop drop, Event event)

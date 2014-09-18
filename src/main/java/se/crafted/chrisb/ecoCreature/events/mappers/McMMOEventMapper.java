@@ -24,18 +24,18 @@ import java.util.Collection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
+import se.crafted.chrisb.ecoCreature.PluginConfig;
+import se.crafted.chrisb.ecoCreature.drops.DropConfig;
+import se.crafted.chrisb.ecoCreature.events.DropEvent;
+
 import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 import com.google.common.collect.Lists;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
-import se.crafted.chrisb.ecoCreature.events.DropEvent;
-import se.crafted.chrisb.ecoCreature.drops.DropConfig;
-
 public class McMMOEventMapper extends AbstractEventMapper
 {
-    public McMMOEventMapper(ecoCreature plugin)
+    public McMMOEventMapper(PluginConfig pluginConfig)
     {
-        super(plugin);
+        super(pluginConfig);
     }
 
     @Override

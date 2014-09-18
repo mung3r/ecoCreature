@@ -35,7 +35,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.drops.Drop;
@@ -44,17 +43,18 @@ import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
+import se.crafted.chrisb.ecoCreature.metrics.DropMetrics;
 
 public class DropEventListener implements Listener
 {
     private static final String PARTY_REWARD_MESSAGE = "&7Party awarded &6<amt>&7.";
     private static final String PARTY_PENALTY_MESSAGE = "&Party penalized &6<amt>&7.";
 
-    private ecoCreature plugin;
+    private DropMetrics dropMetrics;
 
-    public DropEventListener(ecoCreature plugin)
+    public DropEventListener(DropMetrics dropMetrics)
     {
-        this.plugin = plugin;
+        this.dropMetrics = dropMetrics;
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -72,7 +72,7 @@ public class DropEventListener implements Listener
                 dropEntities(drop);
                 dropJockeys(drop);
     
-                plugin.getMetrics().addCount(drop.getName());
+                dropMetrics.addCount(drop.getName());
             }
         }
     }

@@ -124,33 +124,33 @@ public class ecoCreature extends JavaPlugin
 
     private void registerEvents()
     {
-        Bukkit.getPluginManager().registerEvents(new DropEventListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new SpawnEventListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new DropEventListener(metrics), this);
+        Bukkit.getPluginManager().registerEvents(new SpawnEventListener(pluginConfig), this);
 
         DropEventFactory factory = new DropEventFactory();
-        factory.addMapper(new BlockEventMapper(this));
-        factory.addMapper(new PlayerKilledEventMapper(this));
-        factory.addMapper(new PlayerDeathEventMapper(this));
-        factory.addMapper(new EntityKilledEventMapper(this));
-        factory.addMapper(new EntityFarmedEventMapper(this));
+        factory.addMapper(new BlockEventMapper(pluginConfig));
+        factory.addMapper(new PlayerKilledEventMapper(pluginConfig));
+        factory.addMapper(new PlayerDeathEventMapper(pluginConfig));
+        factory.addMapper(new EntityKilledEventMapper(pluginConfig));
+        factory.addMapper(new EntityFarmedEventMapper(pluginConfig));
 
         Bukkit.getPluginManager().registerEvents(new BlockEventListener(factory), this);
         Bukkit.getPluginManager().registerEvents(new PlayerDeathEventListener(factory), this);
         Bukkit.getPluginManager().registerEvents(new EntityDeathEventListener(factory), this);
 
         if (DependencyUtils.hasDeathTpPlus()) {
-            factory.addMapper(new KillStreakEventMapper(this));
-            factory.addMapper(new DeathStreakEventMapper(this));
+            factory.addMapper(new KillStreakEventMapper(pluginConfig));
+            factory.addMapper(new DeathStreakEventMapper(pluginConfig));
             Bukkit.getPluginManager().registerEvents(new StreakEventListener(factory), this);
         }
 
         if (DependencyUtils.hasHeroes()) {
-            factory.addMapper(new HeroesEventMapper(this));
+            factory.addMapper(new HeroesEventMapper(pluginConfig));
             Bukkit.getPluginManager().registerEvents(new HeroesEventListener(factory), this);
         }
 
         if (DependencyUtils.hasMcMMO()) {
-            factory.addMapper(new McMMOEventMapper(this));
+            factory.addMapper(new McMMOEventMapper(pluginConfig));
             Bukkit.getPluginManager().registerEvents(new McMMOEventListener(factory), this);
         }
     }

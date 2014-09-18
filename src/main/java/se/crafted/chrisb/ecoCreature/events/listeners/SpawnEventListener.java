@@ -25,22 +25,22 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
+import se.crafted.chrisb.ecoCreature.PluginConfig;
 
 public class SpawnEventListener implements Listener
 {
-    private final ecoCreature plugin;
+    private PluginConfig pluginConfig;
 
-    public SpawnEventListener(ecoCreature plugin)
+    public SpawnEventListener(PluginConfig pluginConfig)
     {
-        this.plugin = plugin;
+        this.pluginConfig = pluginConfig;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onCreatureSpawn(CreatureSpawnEvent event)
     {
         if (!event.isCancelled() && event.getSpawnReason() == SpawnReason.SPAWNER) {
-            plugin.getPluginConfig().getDropConfig(event.getEntity().getWorld()).tagSpawnerMob(event);
+            pluginConfig.getDropConfig(event.getEntity().getWorld()).tagSpawnerMob(event);
         }
     }
 }
