@@ -678,6 +678,12 @@ RewardTable:
     - LoreZombie:1-1:25
     - RichZombie:1-1:25
     - ZombieApocalypse:1-1:25
+  ZombieBaby:
+    Coin_Minimum: 1.00
+    Coin_Maximum: 3.50
+    Coin_Percent: 50.0
+    Drops:
+    - 'rotten flesh:2:100'
   ZombieVillager:
     Coin_Minimum: 1.00
     Coin_Maximum: 3.50

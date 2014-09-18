@@ -39,6 +39,7 @@ public enum CustomEntityDropType
     POWERED_CREEPER("PoweredCreeper", true),
     WITHER_SKELETON("WitherSkeleton", true),
     ZOMBIE_VILLAGER("ZombieVillager", true),
+    ZOMBIE_BABY("ZombieBaby", true),
     INVALID("__Invalid__", false);
 
     private static final Map<String, CustomEntityDropType> NAME_MAP = new HashMap<String, CustomEntityDropType>();
@@ -90,6 +91,9 @@ public enum CustomEntityDropType
         }
         else if (entity instanceof Zombie && ((Zombie) entity).isVillager()) {
             entityType = CustomEntityDropType.ZOMBIE_VILLAGER;
+        }
+        else if (entity instanceof Zombie && ((Zombie) entity).isBaby()) {
+            entityType = CustomEntityDropType.ZOMBIE_BABY;
         }
         else if (entity instanceof LivingEntity) {
             entityType = CustomEntityDropType.fromName(entity.getType().getName());
