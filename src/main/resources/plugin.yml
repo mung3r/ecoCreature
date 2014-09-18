@@ -22,21 +22,21 @@ permissions:
   ecocreature.gain.*:
     description: Allows all gain multipliers
     children:
-      ecocreature.gain.group: true
-      ecocreature.gain.time: true
-      ecocreature.gain.environment: true
       ecocreature.gain.biome: true
       ecocreature.gain.cron: true
-      ecocreature.gain.weather: true
-      ecocreature.gain.weapon: true
+      ecocreature.gain.environment: true
+      ecocreature.gain.factions: true
+      ecocreature.gain.group: true
       ecocreature.gain.heroes: true
       ecocreature.gain.mcmmo: true
       ecocreature.gain.mobarena: true
       ecocreature.gain.worldguard: true
-      ecocreature.gain.residence: true
       ecocreature.gain.regios: true
-      ecocreature.gain.factions: true
+      ecocreature.gain.residence: true
+      ecocreature.gain.time: true
       ecocreature.gain.towny: true
+      ecocreature.gain.weapon: true
+      ecocreature.gain.weather: true
   ecocreature.reward.*:
     description: Allows rewards for all creature types
     children:
@@ -82,6 +82,7 @@ permissions:
       ecocreature.reward.witherskeleton: true
       ecocreature.reward.wolf: true
       ecocreature.reward.zombie: true
+      ecocreature.reward.zombiebaby: true
       ecocreature.reward.zombievillager: true
   ecocreature.command.reload:
     description: Enables use of reload command
@@ -89,26 +90,20 @@ permissions:
   ecocreature.command.debug:
     description: Enables use of debug command
     default: op
-  ecocreature.gain.group:
-    description: Enables gain multiplier based on group
-    default: op
-  ecocreature.gain.time:
-    description: Enables gain multiplier based on time period
-    default: op
-  ecocreature.gain.environment:
-    description: Enables gain multiplier based on environment
-    default: op
   ecocreature.gain.biome:
     description: Enables gain multiplier based on biome
     default: op
   ecocreature.gain.cron:
     description: Enables gain multiplier based on cron
     default: op
-  ecocreature.gain.weather:
-    description: Enables gain multiplier based on weather
+  ecocreature.gain.environment:
+    description: Enables gain multiplier based on environment
     default: op
-  ecocreature.gain.weapon:
-    description: Enables gain multiplier based on weapon
+  ecocreature.gain.factions:
+    description: Enables gain multiplier based on Factions region
+    default: op 
+  ecocreature.gain.group:
+    description: Enables gain multiplier based on group
     default: op
   ecocreature.gain.heroes:
     description: Enables gain multiplier based on Heroes party status
@@ -128,12 +123,18 @@ permissions:
   ecocreature.gain.residence:
     description: Enables gain multiplier based on Residence region
     default: op 
+  ecocreature.gain.time:
+    description: Enables gain multiplier based on time period
+    default: op
   ecocreature.gain.towny:
     description: Enables gain multiplier based on Towny region
     default: op 
-  ecocreature.gain.factions:
-    description: Enables gain multiplier based on Factions region
-    default: op 
+  ecocreature.gain.weapon:
+    description: Enables gain multiplier based on weapon
+    default: op
+  ecocreature.gain.weather:
+    description: Enables gain multiplier based on weather
+    default: op
   ecocreature.reward.angrywolf:
     description: Enables rewards for angry wolves
     default: op
@@ -246,13 +247,13 @@ permissions:
     description: Enables rewards for villagergolems
     default: op
   ecocreature.reward.witch:
-    description: Enables rewards for wolves
+    description: Enables rewards for witches
     default: op
   ecocreature.reward.wither:
-    description: Enables rewards for wolves
+    description: Enables rewards for withers
     default: op
   ecocreature.reward.witherskeleton:
-    description: Enables rewards for wolves
+    description: Enables rewards for wither skeletons
     default: op
   ecocreature.reward.wolf:
     description: Enables rewards for wolves
@@ -260,7 +261,10 @@ permissions:
   ecocreature.reward.zombie:
     description: Enables rewards for zombies
     default: op
+  ecocreature.reward.zombiebaby:
+    description: Enables rewards for baby zombies
+    default: op
   ecocreature.reward.zombievillager:
-    description: Enables rewards for zombies
+    description: Enables rewards for villager zombies
     default: op
     
