@@ -26,8 +26,6 @@ import java.util.List;
 
 import org.bukkit.event.Event;
 
-import se.crafted.chrisb.ecoCreature.events.DropEvent;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import se.crafted.chrisb.ecoCreature.events.mappers.EventMapper;

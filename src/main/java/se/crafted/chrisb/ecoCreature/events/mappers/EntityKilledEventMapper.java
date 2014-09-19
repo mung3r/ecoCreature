@@ -75,11 +75,11 @@ public class EntityKilledEventMapper extends AbstractEventMapper
                 drop.addParameter(MessageToken.CREATURE, drop.getName())
                     .addParameter(MessageToken.ITEM, event.getWeaponName());
 
-                if ((dropConfig.isOverrideDrops() && drop.hasDrops()) || (dropConfig.isClearOnNoDrops() && !drop.hasDrops())) {
+                if (dropConfig.isOverrideDrops() && drop.hasDrops() || dropConfig.isClearOnNoDrops() && !drop.hasDrops()) {
                     event.getDrops().clear();
                 }
 
-                if ((dropConfig.isClearEnchantedDrops())) {
+                if (dropConfig.isClearEnchantedDrops()) {
                     Iterables.removeIf(event.getDrops(), new Predicate<ItemStack>() {
 
                         @Override

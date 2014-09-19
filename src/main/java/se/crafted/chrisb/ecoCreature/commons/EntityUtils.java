@@ -58,7 +58,7 @@ public final class EntityUtils
 
     public static boolean isUnderSeaLevel(Entity entity)
     {
-        return entity != null && (entity.getLocation().getBlockY() < entity.getWorld().getSeaLevel());
+        return entity != null && entity.getLocation().getBlockY() < entity.getWorld().getSeaLevel();
     }
 
     public static boolean isOwner(Player player, Entity entity)

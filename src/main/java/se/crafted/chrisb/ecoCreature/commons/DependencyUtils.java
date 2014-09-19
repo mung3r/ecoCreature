@@ -93,13 +93,13 @@ public final class DependencyUtils
     private static void initVault()
     {
         if (hasVault()) {
-            RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+            RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServer().getServicesManager().getRegistration(Permission.class);
             if (permissionProvider != null) {
                 permission = permissionProvider.getProvider();
                 LoggerUtil.getInstance().info("Found permission provider " + permission.getName());
             }
 
-            RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+            RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
             if (economyProvider != null) {
                 economy = economyProvider.getProvider();
                 LoggerUtil.getInstance().info("Found economy provider " + economy.getName());

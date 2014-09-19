@@ -29,7 +29,7 @@ public abstract class AbstractPlayerRule extends AbstractRule
     @Override
     public boolean isBroken(Event event)
     {
-        return (event instanceof PlayerKilledEvent) && isBroken((PlayerKilledEvent) event);
+        return event instanceof PlayerKilledEvent && isBroken((PlayerKilledEvent) event);
     }
 
     protected abstract boolean isBroken(PlayerKilledEvent event);
