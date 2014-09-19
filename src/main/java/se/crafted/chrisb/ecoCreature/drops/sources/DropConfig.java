@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops;
+package se.crafted.chrisb.ecoCreature.drops.sources;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,12 +30,13 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import se.crafted.chrisb.ecoCreature.drops.Drop;
+import se.crafted.chrisb.ecoCreature.drops.SpawnerMobTracker;
 import se.crafted.chrisb.ecoCreature.drops.categories.AbstractDropCategory;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.drops.gain.PlayerGain;
 import se.crafted.chrisb.ecoCreature.drops.parties.Party;
-import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
 
 public class DropConfig implements SpawnerMobTracker
 {

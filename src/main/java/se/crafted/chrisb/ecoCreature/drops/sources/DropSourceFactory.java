@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops;
+package se.crafted.chrisb.ecoCreature.drops.sources;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
@@ -31,15 +31,6 @@ import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomMaterialDropTy
 import se.crafted.chrisb.ecoCreature.drops.categories.types.HeroesDropType;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.McMMODropType;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.StreakDropType;
-import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
-import se.crafted.chrisb.ecoCreature.drops.sources.DeathPenaltyDropSource;
-import se.crafted.chrisb.ecoCreature.drops.sources.EntityDropSource;
-import se.crafted.chrisb.ecoCreature.drops.sources.HeroesDropSource;
-import se.crafted.chrisb.ecoCreature.drops.sources.MaterialDropSource;
-import se.crafted.chrisb.ecoCreature.drops.sources.McMMODropSource;
-import se.crafted.chrisb.ecoCreature.drops.sources.PVPDropSource;
-import se.crafted.chrisb.ecoCreature.drops.sources.SetDropSource;
-import se.crafted.chrisb.ecoCreature.drops.sources.StreakDropSource;
 
 import java.util.ArrayList;
 import java.util.Collection;

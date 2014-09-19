@@ -25,7 +25,7 @@ import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.PluginConfig;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
-import se.crafted.chrisb.ecoCreature.drops.DropConfig;
+import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.events.EntityFarmedEvent;
 

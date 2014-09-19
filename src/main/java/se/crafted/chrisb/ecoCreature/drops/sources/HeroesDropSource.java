@@ -26,7 +26,6 @@ import org.bukkit.event.Event;
 import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.drops.DropSourceFactory;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 import se.crafted.chrisb.ecoCreature.drops.Drop;

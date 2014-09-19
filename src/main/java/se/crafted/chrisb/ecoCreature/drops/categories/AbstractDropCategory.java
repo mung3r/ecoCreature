@@ -31,7 +31,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
-import se.crafted.chrisb.ecoCreature.drops.DropSourceFactory;
 import se.crafted.chrisb.ecoCreature.drops.rules.AbstractRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.BattleArenaRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.CreativeModeRule;
@@ -47,6 +46,7 @@ import se.crafted.chrisb.ecoCreature.drops.rules.TamedCreatureRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.TownyRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.UnderSeaLevelRule;
 import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
+import se.crafted.chrisb.ecoCreature.drops.sources.DropSourceFactory;
 import se.crafted.chrisb.ecoCreature.messages.CoinMessageDecorator;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.MessageHandler;

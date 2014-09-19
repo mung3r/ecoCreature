@@ -43,7 +43,6 @@ import se.crafted.chrisb.ecoCreature.drops.categories.AbstractDropCategory;
 import se.crafted.chrisb.ecoCreature.drops.categories.CustomDropCategory;
 import se.crafted.chrisb.ecoCreature.drops.categories.CustomEntityDropCategory;
 import se.crafted.chrisb.ecoCreature.drops.categories.CustomMaterialDropCategory;
-import se.crafted.chrisb.ecoCreature.drops.DropConfig;
 import se.crafted.chrisb.ecoCreature.drops.categories.EntityDropCategory;
 import se.crafted.chrisb.ecoCreature.drops.categories.HeroesDropCategory;
 import se.crafted.chrisb.ecoCreature.drops.categories.MaterialDropCategory;
@@ -69,6 +68,7 @@ import se.crafted.chrisb.ecoCreature.drops.parties.HeroesParty;
 import se.crafted.chrisb.ecoCreature.drops.parties.McMMOParty;
 import se.crafted.chrisb.ecoCreature.drops.parties.MobArenaParty;
 import se.crafted.chrisb.ecoCreature.drops.parties.Party;
+import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 
 public class PluginConfig
 {

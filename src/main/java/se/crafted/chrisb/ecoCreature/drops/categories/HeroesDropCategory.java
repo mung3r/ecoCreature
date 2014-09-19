@@ -29,8 +29,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.drops.DropSourceFactory;
 import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
+import se.crafted.chrisb.ecoCreature.drops.sources.DropSourceFactory;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.HeroesDropType;
 
 import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;

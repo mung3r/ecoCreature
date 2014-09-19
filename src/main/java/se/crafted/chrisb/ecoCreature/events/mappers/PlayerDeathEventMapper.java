@@ -26,7 +26,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import se.crafted.chrisb.ecoCreature.PluginConfig;
-import se.crafted.chrisb.ecoCreature.drops.DropConfig;
+import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 
 import com.google.common.collect.Lists;

@@ -25,7 +25,7 @@ import org.bukkit.World;
 import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
-import se.crafted.chrisb.ecoCreature.drops.DropConfig;
+import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 
 public interface EventMapper
 {

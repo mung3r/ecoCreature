@@ -28,12 +28,12 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-import se.crafted.chrisb.ecoCreature.drops.DropSourceFactory;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.drops.rules.AbstractRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.Rule;
 import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
+import se.crafted.chrisb.ecoCreature.drops.sources.DropSourceFactory;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomEntityDropType;
 
 public class CustomEntityDropCategory extends AbstractDropCategory<CustomEntityDropType>

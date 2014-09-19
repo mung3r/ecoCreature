@@ -29,9 +29,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import se.crafted.chrisb.ecoCreature.drops.DropSourceFactory;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
+import se.crafted.chrisb.ecoCreature.drops.sources.DropSourceFactory;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomDropType;
 
 public class CustomDropCategory extends AbstractDropCategory<CustomDropType>

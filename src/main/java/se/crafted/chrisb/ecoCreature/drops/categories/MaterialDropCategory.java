@@ -31,8 +31,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.material.MaterialData;
 
-import se.crafted.chrisb.ecoCreature.drops.DropSourceFactory;
 import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
+import se.crafted.chrisb.ecoCreature.drops.sources.DropSourceFactory;
 
 public class MaterialDropCategory extends AbstractDropCategory<MaterialData>
 {
