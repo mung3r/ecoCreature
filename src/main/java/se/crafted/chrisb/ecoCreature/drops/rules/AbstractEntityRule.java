@@ -29,7 +29,7 @@ public abstract class AbstractEntityRule extends AbstractRule
     @Override
     public boolean isBroken(Event event)
     {
-        return (event instanceof EntityKilledEvent) && isBroken((EntityKilledEvent) event);
+        return event instanceof EntityKilledEvent && isBroken((EntityKilledEvent) event);
     }
 
     protected abstract boolean isBroken(EntityKilledEvent event);
