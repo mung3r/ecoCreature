@@ -33,22 +33,23 @@ import org.mcstats.Metrics.Plotter;
 public class DropMetrics
 {
     private Map<String, Integer> typeCount;
-    private Metrics metrics;
     private Graph graph;
 
     public DropMetrics(Plugin plugin)
     {
+        Metrics metrics;
+
         try {
             metrics = new Metrics(plugin);
+
+            if (metrics != null) {
+                typeCount = new Hashtable<String, Integer>();
+                graph = metrics.createGraph("Reward Types");
+                metrics.start();
+            }
         }
         catch (IOException e) {
             LoggerUtil.getInstance().warning("Metrics failed to load.");
-        }
-
-        if (metrics != null) {
-            typeCount = new Hashtable<String, Integer>();
-            graph = metrics.createGraph("Reward Types");
-            metrics.start();
         }
     }
 

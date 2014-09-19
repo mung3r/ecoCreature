@@ -31,7 +31,7 @@ import se.crafted.chrisb.ecoCreature.drops.Drop;
 
 public class DropEvent extends Event implements Cancellable
 {
-    private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList HANDLERS = new HandlerList();
 
     private String player;
     private Collection<Drop> drops;
@@ -89,11 +89,11 @@ public class DropEvent extends Event implements Cancellable
     @Override
     public HandlerList getHandlers()
     {
-        return handlers;
+        return HANDLERS;
     }
 
     public static HandlerList getHandlerList()
     {
-        return handlers;
+        return HANDLERS;
     }
 }

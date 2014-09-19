@@ -31,7 +31,7 @@ import se.crafted.chrisb.ecoCreature.commons.EventUtils;
 
 public final class EntityFarmedEvent extends Event
 {
-    private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList HANDLERS = new HandlerList();
 
     private EntityDeathEvent event;
 
@@ -73,11 +73,11 @@ public final class EntityFarmedEvent extends Event
     @Override
     public HandlerList getHandlers()
     {
-        return handlers;
+        return HANDLERS;
     }
 
     public static HandlerList getHandlerList()
     {
-        return handlers;
+        return HANDLERS;
     }
 }

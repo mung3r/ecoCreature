@@ -34,7 +34,7 @@ import se.crafted.chrisb.ecoCreature.drops.SpawnerMobTracker;
 
 public final class EntityKilledEvent extends Event
 {
-    private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList HANDLERS = new HandlerList();
 
     private EntityDeathEvent event;
     private SpawnerMobTracker spawnerMobTracker;
@@ -102,6 +102,6 @@ public final class EntityKilledEvent extends Event
     @Override
     public HandlerList getHandlers()
     {
-        return handlers;
+        return HANDLERS;
     }
 }
