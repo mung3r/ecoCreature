@@ -31,7 +31,6 @@ import se.crafted.chrisb.ecoCreature.commands.ReloadCommand;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.UpdateTask;
-import se.crafted.chrisb.ecoCreature.events.DropEventFactory;
 import se.crafted.chrisb.ecoCreature.events.listeners.BlockEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.DropEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.EntityDeathEventListener;
@@ -40,6 +39,7 @@ import se.crafted.chrisb.ecoCreature.events.listeners.McMMOEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.PlayerDeathEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.SpawnEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.StreakEventListener;
+import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
 import se.crafted.chrisb.ecoCreature.metrics.DropMetrics;
 
 public class ecoCreature extends JavaPlugin

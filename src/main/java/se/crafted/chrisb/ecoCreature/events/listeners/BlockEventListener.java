@@ -26,7 +26,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
-import se.crafted.chrisb.ecoCreature.events.DropEventFactory;
+import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
 
 public class BlockEventListener implements Listener
 {

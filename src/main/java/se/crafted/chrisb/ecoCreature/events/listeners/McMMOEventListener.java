@@ -27,7 +27,7 @@ import org.bukkit.event.Listener;
 import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
-import se.crafted.chrisb.ecoCreature.events.DropEventFactory;
+import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
 
 public class McMMOEventListener implements Listener
 {

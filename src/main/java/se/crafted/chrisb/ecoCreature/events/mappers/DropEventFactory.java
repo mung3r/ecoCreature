@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.events;
+package se.crafted.chrisb.ecoCreature.events.mappers;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,16 +28,7 @@ import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.PluginConfig;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.events.mappers.BlockEventMapper;
-import se.crafted.chrisb.ecoCreature.events.mappers.DeathStreakEventMapper;
-import se.crafted.chrisb.ecoCreature.events.mappers.EntityFarmedEventMapper;
-import se.crafted.chrisb.ecoCreature.events.mappers.EntityKilledEventMapper;
-import se.crafted.chrisb.ecoCreature.events.mappers.EventMapper;
-import se.crafted.chrisb.ecoCreature.events.mappers.HeroesEventMapper;
-import se.crafted.chrisb.ecoCreature.events.mappers.KillStreakEventMapper;
-import se.crafted.chrisb.ecoCreature.events.mappers.McMMOEventMapper;
-import se.crafted.chrisb.ecoCreature.events.mappers.PlayerDeathEventMapper;
-import se.crafted.chrisb.ecoCreature.events.mappers.PlayerKilledEventMapper;
+import se.crafted.chrisb.ecoCreature.events.DropEvent;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;

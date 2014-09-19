@@ -27,7 +27,7 @@ import org.bukkit.event.Listener;
 import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
-import se.crafted.chrisb.ecoCreature.events.DropEventFactory;
+import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
 
 public class HeroesEventListener implements Listener
 {
