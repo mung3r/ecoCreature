@@ -70,10 +70,10 @@ public abstract class AbstractDropCategory<T>
 
     public Collection<AbstractDropSource> getDropSources(final Event event)
     {
-        Collection<AbstractDropSource> sources = Collections.emptyList();
+        Collection<AbstractDropSource> dropSources = Collections.emptyList();
 
         if (isValidEvent(event)) {
-            sources = Collections2.filter(getDropSources(extractType(event)), new Predicate<AbstractDropSource>() {
+            dropSources = Collections2.filter(getDropSources(extractType(event)), new Predicate<AbstractDropSource>() {
 
                 @Override
                 public boolean apply(AbstractDropSource source)
@@ -84,7 +84,7 @@ public abstract class AbstractDropCategory<T>
             });
         }
 
-        return sources;
+        return dropSources;
     }
 
     protected abstract boolean isValidEvent(Event event);

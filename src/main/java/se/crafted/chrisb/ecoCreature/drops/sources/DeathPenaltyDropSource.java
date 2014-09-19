@@ -37,7 +37,7 @@ public class DeathPenaltyDropSource extends AbstractDropSource
     private boolean percentPenalty;
     private double penaltyAmount;
 
-    public DeathPenaltyDropSource(String section, ConfigurationSection config)
+    public DeathPenaltyDropSource(ConfigurationSection config)
     {
         if (config == null) {
             throw new IllegalArgumentException("Config cannot be null");

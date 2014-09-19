@@ -131,10 +131,10 @@ public final class DropSourceFactory
 
         switch (CustomDropType.fromName(parseTypeName(section))) {
             case DEATH_PENALTY:
-                sources.add(new DeathPenaltyDropSource(section, config));
+                sources.add(new DeathPenaltyDropSource(config));
                 break;
             case LEGACY_PVP:
-                sources.add(new PVPDropSource(section, config));
+                sources.add(new PVPDropSource(config));
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported type: " + section);
@@ -144,6 +144,6 @@ public final class DropSourceFactory
 
     public static String parseTypeName(String section)
     {
-        return StringUtils.isNotEmpty(section) && section.lastIndexOf(".") > -1 ? section.substring(section.lastIndexOf(".") + 1) : section;
+        return StringUtils.isNotEmpty(section) && section.lastIndexOf('.') > -1 ? section.substring(section.lastIndexOf('.') + 1) : section;
     }
 }
