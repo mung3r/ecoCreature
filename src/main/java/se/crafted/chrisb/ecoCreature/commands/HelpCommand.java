@@ -24,17 +24,15 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
-
 public class HelpCommand extends BasicCommand
 {
     private static final int CMDS_PER_PAGE = 8;
     private CommandHandler commandHandler;
 
-    public HelpCommand(ecoCreature plugin)
+    public HelpCommand(CommandHandler commandHandler)
     {
         super("Help");
-        this.commandHandler = plugin.getCommandHandler();
+        this.commandHandler = commandHandler;
         setDescription("Displays the help menu");
         setUsage("/ecoc help §8[page#]");
         setArgumentRange(0, 1);

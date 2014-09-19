@@ -26,22 +26,48 @@ import java.util.List;
 
 import org.bukkit.event.Event;
 
+import se.crafted.chrisb.ecoCreature.PluginConfig;
+import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.events.mappers.BlockEventMapper;
+import se.crafted.chrisb.ecoCreature.events.mappers.DeathStreakEventMapper;
+import se.crafted.chrisb.ecoCreature.events.mappers.EntityFarmedEventMapper;
+import se.crafted.chrisb.ecoCreature.events.mappers.EntityKilledEventMapper;
+import se.crafted.chrisb.ecoCreature.events.mappers.EventMapper;
+import se.crafted.chrisb.ecoCreature.events.mappers.HeroesEventMapper;
+import se.crafted.chrisb.ecoCreature.events.mappers.KillStreakEventMapper;
+import se.crafted.chrisb.ecoCreature.events.mappers.McMMOEventMapper;
+import se.crafted.chrisb.ecoCreature.events.mappers.PlayerDeathEventMapper;
+import se.crafted.chrisb.ecoCreature.events.mappers.PlayerKilledEventMapper;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import se.crafted.chrisb.ecoCreature.events.mappers.EventMapper;
 
 public class DropEventFactory
 {
-    private List<EventMapper> mappers;
+    private final List<EventMapper> mappers;
 
-    public DropEventFactory()
+    public DropEventFactory(PluginConfig pluginConfig)
     {
         mappers = new ArrayList<EventMapper>();
-    }
 
-    public void addMapper(EventMapper mapper)
-    {
-        mappers.add(mapper);
+        mappers.add(new BlockEventMapper(pluginConfig));
+        mappers.add(new PlayerKilledEventMapper(pluginConfig));
+        mappers.add(new PlayerDeathEventMapper(pluginConfig));
+        mappers.add(new EntityKilledEventMapper(pluginConfig));
+        mappers.add(new EntityFarmedEventMapper(pluginConfig));
+
+        if (DependencyUtils.hasDeathTpPlus()) {
+            mappers.add(new KillStreakEventMapper(pluginConfig));
+            mappers.add(new DeathStreakEventMapper(pluginConfig));
+        }
+
+        if (DependencyUtils.hasHeroes()) {
+            mappers.add(new HeroesEventMapper(pluginConfig));
+        }
+
+        if (DependencyUtils.hasMcMMO()) {
+            mappers.add(new McMMOEventMapper(pluginConfig));
+        }
     }
 
     public Collection<DropEvent> createEvents(final Event event)

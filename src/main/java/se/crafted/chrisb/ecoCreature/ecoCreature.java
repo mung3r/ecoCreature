@@ -31,6 +31,7 @@ import se.crafted.chrisb.ecoCreature.commands.ReloadCommand;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.UpdateTask;
+import se.crafted.chrisb.ecoCreature.events.DropEventFactory;
 import se.crafted.chrisb.ecoCreature.events.listeners.BlockEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.DropEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.EntityDeathEventListener;
@@ -39,22 +40,13 @@ import se.crafted.chrisb.ecoCreature.events.listeners.McMMOEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.PlayerDeathEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.SpawnEventListener;
 import se.crafted.chrisb.ecoCreature.events.listeners.StreakEventListener;
-import se.crafted.chrisb.ecoCreature.events.mappers.BlockEventMapper;
-import se.crafted.chrisb.ecoCreature.events.mappers.DeathStreakEventMapper;
-import se.crafted.chrisb.ecoCreature.events.DropEventFactory;
-import se.crafted.chrisb.ecoCreature.events.mappers.EntityFarmedEventMapper;
-import se.crafted.chrisb.ecoCreature.events.mappers.EntityKilledEventMapper;
-import se.crafted.chrisb.ecoCreature.events.mappers.HeroesEventMapper;
-import se.crafted.chrisb.ecoCreature.events.mappers.KillStreakEventMapper;
-import se.crafted.chrisb.ecoCreature.events.mappers.McMMOEventMapper;
-import se.crafted.chrisb.ecoCreature.events.mappers.PlayerDeathEventMapper;
-import se.crafted.chrisb.ecoCreature.events.mappers.PlayerKilledEventMapper;
 import se.crafted.chrisb.ecoCreature.metrics.DropMetrics;
 
 public class ecoCreature extends JavaPlugin
 {
     private DropMetrics metrics;
     private PluginConfig pluginConfig;
+    private DropEventFactory dropEventFactory;
     private CommandHandler commandHandler;
 
     @Override
@@ -64,6 +56,7 @@ public class ecoCreature extends JavaPlugin
 
         metrics = new DropMetrics(this);
         pluginConfig = new PluginConfig(this);
+        dropEventFactory = new DropEventFactory(pluginConfig);
 
         if (pluginConfig.isInitialized()) {
             addCommands();
@@ -97,6 +90,7 @@ public class ecoCreature extends JavaPlugin
     {
         super.reloadConfig();
         pluginConfig = new PluginConfig(this);
+        dropEventFactory = new DropEventFactory(pluginConfig);
     }
 
     public DropMetrics getMetrics()
@@ -117,7 +111,7 @@ public class ecoCreature extends JavaPlugin
     private void addCommands()
     {
         commandHandler = new CommandHandler();
-        commandHandler.addCommand(new HelpCommand(this));
+        commandHandler.addCommand(new HelpCommand(commandHandler));
         commandHandler.addCommand(new ReloadCommand(this));
         commandHandler.addCommand(new DebugCommand());
     }
@@ -127,31 +121,20 @@ public class ecoCreature extends JavaPlugin
         Bukkit.getPluginManager().registerEvents(new DropEventListener(metrics), this);
         Bukkit.getPluginManager().registerEvents(new SpawnEventListener(pluginConfig), this);
 
-        DropEventFactory factory = new DropEventFactory();
-        factory.addMapper(new BlockEventMapper(pluginConfig));
-        factory.addMapper(new PlayerKilledEventMapper(pluginConfig));
-        factory.addMapper(new PlayerDeathEventMapper(pluginConfig));
-        factory.addMapper(new EntityKilledEventMapper(pluginConfig));
-        factory.addMapper(new EntityFarmedEventMapper(pluginConfig));
-
-        Bukkit.getPluginManager().registerEvents(new BlockEventListener(factory), this);
-        Bukkit.getPluginManager().registerEvents(new PlayerDeathEventListener(factory), this);
-        Bukkit.getPluginManager().registerEvents(new EntityDeathEventListener(factory), this);
+        Bukkit.getPluginManager().registerEvents(new BlockEventListener(dropEventFactory), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerDeathEventListener(dropEventFactory), this);
+        Bukkit.getPluginManager().registerEvents(new EntityDeathEventListener(dropEventFactory), this);
 
         if (DependencyUtils.hasDeathTpPlus()) {
-            factory.addMapper(new KillStreakEventMapper(pluginConfig));
-            factory.addMapper(new DeathStreakEventMapper(pluginConfig));
-            Bukkit.getPluginManager().registerEvents(new StreakEventListener(factory), this);
+            Bukkit.getPluginManager().registerEvents(new StreakEventListener(dropEventFactory), this);
         }
 
         if (DependencyUtils.hasHeroes()) {
-            factory.addMapper(new HeroesEventMapper(pluginConfig));
-            Bukkit.getPluginManager().registerEvents(new HeroesEventListener(factory), this);
+            Bukkit.getPluginManager().registerEvents(new HeroesEventListener(dropEventFactory), this);
         }
 
         if (DependencyUtils.hasMcMMO()) {
-            factory.addMapper(new McMMOEventMapper(pluginConfig));
-            Bukkit.getPluginManager().registerEvents(new McMMOEventListener(factory), this);
+            Bukkit.getPluginManager().registerEvents(new McMMOEventListener(dropEventFactory), this);
         }
     }
 }
