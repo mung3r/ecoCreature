@@ -36,7 +36,7 @@ import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 public class CronGain extends AbstractPlayerGain<String>
 {
 
-    public CronGain(Map<String, Double> multipliers, String permission)
+    public CronGain(Map<String, Double> multipliers)
     {
         super(multipliers, "gain.cron");
     }
@@ -81,7 +81,7 @@ public class CronGain extends AbstractPlayerGain<String>
 
         if (config != null) {
             gain = new ArrayList<PlayerGain>();
-            gain.add(new GroupGain(parseMultipliers(config)));
+            gain.add(new CronGain(parseMultipliers(config)));
         }
 
         return gain;
