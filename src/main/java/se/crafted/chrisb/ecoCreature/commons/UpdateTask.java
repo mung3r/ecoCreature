@@ -49,6 +49,7 @@ public class UpdateTask implements Runnable
         pluginName = plugin.getName();
         pluginVersion = plugin.getDescription().getVersion().split("-")[0];
         latestVersion = pluginVersion;
+        this.plugin = plugin;
     }
 
     public void start()
