@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.bukkit.event.Event;
 
-import se.crafted.chrisb.ecoCreature.PluginConfig;
+import se.crafted.chrisb.ecoCreature.DropConfigLoader;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 
@@ -37,27 +37,27 @@ public class DropEventFactory
 {
     private final List<EventMapper> mappers;
 
-    public DropEventFactory(PluginConfig pluginConfig)
+    public DropEventFactory(DropConfigLoader dropConfigLoader)
     {
         mappers = new ArrayList<EventMapper>();
 
-        mappers.add(new BlockEventMapper(pluginConfig));
-        mappers.add(new PlayerKilledEventMapper(pluginConfig));
-        mappers.add(new PlayerDeathEventMapper(pluginConfig));
-        mappers.add(new EntityKilledEventMapper(pluginConfig));
-        mappers.add(new EntityFarmedEventMapper(pluginConfig));
+        mappers.add(new BlockEventMapper(dropConfigLoader));
+        mappers.add(new PlayerKilledEventMapper(dropConfigLoader));
+        mappers.add(new PlayerDeathEventMapper(dropConfigLoader));
+        mappers.add(new EntityKilledEventMapper(dropConfigLoader));
+        mappers.add(new EntityFarmedEventMapper(dropConfigLoader));
 
         if (DependencyUtils.hasDeathTpPlus()) {
-            mappers.add(new KillStreakEventMapper(pluginConfig));
-            mappers.add(new DeathStreakEventMapper(pluginConfig));
+            mappers.add(new KillStreakEventMapper(dropConfigLoader));
+            mappers.add(new DeathStreakEventMapper(dropConfigLoader));
         }
 
         if (DependencyUtils.hasHeroes()) {
-            mappers.add(new HeroesEventMapper(pluginConfig));
+            mappers.add(new HeroesEventMapper(dropConfigLoader));
         }
 
         if (DependencyUtils.hasMcMMO()) {
-            mappers.add(new McMMOEventMapper(pluginConfig));
+            mappers.add(new McMMOEventMapper(dropConfigLoader));
         }
     }
 

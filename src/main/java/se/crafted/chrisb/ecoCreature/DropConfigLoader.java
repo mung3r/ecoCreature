@@ -70,27 +70,27 @@ import se.crafted.chrisb.ecoCreature.drops.parties.MobArenaParty;
 import se.crafted.chrisb.ecoCreature.drops.parties.Party;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 
-public class PluginConfig
+public class DropConfigLoader
 {
-    private static final String DEFAULT_WORLD = "__DEFAULT_WORLD__";
+    private static final String DEFAULT_DROP_CONFIG = "__DEFAULT_CONFIG__";
 
     private static final Charset CHARSET = Charset.forName("UTF-8");
-    private static final String OLD_DEFAULT_FILE = "ecoCreature.yml";
-    private static final String DEFAULT_FILE = "default.yml";
+    private static final String LEGACY_CONFIG_FILE = "ecoCreature.yml";
+    private static final String DEFAULT_CONFIG_FILE = "default.yml";
     private static final int BUFFER_SIZE = 8192;
 
     private final ecoCreature plugin;
-    private final File dataWorldsFolder;
+    private final File worldsDataFolder;
     private boolean initialized;
     private boolean checkForUpdates;
 
     private Map<String, DropConfig> worldConfigMap;
 
-    public PluginConfig(ecoCreature plugin)
+    public DropConfigLoader(ecoCreature plugin)
     {
         this.plugin = plugin;
-        dataWorldsFolder = new File(plugin.getDataFolder(), "worlds");
-        initialized = (dataWorldsFolder.exists() || dataWorldsFolder.mkdirs()) && initConfig();
+        worldsDataFolder = new File(plugin.getDataFolder(), "worlds");
+        initialized = (worldsDataFolder.exists() || worldsDataFolder.mkdirs()) && initConfig();
     }
 
     public boolean isInitialized()
@@ -107,7 +107,7 @@ public class PluginConfig
     {
         DropConfig dropConfig = worldConfigMap.get(world.getName());
         if (dropConfig == null) {
-            dropConfig = worldConfigMap.get(PluginConfig.DEFAULT_WORLD);
+            dropConfig = worldConfigMap.get(DropConfigLoader.DEFAULT_DROP_CONFIG);
         }
         return dropConfig;
     }
@@ -121,11 +121,11 @@ public class PluginConfig
 
             DropConfig defaultDropConfig = loadDropConfig(new DropConfig(plugin), defaultConfigFile);
             worldConfigMap = new HashMap<String, DropConfig>();
-            worldConfigMap.put(DEFAULT_WORLD, defaultDropConfig);
+            worldConfigMap.put(DEFAULT_DROP_CONFIG, defaultDropConfig);
 
             for (World world : plugin.getServer().getWorlds()) {
 
-                File worldConfigFile = new File(dataWorldsFolder, world.getName() + ".yml");
+                File worldConfigFile = new File(worldsDataFolder, world.getName() + ".yml");
 
                 if (worldConfigFile.exists()) {
                     FileConfiguration configFile = getConfig(worldConfigFile);
@@ -219,24 +219,24 @@ public class PluginConfig
     private FileConfiguration getDefaultConfig() throws IOException, InvalidConfigurationException
     {
         FileConfiguration fileConfig = new YamlConfiguration();
-        File defaultFile = new File(plugin.getDataFolder(), DEFAULT_FILE);
+        File defaultConfigFile = new File(plugin.getDataFolder(), DEFAULT_CONFIG_FILE);
 
-        File oldDefaultFile = new File(plugin.getDataFolder(), OLD_DEFAULT_FILE);
+        File legacyConfigFile = new File(plugin.getDataFolder(), LEGACY_CONFIG_FILE);
 
-        if (defaultFile.exists()) {
-            fileConfig.load(defaultFile);
+        if (defaultConfigFile.exists()) {
+            fileConfig.load(defaultConfigFile);
         }
-        else if (oldDefaultFile.exists()) {
+        else if (legacyConfigFile.exists()) {
             LoggerUtil.getInstance().info("Converting old config file.");
-            fileConfig = getConfig(oldDefaultFile);
-            fileConfig.save(defaultFile);
-            if (oldDefaultFile.delete()) {
+            fileConfig = getConfig(legacyConfigFile);
+            fileConfig.save(defaultConfigFile);
+            if (legacyConfigFile.delete()) {
                 LoggerUtil.getInstance().info("Old config file converted.");
             }
         }
         else {
-            fileConfig = getConfig(defaultFile);
-            fileConfig.save(defaultFile);
+            fileConfig = getConfig(defaultConfigFile);
+            fileConfig.save(defaultConfigFile);
         }
 
         LoggerUtil.getInstance().info("Loaded config defaults.");
@@ -274,7 +274,7 @@ public class PluginConfig
         }
 
         config.load(file);
-        config.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(plugin.getResource(DEFAULT_FILE), CHARSET)));
+        config.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(plugin.getResource(DEFAULT_CONFIG_FILE), CHARSET)));
         config.options().copyDefaults(true);
 
         return config;

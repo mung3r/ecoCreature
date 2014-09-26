@@ -45,8 +45,9 @@ import se.crafted.chrisb.ecoCreature.metrics.DropMetrics;
 public class ecoCreature extends JavaPlugin
 {
     private DropMetrics metrics;
-    private PluginConfig pluginConfig;
+    private DropConfigLoader dropConfigLoader;
     private DropEventFactory dropEventFactory;
+    private UpdateTask updateTask;
     private CommandHandler commandHandler;
 
     @Override
@@ -55,15 +56,16 @@ public class ecoCreature extends JavaPlugin
         DependencyUtils.init();
 
         metrics = new DropMetrics(this);
-        pluginConfig = new PluginConfig(this);
-        dropEventFactory = new DropEventFactory(pluginConfig);
+        dropConfigLoader = new DropConfigLoader(this);
+        dropEventFactory = new DropEventFactory(dropConfigLoader);
+        updateTask = new UpdateTask(this);
 
-        if (pluginConfig.isInitialized()) {
+        if (dropConfigLoader.isInitialized()) {
             addCommands();
             registerEvents();
 
-            if (pluginConfig.isCheckForUpdates()) {
-                new UpdateTask(this);
+            if (dropConfigLoader.isCheckForUpdates()) {
+                updateTask.start();
             }
 
             LoggerUtil.getInstance().info(getDescription().getVersion() + " enabled.");
@@ -88,24 +90,14 @@ public class ecoCreature extends JavaPlugin
     @Override
     public void reloadConfig()
     {
-        super.reloadConfig();
-        pluginConfig = new PluginConfig(this);
-        dropEventFactory = new DropEventFactory(pluginConfig);
-    }
+        super.reloadConfig();        
+        dropConfigLoader = new DropConfigLoader(this);
+        dropEventFactory = new DropEventFactory(dropConfigLoader);
+        updateTask.stop();
 
-    public DropMetrics getMetrics()
-    {
-        return metrics;
-    }
-
-    public PluginConfig getPluginConfig()
-    {
-        return pluginConfig;
-    }
-
-    public CommandHandler getCommandHandler()
-    {
-        return commandHandler;
+        if (dropConfigLoader.isInitialized() && dropConfigLoader.isCheckForUpdates()) {
+            updateTask.start();
+        }
     }
 
     private void addCommands()
@@ -119,7 +111,7 @@ public class ecoCreature extends JavaPlugin
     private void registerEvents()
     {
         Bukkit.getPluginManager().registerEvents(new DropEventListener(metrics), this);
-        Bukkit.getPluginManager().registerEvents(new SpawnEventListener(pluginConfig), this);
+        Bukkit.getPluginManager().registerEvents(new SpawnEventListener(dropConfigLoader), this);
 
         Bukkit.getPluginManager().registerEvents(new BlockEventListener(dropEventFactory), this);
         Bukkit.getPluginManager().registerEvents(new PlayerDeathEventListener(dropEventFactory), this);

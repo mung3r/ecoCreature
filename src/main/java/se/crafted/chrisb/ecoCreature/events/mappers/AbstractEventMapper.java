@@ -29,7 +29,7 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import se.crafted.chrisb.ecoCreature.PluginConfig;
+import se.crafted.chrisb.ecoCreature.DropConfigLoader;
 import se.crafted.chrisb.ecoCreature.drops.Drop;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
@@ -42,11 +42,11 @@ public abstract class AbstractEventMapper implements EventMapper
 {
     protected static final Collection<DropEvent> EMPTY_COLLECTION = Collections.emptyList();
 
-    private PluginConfig pluginConfig;
+    private DropConfigLoader dropConfigLoader;
 
-    public AbstractEventMapper(PluginConfig pluginConfig)
+    public AbstractEventMapper(DropConfigLoader dropConfigLoader)
     {
-        this.pluginConfig = pluginConfig;
+        this.dropConfigLoader = dropConfigLoader;
     }
 
     @Override
@@ -58,12 +58,12 @@ public abstract class AbstractEventMapper implements EventMapper
     @Override
     public DropConfig getDropConfig(World world)
     {
-        return getPluginConfig().getDropConfig(world);
+        return getDropConfigLoader().getDropConfig(world);
     }
 
-    protected PluginConfig getPluginConfig()
+    protected DropConfigLoader getDropConfigLoader()
     {
-        return pluginConfig;
+        return dropConfigLoader;
     }
 
     protected static void addPlayerSkullToEvent(Drop drop, Event event)

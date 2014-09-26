@@ -41,16 +41,28 @@ public class UpdateTask implements Runnable
     private String pluginName;
     private String pluginVersion;
     private String latestVersion;
+    private BukkitTask task;
+    private ecoCreature plugin;
 
     public UpdateTask(ecoCreature plugin)
     {
         pluginName = plugin.getName();
         pluginVersion = plugin.getDescription().getVersion().split("-")[0];
         latestVersion = pluginVersion;
+    }
 
-        BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this, CHECK_DELAY, CHECK_PERIOD);
+    public void start()
+    {
+        task = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this, CHECK_DELAY, CHECK_PERIOD);
         if (task.getTaskId() < 0) {
             LoggerUtil.getInstance().warning("Failed to schedule UpdateTask task.");
+        }
+    }
+
+    public void stop()
+    {
+        if (task != null && task.getTaskId() > 0) {
+            task.cancel();
         }
     }
 

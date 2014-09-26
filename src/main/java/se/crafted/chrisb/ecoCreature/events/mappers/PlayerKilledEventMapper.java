@@ -27,7 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import se.crafted.chrisb.ecoCreature.PluginConfig;
+import se.crafted.chrisb.ecoCreature.DropConfigLoader;
 import se.crafted.chrisb.ecoCreature.drops.Drop;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
@@ -40,9 +40,9 @@ import com.google.common.collect.Lists;
 
 public class PlayerKilledEventMapper extends AbstractEventMapper
 {
-    public PlayerKilledEventMapper(PluginConfig pluginConfig)
+    public PlayerKilledEventMapper(DropConfigLoader dropConfigLoader)
     {
-        super(pluginConfig);
+        super(dropConfigLoader);
     }
 
     @Override

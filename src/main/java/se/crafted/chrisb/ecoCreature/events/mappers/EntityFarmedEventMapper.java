@@ -23,7 +23,7 @@ import java.util.Collection;
 
 import org.bukkit.event.Event;
 
-import se.crafted.chrisb.ecoCreature.PluginConfig;
+import se.crafted.chrisb.ecoCreature.DropConfigLoader;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
@@ -31,9 +31,9 @@ import se.crafted.chrisb.ecoCreature.events.EntityFarmedEvent;
 
 public class EntityFarmedEventMapper extends AbstractEventMapper
 {
-    public EntityFarmedEventMapper(PluginConfig pluginConfig)
+    public EntityFarmedEventMapper(DropConfigLoader dropConfigLoader)
     {
-        super(pluginConfig);
+        super(dropConfigLoader);
     }
 
     @Override

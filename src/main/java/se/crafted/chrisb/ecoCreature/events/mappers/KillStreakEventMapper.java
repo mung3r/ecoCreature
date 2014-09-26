@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
-import se.crafted.chrisb.ecoCreature.PluginConfig;
+import se.crafted.chrisb.ecoCreature.DropConfigLoader;
 import se.crafted.chrisb.ecoCreature.drops.Drop;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
@@ -36,9 +36,9 @@ import com.google.common.collect.Lists;
 
 public class KillStreakEventMapper extends AbstractEventMapper
 {
-    public KillStreakEventMapper(PluginConfig pluginConfig)
+    public KillStreakEventMapper(DropConfigLoader dropConfigLoader)
     {
-        super(pluginConfig);
+        super(dropConfigLoader);
     }
 
     @Override

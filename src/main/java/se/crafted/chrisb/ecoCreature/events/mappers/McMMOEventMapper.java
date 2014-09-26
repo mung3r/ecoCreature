@@ -24,7 +24,7 @@ import java.util.Collection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-import se.crafted.chrisb.ecoCreature.PluginConfig;
+import se.crafted.chrisb.ecoCreature.DropConfigLoader;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 
@@ -33,9 +33,9 @@ import com.google.common.collect.Lists;
 
 public class McMMOEventMapper extends AbstractEventMapper
 {
-    public McMMOEventMapper(PluginConfig pluginConfig)
+    public McMMOEventMapper(DropConfigLoader dropConfigLoader)
     {
-        super(pluginConfig);
+        super(dropConfigLoader);
     }
 
     @Override
