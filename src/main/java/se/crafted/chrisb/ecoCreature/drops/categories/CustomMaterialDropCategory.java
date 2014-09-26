@@ -60,7 +60,7 @@ public class CustomMaterialDropCategory extends AbstractDropCategory<CustomMater
 
     public static AbstractDropCategory<CustomMaterialDropType> parseConfig(ConfigurationSection config)
     {
-        Map<CustomMaterialDropType, Collection<AbstractDropSource>> sources = new HashMap<CustomMaterialDropType, Collection<AbstractDropSource>>();
+        Map<CustomMaterialDropType, Collection<AbstractDropSource>> sources = new HashMap<>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {

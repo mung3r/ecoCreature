@@ -52,7 +52,7 @@ public class EnvironmentGain extends AbstractPlayerGain<Environment>
         Collection<PlayerGain> gain = Collections.emptyList();
 
         if (config != null) {
-            Map<Environment, Double> multipliers = new HashMap<World.Environment, Double>();
+            Map<Environment, Double> multipliers = new HashMap<>();
             for (String environment : config.getKeys(false)) {
                 try {
                     multipliers.put(Environment.valueOf(environment.toUpperCase()),
@@ -62,7 +62,7 @@ public class EnvironmentGain extends AbstractPlayerGain<Environment>
                     LoggerUtil.getInstance().warning("Skipping unknown environment name: " + environment);
                 }
             }
-            gain = new ArrayList<PlayerGain>();
+            gain = new ArrayList<>();
             gain.add(new EnvironmentGain(multipliers));
         }
 

@@ -26,7 +26,7 @@ public class CommandHandler
 
     public CommandHandler()
     {
-        commands = new LinkedHashMap<String, Command>();
+        commands = new LinkedHashMap<>();
     }
 
     public void addCommand(Command command)
@@ -46,7 +46,7 @@ public class CommandHandler
 
     public List<Command> getCommands()
     {
-        return new ArrayList<Command>(commands.values());
+        return new ArrayList<>(commands.values());
     }
 
     public boolean dispatch(CommandSender sender, org.bukkit.command.Command command, String label, String[] args)

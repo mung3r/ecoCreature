@@ -135,7 +135,7 @@ public abstract class AbstractDropCategory<T>
 
     protected static Collection<AbstractDropSource> getSets(String rewardSection, ConfigurationSection config)
     {
-        Collection<AbstractDropSource> sources = new ArrayList<AbstractDropSource>();
+        Collection<AbstractDropSource> sources = new ArrayList<>();
         ConfigurationSection rewardConfig = config.getConfigurationSection(rewardSection);
         ConfigurationSection rewardSets = config.getConfigurationSection("RewardSets");
         Collection<String> sets = rewardConfig.getStringList("Sets");
@@ -226,7 +226,7 @@ public abstract class AbstractDropCategory<T>
 
     protected static Map<Class<? extends AbstractRule>, Rule> loadHuntingRules(ConfigurationSection config)
     {
-        Map<Class<? extends AbstractRule>, Rule> rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+        Map<Class<? extends AbstractRule>, Rule> rules = new HashMap<>();
 
         rules.putAll(CreativeModeRule.parseConfig(config));
         rules.putAll(MobArenaRule.parseConfig(config));
@@ -245,7 +245,7 @@ public abstract class AbstractDropCategory<T>
 
     protected static Map<Class<? extends AbstractRule>, Rule> loadGainRules(ConfigurationSection config)
     {
-        Map<Class<? extends AbstractRule>, Rule> rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+        Map<Class<? extends AbstractRule>, Rule> rules = new HashMap<>();
 
         rules.putAll(TownyRule.parseConfig(config));
 

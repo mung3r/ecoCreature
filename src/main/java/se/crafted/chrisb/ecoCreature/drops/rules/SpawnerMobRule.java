@@ -76,7 +76,7 @@ public class SpawnerMobRule extends AbstractEntityRule
             rule.setClearExpOrbs(system.getBoolean("Hunting.ClearCampExpOrbs", true));
             rule.setCampByEntity(system.getBoolean("Hunting.CampingByEntity", false));
             rule.setMessage(getNoCampMessage(system));
-            rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+            rules = new HashMap<>();
             rules.put(SpawnerMobRule.class, rule);
         }
 

@@ -92,13 +92,13 @@ public abstract class AbstractDropSource
         ConfigurationSection dropConfig = config.getConfigurationSection(section);
         name = dropConfig.getName();
 
-        itemDrops = new ArrayList<AbstractItemDrop>();
+        itemDrops = new ArrayList<>();
         itemDrops.addAll(ItemDrop.parseConfig(dropConfig));
         itemDrops.addAll(BookDrop.parseConfig(dropConfig));
         itemDrops.addAll(LoreDrop.parseConfig(dropConfig));
         entityDrops = EntityDrop.parseConfig(dropConfig);
         // TODO: hack - need to fix
-        jockeyDrops = new ArrayList<JockeyDrop>();
+        jockeyDrops = new ArrayList<>();
         for (EntityDrop drop : JockeyDrop.parseConfig(dropConfig)) {
             if (drop instanceof JockeyDrop) {
                 jockeyDrops.add((JockeyDrop) drop);
@@ -225,7 +225,7 @@ public abstract class AbstractDropSource
 
     public Collection<Drop> createDrops(Event event)
     {
-        Collection<Drop> drops = new ArrayList<Drop>();
+        Collection<Drop> drops = new ArrayList<>();
         int amount = nextAmount();
 
         for (int i = 0; i < amount; i++) {
@@ -293,7 +293,7 @@ public abstract class AbstractDropSource
         Collection<ItemStack> stacks = Collections.emptyList();
 
         if (itemDrops != null) {
-            stacks = new ArrayList<ItemStack>();
+            stacks = new ArrayList<>();
 
             for (AbstractItemDrop drop : itemDrops) {
                 ItemStack itemStack = drop.getOutcome(fixedDrops);
@@ -311,7 +311,7 @@ public abstract class AbstractDropSource
         Collection<EntityType> types = Collections.emptyList();
 
         if (entityDrops != null) {
-            types = new ArrayList<EntityType>();
+            types = new ArrayList<>();
 
             for (EntityDrop drop : entityDrops) {
                 types.addAll(drop.getOutcome());
@@ -326,7 +326,7 @@ public abstract class AbstractDropSource
         Collection<EntityType> types = Collections.emptyList();
 
         if (jockeyDrops != null) {
-            types = new ArrayList<EntityType>();
+            types = new ArrayList<>();
 
             for (EntityDrop drop : jockeyDrops) {
                 if (drop instanceof JockeyDrop) {

@@ -29,7 +29,7 @@ public enum TimePeriod
 {
     DAY, SUNSET, DUSK, NIGHT, DAWN, SUNRISE, NONE;
 
-    private static final Map<LongRange, TimePeriod> PERIOD_MAP = new HashMap<LongRange, TimePeriod>();
+    private static final Map<LongRange, TimePeriod> PERIOD_MAP = new HashMap<>();
 
     private static final long DAY_START = 0;
     private static final long SUNSET_START = 13000;

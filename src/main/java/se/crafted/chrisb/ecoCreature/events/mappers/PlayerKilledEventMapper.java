@@ -62,8 +62,8 @@ public class PlayerKilledEventMapper extends AbstractEventMapper
         Player killer = event.getKiller();
         Player victim = event.getVictim();
         DropConfig dropConfig = getDropConfig(killer.getWorld());
-        Collection<Drop> drops = new ArrayList<Drop>();
-        Collection<Drop> penalties = new ArrayList<Drop>();
+        Collection<Drop> drops = new ArrayList<>();
+        Collection<Drop> penalties = new ArrayList<>();
 
         for (Drop killerDrop : createKillerDrops(event)) {
             drops.add(killerDrop);

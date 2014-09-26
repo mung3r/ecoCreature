@@ -56,7 +56,7 @@ public class MobArenaGain extends AbstractPlayerGain<String>
         Collection<PlayerGain> gain = Collections.emptyList();
 
         if (config != null) {
-            gain = new ArrayList<PlayerGain>();
+            gain = new ArrayList<>();
             gain.add(new MobArenaGain(parseMultiplier(config.getConfigurationSection("InArena"))));
         }
 

@@ -96,7 +96,7 @@ public class BookDrop extends ItemDrop
         Collection<AbstractItemDrop> drops = Collections.emptyList();
 
         if (config != null && config.getList("Drops") != null) {
-            drops = new ArrayList<AbstractItemDrop>();
+            drops = new ArrayList<>();
 
             for (Object obj : config.getList("Drops")) {
                 if (obj instanceof LinkedHashMap) {

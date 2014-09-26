@@ -79,7 +79,7 @@ public class CustomDropCategory extends AbstractDropCategory<CustomDropType>
 
     public static AbstractDropCategory<CustomDropType> parseConfig(ConfigurationSection config)
     {
-        Map<CustomDropType, Collection<AbstractDropSource>> sources = new HashMap<CustomDropType, Collection<AbstractDropSource>>();
+        Map<CustomDropType, Collection<AbstractDropSource>> sources = new HashMap<>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {

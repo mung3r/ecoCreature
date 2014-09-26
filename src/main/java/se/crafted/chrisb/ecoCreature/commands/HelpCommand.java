@@ -80,7 +80,7 @@ public class HelpCommand extends BasicCommand
 
     private List<Command> getCommandsForSender(CommandSender sender)
     {
-        List<Command> commands = new ArrayList<Command>();
+        List<Command> commands = new ArrayList<>();
 
         // Build list of permitted commands
         for (Command command : commandHandler.getCommands()) {

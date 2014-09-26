@@ -29,7 +29,7 @@ public enum HeroesDropType
     HERO_MASTERED("HeroMastered", true),
     INVALID("__Invalid__", false);
 
-    private static final Map<String, HeroesDropType> NAME_MAP = new HashMap<String, HeroesDropType>();
+    private static final Map<String, HeroesDropType> NAME_MAP = new HashMap<>();
 
     static {
         for (HeroesDropType type : EnumSet.allOf(HeroesDropType.class)) {

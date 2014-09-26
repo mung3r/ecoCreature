@@ -29,7 +29,7 @@ public enum StreakDropType
     KILL_STREAK("KillStreak", true),
     INVALID("__Invalid__", false);
 
-    private static final Map<String, StreakDropType> NAME_MAP = new HashMap<String, StreakDropType>();
+    private static final Map<String, StreakDropType> NAME_MAP = new HashMap<>();
 
     static {
         for (StreakDropType type : EnumSet.allOf(StreakDropType.class)) {

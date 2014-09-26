@@ -56,7 +56,7 @@ public class BiomeGain extends AbstractPlayerGain<Biome>
         Collection<PlayerGain> gain = Collections.emptyList();
 
         if (config != null) {
-            Map<Biome, Double> multipliers = new HashMap<Biome, Double>();
+            Map<Biome, Double> multipliers = new HashMap<>();
             for (String biome : config.getKeys(false)) {
                 try {
                     multipliers.put(Biome.valueOf(biome.toUpperCase()), config.getConfigurationSection(biome).getDouble(AMOUNT_KEY, NO_GAIN));
@@ -65,7 +65,7 @@ public class BiomeGain extends AbstractPlayerGain<Biome>
                     LoggerUtil.getInstance().warning("Skipping unknown biome name: " + biome);
                 }
             }
-            gain = new ArrayList<PlayerGain>();
+            gain = new ArrayList<>();
             gain.add(new BiomeGain(multipliers));
         }
 

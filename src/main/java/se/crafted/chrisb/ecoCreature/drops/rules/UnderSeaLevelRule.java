@@ -63,7 +63,7 @@ public class UnderSeaLevelRule extends AbstractEntityRule
             UnderSeaLevelRule rule = new UnderSeaLevelRule();
             rule.setHuntUnderSeaLevel(system.getBoolean("Hunting.AllowUnderSeaLVL", true));
             rule.setMessage(new DefaultMessage(system.getString("Messages.NoUnderSeaLevel", NO_UNDER_SEA_LEVEL_MESSAGE)));
-            rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+            rules = new HashMap<>();
             rules.put(UnderSeaLevelRule.class, rule);
         }
 

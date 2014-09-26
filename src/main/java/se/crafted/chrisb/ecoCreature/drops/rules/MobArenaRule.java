@@ -59,7 +59,7 @@ public class MobArenaRule extends AbstractEntityRule
         if (system != null && system.isConfigurationSection("Hunting")) {
             MobArenaRule rule = new MobArenaRule();
             rule.setMobArenaRewards(system.getBoolean("Hunting.MobArenaRewards"));
-            rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+            rules = new HashMap<>();
             rules.put(MobArenaRule.class, rule);
         }
 

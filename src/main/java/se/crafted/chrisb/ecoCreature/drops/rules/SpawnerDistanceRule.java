@@ -91,7 +91,7 @@ public class SpawnerDistanceRule extends AbstractEntityRule
             rule.setCampByDistance(system.getBoolean("Hunting.CampingByDistance", true));
             rule.setCampRadius(system.getInt("Hunting.CampRadius", CAMP_RADIUS));
             rule.setMessage(getNoCampMessage(system));
-            rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+            rules = new HashMap<>();
             rules.put(SpawnerDistanceRule.class, rule);
         }
 

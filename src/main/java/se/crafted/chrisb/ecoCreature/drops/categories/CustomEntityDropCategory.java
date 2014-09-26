@@ -81,7 +81,7 @@ public class CustomEntityDropCategory extends AbstractDropCategory<CustomEntityD
 
     public static AbstractDropCategory<CustomEntityDropType> parseConfig(ConfigurationSection config)
     {
-        Map<CustomEntityDropType, Collection<AbstractDropSource>> sources = new HashMap<CustomEntityDropType, Collection<AbstractDropSource>>();
+        Map<CustomEntityDropType, Collection<AbstractDropSource>> sources = new HashMap<>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {

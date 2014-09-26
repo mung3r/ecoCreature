@@ -39,7 +39,7 @@ public class HeroesParty extends AbstractParty
         Collection<String> party = Collections.emptyList();
 
         if (DependencyUtils.hasHeroes() && DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {
-            party = new ArrayList<String>();
+            party = new ArrayList<>();
 
             for (Hero hero : DependencyUtils.getHeroes().getCharacterManager().getHero(player).getParty().getMembers()) {
                 party.add(hero.getPlayer().getName());
@@ -57,7 +57,7 @@ public class HeroesParty extends AbstractParty
         if (config != null) {
             HeroesParty party = new HeroesParty();
             party.setShared(config.getBoolean("InParty.Share", false));
-            parties = new ArrayList<Party>();
+            parties = new ArrayList<>();
             parties.add(party);
         }
 

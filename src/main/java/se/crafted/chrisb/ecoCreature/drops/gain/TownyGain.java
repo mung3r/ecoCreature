@@ -77,7 +77,7 @@ public class TownyGain extends AbstractPlayerGain<String>
         Collection<PlayerGain> gain = Collections.emptyList();
 
         if (config != null) {
-            gain = new ArrayList<PlayerGain>();
+            gain = new ArrayList<>();
             gain.add(new TownyGain(parseMultipliers(config)));
         }
 

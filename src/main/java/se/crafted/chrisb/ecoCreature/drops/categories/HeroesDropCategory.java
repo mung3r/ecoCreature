@@ -71,7 +71,7 @@ public class HeroesDropCategory extends AbstractDropCategory<HeroesDropType>
 
     public static AbstractDropCategory<HeroesDropType> parseConfig(ConfigurationSection config)
     {
-        Map<HeroesDropType, Collection<AbstractDropSource>> sources = new HashMap<HeroesDropType, Collection<AbstractDropSource>>();
+        Map<HeroesDropType, Collection<AbstractDropSource>> sources = new HashMap<>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {

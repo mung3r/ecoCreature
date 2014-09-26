@@ -37,7 +37,7 @@ public class MobArenaParty extends AbstractParty
         Collection<String> party = Collections.emptyList();
 
         if (DependencyUtils.hasMobArena() && DependencyUtils.getMobArenaHandler().isPlayerInArena(player)) {
-            party = new ArrayList<String>();
+            party = new ArrayList<>();
 
             for (Player member : DependencyUtils.getMobArenaHandler().getArenaWithPlayer(player).getAllPlayers()) {
                 party.add(member.getName());
@@ -55,7 +55,7 @@ public class MobArenaParty extends AbstractParty
         if (config != null) {
             MobArenaParty party = new MobArenaParty();
             party.setShared(config.getBoolean("InArena.Share", false));
-            parties = new ArrayList<Party>();
+            parties = new ArrayList<>();
             parties.add(party);
         }
 

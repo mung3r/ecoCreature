@@ -80,7 +80,7 @@ public class StreakDropCategory extends AbstractDropCategory<StreakDropType>
 
     public static AbstractDropCategory<StreakDropType> parseConfig(ConfigurationSection config)
     {
-        Map<StreakDropType, Collection<AbstractDropSource>> sources = new HashMap<StreakDropType, Collection<AbstractDropSource>>();
+        Map<StreakDropType, Collection<AbstractDropSource>> sources = new HashMap<>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {

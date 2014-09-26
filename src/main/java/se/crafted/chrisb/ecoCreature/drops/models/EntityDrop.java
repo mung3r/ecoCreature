@@ -47,7 +47,7 @@ public class EntityDrop
 
     public Collection<EntityType> getOutcome()
     {
-        Collection<EntityType> types = new ArrayList<EntityType>();
+        Collection<EntityType> types = new ArrayList<>();
         int amount = nextAmount();
 
         for (int i = 0; i < amount; i++) {
@@ -84,7 +84,7 @@ public class EntityDrop
         Collection<EntityDrop> drops = Collections.emptyList();
 
         if (config != null) {
-            drops = new ArrayList<EntityDrop>();
+            drops = new ArrayList<>();
 
             if (config.getList("Drops") != null) {
                 Collection<String> dropsList = config.getStringList("Drops");
@@ -129,7 +129,7 @@ public class EntityDrop
 
     private static Collection<EntityDrop> parseDrops(Collection<String> dropsList)
     {
-        Collection<EntityDrop> drops = new ArrayList<EntityDrop>();
+        Collection<EntityDrop> drops = new ArrayList<>();
 
         for (String dropString : dropsList) {
             EntityDrop drop = createEntityDrop(dropString);

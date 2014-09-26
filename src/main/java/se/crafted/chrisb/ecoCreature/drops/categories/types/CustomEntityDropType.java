@@ -42,7 +42,7 @@ public enum CustomEntityDropType
     ZOMBIE_BABY("ZombieBaby", true),
     INVALID("__Invalid__", false);
 
-    private static final Map<String, CustomEntityDropType> NAME_MAP = new HashMap<String, CustomEntityDropType>();
+    private static final Map<String, CustomEntityDropType> NAME_MAP = new HashMap<>();
 
     static {
         for (CustomEntityDropType type : EnumSet.allOf(CustomEntityDropType.class)) {

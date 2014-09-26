@@ -61,7 +61,7 @@ public class MaterialDropCategory extends AbstractDropCategory<MaterialData>
 
     public static AbstractDropCategory<MaterialData> parseConfig(ConfigurationSection config)
     {
-        Map<MaterialData, Collection<AbstractDropSource>> sources = new HashMap<MaterialData, Collection<AbstractDropSource>>();
+        Map<MaterialData, Collection<AbstractDropSource>> sources = new HashMap<>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {

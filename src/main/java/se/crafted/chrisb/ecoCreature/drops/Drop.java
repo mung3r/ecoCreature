@@ -68,7 +68,7 @@ public class Drop
         entityDrops = Collections.emptyList();
         jockeyDrops = Collections.emptyList();
         message = DefaultMessage.NO_MESSAGE;
-        parameters = new HashMap<MessageToken, String>();
+        parameters = new HashMap<>();
     }
 
     public World getWorld()

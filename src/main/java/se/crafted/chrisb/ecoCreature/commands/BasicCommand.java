@@ -41,8 +41,8 @@ public abstract class BasicCommand implements Command {
         description = "";
         usage = "";
         permission = "";
-        notes = new ArrayList<String>();
-        identifiers = new ArrayList<String>();
+        notes = new ArrayList<>();
+        identifiers = new ArrayList<>();
         minArguments = 0;
         maxArguments = 0;
     }

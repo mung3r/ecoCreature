@@ -113,7 +113,7 @@ public class DefaultMessage implements Message
     }
 
     public static List<String> convertMessages(List<String> messages) {
-        List<String> convertedMessages = new ArrayList<String>();
+        List<String> convertedMessages = new ArrayList<>();
 
         for (String message : messages) {
             convertedMessages.add(convertMessage(message));

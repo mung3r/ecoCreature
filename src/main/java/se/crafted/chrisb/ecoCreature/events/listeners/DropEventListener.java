@@ -101,7 +101,7 @@ public class DropEventListener implements Listener
 
     private Collection<String> createParty(String player, Drop drop)
     {
-        Collection<String> party = new ArrayList<String>();
+        Collection<String> party = new ArrayList<>();
         party.add(player);
         party.addAll(drop.getParty());
         return party;
@@ -180,7 +180,7 @@ public class DropEventListener implements Listener
             }
 
             if (itemMeta.hasLore()) {
-                List<String> lore = new ArrayList<String>();
+                List<String> lore = new ArrayList<>();
                 for (String loreLine : itemMeta.getLore()) {
                     lore.add(getAssembledMessage(loreLine, drop));
                 }

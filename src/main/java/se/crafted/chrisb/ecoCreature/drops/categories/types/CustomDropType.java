@@ -30,7 +30,7 @@ public enum CustomDropType
     SET("Set", true),
     INVALID("__Invalid__", false);
 
-    private static final Map<String, CustomDropType> NAME_MAP = new HashMap<String, CustomDropType>();
+    private static final Map<String, CustomDropType> NAME_MAP = new HashMap<>();
 
     static {
         for (CustomDropType type : EnumSet.allOf(CustomDropType.class)) {

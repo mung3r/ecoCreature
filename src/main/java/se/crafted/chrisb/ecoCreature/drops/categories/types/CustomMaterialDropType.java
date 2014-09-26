@@ -30,7 +30,7 @@ public enum CustomMaterialDropType
     LEGACY_SPAWNER("Spawner", true),
     INVALID("__Invalid__", false);
 
-    private static final Map<String, CustomMaterialDropType> NAME_MAP = new HashMap<String, CustomMaterialDropType>();
+    private static final Map<String, CustomMaterialDropType> NAME_MAP = new HashMap<>();
 
     static {
         for (CustomMaterialDropType type : EnumSet.allOf(CustomMaterialDropType.class)) {

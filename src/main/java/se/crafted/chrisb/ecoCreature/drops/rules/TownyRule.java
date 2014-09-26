@@ -38,7 +38,7 @@ public class TownyRule extends AbstractEntityRule
 
     public TownyRule()
     {
-        townMap = new HashMap<String, Boolean>();
+        townMap = new HashMap<>();
         setClearExpOrbs(true);
     }
 
@@ -82,7 +82,7 @@ public class TownyRule extends AbstractEntityRule
                 }
             }
 
-            rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+            rules = new HashMap<>();
             rules.put(TownyRule.class, rule);
         }
 

@@ -61,7 +61,7 @@ public class ItemEnchantment
 
     public static Map<Enchantment, Integer> getOutcome(Collection<ItemEnchantment> enchantments)
     {
-        Map<Enchantment, Integer> enchantmentMap = new HashMap<Enchantment, Integer>();
+        Map<Enchantment, Integer> enchantmentMap = new HashMap<>();
 
         for (ItemEnchantment enchantment : enchantments) {
             int level = enchantment.getLevel();

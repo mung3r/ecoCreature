@@ -37,7 +37,7 @@ public class HeroesRule extends AbstractPlayerRule
 
     public HeroesRule()
     {
-        classNames = new ArrayList<String>();
+        classNames = new ArrayList<>();
         setClearDrops(true);
         setClearExpOrbs(true);
     }
@@ -73,7 +73,7 @@ public class HeroesRule extends AbstractPlayerRule
             List<String> classNames = system.getStringList("Hunting.Heroes.ClearClassDropsList");
             HeroesRule rule = new HeroesRule();
             rule.setClassNames(classNames);
-            rules = new HashMap<Class<? extends AbstractRule>, Rule>();
+            rules = new HashMap<>();
             rules.put(HeroesRule.class, rule);
         }
 

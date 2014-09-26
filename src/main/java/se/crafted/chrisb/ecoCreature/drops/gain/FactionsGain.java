@@ -68,7 +68,7 @@ public class FactionsGain extends AbstractPlayerGain<Rel>
         Collection<PlayerGain> gain = Collections.emptyList();
 
         if (config != null && DependencyUtils.hasFactions()) {
-            Map<Rel, Double> multipliers = new HashMap<Rel, Double>();
+            Map<Rel, Double> multipliers = new HashMap<>();
             for (String relation : config.getKeys(false)) {
                 try {
                     multipliers.put(Rel.valueOf(relation), config.getConfigurationSection(relation).getDouble(AMOUNT_KEY, NO_GAIN));
@@ -77,7 +77,7 @@ public class FactionsGain extends AbstractPlayerGain<Rel>
                     LoggerUtil.getInstance().warning("Unrecognized Factions relation: " + relation);
                 }
             }
-            gain = new ArrayList<PlayerGain>();
+            gain = new ArrayList<>();
             gain.add(new FactionsGain(multipliers));
         }
 

@@ -69,7 +69,7 @@ public class ItemDrop extends AbstractItemDrop
         Collection<AbstractItemDrop> drops = Collections.emptyList();
 
         if (dropsList != null && !dropsList.isEmpty()) {
-            drops = new ArrayList<AbstractItemDrop>();
+            drops = new ArrayList<>();
 
             for (String dropString : dropsList) {
                 drops.addAll(parseItem(dropString));
@@ -84,7 +84,7 @@ public class ItemDrop extends AbstractItemDrop
         Collection<AbstractItemDrop> drops = Collections.emptyList();
 
         if (parseMaterial(dropString) != null) {
-            drops = new ArrayList<AbstractItemDrop>();
+            drops = new ArrayList<>();
             drops.add(populateItemDrop(new ItemDrop(parseMaterial(dropString)), dropString));
         }
 
@@ -125,7 +125,7 @@ public class ItemDrop extends AbstractItemDrop
 
         // check for enchantment
         if (itemParts.length > 1) {
-            enchantments = new ArrayList<ItemEnchantment>();
+            enchantments = new ArrayList<>();
 
             for (int i = 1; i < itemParts.length; i++) {
                 String[] enchantParts = itemParts[i].split("\\.");

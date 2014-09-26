@@ -52,12 +52,12 @@ public class WeaponGain extends AbstractPlayerGain<Material>
         Collection<PlayerGain> gain = Collections.emptyList();
 
         if (config != null) {
-            Map<Material, Double> multipliers = new HashMap<Material, Double>();
+            Map<Material, Double> multipliers = new HashMap<>();
 
             for (String material : config.getKeys(false)) {
                 multipliers.put(Material.matchMaterial(material), config.getConfigurationSection(material).getDouble(AMOUNT_KEY, NO_GAIN));
             }
-            gain = new ArrayList<PlayerGain>();
+            gain = new ArrayList<>();
             gain.add(new WeaponGain(multipliers));
         }
 

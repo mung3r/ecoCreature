@@ -41,7 +41,7 @@ public class JockeyDrop extends EntityDrop
 
     public static Collection<EntityDrop> parseConfig(ConfigurationSection config)
     {
-        Collection<EntityDrop> drops = new ArrayList<EntityDrop>();
+        Collection<EntityDrop> drops = new ArrayList<>();
 
         if (config != null && config.getList("Drops") != null) {
 
@@ -64,7 +64,7 @@ public class JockeyDrop extends EntityDrop
     @Override
     public Collection<EntityType> getOutcome()
     {
-        Collection<EntityType> types = new ArrayList<EntityType>();
+        Collection<EntityType> types = new ArrayList<>();
         for (EntityType vehicle : super.getOutcome()) {
             types.add(vehicle);
             types.add(passenger);

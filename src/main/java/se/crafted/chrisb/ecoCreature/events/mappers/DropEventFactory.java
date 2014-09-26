@@ -39,7 +39,7 @@ public class DropEventFactory
 
     public DropEventFactory(DropConfigLoader dropConfigLoader)
     {
-        mappers = new ArrayList<EventMapper>();
+        mappers = new ArrayList<>();
 
         mappers.add(new BlockEventMapper(dropConfigLoader));
         mappers.add(new PlayerKilledEventMapper(dropConfigLoader));

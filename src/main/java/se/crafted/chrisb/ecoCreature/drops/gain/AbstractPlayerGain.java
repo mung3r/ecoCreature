@@ -66,7 +66,7 @@ public abstract class AbstractPlayerGain<T> implements PlayerGain
         Map<String, Double> multipliers = Collections.emptyMap();
 
         if (config != null) {
-            multipliers = new HashMap<String, Double>();
+            multipliers = new HashMap<>();
             for (String key : config.getKeys(false)) {
                 multipliers.put(key, config.getConfigurationSection(key).getDouble(AMOUNT_KEY, NO_GAIN));
             }
@@ -80,7 +80,7 @@ public abstract class AbstractPlayerGain<T> implements PlayerGain
         Map<String, Double> multipliers = Collections.emptyMap();
 
         if (config != null) {
-            multipliers = new HashMap<String, Double>();
+            multipliers = new HashMap<>();
             multipliers.put(AMOUNT_KEY, config.getDouble(AMOUNT_KEY, NO_GAIN));
         }
 

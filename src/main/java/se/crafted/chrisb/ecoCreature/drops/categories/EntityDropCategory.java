@@ -62,7 +62,7 @@ public class EntityDropCategory extends AbstractDropCategory<EntityType>
 
     public static AbstractDropCategory<EntityType> parseConfig(ConfigurationSection config)
     {
-        Map<EntityType, Collection<AbstractDropSource>> sources = new HashMap<EntityType, Collection<AbstractDropSource>>();
+        Map<EntityType, Collection<AbstractDropSource>> sources = new HashMap<>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {

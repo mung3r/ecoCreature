@@ -51,7 +51,7 @@ public class TimeGain extends AbstractPlayerGain<TimePeriod>
         Collection<PlayerGain> gain = Collections.emptyList();
 
         if (config != null) {
-            Map<TimePeriod, Double> multipliers = new HashMap<TimePeriod, Double>();
+            Map<TimePeriod, Double> multipliers = new HashMap<>();
             for (String period : config.getKeys(false)) {
                 try {
                     multipliers.put(TimePeriod.valueOf(period.toUpperCase()),
@@ -61,7 +61,7 @@ public class TimeGain extends AbstractPlayerGain<TimePeriod>
                     LoggerUtil.getInstance().warning("Skipping unknown time period name: " + period);
                 }
             }
-            gain = new ArrayList<PlayerGain>();
+            gain = new ArrayList<>();
             gain.add(new TimeGain(multipliers));
         }
 

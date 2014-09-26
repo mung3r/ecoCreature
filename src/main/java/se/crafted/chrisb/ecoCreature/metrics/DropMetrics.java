@@ -43,7 +43,7 @@ public class DropMetrics
             metrics = new Metrics(plugin);
 
             if (metrics != null) {
-                typeCount = new Hashtable<String, Integer>();
+                typeCount = new Hashtable<>();
                 graph = metrics.createGraph("Reward Types");
                 metrics.start();
             }

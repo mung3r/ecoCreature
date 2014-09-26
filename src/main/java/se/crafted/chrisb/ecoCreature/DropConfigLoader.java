@@ -120,7 +120,7 @@ public class DropConfigLoader
             checkForUpdates = defaultConfigFile.getBoolean("System.CheckForUpdates", true);
 
             DropConfig defaultDropConfig = loadDropConfig(new DropConfig(plugin), defaultConfigFile);
-            worldConfigMap = new HashMap<String, DropConfig>();
+            worldConfigMap = new HashMap<>();
             worldConfigMap.put(DEFAULT_DROP_CONFIG, defaultDropConfig);
 
             for (World world : plugin.getServer().getWorlds()) {
@@ -166,7 +166,7 @@ public class DropConfigLoader
 
     private static Collection<PlayerGain> loadGainMultipliers(ConfigurationSection config)
     {
-        Collection<PlayerGain> gainMultipliers = new ArrayList<PlayerGain>();
+        Collection<PlayerGain> gainMultipliers = new ArrayList<>();
 
         gainMultipliers.addAll(GroupGain.parseConfig(config.getConfigurationSection("Gain.Groups")));
         gainMultipliers.addAll(TimeGain.parseConfig(config.getConfigurationSection("Gain.Time")));
@@ -191,7 +191,7 @@ public class DropConfigLoader
 
     private static Collection<Party> loadParties(ConfigurationSection config)
     {
-        Collection<Party> parties = new ArrayList<Party>();
+        Collection<Party> parties = new ArrayList<>();
 
         parties.addAll(MobArenaParty.parseConfig(config.getConfigurationSection("Gain.MobArena")));
         parties.addAll(HeroesParty.parseConfig(config.getConfigurationSection("Gain.Heroes")));
@@ -202,7 +202,7 @@ public class DropConfigLoader
 
     private static List<AbstractDropCategory<?>> loadDropCategories(ConfigurationSection config)
     {
-        List<AbstractDropCategory<?>> dropCategory = new ArrayList<AbstractDropCategory<?>>();
+        List<AbstractDropCategory<?>> dropCategory = new ArrayList<>();
 
         dropCategory.add(CustomMaterialDropCategory.parseConfig(config));
         dropCategory.add(MaterialDropCategory.parseConfig(config));

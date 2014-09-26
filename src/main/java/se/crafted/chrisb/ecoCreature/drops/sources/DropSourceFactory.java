@@ -43,14 +43,14 @@ public final class DropSourceFactory
 
     public static Collection<AbstractDropSource> createSetSources(String section, ConfigurationSection config)
     {
-        Collection<AbstractDropSource> sources = new ArrayList<AbstractDropSource>();
+        Collection<AbstractDropSource> sources = new ArrayList<>();
         sources.add(new SetDropSource(section, config));
         return sources;
     }
 
     public static Collection<AbstractDropSource> createSources(String section, ConfigurationSection config)
     {
-        Collection<AbstractDropSource> sources = new ArrayList<AbstractDropSource>();
+        Collection<AbstractDropSource> sources = new ArrayList<>();
         String name = parseTypeName(section);
         
         if (CustomMaterialDropType.fromName(name).isValid()) {
@@ -86,7 +86,7 @@ public final class DropSourceFactory
 
     private static Collection<AbstractDropSource> createCustomMaterialSources(String section, ConfigurationSection config)
     {
-        Collection<AbstractDropSource> sources = new ArrayList<AbstractDropSource>();
+        Collection<AbstractDropSource> sources = new ArrayList<>();
 
         switch (CustomMaterialDropType.fromName(parseTypeName(section))) {
             case LEGACY_SPAWNER:
@@ -100,7 +100,7 @@ public final class DropSourceFactory
 
     private static Collection<AbstractDropSource> createCustomEntitySources(String section, ConfigurationSection config)
     {
-        Collection<AbstractDropSource> sources = new ArrayList<AbstractDropSource>();
+        Collection<AbstractDropSource> sources = new ArrayList<>();
 
         switch (CustomEntityDropType.fromName(parseTypeName(section))) {
             case ANGRY_WOLF:
@@ -118,7 +118,7 @@ public final class DropSourceFactory
 
     private static Collection<AbstractDropSource> createCustomSources(String section, ConfigurationSection config)
     {
-        Collection<AbstractDropSource> sources = new ArrayList<AbstractDropSource>();
+        Collection<AbstractDropSource> sources = new ArrayList<>();
 
         switch (CustomDropType.fromName(parseTypeName(section))) {
             case DEATH_PENALTY:

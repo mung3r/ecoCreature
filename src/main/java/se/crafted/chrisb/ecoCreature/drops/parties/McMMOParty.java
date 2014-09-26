@@ -41,7 +41,7 @@ public class McMMOParty extends AbstractParty
         if (DependencyUtils.hasMcMMO() && PartyAPI.inParty(player)) {
             Collection<Player> members = PartyAPI.getOnlineMembers(player);
             if (members != null) {
-                party = new ArrayList<String>();
+                party = new ArrayList<>();
 
                 for (Player member : members) {
                     party.add(member.getName());
@@ -60,7 +60,7 @@ public class McMMOParty extends AbstractParty
         if (config != null) {
             McMMOParty party = new McMMOParty();
             party.setShared(config.getBoolean("InParty.Share", false));
-            parties = new ArrayList<Party>();
+            parties = new ArrayList<>();
             parties.add(party);
         }
 

@@ -59,7 +59,7 @@ public class DropConfig implements SpawnerMobTracker
     public DropConfig(ecoCreature plugin)
     {
         this.plugin = plugin;
-        dropCategories = new ArrayList<AbstractDropCategory<?>>();
+        dropCategories = new ArrayList<>();
         gainMultipliers = Collections.emptyList();
         parties = Collections.emptyList();
 
@@ -133,7 +133,7 @@ public class DropConfig implements SpawnerMobTracker
 
     public Collection<Drop> createDrops(final Event event)
     {
-        Collection<Drop> drops = new ArrayList<Drop>();
+        Collection<Drop> drops = new ArrayList<>();
 
         for (AbstractDropCategory<?> category : dropCategories) {
             for (AbstractDropSource source : category.getDropSources(event)) {
@@ -161,7 +161,7 @@ public class DropConfig implements SpawnerMobTracker
 
     public Collection<String> getPartyMembers(Player player)
     {
-        Collection<String> players = new ArrayList<String>();
+        Collection<String> players = new ArrayList<>();
 
         for (Party party : parties) {
             if (party.isShared()) {

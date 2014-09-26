@@ -28,7 +28,7 @@ public enum McMMODropType
     MCMMO_LEVELED("mcMMOLeveled", true),
     INVALID("__Invalid__", false);
 
-    private static final Map<String, McMMODropType> NAME_MAP = new HashMap<String, McMMODropType>();
+    private static final Map<String, McMMODropType> NAME_MAP = new HashMap<>();
 
     static {
         for (McMMODropType type : EnumSet.allOf(McMMODropType.class)) {

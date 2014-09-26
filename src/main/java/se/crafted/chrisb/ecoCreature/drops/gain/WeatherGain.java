@@ -51,7 +51,7 @@ public class WeatherGain extends AbstractPlayerGain<WeatherType>
         Collection<PlayerGain> gain = Collections.emptyList();
 
         if (config != null) {
-            Map<WeatherType, Double> multipliers = new HashMap<WeatherType, Double>();
+            Map<WeatherType, Double> multipliers = new HashMap<>();
             for (String weather : config.getKeys(false)) {
                 try {
                     multipliers.put(WeatherType.valueOf(weather.toUpperCase()),
@@ -61,7 +61,7 @@ public class WeatherGain extends AbstractPlayerGain<WeatherType>
                     LoggerUtil.getInstance().warning("Skipping unknown weather name: " + weather);
                 }
             }
-            gain = new ArrayList<PlayerGain>();
+            gain = new ArrayList<>();
             gain.add(new WeatherGain(multipliers));
         }
 

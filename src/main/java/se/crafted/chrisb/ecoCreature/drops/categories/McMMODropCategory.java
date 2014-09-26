@@ -62,7 +62,7 @@ public class McMMODropCategory extends AbstractDropCategory<McMMODropType>
 
     public static AbstractDropCategory<McMMODropType> parseConfig(ConfigurationSection config)
     {
-        Map<McMMODropType, Collection<AbstractDropSource>> sources = new HashMap<McMMODropType, Collection<AbstractDropSource>>();
+        Map<McMMODropType, Collection<AbstractDropSource>> sources = new HashMap<>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {
