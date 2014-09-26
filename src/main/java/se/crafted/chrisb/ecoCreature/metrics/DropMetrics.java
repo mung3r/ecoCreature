@@ -41,12 +41,9 @@ public class DropMetrics
 
         try {
             metrics = new Metrics(plugin);
-
-            if (metrics != null) {
-                typeCount = new Hashtable<>();
-                graph = metrics.createGraph("Reward Types");
-                metrics.start();
-            }
+            typeCount = new Hashtable<>();
+            graph = metrics.createGraph("Reward Types");
+            metrics.start();
         }
         catch (IOException e) {
             LoggerUtil.getInstance().warning("Metrics failed to load.");

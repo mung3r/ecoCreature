@@ -249,22 +249,15 @@ public class DropConfigLoader
 
         if (!file.exists()) {
             boolean success = file.getParentFile().mkdir() && file.createNewFile();
-            InputStream inputStream = plugin.getResource(file.getName());
-            FileOutputStream outputStream = new FileOutputStream(file);
 
-            try {
+            try (InputStream inputStream = plugin.getResource(file.getName()); FileOutputStream outputStream = new FileOutputStream(file)) {
                 byte[] buffer = new byte[BUFFER_SIZE];
                 int length;
                 while ((length = inputStream.read(buffer)) > 0) {
                     outputStream.write(buffer, 0, length);
                 }
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 LoggerUtil.getInstance().warning("Could not read config file.");
-            }
-            finally {
-                inputStream.close();
-                outputStream.close();
             }
 
             LoggerUtil.getInstance().info("Created config file: " + file.getName());
