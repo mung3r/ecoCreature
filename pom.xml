@@ -88,12 +88,6 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.bukkit</groupId>
-      <artifactId>craftbukkit</artifactId>
-      <version>${bukkit.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>net.milkbowl.vault</groupId>
       <artifactId>VaultAPI</artifactId>
       <version>${vault.version}</version>
