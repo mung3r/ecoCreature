@@ -65,10 +65,8 @@ public class DropEventListener implements Listener
             Player player = event.getPlayer();
 
             for (Drop drop : drops) {
-                if (player != null) { // TODO: fix this upstream for citizens2
-                    dropCoin(player, drop);
-                    dropItems(player, drop);
-                }
+                dropCoin(player, drop);
+                dropItems(player, drop);
                 dropEntities(drop);
                 dropJockeys(drop);
     
@@ -79,7 +77,7 @@ public class DropEventListener implements Listener
 
     private void dropCoin(Player player, Drop drop)
     {
-        if (!DependencyUtils.hasEconomy()) {
+        if (!DependencyUtils.hasEconomy() || player == null) {
             return;
         }
 
@@ -122,21 +120,21 @@ public class DropEventListener implements Listener
         }
 
         if (drop.isIntegerCurrency()) {
-            amount = round(amount, 0, BigDecimal.ROUND_HALF_UP);
+            amount = round(amount, 0);
             LoggerUtil.getInstance().debug("Rounded integer amount: " + amount);
         }
         else {
-            amount = round(amount, 2, BigDecimal.ROUND_HALF_UP);
+            amount = round(amount, 2);
             LoggerUtil.getInstance().debug("Rounded decimal amount: " + amount);
         }
         LoggerUtil.getInstance().debug("===== END: amount is " + amount);
         return amount;
     }
 
-    public static double round(double unrounded, int precision, int roundingMode)
+    public static double round(double unrounded, int precision)
     {
         BigDecimal bd = new BigDecimal(unrounded);
-        BigDecimal rounded = bd.setScale(precision, roundingMode);
+        BigDecimal rounded = bd.setScale(precision, BigDecimal.ROUND_HALF_UP);
         return rounded.doubleValue();
     }
 
@@ -170,7 +168,9 @@ public class DropEventListener implements Listener
 
     private void dropItems(Player player, Drop drop)
     {
-        drop.addParameter(MessageToken.PLAYER, player.getName());
+        if (player != null) {
+            drop.addParameter(MessageToken.PLAYER, player.getName());
+        }
 
         for (ItemStack stack : drop.getItemDrops()) {
             ItemMeta itemMeta = stack.getItemMeta();
@@ -188,7 +188,7 @@ public class DropEventListener implements Listener
             }
             stack.setItemMeta(itemMeta);
 
-            if (drop.isAddItemsToInventory()) {
+            if (drop.isAddItemsToInventory() && player != null) {
                 Map<Integer, ItemStack> leftOver = player.getInventory().addItem(stack);
                 for (Map.Entry<Integer, ItemStack> entry : leftOver.entrySet()) {
                     drop.getWorld().dropItemNaturally(drop.getLocation(), entry.getValue());
