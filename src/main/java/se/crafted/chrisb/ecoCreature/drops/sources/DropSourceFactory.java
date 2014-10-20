@@ -107,6 +107,7 @@ public final class DropSourceFactory
             case PLAYER:
             case POWERED_CREEPER:
             case WITHER_SKELETON:
+            case ZOMBIE_BABY:
             case ZOMBIE_VILLAGER:
                 sources.add(new EntityDropSource(section, config));
                 break;
