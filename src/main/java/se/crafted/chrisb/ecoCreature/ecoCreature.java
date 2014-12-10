@@ -96,16 +96,23 @@ public class ecoCreature extends JavaPlugin
         super.reloadConfig();
         dropConfigLoader = new DropConfigLoader(this);
         dropEventFactory = new DropEventFactory(dropConfigLoader);
-        updateTask.stop();
-
-        if (dropConfigLoader.isInitialized() && dropConfigLoader.isCheckForUpdates()) {
-            updateTask.start();
-        }
+        restartUpdateTask();
     }
 
     public void loadConfig(String file) throws IOException, InvalidConfigurationException
     {
         dropConfigLoader.loadConfig(file);
+        dropEventFactory = new DropEventFactory(dropConfigLoader);
+        restartUpdateTask();
+    }
+
+    private void restartUpdateTask()
+    {
+        updateTask.stop();
+    
+        if (dropConfigLoader.isInitialized() && dropConfigLoader.isCheckForUpdates()) {
+            updateTask.start();
+        }
     }
 
     private void addCommands()
