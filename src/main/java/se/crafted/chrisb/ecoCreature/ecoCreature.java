@@ -19,9 +19,12 @@
  */
 package se.crafted.chrisb.ecoCreature;
 
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import se.crafted.chrisb.ecoCreature.commands.CommandHandler;
@@ -90,7 +93,7 @@ public class ecoCreature extends JavaPlugin
     @Override
     public void reloadConfig()
     {
-        super.reloadConfig();        
+        super.reloadConfig();
         dropConfigLoader = new DropConfigLoader(this);
         dropEventFactory = new DropEventFactory(dropConfigLoader);
         updateTask.stop();
@@ -98,6 +101,11 @@ public class ecoCreature extends JavaPlugin
         if (dropConfigLoader.isInitialized() && dropConfigLoader.isCheckForUpdates()) {
             updateTask.start();
         }
+    }
+
+    public void loadConfig(String file) throws IOException, InvalidConfigurationException
+    {
+        dropConfigLoader.loadConfig(file);
     }
 
     private void addCommands()

@@ -32,8 +32,8 @@ public class ReloadCommand extends BasicCommand
         super("Reload");
         this.plugin = plugin;
         setDescription("Reload configuration");
-        setUsage("/ecoc reload");
-        setArgumentRange(0, 0);
+        setUsage("/ecoc reload [config]");
+        setArgumentRange(0, 1);
         setIdentifiers("reload");
         setPermission("ecocreature.command.reload");
     }
@@ -41,8 +41,18 @@ public class ReloadCommand extends BasicCommand
     @Override
     public boolean execute(CommandSender sender, String identifier, String[] args)
     {
-        plugin.reloadConfig();
-        sender.sendMessage("ecoCreature config reloaded.");
+        if (args == null || args.length == 0) {
+            plugin.reloadConfig();
+            sender.sendMessage("config reloaded.");
+        }
+        else {
+            try {
+                plugin.loadConfig(args[0]);
+            }
+            catch(Exception e) {
+                sender.sendMessage("failed to load config");
+            }
+        }
         return true;
     }
 }
