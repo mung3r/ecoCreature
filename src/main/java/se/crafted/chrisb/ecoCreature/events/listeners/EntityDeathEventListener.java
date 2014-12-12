@@ -29,19 +29,19 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.commons.EventUtils;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.events.EntityFarmedEvent;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
-import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
 
 public class EntityDeathEventListener implements Listener
 {
-    private final DropEventFactory factory;
+    private final ecoCreature plugin;
 
-    public EntityDeathEventListener(DropEventFactory factory)
+    public EntityDeathEventListener(ecoCreature plugin)
     {
-        this.factory = factory;
+        this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -54,10 +54,10 @@ public class EntityDeathEventListener implements Listener
         Collection<DropEvent> events = Collections.emptyList();
 
         if (EventUtils.isEntityKilledEvent(event)) {
-            events = factory.createEvents(EntityKilledEvent.createEvent(event));
+            events = plugin.getDropEventFactory().createEvents(EntityKilledEvent.createEvent(event));
         }
         else if (EventUtils.isEntityFarmed(event) || EventUtils.isEntityFireFarmed(event)) {
-            events = factory.createEvents(EntityFarmedEvent.createEvent(event));
+            events = plugin.getDropEventFactory().createEvents(EntityFarmedEvent.createEvent(event));
         }
 
         for (DropEvent dropEvent : events) {

@@ -112,9 +112,9 @@ public class DropConfigLoader
         return dropConfig;
     }
 
-    public void loadConfig(String file) throws IOException, InvalidConfigurationException
+    public void loadConfig(String file, String world) throws IOException, InvalidConfigurationException
     {
-        worldConfigMap.put(DEFAULT_CONFIG_FILE, loadDropConfig(new DropConfig(plugin), getConfig(new File(plugin.getDataFolder(), file))));
+        worldConfigMap.put(world, loadDropConfig(new DropConfig(plugin), getConfig(new File(plugin.getDataFolder(), file))));
     }
 
     private boolean initConfig()
