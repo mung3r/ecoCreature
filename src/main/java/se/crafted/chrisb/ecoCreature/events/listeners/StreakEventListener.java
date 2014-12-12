@@ -26,22 +26,22 @@ import org.bukkit.event.Listener;
 import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
 import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
+import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
-import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
 
 public class StreakEventListener implements Listener
 {
-    private final DropEventFactory factory;
+    private final ecoCreature plugin;
 
-    public StreakEventListener(DropEventFactory factory)
+    public StreakEventListener(ecoCreature plugin)
     {
-        this.factory = factory;
+        this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onDeathStreakEvent(DeathStreakEvent event)
     {
-        for (DropEvent dropEvent : factory.createEvents(event)) {
+        for (DropEvent dropEvent : plugin.getDropEventFactory().createEvents(event)) {
             Bukkit.getPluginManager().callEvent(dropEvent);
         }
     }
@@ -49,7 +49,7 @@ public class StreakEventListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onKillStreakEvent(KillStreakEvent event)
     {
-        for (DropEvent dropEvent : factory.createEvents(event)) {
+        for (DropEvent dropEvent : plugin.getDropEventFactory().createEvents(event)) {
             Bukkit.getPluginManager().callEvent(dropEvent);
         }
     }

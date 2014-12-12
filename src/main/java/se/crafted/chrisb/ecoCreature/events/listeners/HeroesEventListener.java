@@ -24,24 +24,24 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
-
+import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
-import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
+
+import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 public class HeroesEventListener implements Listener
 {
-    private final DropEventFactory factory;
+    private final ecoCreature plugin;
 
-    public HeroesEventListener(DropEventFactory factory)
+    public HeroesEventListener(ecoCreature plugin)
     {
-        this.factory = factory;
+        this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onHeroChangeLevel(HeroChangeLevelEvent event)
     {
-        for (DropEvent dropEvent : factory.createEvents(event)) {
+        for (DropEvent dropEvent : plugin.getDropEventFactory().createEvents(event)) {
             Bukkit.getPluginManager().callEvent(dropEvent);
         }
     }

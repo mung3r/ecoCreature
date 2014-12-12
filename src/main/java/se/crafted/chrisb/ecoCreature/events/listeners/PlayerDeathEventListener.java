@@ -28,18 +28,18 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.commons.EventUtils;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
-import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
 
 public class PlayerDeathEventListener implements Listener
 {
-    private final DropEventFactory factory;
+    private final ecoCreature plugin;
 
-    public PlayerDeathEventListener(DropEventFactory factory)
+    public PlayerDeathEventListener(ecoCreature plugin)
     {
-        this.factory = factory;
+        this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -48,10 +48,10 @@ public class PlayerDeathEventListener implements Listener
         Collection<DropEvent> events = Collections.emptySet();
 
         if (EventUtils.isPVPDeath(event)) {
-            events = factory.createEvents(PlayerKilledEvent.createEvent(event));
+            events = plugin.getDropEventFactory().createEvents(PlayerKilledEvent.createEvent(event));
         }
         else if (EventUtils.isNotSuicide(event)) {
-            events = factory.createEvents(event);
+            events = plugin.getDropEventFactory().createEvents(event);
         }
 
         for (DropEvent dropEvent : events) {

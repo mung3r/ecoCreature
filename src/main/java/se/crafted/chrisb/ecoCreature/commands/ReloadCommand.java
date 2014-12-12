@@ -20,6 +20,7 @@
 package se.crafted.chrisb.ecoCreature.commands;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 
@@ -32,8 +33,8 @@ public class ReloadCommand extends BasicCommand
         super("Reload");
         this.plugin = plugin;
         setDescription("Reload configuration");
-        setUsage("/ecoc reload");
-        setArgumentRange(0, 0);
+        setUsage("/ecoc reload [config] <world>");
+        setArgumentRange(0, 2);
         setIdentifiers("reload");
         setPermission("ecocreature.command.reload");
     }
@@ -41,8 +42,31 @@ public class ReloadCommand extends BasicCommand
     @Override
     public boolean execute(CommandSender sender, String identifier, String[] args)
     {
-        plugin.reloadConfig();
-        sender.sendMessage("ecoCreature config reloaded.");
+        if (args != null) {
+            try {
+                switch (args.length) {
+                    case 0:
+                        plugin.reloadConfig();
+                        sender.sendMessage("config reloaded.");
+                        break;
+                    case 1:
+                        if (sender instanceof Player) {
+                            Player player = (Player) sender;
+                            plugin.loadConfig(args[0], player.getWorld().getName());
+                        }
+                        else {
+                            sender.sendMessage("you must specify a world");
+                        }
+                        break;
+                    case 2:
+                        plugin.loadConfig(args[0], args[1]);
+                        break;
+                }
+            }
+            catch (Exception e) {
+                sender.sendMessage("failed to load config");
+            }
+        }
         return true;
     }
 }

@@ -72,7 +72,7 @@ import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 
 public class DropConfigLoader
 {
-    private static final String DEFAULT_DROP_CONFIG = "__DEFAULT_CONFIG__";
+    public static final String DEFAULT_DROP_CONFIG = "__DEFAULT_CONFIG__";
 
     private static final Charset CHARSET = Charset.forName("UTF-8");
     private static final String LEGACY_CONFIG_FILE = "ecoCreature.yml";
@@ -110,6 +110,11 @@ public class DropConfigLoader
             dropConfig = worldConfigMap.get(DropConfigLoader.DEFAULT_DROP_CONFIG);
         }
         return dropConfig;
+    }
+
+    public void loadConfig(String file, String world) throws IOException, InvalidConfigurationException
+    {
+        worldConfigMap.put(world, loadDropConfig(new DropConfig(plugin), getConfig(new File(plugin.getDataFolder(), file))));
     }
 
     private boolean initConfig()
@@ -235,8 +240,8 @@ public class DropConfigLoader
             }
         }
         else {
+            createConfig(defaultConfigFile);
             fileConfig = getConfig(defaultConfigFile);
-            fileConfig.save(defaultConfigFile);
         }
 
         LoggerUtil.getInstance().info("Loaded config defaults.");
@@ -247,29 +252,33 @@ public class DropConfigLoader
     {
         FileConfiguration config = new YamlConfiguration();
 
-        if (!file.exists()) {
-            boolean success = file.getParentFile().mkdir() && file.createNewFile();
-
-            try (InputStream inputStream = plugin.getResource(file.getName()); FileOutputStream outputStream = new FileOutputStream(file)) {
-                byte[] buffer = new byte[BUFFER_SIZE];
-                int length;
-                while ((length = inputStream.read(buffer)) > 0) {
-                    outputStream.write(buffer, 0, length);
-                }
-            } catch (IOException e) {
-                LoggerUtil.getInstance().warning("Could not read config file.");
-            }
-
-            LoggerUtil.getInstance().info("Created config file: " + file.getName());
-        }
-        else {
+        if (file.exists()) {
+            config.load(file);
+            config.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(plugin.getResource(DEFAULT_CONFIG_FILE), CHARSET)));
+            config.options().copyDefaults(true);
             LoggerUtil.getInstance().info("Found config file: " + file.getName());
         }
-
-        config.load(file);
-        config.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(plugin.getResource(DEFAULT_CONFIG_FILE), CHARSET)));
-        config.options().copyDefaults(true);
+        else {
+            LoggerUtil.getInstance().severe("Could not read config file: " + file.getName());
+        }
 
         return config;
+    }
+
+    private void createConfig(File file) throws IOException
+    {
+        boolean success = file.getParentFile().mkdir() && file.createNewFile();
+   
+        try (InputStream inputStream = plugin.getResource(file.getName()); FileOutputStream outputStream = new FileOutputStream(file)) {
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+        } catch (IOException e) {
+            LoggerUtil.getInstance().warning("Could not read config file.");
+        }
+   
+        LoggerUtil.getInstance().info("Created config file: " + file.getName());
     }
 }

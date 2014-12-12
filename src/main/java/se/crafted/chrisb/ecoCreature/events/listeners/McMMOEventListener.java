@@ -24,24 +24,24 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
-
+import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
-import se.crafted.chrisb.ecoCreature.events.mappers.DropEventFactory;
+
+import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 
 public class McMMOEventListener implements Listener
 {
-    private final DropEventFactory factory;
+    private final ecoCreature plugin;
 
-    public McMMOEventListener(DropEventFactory factory)
+    public McMMOEventListener(ecoCreature plugin)
     {
-        this.factory = factory;
+        this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onMcMMOPlayerLevelUp(McMMOPlayerLevelUpEvent event)
     {
-        for (DropEvent dropEvent : factory.createEvents(event)) {
+        for (DropEvent dropEvent : plugin.getDropEventFactory().createEvents(event)) {
             Bukkit.getPluginManager().callEvent(dropEvent);
         }
     }

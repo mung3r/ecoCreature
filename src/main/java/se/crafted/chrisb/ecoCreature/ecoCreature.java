@@ -19,9 +19,12 @@
  */
 package se.crafted.chrisb.ecoCreature;
 
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import se.crafted.chrisb.ecoCreature.commands.CommandHandler;
@@ -90,11 +93,23 @@ public class ecoCreature extends JavaPlugin
     @Override
     public void reloadConfig()
     {
-        super.reloadConfig();        
+        super.reloadConfig();
         dropConfigLoader = new DropConfigLoader(this);
         dropEventFactory = new DropEventFactory(dropConfigLoader);
-        updateTask.stop();
+        restartUpdateTask();
+    }
 
+    public void loadConfig(String file, String world) throws IOException, InvalidConfigurationException
+    {
+        dropConfigLoader.loadConfig(file, world);
+        dropEventFactory = new DropEventFactory(dropConfigLoader);
+        restartUpdateTask();
+    }
+
+    private void restartUpdateTask()
+    {
+        updateTask.stop();
+    
         if (dropConfigLoader.isInitialized() && dropConfigLoader.isCheckForUpdates()) {
             updateTask.start();
         }
@@ -111,22 +126,32 @@ public class ecoCreature extends JavaPlugin
     private void registerEvents()
     {
         Bukkit.getPluginManager().registerEvents(new DropEventListener(metrics), this);
-        Bukkit.getPluginManager().registerEvents(new SpawnEventListener(dropConfigLoader), this);
+        Bukkit.getPluginManager().registerEvents(new SpawnEventListener(this), this);
 
-        Bukkit.getPluginManager().registerEvents(new BlockEventListener(dropEventFactory), this);
-        Bukkit.getPluginManager().registerEvents(new PlayerDeathEventListener(dropEventFactory), this);
-        Bukkit.getPluginManager().registerEvents(new EntityDeathEventListener(dropEventFactory), this);
+        Bukkit.getPluginManager().registerEvents(new BlockEventListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerDeathEventListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new EntityDeathEventListener(this), this);
 
         if (DependencyUtils.hasDeathTpPlus()) {
-            Bukkit.getPluginManager().registerEvents(new StreakEventListener(dropEventFactory), this);
+            Bukkit.getPluginManager().registerEvents(new StreakEventListener(this), this);
         }
 
         if (DependencyUtils.hasHeroes()) {
-            Bukkit.getPluginManager().registerEvents(new HeroesEventListener(dropEventFactory), this);
+            Bukkit.getPluginManager().registerEvents(new HeroesEventListener(this), this);
         }
 
         if (DependencyUtils.hasMcMMO()) {
-            Bukkit.getPluginManager().registerEvents(new McMMOEventListener(dropEventFactory), this);
+            Bukkit.getPluginManager().registerEvents(new McMMOEventListener(this), this);
         }
+    }
+
+    public DropConfigLoader getDropConfigLoader()
+    {
+        return dropConfigLoader;
+    }
+
+    public DropEventFactory getDropEventFactory()
+    {
+        return dropEventFactory;
     }
 }
