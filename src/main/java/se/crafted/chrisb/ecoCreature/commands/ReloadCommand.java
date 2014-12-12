@@ -19,6 +19,8 @@
  */
 package se.crafted.chrisb.ecoCreature.commands;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -59,7 +61,13 @@ public class ReloadCommand extends BasicCommand
                         }
                         break;
                     case 2:
-                        plugin.loadConfig(args[0], args[1]);
+                        World world = Bukkit.getWorld(args[1]);
+                        if (world != null) {
+                            plugin.loadConfig(args[0], world.getName());
+                        }
+                        else {
+                            sender.sendMessage("that world doesn't exist");
+                        }
                         break;
                 }
             }
