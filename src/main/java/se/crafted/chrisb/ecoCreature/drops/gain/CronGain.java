@@ -66,7 +66,7 @@ public class CronGain extends AbstractPlayerGain<String>
             satisfied = cron.isSatisfiedBy(new Date());
         }
         catch (ClassNotFoundException e) {
-            LoggerUtil.getInstance().warning("quartz jar not installed");
+            LoggerUtil.getInstance().debug("quartz jar not installed");
         }
         catch (ParseException e) {
             LoggerUtil.getInstance().warning("cron expression syntax error: " + cronExpression);
