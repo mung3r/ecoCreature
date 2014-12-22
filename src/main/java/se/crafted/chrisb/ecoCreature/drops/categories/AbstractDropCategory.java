@@ -106,7 +106,9 @@ public abstract class AbstractDropCategory<T>
             source = sources.get(type);
         }
 
-        LoggerUtil.getInstance().debugTrue("No reward defined for type: " + type, source.isEmpty());
+        if (type != null) {
+            LoggerUtil.getInstance().debugTrue("No reward defined for type: " + type, source.isEmpty());
+        }
         return source;
     }
 
