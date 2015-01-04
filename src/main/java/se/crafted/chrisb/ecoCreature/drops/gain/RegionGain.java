@@ -19,19 +19,18 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.gain;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
-
-import com.sk89q.worldguard.protection.managers.RegionManager;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 public class RegionGain extends AbstractPlayerGain<String>
 {
@@ -50,12 +49,24 @@ public class RegionGain extends AbstractPlayerGain<String>
     public double getGain(Player player)
     {
         double multiplier = NO_GAIN;
-
-        RegionManager regionManager = DependencyUtils.getRegionManager(player.getWorld());
-        if (regionManager != null) {
-            for (ProtectedRegion protectedRegion : regionManager.getApplicableRegions(player.getLocation())) {
-                multiplier = getMultiplier(protectedRegion.getId());
+        try {
+            Object regionManager = DependencyUtils.getRegionManager(player.getWorld());
+            if (regionManager != null) {
+                Method applicableRegionsMethod = regionManager.getClass().getMethod("getApplicableRegions", Location.class);
+                Object applicableRegionSet = applicableRegionsMethod.invoke(regionManager, player.getLocation());
+                if (applicableRegionSet instanceof Iterable<?>) {
+                    for (Object protectedRegion : (Iterable<?>) applicableRegionSet) {
+                        Method idMethod = protectedRegion.getClass().getMethod("getId");
+                        Object id = idMethod.invoke(protectedRegion);
+                        if (id instanceof String) {
+                            multiplier = getMultiplier((String) id);
+                        }
+                    }
+                }
             }
+        }
+        catch (Exception e) {
+            LoggerUtil.getInstance().warning("Incompatible version of WorldGuard");
         }
 
         LoggerUtil.getInstance().debug("Gain: " + multiplier);
