@@ -36,7 +36,6 @@ import com.garbagemule.MobArena.MobArenaHandler;
 import com.herocraftonline.heroes.Heroes;
 import com.palmergames.bukkit.towny.Towny;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.managers.RegionManager;
 
 public final class DependencyUtils
 {
@@ -203,7 +202,7 @@ public final class DependencyUtils
         return worldGuardPlugin != null;
     }
 
-    public static RegionManager getRegionManager(World world)
+    public static Object getRegionManager(World world)
     {
         return worldGuardPlugin.getRegionManager(world);
     }
