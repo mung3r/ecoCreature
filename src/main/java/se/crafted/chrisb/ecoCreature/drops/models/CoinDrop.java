@@ -37,10 +37,7 @@ public class CoinDrop extends AbstractDrop
     {
         double amount;
 
-        if (getRandom().nextDouble() > getPercentage() / 100.0D) {
-            amount = 0.0D;
-        }
-        else {
+        if (getRandom().nextDouble() < getChance()) {
             if (getRange().getMinimumDouble() == getRange().getMaximumDouble()) {
                 amount = getRange().getMaximumDouble();
             }
@@ -50,6 +47,9 @@ public class CoinDrop extends AbstractDrop
             else {
                 amount = getRange().getMinimumDouble() + getRandom().nextDouble() * (getRange().getMaximumDouble() - getRange().getMinimumDouble());
             }
+        }
+        else {
+            amount = 0.0D;
         }
 
         return amount * multiplier;

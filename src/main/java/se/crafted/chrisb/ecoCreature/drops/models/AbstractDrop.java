@@ -54,6 +54,12 @@ public abstract class AbstractDrop implements Drop
     }
 
     @Override
+    public double getChance() 
+    {
+        return percentage / 100.0D;
+    }
+
+    @Override
     public Random getRandom()
     {
         return random;

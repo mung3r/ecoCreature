@@ -56,10 +56,7 @@ public class EntityDrop extends AbstractDrop
     {
         int amount;
 
-        if (getRandom().nextDouble() > getPercentage() / 100.0D) {
-            amount = 0;
-        }
-        else {
+        if (getRandom().nextDouble() < getChance()) {
             if (getRange().getMinimumInteger() == getRange().getMaximumInteger()) {
                 amount = getRange().getMinimumInteger();
             }
@@ -69,6 +66,9 @@ public class EntityDrop extends AbstractDrop
             else {
                 amount = getRange().getMinimumInteger() + getRandom().nextInt(getRange().getMaximumInteger() - getRange().getMinimumInteger() + 1);
             }
+        }
+        else {
+            amount = 0;
         }
 
         return amount;

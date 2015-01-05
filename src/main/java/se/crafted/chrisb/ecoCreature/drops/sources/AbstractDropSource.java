@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Random;
 
 import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.Location;
@@ -35,6 +34,7 @@ import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
+import se.crafted.chrisb.ecoCreature.drops.models.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.BookDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.CoinDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.EntityDrop;
@@ -48,16 +48,13 @@ import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
 
-public abstract class AbstractDropSource
+public abstract class AbstractDropSource extends AbstractDrop
 {
     private static final String NO_COIN_REWARD_MESSAGE = "&7You slayed a &5<crt>&7 using a &3<itm>&7.";
     private static final String COIN_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.";
     private static final String COIN_PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.";
-    private static Random random = new Random();
 
     private String name;
-    private NumberRange range;
-    private double percentage;
 
     private CoinDrop coin;
     private Collection<ItemDrop> itemDrops;
@@ -76,8 +73,8 @@ public abstract class AbstractDropSource
 
     public AbstractDropSource()
     {
-        range = new NumberRange(1, 1);
-        percentage = 100;
+        setRange(new NumberRange(1, 1));
+        setPercentage(100.0D);
         huntingRules = Collections.emptyMap();
     }
 
@@ -120,26 +117,6 @@ public abstract class AbstractDropSource
     public void setName(String name)
     {
         this.name = name;
-    }
-
-    public NumberRange getRange()
-    {
-        return range;
-    }
-
-    public void setRange(NumberRange range)
-    {
-        this.range = range;
-    }
-
-    public double getPercentage()
-    {
-        return percentage;
-    }
-
-    public void setPercentage(double percentage)
-    {
-        this.percentage = percentage;
     }
 
     public boolean hasPermission(Player player)
@@ -267,19 +244,19 @@ public abstract class AbstractDropSource
     {
         int amount;
 
-        if (random.nextDouble() > percentage / 100.0D) {
-            amount = 0;
-        }
-        else {
-            if (range.getMinimumInteger() == range.getMaximumInteger()) {
-                amount = range.getMinimumInteger();
+        if (getRandom().nextDouble() < getChance()) {
+            if (getRange().getMinimumInteger() == getRange().getMaximumInteger()) {
+                amount = getRange().getMinimumInteger();
             }
-            else if (range.getMinimumInteger() > range.getMaximumInteger()) {
-                amount = range.getMinimumInteger();
+            else if (getRange().getMinimumInteger() > getRange().getMaximumInteger()) {
+                amount = getRange().getMinimumInteger();
             }
             else {
-                amount = range.getMinimumInteger() + random.nextInt(range.getMaximumInteger() - range.getMinimumInteger() + 1);
+                amount = getRange().getMinimumInteger() + getRandom().nextInt(getRange().getMaximumInteger() - getRange().getMinimumInteger() + 1);
             }
+        }
+        else {
+            amount = 0;
         }
 
         return amount;

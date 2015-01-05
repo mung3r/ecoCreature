@@ -14,5 +14,7 @@ public interface Drop
 
     void setPercentage(double percentage);
 
+    double getChance();
+
     Random getRandom();
 }
