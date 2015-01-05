@@ -52,28 +52,6 @@ public class EntityDrop extends AbstractDrop
         return types;
     }
 
-    private int nextAmount()
-    {
-        int amount;
-
-        if (getRandom().nextDouble() < getChance()) {
-            if (getRange().getMinimumInteger() == getRange().getMaximumInteger()) {
-                amount = getRange().getMinimumInteger();
-            }
-            else if (getRange().getMinimumInteger() > getRange().getMaximumInteger()) {
-                amount = getRange().getMinimumInteger();
-            }
-            else {
-                amount = getRange().getMinimumInteger() + getRandom().nextInt(getRange().getMaximumInteger() - getRange().getMinimumInteger() + 1);
-            }
-        }
-        else {
-            amount = 0;
-        }
-
-        return amount;
-    }
-
     public static Collection<EntityDrop> parseConfig(ConfigurationSection config)
     {
         Collection<EntityDrop> drops = Collections.emptyList();

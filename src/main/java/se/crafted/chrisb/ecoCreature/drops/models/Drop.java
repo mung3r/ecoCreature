@@ -17,4 +17,6 @@ public interface Drop
     double getChance();
 
     Random getRandom();
+
+    int nextAmount();
 }

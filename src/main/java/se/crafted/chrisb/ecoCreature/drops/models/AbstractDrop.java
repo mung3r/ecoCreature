@@ -64,4 +64,27 @@ public abstract class AbstractDrop implements Drop
     {
         return random;
     }
+
+    @Override
+    public int nextAmount()
+    {
+        int amount;
+
+        if (getRandom().nextDouble() < getChance()) {
+            if (getRange().getMinimumInteger() == getRange().getMaximumInteger()) {
+                amount = getRange().getMinimumInteger();
+            }
+            else if (getRange().getMinimumInteger() > getRange().getMaximumInteger()) {
+                amount = getRange().getMinimumInteger();
+            }
+            else {
+                amount = getRange().getMinimumInteger() + getRandom().nextInt(getRange().getMaximumInteger() - getRange().getMinimumInteger() + 1);
+            }
+        }
+        else {
+            amount = 0;
+        }
+
+        return amount;
+    }
 }

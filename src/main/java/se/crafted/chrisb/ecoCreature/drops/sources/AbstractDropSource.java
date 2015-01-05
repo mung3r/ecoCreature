@@ -240,28 +240,6 @@ public abstract class AbstractDropSource extends AbstractDrop
         return drop;
     }
 
-    private int nextAmount()
-    {
-        int amount;
-
-        if (getRandom().nextDouble() < getChance()) {
-            if (getRange().getMinimumInteger() == getRange().getMaximumInteger()) {
-                amount = getRange().getMinimumInteger();
-            }
-            else if (getRange().getMinimumInteger() > getRange().getMaximumInteger()) {
-                amount = getRange().getMinimumInteger();
-            }
-            else {
-                amount = getRange().getMinimumInteger() + getRandom().nextInt(getRange().getMaximumInteger() - getRange().getMinimumInteger() + 1);
-            }
-        }
-        else {
-            amount = 0;
-        }
-
-        return amount;
-    }
-
     protected abstract Location getLocation(Event event);
 
     private Collection<ItemStack> getItemDropOutcomes()
