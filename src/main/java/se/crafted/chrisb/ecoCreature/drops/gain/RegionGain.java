@@ -19,6 +19,7 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.gain;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -65,7 +66,7 @@ public class RegionGain extends AbstractPlayerGain<String>
                 }
             }
         }
-        catch (Exception e) {
+        catch (NoSuchMethodException|InvocationTargetException|IllegalAccessException e) {
             LoggerUtil.getInstance().warning("Incompatible version of WorldGuard");
         }
 

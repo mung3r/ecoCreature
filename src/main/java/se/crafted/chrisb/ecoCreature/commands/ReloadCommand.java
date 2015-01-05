@@ -19,9 +19,12 @@
  */
 package se.crafted.chrisb.ecoCreature.commands;
 
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
@@ -69,9 +72,11 @@ public class ReloadCommand extends BasicCommand
                             sender.sendMessage("that world doesn't exist");
                         }
                         break;
+                    default:
+                        sender.sendMessage(getUsage());
                 }
             }
-            catch (Exception e) {
+            catch (InvalidConfigurationException|IOException e) {
                 sender.sendMessage("failed to load config");
             }
         }
