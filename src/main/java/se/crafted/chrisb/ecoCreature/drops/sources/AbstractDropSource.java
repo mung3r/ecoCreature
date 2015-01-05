@@ -34,8 +34,7 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.drops.Drop;
-import se.crafted.chrisb.ecoCreature.drops.models.AbstractItemDrop;
+import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.BookDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.CoinDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.EntityDrop;
@@ -61,7 +60,7 @@ public abstract class AbstractDropSource
     private double percentage;
 
     private CoinDrop coin;
-    private Collection<AbstractItemDrop> itemDrops;
+    private Collection<ItemDrop> itemDrops;
     private Collection<EntityDrop> entityDrops;
     private Collection<JockeyDrop> jockeyDrops;
 
@@ -223,21 +222,21 @@ public abstract class AbstractDropSource
         this.huntingRules = huntingRules;
     }
 
-    public Collection<Drop> createDrops(Event event)
+    public Collection<AssembledDrop> assembleDrops(Event event)
     {
-        Collection<Drop> drops = new ArrayList<>();
+        Collection<AssembledDrop> drops = new ArrayList<>();
         int amount = nextAmount();
 
         for (int i = 0; i < amount; i++) {
-            drops.add(createDrop(event));
+            drops.add(assembleDrop(event));
         }
 
         return drops;
     }
 
-    protected Drop createDrop(Event event)
+    protected AssembledDrop assembleDrop(Event event)
     {
-        Drop drop = new Drop(getLocation(event));
+        AssembledDrop drop = new AssembledDrop(getLocation(event));
 
         drop.setName(name);
         drop.setItemDrops(getItemDropOutcomes());
@@ -295,7 +294,7 @@ public abstract class AbstractDropSource
         if (itemDrops != null) {
             stacks = new ArrayList<>();
 
-            for (AbstractItemDrop drop : itemDrops) {
+            for (ItemDrop drop : itemDrops) {
                 ItemStack itemStack = drop.getOutcome(fixedDrops);
                 if (itemStack != null) {
                     stacks.add(itemStack);

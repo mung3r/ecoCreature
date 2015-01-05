@@ -55,6 +55,6 @@ public class HeroesEventMapper extends AbstractEventMapper
         Player player = event.getHero().getPlayer();
         DropConfig dropConfig = getDropConfig(player.getWorld());
 
-        return Lists.newArrayList(new DropEvent(player, dropConfig.createDrops(event)));
+        return Lists.newArrayList(new DropEvent(player, dropConfig.assembleDrops(event)));
     }
 }

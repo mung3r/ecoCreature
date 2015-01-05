@@ -79,9 +79,9 @@ public class LoreDrop extends ItemDrop
         return itemStack;
     }
 
-    public static Collection<AbstractItemDrop> parseConfig(ConfigurationSection config)
+    public static Collection<ItemDrop> parseConfig(ConfigurationSection config)
     {
-        Collection<AbstractItemDrop> drops = Collections.emptyList();
+        Collection<ItemDrop> drops = Collections.emptyList();
 
         if (config != null && config.getList("Drops") != null) {
             drops = new ArrayList<>();

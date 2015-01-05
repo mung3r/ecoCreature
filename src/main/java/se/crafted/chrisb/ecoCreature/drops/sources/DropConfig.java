@@ -30,7 +30,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import se.crafted.chrisb.ecoCreature.drops.Drop;
+import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
 import se.crafted.chrisb.ecoCreature.drops.SpawnerMobTracker;
 import se.crafted.chrisb.ecoCreature.drops.categories.AbstractDropCategory;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
@@ -131,13 +131,13 @@ public class DropConfig implements SpawnerMobTracker
         this.dropCategories = dropCategories;
     }
 
-    public Collection<Drop> createDrops(final Event event)
+    public Collection<AssembledDrop> assembleDrops(final Event event)
     {
-        Collection<Drop> drops = new ArrayList<>();
+        Collection<AssembledDrop> drops = new ArrayList<>();
 
         for (AbstractDropCategory<?> category : dropCategories) {
             for (AbstractDropSource source : category.getDropSources(event)) {
-                drops.addAll(source.createDrops(event));
+                drops.addAll(source.assembleDrops(event));
             }
         }
 

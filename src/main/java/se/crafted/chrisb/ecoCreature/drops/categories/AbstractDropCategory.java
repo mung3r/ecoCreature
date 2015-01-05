@@ -164,7 +164,7 @@ public abstract class AbstractDropCategory<T>
         return sources;
     }
 
-    protected static NumberRange parseRange(String dropString, NumberRange defaultRange)
+    private static NumberRange parseRange(String dropString, NumberRange defaultRange)
     {
         NumberRange range = defaultRange;
 
@@ -184,7 +184,7 @@ public abstract class AbstractDropCategory<T>
         return range;
     }
 
-    protected static double parsePercentage(String dropString, double defaultPercentage)
+    private static double parsePercentage(String dropString, double defaultPercentage)
     {
         String[] dropParts = dropString.split(":");
 

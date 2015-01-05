@@ -22,16 +22,14 @@ package se.crafted.chrisb.ecoCreature.drops.models;
 import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.configuration.ConfigurationSection;
 
-public class CoinDrop
+public class CoinDrop extends AbstractDrop
 {
-    private final NumberRange range;
-    private final double percentage;
     private final double multiplier;
 
     public CoinDrop(NumberRange range, double percentage, double multiplier)
     {
-        this.range = range;
-        this.percentage = percentage;
+        setRange(range);
+        setPercentage(percentage);
         this.multiplier = multiplier;
     }
 
@@ -39,18 +37,18 @@ public class CoinDrop
     {
         double amount;
 
-        if (Math.random() > percentage / 100.0D) {
+        if (getRandom().nextDouble() > getPercentage() / 100.0D) {
             amount = 0.0D;
         }
         else {
-            if (range.getMinimumDouble() == range.getMaximumDouble()) {
-                amount = range.getMaximumDouble();
+            if (getRange().getMinimumDouble() == getRange().getMaximumDouble()) {
+                amount = getRange().getMaximumDouble();
             }
-            else if (range.getMinimumDouble() > range.getMaximumDouble()) {
-                amount = range.getMinimumDouble();
+            else if (getRange().getMinimumDouble() > getRange().getMaximumDouble()) {
+                amount = getRange().getMinimumDouble();
             }
             else {
-                amount = range.getMinimumDouble() + Math.random() * (range.getMaximumDouble() - range.getMinimumDouble());
+                amount = getRange().getMinimumDouble() + getRandom().nextDouble() * (getRange().getMaximumDouble() - getRange().getMinimumDouble());
             }
         }
 

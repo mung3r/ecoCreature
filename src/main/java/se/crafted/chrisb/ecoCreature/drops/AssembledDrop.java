@@ -34,7 +34,7 @@ import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 
-public class Drop
+public class AssembledDrop
 {
     private static final double IDENTITY = 1.0;
     private static final double ZERO = 0.0;
@@ -54,7 +54,7 @@ public class Drop
     private Message message;
     private Map<MessageToken, String> parameters;
 
-    public Drop(Location location)
+    public AssembledDrop(Location location)
     {
         this.location = location;
         worldName = location.getWorld().getName();
@@ -201,7 +201,7 @@ public class Drop
         return parameters;
     }
 
-    public Drop addParameter(MessageToken key, String value)
+    public AssembledDrop addParameter(MessageToken key, String value)
     {
         parameters.put(key, value);
         return this;
