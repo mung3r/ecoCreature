@@ -27,7 +27,7 @@ import org.bukkit.event.Event;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
-import se.crafted.chrisb.ecoCreature.drops.Drop;
+import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomDropType;
 
 public class PVPDropSource extends AbstractDropSource
@@ -77,9 +77,9 @@ public class PVPDropSource extends AbstractDropSource
     }
 
     @Override
-    public Drop createDrop(Event event)
+    public AssembledDrop assembleDrop(Event event)
     {
-        Drop drop = new Drop(getLocation(event));
+        AssembledDrop drop = new AssembledDrop(getLocation(event));
 
         drop.setName(getName());
 

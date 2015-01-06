@@ -28,17 +28,97 @@ import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 
-public class ItemDrop extends AbstractItemDrop
+public class ItemDrop extends AbstractDrop
 {
+    private final Material material;
+    private Byte data;
+    private Short durability;
+    private Collection<ItemEnchantment> enchantments;
+    private boolean addToInventory;
+
     public ItemDrop(Material material)
     {
-        super(material);
+        this.material = material;
+        this.enchantments = Collections.emptyList();
     }
 
-    public static Collection<AbstractItemDrop> parseConfig(ConfigurationSection config)
+    public Material getMaterial()
     {
-        Collection<AbstractItemDrop> drops = Collections.emptyList();
+        return material;
+    }
+
+    public Byte getData()
+    {
+        return data;
+    }
+
+    public void setData(Byte data)
+    {
+        this.data = data;
+    }
+
+    public Short getDurability()
+    {
+        return durability;
+    }
+
+    public void setDurability(Short durability)
+    {
+        this.durability = durability;
+    }
+
+    public Collection<ItemEnchantment> getEnchantments()
+    {
+        return enchantments;
+    }
+
+    public void setEnchantments(Collection<ItemEnchantment> enchantments)
+    {
+        this.enchantments = enchantments;
+    }
+
+    public boolean isAddToInventory()
+    {
+        return addToInventory;
+    }
+
+    public void setAddToInventory(boolean addToInventory)
+    {
+        this.addToInventory = addToInventory;
+    }
+
+    public ItemStack nextItemStack(boolean isFixedDrops)
+    {
+        if (nextWinner() && material != null) {
+            int dropAmount = isFixedDrops ? getFixedAmount() : nextIntAmount();
+
+            if (dropAmount > 0) {
+                ItemStack itemStack;
+                if (data == null && durability == null) {
+                    itemStack = new ItemStack(material, dropAmount);
+                }
+                else {
+                    MaterialData materialData = data == null ? new MaterialData(material) : new MaterialData(material, data);
+                    itemStack = materialData.toItemStack(dropAmount);
+                    if (durability != null) {
+                        itemStack.setDurability(durability);
+                    }
+                }
+                itemStack.addUnsafeEnchantments(ItemEnchantment.nextEnchantments(enchantments));
+                if (itemStack.getAmount() > 0) {
+                    return itemStack;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static Collection<ItemDrop> parseConfig(ConfigurationSection config)
+    {
+        Collection<ItemDrop> drops = Collections.emptyList();
 
         if (config != null) {
             if (config.getList("Drops") != null) {
@@ -53,9 +133,9 @@ public class ItemDrop extends AbstractItemDrop
         return drops;
     }
 
-    private static Collection<AbstractItemDrop> parseDrops(String dropsString)
+    private static Collection<ItemDrop> parseDrops(String dropsString)
     {
-        Collection<AbstractItemDrop> drops = Collections.emptyList();
+        Collection<ItemDrop> drops = Collections.emptyList();
 
         if (dropsString != null && !dropsString.isEmpty()) {
             drops = parseDrops(Arrays.asList(dropsString.split(";")));
@@ -64,9 +144,9 @@ public class ItemDrop extends AbstractItemDrop
         return drops;
     }
 
-    private static Collection<AbstractItemDrop> parseDrops(Collection<String> dropsList)
+    private static Collection<ItemDrop> parseDrops(Collection<String> dropsList)
     {
-        Collection<AbstractItemDrop> drops = Collections.emptyList();
+        Collection<ItemDrop> drops = Collections.emptyList();
 
         if (dropsList != null && !dropsList.isEmpty()) {
             drops = new ArrayList<>();
@@ -79,9 +159,9 @@ public class ItemDrop extends AbstractItemDrop
         return drops;
     }
 
-    protected static Collection<AbstractItemDrop> parseItem(String dropString)
+    private static Collection<ItemDrop> parseItem(String dropString)
     {
-        Collection<AbstractItemDrop> drops = Collections.emptyList();
+        Collection<ItemDrop> drops = Collections.emptyList();
 
         if (parseMaterial(dropString) != null) {
             drops = new ArrayList<>();
@@ -91,7 +171,7 @@ public class ItemDrop extends AbstractItemDrop
         return drops;
     }
 
-    protected static AbstractItemDrop populateItemDrop(AbstractItemDrop drop, String dropString)
+    protected static ItemDrop populateItemDrop(ItemDrop drop, String dropString)
     {
         drop.setEnchantments(parseEnchantments(dropString));
         drop.setData(parseData(dropString));
@@ -174,7 +254,7 @@ public class ItemDrop extends AbstractItemDrop
         return itemSubParts.length > 2 && !itemSubParts[2].isEmpty() ? Short.parseShort(itemSubParts[2]) : null;
     }
 
-    protected static NumberRange parseRange(String dropString)
+    private static NumberRange parseRange(String dropString)
     {
         String[] dropParts = dropString.split(":");
         String[] amountRange = dropParts[1].split("-");
@@ -193,7 +273,7 @@ public class ItemDrop extends AbstractItemDrop
         return new NumberRange(min, max);
     }
 
-    protected static double parsePercentage(String dropString)
+    private static double parsePercentage(String dropString)
     {
         String[] dropParts = dropString.split(":");
 

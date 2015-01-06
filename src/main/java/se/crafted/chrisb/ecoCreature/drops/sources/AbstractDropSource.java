@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Random;
 
 import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.Location;
@@ -34,8 +33,8 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.drops.Drop;
-import se.crafted.chrisb.ecoCreature.drops.models.AbstractItemDrop;
+import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
+import se.crafted.chrisb.ecoCreature.drops.models.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.BookDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.CoinDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.EntityDrop;
@@ -49,19 +48,16 @@ import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
 
-public abstract class AbstractDropSource
+public abstract class AbstractDropSource extends AbstractDrop
 {
     private static final String NO_COIN_REWARD_MESSAGE = "&7You slayed a &5<crt>&7 using a &3<itm>&7.";
     private static final String COIN_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.";
     private static final String COIN_PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.";
-    private static Random random = new Random();
 
     private String name;
-    private NumberRange range;
-    private double percentage;
 
     private CoinDrop coin;
-    private Collection<AbstractItemDrop> itemDrops;
+    private Collection<ItemDrop> itemDrops;
     private Collection<EntityDrop> entityDrops;
     private Collection<JockeyDrop> jockeyDrops;
 
@@ -71,14 +67,14 @@ public abstract class AbstractDropSource
 
     private boolean fixedDrops;
     private boolean integerCurrency;
-    private boolean addItemsToInventory;
+    private boolean addToInventory;
 
     private Map<Class<? extends AbstractRule>, Rule> huntingRules;
 
     public AbstractDropSource()
     {
-        range = new NumberRange(1, 1);
-        percentage = 100;
+        setRange(new NumberRange(1, 1));
+        setPercentage(100.0D);
         huntingRules = Collections.emptyMap();
     }
 
@@ -110,7 +106,7 @@ public abstract class AbstractDropSource
         coinPenaltyMessage = new CoinMessageDecorator(new DefaultMessage(dropConfig.getString("Penalty_Message", config.getString("System.Messages.Penalty_Message", COIN_PENALTY_MESSAGE))));
         noCoinRewardMessage = new NoCoinMessageDecorator(new DefaultMessage(dropConfig.getString("NoReward_Message", config.getString("System.Messages.NoReward_Message", NO_COIN_REWARD_MESSAGE))));
 
-        addItemsToInventory = dropConfig.getBoolean("AddItemsToInventory", false);
+        addToInventory = dropConfig.getBoolean("AddItemsToInventory", false);
     }
 
     public String getName()
@@ -121,26 +117,6 @@ public abstract class AbstractDropSource
     public void setName(String name)
     {
         this.name = name;
-    }
-
-    public NumberRange getRange()
-    {
-        return range;
-    }
-
-    public void setRange(NumberRange range)
-    {
-        this.range = range;
-    }
-
-    public double getPercentage()
-    {
-        return percentage;
-    }
-
-    public void setPercentage(double percentage)
-    {
-        this.percentage = percentage;
     }
 
     public boolean hasPermission(Player player)
@@ -203,14 +179,14 @@ public abstract class AbstractDropSource
         this.integerCurrency = integerCurrency;
     }
 
-    public Boolean isAddItemsToInventory()
+    public Boolean isAddToInventory()
     {
-        return addItemsToInventory;
+        return addToInventory;
     }
 
-    public void setAddItemsToInventory(Boolean addItemsToInventory)
+    public void setAddToInventory(Boolean addToInventory)
     {
-        this.addItemsToInventory = addItemsToInventory;
+        this.addToInventory = addToInventory;
     }
 
     public Map<Class<? extends AbstractRule>, Rule> getHuntingRules()
@@ -223,21 +199,21 @@ public abstract class AbstractDropSource
         this.huntingRules = huntingRules;
     }
 
-    public Collection<Drop> createDrops(Event event)
+    public Collection<AssembledDrop> assembleDrops(Event event)
     {
-        Collection<Drop> drops = new ArrayList<>();
-        int amount = nextAmount();
+        Collection<AssembledDrop> drops = new ArrayList<>();
+        int amount = nextIntAmount();
 
         for (int i = 0; i < amount; i++) {
-            drops.add(createDrop(event));
+            drops.add(assembleDrop(event));
         }
 
         return drops;
     }
 
-    protected Drop createDrop(Event event)
+    protected AssembledDrop assembleDrop(Event event)
     {
-        Drop drop = new Drop(getLocation(event));
+        AssembledDrop drop = new AssembledDrop(getLocation(event));
 
         drop.setName(name);
         drop.setItemDrops(getItemDropOutcomes());
@@ -245,7 +221,7 @@ public abstract class AbstractDropSource
         drop.setJockeyDrops(getJockeyDropOutcomes());
 
         if (hasCoin()) {
-            drop.setCoin(coin.getOutcome());
+            drop.setCoin(coin.nextDoubleAmount());
 
             if (drop.getCoin() > 0.0) {
                 drop.setMessage(coinRewardMessage);
@@ -259,31 +235,9 @@ public abstract class AbstractDropSource
         }
 
         drop.setIntegerCurrency(integerCurrency);
-        drop.setAddItemsToInventory(addItemsToInventory);
+        drop.setAddToInventory(addToInventory);
 
         return drop;
-    }
-
-    private int nextAmount()
-    {
-        int amount;
-
-        if (random.nextDouble() > percentage / 100.0D) {
-            amount = 0;
-        }
-        else {
-            if (range.getMinimumInteger() == range.getMaximumInteger()) {
-                amount = range.getMinimumInteger();
-            }
-            else if (range.getMinimumInteger() > range.getMaximumInteger()) {
-                amount = range.getMinimumInteger();
-            }
-            else {
-                amount = range.getMinimumInteger() + random.nextInt(range.getMaximumInteger() - range.getMinimumInteger() + 1);
-            }
-        }
-
-        return amount;
     }
 
     protected abstract Location getLocation(Event event);
@@ -295,8 +249,8 @@ public abstract class AbstractDropSource
         if (itemDrops != null) {
             stacks = new ArrayList<>();
 
-            for (AbstractItemDrop drop : itemDrops) {
-                ItemStack itemStack = drop.getOutcome(fixedDrops);
+            for (ItemDrop drop : itemDrops) {
+                ItemStack itemStack = drop.nextItemStack(fixedDrops);
                 if (itemStack != null) {
                     stacks.add(itemStack);
                 }
@@ -314,7 +268,7 @@ public abstract class AbstractDropSource
             types = new ArrayList<>();
 
             for (EntityDrop drop : entityDrops) {
-                types.addAll(drop.getOutcome());
+                types.addAll(drop.nextEntityTypes());
             }
         }
 
@@ -331,7 +285,7 @@ public abstract class AbstractDropSource
             for (EntityDrop drop : jockeyDrops) {
                 if (drop instanceof JockeyDrop) {
                     JockeyDrop jockeyDrop = (JockeyDrop) drop;
-                    types.addAll(jockeyDrop.getOutcome());
+                    types.addAll(jockeyDrop.nextEntityTypes());
                 }
             }
         }

@@ -148,8 +148,8 @@ public abstract class AbstractDropCategory<T>
 
                 if (rewardSets.getConfigurationSection(name) != null) {
                     Map<Class<? extends AbstractRule>, Rule> huntingRules = loadHuntingRules(rewardSets.getConfigurationSection(name));
-                    NumberRange range = parseRange(setName, new NumberRange(1, 1));
-                    double percentage = parsePercentage(setName, 100);
+                    NumberRange range = parseRange(setName);
+                    double percentage = parsePercentage(setName);
 
                     for (AbstractDropSource setSource : DropSourceFactory.createSetSources(name, rewardSets)) {
                         setSource.setHuntingRules(huntingRules);
@@ -164,9 +164,9 @@ public abstract class AbstractDropCategory<T>
         return sources;
     }
 
-    protected static NumberRange parseRange(String dropString, NumberRange defaultRange)
+    private static NumberRange parseRange(String dropString)
     {
-        NumberRange range = defaultRange;
+        NumberRange range = new NumberRange(1, 1);
 
         String[] dropParts = dropString.split(":");
 
@@ -184,15 +184,17 @@ public abstract class AbstractDropCategory<T>
         return range;
     }
 
-    protected static double parsePercentage(String dropString, double defaultPercentage)
+    private static double parsePercentage(String dropString)
     {
+        double percentage = 100.0D;
+
         String[] dropParts = dropString.split(":");
 
         if (dropParts.length > 2) {
-            return Double.parseDouble(dropParts[2]);
+            percentage = Double.parseDouble(dropParts[2]);
         }
 
-        return defaultPercentage;
+        return percentage;
     }
 
     protected static Collection<AbstractDropSource> configureDropSources(Collection<AbstractDropSource> sources, ConfigurationSection config)

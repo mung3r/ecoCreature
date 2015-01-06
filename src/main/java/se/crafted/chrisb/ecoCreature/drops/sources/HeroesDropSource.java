@@ -28,7 +28,7 @@ import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
-import se.crafted.chrisb.ecoCreature.drops.Drop;
+import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.HeroesDropType;
 
 public class HeroesDropSource extends AbstractDropSource
@@ -51,9 +51,9 @@ public class HeroesDropSource extends AbstractDropSource
     }
 
     @Override
-    protected Drop createDrop(Event event)
+    protected AssembledDrop assembleDrop(Event event)
     {
-        Drop drop = super.createDrop(event);
+        AssembledDrop drop = super.assembleDrop(event);
 
         if (event instanceof HeroChangeLevelEvent) {
             HeroChangeLevelEvent changeLevelEvent = (HeroChangeLevelEvent) event;

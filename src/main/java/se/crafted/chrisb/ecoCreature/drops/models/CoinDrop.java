@@ -22,39 +22,21 @@ package se.crafted.chrisb.ecoCreature.drops.models;
 import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.configuration.ConfigurationSection;
 
-public class CoinDrop
+public class CoinDrop extends AbstractDrop
 {
-    private final NumberRange range;
-    private final double percentage;
     private final double multiplier;
 
     public CoinDrop(NumberRange range, double percentage, double multiplier)
     {
-        this.range = range;
-        this.percentage = percentage;
+        setRange(range);
+        setPercentage(percentage);
         this.multiplier = multiplier;
     }
 
-    public double getOutcome()
+    @Override
+    public double nextDoubleAmount()
     {
-        double amount;
-
-        if (Math.random() > percentage / 100.0D) {
-            amount = 0.0D;
-        }
-        else {
-            if (range.getMinimumDouble() == range.getMaximumDouble()) {
-                amount = range.getMaximumDouble();
-            }
-            else if (range.getMinimumDouble() > range.getMaximumDouble()) {
-                amount = range.getMinimumDouble();
-            }
-            else {
-                amount = range.getMinimumDouble() + Math.random() * (range.getMaximumDouble() - range.getMinimumDouble());
-            }
-        }
-
-        return amount * multiplier;
+        return super.nextDoubleAmount() * multiplier;
     }
 
     public static CoinDrop parseConfig(ConfigurationSection config)
