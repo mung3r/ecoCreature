@@ -113,7 +113,7 @@ public class ItemDrop extends AbstractDrop
                 }
             }
         }
-        return null;
+        return new ItemStack(Material.AIR, 0);
     }
 
     public static Collection<ItemDrop> parseConfig(ConfigurationSection config)
