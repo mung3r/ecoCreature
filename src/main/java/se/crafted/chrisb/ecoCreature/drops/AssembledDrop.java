@@ -19,6 +19,7 @@
  */
 package se.crafted.chrisb.ecoCreature.drops;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -64,9 +65,9 @@ public class AssembledDrop
 
         name = "Unknown";
         coin = ZERO;
-        itemDrops = Collections.emptyList();
-        entityDrops = Collections.emptyList();
-        jockeyDrops = Collections.emptyList();
+        itemDrops = new ArrayList<>();
+        entityDrops = new ArrayList<>();
+        jockeyDrops = new ArrayList<>();
         message = DefaultMessage.NO_MESSAGE;
         parameters = new HashMap<>();
     }

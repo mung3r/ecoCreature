@@ -19,6 +19,10 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.models;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
 import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -39,15 +43,16 @@ public class CoinDrop extends AbstractDrop
         return super.nextDoubleAmount() * multiplier;
     }
 
-    public static CoinDrop parseConfig(ConfigurationSection config)
+    public static Collection<CoinDrop> parseConfig(ConfigurationSection config)
     {
-        CoinDrop coin = null;
+        Collection<CoinDrop> coins = Collections.emptyList();
 
         if (config != null && config.contains("Coin_Maximum") && config.contains("Coin_Minimum") && config.contains("Coin_Percent")) {
-            coin = new CoinDrop(new NumberRange(config.getDouble("Coin_Minimum", 0), config.getDouble("Coin_Maximum", 0)),
-                    config.getDouble("Coin_Percent", 0.0D), config.getDouble("Coin_Gain", 1.0D));
+            coins = new ArrayList<CoinDrop>();
+            coins.add(new CoinDrop(new NumberRange(config.getDouble("Coin_Minimum", 0), config.getDouble("Coin_Maximum", 0)),
+                    config.getDouble("Coin_Percent", 0.0D), config.getDouble("Coin_Gain", 1.0D)));
         }
 
-        return coin;
+        return coins;
     }
 }

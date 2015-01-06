@@ -27,10 +27,8 @@ import java.util.Map;
 import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
@@ -56,10 +54,7 @@ public abstract class AbstractDropSource extends AbstractDrop
 
     private String name;
 
-    private CoinDrop coin;
-    private Collection<ItemDrop> itemDrops;
-    private Collection<EntityDrop> entityDrops;
-    private Collection<JockeyDrop> jockeyDrops;
+    private Collection<AbstractDrop> drops;
 
     private Message noCoinRewardMessage;
     private Message coinRewardMessage;
@@ -88,19 +83,13 @@ public abstract class AbstractDropSource extends AbstractDrop
         ConfigurationSection dropConfig = config.getConfigurationSection(section);
         name = dropConfig.getName();
 
-        itemDrops = new ArrayList<>();
-        itemDrops.addAll(ItemDrop.parseConfig(dropConfig));
-        itemDrops.addAll(BookDrop.parseConfig(dropConfig));
-        itemDrops.addAll(LoreDrop.parseConfig(dropConfig));
-        entityDrops = EntityDrop.parseConfig(dropConfig);
-        // TODO: hack - need to fix
-        jockeyDrops = new ArrayList<>();
-        for (EntityDrop drop : JockeyDrop.parseConfig(dropConfig)) {
-            if (drop instanceof JockeyDrop) {
-                jockeyDrops.add((JockeyDrop) drop);
-            }
-        }
-        coin = CoinDrop.parseConfig(dropConfig);
+        drops = new ArrayList<>();
+        drops.addAll(ItemDrop.parseConfig(dropConfig));
+        drops.addAll(BookDrop.parseConfig(dropConfig));
+        drops.addAll(LoreDrop.parseConfig(dropConfig));
+        drops.addAll(EntityDrop.parseConfig(dropConfig));
+        drops.addAll(JockeyDrop.parseConfig(dropConfig));
+        drops.addAll(CoinDrop.parseConfig(dropConfig));
 
         coinRewardMessage = new CoinMessageDecorator(new DefaultMessage(dropConfig.getString("Reward_Message", config.getString("System.Messages.Reward_Message", COIN_REWARD_MESSAGE))));
         coinPenaltyMessage = new CoinMessageDecorator(new DefaultMessage(dropConfig.getString("Penalty_Message", config.getString("System.Messages.Penalty_Message", COIN_PENALTY_MESSAGE))));
@@ -122,11 +111,6 @@ public abstract class AbstractDropSource extends AbstractDrop
     public boolean hasPermission(Player player)
     {
         return DependencyUtils.hasPermission(player, "reward." + name);
-    }
-
-    public boolean hasCoin()
-    {
-        return coin != null;
     }
 
     public Message getNoCoinRewardMessage()
@@ -213,83 +197,42 @@ public abstract class AbstractDropSource extends AbstractDrop
 
     protected AssembledDrop assembleDrop(Event event)
     {
-        AssembledDrop drop = new AssembledDrop(getLocation(event));
+        AssembledDrop assembledDrop = new AssembledDrop(getLocation(event));
 
-        drop.setName(name);
-        drop.setItemDrops(getItemDropOutcomes());
-        drop.setEntityDrops(getEntityDropOutcomes());
-        drop.setJockeyDrops(getJockeyDropOutcomes());
+        assembledDrop.setName(name);
 
-        if (hasCoin()) {
-            drop.setCoin(coin.nextDoubleAmount());
-
-            if (drop.getCoin() > 0.0) {
-                drop.setMessage(coinRewardMessage);
+        for (AbstractDrop drop : drops) {
+            if (drop instanceof JockeyDrop) {
+                assembledDrop.getJockeyDrops().addAll(((JockeyDrop) drop).nextEntityTypes());
             }
-            else if (drop.getCoin() < 0.0) {
-                drop.setMessage(coinPenaltyMessage);
+            else if (drop instanceof EntityDrop) {
+                assembledDrop.getEntityDrops().addAll(((EntityDrop) drop).nextEntityTypes());
             }
-            else {
-                drop.setMessage(noCoinRewardMessage);
+            else if (drop instanceof ItemDrop) {
+                assembledDrop.getItemDrops().add(((ItemDrop) drop).nextItemStack(fixedDrops));
+            }
+            else if (drop instanceof CoinDrop) {
+                CoinDrop coin = (CoinDrop) drop;
+
+                assembledDrop.setCoin(coin.nextDoubleAmount());
+
+                if (assembledDrop.getCoin() > 0.0) {
+                    assembledDrop.setMessage(coinRewardMessage);
+                }
+                else if (assembledDrop.getCoin() < 0.0) {
+                    assembledDrop.setMessage(coinPenaltyMessage);
+                }
+                else {
+                    assembledDrop.setMessage(noCoinRewardMessage);
+                }
             }
         }
 
-        drop.setIntegerCurrency(integerCurrency);
-        drop.setAddToInventory(addToInventory);
+        assembledDrop.setIntegerCurrency(integerCurrency);
+        assembledDrop.setAddToInventory(addToInventory);
 
-        return drop;
+        return assembledDrop;
     }
 
     protected abstract Location getLocation(Event event);
-
-    private Collection<ItemStack> getItemDropOutcomes()
-    {
-        Collection<ItemStack> stacks = Collections.emptyList();
-
-        if (itemDrops != null) {
-            stacks = new ArrayList<>();
-
-            for (ItemDrop drop : itemDrops) {
-                ItemStack itemStack = drop.nextItemStack(fixedDrops);
-                if (itemStack != null) {
-                    stacks.add(itemStack);
-                }
-            }
-        }
-
-        return stacks;
-    }
-
-    private Collection<EntityType> getEntityDropOutcomes()
-    {
-        Collection<EntityType> types = Collections.emptyList();
-
-        if (entityDrops != null) {
-            types = new ArrayList<>();
-
-            for (EntityDrop drop : entityDrops) {
-                types.addAll(drop.nextEntityTypes());
-            }
-        }
-
-        return types;
-    }
-
-    private Collection<EntityType> getJockeyDropOutcomes()
-    {
-        Collection<EntityType> types = Collections.emptyList();
-
-        if (jockeyDrops != null) {
-            types = new ArrayList<>();
-
-            for (EntityDrop drop : jockeyDrops) {
-                if (drop instanceof JockeyDrop) {
-                    JockeyDrop jockeyDrop = (JockeyDrop) drop;
-                    types.addAll(jockeyDrop.nextEntityTypes());
-                }
-            }
-        }
-
-        return types;
-    }
 }
