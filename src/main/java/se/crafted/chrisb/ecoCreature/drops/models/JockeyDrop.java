@@ -62,10 +62,10 @@ public class JockeyDrop extends EntityDrop
     }
 
     @Override
-    public Collection<EntityType> getOutcome()
+    public Collection<EntityType> nextEntityTypes()
     {
         Collection<EntityType> types = new ArrayList<>();
-        for (EntityType vehicle : super.getOutcome()) {
+        for (EntityType vehicle : super.nextEntityTypes()) {
             types.add(vehicle);
             types.add(passenger);
         }

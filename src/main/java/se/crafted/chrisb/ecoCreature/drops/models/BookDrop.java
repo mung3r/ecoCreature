@@ -76,9 +76,9 @@ public class BookDrop extends ItemDrop
     }
 
     @Override
-    public ItemStack getOutcome(boolean isFixedDrops)
+    public ItemStack nextItemStack(boolean isFixedDrops)
     {
-        ItemStack itemStack = super.getOutcome(isFixedDrops);
+        ItemStack itemStack = super.nextItemStack(isFixedDrops);
 
         if (itemStack != null && itemStack.getItemMeta() instanceof BookMeta) {
             BookMeta bookMeta = (BookMeta) itemStack.getItemMeta();

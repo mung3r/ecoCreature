@@ -65,9 +65,9 @@ public class LoreDrop extends ItemDrop
     }
 
     @Override
-    public ItemStack getOutcome(boolean isFixedDrops)
+    public ItemStack nextItemStack(boolean isFixedDrops)
     {
-        ItemStack itemStack = super.getOutcome(isFixedDrops);
+        ItemStack itemStack = super.nextItemStack(isFixedDrops);
 
         if (itemStack != null) {
             ItemMeta itemMeta = itemStack.getItemMeta();

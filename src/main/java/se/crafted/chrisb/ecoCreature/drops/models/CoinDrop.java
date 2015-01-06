@@ -33,26 +33,10 @@ public class CoinDrop extends AbstractDrop
         this.multiplier = multiplier;
     }
 
-    public double getOutcome()
+    @Override
+    public double nextDoubleAmount()
     {
-        double amount;
-
-        if (getRandom().nextDouble() < getChance()) {
-            if (getRange().getMinimumDouble() == getRange().getMaximumDouble()) {
-                amount = getRange().getMaximumDouble();
-            }
-            else if (getRange().getMinimumDouble() > getRange().getMaximumDouble()) {
-                amount = getRange().getMinimumDouble();
-            }
-            else {
-                amount = getRange().getMinimumDouble() + getRandom().nextDouble() * (getRange().getMaximumDouble() - getRange().getMinimumDouble());
-            }
-        }
-        else {
-            amount = 0.0D;
-        }
-
-        return amount * multiplier;
+        return super.nextDoubleAmount() * multiplier;
     }
 
     public static CoinDrop parseConfig(ConfigurationSection config)

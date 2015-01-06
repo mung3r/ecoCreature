@@ -1,7 +1,5 @@
 package se.crafted.chrisb.ecoCreature.drops.models;
 
-import java.util.Random;
-
 import org.apache.commons.lang.math.NumberRange;
 
 public interface Drop
@@ -14,9 +12,11 @@ public interface Drop
 
     void setPercentage(double percentage);
 
-    double getChance();
+    boolean nextWinner();
 
-    Random getRandom();
+    int nextIntAmount();
 
-    int nextAmount();
+    int getFixedAmount();
+
+    double nextDoubleAmount();
 }

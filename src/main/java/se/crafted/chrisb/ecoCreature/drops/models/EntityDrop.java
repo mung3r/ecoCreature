@@ -40,10 +40,10 @@ public class EntityDrop extends AbstractDrop
         setPercentage(percentage);
     }
 
-    public Collection<EntityType> getOutcome()
+    public Collection<EntityType> nextEntityTypes()
     {
         Collection<EntityType> types = new ArrayList<>();
-        int amount = nextAmount();
+        int amount = nextIntAmount();
 
         for (int i = 0; i < amount; i++) {
             types.add(type);

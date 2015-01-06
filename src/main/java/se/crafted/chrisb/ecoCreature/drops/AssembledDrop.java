@@ -44,7 +44,7 @@ public class AssembledDrop
     private double gain;
     private Collection<String> party;
     private boolean integerCurrency;
-    private boolean addItemsToInventory;
+    private boolean addToInventory;
 
     private String name;
     private double coin;
@@ -121,14 +121,14 @@ public class AssembledDrop
         this.integerCurrency = integerCurrency;
     }
 
-    public boolean isAddItemsToInventory()
+    public boolean isAddToInventory()
     {
-        return addItemsToInventory;
+        return addToInventory;
     }
 
-    public void setAddItemsToInventory(boolean addItemsToInventory)
+    public void setAddToInventory(boolean addToInventory)
     {
-        this.addItemsToInventory = addItemsToInventory;
+        this.addToInventory = addToInventory;
     }
 
     public String getName()

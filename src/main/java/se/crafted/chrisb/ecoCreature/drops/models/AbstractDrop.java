@@ -54,23 +54,17 @@ public abstract class AbstractDrop implements Drop
     }
 
     @Override
-    public double getChance() 
+    public boolean nextWinner()
     {
-        return percentage / 100.0D;
+        return random.nextDouble() < getPercentage() / 100.0D;
     }
 
     @Override
-    public Random getRandom()
-    {
-        return random;
-    }
-
-    @Override
-    public int nextAmount()
+    public int nextIntAmount()
     {
         int amount;
 
-        if (getRandom().nextDouble() < getChance()) {
+        if (nextWinner()) {
             if (getRange().getMinimumInteger() == getRange().getMaximumInteger()) {
                 amount = getRange().getMinimumInteger();
             }
@@ -78,11 +72,39 @@ public abstract class AbstractDrop implements Drop
                 amount = getRange().getMinimumInteger();
             }
             else {
-                amount = getRange().getMinimumInteger() + getRandom().nextInt(getRange().getMaximumInteger() - getRange().getMinimumInteger() + 1);
+                amount = getRange().getMinimumInteger() + random.nextInt(getRange().getMaximumInteger() - getRange().getMinimumInteger() + 1);
             }
         }
         else {
             amount = 0;
+        }
+    
+        return amount;
+    }
+
+    @Override
+    public int getFixedAmount() {
+        return getRange().getMaximumInteger();
+    }
+
+    @Override
+    public double nextDoubleAmount()
+    {
+        double amount;
+
+        if (nextWinner()) {
+            if (getRange().getMinimumDouble() == getRange().getMaximumDouble()) {
+                amount = getRange().getMaximumDouble();
+            }
+            else if (getRange().getMinimumDouble() > getRange().getMaximumDouble()) {
+                amount = getRange().getMinimumDouble();
+            }
+            else {
+                amount = getRange().getMinimumDouble() + random.nextDouble() * (getRange().getMaximumDouble() - getRange().getMinimumDouble());
+            }
+        }
+        else {
+            amount = 0.0D;
         }
 
         return amount;

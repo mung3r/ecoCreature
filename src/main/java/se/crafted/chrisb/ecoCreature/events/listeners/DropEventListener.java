@@ -188,7 +188,7 @@ public class DropEventListener implements Listener
             }
             stack.setItemMeta(itemMeta);
 
-            if (drop.isAddItemsToInventory() && player != null) {
+            if (drop.isAddToInventory() && player != null) {
                 Map<Integer, ItemStack> leftOver = player.getInventory().addItem(stack);
                 for (Map.Entry<Integer, ItemStack> entry : leftOver.entrySet()) {
                     drop.getWorld().dropItemNaturally(drop.getLocation(), entry.getValue());

@@ -37,7 +37,7 @@ public class ItemDrop extends AbstractDrop
     private Byte data;
     private Short durability;
     private Collection<ItemEnchantment> enchantments;
-    private boolean addItemsToInventory;
+    private boolean addToInventory;
 
     public ItemDrop(Material material)
     {
@@ -80,21 +80,20 @@ public class ItemDrop extends AbstractDrop
         this.enchantments = enchantments;
     }
 
-    public boolean isAddItemsToInventory()
+    public boolean isAddToInventory()
     {
-        return addItemsToInventory;
+        return addToInventory;
     }
 
-    public void setAddItemsToInventory(boolean addItemsToInventory)
+    public void setAddToInventory(boolean addToInventory)
     {
-        this.addItemsToInventory = addItemsToInventory;
+        this.addToInventory = addToInventory;
     }
 
-    public ItemStack getOutcome(boolean isFixedDrops)
+    public ItemStack nextItemStack(boolean isFixedDrops)
     {
-        if (getRandom().nextDouble() < getChance() && material != null) {
-            int dropAmount = isFixedDrops ? getRange().getMaximumInteger() : getRange().getMinimumInteger()
-                    + getRandom().nextInt(Math.abs(getRange().getMaximumInteger() - getRange().getMinimumInteger() + 1));
+        if (nextWinner() && material != null) {
+            int dropAmount = isFixedDrops ? getFixedAmount() : nextIntAmount();
 
             if (dropAmount > 0) {
                 ItemStack itemStack;
@@ -108,7 +107,7 @@ public class ItemDrop extends AbstractDrop
                         itemStack.setDurability(durability);
                     }
                 }
-                itemStack.addUnsafeEnchantments(ItemEnchantment.getOutcome(enchantments));
+                itemStack.addUnsafeEnchantments(ItemEnchantment.nextEnchantments(enchantments));
                 if (itemStack.getAmount() > 0) {
                     return itemStack;
                 }
