@@ -69,7 +69,7 @@ public class LoreDrop extends ItemDrop
     {
         ItemStack itemStack = super.nextItemStack(fixedAmount);
 
-        if (itemStack != null) {
+        if (itemStack != null && itemStack.getItemMeta() != null) {
             ItemMeta itemMeta = itemStack.getItemMeta();
             itemMeta.setDisplayName(displayName);
             itemMeta.setLore(lore);

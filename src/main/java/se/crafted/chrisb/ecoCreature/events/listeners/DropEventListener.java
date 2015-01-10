@@ -174,19 +174,21 @@ public class DropEventListener implements Listener
 
         for (ItemStack stack : drop.getItemDrops()) {
             ItemMeta itemMeta = stack.getItemMeta();
-            if (itemMeta.hasDisplayName()) {
-                String displayName = getAssembledMessage(itemMeta.getDisplayName(), drop);
-                itemMeta.setDisplayName(displayName);
-            }
-
-            if (itemMeta.hasLore()) {
-                List<String> lore = new ArrayList<>();
-                for (String loreLine : itemMeta.getLore()) {
-                    lore.add(getAssembledMessage(loreLine, drop));
+            if (itemMeta != null) {
+                if (itemMeta.hasDisplayName()) {
+                    String displayName = getAssembledMessage(itemMeta.getDisplayName(), drop);
+                    itemMeta.setDisplayName(displayName);
                 }
-                itemMeta.setLore(lore);
+    
+                if (itemMeta.hasLore()) {
+                    List<String> lore = new ArrayList<>();
+                    for (String loreLine : itemMeta.getLore()) {
+                        lore.add(getAssembledMessage(loreLine, drop));
+                    }
+                    itemMeta.setLore(lore);
+                }
+                stack.setItemMeta(itemMeta);
             }
-            stack.setItemMeta(itemMeta);
 
             if (drop.isAddToInventory() && player != null) {
                 Map<Integer, ItemStack> leftOver = player.getInventory().addItem(stack);
