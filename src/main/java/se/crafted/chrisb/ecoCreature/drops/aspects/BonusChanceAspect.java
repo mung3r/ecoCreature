@@ -35,8 +35,11 @@ public class BonusChanceAspect
     public double applyBonusMultiplierAspect(ProceedingJoinPoint pjp) throws Throwable
     {
         double percentage = (double) pjp.proceed();
-        LoggerUtil.getInstance().debug("applying bonus multiplier " + bonus.getMultiplier() + " to " + percentage);
-        return percentage * bonus.getMultiplier();
+        if (bonus.isValid()) {
+            LoggerUtil.getInstance().debug("applying bonus multiplier " + bonus.getMultiplier() + " to " + percentage);
+            percentage *=  bonus.getMultiplier();
+        }
+        return percentage;
     }
 
     public static synchronized Bonus getBonus()
