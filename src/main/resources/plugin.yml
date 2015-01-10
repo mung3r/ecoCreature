@@ -12,12 +12,15 @@ commands:
     description: ecoCreature commands
     usage: |
            Usage:
-           /<command> reload - Reload config
+           /<command> reload [config] <world> - Reload configuration
+           /<command> bonus <multiplier> <duration> <message> - Set bonus multiplier
+           /<command> debug - Toggle debug log output
 permissions:
   ecocreature.command.*:
     description: Allows all commands
     children:
       ecocreature.command.reload: true
+      ecocreature.command.bonus: true
       ecocreature.command.debug: true
   ecocreature.gain.*:
     description: Allows all gain multipliers
