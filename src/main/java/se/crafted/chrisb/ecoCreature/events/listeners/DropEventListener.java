@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
@@ -173,22 +174,24 @@ public class DropEventListener implements Listener
         }
 
         for (ItemStack stack : drop.getItemDrops()) {
-            ItemMeta itemMeta = stack.getItemMeta();
-            if (itemMeta != null) {
-                if (itemMeta.hasDisplayName()) {
-                    String displayName = getAssembledMessage(itemMeta.getDisplayName(), drop);
-                    itemMeta.setDisplayName(displayName);
-                }
-    
-                if (itemMeta.hasLore()) {
-                    List<String> lore = new ArrayList<>();
-                    for (String loreLine : itemMeta.getLore()) {
-                        lore.add(getAssembledMessage(loreLine, drop));
-                    }
-                    itemMeta.setLore(lore);
-                }
-                stack.setItemMeta(itemMeta);
+            if (Material.AIR.equals(stack.getType())) {
+                continue;
             }
+
+            ItemMeta itemMeta = stack.getItemMeta();
+            if (itemMeta.hasDisplayName()) {
+                String displayName = getAssembledMessage(itemMeta.getDisplayName(), drop);
+                itemMeta.setDisplayName(displayName);
+            }
+
+            if (itemMeta.hasLore()) {
+                List<String> lore = new ArrayList<>();
+                for (String loreLine : itemMeta.getLore()) {
+                    lore.add(getAssembledMessage(loreLine, drop));
+                }
+                itemMeta.setLore(lore);
+            }
+            stack.setItemMeta(itemMeta);
 
             if (drop.isAddToInventory() && player != null) {
                 Map<Integer, ItemStack> leftOver = player.getInventory().addItem(stack);
