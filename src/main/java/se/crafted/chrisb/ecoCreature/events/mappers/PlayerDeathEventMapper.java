@@ -55,6 +55,6 @@ public class PlayerDeathEventMapper extends AbstractEventMapper
         Player player = event.getEntity();
         DropConfig dropConfig = getDropConfig(player.getWorld());
 
-        return Lists.newArrayList(new DropEvent(player, dropConfig.createDrops(event)));
+        return Lists.newArrayList(new DropEvent(player, dropConfig.assembleDrops(event)));
     }
 }

@@ -23,60 +23,33 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Random;
 
 import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
 
-public class EntityDrop
+public class EntityDrop extends AbstractDrop
 {
-    private static Random random = new Random();
-
     private final EntityType type;
-    private NumberRange range;
-    private double percentage;
 
     public EntityDrop(EntityType type, NumberRange range, double percentage)
     {
         this.type = type;
-        this.range = range;
-        this.percentage = percentage;
+        setRange(range);
+        setPercentage(percentage);
     }
 
-    public Collection<EntityType> getOutcome()
+    public Collection<EntityType> nextEntityTypes()
     {
         Collection<EntityType> types = new ArrayList<>();
-        int amount = nextAmount();
+        int amount = nextIntAmount();
 
         for (int i = 0; i < amount; i++) {
             types.add(type);
         }
 
         return types;
-    }
-
-    private int nextAmount()
-    {
-        int amount;
-
-        if (random.nextDouble() > percentage / 100.0D) {
-            amount = 0;
-        }
-        else {
-            if (range.getMinimumInteger() == range.getMaximumInteger()) {
-                amount = range.getMinimumInteger();
-            }
-            else if (range.getMinimumInteger() > range.getMaximumInteger()) {
-                amount = range.getMinimumInteger();
-            }
-            else {
-                amount = range.getMinimumInteger() + random.nextInt(range.getMaximumInteger() - range.getMinimumInteger() + 1);
-            }
-        }
-
-        return amount;
     }
 
     public static Collection<EntityDrop> parseConfig(ConfigurationSection config)

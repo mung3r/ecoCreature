@@ -28,7 +28,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import se.crafted.chrisb.ecoCreature.DropConfigLoader;
-import se.crafted.chrisb.ecoCreature.drops.Drop;
+import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
@@ -62,15 +62,15 @@ public class PlayerKilledEventMapper extends AbstractEventMapper
         Player killer = event.getKiller();
         Player victim = event.getVictim();
         DropConfig dropConfig = getDropConfig(killer.getWorld());
-        Collection<Drop> drops = new ArrayList<>();
-        Collection<Drop> penalties = new ArrayList<>();
+        Collection<AssembledDrop> drops = new ArrayList<>();
+        Collection<AssembledDrop> penalties = new ArrayList<>();
 
-        for (Drop killerDrop : createKillerDrops(event)) {
+        for (AssembledDrop killerDrop : createKillerDrops(event)) {
             drops.add(killerDrop);
 
             PlayerDeathEvent deathEvent = new PlayerDeathEvent(event.getEntity(), event.getDrops(), event.getDroppedExp(), event.getNewExp(),
                     event.getNewTotalExp(), event.getNewLevel(), event.getDeathMessage());
-            for (Drop penalty : dropConfig.createDrops(deathEvent)) {
+            for (AssembledDrop penalty : dropConfig.assembleDrops(deathEvent)) {
                 penalty.setCoin(killerDrop.getCoin());
                 penalty.setGain(-killerDrop.getGain());
 
@@ -81,14 +81,14 @@ public class PlayerKilledEventMapper extends AbstractEventMapper
         return Lists.newArrayList(new DropEvent(killer, drops), new DropEvent(victim, penalties));
     }
 
-    private Collection<Drop> createKillerDrops(final PlayerKilledEvent event)
+    private Collection<AssembledDrop> createKillerDrops(final PlayerKilledEvent event)
     {
         final DropConfig dropConfig = getDropConfig(event.getEntity().getWorld());
 
-        Collection<Drop> drops = Collections2.transform(dropConfig.createDrops(event), new Function<Drop, Drop>() {
+        Collection<AssembledDrop> drops = Collections2.transform(dropConfig.assembleDrops(event), new Function<AssembledDrop, AssembledDrop>() {
 
             @Override
-            public Drop apply(Drop drop)
+            public AssembledDrop apply(AssembledDrop drop)
             {
                 drop.addParameter(MessageToken.CREATURE, event.getVictim().getName());
 

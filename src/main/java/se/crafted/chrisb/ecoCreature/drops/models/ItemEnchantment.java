@@ -59,7 +59,7 @@ public class ItemEnchantment
         return levelRange.getMinimumInteger() + random.nextInt(Math.abs(levelRange.getMaximumInteger() - levelRange.getMinimumInteger() + 1));
     }
 
-    public static Map<Enchantment, Integer> getOutcome(Collection<ItemEnchantment> enchantments)
+    public static Map<Enchantment, Integer> nextEnchantments(Collection<ItemEnchantment> enchantments)
     {
         Map<Enchantment, Integer> enchantmentMap = new HashMap<>();
 

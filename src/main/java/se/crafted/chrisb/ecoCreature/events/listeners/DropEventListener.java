@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
@@ -37,7 +38,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
-import se.crafted.chrisb.ecoCreature.drops.Drop;
+import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
@@ -61,10 +62,10 @@ public class DropEventListener implements Listener
     public void onDropEvent(DropEvent event)
     {
         if (!event.isCancelled()) {
-            Collection<Drop> drops = event.getDrops();
+            Collection<AssembledDrop> drops = event.getDrops();
             Player player = event.getPlayer();
 
-            for (Drop drop : drops) {
+            for (AssembledDrop drop : drops) {
                 dropCoin(player, drop);
                 dropItems(player, drop);
                 dropEntities(drop);
@@ -75,7 +76,7 @@ public class DropEventListener implements Listener
         }
     }
 
-    private void dropCoin(Player player, Drop drop)
+    private void dropCoin(Player player, AssembledDrop drop)
     {
         if (!DependencyUtils.hasEconomy() || player == null) {
             return;
@@ -97,7 +98,7 @@ public class DropEventListener implements Listener
         }
     }
 
-    private Collection<String> createParty(String player, Drop drop)
+    private Collection<String> createParty(String player, AssembledDrop drop)
     {
         Collection<String> party = new ArrayList<>();
         party.add(player);
@@ -105,7 +106,7 @@ public class DropEventListener implements Listener
         return party;
     }
 
-    private double calculateAmount(Drop drop)
+    private double calculateAmount(AssembledDrop drop)
     {
         LoggerUtil.getInstance().debug("===== START: coin calculation for " + drop.getName());
         LoggerUtil.getInstance().debug("Initial amount: " + drop.getCoin());
@@ -166,13 +167,17 @@ public class DropEventListener implements Listener
         return message;
     }
 
-    private void dropItems(Player player, Drop drop)
+    private void dropItems(Player player, AssembledDrop drop)
     {
         if (player != null) {
             drop.addParameter(MessageToken.PLAYER, player.getName());
         }
 
         for (ItemStack stack : drop.getItemDrops()) {
+            if (Material.AIR.equals(stack.getType())) {
+                continue;
+            }
+
             ItemMeta itemMeta = stack.getItemMeta();
             if (itemMeta.hasDisplayName()) {
                 String displayName = getAssembledMessage(itemMeta.getDisplayName(), drop);
@@ -188,7 +193,7 @@ public class DropEventListener implements Listener
             }
             stack.setItemMeta(itemMeta);
 
-            if (drop.isAddItemsToInventory() && player != null) {
+            if (drop.isAddToInventory() && player != null) {
                 Map<Integer, ItemStack> leftOver = player.getInventory().addItem(stack);
                 for (Map.Entry<Integer, ItemStack> entry : leftOver.entrySet()) {
                     drop.getWorld().dropItemNaturally(drop.getLocation(), entry.getValue());
@@ -199,13 +204,13 @@ public class DropEventListener implements Listener
         }
     }
 
-    private String getAssembledMessage(String template, Drop drop)
+    private String getAssembledMessage(String template, AssembledDrop drop)
     {
         Message message = new DefaultMessage(template);
         return message.getAssembledMessage(drop.getParameters());
     }
 
-    private void dropEntities(Drop drop)
+    private void dropEntities(AssembledDrop drop)
     {
         for (EntityType type : drop.getEntityDrops()) {
             Entity entity = drop.getWorld().spawn(drop.getLocation(), type.getEntityClass());
@@ -215,7 +220,7 @@ public class DropEventListener implements Listener
         }
     }
 
-    private void dropJockeys(Drop drop)
+    private void dropJockeys(AssembledDrop drop)
     {
         Iterator<EntityType> typeIterator = drop.getJockeyDrops().iterator();
         while (typeIterator.hasNext()) {

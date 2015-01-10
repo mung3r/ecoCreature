@@ -36,9 +36,9 @@ import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 
 public class BookDrop extends ItemDrop
 {
-    public BookDrop(Material material)
+    public BookDrop()
     {
-        super(material);
+        super(Material.WRITTEN_BOOK);
     }
 
     private String title;
@@ -76,9 +76,9 @@ public class BookDrop extends ItemDrop
     }
 
     @Override
-    public ItemStack getOutcome(boolean isFixedDrops)
+    public ItemStack nextItemStack(boolean fixedAmount)
     {
-        ItemStack itemStack = super.getOutcome(isFixedDrops);
+        ItemStack itemStack = super.nextItemStack(fixedAmount);
 
         if (itemStack != null && itemStack.getItemMeta() instanceof BookMeta) {
             BookMeta bookMeta = (BookMeta) itemStack.getItemMeta();
@@ -91,9 +91,9 @@ public class BookDrop extends ItemDrop
         return itemStack;
     }
 
-    public static Collection<AbstractItemDrop> parseConfig(ConfigurationSection config)
+    public static Collection<ItemDrop> parseConfig(ConfigurationSection config)
     {
-        Collection<AbstractItemDrop> drops = Collections.emptyList();
+        Collection<ItemDrop> drops = Collections.emptyList();
 
         if (config != null && config.getList("Drops") != null) {
             drops = new ArrayList<>();
@@ -104,7 +104,7 @@ public class BookDrop extends ItemDrop
                     Material material = parseMaterial(itemConfig.getString("item"));
 
                     if (material != null && material == Material.WRITTEN_BOOK) {
-                        BookDrop drop = new BookDrop(material);
+                        BookDrop drop = new BookDrop();
                         drop.setTitle(DefaultMessage.convertMessage(itemConfig.getString("title")));
                         drop.setAuthor(DefaultMessage.convertMessage(itemConfig.getString("author")));
                         drop.setPages(DefaultMessage.convertMessages(itemConfig.getStringList("pages")));

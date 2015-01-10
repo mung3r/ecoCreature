@@ -27,23 +27,23 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import se.crafted.chrisb.ecoCreature.drops.Drop;
+import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
 
 public class DropEvent extends Event implements Cancellable
 {
     private static final HandlerList HANDLERS = new HandlerList();
 
     private String player;
-    private Collection<Drop> drops;
+    private Collection<AssembledDrop> drops;
 
     private boolean isCancelled;
 
-    public DropEvent(Player player, Collection<Drop> drops)
+    public DropEvent(Player player, Collection<AssembledDrop> drops)
     {
         this(player.getName(), drops);
     }
 
-    public DropEvent(String player, Collection<Drop> drops)
+    public DropEvent(String player, Collection<AssembledDrop> drops)
     {
         this.player = player;
         this.drops = drops;
@@ -59,12 +59,12 @@ public class DropEvent extends Event implements Cancellable
         this.player = player;
     }
 
-    public Collection<Drop> getDrops()
+    public Collection<AssembledDrop> getDrops()
     {
         return drops;
     }
 
-    public void setDrops(Collection<Drop> drop)
+    public void setDrops(Collection<AssembledDrop> drop)
     {
         this.drops = drop;
     }

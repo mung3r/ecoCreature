@@ -23,19 +23,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Random;
 
-import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.drops.Drop;
-import se.crafted.chrisb.ecoCreature.drops.models.AbstractItemDrop;
+import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
+import se.crafted.chrisb.ecoCreature.drops.models.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.BookDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.CoinDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.EntityDrop;
@@ -49,36 +45,28 @@ import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
 
-public abstract class AbstractDropSource
+public abstract class AbstractDropSource extends AbstractDrop
 {
     private static final String NO_COIN_REWARD_MESSAGE = "&7You slayed a &5<crt>&7 using a &3<itm>&7.";
     private static final String COIN_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.";
     private static final String COIN_PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.";
-    private static Random random = new Random();
 
     private String name;
-    private NumberRange range;
-    private double percentage;
 
-    private CoinDrop coin;
-    private Collection<AbstractItemDrop> itemDrops;
-    private Collection<EntityDrop> entityDrops;
-    private Collection<JockeyDrop> jockeyDrops;
+    private Collection<AbstractDrop> drops;
 
     private Message noCoinRewardMessage;
     private Message coinRewardMessage;
     private Message coinPenaltyMessage;
 
-    private boolean fixedDrops;
+    private boolean fixedAmount;
     private boolean integerCurrency;
-    private boolean addItemsToInventory;
+    private boolean addToInventory;
 
     private Map<Class<? extends AbstractRule>, Rule> huntingRules;
 
     public AbstractDropSource()
     {
-        range = new NumberRange(1, 1);
-        percentage = 100;
         huntingRules = Collections.emptyMap();
     }
 
@@ -92,25 +80,19 @@ public abstract class AbstractDropSource
         ConfigurationSection dropConfig = config.getConfigurationSection(section);
         name = dropConfig.getName();
 
-        itemDrops = new ArrayList<>();
-        itemDrops.addAll(ItemDrop.parseConfig(dropConfig));
-        itemDrops.addAll(BookDrop.parseConfig(dropConfig));
-        itemDrops.addAll(LoreDrop.parseConfig(dropConfig));
-        entityDrops = EntityDrop.parseConfig(dropConfig);
-        // TODO: hack - need to fix
-        jockeyDrops = new ArrayList<>();
-        for (EntityDrop drop : JockeyDrop.parseConfig(dropConfig)) {
-            if (drop instanceof JockeyDrop) {
-                jockeyDrops.add((JockeyDrop) drop);
-            }
-        }
-        coin = CoinDrop.parseConfig(dropConfig);
+        drops = new ArrayList<>();
+        drops.addAll(ItemDrop.parseConfig(dropConfig));
+        drops.addAll(BookDrop.parseConfig(dropConfig));
+        drops.addAll(LoreDrop.parseConfig(dropConfig));
+        drops.addAll(EntityDrop.parseConfig(dropConfig));
+        drops.addAll(JockeyDrop.parseConfig(dropConfig));
+        drops.addAll(CoinDrop.parseConfig(dropConfig));
 
         coinRewardMessage = new CoinMessageDecorator(new DefaultMessage(dropConfig.getString("Reward_Message", config.getString("System.Messages.Reward_Message", COIN_REWARD_MESSAGE))));
         coinPenaltyMessage = new CoinMessageDecorator(new DefaultMessage(dropConfig.getString("Penalty_Message", config.getString("System.Messages.Penalty_Message", COIN_PENALTY_MESSAGE))));
         noCoinRewardMessage = new NoCoinMessageDecorator(new DefaultMessage(dropConfig.getString("NoReward_Message", config.getString("System.Messages.NoReward_Message", NO_COIN_REWARD_MESSAGE))));
 
-        addItemsToInventory = dropConfig.getBoolean("AddItemsToInventory", false);
+        addToInventory = dropConfig.getBoolean("AddItemsToInventory", false);
     }
 
     public String getName()
@@ -123,34 +105,9 @@ public abstract class AbstractDropSource
         this.name = name;
     }
 
-    public NumberRange getRange()
-    {
-        return range;
-    }
-
-    public void setRange(NumberRange range)
-    {
-        this.range = range;
-    }
-
-    public double getPercentage()
-    {
-        return percentage;
-    }
-
-    public void setPercentage(double percentage)
-    {
-        this.percentage = percentage;
-    }
-
     public boolean hasPermission(Player player)
     {
         return DependencyUtils.hasPermission(player, "reward." + name);
-    }
-
-    public boolean hasCoin()
-    {
-        return coin != null;
     }
 
     public Message getNoCoinRewardMessage()
@@ -183,14 +140,14 @@ public abstract class AbstractDropSource
         this.coinPenaltyMessage = coinPenaltyMessage;
     }
 
-    public Boolean isFixedDrops()
+    public Boolean isFixedAmount()
     {
-        return fixedDrops;
+        return fixedAmount;
     }
 
-    public void setFixedDrops(Boolean fixedDrops)
+    public void setFixedAmount(Boolean fixedAmount)
     {
-        this.fixedDrops = fixedDrops;
+        this.fixedAmount = fixedAmount;
     }
 
     public Boolean isIntegerCurrency()
@@ -203,14 +160,14 @@ public abstract class AbstractDropSource
         this.integerCurrency = integerCurrency;
     }
 
-    public Boolean isAddItemsToInventory()
+    public Boolean isAddToInventory()
     {
-        return addItemsToInventory;
+        return addToInventory;
     }
 
-    public void setAddItemsToInventory(Boolean addItemsToInventory)
+    public void setAddToInventory(Boolean addToInventory)
     {
-        this.addItemsToInventory = addItemsToInventory;
+        this.addToInventory = addToInventory;
     }
 
     public Map<Class<? extends AbstractRule>, Rule> getHuntingRules()
@@ -223,119 +180,56 @@ public abstract class AbstractDropSource
         this.huntingRules = huntingRules;
     }
 
-    public Collection<Drop> createDrops(Event event)
+    public Collection<AssembledDrop> assembleDrops(Event event)
     {
-        Collection<Drop> drops = new ArrayList<>();
-        int amount = nextAmount();
+        Collection<AssembledDrop> drops = new ArrayList<>();
+        int amount = nextIntAmount();
 
         for (int i = 0; i < amount; i++) {
-            drops.add(createDrop(event));
+            drops.add(assembleDrop(event));
         }
 
         return drops;
     }
 
-    protected Drop createDrop(Event event)
+    protected AssembledDrop assembleDrop(Event event)
     {
-        Drop drop = new Drop(getLocation(event));
+        AssembledDrop assembledDrop = new AssembledDrop(getLocation(event));
 
-        drop.setName(name);
-        drop.setItemDrops(getItemDropOutcomes());
-        drop.setEntityDrops(getEntityDropOutcomes());
-        drop.setJockeyDrops(getJockeyDropOutcomes());
+        assembledDrop.setName(name);
 
-        if (hasCoin()) {
-            drop.setCoin(coin.getOutcome());
-
-            if (drop.getCoin() > 0.0) {
-                drop.setMessage(coinRewardMessage);
+        for (AbstractDrop drop : drops) {
+            if (drop instanceof JockeyDrop) {
+                assembledDrop.getJockeyDrops().addAll(((JockeyDrop) drop).nextEntityTypes());
             }
-            else if (drop.getCoin() < 0.0) {
-                drop.setMessage(coinPenaltyMessage);
+            else if (drop instanceof EntityDrop) {
+                assembledDrop.getEntityDrops().addAll(((EntityDrop) drop).nextEntityTypes());
             }
-            else {
-                drop.setMessage(noCoinRewardMessage);
+            else if (drop instanceof ItemDrop) {
+                assembledDrop.getItemDrops().add(((ItemDrop) drop).nextItemStack(fixedAmount));
             }
-        }
+            else if (drop instanceof CoinDrop) {
+                CoinDrop coin = (CoinDrop) drop;
 
-        drop.setIntegerCurrency(integerCurrency);
-        drop.setAddItemsToInventory(addItemsToInventory);
+                assembledDrop.setCoin(coin.nextDoubleAmount());
 
-        return drop;
-    }
-
-    private int nextAmount()
-    {
-        int amount;
-
-        if (random.nextDouble() > percentage / 100.0D) {
-            amount = 0;
-        }
-        else {
-            if (range.getMinimumInteger() == range.getMaximumInteger()) {
-                amount = range.getMinimumInteger();
-            }
-            else if (range.getMinimumInteger() > range.getMaximumInteger()) {
-                amount = range.getMinimumInteger();
-            }
-            else {
-                amount = range.getMinimumInteger() + random.nextInt(range.getMaximumInteger() - range.getMinimumInteger() + 1);
+                if (assembledDrop.getCoin() > 0.0) {
+                    assembledDrop.setMessage(coinRewardMessage);
+                }
+                else if (assembledDrop.getCoin() < 0.0) {
+                    assembledDrop.setMessage(coinPenaltyMessage);
+                }
+                else {
+                    assembledDrop.setMessage(noCoinRewardMessage);
+                }
             }
         }
 
-        return amount;
+        assembledDrop.setIntegerCurrency(integerCurrency);
+        assembledDrop.setAddToInventory(addToInventory);
+
+        return assembledDrop;
     }
 
     protected abstract Location getLocation(Event event);
-
-    private Collection<ItemStack> getItemDropOutcomes()
-    {
-        Collection<ItemStack> stacks = Collections.emptyList();
-
-        if (itemDrops != null) {
-            stacks = new ArrayList<>();
-
-            for (AbstractItemDrop drop : itemDrops) {
-                ItemStack itemStack = drop.getOutcome(fixedDrops);
-                if (itemStack != null) {
-                    stacks.add(itemStack);
-                }
-            }
-        }
-
-        return stacks;
-    }
-
-    private Collection<EntityType> getEntityDropOutcomes()
-    {
-        Collection<EntityType> types = Collections.emptyList();
-
-        if (entityDrops != null) {
-            types = new ArrayList<>();
-
-            for (EntityDrop drop : entityDrops) {
-                types.addAll(drop.getOutcome());
-            }
-        }
-
-        return types;
-    }
-
-    private Collection<EntityType> getJockeyDropOutcomes()
-    {
-        Collection<EntityType> types = Collections.emptyList();
-
-        if (jockeyDrops != null) {
-            types = new ArrayList<>();
-
-            for (EntityDrop drop : jockeyDrops) {
-                if (drop instanceof JockeyDrop) {
-                    JockeyDrop jockeyDrop = (JockeyDrop) drop;
-                    types.addAll(jockeyDrop.getOutcome());
-                }
-            }
-        }
-
-        return types;
-    }
 }

@@ -27,7 +27,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import se.crafted.chrisb.ecoCreature.DropConfigLoader;
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
-import se.crafted.chrisb.ecoCreature.drops.Drop;
+import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
@@ -60,10 +60,10 @@ public class BlockEventMapper extends AbstractEventMapper
         final Player player = event.getPlayer();
         final DropConfig dropConfig = getDropConfig(player.getWorld());
 
-        Collection<Drop> drops = Collections2.transform(dropConfig.createDrops(event), new Function<Drop, Drop>() {
+        Collection<AssembledDrop> drops = Collections2.transform(dropConfig.assembleDrops(event), new Function<AssembledDrop, AssembledDrop>() {
 
             @Override
-            public Drop apply(Drop drop)
+            public AssembledDrop apply(AssembledDrop drop)
             {
                 drop.setGain(dropConfig.getGainMultiplier(player));
                 drop.addParameter(MessageToken.ITEM, EntityUtils.getItemNameInHand(player))

@@ -65,11 +65,11 @@ public class LoreDrop extends ItemDrop
     }
 
     @Override
-    public ItemStack getOutcome(boolean isFixedDrops)
+    public ItemStack nextItemStack(boolean fixedAmount)
     {
-        ItemStack itemStack = super.getOutcome(isFixedDrops);
+        ItemStack itemStack = super.nextItemStack(fixedAmount);
 
-        if (itemStack != null) {
+        if (itemStack != null && itemStack.getItemMeta() != null) {
             ItemMeta itemMeta = itemStack.getItemMeta();
             itemMeta.setDisplayName(displayName);
             itemMeta.setLore(lore);
@@ -79,9 +79,9 @@ public class LoreDrop extends ItemDrop
         return itemStack;
     }
 
-    public static Collection<AbstractItemDrop> parseConfig(ConfigurationSection config)
+    public static Collection<ItemDrop> parseConfig(ConfigurationSection config)
     {
-        Collection<AbstractItemDrop> drops = Collections.emptyList();
+        Collection<ItemDrop> drops = Collections.emptyList();
 
         if (config != null && config.getList("Drops") != null) {
             drops = new ArrayList<>();
