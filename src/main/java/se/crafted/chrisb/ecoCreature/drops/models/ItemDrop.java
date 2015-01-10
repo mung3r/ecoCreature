@@ -90,10 +90,10 @@ public class ItemDrop extends AbstractDrop
         this.addToInventory = addToInventory;
     }
 
-    public ItemStack nextItemStack(boolean isFixedDrops)
+    public ItemStack nextItemStack(boolean fixedAmount)
     {
         if (nextWinner() && material != null) {
-            int dropAmount = isFixedDrops ? getFixedAmount() : nextIntAmount();
+            int dropAmount = fixedAmount ? getFixedAmount() : nextIntAmount();
 
             if (dropAmount > 0) {
                 ItemStack itemStack;

@@ -27,27 +27,30 @@ public abstract class AbstractDrop implements Drop
 {
     private NumberRange range;
     private double percentage;
-    private final Random random = new Random();
+    private final Random random;
 
-    @Override
+    public AbstractDrop()
+    {
+        range = new NumberRange(1, 1);
+        percentage = 100.0D;
+        random = new Random();
+    }
+
     public NumberRange getRange()
     {
         return range;
     }
 
-    @Override
     public void setRange(NumberRange range)
     {
         this.range = range;
     }
 
-    @Override
     public double getPercentage()
     {
         return percentage;
     }
 
-    @Override
     public void setPercentage(double percentage)
     {
         this.percentage = percentage;
@@ -78,13 +81,14 @@ public abstract class AbstractDrop implements Drop
         else {
             amount = 0;
         }
-    
+
         return amount;
     }
 
     @Override
-    public int getFixedAmount() {
-        return getRange().getMaximumInteger();
+    public int getFixedAmount()
+    {
+        return getRange().getMinimumInteger() > getRange().getMaximumInteger() ? getRange().getMinimumInteger() : getRange().getMaximumInteger();
     }
 
     @Override

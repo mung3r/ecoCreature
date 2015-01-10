@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -60,7 +59,7 @@ public abstract class AbstractDropSource extends AbstractDrop
     private Message coinRewardMessage;
     private Message coinPenaltyMessage;
 
-    private boolean fixedDrops;
+    private boolean fixedAmount;
     private boolean integerCurrency;
     private boolean addToInventory;
 
@@ -68,8 +67,6 @@ public abstract class AbstractDropSource extends AbstractDrop
 
     public AbstractDropSource()
     {
-        setRange(new NumberRange(1, 1));
-        setPercentage(100.0D);
         huntingRules = Collections.emptyMap();
     }
 
@@ -143,14 +140,14 @@ public abstract class AbstractDropSource extends AbstractDrop
         this.coinPenaltyMessage = coinPenaltyMessage;
     }
 
-    public Boolean isFixedDrops()
+    public Boolean isFixedAmount()
     {
-        return fixedDrops;
+        return fixedAmount;
     }
 
-    public void setFixedDrops(Boolean fixedDrops)
+    public void setFixedAmount(Boolean fixedAmount)
     {
-        this.fixedDrops = fixedDrops;
+        this.fixedAmount = fixedAmount;
     }
 
     public Boolean isIntegerCurrency()
@@ -209,7 +206,7 @@ public abstract class AbstractDropSource extends AbstractDrop
                 assembledDrop.getEntityDrops().addAll(((EntityDrop) drop).nextEntityTypes());
             }
             else if (drop instanceof ItemDrop) {
-                assembledDrop.getItemDrops().add(((ItemDrop) drop).nextItemStack(fixedDrops));
+                assembledDrop.getItemDrops().add(((ItemDrop) drop).nextItemStack(fixedAmount));
             }
             else if (drop instanceof CoinDrop) {
                 CoinDrop coin = (CoinDrop) drop;

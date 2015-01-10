@@ -202,7 +202,7 @@ public abstract class AbstractDropCategory<T>
         if (sources != null && config != null) {
             for (AbstractDropSource source : sources) {
                 source.setIntegerCurrency(config.getBoolean("System.Economy.IntegerCurrency", false));
-                source.setFixedDrops(config.getBoolean("System.Hunting.FixedDrops", false));
+                source.setFixedAmount(config.getBoolean("System.Hunting.FixedDrops", false));
 
                 source.setCoinRewardMessage(configureMessage(source.getCoinRewardMessage(), config));
                 source.setCoinPenaltyMessage(configureMessage(source.getCoinPenaltyMessage(), config));
