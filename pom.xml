@@ -101,6 +101,12 @@
       <artifactId>bukkit</artifactId>
       <version>${bukkit.version}</version>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.avaje</groupId>
+          <artifactId>ebean</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>net.milkbowl.vault</groupId>
