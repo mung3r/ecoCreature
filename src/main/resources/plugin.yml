@@ -57,11 +57,13 @@ permissions:
       ecocreature.reward.deathstreak: true
       ecocreature.reward.enderdragon: true
       ecocreature.reward.enderman: true
+      ecocreature.reward.endermite: true
+      ecocreature.reward.entityhorse: true
       ecocreature.reward.ghast: true
       ecocreature.reward.giant: true
+      ecocreature.reward.guardian: true
       ecocreature.reward.heroleveled: true
       ecocreature.reward.heromastered: true
-      ecocreature.reward.horse: true
       ecocreature.reward.killstreak: true
       ecocreature.reward.magmacube: true
       ecocreature.reward.mcmmoleveled: true
@@ -72,6 +74,7 @@ permissions:
       ecocreature.reward.pigzombie: true
       ecocreature.reward.player: true
       ecocreature.reward.poweredcreeper: true
+      ecocreature.reward.rabbit: true
       ecocreature.reward.sheep: true
       ecocreature.reward.silverfish: true
       ecocreature.reward.skeleton: true
@@ -176,20 +179,26 @@ permissions:
   ecocreature.reward.enderman:
     description: Enables rewards for endermen
     default: op
+  ecocreature.reward.endermite:
+    description: Enables rewards for endermite
+    default: op
+  ecocreature.reward.entityhorse:
+    description: Enables rewards for horses
+    default: op
   ecocreature.reward.ghast:
     description: Enables rewards for ghasts
     default: op
   ecocreature.reward.giant:
     description: Enables rewards for giants
     default: op
+  ecocreature.reward.guardian:
+    description: Enables rewards for guardians
+    default: op
   ecocreature.reward.heroleveled:
     description: Enables rewards for leveling in Heroes
     default: op
   ecocreature.reward.heromastered:
     description: Enables rewards for mastering a class in Heroes
-    default: op
-  ecocreature.reward.horse:
-    description: Enables rewards for horses
     default: op
   ecocreature.reward.killstreak:
     description: Enables rewards for kill streaks via DeathTpPlus
@@ -220,6 +229,9 @@ permissions:
     default: op
   ecocreature.reward.poweredcreeper:
     description: Enables rewards for powered creepers
+    default: op
+  ecocreature.reward.rabbit:
+    description: Enables rewards for rabbits
     default: op
   ecocreature.reward.sheep:
     description: Enables rewards for sheep
