@@ -13,7 +13,8 @@ commands:
     usage: |
            Usage:
            /<command> reload [config] <world> - Reload configuration
-           /<command> bonus <multiplier> <duration> <message> - Set bonus multiplier
+           /<command> bonus - Show loot bonus info
+           /<command> setbonus <multiplier> <duration> <message> - Set loot bonus multiplier
            /<command> debug - Toggle debug log output
 permissions:
   ecocreature.command.*:
@@ -21,6 +22,7 @@ permissions:
     children:
       ecocreature.command.reload: true
       ecocreature.command.bonus: true
+      ecocreature.command.setbonus: true
       ecocreature.command.debug: true
   ecocreature.gain.*:
     description: Allows all gain multipliers

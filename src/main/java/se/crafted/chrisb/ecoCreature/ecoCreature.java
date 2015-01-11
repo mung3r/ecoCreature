@@ -28,6 +28,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import se.crafted.chrisb.ecoCreature.commands.BonusCommand;
+import se.crafted.chrisb.ecoCreature.commands.SetBonusCommand;
 import se.crafted.chrisb.ecoCreature.commands.CommandHandler;
 import se.crafted.chrisb.ecoCreature.commands.DebugCommand;
 import se.crafted.chrisb.ecoCreature.commands.HelpCommand;
@@ -121,7 +122,8 @@ public class ecoCreature extends JavaPlugin
         commandHandler = new CommandHandler();
         commandHandler.addCommand(new HelpCommand(commandHandler));
         commandHandler.addCommand(new ReloadCommand(this));
-        commandHandler.addCommand(new BonusCommand(this));
+        commandHandler.addCommand(new BonusCommand());
+        commandHandler.addCommand(new SetBonusCommand());
         commandHandler.addCommand(new DebugCommand());
     }
 
