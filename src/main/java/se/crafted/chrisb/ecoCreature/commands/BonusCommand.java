@@ -19,29 +19,21 @@
  */
 package se.crafted.chrisb.ecoCreature.commands;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.bukkit.command.CommandSender;
 
-import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.drops.aspects.BonusChanceAspect;
 import se.crafted.chrisb.ecoCreature.drops.categories.Bonus;
 
 public class BonusCommand extends BasicCommand
 {
-    private final ecoCreature plugin;
-
-    public BonusCommand(ecoCreature plugin)
+    public BonusCommand()
     {
         super("Bonus");
-        this.plugin = plugin;
-        setDescription("Set bonus multiplier");
-        setUsage("/ecoc bonus <multiplier> <duration> <message...>");
-        setArgumentRange(3, 255);
+        setDescription("Show loot bonus info");
+        setUsage("/ecoc bonus");
+        setArgumentRange(0, 0);
         setIdentifiers("bonus");
         setPermission("ecocreature.command.bonus");
     }
@@ -49,68 +41,18 @@ public class BonusCommand extends BasicCommand
     @Override
     public boolean execute(CommandSender sender, String identifier, String[] args)
     {
-        if (args != null && args.length > 2) {
-            try {
-                double multiplier = Double.parseDouble(args[0]);
-                long endTimeInMillis = getTimeInMillis(args[1]);
-                Bonus bonus = new Bonus(multiplier, endTimeInMillis);
-                BonusChanceAspect.setBonus(bonus);
-
-                StringBuilder message = new StringBuilder();
-                for (int i = 0; i < args.length; i++) {
-                    message.append(args[i]);
-                    if (i + 1 < args.length) {
-                        message.append(" ");
-                    }
-                }
-                sender.sendMessage("Bonus multiplier set for " + bonus.getMultiplier() + ", ending at " + new Date(bonus.getEndTimeInMillis()));
+        if (args != null && args.length == 0) {
+            Bonus bonus = BonusChanceAspect.getBonus();
+            if (bonus != null && bonus.isValid()) {
+                sender.sendMessage("Loot bonus multiplier set for " + bonus.getMultiplier() + ", ending at " + new Date(bonus.getEndTimeInMillis()));
             }
-            catch (IllegalArgumentException e) {
-                sender.sendMessage(e.getMessage());
+            else {
+                sender.sendMessage("No active loot bonus");
             }
         }
         else {
             sender.sendMessage(getUsage());
         }
         return true;
-    }
-
-    private long getTimeInMillis(String arg)
-    {
-        final Calendar cal = new GregorianCalendar();
-        Integer field = null;
-        final Pattern pattern = Pattern.compile("(?i)(\\d+)(.+)", Pattern.CASE_INSENSITIVE);
-        final Matcher matcher = pattern.matcher(arg);
-
-        if (!matcher.find()) {
-            throw new IllegalArgumentException("Syntax Error");
-        }
-
-        int amount = Integer.parseInt(matcher.group(1));
-        arg = matcher.group(2);
-        if (arg.equalsIgnoreCase("min")) {
-            field = Calendar.MINUTE;
-        }
-        else if (arg.equalsIgnoreCase("s")) {
-            field = Calendar.SECOND;
-        }
-        else if (arg.equalsIgnoreCase("h")) {
-            field = Calendar.HOUR_OF_DAY;
-        }
-        else if (arg.equalsIgnoreCase("d")) {
-            field = Calendar.DAY_OF_YEAR;
-        }
-        else if (arg.equalsIgnoreCase("w")) {
-            field = Calendar.WEEK_OF_YEAR;
-        }
-        else if (arg.equalsIgnoreCase("m")) {
-            field = Calendar.MONTH;
-        }
-        else {
-            throw new IllegalArgumentException("Invalid time-type given, use: min - Minutes, s - Seconds, h - Hours, d - Days, w - Weeks, m - Month");
-        }
-
-        cal.add(field, amount);
-        return cal.getTimeInMillis();
     }
 }
