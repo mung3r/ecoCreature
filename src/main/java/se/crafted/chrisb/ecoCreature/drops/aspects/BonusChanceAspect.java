@@ -24,7 +24,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
-import se.crafted.chrisb.ecoCreature.drops.categories.Bonus;
+import se.crafted.chrisb.ecoCreature.drops.models.Bonus;
 
 @Aspect
 public class BonusChanceAspect
