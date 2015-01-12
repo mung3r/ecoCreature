@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 import org.bukkit.command.CommandSender;
 
 import se.crafted.chrisb.ecoCreature.drops.aspects.BonusChanceAspect;
-import se.crafted.chrisb.ecoCreature.drops.categories.Bonus;
+import se.crafted.chrisb.ecoCreature.drops.models.Bonus;
 
 public class SetBonusCommand extends BasicCommand
 {
