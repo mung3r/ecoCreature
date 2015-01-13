@@ -77,7 +77,7 @@ public class MaterialDropCategory extends AbstractDropCategory<MaterialData>
                         }
 
                         sources.get(materialData).add(source);
-                        sources.get(materialData).addAll(getSets("RewardTable." + typeName, config));
+                        sources.get(materialData).addAll(parseSets("RewardTable." + typeName, config));
                     }
                 }
             }

@@ -135,7 +135,7 @@ public abstract class AbstractDropCategory<T>
         });
     }
 
-    protected static Collection<AbstractDropSource> getSets(String rewardSection, ConfigurationSection config)
+    protected static Collection<AbstractDropSource> parseSets(String rewardSection, ConfigurationSection config)
     {
         Collection<AbstractDropSource> sources = new ArrayList<>();
         ConfigurationSection rewardConfig = config.getConfigurationSection(rewardSection);

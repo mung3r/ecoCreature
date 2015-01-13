@@ -86,7 +86,7 @@ public class HeroesDropCategory extends AbstractDropCategory<HeroesDropType>
                         }
 
                         sources.get(type).add(source);
-                        sources.get(type).addAll(getSets("RewardTable." + typeName, config));
+                        sources.get(type).addAll(parseSets("RewardTable." + typeName, config));
                     }
                 }
             }
