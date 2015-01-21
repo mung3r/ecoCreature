@@ -92,7 +92,7 @@ public class ItemDrop extends AbstractDrop
 
     public ItemStack nextItemStack(boolean fixedAmount)
     {
-        if (nextWinner() && material != null) {
+        if (material != null) {
             int dropAmount = fixedAmount ? getFixedAmount() : nextIntAmount();
 
             if (dropAmount > 0) {
