@@ -32,11 +32,11 @@ import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 import com.massivecraft.factions.Rel;
-import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.BoardColl;
 import com.massivecraft.factions.entity.Faction;
-import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.factions.entity.MPlayer;
 import com.massivecraft.factions.util.RelationUtil;
-import com.massivecraft.mcore.ps.PS;
+import com.massivecraft.massivecore.ps.PS;
 
 public class FactionsGain extends AbstractPlayerGain<Rel>
 {
@@ -54,8 +54,8 @@ public class FactionsGain extends AbstractPlayerGain<Rel>
     @Override
     public double getGain(Player player)
     {
-        UPlayer uPlayer = UPlayer.get(player);
-        Faction faction = BoardColls.get().getFactionAt(PS.valueOf(player.getLocation()));
+        MPlayer uPlayer = MPlayer.get(player);
+        Faction faction = BoardColl.get().getFactionAt(PS.valueOf(player.getLocation()));
         Rel rel = RelationUtil.getRelationOfThatToMe(faction, uPlayer);
         double multiplier = uPlayer != null && getMultipliers().containsKey(rel) ?
                 getMultipliers().get(rel) : NO_GAIN;
