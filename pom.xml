@@ -16,8 +16,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <bukkit.version>1.7.9-R0.2</bukkit.version>
-    <vault.version>1.4</vault.version>
+    <bukkit.version>1.8-R0.1-SNAPSHOT</bukkit.version>
+    <vault.version>1.5</vault.version>
     <currentYear>2014</currentYear>
   </properties>
 
@@ -41,6 +41,10 @@
     <repository>
       <id>bukkit-repo</id>
       <url>http://repo.bukkit.org/content/groups/public/</url>
+    </repository>
+    <repository>
+      <id>spigot-repo</id>
+      <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
     </repository>
     <repository>
       <id>heroes-repo</id>
@@ -87,9 +91,21 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>17.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
       <version>${bukkit.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.avaje</groupId>
+      <artifactId>ebean</artifactId>
+      <version>2.7.3</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -160,6 +176,10 @@
         <exclusion>
           <groupId>org.spigotmc</groupId>
           <artifactId>spigot-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>me.desht</groupId>
+          <artifactId>scrollingmenusign</artifactId>
         </exclusion>
         <exclusion>
           <groupId>me.desht</groupId>
