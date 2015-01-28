@@ -181,14 +181,6 @@
           <groupId>me.desht</groupId>
           <artifactId>scrollingmenusign</artifactId>
         </exclusion>
-        <exclusion>
-          <groupId>me.desht</groupId>
-          <artifactId>scrollingmenusign</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>me.desht</groupId>
-          <artifactId>scrollingmenusign</artifactId>
-        </exclusion>
       </exclusions>
     </dependency>
 
