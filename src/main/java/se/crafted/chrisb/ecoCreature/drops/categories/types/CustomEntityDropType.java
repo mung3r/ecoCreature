@@ -27,6 +27,8 @@ import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Rabbit;
+import org.bukkit.entity.Rabbit.Type;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.entity.Wolf;
@@ -35,6 +37,7 @@ import org.bukkit.entity.Zombie;
 public enum CustomEntityDropType
 {
     ANGRY_WOLF("AngryWolf", true),
+    KILLER_RABBIT("KillerRabbit", true),
     PLAYER("Player", true),
     POWERED_CREEPER("PoweredCreeper", true),
     WITHER_SKELETON("WitherSkeleton", true),
@@ -79,6 +82,9 @@ public enum CustomEntityDropType
 
         if (entity instanceof Creeper && ((Creeper) entity).isPowered()) {
             entityType = CustomEntityDropType.POWERED_CREEPER;
+        }
+        else if (entity instanceof Rabbit && Type.THE_KILLER_BUNNY.equals(((Rabbit) entity).getRabbitType())) {
+            entityType = CustomEntityDropType.KILLER_RABBIT;
         }
         else if (entity instanceof Player) {
             entityType = CustomEntityDropType.PLAYER;

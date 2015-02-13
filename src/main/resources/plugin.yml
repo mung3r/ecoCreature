@@ -75,6 +75,7 @@ permissions:
       ecocreature.reward.player: true
       ecocreature.reward.poweredcreeper: true
       ecocreature.reward.rabbit: true
+      ecocreature.reward.killerrabbit: true
       ecocreature.reward.sheep: true
       ecocreature.reward.silverfish: true
       ecocreature.reward.skeleton: true
@@ -233,8 +234,8 @@ permissions:
   ecocreature.reward.rabbit:
     description: Enables rewards for rabbits
     default: op
-  ecocreature.reward.rabbit:
-    description: Enables rewards for rabbits
+  ecocreature.reward.killerrabbit:
+    description: Enables rewards for killer rabbits
     default: op
   ecocreature.reward.sheep:
     description: Enables rewards for sheep
