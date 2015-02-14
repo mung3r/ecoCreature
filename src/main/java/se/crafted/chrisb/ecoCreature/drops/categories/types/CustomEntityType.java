@@ -35,7 +35,7 @@ import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 
-public enum CustomEntityDropType
+public enum CustomEntityType
 {
     ANGRY_WOLF("AngryWolf", EntityType.WOLF),
     KILLER_RABBIT("KillerRabbit", EntityType.RABBIT),
@@ -46,10 +46,10 @@ public enum CustomEntityDropType
     ZOMBIE_BABY("ZombieBaby", EntityType.ZOMBIE),
     INVALID("__Invalid__", null);
 
-    private static final Map<String, CustomEntityDropType> NAME_MAP = new HashMap<>();
+    private static final Map<String, CustomEntityType> NAME_MAP = new HashMap<>();
 
     static {
-        for (CustomEntityDropType type : EnumSet.allOf(CustomEntityDropType.class)) {
+        for (CustomEntityType type : EnumSet.allOf(CustomEntityType.class)) {
             NAME_MAP.put(type.name, type);
         }
     }
@@ -57,7 +57,7 @@ public enum CustomEntityDropType
     private final String name;
     private final EntityType type;
 
-    CustomEntityDropType(String name, EntityType type)
+    CustomEntityType(String name, EntityType type)
     {
         this.name = name.toLowerCase();
         this.type = type;
@@ -73,42 +73,42 @@ public enum CustomEntityDropType
         return type != null;
     }
 
-    public static CustomEntityDropType fromName(String name)
+    public static CustomEntityType fromName(String name)
     {
-        CustomEntityDropType dropType = INVALID;
+        CustomEntityType dropType = INVALID;
         if (name != null && NAME_MAP.containsKey(name.toLowerCase())) {
             dropType = NAME_MAP.get(name.toLowerCase());
         }
         return dropType;
     }
 
-    public static CustomEntityDropType fromEntity(Entity entity)
+    public static CustomEntityType fromEntity(Entity entity)
     {
-        CustomEntityDropType entityType = INVALID;
+        CustomEntityType entityType = INVALID;
 
         if (entity instanceof Creeper && ((Creeper) entity).isPowered()) {
-            entityType = CustomEntityDropType.POWERED_CREEPER;
+            entityType = CustomEntityType.POWERED_CREEPER;
         }
         else if (entity instanceof Rabbit && Type.THE_KILLER_BUNNY.equals(((Rabbit) entity).getRabbitType())) {
-            entityType = CustomEntityDropType.KILLER_RABBIT;
+            entityType = CustomEntityType.KILLER_RABBIT;
         }
         else if (entity instanceof Player) {
-            entityType = CustomEntityDropType.PLAYER;
+            entityType = CustomEntityType.PLAYER;
         }
         else if (entity instanceof Wolf && ((Wolf) entity).isAngry()) {
-            entityType = CustomEntityDropType.ANGRY_WOLF;
+            entityType = CustomEntityType.ANGRY_WOLF;
         }
         else if (entity instanceof Skeleton && ((Skeleton) entity).getSkeletonType() == SkeletonType.WITHER) {
-            entityType = CustomEntityDropType.WITHER_SKELETON;
+            entityType = CustomEntityType.WITHER_SKELETON;
         }
         else if (entity instanceof Zombie && ((Zombie) entity).isVillager()) {
-            entityType = CustomEntityDropType.ZOMBIE_VILLAGER;
+            entityType = CustomEntityType.ZOMBIE_VILLAGER;
         }
         else if (entity instanceof Zombie && ((Zombie) entity).isBaby()) {
-            entityType = CustomEntityDropType.ZOMBIE_BABY;
+            entityType = CustomEntityType.ZOMBIE_BABY;
         }
         else if (entity instanceof LivingEntity) {
-            entityType = CustomEntityDropType.fromName(entity.getType().getName());
+            entityType = CustomEntityType.fromName(entity.getType().getName());
         }
 
         //LoggerUtil.getInstance().debugTrue("No match for type: " + entity.getType().getName(), entityType.equals(INVALID));

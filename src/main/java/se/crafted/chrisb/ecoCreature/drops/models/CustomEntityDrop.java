@@ -27,22 +27,22 @@ import java.util.Collections;
 import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.configuration.ConfigurationSection;
 
-import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomEntityDropType;
+import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomEntityType;
 
 public class CustomEntityDrop extends AbstractDrop
 {
-    private final CustomEntityDropType type;
+    private final CustomEntityType type;
 
-    public CustomEntityDrop(CustomEntityDropType type, NumberRange range, double percentage)
+    public CustomEntityDrop(CustomEntityType type, NumberRange range, double percentage)
     {
         this.type = type;
         setRange(range);
         setPercentage(percentage);
     }
 
-    public Collection<CustomEntityDropType> nextEntityTypes()
+    public Collection<CustomEntityType> nextEntityTypes()
     {
-        Collection<CustomEntityDropType> types = new ArrayList<>();
+        Collection<CustomEntityType> types = new ArrayList<>();
         int amount = nextIntAmount();
 
         for (int i = 0; i < amount; i++) {
@@ -61,19 +61,19 @@ public class CustomEntityDrop extends AbstractDrop
 
             if (config.getList("Drops") != null) {
                 Collection<String> dropsList = config.getStringList("Drops");
-                drops.addAll(CustomEntityDrop.parseDrops(dropsList));
+                drops.addAll(parseDrops(dropsList));
             }
             else {
-                drops.addAll(CustomEntityDrop.parseDrops(config.getString("Drops")));
+                drops.addAll(parseDrops(config.getString("Drops")));
             }
         }
 
         return drops;
     }
 
-    private static Collection<CustomEntityDrop> parseDrops(String dropsString)
+    private static Collection<AbstractDrop> parseDrops(String dropsString)
     {
-        Collection<CustomEntityDrop> drops = Collections.emptyList();
+        Collection<AbstractDrop> drops = Collections.emptyList();
 
         if (dropsString != null && !dropsString.isEmpty()) {
             drops = parseDrops(Arrays.asList(dropsString.split(";")));
@@ -82,12 +82,12 @@ public class CustomEntityDrop extends AbstractDrop
         return drops;
     }
 
-    private static Collection<CustomEntityDrop> parseDrops(Collection<String> dropsList)
+    private static Collection<AbstractDrop> parseDrops(Collection<String> dropsList)
     {
-        Collection<CustomEntityDrop> drops = new ArrayList<>();
+        Collection<AbstractDrop> drops = new ArrayList<>();
 
         for (String dropString : dropsList) {
-            CustomEntityDrop drop = createEntityDrop(dropString);
+            AbstractDrop drop = createEntityDrop(dropString);
             if (drop != null) {
                 drops.add(drop);
             }
@@ -96,28 +96,28 @@ public class CustomEntityDrop extends AbstractDrop
         return drops;
     }
 
-    private static CustomEntityDrop createEntityDrop(String dropString)
+    private static AbstractDrop createEntityDrop(String dropString)
     {
-        CustomEntityDrop drop = null;
+        AbstractDrop drop = null;
 
-        CustomEntityDropType type = parseType(dropString);
-        if (type != null && !CustomEntityDropType.INVALID.equals(type)) {
+        CustomEntityType type = parseType(dropString);
+        if (type != null && type.isValid()) {
             drop = new CustomEntityDrop(type, parseRange(dropString), parsePercentage(dropString));
         }
 
         return drop;
     }
 
-    protected static CustomEntityDropType parseType(String dropString)
+    protected static CustomEntityType parseType(String dropString)
     {
-        CustomEntityDropType type = null;
+        CustomEntityType type = null;
 
         if (dropString != null) {
             String[] dropParts = dropString.split(":");
             String[] itemParts = dropParts[0].split(",");
             String[] itemSubParts = itemParts[0].split("\\.");
 
-            type = CustomEntityDropType.fromName(itemSubParts[0]);
+            type = CustomEntityType.fromName(itemSubParts[0]);
         }
 
         return type;

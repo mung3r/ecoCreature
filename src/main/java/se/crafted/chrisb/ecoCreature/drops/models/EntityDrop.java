@@ -52,23 +52,23 @@ public class EntityDrop extends AbstractDrop
         return types;
     }
 
-    public static Collection<EntityDrop> parseConfig(ConfigurationSection config)
+    public static Collection<AbstractDrop> parseConfig(ConfigurationSection config)
     {
-        Collection<EntityDrop> drops = Collections.emptyList();
+        Collection<AbstractDrop> drops = Collections.emptyList();
 
         if (config != null) {
             drops = new ArrayList<>();
 
             if (config.getList("Drops") != null) {
                 Collection<String> dropsList = config.getStringList("Drops");
-                drops.addAll(EntityDrop.parseDrops(dropsList));
+                drops.addAll(parseDrops(dropsList));
             }
             else {
-                drops.addAll(EntityDrop.parseDrops(config.getString("Drops")));
+                drops.addAll(parseDrops(config.getString("Drops")));
             }
 
             // NOTE: backward compatibility
-            EntityDrop exp = parseExpConfig(config);
+            AbstractDrop exp = parseExpConfig(config);
             if (exp != null) {
                 drops.add(exp);
             }
@@ -77,9 +77,9 @@ public class EntityDrop extends AbstractDrop
         return drops;
     }
 
-    private static EntityDrop parseExpConfig(ConfigurationSection config)
+    private static AbstractDrop parseExpConfig(ConfigurationSection config)
     {
-        EntityDrop exp = null;
+        AbstractDrop exp = null;
 
         if (config != null && config.contains("ExpMin") && config.contains("ExpMax") && config.contains("ExpPercent")) {
             exp = new EntityDrop(EntityType.EXPERIENCE_ORB, new NumberRange(config.getInt("ExpMin", 0), config.getInt("ExpMax", 0)), config.getDouble(
@@ -89,9 +89,9 @@ public class EntityDrop extends AbstractDrop
         return exp;
     }
 
-    private static Collection<EntityDrop> parseDrops(String dropsString)
+    private static Collection<AbstractDrop> parseDrops(String dropsString)
     {
-        Collection<EntityDrop> drops = Collections.emptyList();
+        Collection<AbstractDrop> drops = Collections.emptyList();
 
         if (dropsString != null && !dropsString.isEmpty()) {
             drops = parseDrops(Arrays.asList(dropsString.split(";")));
@@ -100,12 +100,12 @@ public class EntityDrop extends AbstractDrop
         return drops;
     }
 
-    private static Collection<EntityDrop> parseDrops(Collection<String> dropsList)
+    private static Collection<AbstractDrop> parseDrops(Collection<String> dropsList)
     {
-        Collection<EntityDrop> drops = new ArrayList<>();
+        Collection<AbstractDrop> drops = new ArrayList<>();
 
         for (String dropString : dropsList) {
-            EntityDrop drop = createEntityDrop(dropString);
+            AbstractDrop drop = createEntityDrop(dropString);
             if (drop != null) {
                 drops.add(drop);
             }
@@ -114,9 +114,9 @@ public class EntityDrop extends AbstractDrop
         return drops;
     }
 
-    private static EntityDrop createEntityDrop(String dropString)
+    private static AbstractDrop createEntityDrop(String dropString)
     {
-        EntityDrop drop = null;
+        AbstractDrop drop = null;
 
         EntityType type = parseType(dropString);
         if (type != null) {

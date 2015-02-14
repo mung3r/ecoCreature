@@ -31,7 +31,7 @@ import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomEntityDropType;
+import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomEntityType;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
@@ -51,7 +51,7 @@ public class AssembledDrop
     private String name;
     private double coin;
     private Collection<ItemStack> itemDrops;
-    private Collection<CustomEntityDropType> customEntityDrops;
+    private Collection<CustomEntityType> customEntityDrops;
     private Collection<EntityType> entityDrops;
     private Collection<EntityType> jockeyDrops;
     private Message message;
@@ -170,12 +170,12 @@ public class AssembledDrop
         this.itemDrops = collection;
     }
 
-    public Collection<CustomEntityDropType> getCustomEntityDrops()
+    public Collection<CustomEntityType> getCustomEntityDrops()
     {
         return customEntityDrops;
     }
 
-    public void setCustomEntityDrops(Collection<CustomEntityDropType> customEntityDrops)
+    public void setCustomEntityDrops(Collection<CustomEntityType> customEntityDrops)
     {
         this.customEntityDrops = customEntityDrops;
     }

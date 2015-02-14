@@ -31,11 +31,11 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropSourceFactory;
-import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomMaterialDropType;
+import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomMaterialType;
 
-public class CustomMaterialDropCategory extends AbstractDropCategory<CustomMaterialDropType>
+public class CustomMaterialDropCategory extends AbstractDropCategory<CustomMaterialType>
 {
-    public CustomMaterialDropCategory(Map<CustomMaterialDropType, Collection<AbstractDropSource>> sources)
+    public CustomMaterialDropCategory(Map<CustomMaterialType, Collection<AbstractDropSource>> sources)
     {
         super(sources);
     }
@@ -47,9 +47,9 @@ public class CustomMaterialDropCategory extends AbstractDropCategory<CustomMater
     }
 
     @Override
-    protected CustomMaterialDropType extractType(Event event)
+    protected CustomMaterialType extractType(Event event)
     {
-        return CustomMaterialDropType.fromMaterial(((BlockBreakEvent) event).getBlock().getType());
+        return CustomMaterialType.fromMaterial(((BlockBreakEvent) event).getBlock().getType());
     }
 
     @Override
@@ -58,14 +58,14 @@ public class CustomMaterialDropCategory extends AbstractDropCategory<CustomMater
         return ((BlockBreakEvent) event).getPlayer();
     }
 
-    public static AbstractDropCategory<CustomMaterialDropType> parseConfig(ConfigurationSection config)
+    public static AbstractDropCategory<CustomMaterialType> parseConfig(ConfigurationSection config)
     {
-        Map<CustomMaterialDropType, Collection<AbstractDropSource>> sources = new HashMap<>();
+        Map<CustomMaterialType, Collection<AbstractDropSource>> sources = new HashMap<>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {
             for (String typeName : rewardTable.getKeys(false)) {
-                CustomMaterialDropType type = CustomMaterialDropType.fromName(typeName);
+                CustomMaterialType type = CustomMaterialType.fromName(typeName);
 
                 if (type.isValid()) {
                     for (AbstractDropSource source : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {

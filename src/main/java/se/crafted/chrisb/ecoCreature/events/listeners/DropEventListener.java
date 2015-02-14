@@ -45,7 +45,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
-import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomEntityDropType;
+import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomEntityType;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
@@ -220,7 +220,7 @@ public class DropEventListener implements Listener
 
     private void dropCustomEntities(AssembledDrop drop)
     {
-        for (CustomEntityDropType customType : drop.getCustomEntityDrops()) {
+        for (CustomEntityType customType : drop.getCustomEntityDrops()) {
             Entity entity = drop.getWorld().spawn(drop.getLocation(), customType.getType().getEntityClass());
             switch (customType) {
             case ANGRY_WOLF:

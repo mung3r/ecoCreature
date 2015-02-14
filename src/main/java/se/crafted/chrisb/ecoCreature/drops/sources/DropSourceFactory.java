@@ -26,8 +26,8 @@ import org.bukkit.entity.EntityType;
 
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomDropType;
-import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomEntityDropType;
-import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomMaterialDropType;
+import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomEntityType;
+import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomMaterialType;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.HeroesDropType;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.McMMODropType;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.StreakDropType;
@@ -53,13 +53,13 @@ public final class DropSourceFactory
         Collection<AbstractDropSource> sources = new ArrayList<>();
         String name = parseTypeName(section);
         
-        if (CustomEntityDropType.fromName(name).isValid()) {
+        if (CustomEntityType.fromName(name).isValid()) {
             sources.addAll(createCustomEntitySources(section, config));
         }
         else if (EntityType.fromName(name) != null) {
             sources.add(new EntityDropSource(section, config));
         }
-        else if (CustomMaterialDropType.fromName(name).isValid()) {
+        else if (CustomMaterialType.fromName(name).isValid()) {
             sources.addAll(createCustomMaterialSources(section, config));
         }
         else if (Material.matchMaterial(name) != null) {
@@ -88,7 +88,7 @@ public final class DropSourceFactory
     {
         Collection<AbstractDropSource> sources = new ArrayList<>();
 
-        switch (CustomMaterialDropType.fromName(parseTypeName(section))) {
+        switch (CustomMaterialType.fromName(parseTypeName(section))) {
             case LEGACY_SPAWNER:
                 sources.add(new MaterialDropSource(section, config));
                 break;
@@ -102,7 +102,7 @@ public final class DropSourceFactory
     {
         Collection<AbstractDropSource> sources = new ArrayList<>();
 
-        switch (CustomEntityDropType.fromName(parseTypeName(section))) {
+        switch (CustomEntityType.fromName(parseTypeName(section))) {
             case ANGRY_WOLF:
             case KILLER_RABBIT:
             case PLAYER:

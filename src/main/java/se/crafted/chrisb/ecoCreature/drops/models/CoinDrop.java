@@ -43,12 +43,12 @@ public class CoinDrop extends AbstractDrop
         return super.nextDoubleAmount() * multiplier;
     }
 
-    public static Collection<CoinDrop> parseConfig(ConfigurationSection config)
+    public static Collection<AbstractDrop> parseConfig(ConfigurationSection config)
     {
-        Collection<CoinDrop> coins = Collections.emptyList();
+        Collection<AbstractDrop> coins = Collections.emptyList();
 
         if (config != null && config.contains("Coin_Maximum") && config.contains("Coin_Minimum") && config.contains("Coin_Percent")) {
-            coins = new ArrayList<CoinDrop>();
+            coins = new ArrayList<AbstractDrop>();
             coins.add(new CoinDrop(new NumberRange(config.getDouble("Coin_Minimum", 0), config.getDouble("Coin_Maximum", 0)),
                     config.getDouble("Coin_Percent", 0.0D), config.getDouble("Coin_Gain", 1.0D)));
         }
