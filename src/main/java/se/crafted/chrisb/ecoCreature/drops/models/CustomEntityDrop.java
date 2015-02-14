@@ -25,24 +25,24 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.apache.commons.lang.math.NumberRange;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.EntityType;
 
-public class EntityDrop extends AbstractDrop
+import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomEntityDropType;
+
+public class CustomEntityDrop extends AbstractDrop
 {
-    private final EntityType type;
+    private final CustomEntityDropType type;
 
-    public EntityDrop(EntityType type, NumberRange range, double percentage)
+    public CustomEntityDrop(CustomEntityDropType type, NumberRange range, double percentage)
     {
         this.type = type;
         setRange(range);
         setPercentage(percentage);
     }
 
-    public Collection<EntityType> nextEntityTypes()
+    public Collection<CustomEntityDropType> nextEntityTypes()
     {
-        Collection<EntityType> types = new ArrayList<>();
+        Collection<CustomEntityDropType> types = new ArrayList<>();
         int amount = nextIntAmount();
 
         for (int i = 0; i < amount; i++) {
@@ -52,46 +52,28 @@ public class EntityDrop extends AbstractDrop
         return types;
     }
 
-    public static Collection<EntityDrop> parseConfig(ConfigurationSection config)
+    public static Collection<AbstractDrop> parseConfig(ConfigurationSection config)
     {
-        Collection<EntityDrop> drops = Collections.emptyList();
+        Collection<AbstractDrop> drops = Collections.emptyList();
 
         if (config != null) {
             drops = new ArrayList<>();
 
             if (config.getList("Drops") != null) {
                 Collection<String> dropsList = config.getStringList("Drops");
-                drops.addAll(EntityDrop.parseDrops(dropsList));
+                drops.addAll(CustomEntityDrop.parseDrops(dropsList));
             }
             else {
-                drops.addAll(EntityDrop.parseDrops(config.getString("Drops")));
-            }
-
-            // NOTE: backward compatibility
-            EntityDrop exp = parseExpConfig(config);
-            if (exp != null) {
-                drops.add(exp);
+                drops.addAll(CustomEntityDrop.parseDrops(config.getString("Drops")));
             }
         }
 
         return drops;
     }
 
-    private static EntityDrop parseExpConfig(ConfigurationSection config)
+    private static Collection<CustomEntityDrop> parseDrops(String dropsString)
     {
-        EntityDrop exp = null;
-
-        if (config != null && config.contains("ExpMin") && config.contains("ExpMax") && config.contains("ExpPercent")) {
-            exp = new EntityDrop(EntityType.EXPERIENCE_ORB, new NumberRange(config.getInt("ExpMin", 0), config.getInt("ExpMax", 0)), config.getDouble(
-                    "ExpPercent", 0.0D));
-        }
-
-        return exp;
-    }
-
-    private static Collection<EntityDrop> parseDrops(String dropsString)
-    {
-        Collection<EntityDrop> drops = Collections.emptyList();
+        Collection<CustomEntityDrop> drops = Collections.emptyList();
 
         if (dropsString != null && !dropsString.isEmpty()) {
             drops = parseDrops(Arrays.asList(dropsString.split(";")));
@@ -100,12 +82,12 @@ public class EntityDrop extends AbstractDrop
         return drops;
     }
 
-    private static Collection<EntityDrop> parseDrops(Collection<String> dropsList)
+    private static Collection<CustomEntityDrop> parseDrops(Collection<String> dropsList)
     {
-        Collection<EntityDrop> drops = new ArrayList<>();
+        Collection<CustomEntityDrop> drops = new ArrayList<>();
 
         for (String dropString : dropsList) {
-            EntityDrop drop = createEntityDrop(dropString);
+            CustomEntityDrop drop = createEntityDrop(dropString);
             if (drop != null) {
                 drops.add(drop);
             }
@@ -114,33 +96,28 @@ public class EntityDrop extends AbstractDrop
         return drops;
     }
 
-    private static EntityDrop createEntityDrop(String dropString)
+    private static CustomEntityDrop createEntityDrop(String dropString)
     {
-        EntityDrop drop = null;
+        CustomEntityDrop drop = null;
 
-        EntityType type = parseType(dropString);
-        if (type != null) {
-            drop = new EntityDrop(type, parseRange(dropString), parsePercentage(dropString));
+        CustomEntityDropType type = parseType(dropString);
+        if (type != null && !CustomEntityDropType.INVALID.equals(type)) {
+            drop = new CustomEntityDrop(type, parseRange(dropString), parsePercentage(dropString));
         }
 
         return drop;
     }
 
-    protected static boolean isNotAmbiguous(EntityType type)
+    protected static CustomEntityDropType parseType(String dropString)
     {
-        return type != null && Material.matchMaterial(type.getName()) == null;
-    }
-
-    protected static EntityType parseType(String dropString)
-    {
-        EntityType type = null;
+        CustomEntityDropType type = null;
 
         if (dropString != null) {
             String[] dropParts = dropString.split(":");
             String[] itemParts = dropParts[0].split(",");
             String[] itemSubParts = itemParts[0].split("\\.");
 
-            type = EntityType.fromName(itemSubParts[0]);
+            type = CustomEntityDropType.fromName(itemSubParts[0]);
         }
 
         return type;

@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Rabbit;
@@ -36,14 +37,14 @@ import org.bukkit.entity.Zombie;
 
 public enum CustomEntityDropType
 {
-    ANGRY_WOLF("AngryWolf", true),
-    KILLER_RABBIT("KillerRabbit", true),
-    PLAYER("Player", true),
-    POWERED_CREEPER("PoweredCreeper", true),
-    WITHER_SKELETON("WitherSkeleton", true),
-    ZOMBIE_VILLAGER("ZombieVillager", true),
-    ZOMBIE_BABY("ZombieBaby", true),
-    INVALID("__Invalid__", false);
+    ANGRY_WOLF("AngryWolf", EntityType.WOLF, true),
+    KILLER_RABBIT("KillerRabbit", EntityType.RABBIT, true),
+    PLAYER("Player", EntityType.PLAYER, true),
+    POWERED_CREEPER("PoweredCreeper", EntityType.CREEPER, true),
+    WITHER_SKELETON("WitherSkeleton", EntityType.WITHER, true),
+    ZOMBIE_VILLAGER("ZombieVillager", EntityType.ZOMBIE, true),
+    ZOMBIE_BABY("ZombieBaby", EntityType.ZOMBIE, true),
+    INVALID("__Invalid__", null, false);
 
     private static final Map<String, CustomEntityDropType> NAME_MAP = new HashMap<>();
 
@@ -54,12 +55,19 @@ public enum CustomEntityDropType
     }
 
     private final String name;
+    private final EntityType type;
     private final boolean valid;
 
-    CustomEntityDropType(String name, boolean valid)
+    CustomEntityDropType(String name, EntityType type, boolean valid)
     {
         this.name = name.toLowerCase();
+        this.type = type;
         this.valid = valid;
+    }
+
+    public EntityType getType()
+    {
+        return type;
     }
 
     public boolean isValid()
