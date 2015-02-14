@@ -578,6 +578,20 @@ RewardTable:
         ClearClassDropsList: ['LOSTSOUL']
       SimpleClans:
         ClearNonRivalDrops: true
+  Rabbit:
+    Drops:
+    - 'rabbit hide:1:100'
+    - 'rabbit:1:100'
+    Coin_Minimum: 0.10
+    Coin_Maximum: 2.50
+    Coin_Percent: 1.0
+  KillerRabbit:
+    Drops:
+    - 'rabbit hide:1:100'
+    - 'rabbit:1:100'
+    Coin_Minimum: 1.00
+    Coin_Maximum: 2.50
+    Coin_Percent: 50.0
   Sheep:
     Drops:
     - 'wool:1-1:100'
