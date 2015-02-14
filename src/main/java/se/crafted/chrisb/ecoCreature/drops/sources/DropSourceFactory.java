@@ -53,17 +53,17 @@ public final class DropSourceFactory
         Collection<AbstractDropSource> sources = new ArrayList<>();
         String name = parseTypeName(section);
         
-        if (CustomEntityDropType.fromName(name).isValid()) {
-            sources.addAll(createCustomEntitySources(section, config));
-        }
-        else if (EntityType.fromName(name) != null) {
-            sources.add(new EntityDropSource(section, config));
-        }
-        else if (CustomMaterialDropType.fromName(name).isValid()) {
+        if (CustomMaterialDropType.fromName(name).isValid()) {
             sources.addAll(createCustomMaterialSources(section, config));
         }
         else if (Material.matchMaterial(name) != null) {
             sources.add(new MaterialDropSource(section, config));
+        }
+        else if (CustomEntityDropType.fromName(name).isValid()) {
+            sources.addAll(createCustomEntitySources(section, config));
+        }
+        else if (EntityType.fromName(name) != null) {
+            sources.add(new EntityDropSource(section, config));
         }
         else if (CustomDropType.fromName(name).isValid()) {
             sources.addAll(createCustomSources(section, config));
