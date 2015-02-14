@@ -68,6 +68,7 @@ public class AssembledDrop
         name = "Unknown";
         coin = ZERO;
         itemDrops = new ArrayList<>();
+        customEntityDrops = new ArrayList<>();
         entityDrops = new ArrayList<>();
         jockeyDrops = new ArrayList<>();
         message = DefaultMessage.NO_MESSAGE;
