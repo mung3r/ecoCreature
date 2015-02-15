@@ -27,10 +27,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Rabbit;
+import org.bukkit.entity.Rabbit.Type;
+import org.bukkit.entity.Wolf;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -40,6 +45,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
+import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomEntityType;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
@@ -69,6 +75,7 @@ public class DropEventListener implements Listener
             for (AssembledDrop drop : drops) {
                 dropCoin(player, drop);
                 dropItems(player, drop);
+                dropCustomEntities(drop);
                 dropEntities(drop);
                 dropJockeys(drop);
     
@@ -174,7 +181,7 @@ public class DropEventListener implements Listener
             drop.addParameter(MessageToken.PLAYER, player.getName());
         }
 
-        for (ItemStack stack : drop.getItemDrops()) {
+        for (ItemStack stack : drop.getItems()) {
             if (Material.AIR.equals(stack.getType())) {
                 continue;
             }
@@ -211,9 +218,34 @@ public class DropEventListener implements Listener
         return message.getAssembledMessage(drop.getParameters());
     }
 
+    private void dropCustomEntities(AssembledDrop drop)
+    {
+        for (CustomEntityType customType : drop.getCustomEntityTypes()) {
+            Entity entity = drop.getWorld().spawn(drop.getLocation(), customType.getType().getEntityClass());
+            switch (customType) {
+            case ANGRY_WOLF:
+                ((Wolf) entity).setAngry(true);
+                break;
+            case KILLER_RABBIT:
+                ((Rabbit) entity).setRabbitType(Type.THE_KILLER_BUNNY);
+                break;
+            case POWERED_CREEPER:
+                ((Creeper) entity).setPowered(true);
+                break;
+            case ZOMBIE_BABY:
+                ((Zombie) entity).setBaby(true);
+                break;
+            case ZOMBIE_VILLAGER:
+                ((Zombie) entity).setVillager(true);
+                break;
+            default:
+            }
+        }
+    }
+
     private void dropEntities(AssembledDrop drop)
     {
-        for (EntityType type : drop.getEntityDrops()) {
+        for (EntityType type : drop.getEntityTypes()) {
             Entity entity = drop.getWorld().spawn(drop.getLocation(), type.getEntityClass());
             if (entity instanceof ExperienceOrb) {
                 ((ExperienceOrb) entity).setExperience(1);
@@ -223,7 +255,7 @@ public class DropEventListener implements Listener
 
     private void dropJockeys(AssembledDrop drop)
     {
-        Iterator<EntityType> typeIterator = drop.getJockeyDrops().iterator();
+        Iterator<EntityType> typeIterator = drop.getJockeyTypes().iterator();
         while (typeIterator.hasNext()) {
             EntityType vehicleType = typeIterator.next();
             Entity vehicle = drop.getWorld().spawn(drop.getLocation(), vehicleType.getEntityClass());

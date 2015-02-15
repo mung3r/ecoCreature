@@ -25,15 +25,15 @@ import java.util.Map;
 
 import org.bukkit.Material;
 
-public enum CustomMaterialDropType
+public enum CustomMaterialType
 {
     LEGACY_SPAWNER("Spawner", true),
     INVALID("__Invalid__", false);
 
-    private static final Map<String, CustomMaterialDropType> NAME_MAP = new HashMap<>();
+    private static final Map<String, CustomMaterialType> NAME_MAP = new HashMap<>();
 
     static {
-        for (CustomMaterialDropType type : EnumSet.allOf(CustomMaterialDropType.class)) {
+        for (CustomMaterialType type : EnumSet.allOf(CustomMaterialType.class)) {
             NAME_MAP.put(type.name, type);
         }
     }
@@ -41,7 +41,7 @@ public enum CustomMaterialDropType
     private final String name;
     private final boolean valid;
 
-    CustomMaterialDropType(String name, boolean isValid)
+    CustomMaterialType(String name, boolean isValid)
     {
         this.name = name.toLowerCase();
         this.valid = isValid;
@@ -52,18 +52,18 @@ public enum CustomMaterialDropType
         return valid;
     }
 
-    public static CustomMaterialDropType fromName(String name)
+    public static CustomMaterialType fromName(String name)
     {
-        CustomMaterialDropType material = INVALID;
+        CustomMaterialType material = INVALID;
         if (name != null && NAME_MAP.containsKey(name.toLowerCase())) {
             material = NAME_MAP.get(name.toLowerCase());
         }
         return material;
     }
 
-    public static CustomMaterialDropType fromMaterial(Material material)
+    public static CustomMaterialType fromMaterial(Material material)
     {
-        CustomMaterialDropType type = INVALID;
+        CustomMaterialType type = INVALID;
 
         if (material == Material.MOB_SPAWNER) {
             type = LEGACY_SPAWNER;

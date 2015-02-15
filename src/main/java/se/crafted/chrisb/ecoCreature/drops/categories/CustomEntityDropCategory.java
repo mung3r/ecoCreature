@@ -34,11 +34,11 @@ import se.crafted.chrisb.ecoCreature.drops.rules.AbstractRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.Rule;
 import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropSourceFactory;
-import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomEntityDropType;
+import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomEntityType;
 
-public class CustomEntityDropCategory extends AbstractDropCategory<CustomEntityDropType>
+public class CustomEntityDropCategory extends AbstractDropCategory<CustomEntityType>
 {
-    public CustomEntityDropCategory(Map<CustomEntityDropType, Collection<AbstractDropSource>> sources)
+    public CustomEntityDropCategory(Map<CustomEntityType, Collection<AbstractDropSource>> sources)
     {
         super(sources);
     }
@@ -50,15 +50,15 @@ public class CustomEntityDropCategory extends AbstractDropCategory<CustomEntityD
     }
 
     @Override
-    protected CustomEntityDropType extractType(Event event)
+    protected CustomEntityType extractType(Event event)
     {
-        CustomEntityDropType type = CustomEntityDropType.INVALID;
+        CustomEntityType type = CustomEntityType.INVALID;
 
         if (event instanceof PlayerKilledEvent) {
-            type = CustomEntityDropType.PLAYER;
+            type = CustomEntityType.PLAYER;
         }
         else if (event instanceof EntityKilledEvent) {
-            type = CustomEntityDropType.fromEntity(((EntityKilledEvent) event).getEntity());
+            type = CustomEntityType.fromEntity(((EntityKilledEvent) event).getEntity());
         }
 
         return type;
@@ -79,14 +79,14 @@ public class CustomEntityDropCategory extends AbstractDropCategory<CustomEntityD
         return player;
     }
 
-    public static AbstractDropCategory<CustomEntityDropType> parseConfig(ConfigurationSection config)
+    public static AbstractDropCategory<CustomEntityType> parseConfig(ConfigurationSection config)
     {
-        Map<CustomEntityDropType, Collection<AbstractDropSource>> sources = new HashMap<>();
+        Map<CustomEntityType, Collection<AbstractDropSource>> sources = new HashMap<>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {
             for (String typeName : rewardTable.getKeys(false)) {
-                CustomEntityDropType type = CustomEntityDropType.fromName(typeName);
+                CustomEntityType type = CustomEntityType.fromName(typeName);
 
                 if (type.isValid()) {
                     Map<Class<? extends AbstractRule>, Rule> huntingRules = loadHuntingRules(config.getConfigurationSection("System"));

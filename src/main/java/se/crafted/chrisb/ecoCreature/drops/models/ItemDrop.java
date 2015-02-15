@@ -116,9 +116,9 @@ public class ItemDrop extends AbstractDrop
         return new ItemStack(Material.AIR, 0);
     }
 
-    public static Collection<ItemDrop> parseConfig(ConfigurationSection config)
+    public static Collection<AbstractDrop> parseConfig(ConfigurationSection config)
     {
-        Collection<ItemDrop> drops = Collections.emptyList();
+        Collection<AbstractDrop> drops = Collections.emptyList();
 
         if (config != null) {
             if (config.getList("Drops") != null) {
@@ -133,9 +133,9 @@ public class ItemDrop extends AbstractDrop
         return drops;
     }
 
-    private static Collection<ItemDrop> parseDrops(String dropsString)
+    private static Collection<AbstractDrop> parseDrops(String dropsString)
     {
-        Collection<ItemDrop> drops = Collections.emptyList();
+        Collection<AbstractDrop> drops = Collections.emptyList();
 
         if (dropsString != null && !dropsString.isEmpty()) {
             drops = parseDrops(Arrays.asList(dropsString.split(";")));
@@ -144,9 +144,9 @@ public class ItemDrop extends AbstractDrop
         return drops;
     }
 
-    private static Collection<ItemDrop> parseDrops(Collection<String> dropsList)
+    private static Collection<AbstractDrop> parseDrops(Collection<String> dropsList)
     {
-        Collection<ItemDrop> drops = Collections.emptyList();
+        Collection<AbstractDrop> drops = Collections.emptyList();
 
         if (dropsList != null && !dropsList.isEmpty()) {
             drops = new ArrayList<>();

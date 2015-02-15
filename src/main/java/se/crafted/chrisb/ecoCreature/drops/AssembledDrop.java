@@ -31,6 +31,7 @@ import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
+import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomEntityType;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
@@ -49,9 +50,10 @@ public class AssembledDrop
 
     private String name;
     private double coin;
-    private Collection<ItemStack> itemDrops;
-    private Collection<EntityType> entityDrops;
-    private Collection<EntityType> jockeyDrops;
+    private Collection<ItemStack> items;
+    private Collection<CustomEntityType> customEntityTypes;
+    private Collection<EntityType> entityTypes;
+    private Collection<EntityType> jockeyTypes;
     private Message message;
     private Map<MessageToken, String> parameters;
 
@@ -65,9 +67,10 @@ public class AssembledDrop
 
         name = "Unknown";
         coin = ZERO;
-        itemDrops = new ArrayList<>();
-        entityDrops = new ArrayList<>();
-        jockeyDrops = new ArrayList<>();
+        items = new ArrayList<>();
+        customEntityTypes = new ArrayList<>();
+        entityTypes = new ArrayList<>();
+        jockeyTypes = new ArrayList<>();
         message = DefaultMessage.NO_MESSAGE;
         parameters = new HashMap<>();
     }
@@ -154,37 +157,47 @@ public class AssembledDrop
 
     public boolean hasDrops()
     {
-        return !itemDrops.isEmpty() || !entityDrops.isEmpty() || !jockeyDrops.isEmpty();
+        return !items.isEmpty() || !customEntityTypes.isEmpty() || !entityTypes.isEmpty() || !jockeyTypes.isEmpty();
     }
 
-    public Collection<ItemStack> getItemDrops()
+    public Collection<ItemStack> getItems()
     {
-        return itemDrops;
+        return items;
     }
 
-    public void setItemDrops(Collection<ItemStack> collection)
+    public void setItems(Collection<ItemStack> items)
     {
-        this.itemDrops = collection;
+        this.items = items;
     }
 
-    public Collection<EntityType> getEntityDrops()
+    public Collection<CustomEntityType> getCustomEntityTypes()
     {
-        return entityDrops;
+        return customEntityTypes;
     }
 
-    public void setEntityDrops(Collection<EntityType> entityDrops)
+    public void setCustomEntityTypes(Collection<CustomEntityType> customEntityTypes)
     {
-        this.entityDrops = entityDrops;
+        this.customEntityTypes = customEntityTypes;
     }
 
-    public Collection<EntityType> getJockeyDrops()
+    public Collection<EntityType> getEntityTypes()
     {
-        return jockeyDrops;
+        return entityTypes;
     }
 
-    public void setJockeyDrops(Collection<EntityType> jockeyDrops)
+    public void setEntityTypes(Collection<EntityType> entityTypes)
     {
-        this.jockeyDrops = jockeyDrops;
+        this.entityTypes = entityTypes;
+    }
+
+    public Collection<EntityType> getJockeyTypes()
+    {
+        return jockeyTypes;
+    }
+
+    public void setJockeyTypes(Collection<EntityType> jockeyTypes)
+    {
+        this.jockeyTypes = jockeyTypes;
     }
 
     public Message getMessage()

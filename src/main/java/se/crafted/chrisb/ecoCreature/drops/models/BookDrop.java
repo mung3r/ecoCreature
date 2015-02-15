@@ -91,9 +91,9 @@ public class BookDrop extends ItemDrop
         return itemStack;
     }
 
-    public static Collection<ItemDrop> parseConfig(ConfigurationSection config)
+    public static Collection<AbstractDrop> parseConfig(ConfigurationSection config)
     {
-        Collection<ItemDrop> drops = Collections.emptyList();
+        Collection<AbstractDrop> drops = Collections.emptyList();
 
         if (config != null && config.getList("Drops") != null) {
             drops = new ArrayList<>();

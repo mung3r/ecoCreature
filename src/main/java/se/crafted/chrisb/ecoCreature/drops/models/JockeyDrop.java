@@ -39,9 +39,9 @@ public class JockeyDrop extends EntityDrop
         this.passenger = passenger;
     }
 
-    public static Collection<EntityDrop> parseConfig(ConfigurationSection config)
+    public static Collection<AbstractDrop> parseConfig(ConfigurationSection config)
     {
-        Collection<EntityDrop> drops = new ArrayList<>();
+        Collection<AbstractDrop> drops = new ArrayList<>();
 
         if (config != null && config.getList("Drops") != null) {
 

@@ -34,6 +34,7 @@ import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.BookDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.CoinDrop;
+import se.crafted.chrisb.ecoCreature.drops.models.CustomEntityDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.EntityDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.ItemDrop;
 import se.crafted.chrisb.ecoCreature.drops.models.JockeyDrop;
@@ -84,6 +85,7 @@ public abstract class AbstractDropSource extends AbstractDrop
         drops.addAll(ItemDrop.parseConfig(dropConfig));
         drops.addAll(BookDrop.parseConfig(dropConfig));
         drops.addAll(LoreDrop.parseConfig(dropConfig));
+        drops.addAll(CustomEntityDrop.parseConfig(dropConfig));
         drops.addAll(EntityDrop.parseConfig(dropConfig));
         drops.addAll(JockeyDrop.parseConfig(dropConfig));
         drops.addAll(CoinDrop.parseConfig(dropConfig));
@@ -200,13 +202,16 @@ public abstract class AbstractDropSource extends AbstractDrop
 
         for (AbstractDrop drop : drops) {
             if (drop instanceof JockeyDrop) {
-                assembledDrop.getJockeyDrops().addAll(((JockeyDrop) drop).nextEntityTypes());
+                assembledDrop.getJockeyTypes().addAll(((JockeyDrop) drop).nextEntityTypes());
+            }
+            else if (drop instanceof CustomEntityDrop) {
+                assembledDrop.getCustomEntityTypes().addAll(((CustomEntityDrop) drop).nextEntityTypes());
             }
             else if (drop instanceof EntityDrop) {
-                assembledDrop.getEntityDrops().addAll(((EntityDrop) drop).nextEntityTypes());
+                assembledDrop.getEntityTypes().addAll(((EntityDrop) drop).nextEntityTypes());
             }
             else if (drop instanceof ItemDrop) {
-                assembledDrop.getItemDrops().add(((ItemDrop) drop).nextItemStack(fixedAmount));
+                assembledDrop.getItems().add(((ItemDrop) drop).nextItemStack(fixedAmount));
             }
             else if (drop instanceof CoinDrop) {
                 CoinDrop coin = (CoinDrop) drop;
