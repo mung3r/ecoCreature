@@ -202,16 +202,16 @@ public abstract class AbstractDropSource extends AbstractDrop
 
         for (AbstractDrop drop : drops) {
             if (drop instanceof JockeyDrop) {
-                assembledDrop.getJockeyDrops().addAll(((JockeyDrop) drop).nextEntityTypes());
+                assembledDrop.getJockeyTypes().addAll(((JockeyDrop) drop).nextEntityTypes());
             }
             else if (drop instanceof CustomEntityDrop) {
-                assembledDrop.getCustomEntityDrops().addAll(((CustomEntityDrop) drop).nextEntityTypes());
+                assembledDrop.getCustomEntityTypes().addAll(((CustomEntityDrop) drop).nextEntityTypes());
             }
             else if (drop instanceof EntityDrop) {
-                assembledDrop.getEntityDrops().addAll(((EntityDrop) drop).nextEntityTypes());
+                assembledDrop.getEntityTypes().addAll(((EntityDrop) drop).nextEntityTypes());
             }
             else if (drop instanceof ItemDrop) {
-                assembledDrop.getItemDrops().add(((ItemDrop) drop).nextItemStack(fixedAmount));
+                assembledDrop.getItems().add(((ItemDrop) drop).nextItemStack(fixedAmount));
             }
             else if (drop instanceof CoinDrop) {
                 CoinDrop coin = (CoinDrop) drop;

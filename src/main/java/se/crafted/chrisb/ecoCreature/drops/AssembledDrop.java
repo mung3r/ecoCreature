@@ -50,10 +50,10 @@ public class AssembledDrop
 
     private String name;
     private double coin;
-    private Collection<ItemStack> itemDrops;
-    private Collection<CustomEntityType> customEntityDrops;
-    private Collection<EntityType> entityDrops;
-    private Collection<EntityType> jockeyDrops;
+    private Collection<ItemStack> items;
+    private Collection<CustomEntityType> customEntityTypes;
+    private Collection<EntityType> entityTypes;
+    private Collection<EntityType> jockeyTypes;
     private Message message;
     private Map<MessageToken, String> parameters;
 
@@ -67,10 +67,10 @@ public class AssembledDrop
 
         name = "Unknown";
         coin = ZERO;
-        itemDrops = new ArrayList<>();
-        customEntityDrops = new ArrayList<>();
-        entityDrops = new ArrayList<>();
-        jockeyDrops = new ArrayList<>();
+        items = new ArrayList<>();
+        customEntityTypes = new ArrayList<>();
+        entityTypes = new ArrayList<>();
+        jockeyTypes = new ArrayList<>();
         message = DefaultMessage.NO_MESSAGE;
         parameters = new HashMap<>();
     }
@@ -157,47 +157,47 @@ public class AssembledDrop
 
     public boolean hasDrops()
     {
-        return !itemDrops.isEmpty() || !entityDrops.isEmpty() || !jockeyDrops.isEmpty();
+        return !items.isEmpty() || !customEntityTypes.isEmpty() || !entityTypes.isEmpty() || !jockeyTypes.isEmpty();
     }
 
-    public Collection<ItemStack> getItemDrops()
+    public Collection<ItemStack> getItems()
     {
-        return itemDrops;
+        return items;
     }
 
-    public void setItemDrops(Collection<ItemStack> collection)
+    public void setItems(Collection<ItemStack> items)
     {
-        this.itemDrops = collection;
+        this.items = items;
     }
 
-    public Collection<CustomEntityType> getCustomEntityDrops()
+    public Collection<CustomEntityType> getCustomEntityTypes()
     {
-        return customEntityDrops;
+        return customEntityTypes;
     }
 
-    public void setCustomEntityDrops(Collection<CustomEntityType> customEntityDrops)
+    public void setCustomEntityTypes(Collection<CustomEntityType> customEntityTypes)
     {
-        this.customEntityDrops = customEntityDrops;
+        this.customEntityTypes = customEntityTypes;
     }
 
-    public Collection<EntityType> getEntityDrops()
+    public Collection<EntityType> getEntityTypes()
     {
-        return entityDrops;
+        return entityTypes;
     }
 
-    public void setEntityDrops(Collection<EntityType> entityDrops)
+    public void setEntityTypes(Collection<EntityType> entityTypes)
     {
-        this.entityDrops = entityDrops;
+        this.entityTypes = entityTypes;
     }
 
-    public Collection<EntityType> getJockeyDrops()
+    public Collection<EntityType> getJockeyTypes()
     {
-        return jockeyDrops;
+        return jockeyTypes;
     }
 
-    public void setJockeyDrops(Collection<EntityType> jockeyDrops)
+    public void setJockeyTypes(Collection<EntityType> jockeyTypes)
     {
-        this.jockeyDrops = jockeyDrops;
+        this.jockeyTypes = jockeyTypes;
     }
 
     public Message getMessage()

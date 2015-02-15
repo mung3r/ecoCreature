@@ -92,7 +92,7 @@ public class EntityKilledEventMapper extends AbstractEventMapper
                     });
                 }
 
-                if (drop.getEntityDrops().contains(EntityType.EXPERIENCE_ORB)) {
+                if (drop.getEntityTypes().contains(EntityType.EXPERIENCE_ORB)) {
                     event.setDroppedExp(0);
                 }
 

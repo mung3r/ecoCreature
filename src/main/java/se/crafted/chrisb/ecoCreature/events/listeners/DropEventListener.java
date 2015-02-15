@@ -181,7 +181,7 @@ public class DropEventListener implements Listener
             drop.addParameter(MessageToken.PLAYER, player.getName());
         }
 
-        for (ItemStack stack : drop.getItemDrops()) {
+        for (ItemStack stack : drop.getItems()) {
             if (Material.AIR.equals(stack.getType())) {
                 continue;
             }
@@ -220,7 +220,7 @@ public class DropEventListener implements Listener
 
     private void dropCustomEntities(AssembledDrop drop)
     {
-        for (CustomEntityType customType : drop.getCustomEntityDrops()) {
+        for (CustomEntityType customType : drop.getCustomEntityTypes()) {
             Entity entity = drop.getWorld().spawn(drop.getLocation(), customType.getType().getEntityClass());
             switch (customType) {
             case ANGRY_WOLF:
@@ -245,7 +245,7 @@ public class DropEventListener implements Listener
 
     private void dropEntities(AssembledDrop drop)
     {
-        for (EntityType type : drop.getEntityDrops()) {
+        for (EntityType type : drop.getEntityTypes()) {
             Entity entity = drop.getWorld().spawn(drop.getLocation(), type.getEntityClass());
             if (entity instanceof ExperienceOrb) {
                 ((ExperienceOrb) entity).setExperience(1);
@@ -255,7 +255,7 @@ public class DropEventListener implements Listener
 
     private void dropJockeys(AssembledDrop drop)
     {
-        Iterator<EntityType> typeIterator = drop.getJockeyDrops().iterator();
+        Iterator<EntityType> typeIterator = drop.getJockeyTypes().iterator();
         while (typeIterator.hasNext()) {
             EntityType vehicleType = typeIterator.next();
             Entity vehicle = drop.getWorld().spawn(drop.getLocation(), vehicleType.getEntityClass());

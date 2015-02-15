@@ -71,7 +71,7 @@ public abstract class AbstractEventMapper implements EventMapper
         if (event instanceof PlayerKilledEvent) {
             PlayerKilledEvent playerKilledEvent = (PlayerKilledEvent) event;
 
-            boolean hasSkull = Iterables.removeIf(drop.getItemDrops(), new Predicate<ItemStack>() {
+            boolean hasSkull = Iterables.removeIf(drop.getItems(), new Predicate<ItemStack>() {
 
                 @Override
                 public boolean apply(ItemStack itemStack)
