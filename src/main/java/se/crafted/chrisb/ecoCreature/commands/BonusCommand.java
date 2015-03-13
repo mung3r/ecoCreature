@@ -42,7 +42,7 @@ public class BonusCommand extends BasicCommand
     public boolean execute(CommandSender sender, String identifier, String[] args)
     {
         if (args != null && args.length == 0) {
-            BonusMultiplier bonusMultiplier = BonusMultiplierAspect.getBonus();
+            BonusMultiplier bonusMultiplier = BonusMultiplierAspect.getBonusMultiplier();
             if (bonusMultiplier != null && bonusMultiplier.isValid()) {
                 sender.sendMessage("Loot bonus multiplier set for " + bonusMultiplier.getMultiplier() + ", ending at " + new Date(bonusMultiplier.getEndTimeInMillis()));
             }

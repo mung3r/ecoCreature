@@ -28,26 +28,26 @@ import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 @Aspect
 public class BonusMultiplierAspect
 {
-    private static BonusMultiplier bonus = new BonusMultiplier(1.0, 0);
+    private static BonusMultiplier bonusMultiplier = new BonusMultiplier(1.0, 0);
 
-    @Around("execution(double se.crafted.chrisb.ecoCreature.drops.models.AbstractDrop+.getPercentage())")
+    @Around("execution(double se.crafted.chrisb.ecoCreature.drops.chances.AbstractChance+.getPercentage())")
     public double applyBonusMultiplierAspect(ProceedingJoinPoint pjp) throws Throwable
     {
         double percentage = (double) pjp.proceed();
-        if (bonus.isValid()) {
-            LoggerUtil.getInstance().debug("applying bonus multiplier " + bonus.getMultiplier() + " to " + percentage);
-            percentage *=  bonus.getMultiplier();
+        if (bonusMultiplier.isValid()) {
+            LoggerUtil.getInstance().debug("applying bonus multiplier " + bonusMultiplier.getMultiplier() + " to " + percentage);
+            percentage *=  bonusMultiplier.getMultiplier();
         }
         return percentage;
     }
 
-    public static synchronized BonusMultiplier getBonus()
+    public static synchronized BonusMultiplier getBonusMultiplier()
     {
-        return bonus;
+        return bonusMultiplier;
     }
 
     public static synchronized void setBonusMultiplier(BonusMultiplier bonus)
     {
-        BonusMultiplierAspect.bonus = bonus;
+        BonusMultiplierAspect.bonusMultiplier = bonus;
     }
 }
