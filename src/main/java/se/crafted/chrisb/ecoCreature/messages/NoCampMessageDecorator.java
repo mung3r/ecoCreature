@@ -40,8 +40,8 @@ public class NoCampMessageDecorator extends AbstractMessageDecorator
     }
 
     @Override
-    public boolean isMessageOutputEnabled()
+    public boolean isEnabled()
     {
-        return spawnerCampMessageEnabled && super.isMessageOutputEnabled();
+        return spawnerCampMessageEnabled && super.isEnabled();
     }
 }

@@ -41,13 +41,13 @@ public class DefaultMessage implements Message
     }
 
     @Override
-    public boolean isMessageOutputEnabled()
+    public boolean isEnabled()
     {
         return messageOutputEnabled;
     }
 
     @Override
-    public void setMessageOutputEnabled(boolean messageOutputEnabled)
+    public void setEnabled(boolean messageOutputEnabled)
     {
         this.messageOutputEnabled = messageOutputEnabled;
     }

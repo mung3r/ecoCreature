@@ -40,8 +40,8 @@ public class NoCoinMessageDecorator extends AbstractMessageDecorator
     }
 
     @Override
-    public boolean isMessageOutputEnabled()
+    public boolean isEnabled()
     {
-        return noRewardMessageEnabled && super.isMessageOutputEnabled();
+        return noRewardMessageEnabled && super.isEnabled();
     }
 }

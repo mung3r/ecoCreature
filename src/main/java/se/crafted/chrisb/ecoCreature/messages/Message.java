@@ -23,9 +23,9 @@ import java.util.Map;
 
 public interface Message
 {
-    boolean isMessageOutputEnabled();
+    boolean isEnabled();
 
-    void setMessageOutputEnabled(boolean messageOutputEnabled);
+    void setEnabled(boolean messageOutputEnabled);
 
     String getAssembledMessage(Map<MessageToken, String> parameters);
 }

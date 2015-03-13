@@ -216,7 +216,7 @@ public abstract class AbstractDropCategory<T>
     private static Message configureMessage(Message message, ConfigurationSection config)
     {
         if (message != null && config != null) {
-            message.setMessageOutputEnabled(config.getBoolean("System.Messages.Output", true));
+            message.setEnabled(config.getBoolean("System.Messages.Output", true));
             if (message instanceof CoinMessageDecorator) {
                 ((CoinMessageDecorator) message).setCoinLoggingEnabled(config.getBoolean("System.Messages.LogCoinRewards", true));
             }

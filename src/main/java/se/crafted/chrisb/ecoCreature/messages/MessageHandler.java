@@ -47,7 +47,7 @@ public class MessageHandler
         String assembledMessage = message.getAssembledMessage(parameters);
 
         if (assembledMessage != null && assembledMessage.length() > 0) {
-            if (message.isMessageOutputEnabled()) {
+            if (message.isEnabled()) {
                 Player player = Bukkit.getPlayer(playerName);
                 if (player != null) {
                     player.sendMessage(assembledMessage);

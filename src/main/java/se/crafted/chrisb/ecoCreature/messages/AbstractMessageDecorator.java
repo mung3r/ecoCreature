@@ -31,15 +31,15 @@ abstract class AbstractMessageDecorator implements Message
     }
 
     @Override
-    public boolean isMessageOutputEnabled()
+    public boolean isEnabled()
     {
-        return decoratedMessage.isMessageOutputEnabled();
+        return decoratedMessage.isEnabled();
     }
 
     @Override
-    public void setMessageOutputEnabled(boolean messageOutputEnabled)
+    public void setEnabled(boolean messageOutputEnabled)
     {
-        decoratedMessage.setMessageOutputEnabled(messageOutputEnabled);
+        decoratedMessage.setEnabled(messageOutputEnabled);
     }
 
     @Override
