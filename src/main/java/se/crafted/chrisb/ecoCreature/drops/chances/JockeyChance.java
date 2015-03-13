@@ -50,7 +50,7 @@ public class JockeyChance extends EntityChance
                     ConfigurationSection memoryConfig = createMemoryConfig(obj);
                     String passengerString = memoryConfig.getString("passenger");
                     String vehicleString = memoryConfig.getString("vehicle");
-                    JockeyChance chance = createJockeyChance(passengerString, vehicleString);
+                    AbstractChance chance = createJockeyChance(passengerString, vehicleString);
                     if (chance != null) {
                         chances.add(chance);
                     }
