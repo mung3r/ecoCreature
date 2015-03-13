@@ -159,16 +159,16 @@ public class ItemChance extends AbstractChance
         return chances;
     }
 
-    private static Collection<ItemChance> parseItemChance(String dropString)
+    private static Collection<AbstractChance> parseItemChance(String dropString)
     {
-        Collection<ItemChance> drops = Collections.emptyList();
+        Collection<AbstractChance> chances = Collections.emptyList();
 
         if (parseMaterial(dropString) != null) {
-            drops = new ArrayList<>();
-            drops.add(populateItemChance(new ItemChance(parseMaterial(dropString)), dropString));
+            chances = new ArrayList<>();
+            chances.add(populateItemChance(new ItemChance(parseMaterial(dropString)), dropString));
         }
 
-        return drops;
+        return chances;
     }
 
     protected static ItemChance populateItemChance(ItemChance drop, String dropString)

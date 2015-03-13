@@ -50,7 +50,7 @@ public class JockeyChance extends EntityChance
                     ConfigurationSection memoryConfig = createMemoryConfig(obj);
                     String passengerString = memoryConfig.getString("passenger");
                     String vehicleString = memoryConfig.getString("vehicle");
-                    JockeyChance chance = createJockeyDrop(passengerString, vehicleString);
+                    JockeyChance chance = createJockeyChance(passengerString, vehicleString);
                     if (chance != null) {
                         chances.add(chance);
                     }
@@ -72,7 +72,7 @@ public class JockeyChance extends EntityChance
         return types;
     }
 
-    private static JockeyChance createJockeyDrop(String passengerString, String vehicleString)
+    private static JockeyChance createJockeyChance(String passengerString, String vehicleString)
     {
         JockeyChance chance = null;
 
