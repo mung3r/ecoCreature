@@ -36,9 +36,9 @@ import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomDropType;
 
 public class CustomDropCategory extends AbstractDropCategory<CustomDropType>
 {
-    public CustomDropCategory(Map<CustomDropType, Collection<AbstractDropSource>> sources)
+    public CustomDropCategory(Map<CustomDropType, Collection<AbstractDropSource>> dropSourceMap)
     {
-        super(sources);
+        super(dropSourceMap);
     }
 
     @Override
