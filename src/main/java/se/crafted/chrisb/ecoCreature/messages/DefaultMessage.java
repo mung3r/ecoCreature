@@ -47,9 +47,9 @@ public class DefaultMessage implements Message
     }
 
     @Override
-    public void setEnabled(boolean messageOutputEnabled)
+    public void setEnabled(boolean enabled)
     {
-        this.enabled = messageOutputEnabled;
+        this.enabled = enabled;
     }
 
     @Override
