@@ -46,8 +46,8 @@ public class BonusMultiplierAspect
         return bonusMultiplier;
     }
 
-    public static synchronized void setBonusMultiplier(BonusMultiplier bonus)
+    public static synchronized void setBonusMultiplier(BonusMultiplier bonusMultiplier)
     {
-        BonusMultiplierAspect.bonusMultiplier = bonus;
+        BonusMultiplierAspect.bonusMultiplier = bonusMultiplier;
     }
 }
