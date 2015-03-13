@@ -17,20 +17,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops.models;
+package se.crafted.chrisb.ecoCreature.drops.chances;
 
 import junit.framework.Assert;
 
 import org.apache.commons.lang.math.NumberRange;
 import org.junit.Test;
 
-public class DropTest
+import se.crafted.chrisb.ecoCreature.drops.chances.AbstractChance;
+import se.crafted.chrisb.ecoCreature.drops.chances.Chance;
+
+public class ChanceTest
 {
 
-    class TestDrop extends AbstractDrop
+    class TestChance extends AbstractChance
     {
 
-        public TestDrop(NumberRange range, double percentage)
+        public TestChance(NumberRange range, double percentage)
         {
             setRange(range);
             setPercentage(percentage);
@@ -44,16 +47,16 @@ public class DropTest
         Number samples = 100000;
         Number percent = 3;
 
-        Drop drop = new TestDrop(new NumberRange(1, 1), percent.doubleValue());
+        Chance chance = new TestChance(new NumberRange(1, 1), percent.doubleValue());
         for (int i = 0; i < 10; i++) {
             double winnerCount = 0;
             for (int j = 0; j < samples.intValue(); j++) {
-                if (drop.nextWinner()) {
+                if (chance.nextWinner()) {
                     winnerCount++;
                 }
             }
-            double chance = winnerCount / samples.doubleValue();
-            double delta = Math.abs(percent.doubleValue() / 100D - chance);
+            double idealChance = winnerCount / samples.doubleValue();
+            double delta = Math.abs(percent.doubleValue() / 100D - idealChance);
             Assert.assertTrue(delta < 0.01);
         }
     }
@@ -66,10 +69,10 @@ public class DropTest
         int min = 1;
         int max = 10;
         int[] bucket = new int[max + 1];
-        Drop drop = new TestDrop(new NumberRange(min, max), 100);
+        Chance chance = new TestChance(new NumberRange(min, max), 100);
 
         for (int i = 0; i < samples; i++) {
-            int amount = drop.nextIntAmount();
+            int amount = chance.nextIntAmount();
             bucket[amount]++;
         }
 

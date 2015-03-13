@@ -37,9 +37,9 @@ import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 
 public class McMMODropCategory extends AbstractDropCategory<McMMODropType>
 {
-    public McMMODropCategory(Map<McMMODropType, Collection<AbstractDropSource>> sources)
+    public McMMODropCategory(Map<McMMODropType, Collection<AbstractDropSource>> dropSourceMap)
     {
-        super(sources);
+        super(dropSourceMap);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class McMMODropCategory extends AbstractDropCategory<McMMODropType>
 
     public static AbstractDropCategory<McMMODropType> parseConfig(ConfigurationSection config)
     {
-        Map<McMMODropType, Collection<AbstractDropSource>> sources = new HashMap<>();
+        Map<McMMODropType, Collection<AbstractDropSource>> dropSourceMap = new HashMap<>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {
@@ -70,19 +70,19 @@ public class McMMODropCategory extends AbstractDropCategory<McMMODropType>
                 McMMODropType type = McMMODropType.fromName(typeName);
 
                 if (type.isValid()) {
-                    for (AbstractDropSource source : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
+                    for (AbstractDropSource dropSource : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
 
-                        if (!sources.containsKey(type)) {
-                            sources.put(type, new ArrayList<AbstractDropSource>());
+                        if (!dropSourceMap.containsKey(type)) {
+                            dropSourceMap.put(type, new ArrayList<AbstractDropSource>());
                         }
 
-                        sources.get(type).add(source);
-                        sources.get(type).addAll(parseSets("RewardTable." + typeName, config));
+                        dropSourceMap.get(type).add(dropSource);
+                        dropSourceMap.get(type).addAll(parseSets("RewardTable." + typeName, config));
                     }
                 }
             }
         }
 
-        return new McMMODropCategory(sources);
+        return new McMMODropCategory(dropSourceMap);
     }
 }

@@ -24,12 +24,11 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
-import se.crafted.chrisb.ecoCreature.drops.models.Bonus;
 
 @Aspect
-public class BonusChanceAspect
+public class BonusMultiplierAspect
 {
-    private static Bonus bonus = new Bonus(1.0, 0);
+    private static BonusMultiplier bonus = new BonusMultiplier(1.0, 0);
 
     @Around("execution(double se.crafted.chrisb.ecoCreature.drops.models.AbstractDrop+.getPercentage())")
     public double applyBonusMultiplierAspect(ProceedingJoinPoint pjp) throws Throwable
@@ -42,13 +41,13 @@ public class BonusChanceAspect
         return percentage;
     }
 
-    public static synchronized Bonus getBonus()
+    public static synchronized BonusMultiplier getBonus()
     {
         return bonus;
     }
 
-    public static synchronized void setBonus(Bonus bonus)
+    public static synchronized void setBonusMultiplier(BonusMultiplier bonus)
     {
-        BonusChanceAspect.bonus = bonus;
+        BonusMultiplierAspect.bonus = bonus;
     }
 }

@@ -25,23 +25,17 @@ import org.bukkit.entity.Player;
 
 public abstract class AbstractParty implements Party
 {
-    private boolean shared;
+    private final boolean shared;
 
-    public AbstractParty()
+    public AbstractParty(boolean shared)
     {
-        shared = false;
+        this.shared = shared;
     }
 
     @Override
     public boolean isShared()
     {
         return shared;
-    }
-
-    @Override
-    public void setShared(boolean shared)
-    {
-        this.shared = shared;
     }
 
     @Override

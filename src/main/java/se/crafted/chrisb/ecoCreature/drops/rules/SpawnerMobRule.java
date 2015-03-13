@@ -30,35 +30,25 @@ import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.NoCampMessageDecorator;
-import se.crafted.chrisb.ecoCreature.drops.SpawnerMobTracker;
+import se.crafted.chrisb.ecoCreature.drops.SpawnerMobTag;
 
 public class SpawnerMobRule extends AbstractEntityRule
 {
     private static final String NO_CAMP_MESSAGE = "&7You find no rewards camping monster spawners.";
 
-    private boolean canCampSpawner;
-    private boolean campByEntity;
+    private final boolean canCampSpawner;
+    private final boolean campByEntity;
 
-    public SpawnerMobRule()
-    {
-        canCampSpawner = false;
-        campByEntity = false;
-    }
-
-    public void setCanCampSpawner(boolean canCampSpawner)
+    public SpawnerMobRule(boolean canCampSpawner, boolean campByEntity)
     {
         this.canCampSpawner = canCampSpawner;
-    }
-
-    public void setCampByEntity(boolean campByEntity)
-    {
         this.campByEntity = campByEntity;
     }
 
     @Override
     protected boolean isBroken(EntityKilledEvent event)
     {
-        SpawnerMobTracker tracker = event.getSpawnerMobTracker();
+        SpawnerMobTag tracker = event.getSpawnerMobTracker();
         boolean ruleBroken = !canCampSpawner && campByEntity && tracker.isSpawnerMob(event.getEntity());
         LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " spawner camping.", ruleBroken);
 
@@ -70,11 +60,10 @@ public class SpawnerMobRule extends AbstractEntityRule
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
         if (system != null && system.isConfigurationSection("Hunting")) {
-            SpawnerMobRule rule = new SpawnerMobRule();
-            rule.setCanCampSpawner(system.getBoolean("Hunting.AllowCamping", false));
+            SpawnerMobRule rule = new SpawnerMobRule(system.getBoolean("Hunting.AllowCamping"),
+                    system.getBoolean("Hunting.CampingByEntity"));
             rule.setClearDrops(system.getBoolean("Hunting.ClearCampDrops", true));
             rule.setClearExpOrbs(system.getBoolean("Hunting.ClearCampExpOrbs", true));
-            rule.setCampByEntity(system.getBoolean("Hunting.CampingByEntity", false));
             rule.setMessage(getNoCampMessage(system));
             rules = new HashMap<>();
             rules.put(SpawnerMobRule.class, rule);
@@ -86,7 +75,7 @@ public class SpawnerMobRule extends AbstractEntityRule
     private static Message getNoCampMessage(ConfigurationSection config)
     {
         NoCampMessageDecorator message = new NoCampMessageDecorator(new DefaultMessage(config.getString("Messages.NoCampMessage", NO_CAMP_MESSAGE)));
-        message.setSpawnerCampMessageEnabled(config.getBoolean("Messages.Spawner", false));
+        message.setSpawnerCampMessageEnabled(config.getBoolean("Messages.Spawner"));
         return message;
     }
 }

@@ -31,6 +31,11 @@ import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class MobArenaParty extends AbstractParty
 {
+    public MobArenaParty(boolean shared)
+    {
+        super(shared);
+    }
+
     @Override
     public Collection<String> getMembers(Player player)
     {
@@ -53,8 +58,7 @@ public class MobArenaParty extends AbstractParty
         Collection<Party> parties = Collections.emptyList();
 
         if (config != null) {
-            MobArenaParty party = new MobArenaParty();
-            party.setShared(config.getBoolean("InArena.Share", false));
+            MobArenaParty party = new MobArenaParty(config.getBoolean("InArena.Share"));
             parties = new ArrayList<>();
             parties.add(party);
         }

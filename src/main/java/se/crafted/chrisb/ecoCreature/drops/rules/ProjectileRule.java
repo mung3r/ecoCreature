@@ -33,14 +33,9 @@ public class ProjectileRule extends AbstractEntityRule
 {
     private static final String NO_BOW_REWARD_MESSAGE = "&7You find no rewards on this creature.";
 
-    private boolean bowRewards;
+    private final boolean bowRewards;
 
-    public ProjectileRule()
-    {
-        bowRewards = true;
-    }
-
-    public void setBowRewards(boolean bowRewards)
+    public ProjectileRule(boolean bowRewards)
     {
         this.bowRewards = bowRewards;
     }
@@ -59,8 +54,7 @@ public class ProjectileRule extends AbstractEntityRule
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
         if (system != null && system.isConfigurationSection("Hunting")) {
-            ProjectileRule rule = new ProjectileRule();
-            rule.setBowRewards(system.getBoolean("Hunting.BowRewards", true));
+            ProjectileRule rule = new ProjectileRule(system.getBoolean("Hunting.BowRewards", true));
             rule.setMessage(new DefaultMessage(system.getString("Messages.NoBowMessage", NO_BOW_REWARD_MESSAGE)));
             rules = new HashMap<>();
             rules.put(ProjectileRule.class, rule);

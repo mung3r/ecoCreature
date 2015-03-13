@@ -30,14 +30,14 @@ import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
 import se.crafted.chrisb.ecoCreature.commons.EventUtils;
-import se.crafted.chrisb.ecoCreature.drops.SpawnerMobTracker;
+import se.crafted.chrisb.ecoCreature.drops.SpawnerMobTag;
 
 public final class EntityKilledEvent extends Event
 {
     private static final HandlerList HANDLERS = new HandlerList();
 
     private EntityDeathEvent event;
-    private SpawnerMobTracker spawnerMobTracker;
+    private SpawnerMobTag spawnerMobTracker;
 
     public static EntityKilledEvent createEvent(EntityDeathEvent event)
     {
@@ -74,12 +74,12 @@ public final class EntityKilledEvent extends Event
         return EventUtils.isProjectileKill(event);
     }
 
-    public SpawnerMobTracker getSpawnerMobTracker()
+    public SpawnerMobTag getSpawnerMobTracker()
     {
         return spawnerMobTracker;
     }
 
-    public void setSpawnerMobTracker(SpawnerMobTracker spawnerMobTracker)
+    public void setSpawnerMobTracker(SpawnerMobTag spawnerMobTracker)
     {
         this.spawnerMobTracker = spawnerMobTracker;
     }

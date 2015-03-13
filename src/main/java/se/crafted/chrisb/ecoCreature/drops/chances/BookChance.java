@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops.models;
+package se.crafted.chrisb.ecoCreature.drops.chances;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,38 +30,49 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.BookMeta;
 
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 
-public class LoreDrop extends ItemDrop
+public class BookChance extends ItemChance
 {
-    public LoreDrop(Material material)
+    public BookChance()
     {
-        super(material);
+        super(Material.WRITTEN_BOOK);
     }
 
-    private String displayName;
-    private List<String> lore;
+    private String title;
+    private String author;
+    private List<String> pages;
 
     public String getTitle()
     {
-        return displayName;
+        return title;
     }
 
-    public void setDisplayName(String displayName)
+    public void setTitle(String title)
     {
-        this.displayName = displayName;
+        this.title = title;
     }
 
-    public List<String> getLore()
+    public String getAuthor()
     {
-        return lore;
+        return author;
     }
 
-    public void setLore(List<String> lore)
+    public void setAuthor(String author)
     {
-        this.lore = lore;
+        this.author = author;
+    }
+
+    public List<String> getPages()
+    {
+        return pages;
+    }
+
+    public void setPages(List<String> pages)
+    {
+        this.pages = pages;
     }
 
     @Override
@@ -69,41 +80,43 @@ public class LoreDrop extends ItemDrop
     {
         ItemStack itemStack = super.nextItemStack(fixedAmount);
 
-        if (itemStack != null && itemStack.getItemMeta() != null) {
-            ItemMeta itemMeta = itemStack.getItemMeta();
-            itemMeta.setDisplayName(displayName);
-            itemMeta.setLore(lore);
-            itemStack.setItemMeta(itemMeta);
+        if (itemStack != null && itemStack.getItemMeta() instanceof BookMeta) {
+            BookMeta bookMeta = (BookMeta) itemStack.getItemMeta();
+            bookMeta.setTitle(title);
+            bookMeta.setAuthor(author);
+            bookMeta.setPages(pages);
+            itemStack.setItemMeta(bookMeta);
         }
 
         return itemStack;
     }
 
-    public static Collection<AbstractDrop> parseConfig(ConfigurationSection config)
+    public static Collection<AbstractChance> parseConfig(ConfigurationSection config)
     {
-        Collection<AbstractDrop> drops = Collections.emptyList();
+        Collection<AbstractChance> chances = Collections.emptyList();
 
         if (config != null && config.getList("Drops") != null) {
-            drops = new ArrayList<>();
+            chances = new ArrayList<>();
 
             for (Object obj : config.getList("Drops")) {
                 if (obj instanceof LinkedHashMap) {
                     ConfigurationSection itemConfig = createItemConfig(obj);
                     Material material = parseMaterial(itemConfig.getString("item"));
 
-                    if (material != null && material != Material.WRITTEN_BOOK) {
-                        LoreDrop drop = new LoreDrop(material);
-                        drop.setDisplayName(DefaultMessage.convertMessage(itemConfig.getString("displayname")));
-                        drop.setLore(DefaultMessage.convertMessages(itemConfig.getStringList("lore")));
-                        populateItemDrop(drop, itemConfig.getString("item"));
+                    if (material != null && material == Material.WRITTEN_BOOK) {
+                        BookChance chance = new BookChance();
+                        chance.setTitle(DefaultMessage.convertMessage(itemConfig.getString("title")));
+                        chance.setAuthor(DefaultMessage.convertMessage(itemConfig.getString("author")));
+                        chance.setPages(DefaultMessage.convertMessages(itemConfig.getStringList("pages")));
+                        populateItemChance(chance, itemConfig.getString("item"));
 
-                        drops.add(drop);
+                        chances.add(chance);
                     }
                 }
             }
         }
 
-        return drops;
+        return chances;
     }
 
     @SuppressWarnings("unchecked")

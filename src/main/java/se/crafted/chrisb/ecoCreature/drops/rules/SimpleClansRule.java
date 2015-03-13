@@ -34,13 +34,7 @@ import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 
 public class SimpleClansRule extends AbstractPlayerRule
 {
-    public SimpleClansRule()
-    {
-        setClearDrops(false);
-        setClearExpOrbs(false);
-    }
-
-    public void setClearNonRivalDrops(boolean clearNonRivalDrops)
+    public SimpleClansRule(boolean clearNonRivalDrops)
     {
         setClearDrops(clearNonRivalDrops);
         setClearExpOrbs(clearNonRivalDrops);
@@ -66,8 +60,7 @@ public class SimpleClansRule extends AbstractPlayerRule
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
         if (system != null && system.isConfigurationSection("Hunting")) {
-            SimpleClansRule rule = new SimpleClansRule();
-            rule.setClearNonRivalDrops(system.getBoolean("Hunting.SimpleClans.ClearNonRivalDrops", false));
+            SimpleClansRule rule = new SimpleClansRule(system.getBoolean("Hunting.SimpleClans.ClearNonRivalDrops"));
             rules = new HashMap<>();
             rules.put(SimpleClansRule.class, rule);
         }

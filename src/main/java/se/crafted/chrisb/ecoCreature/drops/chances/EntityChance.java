@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops.models;
+package se.crafted.chrisb.ecoCreature.drops.chances;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,24 +25,24 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.apache.commons.lang.math.NumberRange;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.EntityType;
 
-import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomEntityType;
-
-public class CustomEntityDrop extends AbstractDrop
+public class EntityChance extends AbstractChance
 {
-    private final CustomEntityType type;
+    private final EntityType type;
 
-    public CustomEntityDrop(CustomEntityType type, NumberRange range, double percentage)
+    public EntityChance(EntityType type, NumberRange range, double percentage)
     {
         this.type = type;
         setRange(range);
         setPercentage(percentage);
     }
 
-    public Collection<CustomEntityType> nextEntityTypes()
+    public Collection<EntityType> nextEntityTypes()
     {
-        Collection<CustomEntityType> types = new ArrayList<>();
+        Collection<EntityType> types = new ArrayList<>();
         int amount = nextIntAmount();
 
         for (int i = 0; i < amount; i++) {
@@ -52,72 +52,95 @@ public class CustomEntityDrop extends AbstractDrop
         return types;
     }
 
-    public static Collection<AbstractDrop> parseConfig(ConfigurationSection config)
+    public static Collection<AbstractChance> parseConfig(ConfigurationSection config)
     {
-        Collection<AbstractDrop> drops = Collections.emptyList();
+        Collection<AbstractChance> chances = Collections.emptyList();
 
         if (config != null) {
-            drops = new ArrayList<>();
+            chances = new ArrayList<>();
 
             if (config.getList("Drops") != null) {
                 Collection<String> dropsList = config.getStringList("Drops");
-                drops.addAll(parseDrops(dropsList));
+                chances.addAll(parseChances(dropsList));
             }
             else {
-                drops.addAll(parseDrops(config.getString("Drops")));
+                chances.addAll(parseChances(config.getString("Drops")));
+            }
+
+            // NOTE: backward compatibility
+            AbstractChance chance = parseExpChance(config);
+            if (chance != null) {
+                chances.add(chance);
             }
         }
 
-        return drops;
+        return chances;
     }
 
-    private static Collection<AbstractDrop> parseDrops(String dropsString)
+    private static AbstractChance parseExpChance(ConfigurationSection config)
     {
-        Collection<AbstractDrop> drops = Collections.emptyList();
+        AbstractChance chance = null;
+
+        if (config != null && config.contains("ExpMin") && config.contains("ExpMax") && config.contains("ExpPercent")) {
+            chance = new EntityChance(EntityType.EXPERIENCE_ORB, new NumberRange(config.getInt("ExpMin", 0), config.getInt("ExpMax", 0)), config.getDouble(
+                    "ExpPercent", 0.0D));
+        }
+
+        return chance;
+    }
+
+    private static Collection<AbstractChance> parseChances(String dropsString)
+    {
+        Collection<AbstractChance> chances = Collections.emptyList();
 
         if (dropsString != null && !dropsString.isEmpty()) {
-            drops = parseDrops(Arrays.asList(dropsString.split(";")));
+            chances = parseChances(Arrays.asList(dropsString.split(";")));
         }
 
-        return drops;
+        return chances;
     }
 
-    private static Collection<AbstractDrop> parseDrops(Collection<String> dropsList)
+    private static Collection<AbstractChance> parseChances(Collection<String> dropsList)
     {
-        Collection<AbstractDrop> drops = new ArrayList<>();
+        Collection<AbstractChance> chances = new ArrayList<>();
 
         for (String dropString : dropsList) {
-            AbstractDrop drop = createEntityDrop(dropString);
-            if (drop != null) {
-                drops.add(drop);
+            AbstractChance chance = createEntityChance(dropString);
+            if (chance != null) {
+                chances.add(chance);
             }
         }
 
-        return drops;
+        return chances;
     }
 
-    private static AbstractDrop createEntityDrop(String dropString)
+    private static AbstractChance createEntityChance(String dropString)
     {
-        AbstractDrop drop = null;
+        AbstractChance chance = null;
 
-        CustomEntityType type = parseType(dropString);
-        if (type != null && type.isValid()) {
-            drop = new CustomEntityDrop(type, parseRange(dropString), parsePercentage(dropString));
+        EntityType type = parseType(dropString);
+        if (type != null) {
+            chance = new EntityChance(type, parseRange(dropString), parsePercentage(dropString));
         }
 
-        return drop;
+        return chance;
     }
 
-    protected static CustomEntityType parseType(String dropString)
+    protected static boolean isNotAmbiguous(EntityType type)
     {
-        CustomEntityType type = null;
+        return type != null && Material.matchMaterial(type.getName()) == null;
+    }
+
+    protected static EntityType parseType(String dropString)
+    {
+        EntityType type = null;
 
         if (dropString != null) {
             String[] dropParts = dropString.split(":");
             String[] itemParts = dropParts[0].split(",");
             String[] itemSubParts = itemParts[0].split("\\.");
 
-            type = CustomEntityType.fromName(itemSubParts[0]);
+            type = EntityType.fromName(itemSubParts[0]);
         }
 
         return type;

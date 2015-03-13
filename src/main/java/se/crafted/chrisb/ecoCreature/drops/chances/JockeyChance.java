@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops.models;
+package se.crafted.chrisb.ecoCreature.drops.chances;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,19 +29,19 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.EntityType;
 
-public class JockeyDrop extends EntityDrop
+public class JockeyChance extends EntityChance
 {
     private EntityType passenger;
 
-    public JockeyDrop(EntityType passenger, EntityType vehicle, NumberRange range, double percentage)
+    public JockeyChance(EntityType passenger, EntityType vehicle, NumberRange range, double percentage)
     {
         super(vehicle, range, percentage);
         this.passenger = passenger;
     }
 
-    public static Collection<AbstractDrop> parseConfig(ConfigurationSection config)
+    public static Collection<AbstractChance> parseConfig(ConfigurationSection config)
     {
-        Collection<AbstractDrop> drops = new ArrayList<>();
+        Collection<AbstractChance> chances = new ArrayList<>();
 
         if (config != null && config.getList("Drops") != null) {
 
@@ -50,15 +50,15 @@ public class JockeyDrop extends EntityDrop
                     ConfigurationSection memoryConfig = createMemoryConfig(obj);
                     String passengerString = memoryConfig.getString("passenger");
                     String vehicleString = memoryConfig.getString("vehicle");
-                    JockeyDrop drop = createJockeyDrop(passengerString, vehicleString);
-                    if (drop != null) {
-                        drops.add(drop);
+                    JockeyChance chance = createJockeyDrop(passengerString, vehicleString);
+                    if (chance != null) {
+                        chances.add(chance);
                     }
                 }
             }
         }
 
-        return drops;
+        return chances;
     }
 
     @Override
@@ -72,18 +72,18 @@ public class JockeyDrop extends EntityDrop
         return types;
     }
 
-    private static JockeyDrop createJockeyDrop(String passengerString, String vehicleString)
+    private static JockeyChance createJockeyDrop(String passengerString, String vehicleString)
     {
-        JockeyDrop drop = null;
+        JockeyChance chance = null;
 
         EntityType passengerType = parseType(passengerString);
         EntityType vehicleType = parseType(vehicleString);
 
         if (isNotAmbiguous(vehicleType) && isNotAmbiguous(passengerType)) {
-            drop = new JockeyDrop(passengerType, vehicleType, parseRange(passengerString), parsePercentage(passengerString));
+            chance = new JockeyChance(passengerType, vehicleType, parseRange(passengerString), parsePercentage(passengerString));
         }
 
-        return drop;
+        return chance;
     }
 
     @SuppressWarnings("unchecked")

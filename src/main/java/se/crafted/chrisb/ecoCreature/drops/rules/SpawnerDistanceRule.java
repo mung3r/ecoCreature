@@ -31,43 +31,28 @@ import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.NoCampMessageDecorator;
-import se.crafted.chrisb.ecoCreature.drops.SpawnerMobTracker;
+import se.crafted.chrisb.ecoCreature.drops.SpawnerMobTag;
 
 public class SpawnerDistanceRule extends AbstractEntityRule
 {
     private static final String NO_CAMP_MESSAGE = "&7You find no rewards camping monster spawners.";
     private static final int CAMP_RADIUS = 16;
 
-    private boolean canCampSpawner;
-    private boolean campByDistance;
-    private int campRadius;
+    private final boolean canCampSpawner;
+    private final boolean campByDistance;
+    private final int campRadius;
 
-    public SpawnerDistanceRule()
-    {
-        canCampSpawner = false;
-        campByDistance = true;
-        campRadius = CAMP_RADIUS;
-    }
-
-    public void setCanCampSpawner(boolean canCampSpawner)
+    public SpawnerDistanceRule(boolean canCampSpawner, boolean campByDistance, int campRadius)
     {
         this.canCampSpawner = canCampSpawner;
-    }
-
-    public void setCampByDistance(boolean campByDistance)
-    {
         this.campByDistance = campByDistance;
-    }
-
-    public void setCampRadius(int campRadius)
-    {
         this.campRadius = campRadius;
     }
 
     @Override
     protected boolean isBroken(EntityKilledEvent event)
     {
-        SpawnerMobTracker tracker = event.getSpawnerMobTracker();
+        SpawnerMobTag tracker = event.getSpawnerMobTracker();
         boolean ruleBroken = !canCampSpawner && campByDistance && tracker.isSpawnerMob(event.getEntity()) && isEntityKilledEventNearSpawner(event);
         LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " spawner camping.", ruleBroken);
 
@@ -84,12 +69,10 @@ public class SpawnerDistanceRule extends AbstractEntityRule
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
         if (system != null && system.isConfigurationSection("Hunting")) {
-            SpawnerDistanceRule rule = new SpawnerDistanceRule();
-            rule.setCanCampSpawner(system.getBoolean("Hunting.AllowCamping", false));
+            SpawnerDistanceRule rule = new SpawnerDistanceRule(system.getBoolean("Hunting.AllowCamping"),
+                    system.getBoolean("Hunting.CampingByDistance", true), system.getInt("Hunting.CampRadius", CAMP_RADIUS));
             rule.setClearDrops(system.getBoolean("Hunting.ClearCampDrops", true));
             rule.setClearExpOrbs(system.getBoolean("Hunting.ClearCampExpOrbs", true));
-            rule.setCampByDistance(system.getBoolean("Hunting.CampingByDistance", true));
-            rule.setCampRadius(system.getInt("Hunting.CampRadius", CAMP_RADIUS));
             rule.setMessage(getNoCampMessage(system));
             rules = new HashMap<>();
             rules.put(SpawnerDistanceRule.class, rule);
@@ -101,7 +84,7 @@ public class SpawnerDistanceRule extends AbstractEntityRule
     private static Message getNoCampMessage(ConfigurationSection config)
     {
         NoCampMessageDecorator message = new NoCampMessageDecorator(new DefaultMessage(config.getString("Messages.NoCampMessage", NO_CAMP_MESSAGE)));
-        message.setSpawnerCampMessageEnabled(config.getBoolean("Messages.Spawner", false));
+        message.setSpawnerCampMessageEnabled(config.getBoolean("Messages.Spawner"));
         return message;
     }
 }

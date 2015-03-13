@@ -71,7 +71,7 @@ public class AssembledDrop
         customEntityTypes = new ArrayList<>();
         entityTypes = new ArrayList<>();
         jockeyTypes = new ArrayList<>();
-        message = DefaultMessage.NO_MESSAGE;
+        message = DefaultMessage.EMPTY_MESSAGE;
         parameters = new HashMap<>();
     }
 

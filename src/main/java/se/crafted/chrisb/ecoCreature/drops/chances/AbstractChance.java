@@ -17,19 +17,19 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops.models;
+package se.crafted.chrisb.ecoCreature.drops.chances;
 
 import java.util.Random;
 
 import org.apache.commons.lang.math.NumberRange;
 
-public abstract class AbstractDrop implements Drop
+public abstract class AbstractChance implements Chance
 {
     private NumberRange range;
     private double percentage;
     private final Random random;
 
-    public AbstractDrop()
+    public AbstractChance()
     {
         range = new NumberRange(1, 1);
         percentage = 100.0D;

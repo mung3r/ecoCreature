@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops.models;
+package se.crafted.chrisb.ecoCreature.drops.chances;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,15 +31,15 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-public class ItemDrop extends AbstractDrop
+public class ItemChance extends AbstractChance
 {
     private final Material material;
     private Byte data;
     private Short durability;
-    private Collection<ItemEnchantment> enchantments;
+    private Collection<EnchantmentChance> enchantments;
     private boolean addToInventory;
 
-    public ItemDrop(Material material)
+    public ItemChance(Material material)
     {
         this.material = material;
         this.enchantments = Collections.emptyList();
@@ -70,12 +70,12 @@ public class ItemDrop extends AbstractDrop
         this.durability = durability;
     }
 
-    public Collection<ItemEnchantment> getEnchantments()
+    public Collection<EnchantmentChance> getEnchantments()
     {
         return enchantments;
     }
 
-    public void setEnchantments(Collection<ItemEnchantment> enchantments)
+    public void setEnchantments(Collection<EnchantmentChance> enchantments)
     {
         this.enchantments = enchantments;
     }
@@ -107,7 +107,7 @@ public class ItemDrop extends AbstractDrop
                         itemStack.setDurability(durability);
                     }
                 }
-                itemStack.addUnsafeEnchantments(ItemEnchantment.nextEnchantments(enchantments));
+                itemStack.addUnsafeEnchantments(EnchantmentChance.nextEnchantments(enchantments));
                 if (itemStack.getAmount() > 0) {
                     return itemStack;
                 }
@@ -116,62 +116,62 @@ public class ItemDrop extends AbstractDrop
         return new ItemStack(Material.AIR, 0);
     }
 
-    public static Collection<AbstractDrop> parseConfig(ConfigurationSection config)
+    public static Collection<AbstractChance> parseConfig(ConfigurationSection config)
     {
-        Collection<AbstractDrop> drops = Collections.emptyList();
+        Collection<AbstractChance> chances = Collections.emptyList();
 
         if (config != null) {
             if (config.getList("Drops") != null) {
                 Collection<String> dropsList = config.getStringList("Drops");
-                drops = parseDrops(dropsList);
+                chances = parseChances(dropsList);
             }
             else {
-                drops = parseDrops(config.getString("Drops"));
+                chances = parseChance(config.getString("Drops"));
             }
         }
 
-        return drops;
+        return chances;
     }
 
-    private static Collection<AbstractDrop> parseDrops(String dropsString)
+    private static Collection<AbstractChance> parseChance(String dropsString)
     {
-        Collection<AbstractDrop> drops = Collections.emptyList();
+        Collection<AbstractChance> chances = Collections.emptyList();
 
         if (dropsString != null && !dropsString.isEmpty()) {
-            drops = parseDrops(Arrays.asList(dropsString.split(";")));
+            chances = parseChances(Arrays.asList(dropsString.split(";")));
         }
 
-        return drops;
+        return chances;
     }
 
-    private static Collection<AbstractDrop> parseDrops(Collection<String> dropsList)
+    private static Collection<AbstractChance> parseChances(Collection<String> dropsList)
     {
-        Collection<AbstractDrop> drops = Collections.emptyList();
+        Collection<AbstractChance> chances = Collections.emptyList();
 
         if (dropsList != null && !dropsList.isEmpty()) {
-            drops = new ArrayList<>();
+            chances = new ArrayList<>();
 
             for (String dropString : dropsList) {
-                drops.addAll(parseItem(dropString));
+                chances.addAll(parseItemChance(dropString));
             }
         }
 
-        return drops;
+        return chances;
     }
 
-    private static Collection<ItemDrop> parseItem(String dropString)
+    private static Collection<ItemChance> parseItemChance(String dropString)
     {
-        Collection<ItemDrop> drops = Collections.emptyList();
+        Collection<ItemChance> drops = Collections.emptyList();
 
         if (parseMaterial(dropString) != null) {
             drops = new ArrayList<>();
-            drops.add(populateItemDrop(new ItemDrop(parseMaterial(dropString)), dropString));
+            drops.add(populateItemChance(new ItemChance(parseMaterial(dropString)), dropString));
         }
 
         return drops;
     }
 
-    protected static ItemDrop populateItemDrop(ItemDrop drop, String dropString)
+    protected static ItemChance populateItemChance(ItemChance drop, String dropString)
     {
         drop.setEnchantments(parseEnchantments(dropString));
         drop.setData(parseData(dropString));
@@ -197,9 +197,9 @@ public class ItemDrop extends AbstractDrop
         return material;
     }
 
-    private static Collection<ItemEnchantment> parseEnchantments(String dropString)
+    private static Collection<EnchantmentChance> parseEnchantments(String dropString)
     {
-        Collection<ItemEnchantment> enchantments = Collections.emptyList();
+        Collection<EnchantmentChance> enchantments = Collections.emptyList();
         String[] dropParts = dropString.split(":");
         String[] itemParts = dropParts[0].split(",");
 
@@ -225,13 +225,13 @@ public class ItemDrop extends AbstractDrop
         return enchantments;
     }
 
-    private static ItemEnchantment createEnchantment(String name, int minLevel, int maxLevel)
+    private static EnchantmentChance createEnchantment(String name, int minLevel, int maxLevel)
     {
         if (name == null || Enchantment.getByName(name.toUpperCase()) == null) {
             throw new IllegalArgumentException("Unrecognized enchantment: " + name);
         }
-        ItemEnchantment enchantment = new ItemEnchantment(Enchantment.getByName(name.toUpperCase()));
-        enchantment.setLevelRange(new NumberRange(minLevel, maxLevel));
+        EnchantmentChance enchantment = new EnchantmentChance(Enchantment.getByName(name.toUpperCase()));
+        enchantment.setRange(new NumberRange(minLevel, maxLevel));
 
         return enchantment;
     }

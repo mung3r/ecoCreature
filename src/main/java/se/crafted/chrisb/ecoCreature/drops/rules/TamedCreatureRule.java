@@ -30,14 +30,9 @@ import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
 public class TamedCreatureRule extends AbstractEntityRule
 {
-    private boolean wolverineMode;
+    private final boolean wolverineMode;
 
-    public TamedCreatureRule()
-    {
-        wolverineMode = true;
-    }
-
-    public void setWolverineMode(boolean wolverineMode)
+    public TamedCreatureRule(boolean wolverineMode)
     {
         this.wolverineMode = wolverineMode;
     }
@@ -56,8 +51,7 @@ public class TamedCreatureRule extends AbstractEntityRule
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
         if (system != null && system.isConfigurationSection("Hunting")) {
-            TamedCreatureRule rule = new TamedCreatureRule();
-            rule.setWolverineMode(system.getBoolean("Hunting.WolverineMode", true));
+            TamedCreatureRule rule = new TamedCreatureRule(system.getBoolean("Hunting.WolverineMode", true));
             rules = new HashMap<>();
             rules.put(TamedCreatureRule.class, rule);
         }

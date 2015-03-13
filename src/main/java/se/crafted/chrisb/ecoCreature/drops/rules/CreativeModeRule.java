@@ -33,9 +33,9 @@ public class CreativeModeRule extends AbstractEntityRule
 {
     private boolean creativeModeRewards;
 
-    public CreativeModeRule()
+    public CreativeModeRule(boolean creativeModeRewards)
     {
-        creativeModeRewards = false;
+        this.creativeModeRewards = creativeModeRewards;
     }
 
     public void setCreativeModeRewards(boolean creativeModeRewards)
@@ -57,8 +57,7 @@ public class CreativeModeRule extends AbstractEntityRule
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
         if (system != null && system.isConfigurationSection("Hunting")) {
-            CreativeModeRule rule = new CreativeModeRule();
-            rule.setCreativeModeRewards(system.getBoolean("Hunting.CreativeModeRewards", false));
+            CreativeModeRule rule = new CreativeModeRule(system.getBoolean("Hunting.CreativeModeRewards"));
             rules = new HashMap<>();
             rules.put(CreativeModeRule.class, rule);
         }

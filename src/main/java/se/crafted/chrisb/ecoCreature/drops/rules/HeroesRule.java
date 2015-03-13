@@ -33,11 +33,11 @@ import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 
 public class HeroesRule extends AbstractPlayerRule
 {
-    private List<String> classNames;
+    private final List<String> classNames;
 
-    public HeroesRule()
+    public HeroesRule(List<String> classNames)
     {
-        classNames = new ArrayList<>();
+        this.classNames = classNames;
         setClearDrops(true);
         setClearExpOrbs(true);
     }
@@ -60,19 +60,13 @@ public class HeroesRule extends AbstractPlayerRule
         return ruleBroken;
     }
 
-    public void setClassNames(List<String> classNames)
-    {
-        this.classNames = classNames;
-    }
-
     public static Map<Class<? extends AbstractRule>, Rule> parseConfig(ConfigurationSection system)
     {
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
         if (system != null && system.isConfigurationSection("Hunting")) {
             List<String> classNames = system.getStringList("Hunting.Heroes.ClearClassDropsList");
-            HeroesRule rule = new HeroesRule();
-            rule.setClassNames(classNames);
+            HeroesRule rule = new HeroesRule(classNames);
             rules = new HashMap<>();
             rules.put(HeroesRule.class, rule);
         }

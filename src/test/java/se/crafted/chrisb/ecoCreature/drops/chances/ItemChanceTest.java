@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops.models;
+package se.crafted.chrisb.ecoCreature.drops.chances;
 
 import junit.framework.Assert;
 
@@ -26,28 +26,30 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.junit.Test;
 
-public class ItemDropTest
+import se.crafted.chrisb.ecoCreature.drops.chances.ItemChance;
+
+public class ItemChanceTest
 {
 
     @Test
     public void testItemDrop()
     {
         Number samples = 1000000;
-        ItemDrop drop = new ItemDrop(Material.GHAST_TEAR);
-        drop.setRange(new NumberRange(1, 1));
-        drop.setPercentage(20);
+        ItemChance chance = new ItemChance(Material.GHAST_TEAR);
+        chance.setRange(new NumberRange(1, 1));
+        chance.setPercentage(20);
         int amount = 0;
 
         for (int i = 0; i < samples.intValue(); i++) {
-            ItemStack stack = drop.nextItemStack(false);
+            ItemStack stack = chance.nextItemStack(false);
             if (Material.AIR.equals(stack.getData().getItemType())) {
                 continue;
             }
             amount += stack.getAmount();
         }
 
-        double chance = amount / samples.doubleValue();
-        double delta = Math.abs(drop.getPercentage() / 100D - chance);
+        double idealChance = amount / samples.doubleValue();
+        double delta = Math.abs(chance.getPercentage() / 100D - idealChance);
         Assert.assertTrue(delta < 0.01);
     }
 }

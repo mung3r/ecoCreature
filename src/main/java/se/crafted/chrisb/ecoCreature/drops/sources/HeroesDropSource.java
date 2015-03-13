@@ -36,7 +36,7 @@ public class HeroesDropSource extends AbstractDropSource
     public HeroesDropSource(String section, ConfigurationSection config)
     {
         super(section, config);
-        setNoCoinRewardMessage(DefaultMessage.NO_MESSAGE);
+        setNoCoinRewardMessage(DefaultMessage.EMPTY_MESSAGE);
     }
 
     @Override

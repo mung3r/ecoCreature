@@ -28,7 +28,7 @@ public class DefaultMessage implements Message
 {
     private static final String NO_MESSAGE_TEMPLATE = "";
 
-    public static final DefaultMessage NO_MESSAGE = new DefaultMessage(NO_MESSAGE_TEMPLATE);
+    public static final DefaultMessage EMPTY_MESSAGE = new DefaultMessage(NO_MESSAGE_TEMPLATE);
 
     private boolean messageOutputEnabled;
 

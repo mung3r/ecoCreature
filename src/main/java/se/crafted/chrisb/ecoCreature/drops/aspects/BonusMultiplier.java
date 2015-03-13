@@ -17,14 +17,31 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops;
+package se.crafted.chrisb.ecoCreature.drops.aspects;
 
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-
-public interface SpawnerMobTracker
+public class BonusMultiplier
 {
-    void tagSpawnerMob(CreatureSpawnEvent event);
+    private final double multiplier;
+    private final long endTimeInMillis;
 
-    boolean isSpawnerMob(LivingEntity entity);
+    public BonusMultiplier(double multiplier, long endTimeInMillis)
+    {
+        this.multiplier = multiplier;
+        this.endTimeInMillis = endTimeInMillis;
+    }
+
+    public boolean isValid()
+    {
+        return System.currentTimeMillis() < endTimeInMillis;
+    }
+
+    public double getMultiplier()
+    {
+        return multiplier;
+    }
+
+    public long getEndTimeInMillis()
+    {
+        return endTimeInMillis;
+    }
 }

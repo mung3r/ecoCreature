@@ -37,9 +37,9 @@ import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 public class HeroesDropCategory extends AbstractDropCategory<HeroesDropType>
 {
-    public HeroesDropCategory(Map<HeroesDropType, Collection<AbstractDropSource>> sources)
+    public HeroesDropCategory(Map<HeroesDropType, Collection<AbstractDropSource>> dropSourceMap)
     {
-        super(sources);
+        super(dropSourceMap);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class HeroesDropCategory extends AbstractDropCategory<HeroesDropType>
 
     public static AbstractDropCategory<HeroesDropType> parseConfig(ConfigurationSection config)
     {
-        Map<HeroesDropType, Collection<AbstractDropSource>> sources = new HashMap<>();
+        Map<HeroesDropType, Collection<AbstractDropSource>> dropSourceMap = new HashMap<>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {
@@ -79,19 +79,19 @@ public class HeroesDropCategory extends AbstractDropCategory<HeroesDropType>
                 HeroesDropType type = HeroesDropType.fromName(typeName);
 
                 if (type.isValid()) {
-                    for (AbstractDropSource source : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
+                    for (AbstractDropSource dropSource : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
 
-                        if (!sources.containsKey(type)) {
-                            sources.put(type, new ArrayList<AbstractDropSource>());
+                        if (!dropSourceMap.containsKey(type)) {
+                            dropSourceMap.put(type, new ArrayList<AbstractDropSource>());
                         }
 
-                        sources.get(type).add(source);
-                        sources.get(type).addAll(parseSets("RewardTable." + typeName, config));
+                        dropSourceMap.get(type).add(dropSource);
+                        dropSourceMap.get(type).addAll(parseSets("RewardTable." + typeName, config));
                     }
                 }
             }
         }
 
-        return new HeroesDropCategory(sources);
+        return new HeroesDropCategory(dropSourceMap);
     }
 }

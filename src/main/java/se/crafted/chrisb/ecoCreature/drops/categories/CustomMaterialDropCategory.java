@@ -35,9 +35,9 @@ import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomMaterialType;
 
 public class CustomMaterialDropCategory extends AbstractDropCategory<CustomMaterialType>
 {
-    public CustomMaterialDropCategory(Map<CustomMaterialType, Collection<AbstractDropSource>> sources)
+    public CustomMaterialDropCategory(Map<CustomMaterialType, Collection<AbstractDropSource>> dropSourceMap)
     {
-        super(sources);
+        super(dropSourceMap);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class CustomMaterialDropCategory extends AbstractDropCategory<CustomMater
 
     public static AbstractDropCategory<CustomMaterialType> parseConfig(ConfigurationSection config)
     {
-        Map<CustomMaterialType, Collection<AbstractDropSource>> sources = new HashMap<>();
+        Map<CustomMaterialType, Collection<AbstractDropSource>> dropSourceMap = new HashMap<>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {
@@ -68,19 +68,19 @@ public class CustomMaterialDropCategory extends AbstractDropCategory<CustomMater
                 CustomMaterialType type = CustomMaterialType.fromName(typeName);
 
                 if (type.isValid()) {
-                    for (AbstractDropSource source : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
+                    for (AbstractDropSource dropSource : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
 
-                        if (!sources.containsKey(type)) {
-                            sources.put(type, new ArrayList<AbstractDropSource>());
+                        if (!dropSourceMap.containsKey(type)) {
+                            dropSourceMap.put(type, new ArrayList<AbstractDropSource>());
                         }
 
-                        sources.get(type).add(source);
-                        sources.get(type).addAll(parseSets("RewardTable." + typeName, config));
+                        dropSourceMap.get(type).add(dropSource);
+                        dropSourceMap.get(type).addAll(parseSets("RewardTable." + typeName, config));
                     }
                 }
             }
         }
 
-        return new CustomMaterialDropCategory(sources);
+        return new CustomMaterialDropCategory(dropSourceMap);
     }
 }

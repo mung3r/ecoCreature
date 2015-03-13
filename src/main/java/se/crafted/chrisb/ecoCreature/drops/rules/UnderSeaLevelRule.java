@@ -34,14 +34,9 @@ public class UnderSeaLevelRule extends AbstractEntityRule
 {
     private static final String NO_UNDER_SEA_LEVEL_MESSAGE = "&7You find no rewards on this creature.";
 
-    private boolean huntUnderSeaLevel;
+    private final boolean huntUnderSeaLevel;
 
-    public UnderSeaLevelRule()
-    {
-        huntUnderSeaLevel = true;
-    }
-
-    public void setHuntUnderSeaLevel(boolean huntUnderSeaLevel)
+    public UnderSeaLevelRule(boolean huntUnderSeaLevel)
     {
         this.huntUnderSeaLevel = huntUnderSeaLevel;
     }
@@ -60,8 +55,7 @@ public class UnderSeaLevelRule extends AbstractEntityRule
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
         if (system != null && system.isConfigurationSection("Hunting")) {
-            UnderSeaLevelRule rule = new UnderSeaLevelRule();
-            rule.setHuntUnderSeaLevel(system.getBoolean("Hunting.AllowUnderSeaLVL", true));
+            UnderSeaLevelRule rule = new UnderSeaLevelRule(system.getBoolean("Hunting.AllowUnderSeaLVL", true));
             rule.setMessage(new DefaultMessage(system.getString("Messages.NoUnderSeaLevel", NO_UNDER_SEA_LEVEL_MESSAGE)));
             rules = new HashMap<>();
             rules.put(UnderSeaLevelRule.class, rule);

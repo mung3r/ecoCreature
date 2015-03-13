@@ -17,31 +17,16 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops.models;
+package se.crafted.chrisb.ecoCreature.drops.chances;
 
-public class Bonus
+
+public interface Chance
 {
-    private final double multiplier;
-    private final long endTimeInMillis;
+    boolean nextWinner();
 
-    public Bonus(double multiplier, long endTimeInMillis)
-    {
-        this.multiplier = multiplier;
-        this.endTimeInMillis = endTimeInMillis;
-    }
+    int nextIntAmount();
 
-    public boolean isValid()
-    {
-        return System.currentTimeMillis() < endTimeInMillis;
-    }
+    int getFixedAmount();
 
-    public double getMultiplier()
-    {
-        return multiplier;
-    }
-
-    public long getEndTimeInMillis()
-    {
-        return endTimeInMillis;
-    }
+    double nextDoubleAmount();
 }

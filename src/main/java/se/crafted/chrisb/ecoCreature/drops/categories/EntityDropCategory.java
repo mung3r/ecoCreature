@@ -37,9 +37,9 @@ import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
 public class EntityDropCategory extends AbstractDropCategory<EntityType>
 {
-    public EntityDropCategory(Map<EntityType, Collection<AbstractDropSource>> sources)
+    public EntityDropCategory(Map<EntityType, Collection<AbstractDropSource>> dropSourceMap)
     {
-        super(sources);
+        super(dropSourceMap);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class EntityDropCategory extends AbstractDropCategory<EntityType>
 
     public static AbstractDropCategory<EntityType> parseConfig(ConfigurationSection config)
     {
-        Map<EntityType, Collection<AbstractDropSource>> sources = new HashMap<>();
+        Map<EntityType, Collection<AbstractDropSource>> dropSourceMap = new HashMap<>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {
@@ -74,20 +74,20 @@ public class EntityDropCategory extends AbstractDropCategory<EntityType>
                     huntingRules.putAll(loadHuntingRules(config.getConfigurationSection("RewardTable." + typeName)));
                     huntingRules.putAll(loadGainRules(config.getConfigurationSection("Gain")));
 
-                    for (AbstractDropSource source : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
-                        source.setHuntingRules(huntingRules);
+                    for (AbstractDropSource dropSource : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
+                        dropSource.setHuntingRules(huntingRules);
 
-                        if (!sources.containsKey(type)) {
-                            sources.put(type, new ArrayList<AbstractDropSource>());
+                        if (!dropSourceMap.containsKey(type)) {
+                            dropSourceMap.put(type, new ArrayList<AbstractDropSource>());
                         }
 
-                        sources.get(type).add(source);
-                        sources.get(type).addAll(parseSets("RewardTable." + typeName, config));
+                        dropSourceMap.get(type).add(dropSource);
+                        dropSourceMap.get(type).addAll(parseSets("RewardTable." + typeName, config));
                     }
                 }
             }
         }
 
-        return new EntityDropCategory(sources);
+        return new EntityDropCategory(dropSourceMap);
     }
 }

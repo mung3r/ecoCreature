@@ -33,6 +33,11 @@ import com.gmail.nossr50.api.PartyAPI;
 
 public class McMMOParty extends AbstractParty
 {
+    public McMMOParty(boolean shared)
+    {
+        super(shared);
+    }
+
     @Override
     public Collection<String> getMembers(Player player)
     {
@@ -58,8 +63,7 @@ public class McMMOParty extends AbstractParty
         Collection<Party> parties = Collections.emptyList();
 
         if (config != null) {
-            McMMOParty party = new McMMOParty();
-            party.setShared(config.getBoolean("InParty.Share", false));
+            McMMOParty party = new McMMOParty(config.getBoolean("InParty.Share"));
             parties = new ArrayList<>();
             parties.add(party);
         }

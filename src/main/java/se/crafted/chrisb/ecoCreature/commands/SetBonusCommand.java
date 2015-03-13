@@ -27,8 +27,8 @@ import java.util.regex.Pattern;
 
 import org.bukkit.command.CommandSender;
 
-import se.crafted.chrisb.ecoCreature.drops.aspects.BonusChanceAspect;
-import se.crafted.chrisb.ecoCreature.drops.models.Bonus;
+import se.crafted.chrisb.ecoCreature.drops.aspects.BonusMultiplier;
+import se.crafted.chrisb.ecoCreature.drops.aspects.BonusMultiplierAspect;
 
 public class SetBonusCommand extends BasicCommand
 {
@@ -49,8 +49,8 @@ public class SetBonusCommand extends BasicCommand
             try {
                 double multiplier = Double.parseDouble(args[0]);
                 long endTimeInMillis = getTimeInMillis(args[1]);
-                Bonus bonus = new Bonus(multiplier, endTimeInMillis);
-                BonusChanceAspect.setBonus(bonus);
+                BonusMultiplier bonusMultiplier = new BonusMultiplier(multiplier, endTimeInMillis);
+                BonusMultiplierAspect.setBonusMultiplier(bonusMultiplier);
 
                 StringBuilder message = new StringBuilder();
                 for (int i = 0; i < args.length; i++) {
@@ -59,7 +59,7 @@ public class SetBonusCommand extends BasicCommand
                         message.append(" ");
                     }
                 }
-                sender.sendMessage("Loot bonus multiplier set for " + bonus.getMultiplier() + ", ending at " + new Date(bonus.getEndTimeInMillis()));
+                sender.sendMessage("Loot bonus multiplier set for " + bonusMultiplier.getMultiplier() + ", ending at " + new Date(bonusMultiplier.getEndTimeInMillis()));
             }
             catch (IllegalArgumentException e) {
                 sender.sendMessage(e.getMessage());

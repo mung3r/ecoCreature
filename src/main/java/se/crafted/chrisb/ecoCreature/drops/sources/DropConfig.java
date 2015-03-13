@@ -31,14 +31,14 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
-import se.crafted.chrisb.ecoCreature.drops.SpawnerMobTracker;
+import se.crafted.chrisb.ecoCreature.drops.SpawnerMobTag;
 import se.crafted.chrisb.ecoCreature.drops.categories.AbstractDropCategory;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.drops.gain.PlayerGain;
 import se.crafted.chrisb.ecoCreature.drops.parties.Party;
 
-public class DropConfig implements SpawnerMobTracker
+public class DropConfig implements SpawnerMobTag
 {
     public static final String SPAWNERMOB_TAG_MDID = "ecoCreature.spawnerMob";
     public static final String SPAWNERLOC_TAG_MDID = "ecoCreature.spawnerLoc";

@@ -59,12 +59,12 @@ import com.google.common.collect.Iterables;
 
 public abstract class AbstractDropCategory<T>
 {
-    private Map<T, Collection<AbstractDropSource>> sources = Collections.emptyMap();
+    private Map<T, Collection<AbstractDropSource>> dropSourceMap = Collections.emptyMap();
 
-    public AbstractDropCategory(Map<T, Collection<AbstractDropSource>> sources)
+    public AbstractDropCategory(Map<T, Collection<AbstractDropSource>> dropSourceMap)
     {
-        if (sources != null) {
-            this.sources = sources;
+        if (dropSourceMap != null) {
+            this.dropSourceMap = dropSourceMap;
         }
     }
 
@@ -95,26 +95,26 @@ public abstract class AbstractDropCategory<T>
 
     private boolean hasDropSource(T type)
     {
-        return type != null && sources.containsKey(type) && !sources.get(type).isEmpty();
+        return type != null && dropSourceMap.containsKey(type) && !dropSourceMap.get(type).isEmpty();
     }
 
     private Collection<AbstractDropSource> getDropSources(T type)
     {
-        Collection<AbstractDropSource> source = Collections.emptyList();
+        Collection<AbstractDropSource> dropSources = Collections.emptyList();
 
         if (hasDropSource(type)) {
-            source = sources.get(type);
+            dropSources = dropSourceMap.get(type);
         }
 
         if (type != null) {
-            LoggerUtil.getInstance().debugTrue("No reward defined for type: " + type, source.isEmpty());
+            LoggerUtil.getInstance().debugTrue("No reward defined for type: " + type, dropSources.isEmpty());
         }
-        return source;
+        return dropSources;
     }
 
-    private boolean isNotRuleBroken(final Event event, AbstractDropSource source)
+    private boolean isNotRuleBroken(final Event event, AbstractDropSource dropSource)
     {
-        return !Iterables.any(source.getHuntingRules().values(), new Predicate<Rule>() {
+        return !Iterables.any(dropSource.getHuntingRules().values(), new Predicate<Rule>() {
 
             @Override
             public boolean apply(Rule rule)
@@ -137,7 +137,7 @@ public abstract class AbstractDropCategory<T>
 
     protected static Collection<AbstractDropSource> parseSets(String rewardSection, ConfigurationSection config)
     {
-        Collection<AbstractDropSource> sources = new ArrayList<>();
+        Collection<AbstractDropSource> dropSources = new ArrayList<>();
         ConfigurationSection rewardConfig = config.getConfigurationSection(rewardSection);
         ConfigurationSection rewardSets = config.getConfigurationSection("RewardSets");
         Collection<String> sets = rewardConfig.getStringList("Sets");
@@ -151,17 +151,17 @@ public abstract class AbstractDropCategory<T>
                     NumberRange range = parseRange(setName);
                     double percentage = parsePercentage(setName);
 
-                    for (AbstractDropSource setSource : DropSourceFactory.createSetSources(name, rewardSets)) {
-                        setSource.setHuntingRules(huntingRules);
-                        setSource.setRange(range);
-                        setSource.setPercentage(percentage);
-                        sources.add(setSource);
+                    for (AbstractDropSource dropSource : DropSourceFactory.createSetSources(name, rewardSets)) {
+                        dropSource.setHuntingRules(huntingRules);
+                        dropSource.setRange(range);
+                        dropSource.setPercentage(percentage);
+                        dropSources.add(dropSource);
                     }
                 }
             }
         }
 
-        return sources;
+        return dropSources;
     }
 
     private static NumberRange parseRange(String dropString)
@@ -197,20 +197,20 @@ public abstract class AbstractDropCategory<T>
         return percentage;
     }
 
-    protected static Collection<AbstractDropSource> configureDropSources(Collection<AbstractDropSource> sources, ConfigurationSection config)
+    protected static Collection<AbstractDropSource> configureDropSources(Collection<AbstractDropSource> dropSources, ConfigurationSection config)
     {
-        if (sources != null && config != null) {
-            for (AbstractDropSource source : sources) {
-                source.setIntegerCurrency(config.getBoolean("System.Economy.IntegerCurrency", false));
-                source.setFixedAmount(config.getBoolean("System.Hunting.FixedDrops", false));
+        if (dropSources != null && config != null) {
+            for (AbstractDropSource dropSource : dropSources) {
+                dropSource.setIntegerCurrency(config.getBoolean("System.Economy.IntegerCurrency"));
+                dropSource.setFixedAmount(config.getBoolean("System.Hunting.FixedDrops"));
 
-                source.setCoinRewardMessage(configureMessage(source.getCoinRewardMessage(), config));
-                source.setCoinPenaltyMessage(configureMessage(source.getCoinPenaltyMessage(), config));
-                source.setNoCoinRewardMessage(configureMessage(source.getNoCoinRewardMessage(), config));
+                dropSource.setCoinRewardMessage(configureMessage(dropSource.getCoinRewardMessage(), config));
+                dropSource.setCoinPenaltyMessage(configureMessage(dropSource.getCoinPenaltyMessage(), config));
+                dropSource.setNoCoinRewardMessage(configureMessage(dropSource.getNoCoinRewardMessage(), config));
             }
         }
 
-        return sources;
+        return dropSources;
     }
 
     private static Message configureMessage(Message message, ConfigurationSection config)
@@ -221,7 +221,7 @@ public abstract class AbstractDropCategory<T>
                 ((CoinMessageDecorator) message).setCoinLoggingEnabled(config.getBoolean("System.Messages.LogCoinRewards", true));
             }
             if (message instanceof NoCoinMessageDecorator) {
-                ((NoCoinMessageDecorator) message).setNoRewardMessageEnabled(config.getBoolean("System.Messages.NoReward", false));
+                ((NoCoinMessageDecorator) message).setNoRewardMessageEnabled(config.getBoolean("System.Messages.NoReward"));
             }
         }
 

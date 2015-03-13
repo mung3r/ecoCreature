@@ -31,14 +31,14 @@ import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
-import se.crafted.chrisb.ecoCreature.drops.models.AbstractDrop;
-import se.crafted.chrisb.ecoCreature.drops.models.BookDrop;
-import se.crafted.chrisb.ecoCreature.drops.models.CoinDrop;
-import se.crafted.chrisb.ecoCreature.drops.models.CustomEntityDrop;
-import se.crafted.chrisb.ecoCreature.drops.models.EntityDrop;
-import se.crafted.chrisb.ecoCreature.drops.models.ItemDrop;
-import se.crafted.chrisb.ecoCreature.drops.models.JockeyDrop;
-import se.crafted.chrisb.ecoCreature.drops.models.LoreDrop;
+import se.crafted.chrisb.ecoCreature.drops.chances.AbstractChance;
+import se.crafted.chrisb.ecoCreature.drops.chances.BookChance;
+import se.crafted.chrisb.ecoCreature.drops.chances.CoinChance;
+import se.crafted.chrisb.ecoCreature.drops.chances.CustomEntityChance;
+import se.crafted.chrisb.ecoCreature.drops.chances.EntityChance;
+import se.crafted.chrisb.ecoCreature.drops.chances.ItemChance;
+import se.crafted.chrisb.ecoCreature.drops.chances.JockeyChance;
+import se.crafted.chrisb.ecoCreature.drops.chances.LoreChance;
 import se.crafted.chrisb.ecoCreature.drops.rules.AbstractRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.Rule;
 import se.crafted.chrisb.ecoCreature.messages.CoinMessageDecorator;
@@ -46,7 +46,7 @@ import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
 
-public abstract class AbstractDropSource extends AbstractDrop
+public abstract class AbstractDropSource extends AbstractChance
 {
     private static final String NO_COIN_REWARD_MESSAGE = "&7You slayed a &5<crt>&7 using a &3<itm>&7.";
     private static final String COIN_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.";
@@ -54,7 +54,7 @@ public abstract class AbstractDropSource extends AbstractDrop
 
     private String name;
 
-    private Collection<AbstractDrop> drops;
+    private Collection<AbstractChance> chances;
 
     private Message noCoinRewardMessage;
     private Message coinRewardMessage;
@@ -81,20 +81,20 @@ public abstract class AbstractDropSource extends AbstractDrop
         ConfigurationSection dropConfig = config.getConfigurationSection(section);
         name = dropConfig.getName();
 
-        drops = new ArrayList<>();
-        drops.addAll(ItemDrop.parseConfig(dropConfig));
-        drops.addAll(BookDrop.parseConfig(dropConfig));
-        drops.addAll(LoreDrop.parseConfig(dropConfig));
-        drops.addAll(CustomEntityDrop.parseConfig(dropConfig));
-        drops.addAll(EntityDrop.parseConfig(dropConfig));
-        drops.addAll(JockeyDrop.parseConfig(dropConfig));
-        drops.addAll(CoinDrop.parseConfig(dropConfig));
+        chances = new ArrayList<>();
+        chances.addAll(ItemChance.parseConfig(dropConfig));
+        chances.addAll(BookChance.parseConfig(dropConfig));
+        chances.addAll(LoreChance.parseConfig(dropConfig));
+        chances.addAll(CustomEntityChance.parseConfig(dropConfig));
+        chances.addAll(EntityChance.parseConfig(dropConfig));
+        chances.addAll(JockeyChance.parseConfig(dropConfig));
+        chances.addAll(CoinChance.parseConfig(dropConfig));
 
         coinRewardMessage = new CoinMessageDecorator(new DefaultMessage(dropConfig.getString("Reward_Message", config.getString("System.Messages.Reward_Message", COIN_REWARD_MESSAGE))));
         coinPenaltyMessage = new CoinMessageDecorator(new DefaultMessage(dropConfig.getString("Penalty_Message", config.getString("System.Messages.Penalty_Message", COIN_PENALTY_MESSAGE))));
         noCoinRewardMessage = new NoCoinMessageDecorator(new DefaultMessage(dropConfig.getString("NoReward_Message", config.getString("System.Messages.NoReward_Message", NO_COIN_REWARD_MESSAGE))));
 
-        addToInventory = dropConfig.getBoolean("AddItemsToInventory", false);
+        addToInventory = dropConfig.getBoolean("AddItemsToInventory");
     }
 
     public String getName()
@@ -200,21 +200,21 @@ public abstract class AbstractDropSource extends AbstractDrop
 
         assembledDrop.setName(name);
 
-        for (AbstractDrop drop : drops) {
-            if (drop instanceof JockeyDrop) {
-                assembledDrop.getJockeyTypes().addAll(((JockeyDrop) drop).nextEntityTypes());
+        for (AbstractChance chance : chances) {
+            if (chance instanceof JockeyChance) {
+                assembledDrop.getJockeyTypes().addAll(((JockeyChance) chance).nextEntityTypes());
             }
-            else if (drop instanceof CustomEntityDrop) {
-                assembledDrop.getCustomEntityTypes().addAll(((CustomEntityDrop) drop).nextEntityTypes());
+            else if (chance instanceof CustomEntityChance) {
+                assembledDrop.getCustomEntityTypes().addAll(((CustomEntityChance) chance).nextEntityTypes());
             }
-            else if (drop instanceof EntityDrop) {
-                assembledDrop.getEntityTypes().addAll(((EntityDrop) drop).nextEntityTypes());
+            else if (chance instanceof EntityChance) {
+                assembledDrop.getEntityTypes().addAll(((EntityChance) chance).nextEntityTypes());
             }
-            else if (drop instanceof ItemDrop) {
-                assembledDrop.getItems().add(((ItemDrop) drop).nextItemStack(fixedAmount));
+            else if (chance instanceof ItemChance) {
+                assembledDrop.getItems().add(((ItemChance) chance).nextItemStack(fixedAmount));
             }
-            else if (drop instanceof CoinDrop) {
-                CoinDrop coin = (CoinDrop) drop;
+            else if (chance instanceof CoinChance) {
+                CoinChance coin = (CoinChance) chance;
 
                 assembledDrop.setCoin(coin.nextDoubleAmount());
 

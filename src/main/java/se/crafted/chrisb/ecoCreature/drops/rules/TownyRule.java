@@ -78,7 +78,7 @@ public class TownyRule extends AbstractEntityRule
                 ConfigurationSection townConfig = townyConfig.getConfigurationSection(townName);
 
                 if (townConfig != null) {
-                    rule.addTown(townName, townConfig.getBoolean("ClearExpOrbs", false));
+                    rule.addTown(townName, townConfig.getBoolean("ClearExpOrbs"));
                 }
             }
 

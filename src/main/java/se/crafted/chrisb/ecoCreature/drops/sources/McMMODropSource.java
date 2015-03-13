@@ -34,7 +34,7 @@ public class McMMODropSource extends AbstractDropSource
     public McMMODropSource(String section, ConfigurationSection config)
     {
         super(section, config);
-        setNoCoinRewardMessage(DefaultMessage.NO_MESSAGE);
+        setNoCoinRewardMessage(DefaultMessage.EMPTY_MESSAGE);
     }
 
     @Override

@@ -27,7 +27,5 @@ public interface Party
 {
     boolean isShared();
 
-    void setShared(boolean shared);
-
     Collection<String> getMembers(Player player);
 }

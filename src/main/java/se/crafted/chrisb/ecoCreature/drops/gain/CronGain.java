@@ -35,7 +35,6 @@ import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class CronGain extends AbstractPlayerGain<String>
 {
-
     public CronGain(Map<String, Double> multipliers)
     {
         super(multipliers, "gain.cron");

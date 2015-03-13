@@ -34,7 +34,7 @@ public abstract class AbstractRule implements Rule
     {
         clearDrops = false;
         clearExpOrbs = false;
-        message = DefaultMessage.NO_MESSAGE;
+        message = DefaultMessage.EMPTY_MESSAGE;
     }
 
     @Override

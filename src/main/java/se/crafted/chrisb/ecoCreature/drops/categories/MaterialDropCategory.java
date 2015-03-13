@@ -36,9 +36,9 @@ import se.crafted.chrisb.ecoCreature.drops.sources.DropSourceFactory;
 
 public class MaterialDropCategory extends AbstractDropCategory<MaterialData>
 {
-    public MaterialDropCategory(Map<MaterialData, Collection<AbstractDropSource>> sources)
+    public MaterialDropCategory(Map<MaterialData, Collection<AbstractDropSource>> dropSourceMap)
     {
-        super(sources);
+        super(dropSourceMap);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class MaterialDropCategory extends AbstractDropCategory<MaterialData>
 
     public static AbstractDropCategory<MaterialData> parseConfig(ConfigurationSection config)
     {
-        Map<MaterialData, Collection<AbstractDropSource>> sources = new HashMap<>();
+        Map<MaterialData, Collection<AbstractDropSource>> dropSourceMap = new HashMap<>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {
@@ -69,21 +69,21 @@ public class MaterialDropCategory extends AbstractDropCategory<MaterialData>
                 Material type = Material.matchMaterial(typeName);
 
                 if (type != null) {
-                    for (AbstractDropSource source : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
+                    for (AbstractDropSource dropSource : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
 
                         MaterialData materialData = new MaterialData(type, parseData(config.getConfigurationSection("RewardTable." + typeName)));
-                        if (!sources.containsKey(materialData)) {
-                            sources.put(materialData, new ArrayList<AbstractDropSource>());
+                        if (!dropSourceMap.containsKey(materialData)) {
+                            dropSourceMap.put(materialData, new ArrayList<AbstractDropSource>());
                         }
 
-                        sources.get(materialData).add(source);
-                        sources.get(materialData).addAll(parseSets("RewardTable." + typeName, config));
+                        dropSourceMap.get(materialData).add(dropSource);
+                        dropSourceMap.get(materialData).addAll(parseSets("RewardTable." + typeName, config));
                     }
                 }
             }
         }
 
-        return new MaterialDropCategory(sources);
+        return new MaterialDropCategory(dropSourceMap);
     }
 
     private static byte parseData(ConfigurationSection config)

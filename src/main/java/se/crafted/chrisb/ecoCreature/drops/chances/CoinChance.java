@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops.models;
+package se.crafted.chrisb.ecoCreature.drops.chances;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,11 +26,11 @@ import java.util.Collections;
 import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.configuration.ConfigurationSection;
 
-public class CoinDrop extends AbstractDrop
+public class CoinChance extends AbstractChance
 {
     private final double multiplier;
 
-    public CoinDrop(NumberRange range, double percentage, double multiplier)
+    public CoinChance(NumberRange range, double percentage, double multiplier)
     {
         setRange(range);
         setPercentage(percentage);
@@ -43,16 +43,16 @@ public class CoinDrop extends AbstractDrop
         return super.nextDoubleAmount() * multiplier;
     }
 
-    public static Collection<AbstractDrop> parseConfig(ConfigurationSection config)
+    public static Collection<AbstractChance> parseConfig(ConfigurationSection config)
     {
-        Collection<AbstractDrop> coins = Collections.emptyList();
+        Collection<AbstractChance> chances = Collections.emptyList();
 
         if (config != null && config.contains("Coin_Maximum") && config.contains("Coin_Minimum") && config.contains("Coin_Percent")) {
-            coins = new ArrayList<AbstractDrop>();
-            coins.add(new CoinDrop(new NumberRange(config.getDouble("Coin_Minimum", 0), config.getDouble("Coin_Maximum", 0)),
+            chances = new ArrayList<AbstractChance>();
+            chances.add(new CoinChance(new NumberRange(config.getDouble("Coin_Minimum", 0), config.getDouble("Coin_Maximum", 0)),
                     config.getDouble("Coin_Percent", 0.0D), config.getDouble("Coin_Gain", 1.0D)));
         }
 
-        return coins;
+        return chances;
     }
 }

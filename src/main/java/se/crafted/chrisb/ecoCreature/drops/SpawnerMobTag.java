@@ -17,16 +17,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops.models;
+package se.crafted.chrisb.ecoCreature.drops;
 
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 
-public interface Drop
+public interface SpawnerMobTag
 {
-    boolean nextWinner();
+    void tagSpawnerMob(CreatureSpawnEvent event);
 
-    int nextIntAmount();
-
-    int getFixedAmount();
-
-    double nextDoubleAmount();
+    boolean isSpawnerMob(LivingEntity entity);
 }

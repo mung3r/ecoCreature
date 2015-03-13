@@ -159,8 +159,8 @@ public class DropConfigLoader
         dropConfig.setClearEnchantedDrops(config.getBoolean("System.Hunting.ClearEnchantedDrops", false));
         dropConfig.setClearOnNoDrops(config.getBoolean("System.Hunting.ClearDefaultDrops", true));
         dropConfig.setOverrideDrops(config.getBoolean("System.Hunting.OverrideDrops", true));
-        dropConfig.setNoFarm(config.getBoolean("System.Hunting.NoFarm", false));
-        dropConfig.setNoFarmFire(config.getBoolean("System.Hunting.NoFarmFire", false));
+        dropConfig.setNoFarm(config.getBoolean("System.Hunting.NoFarm"));
+        dropConfig.setNoFarmFire(config.getBoolean("System.Hunting.NoFarmFire"));
 
         dropConfig.setGainMultipliers(loadGainMultipliers(config));
         dropConfig.setParties(loadParties(config));
