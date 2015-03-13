@@ -83,9 +83,7 @@ public class DeathPenaltyDropSource extends AbstractDropSource
     @Override
     public AssembledDrop assembleDrop(Event event)
     {
-        AssembledDrop drop = new AssembledDrop(getLocation(event));
-
-        drop.setName(getName());
+        AssembledDrop drop = new AssembledDrop(getName(), getLocation(event));
 
         if (percentPenalty && event instanceof PlayerDeathEvent && DependencyUtils.hasEconomy()) {
             Player player = ((PlayerDeathEvent) event).getEntity();

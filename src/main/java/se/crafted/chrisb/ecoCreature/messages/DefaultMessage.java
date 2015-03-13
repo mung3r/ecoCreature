@@ -26,34 +26,34 @@ import java.util.Map.Entry;
 
 public class DefaultMessage implements Message
 {
-    private static final String NO_MESSAGE_TEMPLATE = "";
+    private static final String EMPTY_MESSAGE_TEMPLATE = "";
 
-    public static final DefaultMessage EMPTY_MESSAGE = new DefaultMessage(NO_MESSAGE_TEMPLATE);
+    public static final DefaultMessage EMPTY_MESSAGE = new DefaultMessage(EMPTY_MESSAGE_TEMPLATE);
 
-    private boolean messageOutputEnabled;
+    private boolean enabled;
 
     private final String template;
 
     public DefaultMessage(String template)
     {
-        this.template = convertMessage(template);
-        messageOutputEnabled = true;
+        this.template = convertTemplate(template);
+        enabled = true;
     }
 
     @Override
     public boolean isEnabled()
     {
-        return messageOutputEnabled;
+        return enabled;
     }
 
     @Override
     public void setEnabled(boolean messageOutputEnabled)
     {
-        this.messageOutputEnabled = messageOutputEnabled;
+        this.enabled = messageOutputEnabled;
     }
 
     @Override
-    public String getAssembledMessage(Map<MessageToken, String> parameters)
+    public String assembleMessage(Map<MessageToken, String> parameters)
     {
         String assembledMessage = template;
 
@@ -103,7 +103,7 @@ public class DefaultMessage implements Message
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
-    public static String convertMessage(String message)
+    public static String convertTemplate(String message)
     {
         if (message != null) {
             return message.replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
@@ -112,11 +112,11 @@ public class DefaultMessage implements Message
         return null;
     }
 
-    public static List<String> convertMessages(List<String> messages) {
+    public static List<String> convertTemplates(List<String> messages) {
         List<String> convertedMessages = new ArrayList<>();
 
         for (String message : messages) {
-            convertedMessages.add(convertMessage(message));
+            convertedMessages.add(convertTemplate(message));
         }
 
         return convertedMessages;

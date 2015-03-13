@@ -96,9 +96,9 @@ public class CustomEntityChance extends AbstractChance
         return chances;
     }
 
-    private static AbstractChance createEntityChance(String dropString)
+    private static CustomEntityChance createEntityChance(String dropString)
     {
-        AbstractChance chance = null;
+        CustomEntityChance chance = null;
 
         CustomEntityType type = parseType(dropString);
         if (type != null && type.isValid()) {

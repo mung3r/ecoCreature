@@ -57,7 +57,7 @@ public class AssembledDrop
     private Message message;
     private Map<MessageToken, String> parameters;
 
-    public AssembledDrop(Location location)
+    public AssembledDrop(String name, Location location)
     {
         this.location = location;
         worldName = location.getWorld().getName();
@@ -65,7 +65,7 @@ public class AssembledDrop
         party = Collections.emptyList();
         integerCurrency = false;
 
-        name = "Unknown";
+        this.name = name;
         coin = ZERO;
         items = new ArrayList<>();
         customEntityTypes = new ArrayList<>();

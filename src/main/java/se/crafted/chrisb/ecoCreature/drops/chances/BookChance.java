@@ -105,9 +105,9 @@ public class BookChance extends ItemChance
 
                     if (material != null && material == Material.WRITTEN_BOOK) {
                         BookChance chance = new BookChance();
-                        chance.setTitle(DefaultMessage.convertMessage(itemConfig.getString("title")));
-                        chance.setAuthor(DefaultMessage.convertMessage(itemConfig.getString("author")));
-                        chance.setPages(DefaultMessage.convertMessages(itemConfig.getStringList("pages")));
+                        chance.setTitle(DefaultMessage.convertTemplate(itemConfig.getString("title")));
+                        chance.setAuthor(DefaultMessage.convertTemplate(itemConfig.getString("author")));
+                        chance.setPages(DefaultMessage.convertTemplates(itemConfig.getStringList("pages")));
                         populateItemChance(chance, itemConfig.getString("item"));
 
                         chances.add(chance);

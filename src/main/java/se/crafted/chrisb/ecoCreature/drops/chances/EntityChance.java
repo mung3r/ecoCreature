@@ -114,9 +114,9 @@ public class EntityChance extends AbstractChance
         return chances;
     }
 
-    private static AbstractChance createEntityChance(String dropString)
+    private static EntityChance createEntityChance(String dropString)
     {
-        AbstractChance chance = null;
+        EntityChance chance = null;
 
         EntityType type = parseType(dropString);
         if (type != null) {

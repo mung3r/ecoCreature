@@ -19,7 +19,6 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.rules;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -65,8 +64,7 @@ public class HeroesRule extends AbstractPlayerRule
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
         if (system != null && system.isConfigurationSection("Hunting")) {
-            List<String> classNames = system.getStringList("Hunting.Heroes.ClearClassDropsList");
-            HeroesRule rule = new HeroesRule(classNames);
+            HeroesRule rule = new HeroesRule(system.getStringList("Hunting.Heroes.ClearClassDropsList"));
             rules = new HashMap<>();
             rules.put(HeroesRule.class, rule);
         }

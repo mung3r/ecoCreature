@@ -31,14 +31,9 @@ import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
 public class CreativeModeRule extends AbstractEntityRule
 {
-    private boolean creativeModeRewards;
+    private final boolean creativeModeRewards;
 
     public CreativeModeRule(boolean creativeModeRewards)
-    {
-        this.creativeModeRewards = creativeModeRewards;
-    }
-
-    public void setCreativeModeRewards(boolean creativeModeRewards)
     {
         this.creativeModeRewards = creativeModeRewards;
     }

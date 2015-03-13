@@ -44,7 +44,7 @@ public class MessageHandler
 
     public void send(String playerName)
     {
-        String assembledMessage = message.getAssembledMessage(parameters);
+        String assembledMessage = message.assembleMessage(parameters);
 
         if (assembledMessage != null && assembledMessage.length() > 0) {
             if (message.isEnabled()) {

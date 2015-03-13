@@ -79,9 +79,7 @@ public class PVPDropSource extends AbstractDropSource
     @Override
     public AssembledDrop assembleDrop(Event event)
     {
-        AssembledDrop drop = new AssembledDrop(getLocation(event));
-
-        drop.setName(getName());
+        AssembledDrop drop = new AssembledDrop(getName(), getLocation(event));
 
         if (coinPercent && event instanceof PlayerKilledEvent && DependencyUtils.hasEconomy()) {
             Player victim = ((PlayerKilledEvent) event).getVictim();

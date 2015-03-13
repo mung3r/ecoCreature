@@ -215,7 +215,7 @@ public class DropEventListener implements Listener
     private String getAssembledMessage(String template, AssembledDrop drop)
     {
         Message message = new DefaultMessage(template);
-        return message.getAssembledMessage(drop.getParameters());
+        return message.assembleMessage(drop.getParameters());
     }
 
     private void dropCustomEntities(AssembledDrop drop)

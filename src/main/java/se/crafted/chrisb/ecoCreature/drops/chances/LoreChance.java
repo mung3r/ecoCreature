@@ -93,8 +93,8 @@ public class LoreChance extends ItemChance
 
                     if (material != null && material != Material.WRITTEN_BOOK) {
                         LoreChance chance = new LoreChance(material);
-                        chance.setDisplayName(DefaultMessage.convertMessage(itemConfig.getString("displayname")));
-                        chance.setLore(DefaultMessage.convertMessages(itemConfig.getStringList("lore")));
+                        chance.setDisplayName(DefaultMessage.convertTemplate(itemConfig.getString("displayname")));
+                        chance.setLore(DefaultMessage.convertTemplates(itemConfig.getStringList("lore")));
                         populateItemChance(chance, itemConfig.getString("item"));
 
                         chances.add(chance);

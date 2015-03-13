@@ -171,15 +171,15 @@ public class ItemChance extends AbstractChance
         return chances;
     }
 
-    protected static ItemChance populateItemChance(ItemChance drop, String dropString)
+    protected static ItemChance populateItemChance(ItemChance chance, String dropString)
     {
-        drop.setEnchantments(parseEnchantments(dropString));
-        drop.setData(parseData(dropString));
-        drop.setDurability(parseDurability(dropString));
-        drop.setRange(parseRange(dropString));
-        drop.setPercentage(parsePercentage(dropString));
+        chance.setEnchantments(parseEnchantments(dropString));
+        chance.setData(parseData(dropString));
+        chance.setDurability(parseDurability(dropString));
+        chance.setRange(parseRange(dropString));
+        chance.setPercentage(parsePercentage(dropString));
 
-        return drop;
+        return chance;
     }
 
     protected static Material parseMaterial(String dropString)

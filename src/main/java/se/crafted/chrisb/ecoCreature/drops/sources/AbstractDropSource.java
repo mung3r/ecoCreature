@@ -196,44 +196,42 @@ public abstract class AbstractDropSource extends AbstractChance
 
     protected AssembledDrop assembleDrop(Event event)
     {
-        AssembledDrop assembledDrop = new AssembledDrop(getLocation(event));
-
-        assembledDrop.setName(name);
+        AssembledDrop drop = new AssembledDrop(name, getLocation(event));
 
         for (AbstractChance chance : chances) {
             if (chance instanceof JockeyChance) {
-                assembledDrop.getJockeyTypes().addAll(((JockeyChance) chance).nextEntityTypes());
+                drop.getJockeyTypes().addAll(((JockeyChance) chance).nextEntityTypes());
             }
             else if (chance instanceof CustomEntityChance) {
-                assembledDrop.getCustomEntityTypes().addAll(((CustomEntityChance) chance).nextEntityTypes());
+                drop.getCustomEntityTypes().addAll(((CustomEntityChance) chance).nextEntityTypes());
             }
             else if (chance instanceof EntityChance) {
-                assembledDrop.getEntityTypes().addAll(((EntityChance) chance).nextEntityTypes());
+                drop.getEntityTypes().addAll(((EntityChance) chance).nextEntityTypes());
             }
             else if (chance instanceof ItemChance) {
-                assembledDrop.getItems().add(((ItemChance) chance).nextItemStack(fixedAmount));
+                drop.getItems().add(((ItemChance) chance).nextItemStack(fixedAmount));
+                drop.setAddToInventory(addToInventory);
             }
             else if (chance instanceof CoinChance) {
                 CoinChance coin = (CoinChance) chance;
 
-                assembledDrop.setCoin(coin.nextDoubleAmount());
+                drop.setCoin(coin.nextDoubleAmount());
 
-                if (assembledDrop.getCoin() > 0.0) {
-                    assembledDrop.setMessage(coinRewardMessage);
+                if (drop.getCoin() > 0.0) {
+                    drop.setMessage(coinRewardMessage);
                 }
-                else if (assembledDrop.getCoin() < 0.0) {
-                    assembledDrop.setMessage(coinPenaltyMessage);
+                else if (drop.getCoin() < 0.0) {
+                    drop.setMessage(coinPenaltyMessage);
                 }
                 else {
-                    assembledDrop.setMessage(noCoinRewardMessage);
+                    drop.setMessage(noCoinRewardMessage);
                 }
+
+                drop.setIntegerCurrency(integerCurrency);
             }
         }
 
-        assembledDrop.setIntegerCurrency(integerCurrency);
-        assembledDrop.setAddToInventory(addToInventory);
-
-        return assembledDrop;
+        return drop;
     }
 
     protected abstract Location getLocation(Event event);
