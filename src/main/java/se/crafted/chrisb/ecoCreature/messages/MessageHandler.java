@@ -54,7 +54,7 @@ public class MessageHandler
                 }
             }
 
-            if (message instanceof CoinMessageDecorator && ((CoinMessageDecorator) message).isCoinLoggingEnabled()) {
+            if (message instanceof CoinMessageDecorator && ((CoinMessageDecorator) message).isLoggingEnabled()) {
                 LoggerUtil.getInstance().info(removeColorCodes(String.format("%s: %s", getAwardedPlayerName(), assembledMessage)));
             }
         }

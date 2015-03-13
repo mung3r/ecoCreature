@@ -21,21 +21,21 @@ package se.crafted.chrisb.ecoCreature.messages;
 
 public class CoinMessageDecorator extends AbstractMessageDecorator
 {
-    private boolean coinLoggingEnabled;
+    private boolean loggingEnabled;
 
     public CoinMessageDecorator(Message decoratedMessage)
     {
         super(decoratedMessage);
-        coinLoggingEnabled = false;
+        loggingEnabled = false;
     }
 
-    public boolean isCoinLoggingEnabled()
+    public boolean isLoggingEnabled()
     {
-        return coinLoggingEnabled;
+        return loggingEnabled;
     }
 
-    public void setCoinLoggingEnabled(boolean coinLoggingEnabled)
+    public void setLoggingEnabled(boolean loggingEnabled)
     {
-        this.coinLoggingEnabled = coinLoggingEnabled;
+        this.loggingEnabled = loggingEnabled;
     }
 }
