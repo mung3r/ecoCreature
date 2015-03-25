@@ -20,9 +20,10 @@
 package se.crafted.chrisb.ecoCreature.drops;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -116,7 +117,7 @@ public class CoinDrop extends AbstractDrop
 
         if (Math.abs(amount) > 0.0) {
 
-            for (UUID memberId : createParty(player.getUniqueId())) {
+            for (UUID memberId : getMembers(player.getUniqueId())) {
                 registerAmount(memberId, amount);
 
                 Message message = memberId.equals(player.getUniqueId()) ? getMessage() : getPartyMessage(amount);
@@ -128,12 +129,12 @@ public class CoinDrop extends AbstractDrop
         }
     }
 
-    private Collection<UUID> createParty(UUID playerId)
+    private Set<UUID> getMembers(UUID playerId)
     {
-        Collection<UUID> party = new ArrayList<>();
-        party.add(playerId);
-        party.addAll(getParty());
-        return party;
+        Set<UUID> members = new HashSet<>();
+        members.add(playerId);
+        members.addAll(getParty());
+        return members;
     }
 
     private double calculateAmount()

@@ -22,6 +22,8 @@ package se.crafted.chrisb.ecoCreature.drops.parties;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -40,14 +42,14 @@ public class McMMOParty extends AbstractParty
     }
 
     @Override
-    public Collection<UUID> getMembers(Player player)
+    public Set<UUID> getMembers(Player player)
     {
-        Collection<UUID> party = Collections.emptyList();
+        Set<UUID> party = Collections.emptySet();
 
         if (DependencyUtils.hasMcMMO() && PartyAPI.inParty(player)) {
             Collection<Player> members = PartyAPI.getOnlineMembers(player);
             if (members != null) {
-                party = new ArrayList<>();
+                party = new HashSet<>();
 
                 for (Player member : members) {
                     party.add(member.getUniqueId());

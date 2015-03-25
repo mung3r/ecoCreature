@@ -22,6 +22,8 @@ package se.crafted.chrisb.ecoCreature.drops.parties;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -40,12 +42,12 @@ public class HeroesParty extends AbstractParty
     }
 
     @Override
-    public Collection<UUID> getMembers(Player player)
+    public Set<UUID> getMembers(Player player)
     {
-        Collection<UUID> party = Collections.emptyList();
+        Set<UUID> party = Collections.emptySet();
 
         if (DependencyUtils.hasHeroes() && DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {
-            party = new ArrayList<>();
+            party = new HashSet<>();
 
             for (Hero hero : DependencyUtils.getHeroes().getCharacterManager().getHero(player).getParty().getMembers()) {
                 party.add(hero.getPlayer().getUniqueId());
