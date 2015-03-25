@@ -119,7 +119,7 @@ public class CoinDrop extends AbstractDrop
             for (UUID memberId : createParty(player.getUniqueId())) {
                 registerAmount(memberId, amount);
 
-                Message message = memberId.equals(player.getName()) ? getMessage() : getPartyMessage(amount);
+                Message message = memberId.equals(player.getUniqueId()) ? getMessage() : getPartyMessage(amount);
                 addParameter(MessageToken.PLAYER, Bukkit.getOfflinePlayer(memberId).getName()).addParameter(MessageToken.AMOUNT, DependencyUtils.getEconomy().format(Math.abs(amount)));
 
                 MessageHandler handler = new MessageHandler(message, getParameters());
