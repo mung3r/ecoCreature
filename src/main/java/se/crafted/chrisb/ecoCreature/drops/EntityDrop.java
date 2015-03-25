@@ -17,38 +17,45 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.events.listeners;
+package se.crafted.chrisb.ecoCreature.drops;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 
-import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
-import se.crafted.chrisb.ecoCreature.events.DropEvent;
-import se.crafted.chrisb.ecoCreature.metrics.DropMetrics;
-
-public class DropEventListener implements Listener
+public class EntityDrop extends AbstractDrop
 {
-    private DropMetrics dropMetrics;
+    private Collection<EntityType> entityTypes;
 
-    public DropEventListener(DropMetrics dropMetrics)
+    public EntityDrop(String name, Location location)
     {
-        this.dropMetrics = dropMetrics;
+        super(name, location);
+
+        entityTypes = new ArrayList<>();
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onDropEvent(DropEvent event)
+    public Collection<EntityType> getEntityTypes()
     {
-        if (!event.isCancelled()) {
-            Collection<AbstractDrop> drops = event.getDrops();
-            Player player = event.getPlayer();
+        return entityTypes;
+    }
 
-            for (AbstractDrop drop : drops) {
-                drop.deliver(player);
-                dropMetrics.addCount(drop.getName());
+    public void setEntityTypes(Collection<EntityType> entityTypes)
+    {
+        this.entityTypes = entityTypes;
+    }
+
+    @Override
+    public void deliver(Player player)
+    {
+        for (EntityType type : getEntityTypes()) {
+            Entity entity = getWorld().spawn(getLocation(), type.getEntityClass());
+            if (entity instanceof ExperienceOrb) {
+                ((ExperienceOrb) entity).setExperience(1);
             }
         }
     }

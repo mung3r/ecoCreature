@@ -20,8 +20,10 @@
 package se.crafted.chrisb.ecoCreature.messages;
 
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
@@ -39,18 +41,18 @@ public class MessageHandler
 
     public void send(Player player)
     {
-        send(player.getName());
+        send(player.getUniqueId());
     }
 
-    public void send(String playerName)
+    public void send(UUID playerId)
     {
         String assembledMessage = message.assembleMessage(parameters);
 
         if (assembledMessage != null && assembledMessage.length() > 0) {
             if (message.isEnabled()) {
-                Player player = Bukkit.getPlayer(playerName);
-                if (player != null) {
-                    player.sendMessage(assembledMessage);
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerId);
+                if (offlinePlayer.isOnline()) {
+                    offlinePlayer.getPlayer().sendMessage(assembledMessage);
                 }
             }
 

@@ -19,16 +19,20 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.sources;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
+import se.crafted.chrisb.ecoCreature.drops.CoinDrop;
+import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomDropType;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
-import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
-import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomDropType;
 
 public class PVPDropSource extends AbstractDropSource
 {
@@ -77,13 +81,15 @@ public class PVPDropSource extends AbstractDropSource
     }
 
     @Override
-    public AssembledDrop assembleDrop(Event event)
+    public Collection<AbstractDrop> assembleDrop(Event event)
     {
-        AssembledDrop drop = new AssembledDrop(getName(), getLocation(event));
+        Collection<AbstractDrop> drops = new ArrayList<>();
+
+        CoinDrop drop = new CoinDrop(getName(), getLocation(event));
 
         if (coinPercent && event instanceof PlayerKilledEvent && DependencyUtils.hasEconomy()) {
             Player victim = ((PlayerKilledEvent) event).getVictim();
-            drop.setCoin(DependencyUtils.getEconomy().getBalance(victim.getName()));
+            drop.setCoin(DependencyUtils.getEconomy().getBalance(victim));
             drop.setGain(coinAmount / 100.0);
         }
         else {
@@ -92,7 +98,8 @@ public class PVPDropSource extends AbstractDropSource
 
         drop.setMessage(getCoinRewardMessage());
         drop.setIntegerCurrency(isIntegerCurrency());
+        drops.add(drop);
 
-        return drop;
+        return drops;
     }
 }

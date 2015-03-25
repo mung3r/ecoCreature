@@ -17,28 +17,32 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops.parties;
+package se.crafted.chrisb.ecoCreature.drops;
 
-import java.util.Collection;
-import java.util.UUID;
+import java.util.Iterator;
 
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-public abstract class AbstractParty implements Party
+public class JockeyDrop extends EntityDrop
 {
-    private final boolean shared;
-
-    public AbstractParty(boolean shared)
+    public JockeyDrop(String name, Location location)
     {
-        this.shared = shared;
+        super(name, location);
     }
 
     @Override
-    public boolean isShared()
+    public void deliver(Player player)
     {
-        return shared;
+        Iterator<EntityType> typeIterator = getEntityTypes().iterator();
+        while (typeIterator.hasNext()) {
+            EntityType vehicleType = typeIterator.next();
+            Entity vehicle = getWorld().spawn(getLocation(), vehicleType.getEntityClass());
+            EntityType passengerType = typeIterator.next();
+            Entity passenger = getWorld().spawn(getLocation(), passengerType.getEntityClass());
+            vehicle.setPassenger(passenger);
+        }
     }
-
-    @Override
-    public abstract Collection<UUID> getMembers(Player player);
 }

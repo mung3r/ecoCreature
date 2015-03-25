@@ -46,7 +46,7 @@ public class GroupGain extends AbstractPlayerGain<String>
         double multiplier = NO_GAIN;
 
         try {
-            String group = DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName());
+            String group = DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player);
             if (group != null) {
                 multiplier = getMultiplier(group.toLowerCase());
             }

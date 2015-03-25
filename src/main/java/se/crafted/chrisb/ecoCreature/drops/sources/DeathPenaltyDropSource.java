@@ -19,6 +19,9 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.sources;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -26,9 +29,10 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
-import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
+import se.crafted.chrisb.ecoCreature.drops.CoinDrop;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomDropType;
+import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 
 public class DeathPenaltyDropSource extends AbstractDropSource
 {
@@ -81,13 +85,14 @@ public class DeathPenaltyDropSource extends AbstractDropSource
     }
 
     @Override
-    public AssembledDrop assembleDrop(Event event)
+    public Collection<AbstractDrop> assembleDrop(Event event)
     {
-        AssembledDrop drop = new AssembledDrop(getName(), getLocation(event));
+        Collection<AbstractDrop> drops = new ArrayList<>();
+        CoinDrop drop = new CoinDrop(getName(), getLocation(event));
 
         if (percentPenalty && event instanceof PlayerDeathEvent && DependencyUtils.hasEconomy()) {
             Player player = ((PlayerDeathEvent) event).getEntity();
-            drop.setCoin(DependencyUtils.getEconomy().getBalance(player.getName()));
+            drop.setCoin(DependencyUtils.getEconomy().getBalance(player));
             drop.setGain(-penaltyAmount / 100.0);
         }
         else {
@@ -97,7 +102,8 @@ public class DeathPenaltyDropSource extends AbstractDropSource
 
         drop.setMessage(getCoinPenaltyMessage());
         drop.setIntegerCurrency(isIntegerCurrency());
+        drops.add(drop);
 
-        return drop;
+        return drops;
     }
 }

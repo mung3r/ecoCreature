@@ -19,17 +19,19 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.sources;
 
+import java.util.Collection;
+
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 
-import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
-
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
+import se.crafted.chrisb.ecoCreature.drops.categories.types.HeroesDropType;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
-import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
-import se.crafted.chrisb.ecoCreature.drops.categories.types.HeroesDropType;
+
+import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 public class HeroesDropSource extends AbstractDropSource
 {
@@ -51,16 +53,18 @@ public class HeroesDropSource extends AbstractDropSource
     }
 
     @Override
-    protected AssembledDrop assembleDrop(Event event)
+    protected Collection<AbstractDrop> assembleDrop(Event event)
     {
-        AssembledDrop drop = super.assembleDrop(event);
+        Collection<AbstractDrop> drops = super.assembleDrop(event);
 
         if (event instanceof HeroChangeLevelEvent) {
             HeroChangeLevelEvent changeLevelEvent = (HeroChangeLevelEvent) event;
-            drop.addParameter(MessageToken.CLASS, changeLevelEvent.getHeroClass().getName());
+            for (AbstractDrop drop : drops) {
+                drop.addParameter(MessageToken.CLASS, changeLevelEvent.getHeroClass().getName());
+            }
         }
 
-        return drop;
+        return drops;
     }
 
     public static AbstractDropSource createDropSource(String section, ConfigurationSection config)

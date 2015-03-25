@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -32,7 +33,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
-import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.drops.SpawnerMobTag;
 import se.crafted.chrisb.ecoCreature.drops.categories.AbstractDropCategory;
 import se.crafted.chrisb.ecoCreature.drops.gain.PlayerGain;
@@ -131,9 +132,9 @@ public class DropConfig implements SpawnerMobTag
         this.dropCategories = dropCategories;
     }
 
-    public Collection<AssembledDrop> assembleDrops(final Event event)
+    public Collection<AbstractDrop> assembleDrops(final Event event)
     {
-        Collection<AssembledDrop> drops = new ArrayList<>();
+        Collection<AbstractDrop> drops = new ArrayList<>();
 
         for (AbstractDropCategory<?> category : dropCategories) {
             for (AbstractDropSource source : category.getDropSources(event)) {
@@ -159,9 +160,9 @@ public class DropConfig implements SpawnerMobTag
         return multiplier;
     }
 
-    public Collection<String> getPartyMembers(Player player)
+    public Collection<UUID> getPartyMembers(Player player)
     {
-        Collection<String> players = new ArrayList<>();
+        Collection<UUID> players = new ArrayList<>();
 
         for (Party party : parties) {
             if (party.isShared()) {

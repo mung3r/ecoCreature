@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.StringUtils;
+
 public class DefaultMessage implements Message
 {
     private static final String EMPTY_MESSAGE_TEMPLATE = "";
@@ -57,7 +59,7 @@ public class DefaultMessage implements Message
     {
         String assembledMessage = template;
 
-        if (assembledMessage != null && assembledMessage.length() > 0) {
+        if (StringUtils.isNotEmpty(assembledMessage)) {
             for (Entry<MessageToken, String> entry : parameters.entrySet()) {
                 if (entry.getKey() == MessageToken.AMOUNT) {
                     assembledMessage = assembledMessage.replaceAll(entry.getKey().toString(), entry.getValue().replaceAll("\\$", "\\\\\\$"));
@@ -103,22 +105,22 @@ public class DefaultMessage implements Message
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
-    public static String convertTemplate(String message)
+    public static String convertTemplate(String template)
     {
-        if (message != null) {
-            return message.replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
+        if (template != null) {
+            return template.replaceAll("&&", "\b").replaceAll("&", "§").replaceAll("\b", "&");
         }
 
         return null;
     }
 
-    public static List<String> convertTemplates(List<String> messages) {
-        List<String> convertedMessages = new ArrayList<>();
+    public static List<String> convertTemplates(List<String> templates) {
+        List<String> convertedTemplates = new ArrayList<>();
 
-        for (String message : messages) {
-            convertedMessages.add(convertTemplate(message));
+        for (String template : templates) {
+            convertedTemplates.add(convertTemplate(template));
         }
 
-        return convertedMessages;
+        return convertedTemplates;
     }
 }

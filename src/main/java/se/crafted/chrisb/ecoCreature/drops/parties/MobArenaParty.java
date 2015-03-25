@@ -22,6 +22,7 @@ package se.crafted.chrisb.ecoCreature.drops.parties;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.UUID;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -37,15 +38,15 @@ public class MobArenaParty extends AbstractParty
     }
 
     @Override
-    public Collection<String> getMembers(Player player)
+    public Collection<UUID> getMembers(Player player)
     {
-        Collection<String> party = Collections.emptyList();
+        Collection<UUID> party = Collections.emptyList();
 
         if (DependencyUtils.hasMobArena() && DependencyUtils.getMobArenaHandler().isPlayerInArena(player)) {
             party = new ArrayList<>();
 
             for (Player member : DependencyUtils.getMobArenaHandler().getArenaWithPlayer(player).getAllPlayers()) {
-                party.add(member.getName());
+                party.add(member.getUniqueId());
             }
         }
         LoggerUtil.getInstance().debug("Party size: " + party.size());

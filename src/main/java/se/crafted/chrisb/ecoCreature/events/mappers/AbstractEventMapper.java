@@ -30,7 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import se.crafted.chrisb.ecoCreature.DropConfigLoader;
-import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
+import se.crafted.chrisb.ecoCreature.drops.ItemDrop;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
@@ -66,7 +66,7 @@ public abstract class AbstractEventMapper implements EventMapper
         return dropConfigLoader;
     }
 
-    protected static void addPlayerSkullToEvent(AssembledDrop drop, Event event)
+    protected static void addPlayerSkullToEvent(ItemDrop drop, Event event)
     {
         if (event instanceof PlayerKilledEvent) {
             PlayerKilledEvent playerKilledEvent = (PlayerKilledEvent) event;

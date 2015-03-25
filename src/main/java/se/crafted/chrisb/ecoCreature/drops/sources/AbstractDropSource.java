@@ -30,7 +30,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
+import se.crafted.chrisb.ecoCreature.drops.CoinDrop;
+import se.crafted.chrisb.ecoCreature.drops.CustomEntityDrop;
+import se.crafted.chrisb.ecoCreature.drops.EntityDrop;
+import se.crafted.chrisb.ecoCreature.drops.ItemDrop;
+import se.crafted.chrisb.ecoCreature.drops.JockeyDrop;
 import se.crafted.chrisb.ecoCreature.drops.chances.AbstractChance;
 import se.crafted.chrisb.ecoCreature.drops.chances.BookChance;
 import se.crafted.chrisb.ecoCreature.drops.chances.CoinChance;
@@ -182,39 +187,48 @@ public abstract class AbstractDropSource extends AbstractChance
         this.huntingRules = huntingRules;
     }
 
-    public Collection<AssembledDrop> assembleDrops(Event event)
+    public Collection<AbstractDrop> assembleDrops(Event event)
     {
-        Collection<AssembledDrop> drops = new ArrayList<>();
+        Collection<AbstractDrop> drops = new ArrayList<>();
         int amount = nextIntAmount();
 
         for (int i = 0; i < amount; i++) {
-            drops.add(assembleDrop(event));
+            drops.addAll(assembleDrop(event));
         }
 
         return drops;
     }
 
-    protected AssembledDrop assembleDrop(Event event)
+    protected Collection<AbstractDrop> assembleDrop(Event event)
     {
-        AssembledDrop drop = new AssembledDrop(name, getLocation(event));
+        Collection<AbstractDrop> drops = new ArrayList<>();
 
         for (AbstractChance chance : chances) {
             if (chance instanceof JockeyChance) {
-                drop.getJockeyTypes().addAll(((JockeyChance) chance).nextEntityTypes());
+                JockeyDrop drop = new JockeyDrop(name, getLocation(event));
+                drop.setEntityTypes(((JockeyChance) chance).nextEntityTypes());
+                drops.add(drop);
             }
             else if (chance instanceof CustomEntityChance) {
-                drop.getCustomEntityTypes().addAll(((CustomEntityChance) chance).nextEntityTypes());
+                CustomEntityDrop drop = new CustomEntityDrop(name, getLocation(event));
+                drop.setCustomEntityTypes(((CustomEntityChance) chance).nextEntityTypes());
+                drops.add(drop);
             }
             else if (chance instanceof EntityChance) {
-                drop.getEntityTypes().addAll(((EntityChance) chance).nextEntityTypes());
+                EntityDrop drop = new EntityDrop(name, getLocation(event));
+                drop.setEntityTypes(((EntityChance) chance).nextEntityTypes());
+                drops.add(drop);
             }
             else if (chance instanceof ItemChance) {
+                ItemDrop drop = new ItemDrop(name, getLocation(event));
                 drop.getItems().add(((ItemChance) chance).nextItemStack(fixedAmount));
                 drop.setAddToInventory(addToInventory);
+                drops.add(drop);
             }
             else if (chance instanceof CoinChance) {
                 CoinChance coin = (CoinChance) chance;
 
+                CoinDrop drop = new CoinDrop(name, getLocation(event));
                 drop.setCoin(coin.nextDoubleAmount());
 
                 if (drop.getCoin() > 0.0) {
@@ -228,10 +242,11 @@ public abstract class AbstractDropSource extends AbstractChance
                 }
 
                 drop.setIntegerCurrency(integerCurrency);
+                drops.add(drop);
             }
         }
 
-        return drop;
+        return drops;
     }
 
     protected abstract Location getLocation(Event event);

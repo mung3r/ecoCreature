@@ -20,6 +20,7 @@
 package se.crafted.chrisb.ecoCreature.events;
 
 import java.util.Collection;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -27,44 +28,44 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
 
 public class DropEvent extends Event implements Cancellable
 {
     private static final HandlerList HANDLERS = new HandlerList();
 
-    private String player;
-    private Collection<AssembledDrop> drops;
+    private UUID playerId;
+    private Collection<AbstractDrop> drops;
 
     private boolean isCancelled;
 
-    public DropEvent(Player player, Collection<AssembledDrop> drops)
+    public DropEvent(Player player, Collection<AbstractDrop> drops)
     {
-        this(player.getName(), drops);
+        this(player.getUniqueId(), drops);
     }
 
-    public DropEvent(String player, Collection<AssembledDrop> drops)
+    public DropEvent(UUID player, Collection<AbstractDrop> drops)
     {
-        this.player = player;
+        this.playerId = player;
         this.drops = drops;
     }
 
     public Player getPlayer()
     {
-        return Bukkit.getPlayer(player);
+        return Bukkit.getPlayer(playerId);
     }
 
-    public void setPlayer(String player)
+    public void setPlayer(UUID player)
     {
-        this.player = player;
+        this.playerId = player;
     }
 
-    public Collection<AssembledDrop> getDrops()
+    public Collection<AbstractDrop> getDrops()
     {
         return drops;
     }
 
-    public void setDrops(Collection<AssembledDrop> drop)
+    public void setDrops(Collection<AbstractDrop> drop)
     {
         this.drops = drop;
     }

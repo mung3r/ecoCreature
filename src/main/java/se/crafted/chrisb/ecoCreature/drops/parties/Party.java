@@ -20,6 +20,7 @@
 package se.crafted.chrisb.ecoCreature.drops.parties;
 
 import java.util.Collection;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
@@ -27,5 +28,5 @@ public interface Party
 {
     boolean isShared();
 
-    Collection<String> getMembers(Player player);
+    Collection<UUID> getMembers(Player player);
 }

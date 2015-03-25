@@ -26,7 +26,8 @@ import org.bukkit.event.Event;
 import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
 
 import se.crafted.chrisb.ecoCreature.DropConfigLoader;
-import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
+import se.crafted.chrisb.ecoCreature.drops.CoinDrop;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 
@@ -59,12 +60,14 @@ public class DeathStreakEventMapper extends AbstractEventMapper
         final int deaths = event.getDeaths();
         DropConfig dropConfig = getDropConfig(player.getWorld());
 
-        Collection<AssembledDrop> drops = Collections2.transform(dropConfig.assembleDrops(event), new Function<AssembledDrop, AssembledDrop>() {
+        Collection<AbstractDrop> drops = Collections2.transform(dropConfig.assembleDrops(event), new Function<AbstractDrop, AbstractDrop>() {
 
             @Override
-            public AssembledDrop apply(AssembledDrop drop)
+            public AbstractDrop apply(AbstractDrop drop)
             {
-                drop.setGain(deaths);
+                if (drop instanceof CoinDrop) {
+                    ((CoinDrop) drop).setGain(deaths);
+                }
                 return drop;
             }
         });
