@@ -23,6 +23,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 
 public enum CustomMaterialType
@@ -55,7 +56,7 @@ public enum CustomMaterialType
     public static CustomMaterialType fromName(String name)
     {
         CustomMaterialType material = INVALID;
-        if (name != null && NAME_MAP.containsKey(name.toLowerCase())) {
+        if (StringUtils.isNotEmpty(name) && NAME_MAP.containsKey(name.toLowerCase())) {
             material = NAME_MAP.get(name.toLowerCase());
         }
         return material;

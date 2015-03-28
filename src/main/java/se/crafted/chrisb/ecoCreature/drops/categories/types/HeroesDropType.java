@@ -23,6 +23,8 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 public enum HeroesDropType
 {
     HERO_LEVELED("HeroLeveled", true),
@@ -54,7 +56,7 @@ public enum HeroesDropType
     public static HeroesDropType fromName(String name)
     {
         HeroesDropType dropType = INVALID;
-        if (name != null && NAME_MAP.containsKey(name.toLowerCase())) {
+        if (StringUtils.isNotEmpty(name) && NAME_MAP.containsKey(name.toLowerCase())) {
             dropType = NAME_MAP.get(name.toLowerCase());
         }
         return dropType;
