@@ -24,8 +24,10 @@ import java.util.Collection;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
@@ -78,6 +80,22 @@ public class PVPDropSource extends AbstractDropSource
         else {
             throw new IllegalArgumentException("Unrecognized event");
         }
+    }
+
+    @Override
+    protected double getLootBonus(Event event)
+    {
+        double lootBonus = 1.0D;
+
+        if (event instanceof PlayerKilledEvent) {
+            ItemStack weapon = ((PlayerKilledEvent) event).getKiller().getItemInHand();
+
+            if (weapon != null) {
+                lootBonus = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+            }
+        }
+
+        return lootBonus;
     }
 
     @Override

@@ -41,7 +41,7 @@ public class ItemChanceTest
         int amount = 0;
 
         for (int i = 0; i < samples.intValue(); i++) {
-            ItemStack stack = chance.nextItemStack(false);
+            ItemStack stack = chance.nextItemStack(false, 1.0D);
             if (Material.AIR.equals(stack.getData().getItemType())) {
                 continue;
             }
@@ -49,7 +49,7 @@ public class ItemChanceTest
         }
 
         double idealChance = amount / samples.doubleValue();
-        double delta = Math.abs(chance.getPercentage() / 100D - idealChance);
+        double delta = Math.abs(chance.getChance(1.0D) - idealChance);
         Assert.assertTrue(delta < 0.01);
     }
 }

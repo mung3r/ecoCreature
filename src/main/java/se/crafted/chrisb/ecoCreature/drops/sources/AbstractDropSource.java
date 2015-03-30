@@ -206,22 +206,22 @@ public abstract class AbstractDropSource extends AbstractChance
         for (AbstractChance chance : chances) {
             if (chance instanceof JockeyChance) {
                 JockeyDrop drop = new JockeyDrop(name, getLocation(event));
-                drop.setEntityTypes(((JockeyChance) chance).nextEntityTypes());
+                drop.setEntityTypes(((JockeyChance) chance).nextEntityTypes(getLootBonus(event)));
                 drops.add(drop);
             }
             else if (chance instanceof CustomEntityChance) {
                 CustomEntityDrop drop = new CustomEntityDrop(name, getLocation(event));
-                drop.setCustomEntityTypes(((CustomEntityChance) chance).nextEntityTypes());
+                drop.setCustomEntityTypes(((CustomEntityChance) chance).nextEntityTypes(getLootBonus(event)));
                 drops.add(drop);
             }
             else if (chance instanceof EntityChance) {
                 EntityDrop drop = new EntityDrop(name, getLocation(event));
-                drop.setEntityTypes(((EntityChance) chance).nextEntityTypes());
+                drop.setEntityTypes(((EntityChance) chance).nextEntityTypes(getLootBonus(event)));
                 drops.add(drop);
             }
             else if (chance instanceof ItemChance) {
                 ItemDrop drop = new ItemDrop(name, getLocation(event));
-                drop.getItems().add(((ItemChance) chance).nextItemStack(fixedAmount));
+                drop.getItems().add(((ItemChance) chance).nextItemStack(fixedAmount, getLootBonus(event)));
                 drop.setAddToInventory(addToInventory);
                 drops.add(drop);
             }
@@ -250,4 +250,6 @@ public abstract class AbstractDropSource extends AbstractChance
     }
 
     protected abstract Location getLocation(Event event);
+
+    protected abstract double getLootBonus(Event event);
 }

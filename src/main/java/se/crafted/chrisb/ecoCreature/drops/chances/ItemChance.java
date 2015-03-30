@@ -90,10 +90,10 @@ public class ItemChance extends AbstractChance
         this.addToInventory = addToInventory;
     }
 
-    public ItemStack nextItemStack(boolean fixedAmount)
+    public ItemStack nextItemStack(boolean fixedAmount, double lootBonus)
     {
         if (material != null) {
-            int dropAmount = fixedAmount ? getFixedAmount() : nextIntAmount();
+            int dropAmount = fixedAmount ? getFixedAmount() : nextIntAmount(lootBonus);
 
             if (dropAmount > 0) {
                 ItemStack itemStack;

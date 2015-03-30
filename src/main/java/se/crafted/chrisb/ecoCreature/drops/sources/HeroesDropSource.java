@@ -53,6 +53,12 @@ public class HeroesDropSource extends AbstractDropSource
     }
 
     @Override
+    protected double getLootBonus(Event event)
+    {
+        return 1.0D;
+    }
+
+    @Override
     protected Collection<AbstractDrop> assembleDrop(Event event)
     {
         Collection<AbstractDrop> drops = super.assembleDrop(event);

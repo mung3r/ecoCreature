@@ -38,9 +38,9 @@ public class CoinChance extends AbstractChance
     }
 
     @Override
-    public double nextDoubleAmount()
+    public double nextDoubleAmount(double lootBonus)
     {
-        return super.nextDoubleAmount() * multiplier;
+        return super.nextDoubleAmount(lootBonus) * multiplier;
     }
 
     public static Collection<AbstractChance> parseConfig(ConfigurationSection config)

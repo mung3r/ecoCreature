@@ -40,10 +40,10 @@ public class CustomEntityChance extends AbstractChance
         setPercentage(percentage);
     }
 
-    public Collection<CustomEntityType> nextEntityTypes()
+    public Collection<CustomEntityType> nextEntityTypes(double lootBonus)
     {
         Collection<CustomEntityType> types = new ArrayList<>();
-        int amount = nextIntAmount();
+        int amount = nextIntAmount(lootBonus);
 
         for (int i = 0; i < amount; i++) {
             types.add(type);

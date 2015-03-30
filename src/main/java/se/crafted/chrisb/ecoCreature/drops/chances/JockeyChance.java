@@ -62,10 +62,10 @@ public class JockeyChance extends EntityChance
     }
 
     @Override
-    public Collection<EntityType> nextEntityTypes()
+    public Collection<EntityType> nextEntityTypes(double lootBonus)
     {
         Collection<EntityType> types = new ArrayList<>();
-        for (EntityType vehicle : super.nextEntityTypes()) {
+        for (EntityType vehicle : super.nextEntityTypes(lootBonus)) {
             types.add(vehicle);
             types.add(passenger);
         }

@@ -21,10 +21,12 @@ package se.crafted.chrisb.ecoCreature.drops.sources;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
@@ -56,6 +58,33 @@ public class SetDropSource extends AbstractDropSource
         }
 
         return location;
+    }
+
+    @Override
+    protected double getLootBonus(Event event)
+    {
+        double lootBonus = 1.0D;
+
+        if (event instanceof EntityKilledEvent) {
+            ItemStack weapon = ((EntityKilledEvent) event).getKiller().getItemInHand();
+            if (weapon != null) {
+                lootBonus = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+            }
+        }
+        else if (event instanceof PlayerKilledEvent) {
+            ItemStack weapon = ((PlayerKilledEvent) event).getKiller().getItemInHand();
+            if (weapon != null) {
+                lootBonus = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+            }
+        }
+        else if (event instanceof BlockBreakEvent) {
+            ItemStack weapon = ((BlockBreakEvent) event).getPlayer().getItemInHand();
+            if (weapon != null) {
+                lootBonus = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
+            }
+        }
+
+        return lootBonus;
     }
 
     @Override

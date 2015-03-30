@@ -30,15 +30,15 @@ public class BonusMultiplierAspect
 {
     private static BonusMultiplier bonusMultiplier = new BonusMultiplier(1.0, 0);
 
-    @Around("execution(double se.crafted.chrisb.ecoCreature.drops.chances.AbstractChance+.getPercentage())")
-    public double applyBonusMultiplierAspect(ProceedingJoinPoint pjp) throws Throwable
+    @Around("execution(double se.crafted.chrisb.ecoCreature.drops.chances.AbstractChance+.getChance(double))")
+    public double applyBonusMultiplier(ProceedingJoinPoint pjp) throws Throwable
     {
-        double percentage = (double) pjp.proceed();
+        double chance = (double) pjp.proceed();
         if (bonusMultiplier.isValid()) {
-            LoggerUtil.getInstance().debug("applying bonus multiplier " + bonusMultiplier.getMultiplier() + " to " + percentage);
-            percentage *=  bonusMultiplier.getMultiplier();
+            LoggerUtil.getInstance().debug("applying bonus multiplier " + bonusMultiplier.getMultiplier() + " to " + chance);
+            chance *=  bonusMultiplier.getMultiplier();
         }
-        return percentage;
+        return chance;
     }
 
     public static synchronized BonusMultiplier getBonusMultiplier()

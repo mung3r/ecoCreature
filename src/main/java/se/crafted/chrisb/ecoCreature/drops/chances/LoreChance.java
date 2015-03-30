@@ -65,9 +65,9 @@ public class LoreChance extends ItemChance
     }
 
     @Override
-    public ItemStack nextItemStack(boolean fixedAmount)
+    public ItemStack nextItemStack(boolean fixedAmount, double lootBonus)
     {
-        ItemStack itemStack = super.nextItemStack(fixedAmount);
+        ItemStack itemStack = super.nextItemStack(fixedAmount, lootBonus);
 
         if (itemStack != null && itemStack.getItemMeta() != null) {
             ItemMeta itemMeta = itemStack.getItemMeta();

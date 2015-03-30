@@ -21,7 +21,9 @@ package se.crafted.chrisb.ecoCreature.drops.sources;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
@@ -45,5 +47,20 @@ public class EntityDropSource extends AbstractDropSource
         else {
             throw new IllegalArgumentException("Unrecognized event");
         }
+    }
+
+    @Override
+    protected double getLootBonus(Event event)
+    {
+        ItemStack weapon = null;
+
+        if (event instanceof PlayerKilledEvent) {
+            weapon = ((PlayerKilledEvent) event).getKiller().getItemInHand();
+        }
+        else if (event instanceof EntityKilledEvent) {
+            weapon = ((EntityKilledEvent) event).getKiller().getItemInHand();
+        }
+
+        return weapon != null ? weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS) : 1.0D;
     }
 }

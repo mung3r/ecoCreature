@@ -85,6 +85,12 @@ public class DeathPenaltyDropSource extends AbstractDropSource
     }
 
     @Override
+    protected double getLootBonus(Event event)
+    {
+        return 1.0D;
+    }
+
+    @Override
     public Collection<AbstractDrop> assembleDrop(Event event)
     {
         Collection<AbstractDrop> drops = new ArrayList<>();

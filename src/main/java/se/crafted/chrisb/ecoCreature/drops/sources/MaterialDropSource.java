@@ -21,8 +21,10 @@ package se.crafted.chrisb.ecoCreature.drops.sources;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class MaterialDropSource extends AbstractDropSource
 {
@@ -40,5 +42,20 @@ public class MaterialDropSource extends AbstractDropSource
         else {
             throw new IllegalArgumentException("Unrecognized event");
         }
+    }
+
+    @Override
+    protected double getLootBonus(Event event)
+    {
+        double lootBonus = 1.0;
+
+        if (event instanceof BlockBreakEvent) {
+            ItemStack weapon = ((BlockBreakEvent) event).getPlayer().getItemInHand();
+            if (weapon != null) {
+                lootBonus = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
+            }
+        }
+
+        return lootBonus;
     }
 }

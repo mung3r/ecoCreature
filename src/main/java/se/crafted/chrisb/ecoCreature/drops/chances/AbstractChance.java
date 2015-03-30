@@ -36,19 +36,9 @@ public abstract class AbstractChance implements Chance
         random = new Random();
     }
 
-    public NumberRange getRange()
-    {
-        return range;
-    }
-
     public void setRange(NumberRange range)
     {
         this.range = range;
-    }
-
-    public double getPercentage()
-    {
-        return percentage;
     }
 
     public void setPercentage(double percentage)
@@ -56,26 +46,37 @@ public abstract class AbstractChance implements Chance
         this.percentage = percentage;
     }
 
-    @Override
-    public boolean nextWinner()
+    public double getChance(double lootBonus)
     {
-        return random.nextDouble() < getPercentage() / 100.0D;
+        return lootBonus * percentage / 100.0D;
     }
 
     @Override
-    public int nextIntAmount()
+    public boolean nextWinner(double lootBonus)
+    {
+        return random.nextDouble() < getChance(lootBonus);
+    }
+
+    @Override
+    public boolean nextWinner()
+    {
+        return nextWinner(1.0D);
+    }
+
+    @Override
+    public int nextIntAmount(double lootBonus)
     {
         int amount;
 
-        if (nextWinner()) {
-            if (getRange().getMinimumInteger() == getRange().getMaximumInteger()) {
-                amount = getRange().getMinimumInteger();
+        if (nextWinner(lootBonus)) {
+            if (range.getMinimumInteger() == range.getMaximumInteger()) {
+                amount = range.getMinimumInteger();
             }
-            else if (getRange().getMinimumInteger() > getRange().getMaximumInteger()) {
-                amount = getRange().getMinimumInteger();
+            else if (range.getMinimumInteger() > range.getMaximumInteger()) {
+                amount = range.getMinimumInteger();
             }
             else {
-                amount = getRange().getMinimumInteger() + random.nextInt(getRange().getMaximumInteger() - getRange().getMinimumInteger() + 1);
+                amount = range.getMinimumInteger() + random.nextInt(range.getMaximumInteger() - range.getMinimumInteger() + 1);
             }
         }
         else {
@@ -86,25 +87,31 @@ public abstract class AbstractChance implements Chance
     }
 
     @Override
-    public int getFixedAmount()
+    public int nextIntAmount()
     {
-        return getRange().getMinimumInteger() > getRange().getMaximumInteger() ? getRange().getMinimumInteger() : getRange().getMaximumInteger();
+        return nextIntAmount(1.0D);
     }
 
     @Override
-    public double nextDoubleAmount()
+    public int getFixedAmount()
+    {
+        return range.getMinimumInteger() > range.getMaximumInteger() ? range.getMinimumInteger() : range.getMaximumInteger();
+    }
+
+    @Override
+    public double nextDoubleAmount(double lootBonus)
     {
         double amount;
 
-        if (nextWinner()) {
-            if (getRange().getMinimumDouble() == getRange().getMaximumDouble()) {
-                amount = getRange().getMaximumDouble();
+        if (nextWinner(lootBonus)) {
+            if (range.getMinimumDouble() == range.getMaximumDouble()) {
+                amount = range.getMaximumDouble();
             }
-            else if (getRange().getMinimumDouble() > getRange().getMaximumDouble()) {
-                amount = getRange().getMinimumDouble();
+            else if (range.getMinimumDouble() > range.getMaximumDouble()) {
+                amount = range.getMinimumDouble();
             }
             else {
-                amount = getRange().getMinimumDouble() + random.nextDouble() * (getRange().getMaximumDouble() - getRange().getMinimumDouble());
+                amount = range.getMinimumDouble() + random.nextDouble() * (range.getMaximumDouble() - range.getMinimumDouble());
             }
         }
         else {
@@ -112,5 +119,11 @@ public abstract class AbstractChance implements Chance
         }
 
         return amount;
+    }
+
+    @Override
+    public double nextDoubleAmount()
+    {
+        return nextDoubleAmount(1.0D);
     }
 }

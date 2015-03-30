@@ -76,9 +76,9 @@ public class BookChance extends ItemChance
     }
 
     @Override
-    public ItemStack nextItemStack(boolean fixedAmount)
+    public ItemStack nextItemStack(boolean fixedAmount, double lootBonus)
     {
-        ItemStack itemStack = super.nextItemStack(fixedAmount);
+        ItemStack itemStack = super.nextItemStack(fixedAmount, lootBonus);
 
         if (itemStack != null && itemStack.getItemMeta() instanceof BookMeta) {
             BookMeta bookMeta = (BookMeta) itemStack.getItemMeta();
