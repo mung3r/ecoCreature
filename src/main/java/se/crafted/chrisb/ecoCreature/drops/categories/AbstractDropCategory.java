@@ -102,13 +102,10 @@ public abstract class AbstractDropCategory<T>
     {
         Collection<AbstractDropSource> dropSources = Collections.emptyList();
 
-        if (hasDropSource(type)) {
+        if (type != null && hasDropSource(type)) {
             dropSources = dropSourceMap.get(type);
         }
 
-        if (type != null) {
-            LoggerUtil.getInstance().debugTrue("No reward defined for type: " + type, dropSources.isEmpty());
-        }
         return dropSources;
     }
 
