@@ -55,8 +55,10 @@ public class CustomEntityDrop extends AbstractDrop
     }
 
     @Override
-    public void deliver(Player player)
+    public boolean deliver(Player player)
     {
+        boolean success = true;
+
         for (CustomEntityType customType : getCustomEntityTypes()) {
             Entity entity = getWorld().spawn(getLocation(), customType.getType().getEntityClass());
             switch (customType) {
@@ -76,7 +78,10 @@ public class CustomEntityDrop extends AbstractDrop
                     ((Zombie) entity).setVillager(true);
                     break;
                 default:
+                    success = false;
             }
         }
+
+        return success;
     }
 }

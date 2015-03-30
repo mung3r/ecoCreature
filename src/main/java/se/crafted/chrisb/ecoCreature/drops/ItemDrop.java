@@ -67,8 +67,10 @@ public class ItemDrop extends AbstractDrop
     }
 
     @Override
-    public void deliver(Player player)
+    public boolean deliver(Player player)
     {
+        boolean success = false;
+
         if (player != null) {
             addParameter(MessageToken.PLAYER, player.getName());
         }
@@ -101,6 +103,9 @@ public class ItemDrop extends AbstractDrop
             } else {
                 getWorld().dropItemNaturally(getLocation(), stack);
             }
+            success = true;
         }
+
+        return success;
     }
 }

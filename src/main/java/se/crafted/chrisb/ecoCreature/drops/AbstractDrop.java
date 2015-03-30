@@ -86,5 +86,5 @@ public abstract class AbstractDrop
         return this;
     }
 
-    public abstract void deliver(Player player);
+    public abstract boolean deliver(Player player);
 }

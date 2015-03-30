@@ -107,18 +107,20 @@ public class CoinDrop extends AbstractDrop
     }
 
     @Override
-    public void deliver(Player player)
+    public boolean deliver(Player player)
     {
         if (!DependencyUtils.hasEconomy() || player == null) {
-            return;
+            return false;
         }
 
         double amount = calculateAmount();
+        boolean success = false;
 
         if (Math.abs(amount) > 0.0) {
 
             for (UUID memberId : getMembers(player.getUniqueId())) {
                 registerAmount(memberId, amount);
+                success = true;
 
                 Message message = memberId.equals(player.getUniqueId()) ? getMessage() : getPartyMessage(amount);
                 addParameter(MessageToken.PLAYER, Bukkit.getOfflinePlayer(memberId).getName()).addParameter(MessageToken.AMOUNT, DependencyUtils.getEconomy().format(Math.abs(amount)));
@@ -127,6 +129,8 @@ public class CoinDrop extends AbstractDrop
                 handler.send(memberId);
             }
         }
+
+        return success;
     }
 
     private Set<UUID> getMembers(UUID playerId)

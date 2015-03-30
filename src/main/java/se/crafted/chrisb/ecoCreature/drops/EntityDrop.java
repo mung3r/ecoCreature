@@ -50,13 +50,18 @@ public class EntityDrop extends AbstractDrop
     }
 
     @Override
-    public void deliver(Player player)
+    public boolean deliver(Player player)
     {
+        boolean success = false;
+
         for (EntityType type : getEntityTypes()) {
             Entity entity = getWorld().spawn(getLocation(), type.getEntityClass());
             if (entity instanceof ExperienceOrb) {
                 ((ExperienceOrb) entity).setExperience(1);
             }
+            success = true;
         }
+
+        return success;
     }
 }

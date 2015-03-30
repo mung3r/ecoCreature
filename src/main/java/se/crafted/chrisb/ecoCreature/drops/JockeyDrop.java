@@ -34,8 +34,10 @@ public class JockeyDrop extends EntityDrop
     }
 
     @Override
-    public void deliver(Player player)
+    public boolean deliver(Player player)
     {
+        boolean success = false;
+
         Iterator<EntityType> typeIterator = getEntityTypes().iterator();
         while (typeIterator.hasNext()) {
             EntityType vehicleType = typeIterator.next();
@@ -43,6 +45,9 @@ public class JockeyDrop extends EntityDrop
             EntityType passengerType = typeIterator.next();
             Entity passenger = getWorld().spawn(getLocation(), passengerType.getEntityClass());
             vehicle.setPassenger(passenger);
+            success = true;
         }
+
+        return success;
     }
 }

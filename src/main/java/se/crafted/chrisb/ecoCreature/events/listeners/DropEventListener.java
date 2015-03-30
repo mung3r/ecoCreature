@@ -47,8 +47,9 @@ public class DropEventListener implements Listener
             Player player = event.getPlayer();
 
             for (AbstractDrop drop : drops) {
-                drop.deliver(player);
-                dropMetrics.addCount(drop.getName());
+                if (drop.deliver(player)) {
+                    dropMetrics.addCount(drop.getName());
+                }
             }
         }
     }
