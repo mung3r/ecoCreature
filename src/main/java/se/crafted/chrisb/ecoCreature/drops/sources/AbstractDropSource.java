@@ -229,7 +229,7 @@ public abstract class AbstractDropSource extends AbstractChance
                 CoinChance coin = (CoinChance) chance;
 
                 CoinDrop drop = new CoinDrop(name, getLocation(event));
-                drop.setCoin(coin.nextDoubleAmount());
+                drop.setCoin(coin.nextDoubleAmount(getLootBonus(event)));
 
                 if (drop.getCoin() > 0.0) {
                     drop.setMessage(coinRewardMessage);
