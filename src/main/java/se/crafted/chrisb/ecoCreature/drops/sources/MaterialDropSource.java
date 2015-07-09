@@ -45,17 +45,17 @@ public class MaterialDropSource extends AbstractDropSource
     }
 
     @Override
-    protected double getLootBonus(Event event)
+    protected int getLootLevel(Event event)
     {
-        double lootBonus = 1.0;
+        int lootLevel = 0;
 
         if (event instanceof BlockBreakEvent) {
             ItemStack weapon = ((BlockBreakEvent) event).getPlayer().getItemInHand();
             if (weapon != null) {
-                lootBonus = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
+                lootLevel = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
             }
         }
 
-        return lootBonus;
+        return lootLevel;
     }
 }

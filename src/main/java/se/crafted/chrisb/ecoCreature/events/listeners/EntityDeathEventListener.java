@@ -54,10 +54,10 @@ public class EntityDeathEventListener implements Listener
         Collection<DropEvent> events = Collections.emptyList();
 
         if (EventUtils.isEntityKilledEvent(event)) {
-            events = plugin.getDropEventFactory().createEvents(EntityKilledEvent.createEvent(event));
+            events = plugin.getDropEventFactory().collectDropEvents(EntityKilledEvent.createEvent(event));
         }
         else if (EventUtils.isEntityFarmed(event) || EventUtils.isEntityFireFarmed(event)) {
-            events = plugin.getDropEventFactory().createEvents(EntityFarmedEvent.createEvent(event));
+            events = plugin.getDropEventFactory().collectDropEvents(EntityFarmedEvent.createEvent(event));
         }
 
         for (DropEvent dropEvent : events) {

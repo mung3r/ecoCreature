@@ -33,11 +33,14 @@ import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.drops.CoinDrop;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomDropType;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
+import se.crafted.chrisb.ecoCreature.messages.Message;
 
 public class DeathPenaltyDropSource extends AbstractDropSource
 {
     private static final String DEATH_PENALTY_MESSAGE = "&7You wake up to find &6<amt>&7 missing from your pockets!";
 
+    private Message coinPenaltyMessage;
+    private boolean integerCurrency; 
     private boolean percentPenalty;
     private double penaltyAmount;
 
@@ -48,29 +51,10 @@ public class DeathPenaltyDropSource extends AbstractDropSource
         }
 
         setName(CustomDropType.DEATH_PENALTY.toString());
+        coinPenaltyMessage = new DefaultMessage(config.getString("System.Messages.DeathPenaltyMessage", DEATH_PENALTY_MESSAGE));
+        integerCurrency = config.getBoolean("System.Economy.IntegerCurrency");
         percentPenalty = config.getBoolean("System.Hunting.PenalizeType", true);
         penaltyAmount = config.getDouble("System.Hunting.PenalizeAmount", 0.05D);
-        setCoinPenaltyMessage(new DefaultMessage(config.getString("System.Messages.DeathPenaltyMessage", DEATH_PENALTY_MESSAGE)));
-    }
-
-    public boolean isPercentPenalty()
-    {
-        return percentPenalty;
-    }
-
-    public void setPercentPenalty(boolean percentPenalty)
-    {
-        this.percentPenalty = percentPenalty;
-    }
-
-    public double getPenaltyAmount()
-    {
-        return penaltyAmount;
-    }
-
-    public void setPenaltyAmount(double penaltyAmount)
-    {
-        this.penaltyAmount = penaltyAmount;
     }
 
     @Override
@@ -85,13 +69,7 @@ public class DeathPenaltyDropSource extends AbstractDropSource
     }
 
     @Override
-    protected double getLootBonus(Event event)
-    {
-        return 1.0D;
-    }
-
-    @Override
-    public Collection<AbstractDrop> assembleDrop(Event event)
+    public Collection<AbstractDrop> collectDrop(Event event)
     {
         Collection<AbstractDrop> drops = new ArrayList<>();
         CoinDrop drop = new CoinDrop(getName(), getLocation(event));
@@ -106,8 +84,8 @@ public class DeathPenaltyDropSource extends AbstractDropSource
             drop.setGain(-1.0);
         }
 
-        drop.setMessage(getCoinPenaltyMessage());
-        drop.setIntegerCurrency(isIntegerCurrency());
+        drop.setMessage(coinPenaltyMessage);
+        drop.setIntegerCurrency(integerCurrency);
         drops.add(drop);
 
         return drops;

@@ -283,6 +283,7 @@ Gain:
 # Drop format and Examples:
 ############################################################################
 # Drop format:
+#   AddItemsToInventory: false
 #   Drops:
 #   - ITEM_ID.DATA_ID,ENCHANTMENT.[MIN_LEVEL]-MAX_LEVEL:[MIN-]MAX:CHANCE
 #   - ITEM_ID.DATA_ID:[MIN-]MAX:CHANCE
@@ -487,6 +488,7 @@ RewardTable:
   #
   # Heroes plugin is required to use this reward.
   HeroMastered:
+    AddItemsToInventory: true
     Drops:
     - 'diamond:1:100'
     Coin_Minimum: 25.0

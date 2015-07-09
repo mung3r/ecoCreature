@@ -132,13 +132,13 @@ public class DropConfig implements SpawnerMobTag
         this.dropCategories = dropCategories;
     }
 
-    public Collection<AbstractDrop> assembleDrops(final Event event)
+    public Collection<AbstractDrop> collectDrops(final Event event)
     {
         Collection<AbstractDrop> drops = new ArrayList<>();
 
         for (AbstractDropCategory<?> category : dropCategories) {
             for (AbstractDropSource source : category.getDropSources(event)) {
-                drops.addAll(source.assembleDrops(event));
+                drops.addAll(source.collectDrops(event));
             }
         }
 

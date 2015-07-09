@@ -19,28 +19,11 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.rules;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-
-import se.crafted.chrisb.ecoCreature.messages.Message;
 
 public interface Rule
 {
     boolean isBroken(Event event);
 
-    void handleDrops(Event event);
-
-    Player getKiller(Event event);
-
-    boolean isClearDrops();
-
-    void setClearDrops(boolean clearDrops);
-
-    boolean isClearExpOrbs();
-
-    void setClearExpOrbs(boolean clearExpOrbs);
-
-    Message getMessage();
-
-    void setMessage(Message message);
+    void enforce(Event event);
 }

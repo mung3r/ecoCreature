@@ -21,17 +21,13 @@ package se.crafted.chrisb.ecoCreature.drops.chances;
 
 public interface Chance
 {
-    boolean nextWinner(double lootBonus);
-
     boolean nextWinner();
 
-    int nextIntAmount(double lootBonus);
+    int nextIntAmount(int lootLevel);
 
     int nextIntAmount();
 
-    int getFixedAmount();
-
-    double nextDoubleAmount(double lootBonus);
+    int nextFixedAmount();
 
     double nextDoubleAmount();
 }

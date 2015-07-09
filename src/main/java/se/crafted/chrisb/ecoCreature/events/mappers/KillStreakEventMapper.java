@@ -60,7 +60,7 @@ public class KillStreakEventMapper extends AbstractEventMapper
         final int kills = event.getKills();
         DropConfig dropConfig = getDropConfig(player.getWorld());
 
-        Collection<AbstractDrop> drops = Collections2.transform(dropConfig.assembleDrops(event), new Function<AbstractDrop, AbstractDrop>() {
+        Collection<AbstractDrop> drops = Collections2.transform(dropConfig.collectDrops(event), new Function<AbstractDrop, AbstractDrop>() {
 
             @Override
             public AbstractDrop apply(AbstractDrop drop)

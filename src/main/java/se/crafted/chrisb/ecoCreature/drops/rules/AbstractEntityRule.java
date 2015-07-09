@@ -35,7 +35,7 @@ public abstract class AbstractEntityRule extends AbstractRule
     protected abstract boolean isBroken(EntityKilledEvent event);
 
     @Override
-    public void handleDrops(Event event)
+    public void enforce(Event event)
     {
         if (event instanceof EntityKilledEvent) {
             if (isClearDrops()) {
@@ -45,6 +45,8 @@ public abstract class AbstractEntityRule extends AbstractRule
                 ((EntityKilledEvent) event).setDroppedExp(0);
             }
         }
+
+        super.enforce(event);
     }
 
     @Override

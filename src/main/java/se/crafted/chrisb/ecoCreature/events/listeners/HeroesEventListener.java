@@ -41,7 +41,7 @@ public class HeroesEventListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onHeroChangeLevel(HeroChangeLevelEvent event)
     {
-        for (DropEvent dropEvent : plugin.getDropEventFactory().createEvents(event)) {
+        for (DropEvent dropEvent : plugin.getDropEventFactory().collectDropEvents(event)) {
             Bukkit.getPluginManager().callEvent(dropEvent);
         }
     }

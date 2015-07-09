@@ -74,7 +74,7 @@ public class EntityDropCategory extends AbstractDropCategory<EntityType>
                     huntingRules.putAll(loadHuntingRules(config.getConfigurationSection("RewardTable." + typeName)));
                     huntingRules.putAll(loadGainRules(config.getConfigurationSection("Gain")));
 
-                    for (AbstractDropSource dropSource : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
+                    for (AbstractDropSource dropSource : DropSourceFactory.createSources("RewardTable." + typeName, config)) {
                         dropSource.setHuntingRules(huntingRules);
 
                         if (!dropSourceMap.containsKey(type)) {

@@ -25,11 +25,14 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.apache.commons.lang.math.NumberRange;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
+import se.crafted.chrisb.ecoCreature.drops.CustomEntityDrop;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomEntityType;
 
-public class CustomEntityChance extends AbstractChance
+public class CustomEntityChance extends AbstractChance implements DropChance
 {
     private final CustomEntityType type;
 
@@ -40,10 +43,10 @@ public class CustomEntityChance extends AbstractChance
         setPercentage(percentage);
     }
 
-    public Collection<CustomEntityType> nextEntityTypes(double lootBonus)
+    public Collection<CustomEntityType> nextEntityTypes()
     {
         Collection<CustomEntityType> types = new ArrayList<>();
-        int amount = nextIntAmount(lootBonus);
+        int amount = nextIntAmount();
 
         for (int i = 0; i < amount; i++) {
             types.add(type);
@@ -52,9 +55,17 @@ public class CustomEntityChance extends AbstractChance
         return types;
     }
 
-    public static Collection<AbstractChance> parseConfig(ConfigurationSection config)
+    @Override
+    public AbstractDrop nextDrop(String name, Location location, int lootLevel)
     {
-        Collection<AbstractChance> chances = Collections.emptyList();
+        CustomEntityDrop drop = new CustomEntityDrop(name, location);
+        drop.setCustomEntityTypes(nextEntityTypes());
+        return drop;
+    }
+
+    public static Collection<CustomEntityChance> parseConfig(ConfigurationSection config)
+    {
+        Collection<CustomEntityChance> chances = Collections.emptyList();
 
         if (config != null) {
             chances = new ArrayList<>();
@@ -71,9 +82,9 @@ public class CustomEntityChance extends AbstractChance
         return chances;
     }
 
-    private static Collection<AbstractChance> parseChances(String dropsString)
+    private static Collection<CustomEntityChance> parseChances(String dropsString)
     {
-        Collection<AbstractChance> chances = Collections.emptyList();
+        Collection<CustomEntityChance> chances = Collections.emptyList();
 
         if (dropsString != null && !dropsString.isEmpty()) {
             chances = parseChances(Arrays.asList(dropsString.split(";")));
@@ -82,12 +93,12 @@ public class CustomEntityChance extends AbstractChance
         return chances;
     }
 
-    private static Collection<AbstractChance> parseChances(Collection<String> dropsList)
+    private static Collection<CustomEntityChance> parseChances(Collection<String> dropsList)
     {
-        Collection<AbstractChance> chances = new ArrayList<>();
+        Collection<CustomEntityChance> chances = new ArrayList<>();
 
         for (String dropString : dropsList) {
-            AbstractChance chance = createEntityChance(dropString);
+            CustomEntityChance chance = createEntityChance(dropString);
             if (chance != null) {
                 chances.add(chance);
             }

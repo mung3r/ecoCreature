@@ -25,9 +25,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.math.NumberRange;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.EntityType;
+
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
+import se.crafted.chrisb.ecoCreature.drops.JockeyDrop;
 
 public class JockeyChance extends EntityChance
 {
@@ -39,9 +43,17 @@ public class JockeyChance extends EntityChance
         this.passenger = passenger;
     }
 
-    public static Collection<AbstractChance> parseConfig(ConfigurationSection config)
+    @Override
+    public AbstractDrop nextDrop(String name, Location location, int lootLevel)
     {
-        Collection<AbstractChance> chances = new ArrayList<>();
+        JockeyDrop drop = new JockeyDrop(name, location);
+        drop.setEntityTypes(nextEntityTypes());
+        return drop;
+    }
+
+    public static Collection<DropChance> parseConfig(ConfigurationSection config)
+    {
+        Collection<DropChance> chances = new ArrayList<>();
 
         if (config != null && config.getList("Drops") != null) {
 
@@ -50,7 +62,7 @@ public class JockeyChance extends EntityChance
                     ConfigurationSection memoryConfig = createMemoryConfig(obj);
                     String passengerString = memoryConfig.getString("passenger");
                     String vehicleString = memoryConfig.getString("vehicle");
-                    AbstractChance chance = createJockeyChance(passengerString, vehicleString);
+                    JockeyChance chance = createJockeyChance(passengerString, vehicleString);
                     if (chance != null) {
                         chances.add(chance);
                     }
@@ -62,10 +74,10 @@ public class JockeyChance extends EntityChance
     }
 
     @Override
-    public Collection<EntityType> nextEntityTypes(double lootBonus)
+    public Collection<EntityType> nextEntityTypes()
     {
         Collection<EntityType> types = new ArrayList<>();
-        for (EntityType vehicle : super.nextEntityTypes(lootBonus)) {
+        for (EntityType vehicle : super.nextEntityTypes()) {
             types.add(vehicle);
             types.add(passenger);
         }

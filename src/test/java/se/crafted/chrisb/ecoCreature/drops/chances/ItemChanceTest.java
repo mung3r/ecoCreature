@@ -26,8 +26,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.junit.Test;
 
-import se.crafted.chrisb.ecoCreature.drops.chances.ItemChance;
-
 public class ItemChanceTest
 {
 
@@ -38,10 +36,11 @@ public class ItemChanceTest
         ItemChance chance = new ItemChance(Material.GHAST_TEAR);
         chance.setRange(new NumberRange(1, 1));
         chance.setPercentage(20);
+        chance.setFixedAmount(false);
         int amount = 0;
 
         for (int i = 0; i < samples.intValue(); i++) {
-            ItemStack stack = chance.nextItemStack(false, 1.0D);
+            ItemStack stack = chance.nextItemStack(0);
             if (Material.AIR.equals(stack.getData().getItemType())) {
                 continue;
             }
@@ -49,7 +48,7 @@ public class ItemChanceTest
         }
 
         double idealChance = amount / samples.doubleValue();
-        double delta = Math.abs(chance.getChance(1.0D) - idealChance);
+        double delta = Math.abs(chance.getChance() - idealChance);
         Assert.assertTrue(delta < 0.01);
     }
 }

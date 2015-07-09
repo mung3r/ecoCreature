@@ -53,15 +53,15 @@ public class BlockEventMapper extends AbstractEventMapper
     @Override
     public Collection<DropEvent> mapEvent(Event event)
     {
-        return canMap(event) ? createDropEvents((BlockBreakEvent) event) : EMPTY_COLLECTION;
+        return canMap(event) ? collectDropEvents((BlockBreakEvent) event) : EMPTY_COLLECTION;
     }
 
-    private Collection<DropEvent> createDropEvents(BlockBreakEvent event)
+    private Collection<DropEvent> collectDropEvents(BlockBreakEvent event)
     {
         final Player player = event.getPlayer();
         final DropConfig dropConfig = getDropConfig(player.getWorld());
 
-        Collection<AbstractDrop> drops = Collections2.transform(dropConfig.assembleDrops(event), new Function<AbstractDrop, AbstractDrop>() {
+        Collection<AbstractDrop> drops = Collections2.transform(dropConfig.collectDrops(event), new Function<AbstractDrop, AbstractDrop>() {
 
             @Override
             public AbstractDrop apply(AbstractDrop drop)

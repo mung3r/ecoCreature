@@ -68,7 +68,7 @@ public class EntityKilledEventMapper extends AbstractEventMapper
         final DropConfig dropConfig = getDropConfig(killer.getWorld());
         event.setSpawnerMobTracker(dropConfig);
 
-        Collection<AbstractDrop> drops = Collections2.transform(dropConfig.assembleDrops(event), new Function<AbstractDrop, AbstractDrop>() {
+        Collection<AbstractDrop> drops = Collections2.transform(dropConfig.collectDrops(event), new Function<AbstractDrop, AbstractDrop>() {
 
             @Override
             public AbstractDrop apply(AbstractDrop drop)

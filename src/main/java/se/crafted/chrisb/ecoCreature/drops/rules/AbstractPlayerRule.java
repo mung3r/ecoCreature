@@ -35,7 +35,7 @@ public abstract class AbstractPlayerRule extends AbstractRule
     protected abstract boolean isBroken(PlayerKilledEvent event);
 
     @Override
-    public void handleDrops(Event event)
+    public void enforce(Event event)
     {
         if (event instanceof PlayerKilledEvent) {
             if (isClearDrops()) {
@@ -45,6 +45,8 @@ public abstract class AbstractPlayerRule extends AbstractRule
                 ((PlayerKilledEvent) event).setDroppedExp(0);
             }
         }
+
+        super.enforce(event);
     }
 
     @Override

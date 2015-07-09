@@ -25,11 +25,15 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.apache.commons.lang.math.NumberRange;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
 
-public class EntityChance extends AbstractChance
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
+import se.crafted.chrisb.ecoCreature.drops.EntityDrop;
+
+public class EntityChance extends AbstractChance implements DropChance
 {
     private final EntityType type;
 
@@ -40,10 +44,10 @@ public class EntityChance extends AbstractChance
         setPercentage(percentage);
     }
 
-    public Collection<EntityType> nextEntityTypes(double lootBonus)
+    public Collection<EntityType> nextEntityTypes()
     {
         Collection<EntityType> types = new ArrayList<>();
-        int amount = nextIntAmount(lootBonus);
+        int amount = nextIntAmount();
 
         for (int i = 0; i < amount; i++) {
             types.add(type);
@@ -52,9 +56,17 @@ public class EntityChance extends AbstractChance
         return types;
     }
 
-    public static Collection<AbstractChance> parseConfig(ConfigurationSection config)
+    @Override
+    public AbstractDrop nextDrop(String name, Location location, int lootLevel)
     {
-        Collection<AbstractChance> chances = Collections.emptyList();
+        EntityDrop drop = new EntityDrop(name, location);
+        drop.setEntityTypes(nextEntityTypes());
+        return drop;
+    }
+
+    public static Collection<DropChance> parseConfig(ConfigurationSection config)
+    {
+        Collection<DropChance> chances = Collections.emptyList();
 
         if (config != null) {
             chances = new ArrayList<>();
@@ -68,7 +80,7 @@ public class EntityChance extends AbstractChance
             }
 
             // NOTE: backward compatibility
-            AbstractChance chance = parseExpChance(config);
+            EntityChance chance = parseExpChance(config);
             if (chance != null) {
                 chances.add(chance);
             }
@@ -77,9 +89,9 @@ public class EntityChance extends AbstractChance
         return chances;
     }
 
-    private static AbstractChance parseExpChance(ConfigurationSection config)
+    private static EntityChance parseExpChance(ConfigurationSection config)
     {
-        AbstractChance chance = null;
+        EntityChance chance = null;
 
         if (config != null && config.contains("ExpMin") && config.contains("ExpMax") && config.contains("ExpPercent")) {
             chance = new EntityChance(EntityType.EXPERIENCE_ORB, new NumberRange(config.getInt("ExpMin", 0), config.getInt("ExpMax", 0)), config.getDouble(
@@ -89,9 +101,9 @@ public class EntityChance extends AbstractChance
         return chance;
     }
 
-    private static Collection<AbstractChance> parseChances(String dropsString)
+    private static Collection<EntityChance> parseChances(String dropsString)
     {
-        Collection<AbstractChance> chances = Collections.emptyList();
+        Collection<EntityChance> chances = Collections.emptyList();
 
         if (dropsString != null && !dropsString.isEmpty()) {
             chances = parseChances(Arrays.asList(dropsString.split(";")));
@@ -100,12 +112,12 @@ public class EntityChance extends AbstractChance
         return chances;
     }
 
-    private static Collection<AbstractChance> parseChances(Collection<String> dropsList)
+    private static Collection<EntityChance> parseChances(Collection<String> dropsList)
     {
-        Collection<AbstractChance> chances = new ArrayList<>();
+        Collection<EntityChance> chances = new ArrayList<>();
 
         for (String dropString : dropsList) {
-            AbstractChance chance = createEntityChance(dropString);
+            EntityChance chance = createEntityChance(dropString);
             if (chance != null) {
                 chances.add(chance);
             }

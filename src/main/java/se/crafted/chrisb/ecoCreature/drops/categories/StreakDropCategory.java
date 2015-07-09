@@ -88,7 +88,7 @@ public class StreakDropCategory extends AbstractDropCategory<StreakDropType>
                 StreakDropType type = StreakDropType.fromName(typeName);
 
                 if (type.isValid()) {
-                    for (AbstractDropSource dropSource : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
+                    for (AbstractDropSource dropSource : DropSourceFactory.createSources("RewardTable." + typeName, config)) {
 
                         if (!dropSourceMap.containsKey(type)) {
                             dropSourceMap.put(type, new ArrayList<AbstractDropSource>());

@@ -35,20 +35,24 @@ import se.crafted.chrisb.ecoCreature.drops.CoinDrop;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomDropType;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
+import se.crafted.chrisb.ecoCreature.messages.Message;
 
 public class PVPDropSource extends AbstractDropSource
 {
     private static final String PVP_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for murdering &5<crt>&7.";
 
+    private Message coinRewardMessage;
+    private boolean integerCurrency; 
     private boolean coinPercent;
     private double coinAmount;
 
     public PVPDropSource(ConfigurationSection config)
     {
         setName(CustomDropType.LEGACY_PVP.toString());
+        coinRewardMessage = new DefaultMessage(config.getString("System.Messages.PVPRewardMessage", PVP_REWARD_MESSAGE));
+        integerCurrency = config.getBoolean("System.Economy.IntegerCurrency");
         coinPercent = config.getBoolean("System.Hunting.PVPRewardType", true);
         coinAmount = config.getDouble("System.Hunting.PVPRewardAmount", 0.05D);
-        setCoinRewardMessage(new DefaultMessage(config.getString("System.Messages.PVPRewardMessage", PVP_REWARD_MESSAGE)));
     }
 
     public boolean isCoinPercent()
@@ -83,23 +87,23 @@ public class PVPDropSource extends AbstractDropSource
     }
 
     @Override
-    protected double getLootBonus(Event event)
+    protected int getLootLevel(Event event)
     {
-        double lootBonus = 1.0D;
+        int lootLevel = 0;
 
         if (event instanceof PlayerKilledEvent) {
             ItemStack weapon = ((PlayerKilledEvent) event).getKiller().getItemInHand();
 
             if (weapon != null) {
-                lootBonus = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+                lootLevel = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
             }
         }
 
-        return lootBonus;
+        return lootLevel;
     }
 
     @Override
-    public Collection<AbstractDrop> assembleDrop(Event event)
+    public Collection<AbstractDrop> collectDrop(Event event)
     {
         Collection<AbstractDrop> drops = new ArrayList<>();
 
@@ -114,8 +118,8 @@ public class PVPDropSource extends AbstractDropSource
             drop.setCoin(coinAmount);
         }
 
-        drop.setMessage(getCoinRewardMessage());
-        drop.setIntegerCurrency(isIntegerCurrency());
+        drop.setMessage(coinRewardMessage);
+        drop.setIntegerCurrency(integerCurrency);
         drops.add(drop);
 
         return drops;

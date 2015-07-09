@@ -30,7 +30,7 @@ public class BonusMultiplierAspect
 {
     private static BonusMultiplier bonusMultiplier = new BonusMultiplier(1.0, 0);
 
-    @Around("execution(double se.crafted.chrisb.ecoCreature.drops.chances.AbstractChance+.getChance(double))")
+    @Around("execution(double se.crafted.chrisb.ecoCreature.drops.chances.AbstractChance+.getChance())")
     public double applyBonusMultiplier(ProceedingJoinPoint pjp) throws Throwable
     {
         double chance = (double) pjp.proceed();

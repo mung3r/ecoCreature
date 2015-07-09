@@ -73,7 +73,7 @@ public class PlayerKilledEventMapper extends AbstractEventMapper
 
             PlayerDeathEvent deathEvent = new PlayerDeathEvent(event.getEntity(), event.getDrops(), event.getDroppedExp(), event.getNewExp(),
                     event.getNewTotalExp(), event.getNewLevel(), event.getDeathMessage());
-            for (AbstractDrop penalty : dropConfig.assembleDrops(deathEvent)) {
+            for (AbstractDrop penalty : dropConfig.collectDrops(deathEvent)) {
                 if (killerDrop instanceof CoinDrop && penalty instanceof CoinDrop) {
                     ((CoinDrop) penalty).setCoin(((CoinDrop) killerDrop).getCoin());
                     ((CoinDrop) penalty).setGain(-((CoinDrop) killerDrop).getGain());
@@ -90,7 +90,7 @@ public class PlayerKilledEventMapper extends AbstractEventMapper
     {
         final DropConfig dropConfig = getDropConfig(event.getEntity().getWorld());
 
-        Collection<AbstractDrop> drops = Collections2.transform(dropConfig.assembleDrops(event), new Function<AbstractDrop, AbstractDrop>() {
+        Collection<AbstractDrop> drops = Collections2.transform(dropConfig.collectDrops(event), new Function<AbstractDrop, AbstractDrop>() {
 
             @Override
             public AbstractDrop apply(AbstractDrop drop)

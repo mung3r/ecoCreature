@@ -61,30 +61,30 @@ public class SetDropSource extends AbstractDropSource
     }
 
     @Override
-    protected double getLootBonus(Event event)
+    protected int getLootLevel(Event event)
     {
-        double lootBonus = 1.0D;
+        int lootLevel = 0;
 
         if (event instanceof EntityKilledEvent) {
             ItemStack weapon = ((EntityKilledEvent) event).getKiller().getItemInHand();
             if (weapon != null) {
-                lootBonus = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+                lootLevel = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
             }
         }
         else if (event instanceof PlayerKilledEvent) {
             ItemStack weapon = ((PlayerKilledEvent) event).getKiller().getItemInHand();
             if (weapon != null) {
-                lootBonus = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+                lootLevel = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
             }
         }
         else if (event instanceof BlockBreakEvent) {
             ItemStack weapon = ((BlockBreakEvent) event).getPlayer().getItemInHand();
             if (weapon != null) {
-                lootBonus = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
+                lootLevel = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
             }
         }
 
-        return lootBonus;
+        return lootLevel;
     }
 
     @Override

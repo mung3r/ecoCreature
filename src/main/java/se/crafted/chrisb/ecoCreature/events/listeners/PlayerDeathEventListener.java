@@ -48,10 +48,10 @@ public class PlayerDeathEventListener implements Listener
         Collection<DropEvent> events = Collections.emptySet();
 
         if (EventUtils.isPVPDeath(event)) {
-            events = plugin.getDropEventFactory().createEvents(PlayerKilledEvent.createEvent(event));
+            events = plugin.getDropEventFactory().collectDropEvents(PlayerKilledEvent.createEvent(event));
         }
         else if (EventUtils.isNotSuicide(event)) {
-            events = plugin.getDropEventFactory().createEvents(event);
+            events = plugin.getDropEventFactory().collectDropEvents(event);
         }
 
         for (DropEvent dropEvent : events) {

@@ -55,6 +55,6 @@ public class McMMOEventMapper extends AbstractEventMapper
         Player player = event.getPlayer();
         DropConfig dropConfig = getDropConfig(player.getWorld());
 
-        return Lists.newArrayList(new DropEvent(player, dropConfig.assembleDrops(event)));
+        return Lists.newArrayList(new DropEvent(player, dropConfig.collectDrops(event)));
     }
 }

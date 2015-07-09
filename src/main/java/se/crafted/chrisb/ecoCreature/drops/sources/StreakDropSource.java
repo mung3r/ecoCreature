@@ -49,12 +49,6 @@ public class StreakDropSource extends AbstractDropSource
         }
     }
 
-    @Override
-    protected double getLootBonus(Event event)
-    {
-        return 1.0D;
-    }
-
     public static AbstractDropSource createDropSource(String section, ConfigurationSection config)
     {
         AbstractDropSource source;

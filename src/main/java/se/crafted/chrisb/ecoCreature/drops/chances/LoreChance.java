@@ -65,11 +65,11 @@ public class LoreChance extends ItemChance
     }
 
     @Override
-    public ItemStack nextItemStack(boolean fixedAmount, double lootBonus)
+    public ItemStack nextItemStack(int lootLevel)
     {
-        ItemStack itemStack = super.nextItemStack(fixedAmount, lootBonus);
+        ItemStack itemStack = super.nextItemStack(lootLevel);
 
-        if (itemStack != null && itemStack.getItemMeta() != null) {
+        if (!Material.AIR.equals(itemStack.getType()) && itemStack.getItemMeta() != null) {
             ItemMeta itemMeta = itemStack.getItemMeta();
             itemMeta.setDisplayName(displayName);
             itemMeta.setLore(lore);
@@ -79,14 +79,15 @@ public class LoreChance extends ItemChance
         return itemStack;
     }
 
-    public static Collection<AbstractChance> parseConfig(ConfigurationSection config)
+    public static Collection<ItemChance> parseConfig(String section, ConfigurationSection config)
     {
-        Collection<AbstractChance> chances = Collections.emptyList();
+        ConfigurationSection dropConfig = config.getConfigurationSection(section);
+        Collection<ItemChance> chances = Collections.emptyList();
 
-        if (config != null && config.getList("Drops") != null) {
+        if (dropConfig != null && dropConfig.getList("Drops") != null) {
             chances = new ArrayList<>();
 
-            for (Object obj : config.getList("Drops")) {
+            for (Object obj : dropConfig.getList("Drops")) {
                 if (obj instanceof LinkedHashMap) {
                     ConfigurationSection itemConfig = createItemConfig(obj);
                     Material material = parseMaterial(itemConfig.getString("item"));
@@ -95,6 +96,8 @@ public class LoreChance extends ItemChance
                         LoreChance chance = new LoreChance(material);
                         chance.setDisplayName(DefaultMessage.convertTemplate(itemConfig.getString("displayname")));
                         chance.setLore(DefaultMessage.convertTemplates(itemConfig.getStringList("lore")));
+                        chance.setFixedAmount(config.getBoolean("System.Hunting.FixedDrops"));
+                        chance.setAddToInventory(dropConfig.getBoolean("AddItemsToInventory"));
                         populateItemChance(chance, itemConfig.getString("item"));
 
                         chances.add(chance);

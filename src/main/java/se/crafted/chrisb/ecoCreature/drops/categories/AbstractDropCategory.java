@@ -47,11 +47,6 @@ import se.crafted.chrisb.ecoCreature.drops.rules.TownyRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.UnderSeaLevelRule;
 import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropSourceFactory;
-import se.crafted.chrisb.ecoCreature.messages.CoinMessageDecorator;
-import se.crafted.chrisb.ecoCreature.messages.Message;
-import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
-import se.crafted.chrisb.ecoCreature.messages.MessageToken;
-import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -117,12 +112,7 @@ public abstract class AbstractDropCategory<T>
             public boolean apply(Rule rule)
             {
                 if (rule.isBroken(event)) {
-                    rule.handleDrops(event);
-
-                    Map<MessageToken, String> parameters = Collections.emptyMap();
-                    MessageHandler message = new MessageHandler(rule.getMessage(), parameters);
-                    message.send(rule.getKiller(event));
-
+                    rule.enforce(event);
                     LoggerUtil.getInstance().debug("Rule " + rule.getClass().getSimpleName() + " broken");
                     return true;
                 }
@@ -192,37 +182,6 @@ public abstract class AbstractDropCategory<T>
         }
 
         return percentage;
-    }
-
-    protected static Collection<AbstractDropSource> configureDropSources(Collection<AbstractDropSource> dropSources, ConfigurationSection config)
-    {
-        if (dropSources != null && config != null) {
-            for (AbstractDropSource dropSource : dropSources) {
-                dropSource.setIntegerCurrency(config.getBoolean("System.Economy.IntegerCurrency"));
-                dropSource.setFixedAmount(config.getBoolean("System.Hunting.FixedDrops"));
-
-                dropSource.setCoinRewardMessage(configureMessage(dropSource.getCoinRewardMessage(), config));
-                dropSource.setCoinPenaltyMessage(configureMessage(dropSource.getCoinPenaltyMessage(), config));
-                dropSource.setNoCoinRewardMessage(configureMessage(dropSource.getNoCoinRewardMessage(), config));
-            }
-        }
-
-        return dropSources;
-    }
-
-    private static Message configureMessage(Message message, ConfigurationSection config)
-    {
-        if (message != null && config != null) {
-            message.setEnabled(config.getBoolean("System.Messages.Output", true));
-            if (message instanceof CoinMessageDecorator) {
-                ((CoinMessageDecorator) message).setLoggingEnabled(config.getBoolean("System.Messages.LogCoinRewards", true));
-            }
-            if (message instanceof NoCoinMessageDecorator) {
-                ((NoCoinMessageDecorator) message).setNoRewardMessageEnabled(config.getBoolean("System.Messages.NoReward"));
-            }
-        }
-
-        return message;
     }
 
     protected static Map<Class<? extends AbstractRule>, Rule> loadHuntingRules(ConfigurationSection config)

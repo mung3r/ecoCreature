@@ -46,29 +46,23 @@ public abstract class AbstractChance implements Chance
         this.percentage = percentage;
     }
 
-    public double getChance(double lootBonus)
+    public double getChance()
     {
-        return lootBonus * percentage / 100.0D;
-    }
-
-    @Override
-    public boolean nextWinner(double lootBonus)
-    {
-        return random.nextDouble() < getChance(lootBonus);
+        return percentage / 100.0D;
     }
 
     @Override
     public boolean nextWinner()
     {
-        return nextWinner(1.0D);
+        return random.nextDouble() < getChance();
     }
 
     @Override
-    public int nextIntAmount(double lootBonus)
+    public int nextIntAmount(int lootLevel)
     {
         int amount;
 
-        if (nextWinner(lootBonus)) {
+        if (nextWinner()) {
             if (range.getMinimumInteger() == range.getMaximumInteger()) {
                 amount = range.getMinimumInteger();
             }
@@ -76,7 +70,7 @@ public abstract class AbstractChance implements Chance
                 amount = range.getMinimumInteger();
             }
             else {
-                amount = range.getMinimumInteger() + random.nextInt(range.getMaximumInteger() - range.getMinimumInteger() + 1);
+                amount = range.getMinimumInteger() + random.nextInt(range.getMaximumInteger() + lootLevel - range.getMinimumInteger() + 1);
             }
         }
         else {
@@ -89,21 +83,21 @@ public abstract class AbstractChance implements Chance
     @Override
     public int nextIntAmount()
     {
-        return nextIntAmount(1.0D);
+        return nextIntAmount(0);
     }
 
     @Override
-    public int getFixedAmount()
+    public int nextFixedAmount()
     {
         return range.getMinimumInteger() > range.getMaximumInteger() ? range.getMinimumInteger() : range.getMaximumInteger();
     }
 
     @Override
-    public double nextDoubleAmount(double lootBonus)
+    public double nextDoubleAmount()
     {
         double amount;
 
-        if (nextWinner(lootBonus)) {
+        if (nextWinner()) {
             if (range.getMinimumDouble() == range.getMaximumDouble()) {
                 amount = range.getMaximumDouble();
             }
@@ -119,11 +113,5 @@ public abstract class AbstractChance implements Chance
         }
 
         return amount;
-    }
-
-    @Override
-    public double nextDoubleAmount()
-    {
-        return nextDoubleAmount(1.0D);
     }
 }

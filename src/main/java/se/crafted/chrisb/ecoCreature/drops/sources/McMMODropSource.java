@@ -34,7 +34,7 @@ public class McMMODropSource extends AbstractDropSource
     public McMMODropSource(String section, ConfigurationSection config)
     {
         super(section, config);
-        setNoCoinRewardMessage(DefaultMessage.EMPTY_MESSAGE);
+        //setNoCoinRewardMessage(DefaultMessage.EMPTY_MESSAGE);
     }
 
     @Override
@@ -46,12 +46,6 @@ public class McMMODropSource extends AbstractDropSource
         else {
             throw new IllegalArgumentException();
         }
-    }
-
-    @Override
-    protected double getLootBonus(Event event)
-    {
-        return 1.0D;
     }
 
     public static AbstractDropSource createDropSource(String section, ConfigurationSection config)

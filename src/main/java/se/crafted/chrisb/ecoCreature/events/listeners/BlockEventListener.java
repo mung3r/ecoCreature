@@ -44,7 +44,7 @@ public class BlockEventListener implements Listener
             return;
         }
 
-        for (DropEvent dropEvent : plugin.getDropEventFactory().createEvents(event)) {
+        for (DropEvent dropEvent : plugin.getDropEventFactory().collectDropEvents(event)) {
             Bukkit.getPluginManager().callEvent(dropEvent);
         }
     }

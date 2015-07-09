@@ -41,7 +41,7 @@ public class StreakEventListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onDeathStreakEvent(DeathStreakEvent event)
     {
-        for (DropEvent dropEvent : plugin.getDropEventFactory().createEvents(event)) {
+        for (DropEvent dropEvent : plugin.getDropEventFactory().collectDropEvents(event)) {
             Bukkit.getPluginManager().callEvent(dropEvent);
         }
     }
@@ -49,7 +49,7 @@ public class StreakEventListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onKillStreakEvent(KillStreakEvent event)
     {
-        for (DropEvent dropEvent : plugin.getDropEventFactory().createEvents(event)) {
+        for (DropEvent dropEvent : plugin.getDropEventFactory().collectDropEvents(event)) {
             Bukkit.getPluginManager().callEvent(dropEvent);
         }
     }

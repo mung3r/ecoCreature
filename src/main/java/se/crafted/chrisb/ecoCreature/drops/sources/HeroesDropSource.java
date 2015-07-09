@@ -28,7 +28,6 @@ import org.bukkit.event.Event;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.HeroesDropType;
-import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 
 import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
@@ -38,7 +37,6 @@ public class HeroesDropSource extends AbstractDropSource
     public HeroesDropSource(String section, ConfigurationSection config)
     {
         super(section, config);
-        setNoCoinRewardMessage(DefaultMessage.EMPTY_MESSAGE);
     }
 
     @Override
@@ -53,15 +51,9 @@ public class HeroesDropSource extends AbstractDropSource
     }
 
     @Override
-    protected double getLootBonus(Event event)
+    protected Collection<AbstractDrop> collectDrop(Event event)
     {
-        return 1.0D;
-    }
-
-    @Override
-    protected Collection<AbstractDrop> assembleDrop(Event event)
-    {
-        Collection<AbstractDrop> drops = super.assembleDrop(event);
+        Collection<AbstractDrop> drops = super.collectDrop(event);
 
         if (event instanceof HeroChangeLevelEvent) {
             HeroChangeLevelEvent changeLevelEvent = (HeroChangeLevelEvent) event;

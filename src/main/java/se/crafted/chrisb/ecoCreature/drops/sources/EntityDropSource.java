@@ -50,10 +50,11 @@ public class EntityDropSource extends AbstractDropSource
     }
 
     @Override
-    protected double getLootBonus(Event event)
+    protected int getLootLevel(Event event)
     {
-        ItemStack weapon = null;
+        int lootLevel = 0;
 
+        ItemStack weapon = null;
         if (event instanceof PlayerKilledEvent) {
             weapon = ((PlayerKilledEvent) event).getKiller().getItemInHand();
         }
@@ -61,6 +62,10 @@ public class EntityDropSource extends AbstractDropSource
             weapon = ((EntityKilledEvent) event).getKiller().getItemInHand();
         }
 
-        return weapon != null ? weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS) : 1.0D;
+        if (weapon != null) {
+            lootLevel = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+        }
+
+        return lootLevel;
     }
 }

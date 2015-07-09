@@ -25,19 +25,24 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.apache.commons.lang.math.NumberRange;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-public class ItemChance extends AbstractChance
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
+import se.crafted.chrisb.ecoCreature.drops.ItemDrop;
+
+public class ItemChance extends AbstractChance implements DropChance
 {
     private final Material material;
     private Byte data;
     private Short durability;
     private Collection<EnchantmentChance> enchantments;
     private boolean addToInventory;
+    private boolean fixedAmount;
 
     public ItemChance(Material material)
     {
@@ -90,10 +95,20 @@ public class ItemChance extends AbstractChance
         this.addToInventory = addToInventory;
     }
 
-    public ItemStack nextItemStack(boolean fixedAmount, double lootBonus)
+    public Boolean isFixedAmount()
+    {
+        return fixedAmount;
+    }
+
+    public void setFixedAmount(Boolean fixedAmount)
+    {
+        this.fixedAmount = fixedAmount;
+    }
+
+    public ItemStack nextItemStack(int lootLevel)
     {
         if (material != null) {
-            int dropAmount = fixedAmount ? getFixedAmount() : nextIntAmount(lootBonus);
+            int dropAmount = fixedAmount ? nextFixedAmount() : nextIntAmount(lootLevel);
 
             if (dropAmount > 0) {
                 ItemStack itemStack;
@@ -116,26 +131,41 @@ public class ItemChance extends AbstractChance
         return new ItemStack(Material.AIR, 0);
     }
 
-    public static Collection<AbstractChance> parseConfig(ConfigurationSection config)
+    @Override
+    public AbstractDrop nextDrop(String name, Location location, int lootLevel)
     {
-        Collection<AbstractChance> chances = Collections.emptyList();
+        ItemDrop drop = new ItemDrop(name, location);
+        drop.getItems().add(nextItemStack(lootLevel));
+        drop.setAddToInventory(addToInventory);
+        return drop;
+    }
 
-        if (config != null) {
-            if (config.getList("Drops") != null) {
-                Collection<String> dropsList = config.getStringList("Drops");
-                chances = parseChances(dropsList);
+    public static Collection<ItemChance> parseConfig(String section, ConfigurationSection config)
+    {
+        ConfigurationSection dropConfig = config.getConfigurationSection(section);
+        Collection<ItemChance> chances = Collections.emptyList();
+
+        if (dropConfig != null) {
+            if (dropConfig.getList("Drops") != null) {
+                Collection<String> dropsList = dropConfig.getStringList("Drops");
+                chances.addAll(parseChances(dropsList));
             }
             else {
-                chances = parseChance(config.getString("Drops"));
+                chances.addAll(parseChance(dropConfig.getString("Drops")));
             }
+        }
+
+        for (ItemChance chance : chances) {
+            chance.setFixedAmount(config.getBoolean("System.Hunting.FixedDrops"));
+            chance.setAddToInventory(dropConfig.getBoolean("AddItemsToInventory"));
         }
 
         return chances;
     }
 
-    private static Collection<AbstractChance> parseChance(String dropsString)
+    private static Collection<ItemChance> parseChance(String dropsString)
     {
-        Collection<AbstractChance> chances = Collections.emptyList();
+        Collection<ItemChance> chances = Collections.emptyList();
 
         if (dropsString != null && !dropsString.isEmpty()) {
             chances = parseChances(Arrays.asList(dropsString.split(";")));
@@ -144,9 +174,9 @@ public class ItemChance extends AbstractChance
         return chances;
     }
 
-    private static Collection<AbstractChance> parseChances(Collection<String> dropsList)
+    private static Collection<ItemChance> parseChances(Collection<String> dropsList)
     {
-        Collection<AbstractChance> chances = Collections.emptyList();
+        Collection<ItemChance> chances = Collections.emptyList();
 
         if (dropsList != null && !dropsList.isEmpty()) {
             chances = new ArrayList<>();
@@ -159,9 +189,9 @@ public class ItemChance extends AbstractChance
         return chances;
     }
 
-    private static Collection<AbstractChance> parseItemChance(String dropString)
+    private static Collection<ItemChance> parseItemChance(String dropString)
     {
-        Collection<AbstractChance> chances = Collections.emptyList();
+        Collection<ItemChance> chances = Collections.emptyList();
 
         if (parseMaterial(dropString) != null) {
             chances = new ArrayList<>();

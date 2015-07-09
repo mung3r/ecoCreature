@@ -61,7 +61,7 @@ public class DropEventFactory
         }
     }
 
-    public Collection<DropEvent> createEvents(final Event event)
+    public Collection<DropEvent> collectDropEvents(final Event event)
     {
         Collection<DropEvent> emptyList = Collections.emptyList();
 

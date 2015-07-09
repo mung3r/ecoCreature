@@ -87,7 +87,7 @@ public class CustomDropCategory extends AbstractDropCategory<CustomDropType>
                 CustomDropType type = CustomDropType.fromName(typeName);
 
                 if (type.isValid()) {
-                    for (AbstractDropSource dropSource : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
+                    for (AbstractDropSource dropSource : DropSourceFactory.createSources("RewardTable." + typeName, config)) {
 
                         if (!dropSourceMap.containsKey(type)) {
                             dropSourceMap.put(type, new ArrayList<AbstractDropSource>());
@@ -100,7 +100,7 @@ public class CustomDropCategory extends AbstractDropCategory<CustomDropType>
             }
 
             if (config.getBoolean("System.Hunting.PenalizeDeath")) {
-                for (AbstractDropSource dropSource : configureDropSources(DropSourceFactory.createSources(CustomDropType.DEATH_PENALTY.toString(), config), config)) {
+                for (AbstractDropSource dropSource : DropSourceFactory.createSources(CustomDropType.DEATH_PENALTY.toString(), config)) {
                     if (!dropSourceMap.containsKey(CustomDropType.DEATH_PENALTY)) {
                         dropSourceMap.put(CustomDropType.DEATH_PENALTY, new ArrayList<AbstractDropSource>());
                     }
@@ -110,7 +110,7 @@ public class CustomDropCategory extends AbstractDropCategory<CustomDropType>
             }
 
             if (config.getBoolean("System.Hunting.PVPReward")) {
-                for (AbstractDropSource dropSource : configureDropSources(DropSourceFactory.createSources(CustomDropType.LEGACY_PVP.toString(), config), config)) {
+                for (AbstractDropSource dropSource : DropSourceFactory.createSources(CustomDropType.LEGACY_PVP.toString(), config)) {
                     if (!dropSourceMap.containsKey(CustomDropType.LEGACY_PVP)) {
                         dropSourceMap.put(CustomDropType.LEGACY_PVP, new ArrayList<AbstractDropSource>());
                     }
