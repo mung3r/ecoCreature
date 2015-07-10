@@ -107,6 +107,12 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.bukkit</groupId>
+      <artifactId>craftbukkit</artifactId>
+      <version>${bukkit.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.avaje</groupId>
       <artifactId>ebean</artifactId>
       <version>2.7.3</version>

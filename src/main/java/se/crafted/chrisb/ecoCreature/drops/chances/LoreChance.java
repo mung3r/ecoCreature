@@ -99,6 +99,7 @@ public class LoreChance extends ItemChance
                         chance.setFixedAmount(config.getBoolean("System.Hunting.FixedDrops"));
                         chance.setAddToInventory(dropConfig.getBoolean("AddItemsToInventory"));
                         chance.setAttributes(parseAttributes(itemConfig.getStringList("attributes")));
+                        chance.setUnbreakable(itemConfig.getBoolean("unbreakable"));
                         populateItemChance(chance, itemConfig.getString("item"));
 
                         chances.add(chance);

@@ -49,6 +49,7 @@ public class ItemChance extends AbstractChance implements DropChance
     private Short durability;
     private Collection<EnchantmentChance> enchantments;
     private List<Attribute> attributes;
+    private boolean unbreakable;
     private boolean addToInventory;
     private boolean fixedAmount;
 
@@ -102,6 +103,16 @@ public class ItemChance extends AbstractChance implements DropChance
     public void setAttributes(List<Attribute> attributes)
     {
         this.attributes = attributes;
+    }
+
+    public boolean isUnbreakable()
+    {
+        return unbreakable;
+    }
+
+    public void setUnbreakable(boolean unbreakable)
+    {
+        this.unbreakable = unbreakable;
     }
 
     public boolean isAddToInventory()
