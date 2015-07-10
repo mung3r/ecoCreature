@@ -56,6 +56,7 @@ public class ItemChance extends AbstractChance implements DropChance
     {
         this.material = material;
         this.enchantments = Collections.emptyList();
+        this.attributes = Collections.emptyList();
     }
 
     public Material getMaterial()
