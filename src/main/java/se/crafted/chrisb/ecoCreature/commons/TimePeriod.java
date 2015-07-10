@@ -63,9 +63,9 @@ public enum TimePeriod
     {
         TimePeriod timePeriod = NONE;
 
-        for (LongRange period : PERIOD_MAP.keySet()) {
-            if (period.containsLong(time)) {
-                timePeriod = PERIOD_MAP.get(period);
+        for (Map.Entry<LongRange, TimePeriod> entry : PERIOD_MAP.entrySet()) {
+            if (entry.getKey().containsLong(time)) {
+                timePeriod = entry.getValue();
                 break;
             }
         }
