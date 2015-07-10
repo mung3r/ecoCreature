@@ -23,8 +23,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
+import nl.arfie.bukkit.attributes.Attribute;
+import nl.arfie.bukkit.attributes.AttributeType;
+import nl.arfie.bukkit.attributes.Attributes;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberRange;
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -41,6 +48,7 @@ public class ItemChance extends AbstractChance implements DropChance
     private Byte data;
     private Short durability;
     private Collection<EnchantmentChance> enchantments;
+    private List<Attribute> attributes;
     private boolean addToInventory;
     private boolean fixedAmount;
 
@@ -85,6 +93,16 @@ public class ItemChance extends AbstractChance implements DropChance
         this.enchantments = enchantments;
     }
 
+    public List<Attribute> getAttributes()
+    {
+        return attributes;
+    }
+
+    public void setAttributes(List<Attribute> attributes)
+    {
+        this.attributes = attributes;
+    }
+
     public boolean isAddToInventory()
     {
         return addToInventory;
@@ -123,6 +141,8 @@ public class ItemChance extends AbstractChance implements DropChance
                     }
                 }
                 itemStack.addUnsafeEnchantments(EnchantmentChance.nextEnchantments(enchantments));
+                Attributes.apply(itemStack, attributes, false);
+
                 if (itemStack.getAmount() > 0) {
                     return itemStack;
                 }
@@ -146,6 +166,8 @@ public class ItemChance extends AbstractChance implements DropChance
         Collection<ItemChance> chances = Collections.emptyList();
 
         if (dropConfig != null) {
+            chances = new ArrayList<>();
+
             if (dropConfig.getList("Drops") != null) {
                 Collection<String> dropsList = dropConfig.getStringList("Drops");
                 chances.addAll(parseChances(dropsList));
@@ -308,5 +330,22 @@ public class ItemChance extends AbstractChance implements DropChance
         String[] dropParts = dropString.split(":");
 
         return Double.parseDouble(dropParts[2]);
+    }
+
+    protected static List<Attribute> parseAttributes(List<String> attrStrings)
+    {
+        List<Attribute> attrList = new ArrayList<>();
+
+        for (String attrString : attrStrings) {
+            if (StringUtils.isNotEmpty(attrString)) {
+                String[] attrParts = attrString.toUpperCase().split(":");
+                AttributeType type = AttributeType.valueOf(attrParts[0]);
+                if (type != null && NumberUtils.isNumber(attrParts[1])) {
+                    attrList.add(new Attribute(type, Double.valueOf(attrParts[1])));
+                }
+            }
+        }
+
+        return attrList;
     }
 }

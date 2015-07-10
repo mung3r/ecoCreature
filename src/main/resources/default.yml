@@ -749,6 +749,10 @@ RewardSets:
       displayname: Cursed Sword
       lore:
       - 'Forged by the undead'
+      attributes:
+      - max_health:10
+      - knockback_resistance:10
+      - movement_speed:0.1
   RichZombie:
     Coin_Minimum: 1.00
     Coin_Maximum: 3.50

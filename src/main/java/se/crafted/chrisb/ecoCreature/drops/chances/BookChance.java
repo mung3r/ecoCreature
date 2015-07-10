@@ -104,13 +104,14 @@ public class BookChance extends ItemChance
                     ConfigurationSection itemConfig = createItemConfig(obj);
                     Material material = parseMaterial(itemConfig.getString("item"));
 
-                    if (material != null && material == Material.WRITTEN_BOOK) {
+                    if (Material.WRITTEN_BOOK.equals(material)) {
                         BookChance chance = new BookChance();
                         chance.setTitle(DefaultMessage.convertTemplate(itemConfig.getString("title")));
                         chance.setAuthor(DefaultMessage.convertTemplate(itemConfig.getString("author")));
                         chance.setPages(DefaultMessage.convertTemplates(itemConfig.getStringList("pages")));
                         chance.setFixedAmount(config.getBoolean("System.Hunting.FixedDrops"));
                         chance.setAddToInventory(dropConfig.getBoolean("AddItemsToInventory"));
+                        chance.setAttributes(parseAttributes(itemConfig.getStringList("attributes")));
                         populateItemChance(chance, itemConfig.getString("item"));
 
                         chances.add(chance);

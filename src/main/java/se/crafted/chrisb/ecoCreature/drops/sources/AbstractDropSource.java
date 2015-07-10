@@ -66,9 +66,9 @@ public abstract class AbstractDropSource extends AbstractChance
         name = dropConfig.getName();
 
         chances = new ArrayList<>();
-        chances.addAll(ItemChance.parseConfig(section, dropConfig));
-        chances.addAll(BookChance.parseConfig(section, dropConfig));
-        chances.addAll(LoreChance.parseConfig(section, dropConfig));
+        chances.addAll(ItemChance.parseConfig(section, config));
+        chances.addAll(BookChance.parseConfig(section, config));
+        chances.addAll(LoreChance.parseConfig(section, config));
         chances.addAll(CustomEntityChance.parseConfig(dropConfig));
         chances.addAll(EntityChance.parseConfig(dropConfig));
         chances.addAll(JockeyChance.parseConfig(dropConfig));

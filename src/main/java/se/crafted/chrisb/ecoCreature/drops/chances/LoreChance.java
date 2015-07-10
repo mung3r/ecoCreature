@@ -92,12 +92,13 @@ public class LoreChance extends ItemChance
                     ConfigurationSection itemConfig = createItemConfig(obj);
                     Material material = parseMaterial(itemConfig.getString("item"));
 
-                    if (material != null && material != Material.WRITTEN_BOOK) {
+                    if (!Material.WRITTEN_BOOK.equals(material)) {
                         LoreChance chance = new LoreChance(material);
                         chance.setDisplayName(DefaultMessage.convertTemplate(itemConfig.getString("displayname")));
                         chance.setLore(DefaultMessage.convertTemplates(itemConfig.getStringList("lore")));
                         chance.setFixedAmount(config.getBoolean("System.Hunting.FixedDrops"));
                         chance.setAddToInventory(dropConfig.getBoolean("AddItemsToInventory"));
+                        chance.setAttributes(parseAttributes(itemConfig.getStringList("attributes")));
                         populateItemChance(chance, itemConfig.getString("item"));
 
                         chances.add(chance);
