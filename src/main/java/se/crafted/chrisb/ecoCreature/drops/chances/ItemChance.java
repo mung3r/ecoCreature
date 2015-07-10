@@ -141,7 +141,7 @@ public class ItemChance extends AbstractChance implements DropChance
                     }
                 }
                 itemStack.addUnsafeEnchantments(EnchantmentChance.nextEnchantments(enchantments));
-                Attributes.apply(itemStack, attributes, true);
+                itemStack = Attributes.apply(itemStack, attributes, true);
 
                 if (itemStack.getAmount() > 0) {
                     return itemStack;
