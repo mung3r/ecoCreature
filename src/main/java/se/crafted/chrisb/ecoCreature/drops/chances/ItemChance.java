@@ -141,8 +141,11 @@ public class ItemChance extends AbstractChance implements DropChance
                         itemStack.setDurability(durability);
                     }
                 }
+
                 itemStack.addUnsafeEnchantments(EnchantmentChance.nextEnchantments(enchantments));
-                itemStack = Attributes.apply(itemStack, attributes, true);
+                if (!attributes.isEmpty()) {
+                    itemStack = Attributes.apply(itemStack, attributes, true);
+                }
 
                 if (itemStack.getAmount() > 0) {
                     return itemStack;
@@ -238,12 +241,12 @@ public class ItemChance extends AbstractChance implements DropChance
     protected static Material parseMaterial(String dropString)
     {
         Material material = null;
-        
+
         if (dropString != null) {
             String[] dropParts = dropString.split(":");
             String[] itemParts = dropParts[0].split(",");
             String[] itemSubParts = itemParts[0].split("\\.");
-    
+
             material = Material.matchMaterial(itemSubParts[0]);
         }
 
