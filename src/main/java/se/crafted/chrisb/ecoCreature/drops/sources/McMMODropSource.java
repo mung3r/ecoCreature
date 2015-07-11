@@ -23,18 +23,16 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 
-import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
-
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.McMMODropType;
+
+import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 
 public class McMMODropSource extends AbstractDropSource
 {
     public McMMODropSource(String section, ConfigurationSection config)
     {
         super(section, config);
-        //setNoCoinRewardMessage(DefaultMessage.EMPTY_MESSAGE);
     }
 
     @Override
