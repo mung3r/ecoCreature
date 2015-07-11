@@ -39,6 +39,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
+import se.crafted.chrisb.ecoCreature.commons.ItemUtils;
 import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.drops.ItemDrop;
 
@@ -157,6 +158,7 @@ public class ItemChance extends AbstractChance implements DropChance
                 if (!attributes.isEmpty()) {
                     itemStack = Attributes.apply(itemStack, attributes, true);
                 }
+                itemStack = ItemUtils.setUnbreakable(itemStack);
 
                 if (itemStack.getAmount() > 0) {
                     return itemStack;
