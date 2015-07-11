@@ -36,13 +36,13 @@ import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 
 public class LoreChance extends ItemChance
 {
+    private String displayName;
+    private List<String> lore;
+
     public LoreChance(Material material)
     {
         super(material);
     }
-
-    private String displayName;
-    private List<String> lore;
 
     public String getTitle()
     {
