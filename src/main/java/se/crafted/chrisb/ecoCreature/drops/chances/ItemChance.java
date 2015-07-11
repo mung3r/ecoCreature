@@ -51,6 +51,7 @@ public class ItemChance extends AbstractChance implements DropChance
     private Collection<EnchantmentChance> enchantments;
     private List<Attribute> attributes;
     private boolean unbreakable;
+    private boolean hideFlags;
     private boolean addToInventory;
     private boolean fixedAmount;
 
@@ -116,6 +117,16 @@ public class ItemChance extends AbstractChance implements DropChance
         this.unbreakable = unbreakable;
     }
 
+    public boolean isHideFlags()
+    {
+        return hideFlags;
+    }
+
+    public void setHideFlags(boolean hideFlags)
+    {
+        this.hideFlags = hideFlags;
+    }
+
     public boolean isAddToInventory()
     {
         return addToInventory;
@@ -158,7 +169,12 @@ public class ItemChance extends AbstractChance implements DropChance
                 if (!attributes.isEmpty()) {
                     itemStack = Attributes.apply(itemStack, attributes, true);
                 }
-                itemStack = ItemUtils.setUnbreakable(itemStack);
+                if (unbreakable) {
+                    itemStack = ItemUtils.setUnbreakable(itemStack);
+                }
+                if (hideFlags) {
+                    itemStack = ItemUtils.setHideFlags(itemStack);
+                }
 
                 if (itemStack.getAmount() > 0) {
                     return itemStack;

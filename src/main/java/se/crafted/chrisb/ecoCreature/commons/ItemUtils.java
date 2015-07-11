@@ -22,6 +22,19 @@ public class ItemUtils
         return setTag(item, tag);
     }
 
+    public static org.bukkit.inventory.ItemStack setHideFlags(org.bukkit.inventory.ItemStack item)
+    {
+        if (!(item instanceof CraftItemStack)) {
+            item = CraftItemStack.asCraftCopy(item);
+        }
+        NBTTagCompound tag = getTag(item);
+        if (tag == null) {
+            tag = new NBTTagCompound();
+        }
+        tag.setInt("HideFlags", 63);
+        return setTag(item, tag);
+    }
+
     private static NBTTagCompound getTag(org.bukkit.inventory.ItemStack item)
     {
         if ((item instanceof CraftItemStack)) {
