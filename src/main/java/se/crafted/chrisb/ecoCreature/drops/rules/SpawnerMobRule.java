@@ -72,10 +72,10 @@ public class SpawnerMobRule extends AbstractEntityRule
         return rules;
     }
 
-    private static Message getNoCampMessage(ConfigurationSection config)
+    private static Message getNoCampMessage(ConfigurationSection system)
     {
-        NoCampMessageDecorator message = new NoCampMessageDecorator(new DefaultMessage(config.getString("Messages.NoCampMessage", NO_CAMP_MESSAGE)));
-        message.setSpawnerCampMessageEnabled(config.getBoolean("Messages.Spawner"));
+        NoCampMessageDecorator message = new NoCampMessageDecorator(new DefaultMessage(system.getString("Messages.NoCampMessage", NO_CAMP_MESSAGE), system.getBoolean("Messages.Output")));
+        message.setSpawnerCampMessageEnabled(system.getBoolean("Messages.Spawner"));
         return message;
     }
 }

@@ -49,7 +49,7 @@ public class PVPDropSource extends AbstractDropSource
     public PVPDropSource(ConfigurationSection config)
     {
         setName(CustomDropType.LEGACY_PVP.toString());
-        coinRewardMessage = new DefaultMessage(config.getString("System.Messages.PVPRewardMessage", PVP_REWARD_MESSAGE));
+        coinRewardMessage = new DefaultMessage(config.getString("System.Messages.PVPRewardMessage", PVP_REWARD_MESSAGE), config.getBoolean("System.Messages.Output"));
         integerCurrency = config.getBoolean("System.Economy.IntegerCurrency");
         coinPercent = config.getBoolean("System.Hunting.PVPRewardType", true);
         coinAmount = config.getDouble("System.Hunting.PVPRewardAmount", 0.05D);

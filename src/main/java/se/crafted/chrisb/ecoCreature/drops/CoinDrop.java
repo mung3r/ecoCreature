@@ -39,15 +39,13 @@ import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 
 public class CoinDrop extends AbstractDrop
 {
-    private static final String PARTY_REWARD_MESSAGE = "&7Party awarded &6<amt>&7.";
-    private static final String PARTY_PENALTY_MESSAGE = "&Party penalized &6<amt>&7.";
-
     private static final double IDENTITY = 1.0;
     private static final double ZERO = 0.0;
 
     private double gain;
     private Collection<UUID> party;
     private boolean integerCurrency;
+    private Message partyMessage;
 
     private double coin;
 
@@ -96,6 +94,16 @@ public class CoinDrop extends AbstractDrop
         this.integerCurrency = integerCurrency;
     }
 
+    public Message getPartyMessage()
+    {
+        return partyMessage;
+    }
+
+    public void setPartyMessage(Message partyMessage)
+    {
+        this.partyMessage = partyMessage;
+    }
+
     public double getCoin()
     {
         return coin;
@@ -122,7 +130,7 @@ public class CoinDrop extends AbstractDrop
                 registerAmount(memberId, amount);
                 success = true;
 
-                Message message = memberId.equals(player.getUniqueId()) ? getMessage() : getPartyMessage(amount);
+                Message message = memberId.equals(player.getUniqueId()) ? getMessage() : getPartyMessage();
                 addParameter(MessageToken.PLAYER, Bukkit.getOfflinePlayer(memberId).getName()).addParameter(MessageToken.AMOUNT, DependencyUtils.getEconomy().format(Math.abs(amount)));
 
                 MessageHandler handler = new MessageHandler(message, getParameters());
@@ -186,19 +194,5 @@ public class CoinDrop extends AbstractDrop
         else if (amount < 0.0) {
             DependencyUtils.getEconomy().withdrawPlayer(Bukkit.getOfflinePlayer(memberId), Math.abs(amount));
         }
-    }
-
-    private Message getPartyMessage(double amount)
-    {
-        Message message = new DefaultMessage("");
-
-        if (amount > 0.0) {
-            message = new DefaultMessage(PARTY_REWARD_MESSAGE);
-        }
-        else if (amount < 0.0) {
-            message = new DefaultMessage(PARTY_PENALTY_MESSAGE);
-        }
-
-        return message;
     }
 }

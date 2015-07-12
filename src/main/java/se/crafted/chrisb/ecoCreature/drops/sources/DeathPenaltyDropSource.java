@@ -51,7 +51,7 @@ public class DeathPenaltyDropSource extends AbstractDropSource
         }
 
         setName(CustomDropType.DEATH_PENALTY.toString());
-        coinPenaltyMessage = new DefaultMessage(config.getString("System.Messages.DeathPenaltyMessage", DEATH_PENALTY_MESSAGE));
+        coinPenaltyMessage = new DefaultMessage(config.getString("System.Messages.DeathPenaltyMessage", DEATH_PENALTY_MESSAGE), config.getBoolean("System.Messages.Output"));
         integerCurrency = config.getBoolean("System.Economy.IntegerCurrency");
         percentPenalty = config.getBoolean("System.Hunting.PenalizeType", true);
         penaltyAmount = config.getDouble("System.Hunting.PenalizeAmount", 0.05D);

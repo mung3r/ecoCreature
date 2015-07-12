@@ -55,7 +55,7 @@ public class ProjectileRule extends AbstractEntityRule
 
         if (system != null && system.isConfigurationSection("Hunting")) {
             ProjectileRule rule = new ProjectileRule(system.getBoolean("Hunting.BowRewards", true));
-            rule.setMessage(new DefaultMessage(system.getString("Messages.NoBowMessage", NO_BOW_REWARD_MESSAGE)));
+            rule.setMessage(new DefaultMessage(system.getString("Messages.NoBowMessage", NO_BOW_REWARD_MESSAGE), system.getBoolean("Messages.Output")));
             rules = new HashMap<>();
             rules.put(ProjectileRule.class, rule);
         }

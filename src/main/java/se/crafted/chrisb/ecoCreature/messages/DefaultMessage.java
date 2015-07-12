@@ -36,10 +36,15 @@ public class DefaultMessage implements Message
 
     private final String template;
 
+    public DefaultMessage(String template, boolean enabled)
+    {
+        this.template = template;
+        this.enabled = enabled;
+    }
+
     public DefaultMessage(String template)
     {
-        this.template = convertTemplate(template);
-        enabled = true;
+        this(convertTemplate(template), true);
     }
 
     @Override

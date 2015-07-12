@@ -40,9 +40,17 @@ public class CoinChance extends AbstractChance implements DropChance
     private static final String COIN_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for slaying a &5<crt>&7.";
     private static final String COIN_PENALTY_MESSAGE = "&7You are penalized &6<amt>&7 for slaying a &5<crt>&7.";
 
+    private static final String PARTY_NO_REWARD_MESSAGE = "&7<plr> slayed a &5<crt>&7 using a &3<itm>&7.";
+    private static final String PARTY_REWARD_MESSAGE = "&7Party awarded &6<amt>&7.";
+    private static final String PARTY_PENALTY_MESSAGE = "&7Party penalized &6<amt>&7.";
+
     private Message noCoinRewardMessage;
     private Message coinRewardMessage;
     private Message coinPenaltyMessage;
+
+    private Message partyNoRewardMessage;
+    private Message partyRewardMessage;
+    private Message partyPenaltyMessage;
 
     private boolean integerCurrency;
 
@@ -85,6 +93,36 @@ public class CoinChance extends AbstractChance implements DropChance
         this.coinPenaltyMessage = coinPenaltyMessage;
     }
 
+    public Message getPartyNoRewardMessage()
+    {
+        return partyNoRewardMessage;
+    }
+
+    public void setPartyNoRewardMessage(Message partyNoRewardMessage)
+    {
+        this.partyNoRewardMessage = partyNoRewardMessage;
+    }
+
+    public Message getPartyRewardMessage()
+    {
+        return partyRewardMessage;
+    }
+
+    public void setPartyRewardMessage(Message partyRewardMessage)
+    {
+        this.partyRewardMessage = partyRewardMessage;
+    }
+
+    public Message getPartyPenaltyMessage()
+    {
+        return partyPenaltyMessage;
+    }
+
+    public void setPartyPenaltyMessage(Message partyPenaltyMessage)
+    {
+        this.partyPenaltyMessage = partyPenaltyMessage;
+    }
+
     public Boolean isIntegerCurrency()
     {
         return integerCurrency;
@@ -109,12 +147,15 @@ public class CoinChance extends AbstractChance implements DropChance
 
         if (drop.getCoin() > 0.0) {
             drop.setMessage(coinRewardMessage);
+            drop.setPartyMessage(partyRewardMessage);
         }
         else if (drop.getCoin() < 0.0) {
             drop.setMessage(coinPenaltyMessage);
+            drop.setPartyMessage(partyPenaltyMessage);
         }
         else {
             drop.setMessage(noCoinRewardMessage);
+            drop.setPartyMessage(partyNoRewardMessage);
         }
 
         drop.setIntegerCurrency(integerCurrency);
@@ -131,17 +172,29 @@ public class CoinChance extends AbstractChance implements DropChance
             CoinChance chance = new CoinChance(new NumberRange(dropConfig.getDouble("Coin_Minimum", 0), dropConfig.getDouble("Coin_Maximum", 0)), dropConfig.getDouble(
                     "Coin_Percent", 0.0D), dropConfig.getDouble("Coin_Gain", 1.0D));
 
-            CoinMessageDecorator rewardMessage = new CoinMessageDecorator(new DefaultMessage(dropConfig.getString("Reward_Message", config.getString("System.Messages.Reward_Message", COIN_REWARD_MESSAGE))));
+            CoinMessageDecorator rewardMessage = new CoinMessageDecorator(new DefaultMessage(dropConfig.getString("Reward_Message", config.getString("System.Messages.Reward_Message", COIN_REWARD_MESSAGE)), config.getBoolean("System.Messages.Output")));
             rewardMessage.setLoggingEnabled(config.getBoolean("System.Messages.LogCoinRewards", true));
             chance.setCoinRewardMessage(rewardMessage);
 
-            CoinMessageDecorator penaltyMessage = new CoinMessageDecorator(new DefaultMessage(dropConfig.getString("Penalty_Message", config.getString("System.Messages.Penalty_Message", COIN_PENALTY_MESSAGE))));
+            CoinMessageDecorator penaltyMessage = new CoinMessageDecorator(new DefaultMessage(dropConfig.getString("Penalty_Message", config.getString("System.Messages.Penalty_Message", COIN_PENALTY_MESSAGE)), config.getBoolean("System.Messages.Output")));
             penaltyMessage.setLoggingEnabled(config.getBoolean("System.Messages.LogCoinRewards", true));
             chance.setCoinPenaltyMessage(penaltyMessage);
 
-            NoCoinMessageDecorator noRewardMessage = new NoCoinMessageDecorator(new DefaultMessage(dropConfig.getString("NoReward_Message", config.getString("System.Messages.NoReward_Message", NO_COIN_REWARD_MESSAGE))));
+            NoCoinMessageDecorator noRewardMessage = new NoCoinMessageDecorator(new DefaultMessage(dropConfig.getString("NoReward_Message", config.getString("System.Messages.NoReward_Message", NO_COIN_REWARD_MESSAGE)), config.getBoolean("System.Messages.Output")));
             noRewardMessage.setNoRewardMessageEnabled(config.getBoolean("System.Messages.NoReward"));
             chance.setNoCoinRewardMessage(noRewardMessage);
+
+            CoinMessageDecorator partyPenaltyMessage = new CoinMessageDecorator(new DefaultMessage(PARTY_PENALTY_MESSAGE, config.getBoolean("System.Messages.Output")));
+            partyPenaltyMessage.setLoggingEnabled(config.getBoolean("System.Messages.LogCoinRewards", true));
+            chance.setPartyRewardMessage(partyPenaltyMessage);
+
+            CoinMessageDecorator partyRewardMessage = new CoinMessageDecorator(new DefaultMessage(PARTY_REWARD_MESSAGE, config.getBoolean("System.Messages.Output")));
+            partyRewardMessage.setLoggingEnabled(config.getBoolean("System.Messages.LogCoinRewards", true));
+            chance.setPartyRewardMessage(partyRewardMessage);
+
+            NoCoinMessageDecorator partyNoRewardMessage = new NoCoinMessageDecorator(new DefaultMessage(PARTY_NO_REWARD_MESSAGE, config.getBoolean("System.Messages.Output")));
+            partyNoRewardMessage.setNoRewardMessageEnabled(config.getBoolean("System.Messages.NoReward"));
+            chance.setPartyNoRewardMessage(partyNoRewardMessage);
 
             chance.setIntegerCurrency(config.getBoolean("System.Economy.IntegerCurrency"));
 
