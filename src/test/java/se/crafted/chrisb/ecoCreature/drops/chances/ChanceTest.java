@@ -24,9 +24,6 @@ import junit.framework.Assert;
 import org.apache.commons.lang.math.NumberRange;
 import org.junit.Test;
 
-import se.crafted.chrisb.ecoCreature.drops.chances.AbstractChance;
-import se.crafted.chrisb.ecoCreature.drops.chances.Chance;
-
 public class ChanceTest
 {
 

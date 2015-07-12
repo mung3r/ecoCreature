@@ -23,8 +23,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import se.crafted.chrisb.ecoCreature.drops.CoinDrop;
-
 public class CoinDropTest
 {
 
