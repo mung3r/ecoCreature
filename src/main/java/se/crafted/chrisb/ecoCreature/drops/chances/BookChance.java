@@ -36,14 +36,14 @@ import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 
 public class BookChance extends ItemChance
 {
+    private String title;
+    private String author;
+    private List<String> pages;
+
     public BookChance()
     {
         super(Material.WRITTEN_BOOK);
     }
-
-    private String title;
-    private String author;
-    private List<String> pages;
 
     public String getTitle()
     {
