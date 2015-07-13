@@ -156,6 +156,16 @@ System:
     # Legacy custom message for PVP - Use RewardTable.Player instead.
     # Custom message for PVP reward
     PVPRewardMessage: '&7You are awarded &6<amt>&7 for murdering &5<crt>.'
+    #
+    # Custom messages for attributes
+    Attributes:
+        ATTACK_DAMAGE: '&6<amt>&7 Damage'
+        FOLLOW_RANGE: '&6<amt>&7 Follow Range'
+        JUMP_STRENGTH: '&6<amt>&7 Jump'
+        KNOCKBACK_RESISTANCE: '&6<amt>&7 Knockback Resist'
+        MAX_HEALTH: '&6<amt>&7 Health'
+        MOVEMENT_SPEED: '&6<amt>&7 Movement Speed'
+        SPAWN_REINFORCEMENTS: '&6<amt>&7 Reinforcements'
 Gain:
   #
   # Multiply reward amount based on group (NOTE: requires a permission plugin

@@ -23,8 +23,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import nl.arfie.bukkit.attributes.Attribute;
 import nl.arfie.bukkit.attributes.AttributeType;
 import nl.arfie.bukkit.attributes.Attributes;
 
@@ -35,20 +38,23 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 
 import se.crafted.chrisb.ecoCreature.commons.ItemUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.drops.ItemDrop;
+import se.crafted.chrisb.ecoCreature.messages.Message;
+import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 
 public class ItemChance extends AbstractChance implements DropChance
 {
     private final Material material;
     private Byte data;
     private Short durability;
-    private Collection<EnchantmentChance> enchantments;
-    private Collection<AttributeChance> attributes;
+    private Collection<EnchantmentChance> enchantmentChances;
+    private Collection<AttributeChance> attributeChances;
     private boolean unbreakable;
     private boolean hideFlags;
     private boolean addToInventory;
@@ -57,8 +63,8 @@ public class ItemChance extends AbstractChance implements DropChance
     public ItemChance(Material material)
     {
         this.material = material;
-        this.enchantments = Collections.emptyList();
-        this.attributes = Collections.emptyList();
+        this.enchantmentChances = Collections.emptyList();
+        this.attributeChances = Collections.emptyList();
     }
 
     public Material getMaterial()
@@ -88,22 +94,22 @@ public class ItemChance extends AbstractChance implements DropChance
 
     public Collection<EnchantmentChance> getEnchantments()
     {
-        return enchantments;
+        return enchantmentChances;
     }
 
     public void setEnchantments(Collection<EnchantmentChance> enchantments)
     {
-        this.enchantments = enchantments;
+        this.enchantmentChances = enchantments;
     }
 
     public Collection<AttributeChance> getAttributes()
     {
-        return attributes;
+        return attributeChances;
     }
 
     public void setAttributes(Collection<AttributeChance> attributes)
     {
-        this.attributes = attributes;
+        this.attributeChances = attributes;
     }
 
     public boolean isUnbreakable()
@@ -164,9 +170,22 @@ public class ItemChance extends AbstractChance implements DropChance
                     }
                 }
 
-                itemStack.addUnsafeEnchantments(EnchantmentChance.nextEnchantments(enchantments));
-                if (!attributes.isEmpty()) {
-                    itemStack = Attributes.apply(itemStack, AttributeChance.nextAttributes(attributes), true);
+                itemStack.addUnsafeEnchantments(EnchantmentChance.nextEnchantments(enchantmentChances));
+                if (!attributeChances.isEmpty()) {
+                    List<Attribute> attributes = AttributeChance.nextAttributes(attributeChances);
+                    itemStack = Attributes.apply(itemStack, attributes, true);
+
+                    ItemMeta meta = itemStack.getItemMeta();
+                    List<String> lore = new ArrayList<>();
+                    lore.addAll(meta.getLore());
+
+                    for (Attribute attribute : attributes) {
+                        Map<MessageToken, String> parameters = new HashMap<>();
+                        parameters.put(MessageToken.AMOUNT, String.format("%+.1f"));
+                        Message message = AttributeChance.LORE_MAP.get(attribute.getType());
+                        lore.add(message.assembleMessage(parameters));
+                    }
+                    meta.setLore(lore);
                 }
                 if (unbreakable) {
                     itemStack = ItemUtils.setUnbreakable(itemStack);

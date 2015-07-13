@@ -32,6 +32,7 @@ import org.bukkit.event.Event;
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.drops.chances.AbstractChance;
+import se.crafted.chrisb.ecoCreature.drops.chances.AttributeChance;
 import se.crafted.chrisb.ecoCreature.drops.chances.BookChance;
 import se.crafted.chrisb.ecoCreature.drops.chances.CoinChance;
 import se.crafted.chrisb.ecoCreature.drops.chances.CustomEntityChance;
@@ -73,6 +74,7 @@ public abstract class AbstractDropSource extends AbstractChance
         chances.addAll(EntityChance.parseConfig(dropConfig));
         chances.addAll(JockeyChance.parseConfig(dropConfig));
         chances.addAll(CoinChance.parseConfig(section, config));
+        chances.addAll(AttributeChance.parseConfig(section, config));
     }
 
     public String getName()
