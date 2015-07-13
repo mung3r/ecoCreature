@@ -25,13 +25,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import nl.arfie.bukkit.attributes.Attribute;
 import nl.arfie.bukkit.attributes.AttributeType;
 import nl.arfie.bukkit.attributes.Attributes;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberRange;
-import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -40,6 +38,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
 import se.crafted.chrisb.ecoCreature.commons.ItemUtils;
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.drops.ItemDrop;
 
@@ -49,7 +48,7 @@ public class ItemChance extends AbstractChance implements DropChance
     private Byte data;
     private Short durability;
     private Collection<EnchantmentChance> enchantments;
-    private List<Attribute> attributes;
+    private Collection<AttributeChance> attributes;
     private boolean unbreakable;
     private boolean hideFlags;
     private boolean addToInventory;
@@ -97,12 +96,12 @@ public class ItemChance extends AbstractChance implements DropChance
         this.enchantments = enchantments;
     }
 
-    public List<Attribute> getAttributes()
+    public Collection<AttributeChance> getAttributes()
     {
         return attributes;
     }
 
-    public void setAttributes(List<Attribute> attributes)
+    public void setAttributes(Collection<AttributeChance> attributes)
     {
         this.attributes = attributes;
     }
@@ -167,7 +166,7 @@ public class ItemChance extends AbstractChance implements DropChance
 
                 itemStack.addUnsafeEnchantments(EnchantmentChance.nextEnchantments(enchantments));
                 if (!attributes.isEmpty()) {
-                    itemStack = Attributes.apply(itemStack, attributes, true);
+                    itemStack = Attributes.apply(itemStack, AttributeChance.nextAttributes(attributes), true);
                 }
                 if (unbreakable) {
                     itemStack = ItemUtils.setUnbreakable(itemStack);
@@ -321,6 +320,26 @@ public class ItemChance extends AbstractChance implements DropChance
         return enchantment;
     }
 
+    protected static Collection<AttributeChance> parseAttributes(List<String> attrStrings)
+    {
+        Collection<AttributeChance> attributes = new ArrayList<>();
+
+        for (String attrString : attrStrings) {
+            if (StringUtils.isNotEmpty(attrString)) {
+                try {
+                    String[] attrParts = attrString.toUpperCase().split(":");
+                    AttributeChance attribute = new AttributeChance(AttributeType.valueOf(attrParts[0]));
+                    attribute.setRange(parseRange(attrString));
+                }
+                catch (Exception e) {
+                    LoggerUtil.getInstance().warning("Unrecognized attribute: " + attrString);
+                }
+            }
+        }
+
+        return attributes;
+    }
+
     private static Byte parseData(String dropString)
     {
         String[] dropParts = dropString.split(":");
@@ -363,22 +382,5 @@ public class ItemChance extends AbstractChance implements DropChance
         String[] dropParts = dropString.split(":");
 
         return Double.parseDouble(dropParts[2]);
-    }
-
-    protected static List<Attribute> parseAttributes(List<String> attrStrings)
-    {
-        List<Attribute> attrList = new ArrayList<>();
-
-        for (String attrString : attrStrings) {
-            if (StringUtils.isNotEmpty(attrString)) {
-                String[] attrParts = attrString.toUpperCase().split(":");
-                AttributeType type = AttributeType.valueOf(attrParts[0]);
-                if (type != null && NumberUtils.isNumber(attrParts[1])) {
-                    attrList.add(new Attribute(type, Double.valueOf(attrParts[1])));
-                }
-            }
-        }
-
-        return attrList;
     }
 }
