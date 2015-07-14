@@ -72,6 +72,9 @@ public class LoreChance extends ItemChance
         if (!Material.AIR.equals(itemStack.getType()) && itemStack.getItemMeta() != null) {
             ItemMeta itemMeta = itemStack.getItemMeta();
             itemMeta.setDisplayName(displayName);
+            List<String> lore = new ArrayList<>();
+            lore.addAll(this.lore);
+            lore.addAll(itemMeta.getLore());
             itemMeta.setLore(lore);
             itemStack.setItemMeta(itemMeta);
         }

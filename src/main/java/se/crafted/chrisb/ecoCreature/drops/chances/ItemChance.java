@@ -174,10 +174,7 @@ public class ItemChance extends AbstractChance implements DropChance
                 if (!attributeChances.isEmpty()) {
                     List<Attribute> attributes = AttributeChance.nextAttributes(attributeChances);
                     itemStack = Attributes.apply(itemStack, attributes, true);
-
-                    ItemMeta meta = itemStack.getItemMeta();
                     List<String> lore = new ArrayList<>();
-                    lore.addAll(meta.getLore());
 
                     for (Attribute attribute : attributes) {
                         Map<MessageToken, String> parameters = new HashMap<>();
@@ -185,7 +182,9 @@ public class ItemChance extends AbstractChance implements DropChance
                         Message message = AttributeChance.LORE_MAP.get(attribute.getType());
                         lore.add(message.assembleMessage(parameters));
                     }
-                    meta.setLore(lore);
+
+                    ItemMeta itemMeta = itemStack.getItemMeta();
+                    itemMeta.setLore(lore);
                 }
                 if (unbreakable) {
                     itemStack = ItemUtils.setUnbreakable(itemStack);
