@@ -181,7 +181,7 @@ public class ItemChance extends AbstractChance implements DropChance
 
                     for (Attribute attribute : attributes) {
                         Map<MessageToken, String> parameters = new HashMap<>();
-                        parameters.put(MessageToken.AMOUNT, String.format("%+.1f"));
+                        parameters.put(MessageToken.AMOUNT, String.format("%+.1f", attribute.getAmount()));
                         Message message = AttributeChance.LORE_MAP.get(attribute.getType());
                         lore.add(message.assembleMessage(parameters));
                     }
