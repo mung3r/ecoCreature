@@ -349,6 +349,7 @@ public class ItemChance extends AbstractChance implements DropChance
                     String[] attrParts = attrString.toUpperCase().split(":");
                     AttributeChance attribute = new AttributeChance(AttributeType.valueOf(attrParts[0]));
                     attribute.setRange(parseRange(attrString));
+                    attributes.add(attribute);
                 }
                 catch (Exception e) {
                     LoggerUtil.getInstance().warning("Unrecognized attribute: " + attrString);
