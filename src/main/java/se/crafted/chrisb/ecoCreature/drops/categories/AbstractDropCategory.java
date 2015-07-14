@@ -153,7 +153,7 @@ public abstract class AbstractDropCategory<T>
 
     private static NumberRange parseRange(String dropString)
     {
-        NumberRange range = new NumberRange(1, 1);
+        NumberRange range = new NumberRange(1);
 
         String[] dropParts = dropString.split(":");
 

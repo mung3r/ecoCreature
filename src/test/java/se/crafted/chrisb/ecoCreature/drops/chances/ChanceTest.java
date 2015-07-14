@@ -44,7 +44,7 @@ public class ChanceTest
         Number samples = 100000;
         Number percent = 3;
 
-        Chance chance = new TestChance(new NumberRange(1, 1), percent.doubleValue());
+        Chance chance = new TestChance(new NumberRange(1), percent.doubleValue());
         for (int i = 0; i < 10; i++) {
             double winnerCount = 0;
             for (int j = 0; j < samples.intValue(); j++) {

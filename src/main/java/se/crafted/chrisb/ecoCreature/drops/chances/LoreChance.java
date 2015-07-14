@@ -74,7 +74,9 @@ public class LoreChance extends ItemChance
             itemMeta.setDisplayName(displayName);
             List<String> lore = new ArrayList<>();
             lore.addAll(this.lore);
-            lore.addAll(itemMeta.getLore());
+            for (String l : itemMeta.getLore()) {
+                lore.add(l);
+            }
             itemMeta.setLore(lore);
             itemStack.setItemMeta(itemMeta);
         }

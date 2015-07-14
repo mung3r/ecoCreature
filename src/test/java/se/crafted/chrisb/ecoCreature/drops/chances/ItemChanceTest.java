@@ -34,7 +34,7 @@ public class ItemChanceTest
     {
         Number samples = 1000000;
         ItemChance chance = new ItemChance(Material.GHAST_TEAR);
-        chance.setRange(new NumberRange(1, 1));
+        chance.setRange(new NumberRange(1));
         chance.setPercentage(20);
         chance.setFixedAmount(false);
         int amount = 0;

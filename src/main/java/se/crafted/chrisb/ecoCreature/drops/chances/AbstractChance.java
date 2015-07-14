@@ -31,7 +31,7 @@ public abstract class AbstractChance implements Chance
 
     public AbstractChance()
     {
-        range = new NumberRange(1, 1);
+        range = new NumberRange(1);
         percentage = 100.0D;
         random = new Random();
     }
