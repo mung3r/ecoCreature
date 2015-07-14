@@ -174,17 +174,7 @@ public class ItemChance extends AbstractChance implements DropChance
                 if (!attributeChances.isEmpty()) {
                     List<Attribute> attributes = AttributeChance.nextAttributes(attributeChances);
                     itemStack = Attributes.apply(itemStack, attributes, true);
-                    List<String> lore = new ArrayList<>();
-
-                    for (Attribute attribute : attributes) {
-                        Map<MessageToken, String> parameters = new HashMap<>();
-                        parameters.put(MessageToken.AMOUNT, String.format("%+.1f", attribute.getAmount()));
-                        Message message = AttributeChance.LORE_MAP.get(attribute.getType());
-                        lore.add(message.assembleMessage(parameters));
-                    }
-
-                    ItemMeta itemMeta = itemStack.getItemMeta();
-                    itemMeta.setLore(lore);
+                    setItemLore(itemStack, getAttributeLore(attributes));
                 }
                 if (unbreakable) {
                     itemStack = ItemUtils.setUnbreakable(itemStack);
@@ -199,6 +189,26 @@ public class ItemChance extends AbstractChance implements DropChance
             }
         }
         return new ItemStack(Material.AIR, 0);
+    }
+
+    protected List<String> getAttributeLore(List<Attribute> attributes)
+    {
+        List<String> lore = new ArrayList<>();
+
+        for (Attribute attribute : attributes) {
+            Map<MessageToken, String> parameters = new HashMap<>();
+            parameters.put(MessageToken.AMOUNT, String.format("%+.1f", attribute.getAmount()));
+            Message message = AttributeChance.LORE_MAP.get(attribute.getType());
+            lore.add(message.assembleMessage(parameters));
+        }
+
+        return lore;
+    }
+
+    protected void setItemLore(ItemStack itemStack, List<String> lore)
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setLore(lore);
     }
 
     @Override
