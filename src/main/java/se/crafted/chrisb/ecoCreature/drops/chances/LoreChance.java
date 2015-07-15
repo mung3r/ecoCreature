@@ -69,23 +69,15 @@ public class LoreChance extends ItemChance
     {
         ItemStack itemStack = super.nextItemStack(lootLevel);
 
-        if (!Material.AIR.equals(itemStack.getType()) && itemStack.getItemMeta() != null) {
-            ItemMeta itemMeta = itemStack.getItemMeta();
-            itemMeta.setDisplayName(displayName);
-            itemStack.setItemMeta(itemMeta);
-        }
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setDisplayName(displayName);
+        List<String> lore = new ArrayList<>();
+        lore.addAll(itemMeta.getLore());
+        lore.addAll(this.lore);
+        itemMeta.setLore(this.lore);
+        itemStack.setItemMeta(itemMeta);
 
         return itemStack;
-    }
-
-    @Override
-    protected void setItemLore(ItemStack itemStack, List<String> lore)
-    {
-        List<String> newLore = new ArrayList<>();
-        newLore.addAll(this.lore);
-        newLore.addAll(lore);
-
-        super.setItemLore(itemStack, newLore);
     }
 
     public static Collection<ItemChance> parseConfig(String section, ConfigurationSection config)
