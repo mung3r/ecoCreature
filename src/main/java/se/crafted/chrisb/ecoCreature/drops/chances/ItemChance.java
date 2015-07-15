@@ -174,7 +174,7 @@ public class ItemChance extends AbstractChance implements DropChance
                 if (!attributeChances.isEmpty()) {
                     List<Attribute> attributes = AttributeChance.nextAttributes(attributeChances);
                     itemStack = Attributes.apply(itemStack, attributes, true);
-                    setItemLore(itemStack, getAttributeLore(attributes));
+                    setItemLore(itemStack, createAttributeLore(attributes));
                 }
                 if (unbreakable) {
                     itemStack = ItemUtils.setUnbreakable(itemStack);
@@ -191,7 +191,7 @@ public class ItemChance extends AbstractChance implements DropChance
         return new ItemStack(Material.AIR, 0);
     }
 
-    protected List<String> getAttributeLore(List<Attribute> attributes)
+    protected List<String> createAttributeLore(List<Attribute> attributes)
     {
         List<String> lore = new ArrayList<>();
 
