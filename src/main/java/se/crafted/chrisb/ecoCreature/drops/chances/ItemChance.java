@@ -209,6 +209,7 @@ public class ItemChance extends AbstractChance implements DropChance
     {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setLore(lore);
+        itemStack.setItemMeta(itemMeta);
     }
 
     @Override
