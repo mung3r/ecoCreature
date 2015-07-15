@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -23,9 +23,9 @@ import java.util.Map;
 
 public interface Message
 {
-    boolean isMessageOutputEnabled();
+    boolean isEnabled();
 
-    void setMessageOutputEnabled(boolean messageOutputEnabled);
+    void setEnabled(boolean messageOutputEnabled);
 
-    String getAssembledMessage(Map<MessageToken, String> parameters);
+    String assembleMessage(Map<MessageToken, String> parameters);
 }

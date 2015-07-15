@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -19,30 +19,40 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.sources;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
+import se.crafted.chrisb.ecoCreature.drops.CoinDrop;
+import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomDropType;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
-import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
-import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomDropType;
+import se.crafted.chrisb.ecoCreature.messages.Message;
 
 public class PVPDropSource extends AbstractDropSource
 {
     private static final String PVP_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for murdering &5<crt>&7.";
 
+    private Message coinRewardMessage;
+    private boolean integerCurrency; 
     private boolean coinPercent;
     private double coinAmount;
 
     public PVPDropSource(ConfigurationSection config)
     {
         setName(CustomDropType.LEGACY_PVP.toString());
+        coinRewardMessage = new DefaultMessage(config.getString("System.Messages.PVPRewardMessage", PVP_REWARD_MESSAGE), config.getBoolean("System.Messages.Output"));
+        integerCurrency = config.getBoolean("System.Economy.IntegerCurrency");
         coinPercent = config.getBoolean("System.Hunting.PVPRewardType", true);
         coinAmount = config.getDouble("System.Hunting.PVPRewardAmount", 0.05D);
-        setCoinRewardMessage(new DefaultMessage(config.getString("System.Messages.PVPRewardMessage", PVP_REWARD_MESSAGE)));
     }
 
     public boolean isCoinPercent()
@@ -77,24 +87,41 @@ public class PVPDropSource extends AbstractDropSource
     }
 
     @Override
-    public AssembledDrop assembleDrop(Event event)
+    protected int getLootLevel(Event event)
     {
-        AssembledDrop drop = new AssembledDrop(getLocation(event));
+        int lootLevel = 0;
 
-        drop.setName(getName());
+        if (event instanceof PlayerKilledEvent) {
+            ItemStack weapon = ((PlayerKilledEvent) event).getKiller().getItemInHand();
+
+            if (weapon != null) {
+                lootLevel = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+            }
+        }
+
+        return lootLevel;
+    }
+
+    @Override
+    public Collection<AbstractDrop> collectDrop(Event event)
+    {
+        Collection<AbstractDrop> drops = new ArrayList<>();
+
+        CoinDrop drop = new CoinDrop(getName(), getLocation(event));
 
         if (coinPercent && event instanceof PlayerKilledEvent && DependencyUtils.hasEconomy()) {
             Player victim = ((PlayerKilledEvent) event).getVictim();
-            drop.setCoin(DependencyUtils.getEconomy().getBalance(victim.getName()));
+            drop.setCoin(DependencyUtils.getEconomy().getBalance(victim));
             drop.setGain(coinAmount / 100.0);
         }
         else {
             drop.setCoin(coinAmount);
         }
 
-        drop.setMessage(getCoinRewardMessage());
-        drop.setIntegerCurrency(isIntegerCurrency());
+        drop.setMessage(coinRewardMessage);
+        drop.setIntegerCurrency(integerCurrency);
+        drops.add(drop);
 
-        return drop;
+        return drops;
     }
 }

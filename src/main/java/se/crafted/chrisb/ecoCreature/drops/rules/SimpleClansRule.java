@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -34,13 +34,7 @@ import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 
 public class SimpleClansRule extends AbstractPlayerRule
 {
-    public SimpleClansRule()
-    {
-        setClearDrops(false);
-        setClearExpOrbs(false);
-    }
-
-    public void setClearNonRivalDrops(boolean clearNonRivalDrops)
+    public SimpleClansRule(boolean clearNonRivalDrops)
     {
         setClearDrops(clearNonRivalDrops);
         setClearExpOrbs(clearNonRivalDrops);
@@ -66,8 +60,7 @@ public class SimpleClansRule extends AbstractPlayerRule
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
         if (system != null && system.isConfigurationSection("Hunting")) {
-            SimpleClansRule rule = new SimpleClansRule();
-            rule.setClearNonRivalDrops(system.getBoolean("Hunting.SimpleClans.ClearNonRivalDrops", false));
+            SimpleClansRule rule = new SimpleClansRule(system.getBoolean("Hunting.SimpleClans.ClearNonRivalDrops"));
             rules = new HashMap<>();
             rules.put(SimpleClansRule.class, rule);
         }

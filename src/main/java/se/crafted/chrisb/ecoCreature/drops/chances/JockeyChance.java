@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops.models;
+package se.crafted.chrisb.ecoCreature.drops.chances;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,23 +25,35 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.math.NumberRange;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.EntityType;
 
-public class JockeyDrop extends EntityDrop
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
+import se.crafted.chrisb.ecoCreature.drops.JockeyDrop;
+
+public class JockeyChance extends EntityChance
 {
     private EntityType passenger;
 
-    public JockeyDrop(EntityType passenger, EntityType vehicle, NumberRange range, double percentage)
+    public JockeyChance(EntityType passenger, EntityType vehicle, NumberRange range, double percentage)
     {
         super(vehicle, range, percentage);
         this.passenger = passenger;
     }
 
-    public static Collection<AbstractDrop> parseConfig(ConfigurationSection config)
+    @Override
+    public AbstractDrop nextDrop(String name, Location location, int lootLevel)
     {
-        Collection<AbstractDrop> drops = new ArrayList<>();
+        JockeyDrop drop = new JockeyDrop(name, location);
+        drop.setEntityTypes(nextEntityTypes());
+        return drop;
+    }
+
+    public static Collection<DropChance> parseConfig(ConfigurationSection config)
+    {
+        Collection<DropChance> chances = new ArrayList<>();
 
         if (config != null && config.getList("Drops") != null) {
 
@@ -50,15 +62,15 @@ public class JockeyDrop extends EntityDrop
                     ConfigurationSection memoryConfig = createMemoryConfig(obj);
                     String passengerString = memoryConfig.getString("passenger");
                     String vehicleString = memoryConfig.getString("vehicle");
-                    JockeyDrop drop = createJockeyDrop(passengerString, vehicleString);
-                    if (drop != null) {
-                        drops.add(drop);
+                    JockeyChance chance = createJockeyChance(passengerString, vehicleString);
+                    if (chance != null) {
+                        chances.add(chance);
                     }
                 }
             }
         }
 
-        return drops;
+        return chances;
     }
 
     @Override
@@ -72,18 +84,18 @@ public class JockeyDrop extends EntityDrop
         return types;
     }
 
-    private static JockeyDrop createJockeyDrop(String passengerString, String vehicleString)
+    private static JockeyChance createJockeyChance(String passengerString, String vehicleString)
     {
-        JockeyDrop drop = null;
+        JockeyChance chance = null;
 
         EntityType passengerType = parseType(passengerString);
         EntityType vehicleType = parseType(vehicleString);
 
         if (isNotAmbiguous(vehicleType) && isNotAmbiguous(passengerType)) {
-            drop = new JockeyDrop(passengerType, vehicleType, parseRange(passengerString), parsePercentage(passengerString));
+            chance = new JockeyChance(passengerType, vehicleType, parseRange(passengerString), parsePercentage(passengerString));
         }
 
-        return drop;
+        return chance;
     }
 
     @SuppressWarnings("unchecked")

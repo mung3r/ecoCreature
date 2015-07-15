@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -28,7 +28,10 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import se.crafted.chrisb.ecoCreature.DropConfigLoader;
-import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
+import se.crafted.chrisb.ecoCreature.drops.CoinDrop;
+import se.crafted.chrisb.ecoCreature.drops.EntityDrop;
+import se.crafted.chrisb.ecoCreature.drops.ItemDrop;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
@@ -62,17 +65,19 @@ public class PlayerKilledEventMapper extends AbstractEventMapper
         Player killer = event.getKiller();
         Player victim = event.getVictim();
         DropConfig dropConfig = getDropConfig(killer.getWorld());
-        Collection<AssembledDrop> drops = new ArrayList<>();
-        Collection<AssembledDrop> penalties = new ArrayList<>();
+        Collection<AbstractDrop> drops = new ArrayList<>();
+        Collection<AbstractDrop> penalties = new ArrayList<>();
 
-        for (AssembledDrop killerDrop : createKillerDrops(event)) {
+        for (AbstractDrop killerDrop : createKillerDrops(event)) {
             drops.add(killerDrop);
 
             PlayerDeathEvent deathEvent = new PlayerDeathEvent(event.getEntity(), event.getDrops(), event.getDroppedExp(), event.getNewExp(),
                     event.getNewTotalExp(), event.getNewLevel(), event.getDeathMessage());
-            for (AssembledDrop penalty : dropConfig.assembleDrops(deathEvent)) {
-                penalty.setCoin(killerDrop.getCoin());
-                penalty.setGain(-killerDrop.getGain());
+            for (AbstractDrop penalty : dropConfig.collectDrops(deathEvent)) {
+                if (killerDrop instanceof CoinDrop && penalty instanceof CoinDrop) {
+                    ((CoinDrop) penalty).setCoin(((CoinDrop) killerDrop).getCoin());
+                    ((CoinDrop) penalty).setGain(-((CoinDrop) killerDrop).getGain());
+                }
 
                 penalties.add(penalty);
             }
@@ -81,26 +86,32 @@ public class PlayerKilledEventMapper extends AbstractEventMapper
         return Lists.newArrayList(new DropEvent(killer, drops), new DropEvent(victim, penalties));
     }
 
-    private Collection<AssembledDrop> createKillerDrops(final PlayerKilledEvent event)
+    private Collection<AbstractDrop> createKillerDrops(final PlayerKilledEvent event)
     {
         final DropConfig dropConfig = getDropConfig(event.getEntity().getWorld());
 
-        Collection<AssembledDrop> drops = Collections2.transform(dropConfig.assembleDrops(event), new Function<AssembledDrop, AssembledDrop>() {
+        Collection<AbstractDrop> drops = Collections2.transform(dropConfig.collectDrops(event), new Function<AbstractDrop, AbstractDrop>() {
 
             @Override
-            public AssembledDrop apply(AssembledDrop drop)
+            public AbstractDrop apply(AbstractDrop drop)
             {
                 drop.addParameter(MessageToken.CREATURE, event.getVictim().getName());
 
-                /*if ((dropConfig.isOverrideDrops() && drop.hasDrops()) || (dropConfig.isClearOnNoDrops() && !drop.hasDrops())) {
-                    event.getDrops().clear();
-                }*/
+                if (drop instanceof ItemDrop) {
+                    ItemDrop itemDrop = (ItemDrop) drop;
+                    if (dropConfig.isOverrideDrops() && !itemDrop.getItems().isEmpty() || (dropConfig.isClearOnNoDrops() && itemDrop.getItems().isEmpty())) {
+                        event.getDrops().clear();
+                    }
 
-                if (drop.getEntityTypes().contains(EntityType.EXPERIENCE_ORB)) {
-                    event.setDroppedExp(0);
+                    addPlayerSkullToEvent(itemDrop, event);
                 }
 
-                addPlayerSkullToEvent(drop, event);
+                if (drop instanceof EntityDrop) {
+                    EntityDrop entityDrop = (EntityDrop) drop;
+                    if (entityDrop.getEntityTypes().contains(EntityType.EXPERIENCE_ORB)) {
+                        event.setDroppedExp(0);
+                    }
+                }
 
                 return drop;
             }

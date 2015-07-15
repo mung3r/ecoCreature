@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -19,17 +19,18 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.parties;
 
-import java.util.Collection;
+import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
 public abstract class AbstractParty implements Party
 {
-    private boolean shared;
+    private final boolean shared;
 
-    public AbstractParty()
+    public AbstractParty(boolean shared)
     {
-        shared = false;
+        this.shared = shared;
     }
 
     @Override
@@ -39,11 +40,5 @@ public abstract class AbstractParty implements Party
     }
 
     @Override
-    public void setShared(boolean shared)
-    {
-        this.shared = shared;
-    }
-
-    @Override
-    public abstract Collection<String> getMembers(Player player);
+    public abstract Set<UUID> getMembers(Player player);
 }

@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -41,7 +41,7 @@ public class StreakEventListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onDeathStreakEvent(DeathStreakEvent event)
     {
-        for (DropEvent dropEvent : plugin.getDropEventFactory().createEvents(event)) {
+        for (DropEvent dropEvent : plugin.getDropEventFactory().collectDropEvents(event)) {
             Bukkit.getPluginManager().callEvent(dropEvent);
         }
     }
@@ -49,7 +49,7 @@ public class StreakEventListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onKillStreakEvent(KillStreakEvent event)
     {
-        for (DropEvent dropEvent : plugin.getDropEventFactory().createEvents(event)) {
+        for (DropEvent dropEvent : plugin.getDropEventFactory().collectDropEvents(event)) {
             Bukkit.getPluginManager().callEvent(dropEvent);
         }
     }

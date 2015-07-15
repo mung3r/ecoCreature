@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -76,7 +77,7 @@ public enum CustomEntityType
     public static CustomEntityType fromName(String name)
     {
         CustomEntityType dropType = INVALID;
-        if (name != null && NAME_MAP.containsKey(name.toLowerCase())) {
+        if (StringUtils.isNotEmpty(name) && NAME_MAP.containsKey(name.toLowerCase())) {
             dropType = NAME_MAP.get(name.toLowerCase());
         }
         return dropType;

@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops.models;
+package se.crafted.chrisb.ecoCreature.drops.chances;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,16 +34,16 @@ import org.bukkit.inventory.meta.BookMeta;
 
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 
-public class BookDrop extends ItemDrop
+public class BookChance extends ItemChance
 {
-    public BookDrop()
-    {
-        super(Material.WRITTEN_BOOK);
-    }
-
     private String title;
     private String author;
     private List<String> pages;
+
+    public BookChance()
+    {
+        super(Material.WRITTEN_BOOK);
+    }
 
     public String getTitle()
     {
@@ -76,11 +76,11 @@ public class BookDrop extends ItemDrop
     }
 
     @Override
-    public ItemStack nextItemStack(boolean fixedAmount)
+    public ItemStack nextItemStack(int lootLevel)
     {
-        ItemStack itemStack = super.nextItemStack(fixedAmount);
+        ItemStack itemStack = super.nextItemStack(lootLevel);
 
-        if (itemStack != null && itemStack.getItemMeta() instanceof BookMeta) {
+        if (!Material.AIR.equals(itemStack.getType()) && itemStack.getItemMeta() instanceof BookMeta) {
             BookMeta bookMeta = (BookMeta) itemStack.getItemMeta();
             bookMeta.setTitle(title);
             bookMeta.setAuthor(author);
@@ -91,32 +91,38 @@ public class BookDrop extends ItemDrop
         return itemStack;
     }
 
-    public static Collection<AbstractDrop> parseConfig(ConfigurationSection config)
+    public static Collection<ItemChance> parseConfig(String section, ConfigurationSection config)
     {
-        Collection<AbstractDrop> drops = Collections.emptyList();
+        ConfigurationSection dropConfig = config.getConfigurationSection(section);
+        Collection<ItemChance> chances = Collections.emptyList();
 
-        if (config != null && config.getList("Drops") != null) {
-            drops = new ArrayList<>();
+        if (dropConfig != null && dropConfig.getList("Drops") != null) {
+            chances = new ArrayList<>();
 
-            for (Object obj : config.getList("Drops")) {
+            for (Object obj : dropConfig.getList("Drops")) {
                 if (obj instanceof LinkedHashMap) {
                     ConfigurationSection itemConfig = createItemConfig(obj);
                     Material material = parseMaterial(itemConfig.getString("item"));
 
-                    if (material != null && material == Material.WRITTEN_BOOK) {
-                        BookDrop drop = new BookDrop();
-                        drop.setTitle(DefaultMessage.convertMessage(itemConfig.getString("title")));
-                        drop.setAuthor(DefaultMessage.convertMessage(itemConfig.getString("author")));
-                        drop.setPages(DefaultMessage.convertMessages(itemConfig.getStringList("pages")));
-                        populateItemDrop(drop, itemConfig.getString("item"));
+                    if (Material.WRITTEN_BOOK.equals(material)) {
+                        BookChance chance = new BookChance();
+                        chance.setTitle(DefaultMessage.convertTemplate(itemConfig.getString("title")));
+                        chance.setAuthor(DefaultMessage.convertTemplate(itemConfig.getString("author")));
+                        chance.setPages(DefaultMessage.convertTemplates(itemConfig.getStringList("pages")));
+                        chance.setFixedAmount(config.getBoolean("System.Hunting.FixedDrops"));
+                        chance.setAddToInventory(dropConfig.getBoolean("AddItemsToInventory"));
+                        chance.setAttributes(parseAttributes(itemConfig.getStringList("attributes")));
+                        chance.setUnbreakable(itemConfig.getBoolean("unbreakable"));
+                        chance.setHideFlags(itemConfig.getBoolean("hideflags"));
+                        populateItemChance(chance, itemConfig.getString("item"));
 
-                        drops.add(drop);
+                        chances.add(chance);
                     }
                 }
             }
         }
 
-        return drops;
+        return chances;
     }
 
     @SuppressWarnings("unchecked")

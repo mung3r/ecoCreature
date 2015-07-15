@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -19,6 +19,9 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.sources;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -26,14 +29,18 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
-import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
+import se.crafted.chrisb.ecoCreature.drops.CoinDrop;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomDropType;
+import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
+import se.crafted.chrisb.ecoCreature.messages.Message;
 
 public class DeathPenaltyDropSource extends AbstractDropSource
 {
     private static final String DEATH_PENALTY_MESSAGE = "&7You wake up to find &6<amt>&7 missing from your pockets!";
 
+    private Message coinPenaltyMessage;
+    private boolean integerCurrency; 
     private boolean percentPenalty;
     private double penaltyAmount;
 
@@ -44,29 +51,10 @@ public class DeathPenaltyDropSource extends AbstractDropSource
         }
 
         setName(CustomDropType.DEATH_PENALTY.toString());
+        coinPenaltyMessage = new DefaultMessage(config.getString("System.Messages.DeathPenaltyMessage", DEATH_PENALTY_MESSAGE), config.getBoolean("System.Messages.Output"));
+        integerCurrency = config.getBoolean("System.Economy.IntegerCurrency");
         percentPenalty = config.getBoolean("System.Hunting.PenalizeType", true);
         penaltyAmount = config.getDouble("System.Hunting.PenalizeAmount", 0.05D);
-        setCoinPenaltyMessage(new DefaultMessage(config.getString("System.Messages.DeathPenaltyMessage", DEATH_PENALTY_MESSAGE)));
-    }
-
-    public boolean isPercentPenalty()
-    {
-        return percentPenalty;
-    }
-
-    public void setPercentPenalty(boolean percentPenalty)
-    {
-        this.percentPenalty = percentPenalty;
-    }
-
-    public double getPenaltyAmount()
-    {
-        return penaltyAmount;
-    }
-
-    public void setPenaltyAmount(double penaltyAmount)
-    {
-        this.penaltyAmount = penaltyAmount;
     }
 
     @Override
@@ -81,15 +69,14 @@ public class DeathPenaltyDropSource extends AbstractDropSource
     }
 
     @Override
-    public AssembledDrop assembleDrop(Event event)
+    public Collection<AbstractDrop> collectDrop(Event event)
     {
-        AssembledDrop drop = new AssembledDrop(getLocation(event));
-
-        drop.setName(getName());
+        Collection<AbstractDrop> drops = new ArrayList<>();
+        CoinDrop drop = new CoinDrop(getName(), getLocation(event));
 
         if (percentPenalty && event instanceof PlayerDeathEvent && DependencyUtils.hasEconomy()) {
             Player player = ((PlayerDeathEvent) event).getEntity();
-            drop.setCoin(DependencyUtils.getEconomy().getBalance(player.getName()));
+            drop.setCoin(DependencyUtils.getEconomy().getBalance(player));
             drop.setGain(-penaltyAmount / 100.0);
         }
         else {
@@ -97,9 +84,10 @@ public class DeathPenaltyDropSource extends AbstractDropSource
             drop.setGain(-1.0);
         }
 
-        drop.setMessage(getCoinPenaltyMessage());
-        drop.setIntegerCurrency(isIntegerCurrency());
+        drop.setMessage(coinPenaltyMessage);
+        drop.setIntegerCurrency(integerCurrency);
+        drops.add(drop);
 
-        return drop;
+        return drops;
     }
 }

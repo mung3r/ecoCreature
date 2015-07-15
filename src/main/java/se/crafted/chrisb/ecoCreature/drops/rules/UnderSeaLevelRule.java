@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -34,14 +34,9 @@ public class UnderSeaLevelRule extends AbstractEntityRule
 {
     private static final String NO_UNDER_SEA_LEVEL_MESSAGE = "&7You find no rewards on this creature.";
 
-    private boolean huntUnderSeaLevel;
+    private final boolean huntUnderSeaLevel;
 
-    public UnderSeaLevelRule()
-    {
-        huntUnderSeaLevel = true;
-    }
-
-    public void setHuntUnderSeaLevel(boolean huntUnderSeaLevel)
+    public UnderSeaLevelRule(boolean huntUnderSeaLevel)
     {
         this.huntUnderSeaLevel = huntUnderSeaLevel;
     }
@@ -60,9 +55,8 @@ public class UnderSeaLevelRule extends AbstractEntityRule
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
         if (system != null && system.isConfigurationSection("Hunting")) {
-            UnderSeaLevelRule rule = new UnderSeaLevelRule();
-            rule.setHuntUnderSeaLevel(system.getBoolean("Hunting.AllowUnderSeaLVL", true));
-            rule.setMessage(new DefaultMessage(system.getString("Messages.NoUnderSeaLevel", NO_UNDER_SEA_LEVEL_MESSAGE)));
+            UnderSeaLevelRule rule = new UnderSeaLevelRule(system.getBoolean("Hunting.AllowUnderSeaLVL", true));
+            rule.setMessage(new DefaultMessage(system.getString("Messages.NoUnderSeaLevel", NO_UNDER_SEA_LEVEL_MESSAGE), system.getBoolean("Messages.Output")));
             rules = new HashMap<>();
             rules.put(UnderSeaLevelRule.class, rule);
         }

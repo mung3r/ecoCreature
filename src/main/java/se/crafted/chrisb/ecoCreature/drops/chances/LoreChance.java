@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops.models;
+package se.crafted.chrisb.ecoCreature.drops.chances;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,15 +34,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 
-public class LoreDrop extends ItemDrop
+public class LoreChance extends ItemChance
 {
-    public LoreDrop(Material material)
+    private String displayName;
+    private List<String> lore;
+
+    public LoreChance(Material material)
     {
         super(material);
     }
-
-    private String displayName;
-    private List<String> lore;
 
     public String getTitle()
     {
@@ -65,45 +65,60 @@ public class LoreDrop extends ItemDrop
     }
 
     @Override
-    public ItemStack nextItemStack(boolean fixedAmount)
+    public ItemStack nextItemStack(int lootLevel)
     {
-        ItemStack itemStack = super.nextItemStack(fixedAmount);
+        ItemStack itemStack = super.nextItemStack(lootLevel);
 
-        if (itemStack != null && itemStack.getItemMeta() != null) {
+        if (!Material.AIR.equals(itemStack.getType()) && itemStack.getItemMeta() != null) {
             ItemMeta itemMeta = itemStack.getItemMeta();
             itemMeta.setDisplayName(displayName);
-            itemMeta.setLore(lore);
             itemStack.setItemMeta(itemMeta);
         }
 
         return itemStack;
     }
 
-    public static Collection<AbstractDrop> parseConfig(ConfigurationSection config)
+    @Override
+    protected void setItemLore(ItemStack itemStack, List<String> lore)
     {
-        Collection<AbstractDrop> drops = Collections.emptyList();
+        List<String> newLore = new ArrayList<>();
+        newLore.addAll(this.lore);
+        newLore.addAll(lore);
 
-        if (config != null && config.getList("Drops") != null) {
-            drops = new ArrayList<>();
+        super.setItemLore(itemStack, newLore);
+    }
 
-            for (Object obj : config.getList("Drops")) {
+    public static Collection<ItemChance> parseConfig(String section, ConfigurationSection config)
+    {
+        ConfigurationSection dropConfig = config.getConfigurationSection(section);
+        Collection<ItemChance> chances = Collections.emptyList();
+
+        if (dropConfig != null && dropConfig.getList("Drops") != null) {
+            chances = new ArrayList<>();
+
+            for (Object obj : dropConfig.getList("Drops")) {
                 if (obj instanceof LinkedHashMap) {
                     ConfigurationSection itemConfig = createItemConfig(obj);
                     Material material = parseMaterial(itemConfig.getString("item"));
 
-                    if (material != null && material != Material.WRITTEN_BOOK) {
-                        LoreDrop drop = new LoreDrop(material);
-                        drop.setDisplayName(DefaultMessage.convertMessage(itemConfig.getString("displayname")));
-                        drop.setLore(DefaultMessage.convertMessages(itemConfig.getStringList("lore")));
-                        populateItemDrop(drop, itemConfig.getString("item"));
+                    if (!Material.WRITTEN_BOOK.equals(material)) {
+                        LoreChance chance = new LoreChance(material);
+                        chance.setDisplayName(DefaultMessage.convertTemplate(itemConfig.getString("displayname")));
+                        chance.setLore(DefaultMessage.convertTemplates(itemConfig.getStringList("lore")));
+                        chance.setFixedAmount(config.getBoolean("System.Hunting.FixedDrops"));
+                        chance.setAddToInventory(dropConfig.getBoolean("AddItemsToInventory"));
+                        chance.setAttributes(parseAttributes(itemConfig.getStringList("attributes")));
+                        chance.setUnbreakable(itemConfig.getBoolean("unbreakable"));
+                        chance.setHideFlags(itemConfig.getBoolean("hideflags"));
+                        populateItemChance(chance, itemConfig.getString("item"));
 
-                        drops.add(drop);
+                        chances.add(chance);
                     }
                 }
             }
         }
 
-        return drops;
+        return chances;
     }
 
     @SuppressWarnings("unchecked")

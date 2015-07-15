@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -19,7 +19,6 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.rules;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -33,11 +32,11 @@ import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 
 public class HeroesRule extends AbstractPlayerRule
 {
-    private List<String> classNames;
+    private final List<String> classNames;
 
-    public HeroesRule()
+    public HeroesRule(List<String> classNames)
     {
-        classNames = new ArrayList<>();
+        this.classNames = classNames;
         setClearDrops(true);
         setClearExpOrbs(true);
     }
@@ -60,19 +59,12 @@ public class HeroesRule extends AbstractPlayerRule
         return ruleBroken;
     }
 
-    public void setClassNames(List<String> classNames)
-    {
-        this.classNames = classNames;
-    }
-
     public static Map<Class<? extends AbstractRule>, Rule> parseConfig(ConfigurationSection system)
     {
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
         if (system != null && system.isConfigurationSection("Hunting")) {
-            List<String> classNames = system.getStringList("Hunting.Heroes.ClearClassDropsList");
-            HeroesRule rule = new HeroesRule();
-            rule.setClassNames(classNames);
+            HeroesRule rule = new HeroesRule(system.getStringList("Hunting.Heroes.ClearClassDropsList"));
             rules = new HashMap<>();
             rules.put(HeroesRule.class, rule);
         }

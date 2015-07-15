@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -31,20 +31,20 @@ abstract class AbstractMessageDecorator implements Message
     }
 
     @Override
-    public boolean isMessageOutputEnabled()
+    public boolean isEnabled()
     {
-        return decoratedMessage.isMessageOutputEnabled();
+        return decoratedMessage.isEnabled();
     }
 
     @Override
-    public void setMessageOutputEnabled(boolean messageOutputEnabled)
+    public void setEnabled(boolean messageOutputEnabled)
     {
-        decoratedMessage.setMessageOutputEnabled(messageOutputEnabled);
+        decoratedMessage.setEnabled(messageOutputEnabled);
     }
 
     @Override
-    public String getAssembledMessage(Map<MessageToken, String> parameters)
+    public String assembleMessage(Map<MessageToken, String> parameters)
     {
-        return decoratedMessage.getAssembledMessage(parameters);
+        return decoratedMessage.assembleMessage(parameters);
     }
 }

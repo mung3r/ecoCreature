@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -17,14 +17,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops.models;
+package se.crafted.chrisb.ecoCreature.drops.aspects;
 
-public class Bonus
+public class BonusMultiplier
 {
     private final double multiplier;
     private final long endTimeInMillis;
 
-    public Bonus(double multiplier, long endTimeInMillis)
+    public BonusMultiplier(double multiplier, long endTimeInMillis)
     {
         this.multiplier = multiplier;
         this.endTimeInMillis = endTimeInMillis;

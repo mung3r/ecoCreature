@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -28,7 +28,10 @@ import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.DropConfigLoader;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
-import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
+import se.crafted.chrisb.ecoCreature.drops.CoinDrop;
+import se.crafted.chrisb.ecoCreature.drops.EntityDrop;
+import se.crafted.chrisb.ecoCreature.drops.ItemDrop;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
@@ -65,35 +68,44 @@ public class EntityKilledEventMapper extends AbstractEventMapper
         final DropConfig dropConfig = getDropConfig(killer.getWorld());
         event.setSpawnerMobTracker(dropConfig);
 
-        Collection<AssembledDrop> drops = Collections2.transform(dropConfig.assembleDrops(event), new Function<AssembledDrop, AssembledDrop>() {
+        Collection<AbstractDrop> drops = Collections2.transform(dropConfig.collectDrops(event), new Function<AbstractDrop, AbstractDrop>() {
 
             @Override
-            public AssembledDrop apply(AssembledDrop drop)
+            public AbstractDrop apply(AbstractDrop drop)
             {
-                drop.setGain(dropConfig.getGainMultiplier(killer));
-                drop.setParty(dropConfig.getPartyMembers(killer));
-                drop.addParameter(MessageToken.CREATURE, drop.getName())
+                if (drop instanceof CoinDrop) {
+                    CoinDrop coinDrop = (CoinDrop) drop;
+                    coinDrop.setGain(dropConfig.getGainMultiplier(killer));
+                    coinDrop.setParty(dropConfig.getPartyMembers(killer));
+                    coinDrop.addParameter(MessageToken.CREATURE, coinDrop.getName())
                     .addParameter(MessageToken.ITEM, event.getWeaponName());
-
-                if (dropConfig.isOverrideDrops() && drop.hasDrops() || dropConfig.isClearOnNoDrops() && !drop.hasDrops()) {
-                    event.getDrops().clear();
                 }
 
-                if (dropConfig.isClearEnchantedDrops()) {
-                    Iterables.removeIf(event.getDrops(), new Predicate<ItemStack>() {
-
-                        @Override
-                        public boolean apply(ItemStack stack)
-                        {
-                            boolean notEmpty = !stack.getEnchantments().isEmpty();
-                            LoggerUtil.getInstance().debugTrue("Cleared enchanted item: " + stack.getType(), notEmpty);
-                            return notEmpty;
-                        }
-                    });
+                if (drop instanceof ItemDrop) {
+                    ItemDrop itemDrop = (ItemDrop) drop;
+                    if (dropConfig.isOverrideDrops() && !itemDrop.getItems().isEmpty() || dropConfig.isClearOnNoDrops() && itemDrop.getItems().isEmpty()) {
+                        event.getDrops().clear();
+                    }
+        
+                    if (dropConfig.isClearEnchantedDrops()) {
+                        Iterables.removeIf(event.getDrops(), new Predicate<ItemStack>() {
+        
+                            @Override
+                            public boolean apply(ItemStack stack)
+                            {
+                                boolean notEmpty = !stack.getEnchantments().isEmpty();
+                                LoggerUtil.getInstance().debugTrue("Cleared enchanted item: " + stack.getType(), notEmpty);
+                                return notEmpty;
+                            }
+                        });
+                    }
                 }
 
-                if (drop.getEntityTypes().contains(EntityType.EXPERIENCE_ORB)) {
-                    event.setDroppedExp(0);
+                if (drop instanceof EntityDrop) {
+                    EntityDrop entityDrop = (EntityDrop) drop;
+                    if (entityDrop.getEntityTypes().contains(EntityType.EXPERIENCE_ORB)) {
+                        event.setDroppedExp(0);
+                    }
                 }
 
                 return drop;

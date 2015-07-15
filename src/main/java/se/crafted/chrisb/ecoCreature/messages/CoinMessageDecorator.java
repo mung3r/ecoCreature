@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -21,21 +21,21 @@ package se.crafted.chrisb.ecoCreature.messages;
 
 public class CoinMessageDecorator extends AbstractMessageDecorator
 {
-    private boolean coinLoggingEnabled;
+    private boolean loggingEnabled;
 
     public CoinMessageDecorator(Message decoratedMessage)
     {
         super(decoratedMessage);
-        coinLoggingEnabled = false;
+        loggingEnabled = false;
     }
 
-    public boolean isCoinLoggingEnabled()
+    public boolean isLoggingEnabled()
     {
-        return coinLoggingEnabled;
+        return loggingEnabled;
     }
 
-    public void setCoinLoggingEnabled(boolean coinLoggingEnabled)
+    public void setLoggingEnabled(boolean loggingEnabled)
     {
-        this.coinLoggingEnabled = coinLoggingEnabled;
+        this.loggingEnabled = loggingEnabled;
     }
 }

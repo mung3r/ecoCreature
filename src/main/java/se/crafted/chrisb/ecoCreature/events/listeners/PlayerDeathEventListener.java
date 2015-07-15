@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -48,10 +48,10 @@ public class PlayerDeathEventListener implements Listener
         Collection<DropEvent> events = Collections.emptySet();
 
         if (EventUtils.isPVPDeath(event)) {
-            events = plugin.getDropEventFactory().createEvents(PlayerKilledEvent.createEvent(event));
+            events = plugin.getDropEventFactory().collectDropEvents(PlayerKilledEvent.createEvent(event));
         }
         else if (EventUtils.isNotSuicide(event)) {
-            events = plugin.getDropEventFactory().createEvents(event);
+            events = plugin.getDropEventFactory().collectDropEvents(event);
         }
 
         for (DropEvent dropEvent : events) {

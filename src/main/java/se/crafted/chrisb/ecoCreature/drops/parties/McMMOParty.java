@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -22,6 +22,9 @@ package se.crafted.chrisb.ecoCreature.drops.parties;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -33,18 +36,23 @@ import com.gmail.nossr50.api.PartyAPI;
 
 public class McMMOParty extends AbstractParty
 {
-    @Override
-    public Collection<String> getMembers(Player player)
+    public McMMOParty(boolean shared)
     {
-        Collection<String> party = Collections.emptyList();
+        super(shared);
+    }
+
+    @Override
+    public Set<UUID> getMembers(Player player)
+    {
+        Set<UUID> party = Collections.emptySet();
 
         if (DependencyUtils.hasMcMMO() && PartyAPI.inParty(player)) {
             Collection<Player> members = PartyAPI.getOnlineMembers(player);
             if (members != null) {
-                party = new ArrayList<>();
+                party = new HashSet<>();
 
                 for (Player member : members) {
-                    party.add(member.getName());
+                    party.add(member.getUniqueId());
                 }
             }
         }
@@ -58,8 +66,7 @@ public class McMMOParty extends AbstractParty
         Collection<Party> parties = Collections.emptyList();
 
         if (config != null) {
-            McMMOParty party = new McMMOParty();
-            party.setShared(config.getBoolean("InParty.Share", false));
+            McMMOParty party = new McMMOParty(config.getBoolean("InParty.Share"));
             parties = new ArrayList<>();
             parties.add(party);
         }

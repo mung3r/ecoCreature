@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -23,8 +23,8 @@ import java.util.Date;
 
 import org.bukkit.command.CommandSender;
 
-import se.crafted.chrisb.ecoCreature.drops.aspects.BonusChanceAspect;
-import se.crafted.chrisb.ecoCreature.drops.models.Bonus;
+import se.crafted.chrisb.ecoCreature.drops.aspects.BonusMultiplier;
+import se.crafted.chrisb.ecoCreature.drops.aspects.BonusMultiplierAspect;
 
 public class BonusCommand extends BasicCommand
 {
@@ -42,9 +42,9 @@ public class BonusCommand extends BasicCommand
     public boolean execute(CommandSender sender, String identifier, String[] args)
     {
         if (args != null && args.length == 0) {
-            Bonus bonus = BonusChanceAspect.getBonus();
-            if (bonus != null && bonus.isValid()) {
-                sender.sendMessage("Loot bonus multiplier set for " + bonus.getMultiplier() + ", ending at " + new Date(bonus.getEndTimeInMillis()));
+            BonusMultiplier bonusMultiplier = BonusMultiplierAspect.getBonusMultiplier();
+            if (bonusMultiplier != null && bonusMultiplier.isValid()) {
+                sender.sendMessage("Loot bonus multiplier set for " + bonusMultiplier.getMultiplier() + ", ending at " + new Date(bonusMultiplier.getEndTimeInMillis()));
             }
             else {
                 sender.sendMessage("No active loot bonus");

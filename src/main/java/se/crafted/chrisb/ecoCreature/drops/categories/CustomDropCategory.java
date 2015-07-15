@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -36,9 +36,9 @@ import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomDropType;
 
 public class CustomDropCategory extends AbstractDropCategory<CustomDropType>
 {
-    public CustomDropCategory(Map<CustomDropType, Collection<AbstractDropSource>> sources)
+    public CustomDropCategory(Map<CustomDropType, Collection<AbstractDropSource>> dropSourceMap)
     {
-        super(sources);
+        super(dropSourceMap);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class CustomDropCategory extends AbstractDropCategory<CustomDropType>
 
     public static AbstractDropCategory<CustomDropType> parseConfig(ConfigurationSection config)
     {
-        Map<CustomDropType, Collection<AbstractDropSource>> sources = new HashMap<>();
+        Map<CustomDropType, Collection<AbstractDropSource>> dropSourceMap = new HashMap<>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {
@@ -87,39 +87,39 @@ public class CustomDropCategory extends AbstractDropCategory<CustomDropType>
                 CustomDropType type = CustomDropType.fromName(typeName);
 
                 if (type.isValid()) {
-                    for (AbstractDropSource source : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
+                    for (AbstractDropSource dropSource : DropSourceFactory.createSources("RewardTable." + typeName, config)) {
 
-                        if (!sources.containsKey(type)) {
-                            sources.put(type, new ArrayList<AbstractDropSource>());
+                        if (!dropSourceMap.containsKey(type)) {
+                            dropSourceMap.put(type, new ArrayList<AbstractDropSource>());
                         }
 
-                        sources.get(type).add(source);
-                        sources.get(type).addAll(parseSets("RewardTable." + typeName, config));
+                        dropSourceMap.get(type).add(dropSource);
+                        dropSourceMap.get(type).addAll(parseSets("RewardTable." + typeName, config));
                     }
                 }
             }
 
-            if (config.getBoolean("System.Hunting.PenalizeDeath", false)) {
-                for (AbstractDropSource source : configureDropSources(DropSourceFactory.createSources(CustomDropType.DEATH_PENALTY.toString(), config), config)) {
-                    if (!sources.containsKey(CustomDropType.DEATH_PENALTY)) {
-                        sources.put(CustomDropType.DEATH_PENALTY, new ArrayList<AbstractDropSource>());
+            if (config.getBoolean("System.Hunting.PenalizeDeath")) {
+                for (AbstractDropSource dropSource : DropSourceFactory.createSources(CustomDropType.DEATH_PENALTY.toString(), config)) {
+                    if (!dropSourceMap.containsKey(CustomDropType.DEATH_PENALTY)) {
+                        dropSourceMap.put(CustomDropType.DEATH_PENALTY, new ArrayList<AbstractDropSource>());
                     }
 
-                    sources.get(CustomDropType.DEATH_PENALTY).add(source);
+                    dropSourceMap.get(CustomDropType.DEATH_PENALTY).add(dropSource);
                 }
             }
 
-            if (config.getBoolean("System.Hunting.PVPReward", false)) {
-                for (AbstractDropSource source : configureDropSources(DropSourceFactory.createSources(CustomDropType.LEGACY_PVP.toString(), config), config)) {
-                    if (!sources.containsKey(CustomDropType.LEGACY_PVP)) {
-                        sources.put(CustomDropType.LEGACY_PVP, new ArrayList<AbstractDropSource>());
+            if (config.getBoolean("System.Hunting.PVPReward")) {
+                for (AbstractDropSource dropSource : DropSourceFactory.createSources(CustomDropType.LEGACY_PVP.toString(), config)) {
+                    if (!dropSourceMap.containsKey(CustomDropType.LEGACY_PVP)) {
+                        dropSourceMap.put(CustomDropType.LEGACY_PVP, new ArrayList<AbstractDropSource>());
                     }
 
-                    sources.get(CustomDropType.LEGACY_PVP).add(source);
+                    dropSourceMap.get(CustomDropType.LEGACY_PVP).add(dropSource);
                 }
             }
         }
 
-        return new CustomDropCategory(sources);
+        return new CustomDropCategory(dropSourceMap);
     }
 }

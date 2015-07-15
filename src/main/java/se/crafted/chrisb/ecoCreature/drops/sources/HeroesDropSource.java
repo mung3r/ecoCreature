@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -19,24 +19,24 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.sources;
 
+import java.util.Collection;
+
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 
-import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
-
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
-import se.crafted.chrisb.ecoCreature.messages.MessageToken;
-import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.HeroesDropType;
+import se.crafted.chrisb.ecoCreature.messages.MessageToken;
+
+import com.herocraftonline.heroes.api.events.HeroChangeLevelEvent;
 
 public class HeroesDropSource extends AbstractDropSource
 {
     public HeroesDropSource(String section, ConfigurationSection config)
     {
         super(section, config);
-        setNoCoinRewardMessage(DefaultMessage.NO_MESSAGE);
     }
 
     @Override
@@ -51,16 +51,18 @@ public class HeroesDropSource extends AbstractDropSource
     }
 
     @Override
-    protected AssembledDrop assembleDrop(Event event)
+    protected Collection<AbstractDrop> collectDrop(Event event)
     {
-        AssembledDrop drop = super.assembleDrop(event);
+        Collection<AbstractDrop> drops = super.collectDrop(event);
 
         if (event instanceof HeroChangeLevelEvent) {
             HeroChangeLevelEvent changeLevelEvent = (HeroChangeLevelEvent) event;
-            drop.addParameter(MessageToken.CLASS, changeLevelEvent.getHeroClass().getName());
+            for (AbstractDrop drop : drops) {
+                drop.addParameter(MessageToken.CLASS, changeLevelEvent.getHeroClass().getName());
+            }
         }
 
-        return drop;
+        return drops;
     }
 
     public static AbstractDropSource createDropSource(String section, ConfigurationSection config)

@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -19,28 +19,11 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.rules;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-
-import se.crafted.chrisb.ecoCreature.messages.Message;
 
 public interface Rule
 {
     boolean isBroken(Event event);
 
-    void handleDrops(Event event);
-
-    Player getKiller(Event event);
-
-    boolean isClearDrops();
-
-    void setClearDrops(boolean clearDrops);
-
-    boolean isClearExpOrbs();
-
-    void setClearExpOrbs(boolean clearExpOrbs);
-
-    Message getMessage();
-
-    void setMessage(Message message);
+    void enforce(Event event);
 }

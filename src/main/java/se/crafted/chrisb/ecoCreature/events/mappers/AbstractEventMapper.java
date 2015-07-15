@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -30,7 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import se.crafted.chrisb.ecoCreature.DropConfigLoader;
-import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
+import se.crafted.chrisb.ecoCreature.drops.ItemDrop;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
@@ -66,7 +66,7 @@ public abstract class AbstractEventMapper implements EventMapper
         return dropConfigLoader;
     }
 
-    protected static void addPlayerSkullToEvent(AssembledDrop drop, Event event)
+    protected static void addPlayerSkullToEvent(ItemDrop drop, Event event)
     {
         if (event instanceof PlayerKilledEvent) {
             PlayerKilledEvent playerKilledEvent = (PlayerKilledEvent) event;

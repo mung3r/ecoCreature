@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -46,7 +46,7 @@ public class GroupGain extends AbstractPlayerGain<String>
         double multiplier = NO_GAIN;
 
         try {
-            String group = DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player.getName());
+            String group = DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player);
             if (group != null) {
                 multiplier = getMultiplier(group.toLowerCase());
             }

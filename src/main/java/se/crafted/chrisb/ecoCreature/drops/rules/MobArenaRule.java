@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -31,14 +31,9 @@ import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
 public class MobArenaRule extends AbstractEntityRule
 {
-    private boolean mobArenaRewards;
+    private final boolean mobArenaRewards;
 
-    public MobArenaRule()
-    {
-        mobArenaRewards = false;
-    }
-
-    public void setMobArenaRewards(boolean mobArenaRewards)
+    public MobArenaRule(boolean mobArenaRewards)
     {
         this.mobArenaRewards = mobArenaRewards;
     }
@@ -57,8 +52,7 @@ public class MobArenaRule extends AbstractEntityRule
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
         if (system != null && system.isConfigurationSection("Hunting")) {
-            MobArenaRule rule = new MobArenaRule();
-            rule.setMobArenaRewards(system.getBoolean("Hunting.MobArenaRewards"));
+            MobArenaRule rule = new MobArenaRule(system.getBoolean("Hunting.MobArenaRewards"));
             rules = new HashMap<>();
             rules.put(MobArenaRule.class, rule);
         }

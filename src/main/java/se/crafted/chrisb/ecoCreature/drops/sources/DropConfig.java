@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -30,15 +31,15 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
-import se.crafted.chrisb.ecoCreature.drops.SpawnerMobTracker;
-import se.crafted.chrisb.ecoCreature.drops.categories.AbstractDropCategory;
 import se.crafted.chrisb.ecoCreature.ecoCreature;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
+import se.crafted.chrisb.ecoCreature.drops.SpawnerMobTag;
+import se.crafted.chrisb.ecoCreature.drops.categories.AbstractDropCategory;
 import se.crafted.chrisb.ecoCreature.drops.gain.PlayerGain;
 import se.crafted.chrisb.ecoCreature.drops.parties.Party;
 
-public class DropConfig implements SpawnerMobTracker
+public class DropConfig implements SpawnerMobTag
 {
     public static final String SPAWNERMOB_TAG_MDID = "ecoCreature.spawnerMob";
     public static final String SPAWNERLOC_TAG_MDID = "ecoCreature.spawnerLoc";
@@ -131,13 +132,13 @@ public class DropConfig implements SpawnerMobTracker
         this.dropCategories = dropCategories;
     }
 
-    public Collection<AssembledDrop> assembleDrops(final Event event)
+    public Collection<AbstractDrop> collectDrops(final Event event)
     {
-        Collection<AssembledDrop> drops = new ArrayList<>();
+        Collection<AbstractDrop> drops = new ArrayList<>();
 
         for (AbstractDropCategory<?> category : dropCategories) {
             for (AbstractDropSource source : category.getDropSources(event)) {
-                drops.addAll(source.assembleDrops(event));
+                drops.addAll(source.collectDrops(event));
             }
         }
 
@@ -159,9 +160,9 @@ public class DropConfig implements SpawnerMobTracker
         return multiplier;
     }
 
-    public Collection<String> getPartyMembers(Player player)
+    public Collection<UUID> getPartyMembers(Player player)
     {
-        Collection<String> players = new ArrayList<>();
+        Collection<UUID> players = new ArrayList<>();
 
         for (Party party : parties) {
             if (party.isShared()) {

@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -21,7 +21,9 @@ package se.crafted.chrisb.ecoCreature.drops.sources;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
@@ -45,5 +47,25 @@ public class EntityDropSource extends AbstractDropSource
         else {
             throw new IllegalArgumentException("Unrecognized event");
         }
+    }
+
+    @Override
+    protected int getLootLevel(Event event)
+    {
+        int lootLevel = 0;
+
+        ItemStack weapon = null;
+        if (event instanceof PlayerKilledEvent) {
+            weapon = ((PlayerKilledEvent) event).getKiller().getItemInHand();
+        }
+        else if (event instanceof EntityKilledEvent) {
+            weapon = ((EntityKilledEvent) event).getKiller().getItemInHand();
+        }
+
+        if (weapon != null) {
+            lootLevel = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+        }
+
+        return lootLevel;
     }
 }

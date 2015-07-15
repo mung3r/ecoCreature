@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -159,8 +159,8 @@ public class DropConfigLoader
         dropConfig.setClearEnchantedDrops(config.getBoolean("System.Hunting.ClearEnchantedDrops", false));
         dropConfig.setClearOnNoDrops(config.getBoolean("System.Hunting.ClearDefaultDrops", true));
         dropConfig.setOverrideDrops(config.getBoolean("System.Hunting.OverrideDrops", true));
-        dropConfig.setNoFarm(config.getBoolean("System.Hunting.NoFarm", false));
-        dropConfig.setNoFarmFire(config.getBoolean("System.Hunting.NoFarmFire", false));
+        dropConfig.setNoFarm(config.getBoolean("System.Hunting.NoFarm"));
+        dropConfig.setNoFarmFire(config.getBoolean("System.Hunting.NoFarmFire"));
 
         dropConfig.setGainMultipliers(loadGainMultipliers(config));
         dropConfig.setParties(loadParties(config));

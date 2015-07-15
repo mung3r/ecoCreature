@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -47,11 +47,6 @@ import se.crafted.chrisb.ecoCreature.drops.rules.TownyRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.UnderSeaLevelRule;
 import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropSourceFactory;
-import se.crafted.chrisb.ecoCreature.messages.CoinMessageDecorator;
-import se.crafted.chrisb.ecoCreature.messages.Message;
-import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
-import se.crafted.chrisb.ecoCreature.messages.MessageToken;
-import se.crafted.chrisb.ecoCreature.messages.NoCoinMessageDecorator;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -59,12 +54,12 @@ import com.google.common.collect.Iterables;
 
 public abstract class AbstractDropCategory<T>
 {
-    private Map<T, Collection<AbstractDropSource>> sources = Collections.emptyMap();
+    private Map<T, Collection<AbstractDropSource>> dropSourceMap = Collections.emptyMap();
 
-    public AbstractDropCategory(Map<T, Collection<AbstractDropSource>> sources)
+    public AbstractDropCategory(Map<T, Collection<AbstractDropSource>> dropSourceMap)
     {
-        if (sources != null) {
-            this.sources = sources;
+        if (dropSourceMap != null) {
+            this.dropSourceMap = dropSourceMap;
         }
     }
 
@@ -95,37 +90,29 @@ public abstract class AbstractDropCategory<T>
 
     private boolean hasDropSource(T type)
     {
-        return type != null && sources.containsKey(type) && !sources.get(type).isEmpty();
+        return type != null && dropSourceMap.containsKey(type) && !dropSourceMap.get(type).isEmpty();
     }
 
     private Collection<AbstractDropSource> getDropSources(T type)
     {
-        Collection<AbstractDropSource> source = Collections.emptyList();
+        Collection<AbstractDropSource> dropSources = Collections.emptyList();
 
-        if (hasDropSource(type)) {
-            source = sources.get(type);
+        if (type != null && hasDropSource(type)) {
+            dropSources = dropSourceMap.get(type);
         }
 
-        if (type != null) {
-            LoggerUtil.getInstance().debugTrue("No reward defined for type: " + type, source.isEmpty());
-        }
-        return source;
+        return dropSources;
     }
 
-    private boolean isNotRuleBroken(final Event event, AbstractDropSource source)
+    private boolean isNotRuleBroken(final Event event, AbstractDropSource dropSource)
     {
-        return !Iterables.any(source.getHuntingRules().values(), new Predicate<Rule>() {
+        return !Iterables.any(dropSource.getHuntingRules().values(), new Predicate<Rule>() {
 
             @Override
             public boolean apply(Rule rule)
             {
                 if (rule.isBroken(event)) {
-                    rule.handleDrops(event);
-
-                    Map<MessageToken, String> parameters = Collections.emptyMap();
-                    MessageHandler message = new MessageHandler(rule.getMessage(), parameters);
-                    message.send(rule.getKiller(event));
-
+                    rule.enforce(event);
                     LoggerUtil.getInstance().debug("Rule " + rule.getClass().getSimpleName() + " broken");
                     return true;
                 }
@@ -137,7 +124,7 @@ public abstract class AbstractDropCategory<T>
 
     protected static Collection<AbstractDropSource> parseSets(String rewardSection, ConfigurationSection config)
     {
-        Collection<AbstractDropSource> sources = new ArrayList<>();
+        Collection<AbstractDropSource> dropSources = new ArrayList<>();
         ConfigurationSection rewardConfig = config.getConfigurationSection(rewardSection);
         ConfigurationSection rewardSets = config.getConfigurationSection("RewardSets");
         Collection<String> sets = rewardConfig.getStringList("Sets");
@@ -151,22 +138,22 @@ public abstract class AbstractDropCategory<T>
                     NumberRange range = parseRange(setName);
                     double percentage = parsePercentage(setName);
 
-                    for (AbstractDropSource setSource : DropSourceFactory.createSetSources(name, rewardSets)) {
-                        setSource.setHuntingRules(huntingRules);
-                        setSource.setRange(range);
-                        setSource.setPercentage(percentage);
-                        sources.add(setSource);
+                    for (AbstractDropSource dropSource : DropSourceFactory.createSetSources(name, rewardSets)) {
+                        dropSource.setHuntingRules(huntingRules);
+                        dropSource.setRange(range);
+                        dropSource.setPercentage(percentage);
+                        dropSources.add(dropSource);
                     }
                 }
             }
         }
 
-        return sources;
+        return dropSources;
     }
 
     private static NumberRange parseRange(String dropString)
     {
-        NumberRange range = new NumberRange(1, 1);
+        NumberRange range = new NumberRange(1);
 
         String[] dropParts = dropString.split(":");
 
@@ -195,37 +182,6 @@ public abstract class AbstractDropCategory<T>
         }
 
         return percentage;
-    }
-
-    protected static Collection<AbstractDropSource> configureDropSources(Collection<AbstractDropSource> sources, ConfigurationSection config)
-    {
-        if (sources != null && config != null) {
-            for (AbstractDropSource source : sources) {
-                source.setIntegerCurrency(config.getBoolean("System.Economy.IntegerCurrency", false));
-                source.setFixedAmount(config.getBoolean("System.Hunting.FixedDrops", false));
-
-                source.setCoinRewardMessage(configureMessage(source.getCoinRewardMessage(), config));
-                source.setCoinPenaltyMessage(configureMessage(source.getCoinPenaltyMessage(), config));
-                source.setNoCoinRewardMessage(configureMessage(source.getNoCoinRewardMessage(), config));
-            }
-        }
-
-        return sources;
-    }
-
-    private static Message configureMessage(Message message, ConfigurationSection config)
-    {
-        if (message != null && config != null) {
-            message.setMessageOutputEnabled(config.getBoolean("System.Messages.Output", true));
-            if (message instanceof CoinMessageDecorator) {
-                ((CoinMessageDecorator) message).setCoinLoggingEnabled(config.getBoolean("System.Messages.LogCoinRewards", true));
-            }
-            if (message instanceof NoCoinMessageDecorator) {
-                ((NoCoinMessageDecorator) message).setNoRewardMessageEnabled(config.getBoolean("System.Messages.NoReward", false));
-            }
-        }
-
-        return message;
     }
 
     protected static Map<Class<? extends AbstractRule>, Rule> loadHuntingRules(ConfigurationSection config)

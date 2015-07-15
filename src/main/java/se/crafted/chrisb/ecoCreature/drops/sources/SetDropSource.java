@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -21,10 +21,12 @@ package se.crafted.chrisb.ecoCreature.drops.sources;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
@@ -56,6 +58,33 @@ public class SetDropSource extends AbstractDropSource
         }
 
         return location;
+    }
+
+    @Override
+    protected int getLootLevel(Event event)
+    {
+        int lootLevel = 0;
+
+        if (event instanceof EntityKilledEvent) {
+            ItemStack weapon = ((EntityKilledEvent) event).getKiller().getItemInHand();
+            if (weapon != null) {
+                lootLevel = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+            }
+        }
+        else if (event instanceof PlayerKilledEvent) {
+            ItemStack weapon = ((PlayerKilledEvent) event).getKiller().getItemInHand();
+            if (weapon != null) {
+                lootLevel = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+            }
+        }
+        else if (event instanceof BlockBreakEvent) {
+            ItemStack weapon = ((BlockBreakEvent) event).getPlayer().getItemInHand();
+            if (weapon != null) {
+                lootLevel = weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
+            }
+        }
+
+        return lootLevel;
     }
 
     @Override

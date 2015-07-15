@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -23,18 +23,16 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 
-import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
-
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
-import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.McMMODropType;
+
+import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 
 public class McMMODropSource extends AbstractDropSource
 {
     public McMMODropSource(String section, ConfigurationSection config)
     {
         super(section, config);
-        setNoCoinRewardMessage(DefaultMessage.NO_MESSAGE);
     }
 
     @Override

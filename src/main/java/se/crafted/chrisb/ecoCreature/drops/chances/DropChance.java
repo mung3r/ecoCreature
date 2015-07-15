@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -17,14 +17,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops;
+package se.crafted.chrisb.ecoCreature.drops.chances;
 
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.Location;
 
-public interface SpawnerMobTracker
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
+
+public interface DropChance extends Chance
 {
-    void tagSpawnerMob(CreatureSpawnEvent event);
-
-    boolean isSpawnerMob(LivingEntity entity);
+    AbstractDrop nextDrop(String name, Location location, int lootLevel);
 }

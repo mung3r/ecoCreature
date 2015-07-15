@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops.models;
+package se.crafted.chrisb.ecoCreature.drops.chances;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,24 +25,27 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.apache.commons.lang.math.NumberRange;
-import org.bukkit.Material;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.EntityType;
 
-public class EntityDrop extends AbstractDrop
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
+import se.crafted.chrisb.ecoCreature.drops.CustomEntityDrop;
+import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomEntityType;
+
+public class CustomEntityChance extends AbstractChance implements DropChance
 {
-    private final EntityType type;
+    private final CustomEntityType type;
 
-    public EntityDrop(EntityType type, NumberRange range, double percentage)
+    public CustomEntityChance(CustomEntityType type, NumberRange range, double percentage)
     {
         this.type = type;
         setRange(range);
         setPercentage(percentage);
     }
 
-    public Collection<EntityType> nextEntityTypes()
+    public Collection<CustomEntityType> nextEntityTypes()
     {
-        Collection<EntityType> types = new ArrayList<>();
+        Collection<CustomEntityType> types = new ArrayList<>();
         int amount = nextIntAmount();
 
         for (int i = 0; i < amount; i++) {
@@ -52,95 +55,80 @@ public class EntityDrop extends AbstractDrop
         return types;
     }
 
-    public static Collection<AbstractDrop> parseConfig(ConfigurationSection config)
+    @Override
+    public AbstractDrop nextDrop(String name, Location location, int lootLevel)
     {
-        Collection<AbstractDrop> drops = Collections.emptyList();
-
-        if (config != null) {
-            drops = new ArrayList<>();
-
-            if (config.getList("Drops") != null) {
-                Collection<String> dropsList = config.getStringList("Drops");
-                drops.addAll(parseDrops(dropsList));
-            }
-            else {
-                drops.addAll(parseDrops(config.getString("Drops")));
-            }
-
-            // NOTE: backward compatibility
-            AbstractDrop exp = parseExpConfig(config);
-            if (exp != null) {
-                drops.add(exp);
-            }
-        }
-
-        return drops;
-    }
-
-    private static AbstractDrop parseExpConfig(ConfigurationSection config)
-    {
-        AbstractDrop exp = null;
-
-        if (config != null && config.contains("ExpMin") && config.contains("ExpMax") && config.contains("ExpPercent")) {
-            exp = new EntityDrop(EntityType.EXPERIENCE_ORB, new NumberRange(config.getInt("ExpMin", 0), config.getInt("ExpMax", 0)), config.getDouble(
-                    "ExpPercent", 0.0D));
-        }
-
-        return exp;
-    }
-
-    private static Collection<AbstractDrop> parseDrops(String dropsString)
-    {
-        Collection<AbstractDrop> drops = Collections.emptyList();
-
-        if (dropsString != null && !dropsString.isEmpty()) {
-            drops = parseDrops(Arrays.asList(dropsString.split(";")));
-        }
-
-        return drops;
-    }
-
-    private static Collection<AbstractDrop> parseDrops(Collection<String> dropsList)
-    {
-        Collection<AbstractDrop> drops = new ArrayList<>();
-
-        for (String dropString : dropsList) {
-            AbstractDrop drop = createEntityDrop(dropString);
-            if (drop != null) {
-                drops.add(drop);
-            }
-        }
-
-        return drops;
-    }
-
-    private static AbstractDrop createEntityDrop(String dropString)
-    {
-        AbstractDrop drop = null;
-
-        EntityType type = parseType(dropString);
-        if (type != null) {
-            drop = new EntityDrop(type, parseRange(dropString), parsePercentage(dropString));
-        }
-
+        CustomEntityDrop drop = new CustomEntityDrop(name, location);
+        drop.setCustomEntityTypes(nextEntityTypes());
         return drop;
     }
 
-    protected static boolean isNotAmbiguous(EntityType type)
+    public static Collection<CustomEntityChance> parseConfig(ConfigurationSection config)
     {
-        return type != null && Material.matchMaterial(type.getName()) == null;
+        Collection<CustomEntityChance> chances = Collections.emptyList();
+
+        if (config != null) {
+            chances = new ArrayList<>();
+
+            if (config.getList("Drops") != null) {
+                Collection<String> dropsList = config.getStringList("Drops");
+                chances.addAll(parseChances(dropsList));
+            }
+            else {
+                chances.addAll(parseChances(config.getString("Drops")));
+            }
+        }
+
+        return chances;
     }
 
-    protected static EntityType parseType(String dropString)
+    private static Collection<CustomEntityChance> parseChances(String dropsString)
     {
-        EntityType type = null;
+        Collection<CustomEntityChance> chances = Collections.emptyList();
+
+        if (dropsString != null && !dropsString.isEmpty()) {
+            chances = parseChances(Arrays.asList(dropsString.split(";")));
+        }
+
+        return chances;
+    }
+
+    private static Collection<CustomEntityChance> parseChances(Collection<String> dropsList)
+    {
+        Collection<CustomEntityChance> chances = new ArrayList<>();
+
+        for (String dropString : dropsList) {
+            CustomEntityChance chance = createEntityChance(dropString);
+            if (chance != null) {
+                chances.add(chance);
+            }
+        }
+
+        return chances;
+    }
+
+    private static CustomEntityChance createEntityChance(String dropString)
+    {
+        CustomEntityChance chance = null;
+
+        CustomEntityType type = parseType(dropString);
+        if (type != null && type.isValid()) {
+            chance = new CustomEntityChance(type, parseRange(dropString), parsePercentage(dropString));
+        }
+
+        return chance;
+    }
+
+    protected static CustomEntityType parseType(String dropString)
+    {
+        CustomEntityType type = null;
 
         if (dropString != null) {
             String[] dropParts = dropString.split(":");
             String[] itemParts = dropParts[0].split(",");
             String[] itemSubParts = itemParts[0].split("\\.");
 
-            type = EntityType.fromName(itemSubParts[0]);
+            type = CustomEntityType.fromName(itemSubParts[0]);
         }
 
         return type;

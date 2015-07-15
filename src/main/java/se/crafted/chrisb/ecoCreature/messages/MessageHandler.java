@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -20,8 +20,10 @@
 package se.crafted.chrisb.ecoCreature.messages;
 
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
@@ -39,22 +41,22 @@ public class MessageHandler
 
     public void send(Player player)
     {
-        send(player.getName());
+        send(player.getUniqueId());
     }
 
-    public void send(String playerName)
+    public void send(UUID playerId)
     {
-        String assembledMessage = message.getAssembledMessage(parameters);
+        String assembledMessage = message.assembleMessage(parameters);
 
         if (assembledMessage != null && assembledMessage.length() > 0) {
-            if (message.isMessageOutputEnabled()) {
-                Player player = Bukkit.getPlayer(playerName);
-                if (player != null) {
-                    player.sendMessage(assembledMessage);
+            if (message.isEnabled()) {
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerId);
+                if (offlinePlayer.isOnline()) {
+                    offlinePlayer.getPlayer().sendMessage(assembledMessage);
                 }
             }
 
-            if (message instanceof CoinMessageDecorator && ((CoinMessageDecorator) message).isCoinLoggingEnabled()) {
+            if (message instanceof CoinMessageDecorator && ((CoinMessageDecorator) message).isLoggingEnabled()) {
                 LoggerUtil.getInstance().info(removeColorCodes(String.format("%s: %s", getAwardedPlayerName(), assembledMessage)));
             }
         }

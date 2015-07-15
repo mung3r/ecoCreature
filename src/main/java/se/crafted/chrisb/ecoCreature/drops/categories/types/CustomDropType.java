@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -22,6 +22,8 @@ package se.crafted.chrisb.ecoCreature.drops.categories.types;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 
 public enum CustomDropType
 {
@@ -55,7 +57,7 @@ public enum CustomDropType
     public static CustomDropType fromName(String name)
     {
         CustomDropType dropType = INVALID;
-        if (name != null && NAME_MAP.containsKey(name.toLowerCase())) {
+        if (StringUtils.isNotEmpty(name) && NAME_MAP.containsKey(name.toLowerCase())) {
             dropType = NAME_MAP.get(name.toLowerCase());
         }
         return dropType;

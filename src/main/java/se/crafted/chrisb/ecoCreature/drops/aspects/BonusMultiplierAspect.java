@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -24,31 +24,30 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
-import se.crafted.chrisb.ecoCreature.drops.models.Bonus;
 
 @Aspect
-public class BonusChanceAspect
+public class BonusMultiplierAspect
 {
-    private static Bonus bonus = new Bonus(1.0, 0);
+    private static BonusMultiplier bonusMultiplier = new BonusMultiplier(1.0, 0);
 
-    @Around("execution(double se.crafted.chrisb.ecoCreature.drops.models.AbstractDrop+.getPercentage())")
-    public double applyBonusMultiplierAspect(ProceedingJoinPoint pjp) throws Throwable
+    @Around("execution(double se.crafted.chrisb.ecoCreature.drops.chances.AbstractChance+.getChance())")
+    public double applyBonusMultiplier(ProceedingJoinPoint pjp) throws Throwable
     {
-        double percentage = (double) pjp.proceed();
-        if (bonus.isValid()) {
-            LoggerUtil.getInstance().debug("applying bonus multiplier " + bonus.getMultiplier() + " to " + percentage);
-            percentage *=  bonus.getMultiplier();
+        double chance = (double) pjp.proceed();
+        if (bonusMultiplier.isValid()) {
+            LoggerUtil.getInstance().debug("applying bonus multiplier " + bonusMultiplier.getMultiplier() + " to " + chance);
+            chance *=  bonusMultiplier.getMultiplier();
         }
-        return percentage;
+        return chance;
     }
 
-    public static synchronized Bonus getBonus()
+    public static synchronized BonusMultiplier getBonusMultiplier()
     {
-        return bonus;
+        return bonusMultiplier;
     }
 
-    public static synchronized void setBonus(Bonus bonus)
+    public static synchronized void setBonusMultiplier(BonusMultiplier bonusMultiplier)
     {
-        BonusChanceAspect.bonus = bonus;
+        BonusMultiplierAspect.bonusMultiplier = bonusMultiplier;
     }
 }

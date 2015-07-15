@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -17,28 +17,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.crafted.chrisb.ecoCreature.drops.models;
+package se.crafted.chrisb.ecoCreature.drops.chances;
 
 import java.util.Random;
 
 import org.apache.commons.lang.math.NumberRange;
 
-public abstract class AbstractDrop implements Drop
+public abstract class AbstractChance implements Chance
 {
     private NumberRange range;
     private double percentage;
     private final Random random;
 
-    public AbstractDrop()
+    public AbstractChance()
     {
-        range = new NumberRange(1, 1);
+        range = new NumberRange(1);
         percentage = 100.0D;
         random = new Random();
-    }
-
-    public NumberRange getRange()
-    {
-        return range;
     }
 
     public void setRange(NumberRange range)
@@ -46,36 +41,36 @@ public abstract class AbstractDrop implements Drop
         this.range = range;
     }
 
-    public double getPercentage()
-    {
-        return percentage;
-    }
-
     public void setPercentage(double percentage)
     {
         this.percentage = percentage;
     }
 
-    @Override
-    public boolean nextWinner()
+    public double getChance()
     {
-        return random.nextDouble() < getPercentage() / 100.0D;
+        return percentage / 100.0D;
     }
 
     @Override
-    public int nextIntAmount()
+    public boolean nextWinner()
+    {
+        return random.nextDouble() < getChance();
+    }
+
+    @Override
+    public int nextIntAmount(int lootLevel)
     {
         int amount;
 
         if (nextWinner()) {
-            if (getRange().getMinimumInteger() == getRange().getMaximumInteger()) {
-                amount = getRange().getMinimumInteger();
+            if (range.getMinimumInteger() == range.getMaximumInteger()) {
+                amount = range.getMinimumInteger();
             }
-            else if (getRange().getMinimumInteger() > getRange().getMaximumInteger()) {
-                amount = getRange().getMinimumInteger();
+            else if (range.getMinimumInteger() > range.getMaximumInteger()) {
+                amount = range.getMinimumInteger();
             }
             else {
-                amount = getRange().getMinimumInteger() + random.nextInt(getRange().getMaximumInteger() - getRange().getMinimumInteger() + 1);
+                amount = range.getMinimumInteger() + random.nextInt(range.getMaximumInteger() + lootLevel - range.getMinimumInteger() + 1);
             }
         }
         else {
@@ -86,9 +81,15 @@ public abstract class AbstractDrop implements Drop
     }
 
     @Override
-    public int getFixedAmount()
+    public int nextIntAmount()
     {
-        return getRange().getMinimumInteger() > getRange().getMaximumInteger() ? getRange().getMinimumInteger() : getRange().getMaximumInteger();
+        return nextIntAmount(0);
+    }
+
+    @Override
+    public int nextFixedAmount()
+    {
+        return range.getMinimumInteger() > range.getMaximumInteger() ? range.getMinimumInteger() : range.getMaximumInteger();
     }
 
     @Override
@@ -97,14 +98,14 @@ public abstract class AbstractDrop implements Drop
         double amount;
 
         if (nextWinner()) {
-            if (getRange().getMinimumDouble() == getRange().getMaximumDouble()) {
-                amount = getRange().getMaximumDouble();
+            if (range.getMinimumDouble() == range.getMaximumDouble()) {
+                amount = range.getMaximumDouble();
             }
-            else if (getRange().getMinimumDouble() > getRange().getMaximumDouble()) {
-                amount = getRange().getMinimumDouble();
+            else if (range.getMinimumDouble() > range.getMaximumDouble()) {
+                amount = range.getMinimumDouble();
             }
             else {
-                amount = getRange().getMinimumDouble() + random.nextDouble() * (getRange().getMaximumDouble() - getRange().getMinimumDouble());
+                amount = range.getMinimumDouble() + random.nextDouble() * (range.getMaximumDouble() - range.getMinimumDouble());
             }
         }
         else {

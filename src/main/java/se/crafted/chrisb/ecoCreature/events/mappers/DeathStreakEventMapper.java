@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -26,7 +26,8 @@ import org.bukkit.event.Event;
 import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
 
 import se.crafted.chrisb.ecoCreature.DropConfigLoader;
-import se.crafted.chrisb.ecoCreature.drops.AssembledDrop;
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
+import se.crafted.chrisb.ecoCreature.drops.CoinDrop;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 
@@ -59,12 +60,14 @@ public class DeathStreakEventMapper extends AbstractEventMapper
         final int deaths = event.getDeaths();
         DropConfig dropConfig = getDropConfig(player.getWorld());
 
-        Collection<AssembledDrop> drops = Collections2.transform(dropConfig.assembleDrops(event), new Function<AssembledDrop, AssembledDrop>() {
+        Collection<AbstractDrop> drops = Collections2.transform(dropConfig.collectDrops(event), new Function<AbstractDrop, AbstractDrop>() {
 
             @Override
-            public AssembledDrop apply(AssembledDrop drop)
+            public AbstractDrop apply(AbstractDrop drop)
             {
-                drop.setGain(deaths);
+                if (drop instanceof CoinDrop) {
+                    ((CoinDrop) drop).setGain(deaths);
+                }
                 return drop;
             }
         });

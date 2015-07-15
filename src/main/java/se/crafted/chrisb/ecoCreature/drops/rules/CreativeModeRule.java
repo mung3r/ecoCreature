@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -31,14 +31,9 @@ import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
 public class CreativeModeRule extends AbstractEntityRule
 {
-    private boolean creativeModeRewards;
+    private final boolean creativeModeRewards;
 
-    public CreativeModeRule()
-    {
-        creativeModeRewards = false;
-    }
-
-    public void setCreativeModeRewards(boolean creativeModeRewards)
+    public CreativeModeRule(boolean creativeModeRewards)
     {
         this.creativeModeRewards = creativeModeRewards;
     }
@@ -57,8 +52,7 @@ public class CreativeModeRule extends AbstractEntityRule
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
         if (system != null && system.isConfigurationSection("Hunting")) {
-            CreativeModeRule rule = new CreativeModeRule();
-            rule.setCreativeModeRewards(system.getBoolean("Hunting.CreativeModeRewards", false));
+            CreativeModeRule rule = new CreativeModeRule(system.getBoolean("Hunting.CreativeModeRewards"));
             rules = new HashMap<>();
             rules.put(CreativeModeRule.class, rule);
         }

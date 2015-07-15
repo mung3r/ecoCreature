@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -35,7 +35,7 @@ public abstract class AbstractPlayerRule extends AbstractRule
     protected abstract boolean isBroken(PlayerKilledEvent event);
 
     @Override
-    public void handleDrops(Event event)
+    public void enforce(Event event)
     {
         if (event instanceof PlayerKilledEvent) {
             if (isClearDrops()) {
@@ -45,6 +45,8 @@ public abstract class AbstractPlayerRule extends AbstractRule
                 ((PlayerKilledEvent) event).setDroppedExp(0);
             }
         }
+
+        super.enforce(event);
     }
 
     @Override

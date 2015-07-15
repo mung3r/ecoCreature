@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -22,6 +22,9 @@ package se.crafted.chrisb.ecoCreature.drops.parties;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -33,16 +36,21 @@ import com.herocraftonline.heroes.characters.Hero;
 
 public class HeroesParty extends AbstractParty
 {
-    @Override
-    public Collection<String> getMembers(Player player)
+    public HeroesParty(boolean shared)
     {
-        Collection<String> party = Collections.emptyList();
+        super(shared);
+    }
+
+    @Override
+    public Set<UUID> getMembers(Player player)
+    {
+        Set<UUID> party = Collections.emptySet();
 
         if (DependencyUtils.hasHeroes() && DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {
-            party = new ArrayList<>();
+            party = new HashSet<>();
 
             for (Hero hero : DependencyUtils.getHeroes().getCharacterManager().getHero(player).getParty().getMembers()) {
-                party.add(hero.getPlayer().getName());
+                party.add(hero.getPlayer().getUniqueId());
             }
         }
         LoggerUtil.getInstance().debug("Party size: " + party.size());
@@ -55,8 +63,7 @@ public class HeroesParty extends AbstractParty
         Collection<Party> parties = Collections.emptyList();
 
         if (config != null) {
-            HeroesParty party = new HeroesParty();
-            party.setShared(config.getBoolean("InParty.Share", false));
+            HeroesParty party = new HeroesParty(config.getBoolean("InParty.Share"));
             parties = new ArrayList<>();
             parties.add(party);
         }

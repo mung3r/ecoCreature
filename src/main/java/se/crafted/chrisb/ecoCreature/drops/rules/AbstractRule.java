@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -19,10 +19,16 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.rules;
 
+import java.util.Collections;
+import java.util.Map;
+
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.messages.DefaultMessage;
 import se.crafted.chrisb.ecoCreature.messages.Message;
+import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
+import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 
 public abstract class AbstractRule implements Rule
 {
@@ -34,43 +40,44 @@ public abstract class AbstractRule implements Rule
     {
         clearDrops = false;
         clearExpOrbs = false;
-        message = DefaultMessage.NO_MESSAGE;
+        message = DefaultMessage.EMPTY_MESSAGE;
     }
 
-    @Override
     public Message getMessage()
     {
         return message;
     }
 
-    @Override
     public void setMessage(Message message)
     {
         this.message = message;
     }
 
     @Override
-    public abstract void handleDrops(Event event);
+    public void enforce(Event event)
+    {
+        Map<MessageToken, String> parameters = Collections.emptyMap();
+        MessageHandler handler = new MessageHandler(message, parameters);
+        handler.send(getKiller(event));
+    }
 
-    @Override
+    public abstract Player getKiller(Event event);
+
     public boolean isClearDrops()
     {
         return clearDrops;
     }
 
-    @Override
     public void setClearDrops(boolean clearDrops)
     {
         this.clearDrops = clearDrops;
     }
 
-    @Override
     public boolean isClearExpOrbs()
     {
         return clearExpOrbs;
     }
 
-    @Override
     public void setClearExpOrbs(boolean clearExpOrbs)
     {
         this.clearExpOrbs = clearExpOrbs;

@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -37,9 +37,9 @@ import se.crafted.chrisb.ecoCreature.drops.categories.types.StreakDropType;
 
 public class StreakDropCategory extends AbstractDropCategory<StreakDropType>
 {
-    public StreakDropCategory(Map<StreakDropType, Collection<AbstractDropSource>> sources)
+    public StreakDropCategory(Map<StreakDropType, Collection<AbstractDropSource>> dropSourceMap)
     {
-        super(sources);
+        super(dropSourceMap);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class StreakDropCategory extends AbstractDropCategory<StreakDropType>
 
     public static AbstractDropCategory<StreakDropType> parseConfig(ConfigurationSection config)
     {
-        Map<StreakDropType, Collection<AbstractDropSource>> sources = new HashMap<>();
+        Map<StreakDropType, Collection<AbstractDropSource>> dropSourceMap = new HashMap<>();
         ConfigurationSection rewardTable = config.getConfigurationSection("RewardTable");
 
         if (rewardTable != null) {
@@ -88,19 +88,19 @@ public class StreakDropCategory extends AbstractDropCategory<StreakDropType>
                 StreakDropType type = StreakDropType.fromName(typeName);
 
                 if (type.isValid()) {
-                    for (AbstractDropSource source : configureDropSources(DropSourceFactory.createSources("RewardTable." + typeName, config), config)) {
+                    for (AbstractDropSource dropSource : DropSourceFactory.createSources("RewardTable." + typeName, config)) {
 
-                        if (!sources.containsKey(type)) {
-                            sources.put(type, new ArrayList<AbstractDropSource>());
+                        if (!dropSourceMap.containsKey(type)) {
+                            dropSourceMap.put(type, new ArrayList<AbstractDropSource>());
                         }
 
-                        sources.get(type).add(source);
-                        sources.get(type).addAll(parseSets("RewardTable." + typeName, config));
+                        dropSourceMap.get(type).add(dropSource);
+                        dropSourceMap.get(type).addAll(parseSets("RewardTable." + typeName, config));
                     }
                 }
             }
         }
 
-        return new StreakDropCategory(sources);
+        return new StreakDropCategory(dropSourceMap);
     }
 }

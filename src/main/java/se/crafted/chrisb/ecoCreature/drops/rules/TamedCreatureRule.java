@@ -1,7 +1,7 @@
 /*
  * This file is part of ecoCreature.
  *
- * Copyright (c) 2011-2014, R. Ramos <http://github.com/mung3r/>
+ * Copyright (c) 2011-2015, R. Ramos <http://github.com/mung3r/>
  * ecoCreature is licensed under the GNU Lesser General Public License.
  *
  * ecoCreature is free software: you can redistribute it and/or modify
@@ -30,14 +30,9 @@ import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
 public class TamedCreatureRule extends AbstractEntityRule
 {
-    private boolean wolverineMode;
+    private final boolean wolverineMode;
 
-    public TamedCreatureRule()
-    {
-        wolverineMode = true;
-    }
-
-    public void setWolverineMode(boolean wolverineMode)
+    public TamedCreatureRule(boolean wolverineMode)
     {
         this.wolverineMode = wolverineMode;
     }
@@ -56,8 +51,7 @@ public class TamedCreatureRule extends AbstractEntityRule
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
         if (system != null && system.isConfigurationSection("Hunting")) {
-            TamedCreatureRule rule = new TamedCreatureRule();
-            rule.setWolverineMode(system.getBoolean("Hunting.WolverineMode", true));
+            TamedCreatureRule rule = new TamedCreatureRule(system.getBoolean("Hunting.WolverineMode", true));
             rules = new HashMap<>();
             rules.put(TamedCreatureRule.class, rule);
         }
