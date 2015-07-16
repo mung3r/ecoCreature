@@ -387,15 +387,15 @@ public class ItemChance extends AbstractChance implements DropChance
         String[] dropParts = dropString.split(":");
         String[] amountRange = dropParts[1].split("-");
 
-        int min = 0;
-        int max;
+        double min = 0;
+        double max;
 
         if (amountRange.length == 2) {
-            min = Integer.parseInt(amountRange[0]);
-            max = Integer.parseInt(amountRange[1]);
+            min = Double.parseDouble(amountRange[0]);
+            max = Double.parseDouble(amountRange[1]);
         }
         else {
-            max = Integer.parseInt(dropParts[1]);
+            max = Double.parseDouble(dropParts[1]);
         }
 
         return new NumberRange(min, max);
