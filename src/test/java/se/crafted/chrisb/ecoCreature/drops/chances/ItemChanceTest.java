@@ -41,7 +41,7 @@ public class ItemChanceTest
 
         for (int i = 0; i < samples.intValue(); i++) {
             ItemStack stack = chance.nextItemStack(0);
-            if (Material.AIR.equals(stack.getData().getItemType())) {
+            if (stack.getAmount() < 1) {
                 continue;
             }
             amount += stack.getAmount();

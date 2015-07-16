@@ -156,31 +156,33 @@ public class ItemChance extends AbstractChance implements DropChance
     {
         ItemStack itemStack = createItemStack(fixedAmount ? nextFixedAmount() : nextIntAmount(lootLevel));
 
-        itemStack.addUnsafeEnchantments(EnchantmentChance.nextEnchantments(enchantmentChances));
-
-        if (!attributeChances.isEmpty()) {
-            itemStack = Attributes.apply(itemStack, AttributeChance.nextAttributes(attributeChances), true);
-
-            List<String> lore = new ArrayList<>();
-
-            for (Attribute attribute : Attributes.fromStack(itemStack)) {
-                Map<MessageToken, String> parameters = new HashMap<>();
-                parameters.put(MessageToken.AMOUNT, String.format("%+.1f", attribute.getAmount()));
-                Message message = AttributeChance.LORE_MAP.get(attribute.getType());
-                lore.add(message.assembleMessage(parameters));
+        if (itemStack.getAmount() > 0) {
+            itemStack.addUnsafeEnchantments(EnchantmentChance.nextEnchantments(enchantmentChances));
+    
+            if (!attributeChances.isEmpty()) {
+                itemStack = Attributes.apply(itemStack, AttributeChance.nextAttributes(attributeChances), true);
+    
+                List<String> lore = new ArrayList<>();
+    
+                for (Attribute attribute : Attributes.fromStack(itemStack)) {
+                    Map<MessageToken, String> parameters = new HashMap<>();
+                    parameters.put(MessageToken.AMOUNT, String.format("%+.1f", attribute.getAmount()));
+                    Message message = AttributeChance.LORE_MAP.get(attribute.getType());
+                    lore.add(message.assembleMessage(parameters));
+                }
+    
+                ItemMeta itemMeta = itemStack.getItemMeta();
+                itemMeta.setLore(lore);
+                itemStack.setItemMeta(itemMeta);
             }
-
-            ItemMeta itemMeta = itemStack.getItemMeta();
-            itemMeta.setLore(lore);
-            itemStack.setItemMeta(itemMeta);
-        }
-
-        if (unbreakable) {
-            itemStack = ItemUtils.setUnbreakable(itemStack);
-        }
-
-        if (hideFlags) {
-            itemStack = ItemUtils.setHideFlags(itemStack);
+    
+            if (unbreakable) {
+                itemStack = ItemUtils.setUnbreakable(itemStack);
+            }
+    
+            if (hideFlags) {
+                itemStack = ItemUtils.setHideFlags(itemStack);
+            }
         }
 
         return itemStack;
