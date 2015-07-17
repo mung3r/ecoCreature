@@ -80,7 +80,7 @@ public class BookChance extends ItemChance
     {
         ItemStack itemStack = super.nextItemStack(lootLevel);
 
-        if (!Material.AIR.equals(itemStack.getType()) && itemStack.getItemMeta() instanceof BookMeta) {
+        if (itemStack.getItemMeta() instanceof BookMeta) {
             BookMeta bookMeta = (BookMeta) itemStack.getItemMeta();
             bookMeta.setTitle(title);
             bookMeta.setAuthor(author);

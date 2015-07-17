@@ -76,7 +76,7 @@ public class ItemDrop extends AbstractDrop
         }
 
         for (ItemStack stack : getItems()) {
-            if (Material.AIR.equals(stack.getType())) {
+            if (stack.getAmount() < 1) {
                 continue;
             }
 

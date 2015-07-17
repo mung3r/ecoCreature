@@ -154,62 +154,58 @@ public class ItemChance extends AbstractChance implements DropChance
 
     public ItemStack nextItemStack(int lootLevel)
     {
-        if (material != null) {
-            int dropAmount = fixedAmount ? nextFixedAmount() : nextIntAmount(lootLevel);
+        ItemStack itemStack = createItemStack(fixedAmount ? nextFixedAmount() : nextIntAmount(lootLevel));
 
-            if (dropAmount > 0) {
-                ItemStack itemStack;
-                if (data == null && durability == null) {
-                    itemStack = new ItemStack(material, dropAmount);
+        if (itemStack.getAmount() > 0) {
+            itemStack.addUnsafeEnchantments(EnchantmentChance.nextEnchantments(enchantmentChances));
+    
+            if (!attributeChances.isEmpty()) {
+                itemStack = Attributes.apply(itemStack, AttributeChance.nextAttributes(attributeChances), true);
+    
+                List<String> lore = new ArrayList<>();
+    
+                for (Attribute attribute : Attributes.fromStack(itemStack)) {
+                    Map<MessageToken, String> parameters = new HashMap<>();
+                    parameters.put(MessageToken.AMOUNT, String.format("%+.1f", attribute.getAmount()));
+                    Message message = AttributeChance.LORE_MAP.get(attribute.getType());
+                    lore.add(message.assembleMessage(parameters));
                 }
-                else {
-                    MaterialData materialData = data == null ? new MaterialData(material) : new MaterialData(material, data);
-                    itemStack = materialData.toItemStack(dropAmount);
-                    if (durability != null) {
-                        itemStack.setDurability(durability);
-                    }
-                }
+    
+                ItemMeta itemMeta = itemStack.getItemMeta();
+                itemMeta.setLore(lore);
+                itemStack.setItemMeta(itemMeta);
+            }
+    
+            if (unbreakable) {
+                itemStack = ItemUtils.setUnbreakable(itemStack);
+            }
+    
+            if (hideFlags) {
+                itemStack = ItemUtils.setHideFlags(itemStack);
+            }
+        }
 
-                itemStack.addUnsafeEnchantments(EnchantmentChance.nextEnchantments(enchantmentChances));
-                if (!attributeChances.isEmpty()) {
-                    List<Attribute> attributes = AttributeChance.nextAttributes(attributeChances);
-                    itemStack = Attributes.apply(itemStack, attributes, true);
-                    setItemLore(itemStack, createAttributeLore(attributes));
-                }
-                if (unbreakable) {
-                    itemStack = ItemUtils.setUnbreakable(itemStack);
-                }
-                if (hideFlags) {
-                    itemStack = ItemUtils.setHideFlags(itemStack);
-                }
+        return itemStack;
+    }
 
-                if (itemStack.getAmount() > 0) {
-                    return itemStack;
+    private ItemStack createItemStack(int dropAmount)
+    {
+        ItemStack itemStack = new ItemStack(Material.AIR, 0);
+
+        if (dropAmount > 0 && material != null) {
+            if (data == null && durability == null) {
+                itemStack = new ItemStack(material, dropAmount);
+            }
+            else {
+                MaterialData materialData = data == null ? new MaterialData(material) : new MaterialData(material, data);
+                itemStack = materialData.toItemStack(dropAmount);
+                if (durability != null) {
+                    itemStack.setDurability(durability);
                 }
             }
         }
-        return new ItemStack(Material.AIR, 0);
-    }
 
-    protected List<String> createAttributeLore(List<Attribute> attributes)
-    {
-        List<String> lore = new ArrayList<>();
-
-        for (Attribute attribute : attributes) {
-            Map<MessageToken, String> parameters = new HashMap<>();
-            parameters.put(MessageToken.AMOUNT, String.format("%+.1f", attribute.getAmount()));
-            Message message = AttributeChance.LORE_MAP.get(attribute.getType());
-            lore.add(message.assembleMessage(parameters));
-        }
-
-        return lore;
-    }
-
-    protected void setItemLore(ItemStack itemStack, List<String> lore)
-    {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setLore(lore);
-        itemStack.setItemMeta(itemMeta);
+        return itemStack;
     }
 
     @Override
@@ -393,15 +389,15 @@ public class ItemChance extends AbstractChance implements DropChance
         String[] dropParts = dropString.split(":");
         String[] amountRange = dropParts[1].split("-");
 
-        int min = 0;
-        int max;
+        double min = 0;
+        double max;
 
         if (amountRange.length == 2) {
-            min = Integer.parseInt(amountRange[0]);
-            max = Integer.parseInt(amountRange[1]);
+            min = Double.parseDouble(amountRange[0]);
+            max = Double.parseDouble(amountRange[1]);
         }
         else {
-            max = Integer.parseInt(dropParts[1]);
+            max = Double.parseDouble(dropParts[1]);
         }
 
         return new NumberRange(min, max);

@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.DropConfigLoader;
-import se.crafted.chrisb.ecoCreature.drops.sources.DropConfig;
+import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 
 import com.google.common.collect.Lists;
@@ -53,8 +53,8 @@ public class HeroesEventMapper extends AbstractEventMapper
     private Collection<DropEvent> createDropEvents(HeroChangeLevelEvent event)
     {
         Player player = event.getHero().getPlayer();
-        DropConfig dropConfig = getDropConfig(player.getWorld());
+        Collection<AbstractDrop> drops = getDropConfig(player.getWorld()).collectDrops(event);
 
-        return Lists.newArrayList(new DropEvent(player, dropConfig.collectDrops(event)));
+        return drops.isEmpty() ? EMPTY_COLLECTION : Lists.newArrayList(new DropEvent(player, drops));
     }
 }

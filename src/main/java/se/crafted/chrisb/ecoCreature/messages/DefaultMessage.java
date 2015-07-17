@@ -38,7 +38,7 @@ public class DefaultMessage implements Message
 
     public DefaultMessage(String template, boolean enabled)
     {
-        this.template = template;
+        this.template = convertTemplate(template);
         this.enabled = enabled;
     }
 
