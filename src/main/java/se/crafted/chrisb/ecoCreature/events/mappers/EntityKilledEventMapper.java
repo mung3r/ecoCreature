@@ -112,6 +112,6 @@ public class EntityKilledEventMapper extends AbstractEventMapper
             }
         });
 
-        return Lists.newArrayList(new DropEvent(killer, drops));
+        return drops.isEmpty() ? EMPTY_COLLECTION : Lists.newArrayList(new DropEvent(killer, drops));
     }
 }
