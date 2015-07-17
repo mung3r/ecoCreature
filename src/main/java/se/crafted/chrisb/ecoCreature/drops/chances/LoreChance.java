@@ -72,10 +72,17 @@ public class LoreChance extends ItemChance
         if (itemStack.getAmount() > 0) {
             ItemMeta itemMeta = itemStack.getItemMeta();
             itemMeta.setDisplayName(displayName);
-            List<String> lore = new ArrayList<>();
-            lore.addAll(itemMeta.getLore());
-            lore.addAll(this.lore);
-            itemMeta.setLore(this.lore);
+            if (!lore.isEmpty()) {
+                if (itemMeta.getLore() != null) {
+                    List<String> combinedLore = new ArrayList<>();
+                    combinedLore.addAll(lore);
+                    combinedLore.addAll(itemMeta.getLore());
+                    itemMeta.setLore(combinedLore);
+                }
+                else {
+                    itemMeta.setLore(lore);
+                }
+            }
             itemStack.setItemMeta(itemMeta);
         }
 
