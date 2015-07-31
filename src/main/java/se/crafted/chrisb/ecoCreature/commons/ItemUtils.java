@@ -25,7 +25,7 @@ import net.minecraft.server.v1_8_R3.NBTTagCompound;
 
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 
-public class ItemUtils
+public final class ItemUtils
 {
 
     public static org.bukkit.inventory.ItemStack setUnbreakable(org.bukkit.inventory.ItemStack item)
