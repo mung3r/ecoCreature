@@ -129,7 +129,25 @@ public final class EventUtils
 
     public static boolean isNotSuicide(PlayerDeathEvent event)
     {
-        return event == null || event.getEntity().getLastDamageCause() != null;
+        boolean isNotSuicide = true;
+
+        if (event != null && event.getEntity().getLastDamageCause() != null) {
+
+            if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+
+                Entity damager = ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
+
+                if (damager instanceof Projectile) {
+                    Projectile projectile = (Projectile) damager;
+                    if (projectile.getShooter() instanceof Player) {
+                        Player shooter = (Player) projectile.getShooter();
+                        isNotSuicide = !event.getEntity().getUniqueId().equals(shooter.getUniqueId());
+                    }
+                }
+            }
+        }
+
+        return isNotSuicide;
     }
 
     public static boolean isProjectileKill(EntityDeathEvent event)

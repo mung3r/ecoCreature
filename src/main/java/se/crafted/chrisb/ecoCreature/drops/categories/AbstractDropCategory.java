@@ -42,6 +42,7 @@ import se.crafted.chrisb.ecoCreature.drops.rules.Rule;
 import se.crafted.chrisb.ecoCreature.drops.rules.SimpleClansRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.SpawnerDistanceRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.SpawnerMobRule;
+import se.crafted.chrisb.ecoCreature.drops.rules.SuicideRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.TamedCreatureRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.TownyRule;
 import se.crafted.chrisb.ecoCreature.drops.rules.UnderSeaLevelRule;
@@ -199,6 +200,7 @@ public abstract class AbstractDropCategory<T>
         rules.putAll(UnderSeaLevelRule.parseConfig(config));
         rules.putAll(HeroesRule.parseConfig(config));
         rules.putAll(SimpleClansRule.parseConfig(config));
+        rules.putAll(SuicideRule.parseConfig(config));
 
         return rules;
     }
