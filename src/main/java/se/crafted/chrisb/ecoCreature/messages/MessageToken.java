@@ -26,9 +26,9 @@ public enum MessageToken {
     ITEM("<itm>"),
     CREATURE("<crt>");
 
-    private String name;
+    private final String name;
 
-    private MessageToken(String name)
+    MessageToken(String name)
     {
         this.name = name;
     }

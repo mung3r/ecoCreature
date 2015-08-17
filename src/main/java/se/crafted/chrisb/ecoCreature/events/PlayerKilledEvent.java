@@ -34,7 +34,7 @@ public final class PlayerKilledEvent extends Event
 {
     private static final HandlerList HANDLERS = new HandlerList();
 
-    private PlayerDeathEvent event;
+    private final PlayerDeathEvent event;
 
     public static PlayerKilledEvent createEvent(PlayerDeathEvent event)
     {
@@ -81,9 +81,9 @@ public final class PlayerKilledEvent extends Event
         return event.getDroppedExp();
     }
 
-    public void setDroppedExp(int exp)
+    public void resetDroppedExp()
     {
-        event.setDroppedExp(exp);
+        event.setDroppedExp(0);
     }
 
     public int getNewExp()

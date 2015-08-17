@@ -104,7 +104,7 @@ public class EntityKilledEventMapper extends AbstractEventMapper
                 if (drop instanceof EntityDrop) {
                     EntityDrop entityDrop = (EntityDrop) drop;
                     if (entityDrop.getEntityTypes().contains(EntityType.EXPERIENCE_ORB)) {
-                        event.setDroppedExp(0);
+                        event.resetDroppedExp();
                     }
                 }
 

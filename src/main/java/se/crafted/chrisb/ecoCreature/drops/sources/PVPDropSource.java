@@ -41,8 +41,8 @@ public class PVPDropSource extends AbstractDropSource
 {
     private static final String PVP_REWARD_MESSAGE = "&7You are awarded &6<amt>&7 for murdering &5<crt>&7.";
 
-    private Message coinRewardMessage;
-    private boolean integerCurrency; 
+    private final Message coinRewardMessage;
+    private final boolean integerCurrency;
     private boolean coinPercent;
     private double coinAmount;
 

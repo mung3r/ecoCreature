@@ -38,7 +38,7 @@ public abstract class AbstractDrop
 
     private final String name;
     private Message message;
-    private Map<MessageToken, String> parameters;
+    private final Map<MessageToken, String> parameters;
 
     public AbstractDrop(String name, Location location)
     {

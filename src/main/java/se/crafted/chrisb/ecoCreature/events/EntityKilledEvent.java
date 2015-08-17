@@ -36,7 +36,7 @@ public final class EntityKilledEvent extends Event
 {
     private static final HandlerList HANDLERS = new HandlerList();
 
-    private EntityDeathEvent event;
+    private final EntityDeathEvent event;
     private SpawnerMobTag spawnerMobTracker;
 
     public static EntityKilledEvent createEvent(EntityDeathEvent event)
@@ -94,9 +94,9 @@ public final class EntityKilledEvent extends Event
         return event.getDrops();
     }
 
-    public void setDroppedExp(int exp)
+    public void resetDroppedExp()
     {
-        event.setDroppedExp(exp);
+        event.setDroppedExp(0);
     }
 
     @Override

@@ -51,14 +51,6 @@ public class SetBonusCommand extends BasicCommand
                 long endTimeInMillis = getTimeInMillis(args[1]);
                 BonusMultiplier bonusMultiplier = new BonusMultiplier(multiplier, endTimeInMillis);
                 BonusMultiplierAspect.setBonusMultiplier(bonusMultiplier);
-
-                StringBuilder message = new StringBuilder();
-                for (int i = 0; i < args.length; i++) {
-                    message.append(args[i]);
-                    if (i + 1 < args.length) {
-                        message.append(" ");
-                    }
-                }
                 sender.sendMessage("Loot bonus multiplier set for " + bonusMultiplier.getMultiplier() + ", ending at " + new Date(bonusMultiplier.getEndTimeInMillis()));
             }
             catch (IllegalArgumentException e) {
@@ -74,7 +66,7 @@ public class SetBonusCommand extends BasicCommand
     private long getTimeInMillis(String arg)
     {
         final Calendar cal = new GregorianCalendar();
-        Integer field = null;
+        Integer field;
         final Pattern pattern = Pattern.compile("(?i)(\\d+)(.+)", Pattern.CASE_INSENSITIVE);
         final Matcher matcher = pattern.matcher(arg);
 

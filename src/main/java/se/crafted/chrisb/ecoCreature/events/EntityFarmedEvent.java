@@ -19,13 +19,10 @@
  */
 package se.crafted.chrisb.ecoCreature.events;
 
-import java.util.List;
-
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.commons.EventUtils;
 
@@ -33,7 +30,7 @@ public final class EntityFarmedEvent extends Event
 {
     private static final HandlerList HANDLERS = new HandlerList();
 
-    private EntityDeathEvent event;
+    private final EntityDeathEvent event;
 
     public static EntityFarmedEvent createEvent(EntityDeathEvent event)
     {
@@ -50,14 +47,14 @@ public final class EntityFarmedEvent extends Event
         return event.getEntity();
     }
 
-    public List<ItemStack> getDrops()
+    public void resetDrops()
     {
-        return event.getDrops();
+        event.getDrops().clear();
     }
 
-    public void setDroppedExp(int exp)
+    public void resetDroppedExp()
     {
-        event.setDroppedExp(exp);
+        event.setDroppedExp(0);
     }
 
     public boolean isFarmed()
