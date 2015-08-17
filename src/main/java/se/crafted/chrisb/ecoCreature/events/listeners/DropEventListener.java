@@ -32,7 +32,7 @@ import se.crafted.chrisb.ecoCreature.metrics.DropMetrics;
 
 public class DropEventListener implements Listener
 {
-    private DropMetrics dropMetrics;
+    private final DropMetrics dropMetrics;
 
     public DropEventListener(DropMetrics dropMetrics)
     {

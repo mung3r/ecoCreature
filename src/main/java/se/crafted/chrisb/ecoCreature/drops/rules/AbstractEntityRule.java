@@ -42,7 +42,7 @@ public abstract class AbstractEntityRule extends AbstractRule
                 ((EntityKilledEvent) event).getDrops().clear();
             }
             if (isClearDrops() || isClearExpOrbs()) {
-                ((EntityKilledEvent) event).setDroppedExp(0);
+                ((EntityKilledEvent) event).resetDroppedExp();
             }
         }
 

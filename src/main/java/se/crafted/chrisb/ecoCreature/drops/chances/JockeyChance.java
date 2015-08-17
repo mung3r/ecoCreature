@@ -35,7 +35,7 @@ import se.crafted.chrisb.ecoCreature.drops.JockeyDrop;
 
 public class JockeyChance extends EntityChance
 {
-    private EntityType passenger;
+    private final EntityType passenger;
 
     public JockeyChance(EntityType passenger, EntityType vehicle, NumberRange range, double percentage)
     {

@@ -38,11 +38,11 @@ public class UpdateTask implements Runnable
     private static final long CHECK_DELAY = 0;
     private static final long CHECK_PERIOD = 432000;
 
-    private String pluginName;
-    private String pluginVersion;
+    private final String pluginName;
+    private final String pluginVersion;
     private String latestVersion;
     private BukkitTask task;
-    private ecoCreature plugin;
+    private final ecoCreature plugin;
 
     public UpdateTask(ecoCreature plugin)
     {
@@ -65,16 +65,6 @@ public class UpdateTask implements Runnable
         if (task != null && task.getTaskId() > 0) {
             task.cancel();
         }
-    }
-
-    public void setPluginName(String pluginName)
-    {
-        this.pluginName = pluginName;
-    }
-
-    public String getPluginName()
-    {
-        return pluginName;
     }
 
     private void getLatestVersion()

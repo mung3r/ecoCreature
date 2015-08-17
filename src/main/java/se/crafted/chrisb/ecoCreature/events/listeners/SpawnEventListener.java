@@ -29,7 +29,7 @@ import se.crafted.chrisb.ecoCreature.ecoCreature;
 
 public class SpawnEventListener implements Listener
 {
-    private ecoCreature plugin;
+    private final ecoCreature plugin;
 
     public SpawnEventListener(ecoCreature plugin)
     {

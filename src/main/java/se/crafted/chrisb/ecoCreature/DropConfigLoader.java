@@ -81,7 +81,7 @@ public class DropConfigLoader
 
     private final ecoCreature plugin;
     private final File worldsDataFolder;
-    private boolean initialized;
+    private final boolean initialized;
     private boolean checkForUpdates;
 
     private Map<String, DropConfig> worldConfigMap;
