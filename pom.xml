@@ -39,42 +39,21 @@
 
   <repositories>
     <repository>
-      <id>bukkit-repo</id>
-      <url>http://repo.bukkit.org/content/groups/public/</url>
-    </repository>
-    <repository>
-      <id>spigot-repo</id>
-      <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
-    </repository>
-    <repository>
-      <id>heroes-repo</id>
-      <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
-    </repository>
-    <repository>
-      <id>md_5-snapshots</id>
-      <url>http://repo.md-5.net/content/repositories/snapshots</url>
-    </repository>
-    <repository>
-      <id>deathtpplus-repo</id>
-      <url>http://ci.bighatchet.com/plugin/repository/project/DeathTpPlus/LastSuccessful/repository/</url>
-    </repository>
-    <repository>
-      <id>sk89q-repo</id>
-      <url>http://maven.sk89q.com/artifactory/libs-snapshot</url>
-    </repository>
-    <repository>
-      <id>SacredCoding</id>
-      <url>http://repo.sacredlabyrinth.net/artifactory/plugins-release</url>
-    </repository>
-    <repository>
-      <id>Plugin Metrics</id>
-      <url>http://repo.mcstats.org/content/repositories/public</url>
-    </repository>
-    <repository>
-      <id>sinndev-repo</id>
-      <url>http://repo.sinndev.com/content/repositories/releases/</url>
+      <id>public</id>
+      <url>http://nexus.bighatchet.com/content/groups/public/</url>
     </repository>
   </repositories>
+
+  <distributionManagement>
+    <repository>
+      <id>releases</id>
+      <url>http://nexus.bighatchet.com/content/repositories/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <url>http://nexus.bighatchet.com/content/repositories/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
 
   <dependencies>
     <dependency>
@@ -273,6 +252,14 @@
         <configuration>
           <source>1.7</source>
           <target>1.7</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.2</version>
+        <configuration>
+          <tagNameFormat>@{project.version}</tagNameFormat>
         </configuration>
       </plugin>
       <plugin>
