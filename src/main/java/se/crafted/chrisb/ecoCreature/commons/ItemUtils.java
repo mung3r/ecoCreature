@@ -27,6 +27,9 @@ import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 
 public final class ItemUtils
 {
+    private ItemUtils()
+    {
+    }
 
     public static org.bukkit.inventory.ItemStack setUnbreakable(org.bukkit.inventory.ItemStack item)
     {
