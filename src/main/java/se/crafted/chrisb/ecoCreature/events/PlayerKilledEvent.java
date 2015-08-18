@@ -28,12 +28,13 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 import se.crafted.chrisb.ecoCreature.commons.EntityUtils;
+import se.crafted.chrisb.ecoCreature.commons.EventUtils;
 
 public final class PlayerKilledEvent extends Event
 {
     private static final HandlerList HANDLERS = new HandlerList();
 
-    private PlayerDeathEvent event;
+    private final PlayerDeathEvent event;
 
     public static PlayerKilledEvent createEvent(PlayerDeathEvent event)
     {
@@ -43,6 +44,11 @@ public final class PlayerKilledEvent extends Event
     private PlayerKilledEvent(PlayerDeathEvent event)
     {
         this.event = event;
+    }
+
+    public boolean isSuicide()
+    {
+        return !EventUtils.isNotSuicide(event);
     }
 
     public Player getVictim()
@@ -75,9 +81,9 @@ public final class PlayerKilledEvent extends Event
         return event.getDroppedExp();
     }
 
-    public void setDroppedExp(int exp)
+    public void resetDroppedExp()
     {
-        event.setDroppedExp(exp);
+        event.setDroppedExp(0);
     }
 
     public int getNewExp()

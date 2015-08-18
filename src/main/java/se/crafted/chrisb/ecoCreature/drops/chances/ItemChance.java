@@ -232,11 +232,11 @@ public class ItemChance extends AbstractChance implements DropChance
             else {
                 chances.addAll(parseChance(dropConfig.getString("Drops")));
             }
-        }
 
-        for (ItemChance chance : chances) {
-            chance.setFixedAmount(config.getBoolean("System.Hunting.FixedDrops"));
-            chance.setAddToInventory(dropConfig.getBoolean("AddItemsToInventory"));
+            for (ItemChance chance : chances) {
+                chance.setFixedAmount(config.getBoolean("System.Hunting.FixedDrops"));
+                chance.setAddToInventory(dropConfig.getBoolean("AddItemsToInventory"));
+            }
         }
 
         return chances;

@@ -69,7 +69,7 @@ public class EntityFarmedEventMapper extends AbstractEventMapper
 
     private void deleteDrops(EntityFarmedEvent event)
     {
-        event.getDrops().clear();
-        event.setDroppedExp(0);
+        event.resetDrops();
+        event.resetDroppedExp();
     }
 }

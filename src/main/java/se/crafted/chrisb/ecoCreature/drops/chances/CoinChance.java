@@ -198,7 +198,7 @@ public class CoinChance extends AbstractChance implements DropChance
 
             chance.setIntegerCurrency(config.getBoolean("System.Economy.IntegerCurrency"));
 
-            chances = new ArrayList<CoinChance>();
+            chances = new ArrayList<>();
             chances.add(chance);
         }
 

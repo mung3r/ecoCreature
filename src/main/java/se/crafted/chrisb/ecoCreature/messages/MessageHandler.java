@@ -30,8 +30,8 @@ import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class MessageHandler
 {
-    private Message message;
-    private Map<MessageToken, String> parameters;
+    private final Message message;
+    private final Map<MessageToken, String> parameters;
 
     public MessageHandler(Message message, Map<MessageToken, String> parameters)
     {

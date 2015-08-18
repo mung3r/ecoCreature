@@ -50,7 +50,7 @@ public class DropConfig implements SpawnerMobTag
     private boolean noFarm;
     private boolean noFarmFire;
 
-    private ecoCreature plugin;
+    private final ecoCreature plugin;
     private List<AbstractDropCategory<?>> dropCategories;
     private Collection<PlayerGain> gainMultipliers;
     private Collection<Party> parties;

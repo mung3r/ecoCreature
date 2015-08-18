@@ -24,9 +24,9 @@ import java.util.logging.Logger;
 public final class LoggerUtil
 {
     private static final String LOG_NAME = "ecoCreature";
-    private static LoggerUtil instance = new LoggerUtil();
+    private static final LoggerUtil instance = new LoggerUtil();
 
-    private Logger logger;
+    private final Logger logger;
     private String name;
     private boolean debug;
 

@@ -42,7 +42,7 @@ public abstract class AbstractEventMapper implements EventMapper
 {
     protected static final Collection<DropEvent> EMPTY_COLLECTION = Collections.emptyList();
 
-    private DropConfigLoader dropConfigLoader;
+    private final DropConfigLoader dropConfigLoader;
 
     public AbstractEventMapper(DropConfigLoader dropConfigLoader)
     {

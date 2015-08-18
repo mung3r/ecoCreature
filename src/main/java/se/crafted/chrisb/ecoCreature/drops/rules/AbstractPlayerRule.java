@@ -42,7 +42,7 @@ public abstract class AbstractPlayerRule extends AbstractRule
                 ((PlayerKilledEvent) event).getDrops().clear();
             }
             if (isClearDrops() || isClearExpOrbs()) {
-                ((PlayerKilledEvent) event).setDroppedExp(0);
+                ((PlayerKilledEvent) event).resetDroppedExp();
             }
         }
 

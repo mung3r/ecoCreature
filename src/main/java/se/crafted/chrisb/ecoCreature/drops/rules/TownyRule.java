@@ -34,7 +34,7 @@ public class TownyRule extends AbstractEntityRule
 {
     private static final String IN_TOWN = "InTown";
 
-    private Map<String, Boolean> townMap;
+    private final Map<String, Boolean> townMap;
 
     public TownyRule()
     {
