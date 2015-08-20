@@ -48,7 +48,7 @@ public class SetBonusCommand extends BasicCommand
         if (args != null && args.length > 2) {
             try {
                 double multiplier = Double.parseDouble(args[0]);
-                long endTimeInMillis = getTimeInMillis(args[1]);
+                long endTimeInMillis = parseTimeInMillis(args[1]);
                 BonusMultiplier bonusMultiplier = new BonusMultiplier(multiplier, endTimeInMillis);
                 BonusMultiplierAspect.setBonusMultiplier(bonusMultiplier);
                 sender.sendMessage("Loot bonus multiplier set for " + bonusMultiplier.getMultiplier() + ", ending at " + new Date(bonusMultiplier.getEndTimeInMillis()));
@@ -63,10 +63,9 @@ public class SetBonusCommand extends BasicCommand
         return true;
     }
 
-    private long getTimeInMillis(String arg)
+    private long parseTimeInMillis(final String arg)
     {
         final Calendar cal = new GregorianCalendar();
-        Integer field;
         final Pattern pattern = Pattern.compile("(?i)(\\d+)(.+)", Pattern.CASE_INSENSITIVE);
         final Matcher matcher = pattern.matcher(arg);
 
@@ -75,23 +74,24 @@ public class SetBonusCommand extends BasicCommand
         }
 
         int amount = Integer.parseInt(matcher.group(1));
-        arg = matcher.group(2);
-        if (arg.equalsIgnoreCase("min")) {
+        String type = matcher.group(2);
+        Integer field;
+        if (type.equalsIgnoreCase("min")) {
             field = Calendar.MINUTE;
         }
-        else if (arg.equalsIgnoreCase("s")) {
+        else if (type.equalsIgnoreCase("s")) {
             field = Calendar.SECOND;
         }
-        else if (arg.equalsIgnoreCase("h")) {
+        else if (type.equalsIgnoreCase("h")) {
             field = Calendar.HOUR_OF_DAY;
         }
-        else if (arg.equalsIgnoreCase("d")) {
+        else if (type.equalsIgnoreCase("d")) {
             field = Calendar.DAY_OF_YEAR;
         }
-        else if (arg.equalsIgnoreCase("w")) {
+        else if (type.equalsIgnoreCase("w")) {
             field = Calendar.WEEK_OF_YEAR;
         }
-        else if (arg.equalsIgnoreCase("m")) {
+        else if (type.equalsIgnoreCase("m")) {
             field = Calendar.MONTH;
         }
         else {
