@@ -182,41 +182,49 @@
       <groupId>mc.alk.arena</groupId>
       <artifactId>BattleArena</artifactId>
       <version>3.9.7.8</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.massivecraft.factions</groupId>
       <artifactId>Factions</artifactId>
       <version>2.7.5</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.massivecraft.massivecore</groupId>
       <artifactId>MassiveCore</artifactId>
       <version>2.7.5</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.gmail.nossr50.mcMMO</groupId>
       <artifactId>mcMMO</artifactId>
       <version>1.5.00-b3547</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.garbagemule.MobArena</groupId>
       <artifactId>MobArena</artifactId>
       <version>0.96.6</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>couk.Adamki11s.Regios</groupId>
       <artifactId>Regios</artifactId>
       <version>5.9.9</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.bekvon.bukkit.residence</groupId>
       <artifactId>Residence</artifactId>
       <version>2.6.6.6</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.palmergames.bukkit.towny</groupId>
       <artifactId>Towny</artifactId>
       <version>0.87.0.0</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
