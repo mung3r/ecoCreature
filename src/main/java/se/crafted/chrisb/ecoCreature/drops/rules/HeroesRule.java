@@ -21,22 +21,29 @@ package se.crafted.chrisb.ecoCreature.drops.rules;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
 
 import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 
+import com.herocraftonline.heroes.characters.Hero;
+
 public class HeroesRule extends AbstractPlayerRule
 {
     private final List<String> classNames;
+    private final Map<Integer, NumberRange> tiers;
 
-    public HeroesRule(List<String> classNames)
+    public HeroesRule(List<String> classNames, Map<Integer, NumberRange> tiers)
     {
         this.classNames = classNames;
+        this.tiers = tiers;
         setClearDrops(true);
         setClearExpOrbs(true);
     }
@@ -47,12 +54,21 @@ public class HeroesRule extends AbstractPlayerRule
         boolean ruleBroken = false;
 
         if (DependencyUtils.hasHeroes()) {
+            Hero victim = DependencyUtils.getHeroes().getCharacterManager().getHero(event.getVictim());
+
             for (String className : classNames) {
-                if (DependencyUtils.getHeroes().getCharacterManager().getHero(event.getVictim()).getHeroClass().getName().equals(className)) {
-                    ruleBroken = true;
-                    LoggerUtil.getInstance().debug("No reward for " + event.getKiller().getName() + " of hero class " + className);
+                if (victim.getHeroClass().getName().equals(className)) {
+                    ruleBroken |= true;
+                    LoggerUtil.getInstance().debug("No reward for " + event.getKiller().getName() + " who killed a " + className);
                     break;
                 }
+            }
+
+            Integer tieredLevel = victim.getTieredLevel(victim.getHeroClass());
+            Integer level = victim.getLevel(victim.getHeroClass());
+            if (tiers.containsKey(tieredLevel) && tiers.get(tieredLevel).containsInteger(level)) {
+                ruleBroken |= true;
+                LoggerUtil.getInstance().debug("No reward for " + event.getKiller().getName() + " who killed a tier " + tieredLevel + " level " + level);
             }
         }
 
@@ -64,11 +80,42 @@ public class HeroesRule extends AbstractPlayerRule
         Map<Class<? extends AbstractRule>, Rule> rules = Collections.emptyMap();
 
         if (system != null && system.isConfigurationSection("Hunting")) {
-            HeroesRule rule = new HeroesRule(system.getStringList("Hunting.Heroes.ClearClassDropsList"));
-            rules = new HashMap<>();
-            rules.put(HeroesRule.class, rule);
+            List<String> classNames = system.getStringList("Hunting.Heroes.ClearDrops.Classes");
+            Map<Integer, NumberRange> tiers = new HashMap<>();
+
+            if (system.getList("Hunting.Heroes.ClearDrops.Tiers") != null) {
+                for (Object obj : system.getList("Hunting.Heroes.ClearDrops.Tiers")) {
+                    if (obj instanceof LinkedHashMap) {
+                        try {
+                            ConfigurationSection tiersConfig = createTiersConfig(obj);
+                            Integer tier = tiersConfig.getInt("Tier");
+                            String levels = tiersConfig.getString("Levels");
+                            String[] levelRange = levels.split("-");
+                            NumberRange range = new NumberRange(Integer.parseInt(levelRange[0]), Integer.parseInt(levelRange[1]));
+                            tiers.put(tier, range);
+                        }
+                        catch (Exception e) {
+                            LoggerUtil.getInstance().severe("Syntax error parsing Hunting.Heroes.ClearDrops.Tiers");
+                        }
+                    }
+                }
+            }
+
+            if (!classNames.isEmpty() || !tiers.isEmpty()) {
+                HeroesRule rule = new HeroesRule(classNames, tiers);
+                rules = new HashMap<>();
+                rules.put(HeroesRule.class, rule);
+            }
         }
 
         return rules;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static ConfigurationSection createTiersConfig(Object obj)
+    {
+        MemoryConfiguration tiersConfig = new MemoryConfiguration();
+        tiersConfig.addDefaults((Map<String, Object>) obj);
+        return tiersConfig;
     }
 }
