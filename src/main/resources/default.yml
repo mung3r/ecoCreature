@@ -117,13 +117,7 @@ System:
         # Default: empty
         Tiers:
           - Tier: 1
-            Levels: 30-60
-          - Tier: 2
-            Levels: 1-60
-          - Tier: 3
-            Levels: 1-60
-          - Tier: 4
-            Levels: 1-60
+            Levels: 1-29
     #
     # SimpleClans
     SimpleClans:
