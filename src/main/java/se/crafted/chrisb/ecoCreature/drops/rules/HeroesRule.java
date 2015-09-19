@@ -64,11 +64,11 @@ public class HeroesRule extends AbstractPlayerRule
                 }
             }
 
-            Integer tieredLevel = victim.getTieredLevel(victim.getHeroClass());
+            Integer tier = victim.getHeroClass().getTier();
             Integer level = victim.getLevel(victim.getHeroClass());
-            if (tiers.containsKey(tieredLevel) && tiers.get(tieredLevel).containsInteger(level)) {
+            if (tiers.containsKey(tier) && tiers.get(tier).containsInteger(level)) {
                 ruleBroken |= true;
-                LoggerUtil.getInstance().debug("No reward for " + event.getKiller().getName() + " who killed a tier " + tieredLevel + " level " + level);
+                LoggerUtil.getInstance().debug("No reward for " + event.getKiller().getName() + " who killed a tier " + tier + " level " + level);
             }
         }
 
@@ -90,9 +90,9 @@ public class HeroesRule extends AbstractPlayerRule
                             ConfigurationSection tiersConfig = createTiersConfig(obj);
                             Integer tier = tiersConfig.getInt("Tier");
                             String levels = tiersConfig.getString("Levels");
-                            String[] levelRange = levels.split("-");
-                            NumberRange range = new NumberRange(Integer.parseInt(levelRange[0]), Integer.parseInt(levelRange[1]));
-                            tiers.put(tier, range);
+                            String[] range = levels.split("-");
+                            NumberRange levelRange = new NumberRange(Integer.parseInt(range[0]), Integer.parseInt(range[1]));
+                            tiers.put(tier, levelRange);
                         }
                         catch (Exception e) {
                             LoggerUtil.getInstance().severe("Syntax error parsing Hunting.Heroes.ClearDrops.Tiers");
