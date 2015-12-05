@@ -75,6 +75,6 @@ public class BlockEventMapper extends AbstractEventMapper
             }
         });
 
-        return drops.isEmpty() ? EMPTY_COLLECTION : Lists.newArrayList(new DropEvent(player, drops));
+        return drops.isEmpty() ? EMPTY_COLLECTION : Lists.newArrayList(new DropEvent(player, drops, event.getClass()));
     }
 }

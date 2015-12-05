@@ -55,6 +55,6 @@ public class PlayerDeathEventMapper extends AbstractEventMapper
         Player player = event.getEntity();
         Collection<AbstractDrop> drops = getDropConfig(player.getWorld()).collectDrops(event);
 
-        return drops.isEmpty() ? EMPTY_COLLECTION : Lists.newArrayList(new DropEvent(player, drops));
+        return drops.isEmpty() ? EMPTY_COLLECTION : Lists.newArrayList(new DropEvent(player, drops, event.getClass()));
     }
 }
