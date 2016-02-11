@@ -31,7 +31,7 @@ System:
     # Default: false
     CampingByEntity: true
     #
-    # Determine camping by closeness to spawner
+    # Determine camping by distance to spawner
     # Default: true
     CampingByDistance: false
     #
@@ -106,9 +106,18 @@ System:
     # Heroes
     Heroes:
       #
-      # ClearDropsOnClass: clear drops for list of Hero classes
-      # Default: empty
-      ClearClassDrops: []
+      # Clear drops
+      ClearDrops:
+        #
+        # Clear drops for a list of Hero classes
+        # Default: empty
+        Classes: []
+        #
+        # Clear drops for certain tiers and level ranges
+        # Default: empty
+        Tiers:
+          - Tier: 1
+            Levels: 1-29
     #
     # SimpleClans
     SimpleClans:
@@ -587,7 +596,8 @@ RewardTable:
     - 'skull item:1-1:100'
     Hunting:
       Heroes:
-        ClearClassDropsList: ['LOSTSOUL']
+        ClearDrops:
+          Classes: ['LOSTSOUL']
       SimpleClans:
         ClearNonRivalDrops: true
   Rabbit:
@@ -700,10 +710,11 @@ RewardTable:
   Zombie:
     Sets:
     - PoorZombie # defaults to 1-1:100
-    - BookZombie:1-1:25
-    - LoreZombie:1-1:25
-    - RichZombie:1-1:25
-    - ZombieApocalypse:1-1:25
+    - BookZombie:1-1:20
+    - LoreZombie:1-1:20
+    - RichZombie:1-1:20
+    - JockeyZombie:1-1:20
+    - ZombieApocalypse:1-1:20
   ZombieBaby:
     Coin_Minimum: 1.00
     Coin_Maximum: 3.50
@@ -718,9 +729,9 @@ RewardTable:
     - 'rotten flesh:2:100'
 
 ############################################################################
-# Drop set examples
+# Reward set examples
 ############################################################################
-# Drop sets allow you to define groups or sets of drops for use in the
+# Reward sets allow you to define groups or sets of drops for use in the
 # RewardTable. The most obvious benefit is that you no longer have to copy
 # and paste a list of common drops. You can also get really creative with
 # different combinations of sets.
@@ -737,8 +748,8 @@ RewardTable:
 #     ExpMax: 10
 #     ExpPercent: 50.0
 #
-# See how the these example sets below are used for Zombies in the
-# RewardTable
+# The example zombie sets below are referenced in the RewardTable for
+# Zombies.
 ############################################################################
 RewardSets:
   PoorZombie:
@@ -769,10 +780,10 @@ RewardSets:
     Coin_Minimum: 1.00
     Coin_Maximum: 3.50
     Coin_Percent: 25.0
-  ZombieApocalypse:
-    Drops:
-    - 'zombie:2:50'
-  ChickenJockey:
+  JockeyZombie:
     Drops:
     - passenger: zombie:1-1:100
       vehicle: chicken
+  ZombieApocalypse:
+    Drops:
+    - 'zombie:2:50'

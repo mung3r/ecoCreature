@@ -36,18 +36,20 @@ public class DropEvent extends Event implements Cancellable
 
     private UUID playerId;
     private Collection<AbstractDrop> drops;
+    private Class<? extends Event> classType;
 
     private boolean isCancelled;
 
-    public DropEvent(Player player, Collection<AbstractDrop> drops)
+    public DropEvent(Player player, Collection<AbstractDrop> drops, Class<? extends Event> classType)
     {
-        this(player.getUniqueId(), drops);
+        this(player.getUniqueId(), drops, classType);
     }
 
-    public DropEvent(UUID player, Collection<AbstractDrop> drops)
+    public DropEvent(UUID player, Collection<AbstractDrop> drops, Class<? extends Event> classType)
     {
         this.playerId = player;
         this.drops = drops;
+        this.classType = classType;
     }
 
     public Player getPlayer()
@@ -68,6 +70,16 @@ public class DropEvent extends Event implements Cancellable
     public void setDrops(Collection<AbstractDrop> drop)
     {
         this.drops = drop;
+    }
+
+    public Class<? extends Event> getClassType()
+    {
+        return classType;
+    }
+
+    public void setClassType(Class<? extends Event> classType)
+    {
+        this.classType = classType;
     }
 
     public boolean isEmpty()

@@ -83,7 +83,7 @@ public class PlayerKilledEventMapper extends AbstractEventMapper
             }
         }
 
-        return Lists.newArrayList(new DropEvent(killer, drops), new DropEvent(victim, penalties));
+        return Lists.newArrayList(new DropEvent(killer, drops, event.getClass()), new DropEvent(victim, penalties, event.getClass()));
     }
 
     private Collection<AbstractDrop> createKillerDrops(final PlayerKilledEvent event)
