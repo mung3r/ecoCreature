@@ -24,6 +24,7 @@ import java.lang.reflect.Field;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.inventory.ItemStack;
 
 public final class ItemUtils
 {
@@ -31,35 +32,31 @@ public final class ItemUtils
     {
     }
 
-    public static org.bukkit.inventory.ItemStack setUnbreakable(org.bukkit.inventory.ItemStack item)
+    public static ItemStack setUnbreakable(final ItemStack item)
     {
-        if (!(item instanceof CraftItemStack)) {
-            item = CraftItemStack.asCraftCopy(item);
-        }
-        NBTTagCompound tag = getTag(item);
+        CraftItemStack cItem = item instanceof CraftItemStack ? (CraftItemStack) item : CraftItemStack.asCraftCopy(item);
+        NBTTagCompound tag = getTag(cItem);
         if (tag == null) {
             tag = new NBTTagCompound();
         }
         tag.setByte("Unbreakable", (byte) 1);
-        return setTag(item, tag);
+        return setTag(cItem, tag);
     }
 
-    public static org.bukkit.inventory.ItemStack setHideFlags(org.bukkit.inventory.ItemStack item)
+    public static ItemStack setHideFlags(final ItemStack item)
     {
-        if (!(item instanceof CraftItemStack)) {
-            item = CraftItemStack.asCraftCopy(item);
-        }
-        NBTTagCompound tag = getTag(item);
+        CraftItemStack cItem = item instanceof CraftItemStack ? (CraftItemStack) item : CraftItemStack.asCraftCopy(item);
+        NBTTagCompound tag = getTag(cItem);
         if (tag == null) {
             tag = new NBTTagCompound();
         }
         tag.setInt("HideFlags", 63);
-        return setTag(item, tag);
+        return setTag(cItem, tag);
     }
 
-    private static NBTTagCompound getTag(org.bukkit.inventory.ItemStack item)
+    private static NBTTagCompound getTag(ItemStack item)
     {
-        if ((item instanceof CraftItemStack)) {
+        if (item instanceof CraftItemStack) {
             try {
                 Field field = CraftItemStack.class.getDeclaredField("handle");
                 field.setAccessible(true);
@@ -71,9 +68,9 @@ public final class ItemUtils
         return null;
     }
 
-    private static org.bukkit.inventory.ItemStack setTag(org.bukkit.inventory.ItemStack item, NBTTagCompound tag)
+    private static ItemStack setTag(ItemStack item, NBTTagCompound tag)
     {
-        CraftItemStack craftItem = (item instanceof CraftItemStack) ? (CraftItemStack) item : CraftItemStack.asCraftCopy(item);
+        CraftItemStack cItem = item instanceof CraftItemStack ? (CraftItemStack) item : CraftItemStack.asCraftCopy(item);
 
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = null;
         try {
@@ -85,19 +82,19 @@ public final class ItemUtils
         }
 
         if (nmsItem == null) {
-            nmsItem = CraftItemStack.asNMSCopy(craftItem);
+            nmsItem = CraftItemStack.asNMSCopy(cItem);
         }
 
         nmsItem.setTag(tag);
         try {
             Field field = CraftItemStack.class.getDeclaredField("handle");
             field.setAccessible(true);
-            field.set(craftItem, nmsItem);
+            field.set(cItem, nmsItem);
         }
         catch (Exception ignored) {
         }
 
-        return craftItem;
+        return cItem;
     }
 
 }

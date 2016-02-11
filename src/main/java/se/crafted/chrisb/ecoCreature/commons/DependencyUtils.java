@@ -149,7 +149,7 @@ public final class DependencyUtils
 
     public static boolean hasVault()
     {
-        return vaultPlugin != null;
+        return vaultPlugin != null && vaultPlugin.isEnabled();
     }
 
     public static boolean hasMobArena()
@@ -159,12 +159,12 @@ public final class DependencyUtils
 
     public static boolean hasBattleArena()
     {
-        return battleArenaPlugin != null;
+        return battleArenaPlugin != null && battleArenaPlugin.isEnabled();
     }
 
     public static boolean hasSimpleClans()
     {
-        return simpleClansPlugin != null;
+        return simpleClansPlugin != null && simpleClansPlugin.isEnabled();
     }
 
     public static MobArenaHandler getMobArenaHandler()
@@ -174,7 +174,7 @@ public final class DependencyUtils
 
     public static boolean hasHeroes()
     {
-        return heroesPlugin != null;
+        return heroesPlugin != null && heroesPlugin.isEnabled();
     }
 
     public static Heroes getHeroes()
@@ -184,7 +184,7 @@ public final class DependencyUtils
 
     public static boolean hasResidence()
     {
-        return residencePlugin != null;
+        return residencePlugin != null && residencePlugin.isEnabled();
     }
 
     public static boolean hasRegios()
@@ -199,7 +199,7 @@ public final class DependencyUtils
 
     public static boolean hasWorldGuard()
     {
-        return worldGuardPlugin != null;
+        return worldGuardPlugin != null && worldGuardPlugin.isEnabled();
     }
 
     public static Object getRegionManager(World world)
@@ -209,22 +209,22 @@ public final class DependencyUtils
 
     public static boolean hasMcMMO()
     {
-        return mcMMOPlugin != null;
+        return mcMMOPlugin != null && mcMMOPlugin.isEnabled();
     }
 
     public static boolean hasTowny()
     {
-        return townyPlugin != null;
+        return townyPlugin != null && townyPlugin.isEnabled();
     }
 
     public static boolean hasFactions()
     {
-        return factionsPlugin != null;
+        return factionsPlugin != null && factionsPlugin.isEnabled();
     }
 
     public static boolean hasDeathTpPlus()
     {
-        return deathTpPlusPlugin != null;
+        return deathTpPlusPlugin != null && deathTpPlusPlugin.isEnabled();
     }
 
     @SuppressWarnings("unchecked")
@@ -233,7 +233,7 @@ public final class DependencyUtils
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
         try {
             Class<?> testClass = Class.forName(className);
-            if (testClass.isInstance(plugin) && plugin.isEnabled()) {
+            if (testClass.isInstance(plugin)) {
                 LoggerUtil.getInstance().info("Found plugin: " + plugin.getDescription().getName());
                 return (T) plugin;
             }
