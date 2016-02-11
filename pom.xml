@@ -148,6 +148,12 @@
       <groupId>nl.arfie.bukkit.attributes</groupId>
       <artifactId>AttributesAPI</artifactId>
       <version>1.2</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.spigotmc</groupId>
+          <artifactId>spigot-api</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.herocraftonline.heroes</groupId>
