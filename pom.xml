@@ -28,7 +28,7 @@
 
   <ciManagement>
     <system>jenkins</system>
-    <url>http://ci.bighatchet.com/job/ecoCreature/</url>
+    <url>https://ci.bighatchet.com/job/ecoCreature/</url>
   </ciManagement>
 
   <scm>
@@ -40,18 +40,18 @@
   <repositories>
     <repository>
       <id>public</id>
-      <url>http://nexus.bighatchet.com/content/groups/public/</url>
+      <url>https://nexus.bighatchet.com/content/groups/public/</url>
     </repository>
   </repositories>
 
   <distributionManagement>
     <repository>
       <id>releases</id>
-      <url>http://nexus.bighatchet.com/content/repositories/releases/</url>
+      <url>https://nexus.bighatchet.com/content/repositories/releases/</url>
     </repository>
     <snapshotRepository>
       <id>snapshots</id>
-      <url>http://nexus.bighatchet.com/content/repositories/snapshots/</url>
+      <url>https://nexus.bighatchet.com/content/repositories/snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
 
