@@ -40,7 +40,7 @@
   <repositories>
     <repository>
       <id>public</id>
-      <url>https://nexus.bighatchet.com/content/groups/public/</url>
+      <url>http://nexus.bighatchet.com/content/groups/public/</url>
     </repository>
   </repositories>
 
