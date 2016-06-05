@@ -30,7 +30,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class RegionGain extends AbstractPlayerGain<String>
@@ -43,7 +43,7 @@ public class RegionGain extends AbstractPlayerGain<String>
     @Override
     public boolean hasPermission(Player player)
     {
-        return super.hasPermission(player) && DependencyUtils.hasWorldGuard();
+        return super.hasPermission(player) && PluginUtils.hasWorldGuard();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class RegionGain extends AbstractPlayerGain<String>
     {
         double multiplier = NO_GAIN;
         try {
-            Object regionManager = DependencyUtils.getRegionManager(player.getWorld());
+            Object regionManager = PluginUtils.getRegionManager(player.getWorld());
             if (regionManager != null) {
                 Method applicableRegionsMethod = regionManager.getClass().getMethod("getApplicableRegions", Location.class);
                 Object applicableRegionSet = applicableRegionsMethod.invoke(regionManager, player.getLocation());

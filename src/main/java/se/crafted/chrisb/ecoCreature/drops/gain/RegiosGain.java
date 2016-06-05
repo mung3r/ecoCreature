@@ -29,7 +29,7 @@ import net.jzx7.regiosapi.regions.Region;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class RegiosGain extends AbstractPlayerGain<String>
@@ -42,13 +42,13 @@ public class RegiosGain extends AbstractPlayerGain<String>
     @Override
     public boolean hasPermission(Player player)
     {
-        return super.hasPermission(player) && DependencyUtils.hasRegios();
+        return super.hasPermission(player) && PluginUtils.hasRegios();
     }
 
     @Override
     public double getGain(Player player)
     {
-        Region region = DependencyUtils.getRegiosAPI().getRegion(player.getLocation());
+        Region region = PluginUtils.getRegiosAPI().getRegion(player.getLocation());
         double multiplier = region != null ? getMultiplier(region.getName()) : NO_GAIN;
         LoggerUtil.getInstance().debug("Gain: " + multiplier);
         return multiplier;

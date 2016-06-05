@@ -27,7 +27,7 @@ import java.util.List;
 import org.bukkit.event.Event;
 
 import se.crafted.chrisb.ecoCreature.DropConfigLoader;
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.events.DropEvent;
 
 import com.google.common.base.Predicate;
@@ -47,16 +47,16 @@ public class DropEventFactory
         mappers.add(new EntityKilledEventMapper(dropConfigLoader));
         mappers.add(new EntityFarmedEventMapper(dropConfigLoader));
 
-        if (DependencyUtils.hasDeathTpPlus()) {
+        if (PluginUtils.hasDeathTpPlus()) {
             mappers.add(new KillStreakEventMapper(dropConfigLoader));
             mappers.add(new DeathStreakEventMapper(dropConfigLoader));
         }
 
-        if (DependencyUtils.hasHeroes()) {
+        if (PluginUtils.hasHeroes()) {
             mappers.add(new HeroesEventMapper(dropConfigLoader));
         }
 
-        if (DependencyUtils.hasMcMMO()) {
+        if (PluginUtils.hasMcMMO()) {
             mappers.add(new McMMOEventMapper(dropConfigLoader));
         }
     }

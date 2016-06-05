@@ -28,7 +28,7 @@ import java.util.Map;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 import com.massivecraft.factions.Rel;
@@ -48,7 +48,7 @@ public class FactionsGain extends AbstractPlayerGain<Rel>
     @Override
     public boolean hasPermission(Player player)
     {
-        return super.hasPermission(player) && DependencyUtils.hasFactions();
+        return super.hasPermission(player) && PluginUtils.hasFactions();
     }
 
     @Override
@@ -67,7 +67,7 @@ public class FactionsGain extends AbstractPlayerGain<Rel>
     {
         Collection<PlayerGain> gain = Collections.emptyList();
 
-        if (config != null && DependencyUtils.hasFactions()) {
+        if (config != null && PluginUtils.hasFactions()) {
             Map<Rel, Double> multipliers = new HashMap<>();
             for (String relation : config.getKeys(false)) {
                 try {

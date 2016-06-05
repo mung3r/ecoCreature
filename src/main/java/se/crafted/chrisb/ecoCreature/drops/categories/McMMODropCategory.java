@@ -28,7 +28,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropSourceFactory;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.McMMODropType;
@@ -45,7 +45,7 @@ public class McMMODropCategory extends AbstractDropCategory<McMMODropType>
     @Override
     protected boolean isValidEvent(Event event)
     {
-        return DependencyUtils.hasMcMMO() && event instanceof McMMOPlayerLevelUpEvent;
+        return PluginUtils.hasMcMMO() && event instanceof McMMOPlayerLevelUpEvent;
     }
 
     @Override

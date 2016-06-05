@@ -29,8 +29,9 @@ import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
+import se.crafted.chrisb.ecoCreature.drops.chances.AbstractChance;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 
 import com.herocraftonline.heroes.characters.Hero;
@@ -53,8 +54,8 @@ public class HeroesRule extends AbstractPlayerRule
     {
         boolean ruleBroken = false;
 
-        if (DependencyUtils.hasHeroes()) {
-            Hero victim = DependencyUtils.getHeroes().getCharacterManager().getHero(event.getVictim());
+        if (PluginUtils.hasHeroes()) {
+            Hero victim = PluginUtils.getHeroes().getCharacterManager().getHero(event.getVictim());
 
             for (String className : classNames) {
                 if (victim.getHeroClass().getName().equals(className)) {
@@ -87,7 +88,7 @@ public class HeroesRule extends AbstractPlayerRule
                 for (Object obj : system.getList("Hunting.Heroes.ClearDrops.Tiers")) {
                     if (obj instanceof LinkedHashMap) {
                         try {
-                            ConfigurationSection tiersConfig = createTiersConfig(obj);
+                            ConfigurationSection tiersConfig = AbstractChance.createMemoryConfig(obj);
                             Integer tier = tiersConfig.getInt("Tier");
                             String levels = tiersConfig.getString("Levels");
                             String[] range = levels.split("-");
@@ -109,13 +110,5 @@ public class HeroesRule extends AbstractPlayerRule
         }
 
         return rules;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static ConfigurationSection createTiersConfig(Object obj)
-    {
-        MemoryConfiguration tiersConfig = new MemoryConfiguration();
-        tiersConfig.addDefaults((Map<String, Object>) obj);
-        return tiersConfig;
     }
 }

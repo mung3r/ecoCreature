@@ -33,7 +33,7 @@ import se.crafted.chrisb.ecoCreature.commands.CommandHandler;
 import se.crafted.chrisb.ecoCreature.commands.DebugCommand;
 import se.crafted.chrisb.ecoCreature.commands.HelpCommand;
 import se.crafted.chrisb.ecoCreature.commands.ReloadCommand;
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.commons.UpdateTask;
 import se.crafted.chrisb.ecoCreature.events.listeners.BlockEventListener;
@@ -58,7 +58,7 @@ public class ecoCreature extends JavaPlugin
     @Override
     public void onEnable()
     {
-        DependencyUtils.init();
+        PluginUtils.init();
 
         metrics = new DropMetrics(this);
         dropConfigLoader = new DropConfigLoader(this);
@@ -136,15 +136,15 @@ public class ecoCreature extends JavaPlugin
         Bukkit.getPluginManager().registerEvents(new PlayerDeathEventListener(this), this);
         Bukkit.getPluginManager().registerEvents(new EntityDeathEventListener(this), this);
 
-        if (DependencyUtils.hasDeathTpPlus()) {
+        if (PluginUtils.hasDeathTpPlus()) {
             Bukkit.getPluginManager().registerEvents(new StreakEventListener(this), this);
         }
 
-        if (DependencyUtils.hasHeroes()) {
+        if (PluginUtils.hasHeroes()) {
             Bukkit.getPluginManager().registerEvents(new HeroesEventListener(this), this);
         }
 
-        if (DependencyUtils.hasMcMMO()) {
+        if (PluginUtils.hasMcMMO()) {
             Bukkit.getPluginManager().registerEvents(new McMMOEventListener(this), this);
         }
     }

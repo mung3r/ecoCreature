@@ -27,7 +27,7 @@ import java.util.Map;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 import com.bekvon.bukkit.residence.Residence;
@@ -43,7 +43,7 @@ public class ResidenceGain extends AbstractPlayerGain<String>
     @Override
     public boolean hasPermission(Player player)
     {
-        return super.hasPermission(player) && DependencyUtils.hasResidence();
+        return super.hasPermission(player) && PluginUtils.hasResidence();
     }
 
     @Override

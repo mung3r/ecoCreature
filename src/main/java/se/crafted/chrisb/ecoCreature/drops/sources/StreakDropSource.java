@@ -25,7 +25,7 @@ import org.bukkit.event.Event;
 import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
 import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.StreakDropType;
 
 public class StreakDropSource extends AbstractDropSource
@@ -38,10 +38,10 @@ public class StreakDropSource extends AbstractDropSource
     @Override
     protected Location getLocation(Event event)
     {
-        if (DependencyUtils.hasDeathTpPlus() && event instanceof DeathStreakEvent) {
+        if (PluginUtils.hasDeathTpPlus() && event instanceof DeathStreakEvent) {
             return ((DeathStreakEvent) event).getPlayer().getLocation();
         }
-        else if (DependencyUtils.hasDeathTpPlus() && event instanceof KillStreakEvent) {
+        else if (PluginUtils.hasDeathTpPlus() && event instanceof KillStreakEvent) {
             return ((KillStreakEvent) event).getPlayer().getLocation();
         }
         else {

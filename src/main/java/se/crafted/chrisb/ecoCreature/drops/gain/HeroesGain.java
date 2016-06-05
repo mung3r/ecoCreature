@@ -27,7 +27,7 @@ import java.util.Map;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class HeroesGain extends AbstractPlayerGain<String>
@@ -40,13 +40,13 @@ public class HeroesGain extends AbstractPlayerGain<String>
     @Override
     public boolean hasPermission(Player player)
     {
-        return super.hasPermission(player) && DependencyUtils.hasHeroes();
+        return super.hasPermission(player) && PluginUtils.hasHeroes();
     }
 
     @Override
     public double getGain(Player player)
     {
-        double multiplier = DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty() ? getMultiplier(AMOUNT_KEY) : NO_GAIN;
+        double multiplier = PluginUtils.getHeroes().getCharacterManager().getHero(player).hasParty() ? getMultiplier(AMOUNT_KEY) : NO_GAIN;
         LoggerUtil.getInstance().debug("Gain: " + multiplier);
         return multiplier;
     }

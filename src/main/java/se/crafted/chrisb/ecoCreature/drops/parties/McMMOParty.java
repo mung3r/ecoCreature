@@ -29,7 +29,7 @@ import java.util.UUID;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 import com.gmail.nossr50.api.PartyAPI;
@@ -46,7 +46,7 @@ public class McMMOParty extends AbstractParty
     {
         Set<UUID> party = Collections.emptySet();
 
-        if (DependencyUtils.hasMcMMO() && PartyAPI.inParty(player)) {
+        if (PluginUtils.hasMcMMO() && PartyAPI.inParty(player)) {
             Collection<Player> members = PartyAPI.getOnlineMembers(player);
             if (members != null) {
                 party = new HashSet<>();

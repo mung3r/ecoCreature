@@ -28,7 +28,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 
@@ -90,6 +90,6 @@ public class SetDropSource extends AbstractDropSource
     @Override
     public boolean hasPermission(Player player)
     {
-        return DependencyUtils.hasPermission(player, "reward.custom");
+        return PluginUtils.hasPermission(player, "reward.custom");
     }
 }

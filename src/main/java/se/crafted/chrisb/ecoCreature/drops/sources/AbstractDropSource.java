@@ -29,7 +29,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.drops.chances.AbstractChance;
 import se.crafted.chrisb.ecoCreature.drops.chances.AttributeChance;
@@ -89,7 +89,7 @@ public abstract class AbstractDropSource extends AbstractChance
 
     public boolean hasPermission(Player player)
     {
-        return DependencyUtils.hasPermission(player, "reward." + name);
+        return PluginUtils.hasPermission(player, "reward." + name);
     }
 
     public Map<Class<? extends AbstractRule>, Rule> getHuntingRules()

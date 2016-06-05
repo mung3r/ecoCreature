@@ -25,7 +25,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.HeroesDropType;
 import se.crafted.chrisb.ecoCreature.messages.MessageToken;
@@ -42,7 +42,7 @@ public class HeroesDropSource extends AbstractDropSource
     @Override
     protected Location getLocation(Event event)
     {
-        if (DependencyUtils.hasHeroes() && event instanceof HeroChangeLevelEvent) {
+        if (PluginUtils.hasHeroes() && event instanceof HeroChangeLevelEvent) {
             return ((HeroChangeLevelEvent) event).getHero().getPlayer().getLocation();
         }
         else {

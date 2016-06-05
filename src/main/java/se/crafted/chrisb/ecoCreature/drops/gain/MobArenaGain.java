@@ -27,7 +27,7 @@ import java.util.Map;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class MobArenaGain extends AbstractPlayerGain<String>
@@ -40,13 +40,13 @@ public class MobArenaGain extends AbstractPlayerGain<String>
     @Override
     public boolean hasPermission(Player player)
     {
-        return super.hasPermission(player) && DependencyUtils.hasMobArena();
+        return super.hasPermission(player) && PluginUtils.hasMobArena();
     }
 
     @Override
     public double getGain(Player player)
     {
-        double multiplier = DependencyUtils.getMobArenaHandler().isPlayerInArena(player) ? getMultiplier(AMOUNT_KEY) : NO_GAIN;
+        double multiplier = PluginUtils.getMobArenaHandler().isPlayerInArena(player) ? getMultiplier(AMOUNT_KEY) : NO_GAIN;
         LoggerUtil.getInstance().debug("Gain: " + multiplier);
         return multiplier;
     }

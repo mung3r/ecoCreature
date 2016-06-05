@@ -25,7 +25,7 @@ import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
@@ -41,7 +41,7 @@ public class MobArenaRule extends AbstractEntityRule
     @Override
     protected boolean isBroken(EntityKilledEvent event)
     {
-        boolean ruleBroken = !mobArenaRewards && DependencyUtils.hasMobArena() && DependencyUtils.getMobArenaHandler().isPlayerInArena(event.getKiller());
+        boolean ruleBroken = !mobArenaRewards && PluginUtils.hasMobArena() && PluginUtils.getMobArenaHandler().isPlayerInArena(event.getKiller());
         LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " in Mob Arena.", ruleBroken);
 
         return ruleBroken;

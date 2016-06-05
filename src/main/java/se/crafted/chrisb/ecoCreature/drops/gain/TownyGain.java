@@ -28,7 +28,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 import com.palmergames.bukkit.towny.object.TownyUniverse;
@@ -45,7 +45,7 @@ public class TownyGain extends AbstractPlayerGain<String>
     @Override
     public boolean hasPermission(Player player)
     {
-        return super.hasPermission(player) && DependencyUtils.hasTowny();
+        return super.hasPermission(player) && PluginUtils.hasTowny();
     }
 
     @Override

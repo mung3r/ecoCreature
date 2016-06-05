@@ -19,9 +19,12 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.chances;
 
+import java.util.Map;
 import java.util.Random;
 
 import org.apache.commons.lang.math.NumberRange;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
 
 public abstract class AbstractChance implements Chance
 {
@@ -113,5 +116,16 @@ public abstract class AbstractChance implements Chance
         }
 
         return amount;
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public static ConfigurationSection createMemoryConfig(Object obj)
+    {
+        MemoryConfiguration config = new MemoryConfiguration();
+        if (obj instanceof Map) {
+            config.addDefaults((Map<String, Object>) obj);
+        }
+        return config;
     }
 }

@@ -168,13 +168,20 @@ System:
     #
     # Custom messages for attributes
     Attributes:
-        ATTACK_DAMAGE: '&6<amt>&7 Damage'
-        FOLLOW_RANGE: '&6<amt>&7 Follow Range'
-        JUMP_STRENGTH: '&6<amt>&7 Jump'
-        KNOCKBACK_RESISTANCE: '&6<amt>&7 Knockback Resist'
-        MAX_HEALTH: '&6<amt>&7 Health'
-        MOVEMENT_SPEED: '&6<amt>&7 Movement Speed'
-        SPAWN_REINFORCEMENTS: '&6<amt>&7 Reinforcements'
+        ATTACK_DAMAGE: ' &6<amt>&7 Damage'
+        FOLLOW_RANGE: ' &6<amt>&7 Follow Range'
+        JUMP_STRENGTH: ' &6<amt>&7 Jump'
+        KNOCKBACK_RESISTANCE: ' &6<amt>&7 Knockback Resist'
+        MAX_HEALTH: ' &6<amt>&7 Health'
+        MOVEMENT_SPEED: ' &6<amt>&7 Movement Speed'
+        SPAWN_REINFORCEMENTS: ' &6<amt>&7 Reinforcements'
+    Slots:
+        MAIN_HAND: '&7When in hand'
+        OFF_HAND: '&7When in off hand'
+        FEET: '&7When on feet'
+        LEGS: '&7When on legs'
+        CHEST: '&When on chest'
+        HEAD: '&When on head'
 Gain:
   #
   # Multiply reward amount based on group (NOTE: requires a permission plugin
@@ -771,9 +778,10 @@ RewardSets:
       lore:
       - 'Forged by the undead'
       attributes:
-      - max_health:10
-      - knockback_resistance:10
-      - movement_speed:0.1
+        main_hand:
+        - max_health:10
+        - knockback_resistance:10
+        - movement_speed:0.1
       unbreakable: true
       hideflags: true
   RichZombie:

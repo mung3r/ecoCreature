@@ -29,7 +29,7 @@ import java.util.UUID;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class MobArenaParty extends AbstractParty
@@ -44,10 +44,10 @@ public class MobArenaParty extends AbstractParty
     {
         Set<UUID> party = Collections.emptySet();
 
-        if (DependencyUtils.hasMobArena() && DependencyUtils.getMobArenaHandler().isPlayerInArena(player)) {
+        if (PluginUtils.hasMobArena() && PluginUtils.getMobArenaHandler().isPlayerInArena(player)) {
             party = new HashSet<>();
 
-            for (Player member : DependencyUtils.getMobArenaHandler().getArenaWithPlayer(player).getAllPlayers()) {
+            for (Player member : PluginUtils.getMobArenaHandler().getArenaWithPlayer(player).getAllPlayers()) {
                 party.add(member.getUniqueId());
             }
         }

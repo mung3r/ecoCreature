@@ -23,7 +23,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.McMMODropType;
 
 import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
@@ -38,7 +38,7 @@ public class McMMODropSource extends AbstractDropSource
     @Override
     protected Location getLocation(Event event)
     {
-        if (DependencyUtils.hasMcMMO() && event instanceof McMMOPlayerLevelUpEvent) {
+        if (PluginUtils.hasMcMMO() && event instanceof McMMOPlayerLevelUpEvent) {
             return ((McMMOPlayerLevelUpEvent) event).getPlayer().getLocation();
         }
         else {
