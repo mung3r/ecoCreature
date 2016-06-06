@@ -53,8 +53,8 @@ public class AttributeChance extends AbstractChance
     private static final String CHEST = "&When on chest";
     private static final String HEAD = "&When on head";
 
-    public static final Map<Attribute, Message> ATTRIBUTE_LORE = new HashMap<>();
-    public static final Map<Slot, Message> SLOT_LORE = new HashMap<>();
+    protected static final Map<Attribute, Message> ATTRIBUTE_LORE = new HashMap<>();
+    protected static final Map<Slot, Message> SLOT_LORE = new HashMap<>();
 
     private final Attribute type;
     private final Slot slot;

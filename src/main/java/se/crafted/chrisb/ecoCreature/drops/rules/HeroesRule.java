@@ -27,14 +27,13 @@ import java.util.Map;
 
 import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemoryConfiguration;
-
-import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
-import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
-import se.crafted.chrisb.ecoCreature.drops.chances.AbstractChance;
-import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 
 import com.herocraftonline.heroes.characters.Hero;
+
+import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
+import se.crafted.chrisb.ecoCreature.drops.chances.AbstractChance;
+import se.crafted.chrisb.ecoCreature.events.PlayerKilledEvent;
 
 public class HeroesRule extends AbstractPlayerRule
 {

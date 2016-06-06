@@ -218,7 +218,7 @@ public class ItemChance extends AbstractChance implements DropChance
 
         for (AttributeModifier modifier : AttributeChance.nextAttributes(attributeChances)) {
             attributes.addModifier(modifier);
-            
+
             AttributeModifierAdapter attrAdapter = new AttributeModifierAdapter(modifier);
             Map<MessageToken, String> parameters = new HashMap<>();
             parameters.put(MessageToken.AMOUNT, String.format("%+.1f", attrAdapter.getAmount()));
@@ -235,11 +235,12 @@ public class ItemChance extends AbstractChance implements DropChance
         List<String> lore = new ArrayList<>();
         Map<MessageToken, String> emptyParams = Collections.emptyMap();
 
-        for (Slot slot : loreMap.keySet()) {
-            Message slotMsg = AttributeChance.SLOT_LORE.get(slot);
+        for (Map.Entry<Slot, List<String>> entry : loreMap.entrySet()) {
+            Message slotMsg = AttributeChance.SLOT_LORE.get(entry.getKey());
+            lore.add("");
             lore.add(slotMsg.assembleMessage(emptyParams));
 
-            for (String attrMsg : loreMap.get(slot)) {
+            for (String attrMsg : loreMap.get(entry.getKey())) {
                 lore.add(attrMsg);
             }
         }
@@ -459,7 +460,7 @@ public class ItemChance extends AbstractChance implements DropChance
         return Double.parseDouble(dropParts[2]);
     }
 
-    class AttributeModifierAdapter
+    static class AttributeModifierAdapter
     {
 
         final AttributeModifier modifier;
@@ -471,50 +472,33 @@ public class ItemChance extends AbstractChance implements DropChance
 
         public Attribute getAttribute()
         {
-            Attribute type = null;
-
-            try {
-                Field field = AttributeModifier.class.getDeclaredField("attribute");
-                field.setAccessible(true);
-                type = ATTRIBUTE_MAP.get((String) field.get(modifier));
-            }
-            catch (Exception e) {
-                LoggerUtil.getInstance().warning("could not access attribute type");
-            }
-            return type;
+            return ATTRIBUTE_MAP.get(getField("attribute"));
         }
 
         public Slot getSlot()
         {
-            Slot slot = null;
-        
-            try {
-                Field field = AttributeModifier.class.getDeclaredField("slot");
-                field.setAccessible(true);
-                slot = SLOT_MAP.get((String) field.get(modifier));
-            }
-            catch (Exception e) {
-                LoggerUtil.getInstance().warning("could not access slot type");
-            }
-        
-            return slot;
+            return SLOT_MAP.get(getField("slot"));
         }
 
         public double getAmount()
         {
-            double amount = 0;
-
-            try {
-                Field field = AttributeModifier.class.getDeclaredField("amount");
-                field.setAccessible(true);
-                amount = (double) field.get(modifier);
-            }
-            catch (Exception e) {
-                LoggerUtil.getInstance().warning("could not access attribute amount");
-            }
-
-            return amount;
+            return getField("amount");
         }
 
+        private <T> T getField(String name)
+        {
+            T value = null;
+
+            try {
+                Field field = AttributeModifier.class.getDeclaredField(name);
+                field.setAccessible(true);
+                value = (T) field.get(modifier);
+            }
+            catch (Exception e) {
+                LoggerUtil.getInstance().warning("could not access field " + name);
+            }
+
+            return value;
+        }
     }
 }

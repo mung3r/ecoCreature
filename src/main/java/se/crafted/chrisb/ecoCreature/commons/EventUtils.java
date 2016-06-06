@@ -131,18 +131,15 @@ public final class EventUtils
     {
         boolean isNotSuicide = true;
 
-        if (event != null && event.getEntity().getLastDamageCause() != null) {
+        if (event != null && event.getEntity().getLastDamageCause() != null && event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
 
-            if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+            Entity damager = ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
 
-                Entity damager = ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
-
-                if (damager instanceof Projectile) {
-                    Projectile projectile = (Projectile) damager;
-                    if (projectile.getShooter() instanceof Player) {
-                        Player shooter = (Player) projectile.getShooter();
-                        isNotSuicide = !event.getEntity().getUniqueId().equals(shooter.getUniqueId());
-                    }
+            if (damager instanceof Projectile) {
+                Projectile projectile = (Projectile) damager;
+                if (projectile.getShooter() instanceof Player) {
+                    Player shooter = (Player) projectile.getShooter();
+                    isNotSuicide = !event.getEntity().getUniqueId().equals(shooter.getUniqueId());
                 }
             }
         }
