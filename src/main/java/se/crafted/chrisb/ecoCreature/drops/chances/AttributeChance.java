@@ -38,10 +38,14 @@ import se.crafted.chrisb.ecoCreature.messages.Message;
 public class AttributeChance extends AbstractChance
 {
 
+    private static final String ARMOR = "&6<amt>&7 Armor";
+    private static final String ARMOR_TOUGHNESS = "&6<amt>&7 Durability";
     private static final String ATTACK_DAMAGE_MESSAGE = "&6<amt>&7 Damage";
+    private static final String ATTACK_SPEED = "&6<amt>&7 Agility";
     private static final String FOLLOW_RANGE_MESSAGE = "&6<amt>&7 Follow Range";
     private static final String JUMP_STRENGTH_MESSAGE = "&6<amt>&7 Jump";
     private static final String KNOCKBACK_RESISTANCE_MESSAGE = "&6<amt>&7 Knockback Resist";
+    private static final String LUCK = "&6<amt>&7 Luck";
     private static final String MAX_HEALTH_MESSAGE = "&6<amt>&7 Health";
     private static final String MOVEMENT_SPEED_MESSAGE = "&6<amt>&7 Movement Speed";
     private static final String SPAWN_REINFORCEMENTS_MESSAGE = "&6<amt>&7 Reinforcements";
@@ -90,10 +94,14 @@ public class AttributeChance extends AbstractChance
     {
         Collection<AttributeChance> chances = Collections.emptyList();
 
+        ATTRIBUTE_LORE.put(Attribute.ARMOR, new DefaultMessage(config.getString("System.Messages.Attributes.ARMOR", ARMOR)));
+        ATTRIBUTE_LORE.put(Attribute.ARMOR_THOUGHNESS, new DefaultMessage(config.getString("System.Messages.Attributes.ARMOR_TOUGHNESS", ARMOR_TOUGHNESS)));
         ATTRIBUTE_LORE.put(Attribute.ATTACK_DAMAGE, new DefaultMessage(config.getString("System.Messages.Attributes.ATTACK_DAMAGE", ATTACK_DAMAGE_MESSAGE)));
+        ATTRIBUTE_LORE.put(Attribute.ATTACK_SPEED, new DefaultMessage(config.getString("System.Messages.Attributes.ATTACK_SPEED", ATTACK_SPEED)));
         ATTRIBUTE_LORE.put(Attribute.FOLLOW_RANGE, new DefaultMessage(config.getString("System.Messages.Attributes.FOLLOW_RANGE", FOLLOW_RANGE_MESSAGE)));
         ATTRIBUTE_LORE.put(Attribute.JUMP_STRENGTH, new DefaultMessage(config.getString("System.Messages.Attributes.JUMP_STRENGTH", JUMP_STRENGTH_MESSAGE)));
         ATTRIBUTE_LORE.put(Attribute.KNOCKBACK_RESISTANCE, new DefaultMessage(config.getString("System.Messages.Attributes.KNOCKBACK_RESISTANCE", KNOCKBACK_RESISTANCE_MESSAGE)));
+        ATTRIBUTE_LORE.put(Attribute.LUCK, new DefaultMessage(config.getString("System.Messages.Attributes.LUCK", LUCK)));
         ATTRIBUTE_LORE.put(Attribute.MAX_HEALTH, new DefaultMessage(config.getString("System.Messages.Attributes.MAX_HEALTH", MAX_HEALTH_MESSAGE)));
         ATTRIBUTE_LORE.put(Attribute.MOVEMENT_SPEED, new DefaultMessage(config.getString("System.Messages.Attributes.MOVEMENT_SPEED", MOVEMENT_SPEED_MESSAGE)));
         ATTRIBUTE_LORE.put(Attribute.SPAWN_REINFORCEMENTS, new DefaultMessage(config.getString("System.Messages.Attributes.SPAWN_REINFORCEMENTS", SPAWN_REINFORCEMENTS_MESSAGE)));
