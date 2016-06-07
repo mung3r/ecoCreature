@@ -416,7 +416,7 @@ public class ItemChance extends AbstractChance implements DropChance
         return attributes;
     }
 
-    private static Byte parseData(String dropString)
+    protected static Byte parseData(String dropString)
     {
         String[] dropParts = dropString.split(":");
         String[] itemParts = dropParts[0].split(",");
@@ -425,7 +425,7 @@ public class ItemChance extends AbstractChance implements DropChance
         return itemSubParts.length > 1 && !itemSubParts[1].isEmpty() ? Byte.parseByte(itemSubParts[1]) : null;
     }
 
-    private static Short parseDurability(String dropString)
+    protected static Short parseDurability(String dropString)
     {
         String[] dropParts = dropString.split(":");
         String[] itemParts = dropParts[0].split(",");
@@ -434,10 +434,10 @@ public class ItemChance extends AbstractChance implements DropChance
         return itemSubParts.length > 2 && !itemSubParts[2].isEmpty() ? Short.parseShort(itemSubParts[2]) : null;
     }
 
-    private static NumberRange parseRange(String dropString)
+    protected static NumberRange parseRange(String dropString)
     {
         String[] dropParts = dropString.split(":");
-        String[] amountRange = dropParts[1].split("-");
+        String[] amountRange = dropParts[1].trim().startsWith("-") ? new String[] { dropParts[1] } : dropParts[1].split("-");
 
         double min = 0;
         double max;
@@ -453,7 +453,7 @@ public class ItemChance extends AbstractChance implements DropChance
         return new NumberRange(min, max);
     }
 
-    private static double parsePercentage(String dropString)
+    protected static double parsePercentage(String dropString)
     {
         String[] dropParts = dropString.split(":");
 
