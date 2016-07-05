@@ -214,40 +214,13 @@ public class ItemChance extends AbstractChance implements DropChance
     private ItemStack setAttributes(ItemStack itemStack)
     {
         ItemAttributes attributes = new ItemAttributes();
-        Map<Slot, List<String>> loreMap = new HashMap<>();
 
         for (AttributeModifier modifier : AttributeChance.nextAttributes(attributeChances)) {
             attributes.addModifier(modifier);
-
-            AttributeModifierAdapter attrAdapter = new AttributeModifierAdapter(modifier);
-            Map<MessageToken, String> parameters = new HashMap<>();
-            parameters.put(MessageToken.AMOUNT, String.format("%+.1f", attrAdapter.getAmount()));
-            Message attrMsg = AttributeChance.ATTRIBUTE_LORE.get(attrAdapter.getAttribute());
-
-            if (loreMap.containsKey(attrAdapter.getSlot())) {
-                loreMap.get(attrAdapter.getSlot()).add(attrMsg.assembleMessage(parameters));
-            }
-            else {
-                loreMap.put(attrAdapter.getSlot(), Lists.newArrayList(attrMsg.assembleMessage(parameters)));
-            }
-        }
-
-        List<String> lore = new ArrayList<>();
-        Map<MessageToken, String> emptyParams = Collections.emptyMap();
-
-        for (Map.Entry<Slot, List<String>> entry : loreMap.entrySet()) {
-            Message slotMsg = AttributeChance.SLOT_LORE.get(entry.getKey());
-            lore.add("");
-            lore.add(slotMsg.assembleMessage(emptyParams));
-
-            for (String attrMsg : loreMap.get(entry.getKey())) {
-                lore.add(attrMsg);
-            }
         }
 
         itemStack = attributes.apply(itemStack);
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
