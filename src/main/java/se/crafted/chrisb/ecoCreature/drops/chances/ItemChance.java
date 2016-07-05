@@ -37,8 +37,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 
-import com.google.common.collect.Lists;
-
 import minecraft.spigot.community.michel_0.api.Attribute;
 import minecraft.spigot.community.michel_0.api.AttributeModifier;
 import minecraft.spigot.community.michel_0.api.ItemAttributes;
@@ -47,8 +45,6 @@ import se.crafted.chrisb.ecoCreature.commons.ItemUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.drops.ItemDrop;
-import se.crafted.chrisb.ecoCreature.messages.Message;
-import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 
 public class ItemChance extends AbstractChance implements DropChance
 {
