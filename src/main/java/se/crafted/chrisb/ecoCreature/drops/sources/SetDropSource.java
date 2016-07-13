@@ -36,7 +36,7 @@ public class SetDropSource extends AbstractDropSource
 {
     public SetDropSource(String section, ConfigurationSection config)
     {
-        super(section, config);
+        super("RewardSets." + section, config);
     }
 
     @Override
