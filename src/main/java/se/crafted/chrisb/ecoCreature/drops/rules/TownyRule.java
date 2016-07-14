@@ -27,7 +27,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
 public class TownyRule extends AbstractEntityRule
@@ -52,7 +52,7 @@ public class TownyRule extends AbstractEntityRule
     {
         boolean inTown = false;
 
-        if (DependencyUtils.hasTowny()) {
+        if (PluginUtils.hasTowny()) {
             String townName = TownyUniverse.getTownName(event.getKiller().getLocation());
 
             if (townMap.containsKey(townName)) {

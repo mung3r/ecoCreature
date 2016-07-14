@@ -17,7 +17,7 @@ import java.util.Map;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 
 public class CommandHandler
 {
@@ -114,8 +114,8 @@ public class CommandHandler
         }
 
         Player player = (Player) sender;
-        if (DependencyUtils.hasPermission()) {
-            return DependencyUtils.getPermission().has(player, permString);
+        if (PluginUtils.hasPermission()) {
+            return PluginUtils.getPermission().has(player, permString);
         }
         return player.hasPermission(permString);
     }

@@ -29,7 +29,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.drops.CoinDrop;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomDropType;
@@ -109,9 +109,9 @@ public class PVPDropSource extends AbstractDropSource
 
         CoinDrop drop = new CoinDrop(getName(), getLocation(event));
 
-        if (coinPercent && event instanceof PlayerKilledEvent && DependencyUtils.hasEconomy()) {
+        if (coinPercent && event instanceof PlayerKilledEvent && PluginUtils.hasEconomy()) {
             Player victim = ((PlayerKilledEvent) event).getVictim();
-            drop.setCoin(DependencyUtils.getEconomy().getBalance(victim));
+            drop.setCoin(PluginUtils.getEconomy().getBalance(victim));
             drop.setGain(coinAmount / 100.0);
         }
         else {

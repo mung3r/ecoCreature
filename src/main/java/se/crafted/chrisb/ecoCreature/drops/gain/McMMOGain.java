@@ -27,7 +27,7 @@ import java.util.Map;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 import com.gmail.nossr50.api.PartyAPI;
@@ -42,7 +42,7 @@ public class McMMOGain extends AbstractPlayerGain<String>
     @Override
     public boolean hasPermission(Player player)
     {
-        return super.hasPermission(player) && DependencyUtils.hasMcMMO();
+        return super.hasPermission(player) && PluginUtils.hasMcMMO();
     }
 
     @Override

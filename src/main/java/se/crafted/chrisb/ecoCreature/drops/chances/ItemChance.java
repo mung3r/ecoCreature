@@ -19,6 +19,7 @@
  */
 package se.crafted.chrisb.ecoCreature.drops.chances;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,11 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import nl.arfie.bukkit.attributes.Attribute;
-import nl.arfie.bukkit.attributes.AttributeType;
-import nl.arfie.bukkit.attributes.Attributes;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -41,15 +37,31 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 
+import minecraft.spigot.community.michel_0.api.Attribute;
+import minecraft.spigot.community.michel_0.api.AttributeModifier;
+import minecraft.spigot.community.michel_0.api.ItemAttributes;
+import minecraft.spigot.community.michel_0.api.Slot;
 import se.crafted.chrisb.ecoCreature.commons.ItemUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.drops.ItemDrop;
-import se.crafted.chrisb.ecoCreature.messages.Message;
-import se.crafted.chrisb.ecoCreature.messages.MessageToken;
 
 public class ItemChance extends AbstractChance implements DropChance
 {
+    private static Map<String, Slot> SLOT_MAP = new HashMap<>();
+    static {
+        for (Slot slot : Slot.values()) {
+            SLOT_MAP.put(slot.getName(), slot);
+        }
+    }
+
+    private static Map<String, Attribute> ATTRIBUTE_MAP = new HashMap<>();
+    static {
+        for (Attribute attribute : Attribute.values()) {
+            ATTRIBUTE_MAP.put(attribute.getName(), attribute);
+        }
+    }
+
     private final Material material;
     private Byte data;
     private Short durability;
@@ -197,19 +209,14 @@ public class ItemChance extends AbstractChance implements DropChance
 
     private ItemStack setAttributes(ItemStack itemStack)
     {
-        itemStack = Attributes.apply(itemStack, AttributeChance.nextAttributes(attributeChances), true);
+        ItemAttributes attributes = new ItemAttributes();
 
-        List<String> lore = new ArrayList<>();
-
-        for (Attribute attribute : Attributes.fromStack(itemStack)) {
-            Map<MessageToken, String> parameters = new HashMap<>();
-            parameters.put(MessageToken.AMOUNT, String.format("%+.1f", attribute.getAmount()));
-            Message message = AttributeChance.LORE_MAP.get(attribute.getType());
-            lore.add(message.assembleMessage(parameters));
+        for (AttributeModifier modifier : AttributeChance.nextAttributes(attributeChances)) {
+            attributes.addModifier(modifier);
         }
 
+        itemStack = attributes.apply(itemStack);
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
@@ -351,20 +358,26 @@ public class ItemChance extends AbstractChance implements DropChance
         return enchantment;
     }
 
-    protected static Collection<AttributeChance> parseAttributes(List<String> attrStrings)
+    protected static Collection<AttributeChance> parseAttributes(Object config)
     {
         Collection<AttributeChance> attributes = new ArrayList<>();
 
-        for (String attrString : attrStrings) {
-            if (StringUtils.isNotEmpty(attrString)) {
-                try {
-                    String[] attrParts = attrString.toUpperCase().split(":");
-                    AttributeChance attribute = new AttributeChance(AttributeType.valueOf(attrParts[0]));
-                    attribute.setRange(parseRange(attrString));
-                    attributes.add(attribute);
-                }
-                catch (Exception e) {
-                    LoggerUtil.getInstance().warning("Unrecognized attribute: " + attrString);
+        if (config instanceof Map) {
+            Map<String, Object> attrMap = (Map<String, Object>) config;
+
+            for (Map.Entry<String, Object> entry : attrMap.entrySet()) {
+
+                for (String attrString : (List<String>) attrMap.get(entry.getKey())) {
+                    try {
+                        String[] attrParts = attrString.toUpperCase().split(":");
+                        AttributeChance attribute = new AttributeChance(Attribute.valueOf(attrParts[0].toUpperCase()),
+                                Slot.valueOf(entry.getKey().toUpperCase()));
+                        attribute.setRange(parseRange(attrString));
+                        attributes.add(attribute);
+                    }
+                    catch (Exception e) {
+                        LoggerUtil.getInstance().warning("Unrecognized slot: " + entry.getKey() + " attribute: " + attrString);
+                    }
                 }
             }
         }
@@ -372,7 +385,7 @@ public class ItemChance extends AbstractChance implements DropChance
         return attributes;
     }
 
-    private static Byte parseData(String dropString)
+    protected static Byte parseData(String dropString)
     {
         String[] dropParts = dropString.split(":");
         String[] itemParts = dropParts[0].split(",");
@@ -381,7 +394,7 @@ public class ItemChance extends AbstractChance implements DropChance
         return itemSubParts.length > 1 && !itemSubParts[1].isEmpty() ? Byte.parseByte(itemSubParts[1]) : null;
     }
 
-    private static Short parseDurability(String dropString)
+    protected static Short parseDurability(String dropString)
     {
         String[] dropParts = dropString.split(":");
         String[] itemParts = dropParts[0].split(",");
@@ -390,10 +403,10 @@ public class ItemChance extends AbstractChance implements DropChance
         return itemSubParts.length > 2 && !itemSubParts[2].isEmpty() ? Short.parseShort(itemSubParts[2]) : null;
     }
 
-    private static NumberRange parseRange(String dropString)
+    protected static NumberRange parseRange(String dropString)
     {
         String[] dropParts = dropString.split(":");
-        String[] amountRange = dropParts[1].split("-");
+        String[] amountRange = dropParts[1].trim().startsWith("-") ? new String[] { dropParts[1] } : dropParts[1].split("-");
 
         double min = 0;
         double max;
@@ -409,10 +422,52 @@ public class ItemChance extends AbstractChance implements DropChance
         return new NumberRange(min, max);
     }
 
-    private static double parsePercentage(String dropString)
+    protected static double parsePercentage(String dropString)
     {
         String[] dropParts = dropString.split(":");
 
         return Double.parseDouble(dropParts[2]);
+    }
+
+    static class AttributeModifierAdapter
+    {
+
+        final AttributeModifier modifier;
+
+        public AttributeModifierAdapter(AttributeModifier modifier)
+        {
+            this.modifier = modifier;
+        }
+
+        public Attribute getAttribute()
+        {
+            return ATTRIBUTE_MAP.get(getField("attribute"));
+        }
+
+        public Slot getSlot()
+        {
+            return SLOT_MAP.get(getField("slot"));
+        }
+
+        public double getAmount()
+        {
+            return getField("amount");
+        }
+
+        private <T> T getField(String name)
+        {
+            T value = null;
+
+            try {
+                Field field = AttributeModifier.class.getDeclaredField(name);
+                field.setAccessible(true);
+                value = (T) field.get(modifier);
+            }
+            catch (Exception e) {
+                LoggerUtil.getInstance().warning("could not access field " + name);
+            }
+
+            return value;
+        }
     }
 }

@@ -37,7 +37,7 @@ import com.herocraftonline.heroes.Heroes;
 import com.palmergames.bukkit.towny.Towny;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
-public final class DependencyUtils
+public final class PluginUtils
 {
     private static Plugin vaultPlugin;
     private static Plugin deathTpPlusPlugin;
@@ -55,7 +55,7 @@ public final class DependencyUtils
     private static Permission permission;
     private static Economy economy;
 
-    private DependencyUtils()
+    private PluginUtils()
     {
     }
 

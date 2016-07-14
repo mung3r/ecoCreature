@@ -22,12 +22,10 @@ package se.crafted.chrisb.ecoCreature.drops.chances;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.apache.commons.lang.math.NumberRange;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.EntityType;
 
 import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
@@ -96,13 +94,5 @@ public class JockeyChance extends EntityChance
         }
 
         return chance;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static ConfigurationSection createMemoryConfig(Object obj)
-    {
-        MemoryConfiguration memoryConfig = new MemoryConfiguration();
-        memoryConfig.addDefaults((Map<String, Object>) obj);
-        return memoryConfig;
     }
 }

@@ -24,11 +24,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -101,7 +99,7 @@ public class BookChance extends ItemChance
 
             for (Object obj : dropConfig.getList("Drops")) {
                 if (obj instanceof LinkedHashMap) {
-                    ConfigurationSection itemConfig = createItemConfig(obj);
+                    ConfigurationSection itemConfig = createMemoryConfig(obj);
                     Material material = parseMaterial(itemConfig.getString("item"));
 
                     if (Material.WRITTEN_BOOK.equals(material)) {
@@ -111,7 +109,7 @@ public class BookChance extends ItemChance
                         chance.setPages(DefaultMessage.convertTemplates(itemConfig.getStringList("pages")));
                         chance.setFixedAmount(config.getBoolean("System.Hunting.FixedDrops"));
                         chance.setAddToInventory(dropConfig.getBoolean("AddItemsToInventory"));
-                        chance.setAttributes(parseAttributes(itemConfig.getStringList("attributes")));
+                        chance.setAttributes(parseAttributes(itemConfig.get("attributes")));
                         chance.setUnbreakable(itemConfig.getBoolean("unbreakable"));
                         chance.setHideFlags(itemConfig.getBoolean("hideflags"));
                         populateItemChance(chance, itemConfig.getString("item"));
@@ -123,13 +121,5 @@ public class BookChance extends ItemChance
         }
 
         return chances;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static ConfigurationSection createItemConfig(Object obj)
-    {
-        MemoryConfiguration itemConfig = new MemoryConfiguration();
-        itemConfig.addDefaults((Map<String, Object>) obj);
-        return itemConfig;
     }
 }

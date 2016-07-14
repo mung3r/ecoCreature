@@ -30,7 +30,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.messages.Message;
 import se.crafted.chrisb.ecoCreature.messages.MessageHandler;
@@ -116,7 +116,7 @@ public class CoinDrop extends AbstractDrop
     @Override
     public boolean deliver(Player player)
     {
-        if (!DependencyUtils.hasEconomy() || player == null) {
+        if (!PluginUtils.hasEconomy() || player == null) {
             return false;
         }
 
@@ -130,7 +130,7 @@ public class CoinDrop extends AbstractDrop
                 success = true;
 
                 Message message = memberId.equals(player.getUniqueId()) ? getMessage() : getPartyMessage();
-                addParameter(MessageToken.PLAYER, Bukkit.getOfflinePlayer(memberId).getName()).addParameter(MessageToken.AMOUNT, DependencyUtils.getEconomy().format(Math.abs(amount)));
+                addParameter(MessageToken.PLAYER, Bukkit.getOfflinePlayer(memberId).getName()).addParameter(MessageToken.AMOUNT, PluginUtils.getEconomy().format(Math.abs(amount)));
 
                 MessageHandler handler = new MessageHandler(message, getParameters());
                 handler.send(memberId);
@@ -183,15 +183,15 @@ public class CoinDrop extends AbstractDrop
 
     private void registerAmount(UUID memberId, double amount)
     {
-        if (!DependencyUtils.hasEconomy()) {
+        if (!PluginUtils.hasEconomy()) {
             return;
         }
 
         if (amount > 0.0) {
-            DependencyUtils.getEconomy().depositPlayer(Bukkit.getOfflinePlayer(memberId), amount);
+            PluginUtils.getEconomy().depositPlayer(Bukkit.getOfflinePlayer(memberId), amount);
         }
         else if (amount < 0.0) {
-            DependencyUtils.getEconomy().withdrawPlayer(Bukkit.getOfflinePlayer(memberId), Math.abs(amount));
+            PluginUtils.getEconomy().withdrawPlayer(Bukkit.getOfflinePlayer(memberId), Math.abs(amount));
         }
     }
 }

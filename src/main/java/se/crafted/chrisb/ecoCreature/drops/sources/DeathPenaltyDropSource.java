@@ -28,7 +28,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.drops.AbstractDrop;
 import se.crafted.chrisb.ecoCreature.drops.CoinDrop;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.CustomDropType;
@@ -74,9 +74,9 @@ public class DeathPenaltyDropSource extends AbstractDropSource
         Collection<AbstractDrop> drops = new ArrayList<>();
         CoinDrop drop = new CoinDrop(getName(), getLocation(event));
 
-        if (percentPenalty && event instanceof PlayerDeathEvent && DependencyUtils.hasEconomy()) {
+        if (percentPenalty && event instanceof PlayerDeathEvent && PluginUtils.hasEconomy()) {
             Player player = ((PlayerDeathEvent) event).getEntity();
-            drop.setCoin(DependencyUtils.getEconomy().getBalance(player));
+            drop.setCoin(PluginUtils.getEconomy().getBalance(player));
             drop.setGain(-penaltyAmount / 100.0);
         }
         else {

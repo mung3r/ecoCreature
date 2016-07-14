@@ -27,7 +27,7 @@ import mc.alk.arena.BattleArena;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.events.EntityKilledEvent;
 
@@ -43,7 +43,7 @@ public class BattleArenaRule extends AbstractEntityRule
     @Override
     protected boolean isBroken(EntityKilledEvent event)
     {
-        boolean ruleBroken = !battleArenaRewards && DependencyUtils.hasBattleArena() && BattleArena.inArena(event.getKiller());
+        boolean ruleBroken = !battleArenaRewards && PluginUtils.hasBattleArena() && BattleArena.inArena(event.getKiller());
         LoggerUtil.getInstance().debugTrue("No reward for " + event.getKiller().getName() + " in BattleArena.", ruleBroken);
 
         return ruleBroken;

@@ -28,7 +28,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropSourceFactory;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.HeroesDropType;
@@ -45,7 +45,7 @@ public class HeroesDropCategory extends AbstractDropCategory<HeroesDropType>
     @Override
     protected boolean isValidEvent(Event event)
     {
-        return DependencyUtils.hasHeroes() && event instanceof HeroChangeLevelEvent;
+        return PluginUtils.hasHeroes() && event instanceof HeroChangeLevelEvent;
     }
 
     @Override

@@ -29,7 +29,7 @@ import java.util.UUID;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 import com.herocraftonline.heroes.characters.Hero;
@@ -46,10 +46,10 @@ public class HeroesParty extends AbstractParty
     {
         Set<UUID> party = Collections.emptySet();
 
-        if (DependencyUtils.hasHeroes() && DependencyUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {
+        if (PluginUtils.hasHeroes() && PluginUtils.getHeroes().getCharacterManager().getHero(player).hasParty()) {
             party = new HashSet<>();
 
-            for (Hero hero : DependencyUtils.getHeroes().getCharacterManager().getHero(player).getParty().getMembers()) {
+            for (Hero hero : PluginUtils.getHeroes().getCharacterManager().getHero(player).getParty().getMembers()) {
                 party.add(hero.getPlayer().getUniqueId());
             }
         }

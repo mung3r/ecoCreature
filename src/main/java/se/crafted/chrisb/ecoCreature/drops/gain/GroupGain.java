@@ -27,7 +27,7 @@ import java.util.Map;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 
 public class GroupGain extends AbstractPlayerGain<String>
@@ -46,7 +46,7 @@ public class GroupGain extends AbstractPlayerGain<String>
         double multiplier = NO_GAIN;
 
         try {
-            String group = DependencyUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player);
+            String group = PluginUtils.getPermission().getPrimaryGroup(player.getWorld().getName(), player);
             if (group != null) {
                 multiplier = getMultiplier(group.toLowerCase());
             }

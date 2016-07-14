@@ -139,7 +139,7 @@ public abstract class AbstractDropCategory<T>
                     NumberRange range = parseRange(setName);
                     double percentage = parsePercentage(setName);
 
-                    for (AbstractDropSource dropSource : DropSourceFactory.createSetSources(name, rewardSets)) {
+                    for (AbstractDropSource dropSource : DropSourceFactory.createSetSources(name, config)) {
                         dropSource.setHuntingRules(huntingRules);
                         dropSource.setRange(range);
                         dropSource.setPercentage(percentage);

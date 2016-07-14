@@ -30,7 +30,7 @@ import org.bukkit.event.Event;
 import org.simiancage.DeathTpPlus.events.DeathStreakEvent;
 import org.simiancage.DeathTpPlus.events.KillStreakEvent;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.drops.sources.AbstractDropSource;
 import se.crafted.chrisb.ecoCreature.drops.sources.DropSourceFactory;
 import se.crafted.chrisb.ecoCreature.drops.categories.types.StreakDropType;
@@ -45,7 +45,7 @@ public class StreakDropCategory extends AbstractDropCategory<StreakDropType>
     @Override
     protected boolean isValidEvent(Event event)
     {
-        return DependencyUtils.hasDeathTpPlus() && (event instanceof DeathStreakEvent || event instanceof KillStreakEvent);
+        return PluginUtils.hasDeathTpPlus() && (event instanceof DeathStreakEvent || event instanceof KillStreakEvent);
     }
 
     @Override

@@ -37,7 +37,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 import se.crafted.chrisb.ecoCreature.commons.LoggerUtil;
 import se.crafted.chrisb.ecoCreature.drops.categories.AbstractDropCategory;
 import se.crafted.chrisb.ecoCreature.drops.categories.CustomDropCategory;
@@ -182,7 +182,7 @@ public class DropConfigLoader
         gainMultipliers.addAll(RegionGain.parseConfig(config.getConfigurationSection("Gain.WorldGuard")));
         gainMultipliers.addAll(RegiosGain.parseConfig(config.getConfigurationSection("Gain.Regios")));
         gainMultipliers.addAll(ResidenceGain.parseConfig(config.getConfigurationSection("Gain.Residence")));
-        if (DependencyUtils.hasFactions()) {
+        if (PluginUtils.hasFactions()) {
             gainMultipliers.addAll(FactionsGain.parseConfig(config.getConfigurationSection("Gain.Factions")));
         }
         gainMultipliers.addAll(TownyGain.parseConfig(config.getConfigurationSection("Gain.Towny")));
@@ -268,17 +268,18 @@ public class DropConfigLoader
     private void createConfig(File file) throws IOException
     {
         boolean success = file.getParentFile().mkdir() && file.createNewFile();
-   
+
         try (InputStream inputStream = plugin.getResource(file.getName()); FileOutputStream outputStream = new FileOutputStream(file)) {
             byte[] buffer = new byte[BUFFER_SIZE];
             int length;
             while ((length = inputStream.read(buffer)) > 0) {
                 outputStream.write(buffer, 0, length);
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             LoggerUtil.getInstance().warning("Could not read config file.");
         }
-   
+
         LoggerUtil.getInstance().info("Created config file: " + file.getName());
     }
 }

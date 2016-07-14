@@ -99,7 +99,7 @@ public class PlayerKilledEventMapper extends AbstractEventMapper
 
                 if (drop instanceof ItemDrop) {
                     ItemDrop itemDrop = (ItemDrop) drop;
-                    if (dropConfig.isOverrideDrops() && !itemDrop.getItems().isEmpty() || (dropConfig.isClearOnNoDrops() && itemDrop.getItems().isEmpty())) {
+                    if (dropConfig.isOverrideDrops() && !itemDrop.getItems().isEmpty() || dropConfig.isClearOnNoDrops() && itemDrop.getItems().isEmpty()) {
                         event.getDrops().clear();
                     }
 

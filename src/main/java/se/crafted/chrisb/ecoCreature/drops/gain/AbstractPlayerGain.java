@@ -26,7 +26,7 @@ import java.util.Map;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import se.crafted.chrisb.ecoCreature.commons.DependencyUtils;
+import se.crafted.chrisb.ecoCreature.commons.PluginUtils;
 
 public abstract class AbstractPlayerGain<T> implements PlayerGain
 {
@@ -45,7 +45,7 @@ public abstract class AbstractPlayerGain<T> implements PlayerGain
     @Override
     public boolean hasPermission(Player player)
     {
-        return DependencyUtils.hasPermission(player, permission);
+        return PluginUtils.hasPermission(player, permission);
     }
 
     @Override
