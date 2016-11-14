@@ -4,7 +4,7 @@
   <groupId>se.crafted.chrisb</groupId>
   <artifactId>ecoCreature</artifactId>
   <name>ecoCreature</name>
-  <version>0.3.2-SNAPSHOT</version>
+  <version>0.3.3-SNAPSHOT</version>
   <description>Player vs. Monster/Enemy Rewards</description>
   <url>http://dev.bukkit.org/server-mods/ecocreature/</url>
   <inceptionYear>2011</inceptionYear>
@@ -16,7 +16,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <bukkit.version>1.9.4-R0.1-SNAPSHOT</bukkit.version>
+    <bukkit.version>1.10-R0.1-SNAPSHOT</bukkit.version>
     <vault.version>1.5</vault.version>
     <currentYear>2015</currentYear>
   </properties>
@@ -148,7 +148,7 @@
     <dependency>
       <groupId>org.mcstats.bukkit</groupId>
       <artifactId>metrics</artifactId>
-      <version>R7</version>
+      <version>R8-SNAPSHOT</version>
       <exclusions>
         <exclusion>
           <groupId>org.bukkit</groupId>

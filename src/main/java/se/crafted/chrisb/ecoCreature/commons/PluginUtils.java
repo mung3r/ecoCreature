@@ -174,7 +174,7 @@ public final class PluginUtils
 
     public static boolean hasHeroes()
     {
-        return heroesPlugin != null && heroesPlugin.isEnabled();
+        return heroesPlugin != null;
     }
 
     public static Heroes getHeroes()
