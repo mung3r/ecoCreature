@@ -21,9 +21,9 @@ package se.crafted.chrisb.ecoCreature.commons;
 
 import java.lang.reflect.Field;
 
-import net.minecraft.server.v1_11_R1.NBTTagCompound;
+import net.minecraft.server.v1_12_R1.NBTTagCompound;
 
-import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
 public final class ItemUtils
@@ -60,7 +60,7 @@ public final class ItemUtils
             try {
                 Field field = CraftItemStack.class.getDeclaredField("handle");
                 field.setAccessible(true);
-                return ((net.minecraft.server.v1_11_R1.ItemStack) field.get(item)).getTag();
+                return ((net.minecraft.server.v1_12_R1.ItemStack) field.get(item)).getTag();
             }
             catch (Exception ignored) {
             }
@@ -72,11 +72,11 @@ public final class ItemUtils
     {
         CraftItemStack cItem = item instanceof CraftItemStack ? (CraftItemStack) item : CraftItemStack.asCraftCopy(item);
 
-        net.minecraft.server.v1_11_R1.ItemStack nmsItem = null;
+        net.minecraft.server.v1_12_R1.ItemStack nmsItem = null;
         try {
             Field field = CraftItemStack.class.getDeclaredField("handle");
             field.setAccessible(true);
-            nmsItem = (net.minecraft.server.v1_11_R1.ItemStack) field.get(item);
+            nmsItem = (net.minecraft.server.v1_12_R1.ItemStack) field.get(item);
         }
         catch (Exception ignored) {
         }
